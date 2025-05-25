@@ -66,6 +66,7 @@ const props = defineProps({
                       :service-id="serviceId"
                       :services="services"
                       type="service"
+                      variant="light"
                     />
                   </div>
                 </div>

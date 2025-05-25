@@ -11,6 +11,10 @@ const props = defineProps({
     type: String,
     default: "contact",
   },
+  variant: {
+    type: String,
+    default: "dark",
+  },
 });
 
 const serviceId = defineModel("serviceId", {
@@ -54,6 +58,7 @@ function submitForm(values) {
           rules="required"
           required
           class="col-span-3"
+          :variant="variant"
         />
         <br />
         <BaseFormInput
@@ -63,6 +68,7 @@ function submitForm(values) {
           rules="required"
           required
           class="col-span-3"
+          :variant="variant"
         />
         <BaseFormInput
           name="phone_prefix"
@@ -71,6 +77,7 @@ function submitForm(values) {
           rules="required"
           required
           class="col-span-1"
+          :variant="variant"
         />
         <BaseFormInput
           name="phone"
@@ -79,6 +86,7 @@ function submitForm(values) {
           rules="required"
           required
           class="col-span-2"
+          :variant="variant"
         />
         <BaseFormSelect
           v-if="type === 'service'"
@@ -92,6 +100,7 @@ function submitForm(values) {
             }))
           "
           class="col-span-3"
+          :variant="variant"
         />
         <BaseFormInput
           v-if="type === 'service'"
@@ -99,18 +108,21 @@ function submitForm(values) {
           :label="t('contactForm.offerPrice')"
           type="number"
           class="col-span-2"
+          :variant="variant"
         />
         <BaseFormInput
           name="url"
           :label="t('contactForm.url')"
           type="text"
           class="col-span-3"
+          :variant="variant"
         />
         <BaseFormTextarea
           name="text"
           :label="t('contactForm.message')"
           class="col-span-full"
           rules="required"
+          :variant="variant"
         />
         <div class="text-right col-span-full">
           <BaseButton variant="primary" size="lg">{{
