@@ -7,12 +7,21 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  label: {
+    type: String,
+    required: false,
+    default: "Editor",
+  },
 });
 const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <template>
   <div>
+    <label
+      class="block text-xs lg:text-sm/6 font-medium text-grayCustom text-left"
+      >{{ label }}</label
+    >
     <ClientOnly>
       <QuillEditor
         v-model:content="props.modelValue"

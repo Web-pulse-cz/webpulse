@@ -267,6 +267,17 @@ definePageMeta({
               class="col-span-1"
             />
             <br />
+            <BaseFormTextarea
+              v-if="
+                item.translations &&
+                item.translations[selectedLocale] !== undefined &&
+                item.translations[selectedLocale].meta_description !== undefined
+              "
+              v-model="item.translations[selectedLocale].meta_description"
+              label="Meta popis"
+              name="meta_description"
+              class="col-span-full"
+            />
             <BaseFormEditor
               v-if="
                 item.translations &&
@@ -287,28 +298,6 @@ definePageMeta({
               v-model="item.translations[selectedLocale].description"
               label="Popis"
               name="description"
-              class="col-span-2"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_description !== undefined
-              "
-              v-model="item.translations[selectedLocale].meta_description"
-              label="Meta popis"
-              name="meta_description"
-              class="col-span-full"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_description !== undefined
-              "
-              v-model="item.translations[selectedLocale].meta_description"
-              label="Meta popis"
-              name="meta_description"
               class="col-span-2"
             />
           </div>
