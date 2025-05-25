@@ -90,7 +90,7 @@ class ServiceController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating service.'], 500);
+            return Response::json(['message' => $e->getMessage()], 500);
         }
 
         return Response::json(ServiceResource::make($service));
