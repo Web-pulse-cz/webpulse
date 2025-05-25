@@ -69,10 +69,11 @@ export default {
 	},
 	services: {
 		title: 'Služby, které nabízíme',
-		price: 'cena za ',
+		pricePer: 'cena za ',
 		hour: 'hodinu',
 		project: 'projekt',
 		demand: 'Nezávazně poptat',
+		price: 'Cena',
 	},
 	demand: {
 		title: 'Nezávazná poptávka',

@@ -68,10 +68,11 @@ export default {
 	},
 	services: {
 		title: 'Services We Offer',
-		price: 'price per ',
+		pricePer: 'price per ',
 		hour: 'hour',
 		project: 'project',
 		demand: 'Request a Quote',
+		price: 'Price',
 	},
 	demand: {
 		title: 'Non-Binding Inquiry',

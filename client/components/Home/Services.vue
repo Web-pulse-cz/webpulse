@@ -62,7 +62,7 @@ function openDemandDialog(serviceId) {
 								<BasePropsParagraph :html="service.description" />
 								<div class="flex items-center justify-between">
 									<BasePropsParagraph bold="bold">
-										Cena:
+										{{ t("services.price") }}:
 										{{
 											$formatPrice(
 												service.price,
@@ -70,7 +70,7 @@ function openDemandDialog(serviceId) {
 												service.tax_rate,
 											)
 										}}
-										({{ t("services.price") }}
+										({{ t("services.pricePer") }}
 										{{
 											service.price_type === "hourly"
 												? t("services.hour")

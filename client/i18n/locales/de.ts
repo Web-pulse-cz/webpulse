@@ -69,10 +69,11 @@ export default {
 	},
 	services: {
 		title: 'Dienstleistungen, die wir anbieten',
-		price: 'Preis pro ',
+		pricePer: 'Preis pro ',
 		hour: 'Stunde',
 		project: 'Projekt',
 		demand: 'Unverbindlich anfragen',
+		price: 'Preis',
 	},
 	demand: {
 		title: 'Unverbindliche Anfrage',
