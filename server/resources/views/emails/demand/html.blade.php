@@ -116,8 +116,12 @@
         <div class="content">
             <h1>{{ $subject }}</h1>
             <p>Dobrý den,</p>
-            <p>Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka pro
-                službu {{ $demand->service ? $demand->service->name : ''}}.</p>
+            @if ($demand->service)
+                <p>Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka na službu
+                    {{ $demand->service->name }}.</p>
+            @else
+                <p>Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka.</p>
+            @endif
             <p>Níže jsou detaily.</p>
 
             <!-- Tabulka -->
@@ -135,14 +139,16 @@
                     <td>Telefon</td>
                     <td>{{ $demand->fullPhone }}</td>
                 </tr>
-                <tr>
-                    <td>Služba</td>
-                    <td>{{ $demand->service ? $demand->service->name : '-' }}</td>
-                </tr>
-                <tr>
-                    <td>Navrhovaná cena</td>
-                    <td>{{ $demand->offered_price }}</td>
-                </tr>
+                @if($demand->service)
+                    <tr>
+                        <td>Služba</td>
+                        <td>{{ $demand->service ? $demand->service->name : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Navrhovaná cena</td>
+                        <td>{{ $demand->offered_price }}</td>
+                    </tr>
+                @endif
                 <tr>
                     <td>Zpráva</td>
                     <td>{{ $demand->text }}</td>

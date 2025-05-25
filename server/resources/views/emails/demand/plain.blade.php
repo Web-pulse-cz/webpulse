@@ -2,15 +2,20 @@
 
 Dobrý den,
 
-Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka pro službu {{ $demand->service ? $demand->service->name : '-' }}.
+@if($demand->service)
+Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka na službu {{ $demand->service->name }}.
+@else
+Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka.
 
 Níže jsou detaily:
 
 Jméno a příjmení: {{ $demand->fullname }}
 E-mail: {{ $demand->email }}
 Telefon: {{ $demand->fullPhone }}
+@if($demand->service)
 Služba: {{ $demand->service ? $demand->service->name : '-' }}
 Navrhovaná cena: {{ $demand->offered_price }}
+@endif
 Zpráva: {{ $demand->text }}
 Jazyk: {{ $demand->locale }}
 
