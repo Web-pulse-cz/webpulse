@@ -13,7 +13,6 @@
             background-color: #f1f5f9;
             color: #0f172a;
         }
-
         .container {
             max-width: 768px;
             margin: 0 auto;
@@ -22,52 +21,43 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         .header {
             padding: 20px 30px;
             text-align: center;
         }
-
         .logo {
             max-width: 140px;
             height: auto;
         }
-
         .content {
             padding: 30px;
             font-size: 16px;
             line-height: 1.6;
         }
-
         .content h1 {
             font-size: 24px;
             color: #06b6d4;
             font-weight: 700;
             margin-top: 0;
         }
-
         .content p {
             font-weight: 500;
             margin: 12px 0;
         }
-
         .table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         .table th, .table td {
             border: 1px solid #e2e8f0;
             padding: 10px;
             text-align: left;
         }
-
         .table th {
             background-color: #f1f5f9;
             font-weight: 600;
         }
-
         .button {
             display: inline-block;
             padding: 12px 24px;
@@ -77,7 +67,6 @@
             border-radius: 6px;
             font-weight: 600;
         }
-
         .footer {
             background-color: #f8fafc;
             text-align: center;
@@ -85,21 +74,17 @@
             font-size: 12px;
             color: #64748b;
         }
-
         @media screen and (max-width: 600px) {
             .container {
                 max-width: 600px;
             }
-
             .content {
                 padding: 20px;
                 font-size: 14px;
             }
-
             .content h1 {
                 font-size: 20px;
             }
-
             .button {
                 padding: 10px 20px;
                 font-size: 14px;
@@ -111,44 +96,39 @@
 <div style="padding: 30px;">
     <div class="container">
         <div class="header">
-            <img src="https://placehold.co/140x92?text=Webpulse" alt="Web-pulse Logo" class="logo">
+            <img src="https://placehold.co/140x140?text=Webpulse" alt="Web-pulse Logo" class="logo">
         </div>
         <div class="content">
             <h1>{{ $subject }}</h1>
             <p>Dobrý den,</p>
-            <p>Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka pro
-                službu {{ $inquiry->service_name }}.</p>
-            <p>Níže jsou detaily.</p>
+            <p>{!! $content ?? 'Toto je elegantní, profesionální a responzivní e-mailová šablona inspirovaná stylem Web-pulse. Moderní design a čistá typografie.' !!}</p>
 
             <!-- Tabulka -->
             <table class="table">
+                <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Množství</th>
+                    <th>Cena</th>
+                </tr>
+                </thead>
                 <tbody>
                 <tr>
-                    <td>Jméno a příjmení</td>
-                    <td>{{ $inquiry->fullname }}</td>
+                    <td>Webdesign Basic</td>
+                    <td>1</td>
+                    <td>5 000 Kč</td>
                 </tr>
                 <tr>
-                    <td>E-mail</td>
-                    <td>{{ $inquiry->email }}</td>
-                </tr>
-                <tr>
-                    <td>Telefon</td>
-                    <td>{{ $inquiry->fullPhone }}</td>
-                </tr>
-                <tr>
-                    <td>Služba</td>
-                    <td>{{ $inquiry->service_name }}</td>
-                </tr>
-                <tr>
-                    <td>Navrhovaná cena</td>
-                    <td>{{ $inquiry->offered_price }}</td>
-                </tr>
-                <tr>
-                    <td>Jazyk</td>
-                    <td>{{ app()->getLocale() }}</td>
+                    <td>Hosting Premium</td>
+                    <td>12 měsíců</td>
+                    <td>2 400 Kč</td>
                 </tr>
                 </tbody>
             </table>
+
+            <p style="margin-top: 20px;">
+                <a href="{{ $button_url ?? '#' }}" class="button">{{ $button_text ?? 'Klikněte zde' }}</a>
+            </p>
         </div>
         <div class="footer">
             &copy; {{ date('Y') }} Web-pulse. Všechna práva vyhrazena.

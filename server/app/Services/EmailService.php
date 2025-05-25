@@ -127,8 +127,11 @@ class EmailService
      * @param string $type
      * @return string
      */
-    private function loadView(string $template, array $data, string $type): string
+    private function loadView(string $template, array $data, string $type, string $subject): string
     {
+        $data = array_merge($data, [
+            'subject' => $subject,
+        ]);
         $viewPath = resource_path("views/emails/{$template}/{$type}.blade.php");
         if (!file_exists($viewPath)) {
             Log::error("Email template not found: /{$template}/{$type}.blade.php");
