@@ -9,6 +9,16 @@ defineProps({
     required: true,
   },
 });
+
+const demandDialog = ref({
+  show: false,
+  service_id: null,
+});
+function openDemandDialog(serviceId) {
+  console.log(serviceId);
+  demandDialog.value.service_id = serviceId;
+  demandDialog.value.show = true;
+}
 </script>
 
 <template>
@@ -62,6 +72,7 @@ defineProps({
                     :href="`/services/${service.slug}`"
                     size="xl"
                     variant="primary"
+                    @click="openDemandDialog(service.id)"
                     >{{ t("services.inquiry") }}</BaseButton
                   >
                 </div>
@@ -71,5 +82,11 @@ defineProps({
         </div>
       </div>
     </div>
+    <HomeDemandDialog
+      v-model:open="demandDialog.show"
+      :service-id="demandDialog.service_id"
+      :services="services"
+      @close="demandDialog.show = false"
+    />
   </div>
 </template>
