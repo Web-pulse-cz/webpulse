@@ -146,7 +146,7 @@
                     </tr>
                     <tr>
                         <td>Navrhovaná cena</td>
-                        <td>{{ $demand->offered_price }}</td>
+                        <td>{{ $demand->offer_price }}</td>
                     </tr>
                 @endif
                 <tr>

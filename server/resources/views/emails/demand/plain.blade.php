@@ -15,7 +15,7 @@ E-mail: {{ $demand->email }}
 Telefon: {{ $demand->fullPhone }}
 @if($demand->service)
 Služba: {{ $demand->service ? $demand->service->name : '-' }}
-Navrhovaná cena: {{ $demand->offered_price }}
+Navrhovaná cena: {{ $demand->offer_price }}
 @endif
 URL: {{ $demand->url }}
 Zpráva: {{ $demand->text }}
