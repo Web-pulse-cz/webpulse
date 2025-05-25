@@ -258,19 +258,6 @@ definePageMeta({
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].slug !== undefined
-              "
-              v-model="item.translations[selectedLocale].slug"
-              label="Slug"
-              type="text"
-              name="slug"
-              class="col-span-1"
-              :disabled="true"
-            />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].meta_title !== undefined
               "
               v-model="item.translations[selectedLocale].meta_title"
