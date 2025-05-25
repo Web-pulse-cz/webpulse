@@ -5,7 +5,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <div class="flex items-center h-64 py-64 mt-24 relative">
+  <div class="flex items-center h-64 py-72 mt-24 relative">
     <div
       class="bg-cyan-300 hero_circle h-[768px] w-[768px] rounded-full absolute -right-[256px] z-0 opacity-75"
     ></div>

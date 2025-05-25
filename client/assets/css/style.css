@@ -7,6 +7,7 @@ html, body {
     @apply bg-[#f9fafb] text-primary font-sans;
     min-height: 100vh;
     color: #fafafa; /* záloha, kdyby Tailwind neaplikoval správně */
+    overflow-x: hidden;
 }
 
 body, html {
