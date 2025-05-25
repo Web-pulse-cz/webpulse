@@ -67,4 +67,30 @@ export default {
 			},
 		],
 	},
+	services: {
+		title: 'Služby, které nabízíme',
+		price: 'cena za ',
+		hour: 'hodinu',
+		project: 'projekt',
+		demand: 'Nezávazně poptat',
+	},
+	demand: {
+		title: 'Nezávazná poptávka',
+		submitButton: 'Odeslat poptávku',
+	},
+	contactForm: {
+		title: 'Kontaktujte nás',
+		fullName: 'Jméno a příjmení',
+		email: 'E-mail',
+		phonePrefix: 'Předvolba',
+		phone: 'Telefon',
+		message: 'Zpráva',
+		offerPrice: 'Navrhovaná cena',
+		url: 'URL projektu',
+		service: 'Služba',
+		submit: 'Odeslat',
+	},
+	footer: {
+		rightsReserved: 'Všechna práva vyhrazena',
+	},
 };

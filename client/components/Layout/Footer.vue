@@ -113,7 +113,8 @@
 			</div>
 			<div class="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
 				<p class="text-sm/6 text-gray-400">
-					&copy; {{ new Date().getFullYear() }} Webpulse, All rights reserved.
+					&copy; {{ new Date().getFullYear() }} Webpulse,
+					{{ t("footer.rightsReserved") }}.
 				</p>
 			</div>
 		</div>
@@ -122,6 +123,8 @@
 
 <script setup>
 import { defineComponent, h } from 'vue';
+
+const { t } = useI18n();
 
 const navigation = {
 	solutions: [

@@ -35,6 +35,7 @@ export default {
 			description:
         'Jedes Projekt ist einzigartig. Wir erstellen maßgeschneiderte Websites und Anwendungen für Ihre Bedürfnisse.',
 		},
+		technologiesTitle: 'Technologien, die wir nutzen',
 	},
 	benefits: {
 		title: 'Warum sollten Sie uns wählen?',
@@ -65,5 +66,31 @@ export default {
           'Wir sind keine langweiligen IT-Leute, sondern Partner auf dem Weg zum Erfolg, die Ihre Begeisterung für Ergebnisse teilen.',
 			},
 		],
+	},
+	services: {
+		title: 'Dienstleistungen, die wir anbieten',
+		price: 'Preis pro ',
+		hour: 'Stunde',
+		project: 'Projekt',
+		demand: 'Unverbindlich anfragen',
+	},
+	demand: {
+		title: 'Unverbindliche Anfrage',
+		submitButton: 'Anfrage senden',
+	},
+	contactForm: {
+		title: 'Kontaktieren Sie uns',
+		fullName: 'Vor- und Nachname',
+		email: 'E-Mail',
+		phonePrefix: 'Vorwahl',
+		phone: 'Telefon',
+		message: 'Nachricht',
+		offerPrice: 'Vorgeschlagener Preis',
+		url: 'Projekt-URL',
+		service: 'Dienstleistung',
+		submit: 'Senden',
+	},
+	footer: {
+		rightsReserved: 'Alle Rechte vorbehalten',
 	},
 };

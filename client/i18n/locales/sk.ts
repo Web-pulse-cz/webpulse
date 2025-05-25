@@ -35,6 +35,7 @@ export default {
 			description:
         'Každý projekt je originál. Tvoríme weby a aplikácie na mieru vašim potrebám.',
 		},
+		technologiesTitle: 'Technológie, ktoré používame',
 	},
 	benefits: {
 		title: 'Prečo si vybrať nás?',
@@ -65,5 +66,31 @@ export default {
           'Nie sme nudní IT-čkári, ale parťáci na ceste k úspechu, ktorí s vami zdieľajú nadšenie pre výsledky.',
 			},
 		],
+	},
+	services: {
+		title: 'Služby, ktoré ponúkame',
+		price: 'cena za ',
+		hour: 'hodinu',
+		project: 'projekt',
+		demand: 'Nezáväzne dopytovať',
+	},
+	demand: {
+		title: 'Nezáväzný dopyt',
+		submitButton: 'Odoslať dopyt',
+	},
+	contactForm: {
+		title: 'Kontaktujte nás',
+		fullName: 'Meno a priezvisko',
+		email: 'E-mail',
+		phonePrefix: 'Predvoľba',
+		phone: 'Telefón',
+		message: 'Správa',
+		offerPrice: 'Navrhovaná cena',
+		url: 'URL projektu',
+		service: 'Služba',
+		submit: 'Odoslať',
+	},
+	footer: {
+		rightsReserved: 'Všetky práva vyhradené',
 	},
 };

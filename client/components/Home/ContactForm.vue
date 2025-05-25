@@ -132,7 +132,9 @@ function submitForm(values) {
 						size="lg"
 					>
 						{{
-							t("demand.submitButton")
+							type === "service"
+								? t("demand.submitButton")
+								: t("contactForm.submit")
 						}}
 					</BaseButton>
 				</div>

@@ -70,9 +70,11 @@ function openDemandDialog(serviceId) {
 												service.tax_rate,
 											)
 										}}
-										(cena za
+										({{ t("services.price") }}
 										{{
-											service.price_type === "hourly" ? "hodinu" : "projekt"
+											service.price_type === "hourly"
+												? t("services.hour")
+												: t("services.project")
 										}})
 									</BasePropsParagraph>
 									<BaseButton
@@ -81,7 +83,7 @@ function openDemandDialog(serviceId) {
 										variant="primary"
 										@click="openDemandDialog(service.id)"
 									>
-										{{ t("services.inquiry") }}
+										{{ t("services.demand") }}
 									</BaseButton>
 								</div>
 							</div>

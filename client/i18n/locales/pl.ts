@@ -35,6 +35,7 @@ export default {
 			description:
         'Każdy projekt jest wyjątkowy. Tworzymy strony internetowe i aplikacje dostosowane do Twoich potrzeb.',
 		},
+		technologiesTitle: 'Technologie, których używamy',
 	},
 	benefits: {
 		title: 'Dlaczego warto wybrać nas?',
@@ -65,5 +66,31 @@ export default {
           'Nie jesteśmy nudnymi informatykami, ale partnerami w drodze do sukcesu, którzy dzielą z tobą entuzjazm dla wyników.',
 			},
 		],
+	},
+	services: {
+		title: 'Usługi, które oferujemy',
+		price: 'cena za ',
+		hour: 'godzinę',
+		project: 'projekt',
+		demand: 'Zapytaj bez zobowiązań',
+	},
+	demand: {
+		title: 'Zapytanie bez zobowiązań',
+		submitButton: 'Wyślij zapytanie',
+	},
+	contactForm: {
+		title: 'Skontaktuj się z nami',
+		fullName: 'Imię i nazwisko',
+		email: 'E-mail',
+		phonePrefix: 'Prefix',
+		phone: 'Telefon',
+		message: 'Wiadomość',
+		offerPrice: 'Proponowana cena',
+		url: 'URL projektu',
+		service: 'Usługa',
+		submit: 'Wyślij',
+	},
+	footer: {
+		rightsReserved: 'Wszelkie prawa zastrzeżone',
 	},
 };

@@ -35,6 +35,7 @@ export default {
 			description:
         'Every project is unique. We create custom websites and applications tailored to your needs.',
 		},
+		technologiesTitle: 'Technologies we use',
 	},
 	benefits: {
 		title: 'Why choose us?',
@@ -64,5 +65,31 @@ export default {
           'We’re not boring IT guys, but partners on your path to success, sharing your enthusiasm for great results.',
 			},
 		],
+	},
+	services: {
+		title: 'Services We Offer',
+		price: 'price per ',
+		hour: 'hour',
+		project: 'project',
+		demand: 'Request a Quote',
+	},
+	demand: {
+		title: 'Non-Binding Inquiry',
+		submitButton: 'Submit Inquiry',
+	},
+	contactForm: {
+		title: 'Contact Us',
+		fullName: 'Full Name',
+		email: 'Email',
+		phonePrefix: 'Prefix',
+		phone: 'Phone',
+		message: 'Message',
+		offerPrice: 'Proposed Price',
+		url: 'Project URL',
+		service: 'Service',
+		submit: 'Submit',
+	},
+	footer: {
+		rightsReserved: 'All rights reserved',
 	},
 };
