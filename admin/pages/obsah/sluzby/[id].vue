@@ -280,7 +280,7 @@ definePageMeta({
               class="col-span-1"
             />
             <br />
-            <BaseFormTextarea
+            <BaseFormEditor
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
@@ -291,7 +291,7 @@ definePageMeta({
               name="perex"
               class="col-span-2"
             />
-            <BaseFormTextarea
+            <BaseFormEditor
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
@@ -302,7 +302,18 @@ definePageMeta({
               name="description"
               class="col-span-2"
             />
-            <BaseFormTextarea
+            <BaseFormEditor
+              v-if="
+                item.translations &&
+                item.translations[selectedLocale] !== undefined &&
+                item.translations[selectedLocale].meta_description !== undefined
+              "
+              v-model="item.translations[selectedLocale].meta_description"
+              label="Meta popis"
+              name="meta_description"
+              class="col-span-full"
+            />
+            <BaseFormEditor
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
