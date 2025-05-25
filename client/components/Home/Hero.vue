@@ -12,9 +12,9 @@ const { t } = useI18n();
     <div class="grid grid-cols-1 md:grid-cols-2 items-center justify-between">
       <div class="col-span-1 space-y-8">
         <h1
-          class="text-5xl font-bold sm:text-7xl text-primary text-balance mb-8 leading-tight tracking-normal"
+          class="text-5xl font-bold sm:text-7xl text-secondary text-balance mb-8 leading-tight tracking-normal"
         >
-          <span class="text-cyan-500">{{ t("home.hero.titleMark") }}</span>
+          <span class="text-light">{{ t("home.hero.titleMark") }}</span>
           <br />
           {{ t("home.hero.title") }}
         </h1>
