@@ -9,7 +9,6 @@ export default {
         secondary: "#164e63",
         light: "#06b6d4",
         danger: "#ef4444",
-        gray: "#1f2937",
       },
       fontFamily: {
         sans: ["Montserrat", "sans-serif"],
