@@ -142,13 +142,17 @@
                 @if($demand->service)
                     <tr>
                         <td>Služba</td>
-                        <td>{{ $demand->service ? $demand->service->name : '-' }}</td>
+                        <td>{{ $demand->service->name }}</td>
                     </tr>
                     <tr>
                         <td>Navrhovaná cena</td>
                         <td>{{ $demand->offered_price }}</td>
                     </tr>
                 @endif
+                <tr>
+                    <td>URL<td>
+                    <td>{{ $demand->url }}</td>
+                </tr>
                 <tr>
                     <td>Zpráva</td>
                     <td>{{ $demand->text }}</td>

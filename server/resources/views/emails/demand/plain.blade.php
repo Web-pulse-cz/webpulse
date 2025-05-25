@@ -6,6 +6,7 @@ Dobrý den,
 Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka na službu {{ $demand->service->name }}.
 @else
 Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka.
+@endif
 
 Níže jsou detaily:
 
@@ -16,6 +17,7 @@ Telefon: {{ $demand->fullPhone }}
 Služba: {{ $demand->service ? $demand->service->name : '-' }}
 Navrhovaná cena: {{ $demand->offered_price }}
 @endif
+URL: {{ $demand->url }}
 Zpráva: {{ $demand->text }}
 Jazyk: {{ $demand->locale }}
 
