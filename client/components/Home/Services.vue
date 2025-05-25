@@ -24,9 +24,9 @@ defineProps({
       class="overflow-hidden transition-all duration-500 ease-in-out rounded-lg cursor-pointer border border-dark"
     >
       <div class="p-6">
-        <div class="grid grid-cols-6 gap-x-4">
+        <div class="grid grid-cols-8 gap-x-4">
           <p class="col-span-1">{{ `0${index + 1}` }}</p>
-          <div class="col-span-5">
+          <div class="col-span-7">
             <BasePropsHeading type="h3" margin-bottom="mb-0">{{
               service.name
             }}</BasePropsHeading>
