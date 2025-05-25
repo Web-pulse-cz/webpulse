@@ -32,6 +32,11 @@ const props = defineProps({
 		default: 'primary',
 		required: false,
 	},
+	html: {
+		type: String,
+		default: '',
+		required: false,
+	},
 });
 const baseClass = computed(() => {
 	return `${sizeClasses.value[props.size] || ''} ${boldClasses.value[props.bold] || ''} ${colorClasses.value[props.color] || ''} leading-6 tracking-tight`;
@@ -39,7 +44,15 @@ const baseClass = computed(() => {
 </script>
 
 <template>
-	<p :class="baseClass">
+	<p
+		v-if="html === ''"
+		:class="baseClass"
+	>
 		<slot />
 	</p>
+	<p
+		v-else
+		:class="baseClass"
+		v-html="html"
+	/>
 </template>

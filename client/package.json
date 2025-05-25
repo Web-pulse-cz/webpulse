@@ -15,7 +15,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^44.1.0",
     "@ckeditor/ckeditor5-vue": "^7.3.0",
-    "@headlessui/vue": "^0.0.0-insiders.d71fb9c",
+    "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/image": "^1.8.1",
     "@nuxt/ui": "^2.19.2",
