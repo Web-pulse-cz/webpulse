@@ -4,14 +4,23 @@
 @tailwind utilities;
 
 html, body {
-    @apply bg-[#ecfeff] text-primary font-sans;
+    @apply bg-[#f9fafb] text-primary font-sans;
     min-height: 100vh;
     color: #fafafa; /* záloha, kdyby Tailwind neaplikoval správně */
 }
 
 body, html {
-    background: #ecfeff;
+    background: #f9fafb;
     min-height: 100vh;
     color: #082f49;
     font-family: 'Montserrat', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.hero_circle {
+    z-index: -1;
 }
