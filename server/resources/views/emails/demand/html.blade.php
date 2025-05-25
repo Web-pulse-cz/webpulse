@@ -150,7 +150,7 @@
                     </tr>
                 @endif
                 <tr>
-                    <td>URL<td>
+                    <td>URL</td>
                     <td>{{ $demand->url }}</td>
                 </tr>
                 <tr>
