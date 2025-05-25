@@ -40,7 +40,7 @@ class DemandController extends Controller
             DemandSaved::dispatch($demand);
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['error' => $e->getMessage()], 500);
+            return Response::json(['error' => 'An error occurred while processing your request.'], 500);
         }
 
         return Response::json();
