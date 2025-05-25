@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\Country\CountryController;
 use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Service\ServiceController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
+use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 
 
 Route::group([
@@ -34,6 +35,12 @@ Route::group([
 ], function () {
     Route::get('{lang?}', [ClientServiceController::class, 'index']);
     Route::get('{id}/{lang?}', [ClientServiceController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'demand'
+], function () {
+    Route::post('{lang?}', [ClientDemandController::class, 'store']);
 });
 
 Route::group([

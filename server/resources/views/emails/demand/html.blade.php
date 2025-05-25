@@ -117,7 +117,7 @@
             <h1>{{ $subject }}</h1>
             <p>Dobrý den,</p>
             <p>Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka pro
-                službu {{ $inquiry->service_name }}.</p>
+                službu {{ $demand->service ? $demand->service->name : ''}}.</p>
             <p>Níže jsou detaily.</p>
 
             <!-- Tabulka -->
@@ -125,27 +125,31 @@
                 <tbody>
                 <tr>
                     <td>Jméno a příjmení</td>
-                    <td>{{ $inquiry->fullname }}</td>
+                    <td>{{ $demand->fullname }}</td>
                 </tr>
                 <tr>
                     <td>E-mail</td>
-                    <td>{{ $inquiry->email }}</td>
+                    <td>{{ $demand->email }}</td>
                 </tr>
                 <tr>
                     <td>Telefon</td>
-                    <td>{{ $inquiry->fullPhone }}</td>
+                    <td>{{ $demand->fullPhone }}</td>
                 </tr>
                 <tr>
                     <td>Služba</td>
-                    <td>{{ $inquiry->service_name }}</td>
+                    <td>{{ $demand->service ? $demand->service->name : '-' }}</td>
                 </tr>
                 <tr>
                     <td>Navrhovaná cena</td>
-                    <td>{{ $inquiry->offered_price }}</td>
+                    <td>{{ $demand->offered_price }}</td>
+                </tr>
+                <tr>
+                    <td>Zpráva</td>
+                    <td>{{ $demand->text }}</td>
                 </tr>
                 <tr>
                     <td>Jazyk</td>
-                    <td>{{ app()->getLocale() }}</td>
+                    <td>{{ $demand->locale }}</td>
                 </tr>
                 </tbody>
             </table>

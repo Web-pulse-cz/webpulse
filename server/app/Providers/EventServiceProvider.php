@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\ContactUpdatedEvent;
+use App\Events\DemandSaved;
 use App\Events\ProjectSavedEvent;
 use App\Events\ProjectSavedListener;
 use App\Listeners\ContactUpdated;
+use App\Listeners\DemandEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         ProjectSavedEvent::class => [
             ProjectSavedListener::class
         ],
+        DemandSaved::class => [
+            DemandEmail::class
+        ]
     ];
 
     /**
