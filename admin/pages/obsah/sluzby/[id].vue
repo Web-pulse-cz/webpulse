@@ -316,7 +316,13 @@ definePageMeta({
             />
           </div>
           <div class="col-span-1 border-b pb-6">
-            <BaseFormUploadImage />
+            <BaseFormUploadImage
+              :multiple="false"
+              type="service"
+              format="small"
+              label="Náhledový obrázek"
+              class="pt-6"
+            />
           </div>
         </LayoutContainer>
       </div>

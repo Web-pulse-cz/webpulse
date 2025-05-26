@@ -32,8 +32,8 @@ class FilemanagerController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'type' => 'required|string',
-            'format' => 'nullable|string',
+            'type' => 'required|string', // e.g., 'product', 'blog', etc.
+            'format' => 'nullable|string', // e.g., 'thumbnail', 'full', etc.
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);

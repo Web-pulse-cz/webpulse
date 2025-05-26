@@ -1,6 +1,35 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Draggable from 'vuedraggable';
+import useImageFormatMessage from '~/composables/useImageFormatMessage';
+
+const props = defineProps({
+  fileType: {
+    type: String,
+    default: 'image',
+    required: false,
+  },
+  label: {
+    type: String,
+    default: 'Nahrát soubory',
+    required: false,
+  },
+  format: {
+    type: String,
+    default: 'service',
+    required: true,
+  },
+  type: {
+    type: String,
+    default: 'icon',
+    required: false,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+});
+const imageFormatMessage = await useImageFormatMessage(props.multiple, props.type, props.format);
 
 const files = ref<{ file: File; name: string; preview?: string }[]>([]);
 const acceptTypes = 'image/*,application/pdf,application/msword'; // Přijatelné typy
@@ -9,10 +38,11 @@ function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
   if (!input.files) return;
 
-  for (const file of Array.from(input.files)) {
+  const filesArray = Array.from(input.files);
+  if(props.multiple) {
+  for (const file of filesArray) {
     const reader = new FileReader();
     const fileItem = { file, name: file.name, preview: '' };
-
     if (file.type.startsWith('image/')) {
       reader.onload = (e) => {
         fileItem.preview = e.target?.result as string;
@@ -21,6 +51,23 @@ function handleFileChange(event: Event) {
     }
 
     files.value.push(fileItem);
+  }
+  } else {
+    // Pokud není povoleno více souborů, přidejte pouze jeden soubor
+    const file = filesArray[0];
+    if (file) {
+      const reader = new FileReader();
+      const fileItem = { file, name: file.name, preview: '' };
+
+      if (file.type.startsWith('image/')) {
+        reader.onload = (e) => {
+          fileItem.preview = e.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      files.value = [fileItem]; // Přepište pole s jedním souborem
+    }
   }
 }
 
@@ -53,11 +100,19 @@ async function uploadFiles() {
 
 <template>
   <div>
+    <label class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6">{{
+      label
+    }}</label>
+    <span
+      class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+    >
+      {{ imageFormatMessage }}
+    </span>
     <!-- Vstup pro nahrávání více souborů najednou -->
     <input
       type="file"
       class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6"
-      multiple
+      :multiple="multiple"
       :accept="acceptTypes"
       @change="handleFileChange"
     />
@@ -72,7 +127,6 @@ async function uploadFiles() {
             alt="Náhled"
             class="text-primaryCustom"
           />
-          <span class="text-xs text-primaryCustom">{{ element.name }}</span>
         </div>
       </template>
     </draggable>
