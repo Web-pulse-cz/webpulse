@@ -92,12 +92,11 @@ class FileManagerService
         $keepAspectRatio = $format['keepAspectRatio'] ?? true;
 
         if ($width && $height) {
-            //todo: aspect ratio
-            $image->resize($width, $height, function ($constraint) use ($keepAspectRatio) {
-                if ($keepAspectRatio) {
-                    $constraint->aspectRatio();
-                }
-            });
+            if ($keepAspectRatio) {
+                $image->pad($width, $height);
+            } else {
+                $image->resize($width, $height);
+            }
         }
 
         return $image;
