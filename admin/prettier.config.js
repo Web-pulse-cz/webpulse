@@ -2,7 +2,7 @@
 const config = {
   singleQuote: true,
   printWidth: 100,
-  tailwindConfig: './tailwind.config.ts',
+  tailwindConfig: './tailwind.config.js',
   plugins: ['prettier-plugin-tailwindcss'],
   endOfLine: 'auto',
 };
