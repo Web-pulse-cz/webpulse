@@ -263,6 +263,17 @@ definePageMeta({
               class="col-span-1"
             />
             <br />
+            <div class="col-span-full">
+              <BaseFormUploadImage
+                  v-model="item.image"
+                  :multiple="true"
+                  type="service"
+                  format="small"
+                  label="Náhledový obrázek"
+                  class="pt-6"
+                  @update-files="updateItemImage"
+              />
+            </div>
             <BaseFormTextarea
               v-if="
                 item.translations &&
@@ -320,7 +331,6 @@ definePageMeta({
             />
           </div>
           <div class="col-span-1 border-b pb-6">
-            <pre>{{ item.image }}</pre>
             <BaseFormUploadImage
                 v-model="item.image"
               :multiple="false"

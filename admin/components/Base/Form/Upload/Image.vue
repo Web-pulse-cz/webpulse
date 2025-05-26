@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Draggable from 'vuedraggable';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
+import {XMarkIcon} from "@heroicons/vue/24/outline";
 
 const toast = useToast();
 
@@ -9,6 +10,11 @@ const props = defineProps({
   fileType: {
     type: String,
     default: 'image',
+    required: false,
+  },
+  viewType: {
+    type: String,
+    default: 'single',
     required: false,
   },
   label: {
@@ -32,7 +38,7 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['update-files']);
-const imageFormatMessage = await useImageFormatMessage(props.multiple, props.type, props.format);
+const imageFormatMessage = await useImageFormatMessage(props.fileType, props.multiple, props.type, props.format);
 
 const files = ref<{ file: File; name: string; preview?: string }[]>([]);
 const acceptTypes = 'image/*,application/pdf,application/msword'; // Přijatelné typy
@@ -74,6 +80,10 @@ function handleFileChange(event: Event) {
   }
 }
 
+function removeFile(index: number) {
+  files.value.splice(index, 1);
+}
+
 async function uploadFiles() {
   const formData = new FormData();
   files.value.forEach(({ file }) => {
@@ -88,15 +98,6 @@ async function uploadFiles() {
       method: 'POST',
       body: formData,
     });
-
-    /*if(!response.ok) {
-      toast.add({
-        title: 'Chyba',
-        description: props.multiple ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.' : 'Nepodařilo se nahrát soubor. Zkuste to prosím později.',
-        color: 'red',
-      });
-      throw new Error('Nahrávání selhalo');
-    }*/
 
     const result = await response;
     emit('update-files', result);
@@ -118,30 +119,38 @@ async function uploadFiles() {
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <label class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6">{{
       label
     }}</label>
     <span
-      class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+      class="w-full inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
     >
       {{ imageFormatMessage }}
     </span>
     <!-- Vstup pro nahrávání více souborů najednou -->
     <input
+      ref="fileInput"
       type="file"
-      class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6"
+      class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6 bg-indigo-400 hidden"
       :multiple="multiple"
       :accept="acceptTypes"
       @change="handleFileChange"
     />
 
+
     <!-- Galerie nahraných souborů -->
-    <draggable v-if="files.length > 0" v-model="files" item-key="name" class="gallery">
-      <template #item="{ element, index }">
-        <div>
+    <draggable v-if="files.length > 0" v-model="files" item-key="name" class="ring-1 ring-inset ring-grayLight bg-gray-100 p-6 my-4 rounded">
+      <template #item="{ element, index }" class="flex flex-wrap flex-row gap-8 rounded-md">
+        <div class="rounded-md relative">
+          <UTooltip
+            text="Odstanit soubor"
+            placement="top"
+            class="absolute top-2 right-2 w-6 h-6">
+          <XMarkIcon
+            class="absolute top-2 right-2 w-6 h-6 text-danger cursor-pointer" @click="removeFile(index)" />
+          </UTooltip>
           <img
-            v-if="element.preview"
             :src="element.preview"
             alt="Náhled"
             class="text-primaryCustom"
@@ -150,9 +159,15 @@ async function uploadFiles() {
       </template>
     </draggable>
 
-    <!-- Tlačítko pro odeslání na API -->
-    <BaseButton type="button" variant="primary" size="md" class="upload-btn" @click="uploadFiles"
-      >Nahrát soubory</BaseButton
+    <div class="w-full flex flex-wrap gap-x-4">
+      <BaseButton
+          type="button"
+          variant="secondary"
+          size="lg"
+          @click="$refs.fileInput.click()">{{ multiple ? 'Vybrat soubory' : 'Vybrat soubor' }}</BaseButton>
+    <BaseButton v-if="files && files.length" type="button" variant="primary" size="lg" @click="uploadFiles"
+      >{{ multiple ? 'Nahrát soubory' : 'Nahrát soubor'}}</BaseButton
     >
+    </div>
   </div>
 </template>
