@@ -1,9 +1,7 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-	<div class="mx-auto w-full h-full relative px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-		<slot />
-	</div>
+  <div class="relative mx-auto flex h-full w-full items-center justify-center px-4 sm:px-6 lg:px-8">
+    <slot />
+  </div>
 </template>

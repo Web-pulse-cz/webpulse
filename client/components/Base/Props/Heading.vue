@@ -1,32 +1,32 @@
 <script setup lang="ts">
 const colorClasses = {
-  light: "text-light",
-  primary: "text-primary",
+  light: 'text-light',
+  primary: 'text-primary',
 };
 
 const typeClasses = {
-  h1: "text-5xl font-bold tracking-tight sm:text-7xl",
-  h2: "text-4xl font-semibold sm:text-5xl",
-  h3: "text-3xl font-semibold sm:text-4xl",
-  h4: "text-2xl font-medium sm:text-3xl",
-  h5: "text-xl font-medium sm:text-2xl",
-  h6: "text-lg font-medium sm:text-xl",
+  h1: 'text-5xl font-bold tracking-tight sm:text-7xl',
+  h2: 'text-4xl font-semibold sm:text-5xl',
+  h3: 'text-3xl font-semibold sm:text-4xl',
+  h4: 'text-2xl font-medium sm:text-3xl',
+  h5: 'text-xl font-medium sm:text-2xl',
+  h6: 'text-lg font-medium sm:text-xl',
 };
 
 const props = defineProps({
   type: {
     type: String,
-    default: "h1",
+    default: 'h1',
     required: false,
   },
   color: {
     type: String,
-    default: "primary",
+    default: 'primary',
     required: false,
   },
   marginBottom: {
     type: String,
-    default: "mb-8",
+    default: 'mb-8',
     required: false,
   },
 });

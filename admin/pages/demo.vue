@@ -1,5 +1,5 @@
 <template>
-	<ClientOnly>
-		<BaseFormEditor />
-	</ClientOnly>
+  <ClientOnly>
+    <BaseFormEditor />
+  </ClientOnly>
 </template>

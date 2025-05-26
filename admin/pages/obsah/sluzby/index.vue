@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, inject } from "vue";
-import _ from "lodash";
-import { definePageMeta } from "#imports";
+import { ref, inject } from 'vue';
+import _ from 'lodash';
+import { definePageMeta } from '#imports';
 
 const toast = useToast();
-const pageTitle = ref("Služby");
+const pageTitle = ref('Služby');
 
 const loading = ref(false);
 const error = ref(false);
@@ -12,18 +12,18 @@ const error = ref(false);
 const breadcrumbs = ref([
   {
     name: pageTitle.value,
-    link: "/obsah/sluzby",
+    link: '/obsah/sluzby',
     current: true,
   },
 ]);
 
-const searchString = ref(inject("searchString", ""));
+const searchString = ref(inject('searchString', ''));
 const tableQuery = ref({
   search: null as string | null,
   paginate: 12 as number,
   page: 1 as number,
-  orderBy: "id" as string,
-  orderWay: "desc" as string,
+  orderBy: 'id' as string,
+  orderWay: 'desc' as string,
 });
 
 const items = ref([]);
@@ -32,12 +32,12 @@ async function loadItems() {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>("/api/admin/service", {
-    method: "GET",
+  await client<{ id: number }>('/api/admin/service', {
+    method: 'GET',
     query: tableQuery.value,
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
   })
     .then((response) => {
@@ -47,9 +47,9 @@ async function loadItems() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: "Chyba",
-        description: "Nepodařilo se načíst služby. Zkuste to prosím později.",
-        color: "red",
+        title: 'Chyba',
+        description: 'Nepodařilo se načíst služby. Zkuste to prosím později.',
+        color: 'red',
       });
     })
     .finally(() => {
@@ -61,19 +61,19 @@ async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>("/api/admin/service/" + id, {
-    method: "DELETE",
+  await client<{ id: number }>('/api/admin/service/' + id, {
+    method: 'DELETE',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
   })
     .catch(() => {
       error.value = true;
       toast.add({
-        title: "Chyba",
-        description: "Nepodařilo se smazat položku služby.",
-        color: "red",
+        title: 'Chyba',
+        description: 'Nepodařilo se smazat položku služby.',
+        color: 'red',
       });
     })
     .finally(() => {
@@ -84,11 +84,10 @@ async function deleteItem(id: number) {
 
 function updateSort(column: string) {
   if (tableQuery.value.orderBy === column) {
-    tableQuery.value.orderWay =
-      tableQuery.value.orderWay === "asc" ? "desc" : "asc";
+    tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
   } else {
     tableQuery.value.orderBy = column;
-    tableQuery.value.orderWay = "asc";
+    tableQuery.value.orderWay = 'asc';
   }
   loadItems();
 }
@@ -111,7 +110,7 @@ onMounted(() => {
   loadItems();
 });
 definePageMeta({
-  middleware: "sanctum:auth",
+  middleware: 'sanctum:auth',
 });
 </script>
 

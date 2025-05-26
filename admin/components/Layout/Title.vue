@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-	<h3 class="text-md lg:text-lg font-semibold text-grayCustom mb-2">
-		<slot />
-	</h3>
+  <h3 class="text-md mb-2 font-semibold text-grayCustom lg:text-lg">
+    <slot />
+  </h3>
 </template>

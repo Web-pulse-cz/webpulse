@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide } from "vue";
+import { ref, provide } from 'vue';
 import {
   Dialog,
   DialogPanel,
@@ -9,7 +9,7 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
+} from '@headlessui/vue';
 import {
   Bars3Icon,
   BellIcon,
@@ -35,14 +35,14 @@ import {
   LanguageIcon,
   GlobeEuropeAfricaIcon,
   CurrencyEuroIcon,
-} from "@heroicons/vue/24/outline";
-import { ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
-import { useUserGroupStore } from "~/stores/userGroupStore";
-import { useActivityStore } from "~/stores/activityStore";
-import { useLanguageStore } from "~/stores/languageStore";
-import { useCountryStore } from "~/stores/countryStore";
-import { useCurrencyStore } from "~/stores/currencyStore";
-import { useTaxRateStore } from "~/stores/taxRateStore";
+} from '@heroicons/vue/24/outline';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
+import { useUserGroupStore } from '~/stores/userGroupStore';
+import { useActivityStore } from '~/stores/activityStore';
+import { useLanguageStore } from '~/stores/languageStore';
+import { useCountryStore } from '~/stores/countryStore';
+import { useCurrencyStore } from '~/stores/currencyStore';
+import { useTaxRateStore } from '~/stores/taxRateStore';
 
 const userGroupStore = useUserGroupStore();
 const activityStore = useActivityStore();
@@ -57,273 +57,273 @@ const user = useSanctumUser();
 const { logout, refreshIdentity } = useSanctumAuth();
 const sidebarOpen = ref(false);
 
-const searchString = ref("");
-provide("searchString", searchString);
+const searchString = ref('');
+provide('searchString', searchString);
 
 const navigation = ref([
   {
-    title: "Úvod",
+    title: 'Úvod',
     menu: [
-      { name: "Přehled", link: "/", icon: HomeIcon, current: true },
+      { name: 'Přehled', link: '/', icon: HomeIcon, current: true },
       {
-        name: "Statistiky",
-        link: "/statistiky",
+        name: 'Statistiky',
+        link: '/statistiky',
         icon: ChartPieIcon,
         current: false,
       },
     ],
   },
   {
-    title: "Obsah",
+    title: 'Obsah',
     menu: [
       {
-        name: "Blog",
-        link: "/kontakty",
+        name: 'Blog',
+        link: '/kontakty',
         icon: UsersIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
       {
-        name: "Informační stránky",
-        link: "/aktivita",
+        name: 'Informační stránky',
+        link: '/aktivita',
         icon: CalendarIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
       {
-        name: "Služby",
-        link: "/obsah/sluzby",
+        name: 'Služby',
+        link: '/obsah/sluzby',
         icon: ChatBubbleBottomCenterTextIcon,
         current: false,
-        slug: "services",
+        slug: 'services',
       },
       {
-        name: "Události a akce",
-        link: "/demo",
+        name: 'Události a akce',
+        link: '/demo',
         icon: CalendarIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
     ],
   },
   {
-    title: "Uživatelé",
+    title: 'Uživatelé',
     menu: [
       {
-        name: "Uživatelé",
-        link: "/sablony-zprav",
+        name: 'Uživatelé',
+        link: '/sablony-zprav',
         icon: ChatBubbleBottomCenterTextIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
       {
-        name: "Odběry newsletteru",
-        link: "/kontakty",
+        name: 'Odběry newsletteru',
+        link: '/kontakty',
         icon: UsersIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
       {
-        name: "Požadavky",
-        link: "/aktivita",
+        name: 'Požadavky',
+        link: '/aktivita',
         icon: CalendarIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
     ],
   },
   {
-    title: "Byznys a osobní růst",
+    title: 'Byznys a osobní růst',
     menu: [
       {
-        name: "Kontakty",
-        link: "/kontakty",
+        name: 'Kontakty',
+        link: '/kontakty',
         icon: UsersIcon,
         current: false,
-        slug: "contacts",
+        slug: 'contacts',
       },
       {
-        name: "Aktivita",
-        link: "/aktivita",
+        name: 'Aktivita',
+        link: '/aktivita',
         icon: CalendarIcon,
         current: false,
-        slug: "users_has_activities",
+        slug: 'users_has_activities',
       },
       {
-        name: "Šablony zpráv",
-        link: "/sablony-zprav",
+        name: 'Šablony zpráv',
+        link: '/sablony-zprav',
         icon: ChatBubbleBottomCenterTextIcon,
         current: false,
-        slug: "message_blueprints",
+        slug: 'message_blueprints',
       },
       {
-        name: "Kalendář",
-        link: "/demo",
+        name: 'Kalendář',
+        link: '/demo',
         icon: CalendarIcon,
         current: false,
-        slug: "calendars",
+        slug: 'calendars',
       },
       {
-        name: "Cashflow",
-        link: "/cashflow",
+        name: 'Cashflow',
+        link: '/cashflow',
         icon: BanknotesIcon,
         current: false,
-        slug: "cashflows",
+        slug: 'cashflows',
       },
       {
-        name: "Ligy",
-        link: "/demo",
+        name: 'Ligy',
+        link: '/demo',
         icon: TrophyIcon,
         current: false,
-        slug: "leagues",
+        slug: 'leagues',
       },
       {
-        name: "Akce",
-        link: "/demo",
+        name: 'Akce',
+        link: '/demo',
         icon: CalendarDaysIcon,
         current: false,
-        slug: "events",
+        slug: 'events',
       },
     ],
   },
   {
-    title: "Vedení firmy",
+    title: 'Vedení firmy',
     menu: [
       {
-        name: "Klienti",
-        link: "/klienti",
+        name: 'Klienti',
+        link: '/klienti',
         icon: BuildingOfficeIcon,
         current: false,
-        slug: "clients",
+        slug: 'clients',
       },
       {
-        name: "Projekty",
-        link: "/projekty",
+        name: 'Projekty',
+        link: '/projekty',
         icon: BuildingOfficeIcon,
         current: false,
-        slug: "projects",
+        slug: 'projects',
       },
       {
-        name: "Cenové nabídky",
-        link: "/cenove-nabidky",
+        name: 'Cenové nabídky',
+        link: '/cenove-nabidky',
         icon: DocumentTextIcon,
         current: false,
-        slug: "price_offers",
+        slug: 'price_offers',
       },
       {
-        name: "Trackování",
-        link: "/demo",
+        name: 'Trackování',
+        link: '/demo',
         icon: ClockIcon,
         current: false,
-        slug: "trackings",
+        slug: 'trackings',
       },
       {
-        name: "Faktury",
-        link: "/demo",
+        name: 'Faktury',
+        link: '/demo',
         icon: WalletIcon,
         current: false,
-        slug: "invoices",
+        slug: 'invoices',
       },
       {
-        name: "Dodavatelé",
-        link: "/dodavatele",
+        name: 'Dodavatelé',
+        link: '/dodavatele',
         icon: BuildingOfficeIcon,
         current: false,
-        slug: "suppliers",
+        slug: 'suppliers',
       },
       {
-        name: "Zaměstnanci",
-        link: "/zamestnanci",
+        name: 'Zaměstnanci',
+        link: '/zamestnanci',
         icon: UsersIcon,
         current: false,
-        slug: "employees",
+        slug: 'employees',
       },
       {
-        name: "Úkoly",
-        link: "/ukoly",
+        name: 'Úkoly',
+        link: '/ukoly',
         icon: ChartBarSquareIcon,
         current: false,
-        slug: "tasks",
+        slug: 'tasks',
       },
       {
-        name: "Smlouvy",
-        link: "/smlouvy",
+        name: 'Smlouvy',
+        link: '/smlouvy',
         icon: DocumentTextIcon,
         current: false,
-        slug: "contracts",
+        slug: 'contracts',
       },
     ],
   },
   {
-    title: "Nastavení a správa",
+    title: 'Nastavení a správa',
     menu: [
       {
-        name: "Uživatelé",
-        link: "/uzivatele",
+        name: 'Uživatelé',
+        link: '/uzivatele',
         icon: UsersIcon,
         current: false,
-        slug: "users",
+        slug: 'users',
       },
       {
-        name: "Uživatelské skupiny",
-        link: "/uzivatele/skupiny",
+        name: 'Uživatelské skupiny',
+        link: '/uzivatele/skupiny',
         icon: AdjustmentsHorizontalIcon,
         current: false,
-        slug: "user_groups",
+        slug: 'user_groups',
       },
       {
-        name: "Aktivity",
-        link: "/aktivity",
+        name: 'Aktivity',
+        link: '/aktivity',
         icon: ChartBarSquareIcon,
         current: false,
-        slug: "activities",
+        slug: 'activities',
       },
       {
-        name: "Sazby DPH",
-        link: "/nastaveni/dph",
+        name: 'Sazby DPH',
+        link: '/nastaveni/dph',
         icon: DocumentCurrencyEuroIcon,
         current: false,
-        slug: "tax_rates",
+        slug: 'tax_rates',
       },
       {
-        name: "Jazyky",
-        link: "/nastaveni/jazyky",
+        name: 'Jazyky',
+        link: '/nastaveni/jazyky',
         icon: LanguageIcon,
         current: false,
-        slug: "languages",
+        slug: 'languages',
       },
       {
-        name: "Země",
-        link: "/nastaveni/zeme",
+        name: 'Země',
+        link: '/nastaveni/zeme',
         icon: GlobeEuropeAfricaIcon,
         current: false,
-        slug: "countries",
+        slug: 'countries',
       },
       {
-        name: "Měny",
-        link: "/nastaveni/meny",
+        name: 'Měny',
+        link: '/nastaveni/meny',
         icon: CurrencyEuroIcon,
         current: false,
-        slug: "currencies",
+        slug: 'currencies',
       },
       {
-        name: "Odkazy",
-        link: "/aktivity",
+        name: 'Odkazy',
+        link: '/aktivity',
         icon: ChartBarSquareIcon,
         current: false,
-        slug: "demo",
+        slug: 'demo',
       },
     ],
   },
 ]);
 
 const userNavigation = [
-  { name: "Profil", link: "/profil" },
-  { name: "Rychlý přístup", link: "/profil/rychly-pristup" },
-  { name: "Odhlásit se", link: null, action: "handleLogout" },
+  { name: 'Profil', link: '/profil' },
+  { name: 'Rychlý přístup', link: '/profil/rychly-pristup' },
+  { name: 'Odhlásit se', link: null, action: 'handleLogout' },
 ];
 
-const quickAccess = ref([{ name: "", link: "/", target: null }]);
+const quickAccess = ref([{ name: '', link: '/', target: null }]);
 
 watchEffect(() => {
   const currentPath = route.path;
@@ -336,19 +336,12 @@ watchEffect(() => {
 
 function filterNavigationGroups(navigation: any[]): any[] {
   return navigation.filter((group: any) =>
-    group.menu.some(
-      (item: any) => !item.slug || (item.slug && canView(item.slug)),
-    ),
+    group.menu.some((item: any) => !item.slug || (item.slug && canView(item.slug))),
   );
 }
 
 function canView(slug: string): boolean {
-  if (
-    user &&
-    user.value &&
-    (user.value as any).user_group_id &&
-    userGroupStore.userGroups
-  ) {
+  if (user && user.value && (user.value as any).user_group_id && userGroupStore.userGroups) {
     const userGroup = userGroupStore.userGroups.find(
       (group: any) => group.id === (user.value as any).user_group_id,
     );
@@ -356,10 +349,7 @@ function canView(slug: string): boolean {
       const currentPermissionSlug = userGroup.permissions.find(
         (permission: any) => permission.slug === slug,
       );
-      if (
-        currentPermissionSlug &&
-        currentPermissionSlug.permissions.view === true
-      ) {
+      if (currentPermissionSlug && currentPermissionSlug.permissions.view === true) {
         return true;
       }
     }
@@ -369,7 +359,7 @@ function canView(slug: string): boolean {
 
 function handleLogout() {
   logout();
-  router.push("/login");
+  router.push('/login');
 }
 function getQuickAccess() {
   if (user && user.value && user.value.quick_access) {
@@ -432,14 +422,8 @@ onMounted(() => {
                 leave-from="opacity-100"
                 leave-to="opacity-0"
               >
-                <div
-                  class="absolute left-full top-0 flex w-16 justify-center pt-5"
-                >
-                  <button
-                    type="button"
-                    class="-m-2.5 p-2.5"
-                    @click="sidebarOpen = false"
-                  >
+                <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
+                  <button type="button" class="-m-2.5 p-2.5" @click="sidebarOpen = false">
                     <span class="sr-only">Close sidebar</span>
                     <XMarkIcon class="size-6 text-white" aria-hidden="true" />
                   </button>
@@ -469,9 +453,7 @@ onMounted(() => {
                           @click="sidebarOpen = false"
                         >
                           <NuxtLink
-                            v-if="
-                              !item.slug || (item.slug && canView(item.slug))
-                            "
+                            v-if="!item.slug || (item.slug && canView(item.slug))"
                             :to="item.link"
                             :class="[
                               item.current
@@ -480,11 +462,7 @@ onMounted(() => {
                               'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                             ]"
                           >
-                            <component
-                              :is="item.icon"
-                              class="size-6 shrink-0"
-                              aria-hidden="true"
-                            />
+                            <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
                             <span class="truncate">{{ item.name }}</span>
                           </NuxtLink>
                         </li>
@@ -512,19 +490,11 @@ onMounted(() => {
     </TransitionRoot>
 
     <!-- Static sidebar for desktop -->
-    <div
-      class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col"
-    >
+    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div
-        class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4"
-      >
+      <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
         <div class="flex h-24 shrink-0 items-center justify-center">
-          <img
-            class="h-12 w-auto"
-            src="public/static/img/logo-gray-300.png"
-            alt="Your Company"
-          />
+          <img class="h-12 w-auto" src="public/static/img/logo-gray-300.png" alt="Your Company" />
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -544,11 +514,7 @@ onMounted(() => {
                       'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                     ]"
                   >
-                    <component
-                      :is="item.icon"
-                      class="size-6 shrink-0"
-                      aria-hidden="true"
-                    />
+                    <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
                     <span class="truncate">{{ item.name }}</span>
                   </NuxtLink>
                 </li>
@@ -556,7 +522,7 @@ onMounted(() => {
             </li>
             <li class="mt-auto">
               <LayoutPropsCountdown
-                class="bg-gray-900 z-50 px-4 py-10 rounded-lg text-center border border-gray-300"
+                class="z-50 rounded-lg border border-gray-300 bg-gray-900 px-4 py-10 text-center"
               />
               <!--							<a
 								href="#"
@@ -576,7 +542,7 @@ onMounted(() => {
 
     <div class="lg:pl-64">
       <div
-        class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 no-print"
+        class="no-print sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
       >
         <button
           type="button"
@@ -594,13 +560,13 @@ onMounted(() => {
           <div class="relative flex flex-1">
             <label for="search-field" class="sr-only">Hledat</label>
             <MagnifyingGlassIcon
-              class="pointer-events-none absolute inset-y-0 left-0 h-full w-3 lg:w-5 text-grayCustom"
+              class="pointer-events-none absolute inset-y-0 left-0 h-full w-3 text-grayCustom lg:w-5"
               aria-hidden="true"
             />
             <input
               id="search-field"
               v-model="searchString"
-              class="block size-full border-0 py-0 pl-6 lg:pl-8 pr-0 text-grayDark placeholder:text-grayCustom focus:ring-0 text-xs lg:text-sm"
+              class="block size-full border-0 py-0 pl-6 pr-0 text-xs text-grayDark placeholder:text-grayCustom focus:ring-0 lg:pl-8 lg:text-sm"
               placeholder="Hledat..."
               type="search"
               name="search"
@@ -627,27 +593,20 @@ onMounted(() => {
             />
 
             <!-- Quick access dropdown -->
-            <Menu
-              v-if="quickAccess && quickAccess.length"
-              as="div"
-              class="relative"
-            >
+            <Menu v-if="quickAccess && quickAccess.length" as="div" class="relative">
               <MenuButton class="-m-1.5 flex items-center p-1.5">
                 <span class="sr-only">Open qick access menu</span>
                 <span class="flex lg:items-center">
                   <span
-                    class="hidden lg:block text-sm/6 font-semibold text-gray-900"
+                    class="hidden text-sm/6 font-semibold text-gray-900 lg:block"
                     aria-hidden="true"
                     >Rychlý přístup</span
                   >
                   <ChevronDownIcon
-                    class="hidden lg:block ml-2 size-5 text-gray-300"
+                    class="ml-2 hidden size-5 text-gray-300 lg:block"
                     aria-hidden="true"
                   />
-                  <StarIcon
-                    class="lg:hidden ml-2 size-5 text-yellow-600"
-                    aria-hidden="true"
-                  />
+                  <StarIcon class="ml-2 size-5 text-yellow-600 lg:hidden" aria-hidden="true" />
                 </span>
               </MenuButton>
               <transition
@@ -661,23 +620,19 @@ onMounted(() => {
                 <MenuItems
                   class="absolute right-0 z-10 mt-2.5 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                 >
-                  <MenuItem
-                    v-for="item in quickAccess"
-                    :key="item.name"
-                    v-slot="{ active }"
-                  >
+                  <MenuItem v-for="item in quickAccess" :key="item.name" v-slot="{ active }">
                     <NuxtLink
                       :to="item.link"
                       :target="item.target"
                       :class="[
                         active ? 'bg-gray-50 outline-none' : '',
-                        'block px-3 py-1 text-sm/6 text-gray-900 flex flex-grow items-center justify-between',
+                        'block flex flex-grow items-center justify-between px-3 py-1 text-sm/6 text-gray-900',
                       ]"
                     >
                       <span>{{ item.name }}</span>
                       <ArrowTopRightOnSquareIcon
                         v-if="item.target === '_blank'"
-                        class="size-4 text-warning ml-4"
+                        class="ml-4 size-4 text-warning"
                         aria-hidden="true"
                       />
                     </NuxtLink>
@@ -697,15 +652,10 @@ onMounted(() => {
                   alt=""
                 />
                 <span class="hidden lg:flex lg:items-center">
-                  <span
-                    class="ml-4 text-sm/6 font-semibold text-gray-900"
-                    aria-hidden="true"
+                  <span class="ml-4 text-sm/6 font-semibold text-gray-900" aria-hidden="true"
                     >{{ user.firstname }} {{ user.lastname }}</span
                   >
-                  <ChevronDownIcon
-                    class="ml-2 size-5 text-gray-300"
-                    aria-hidden="true"
-                  />
+                  <ChevronDownIcon class="ml-2 size-5 text-gray-300" aria-hidden="true" />
                 </span>
               </MenuButton>
               <transition
@@ -719,11 +669,7 @@ onMounted(() => {
                 <MenuItems
                   class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                 >
-                  <MenuItem
-                    v-for="item in userNavigation"
-                    :key="item.name"
-                    v-slot="{ active }"
-                  >
+                  <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
                     <NuxtLink
                       v-if="item.link != null"
                       :to="item.link"
@@ -737,7 +683,7 @@ onMounted(() => {
                       v-else
                       :class="[
                         active ? 'bg-gray-50 outline-none' : '',
-                        'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',
+                        'block cursor-pointer px-3 py-1 text-sm/6 text-gray-900',
                       ]"
                       @click="handleLogout"
                       >{{ item.name }}</span

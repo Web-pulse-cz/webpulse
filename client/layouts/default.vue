@@ -5,12 +5,12 @@ provide('loading', loading);
 </script>
 
 <template>
-	<div>
-		<LayoutNavbar />
-		<main>
-			<NuxtPage />
-		</main>
-		<LayoutFooter />
-		<LayoutCookiesBar />
-	</div>
+  <div>
+    <LayoutNavbar />
+    <main>
+      <NuxtPage />
+    </main>
+    <LayoutFooter />
+    <LayoutCookiesBar />
+  </div>
 </template>

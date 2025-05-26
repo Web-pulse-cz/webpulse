@@ -32,13 +32,13 @@ async function uploadFiles() {
 
   const client = useSanctumClient();
   formData.append('securityKey', 'your_security_key_here'); // Přidejte svůj bezpečnostní klíč
-  formData.append('type', 'service')
+  formData.append('type', 'service');
   try {
     const response = await client<{}>('https://api.web-pulse.cz/api/filemanager/upload/images', {
       method: 'POST',
       body: formData,
     });
-    formData.append({'securityKey': 'your_security_key_here'})
+    formData.append({ securityKey: 'your_security_key_here' });
 
     if (!response.ok) throw new Error('Nahrávání selhalo');
     const result = await response.json();
@@ -55,29 +55,31 @@ async function uploadFiles() {
   <div>
     <!-- Vstup pro nahrávání více souborů najednou -->
     <input
-        type="file"
-        class="block text-xs lg:text-sm/6 font-medium text-grayCustom text-left"
-        multiple
-        @change="handleFileChange"
-        :accept="acceptTypes"
+      type="file"
+      class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6"
+      multiple
+      :accept="acceptTypes"
+      @change="handleFileChange"
     />
 
     <!-- Galerie nahraných souborů -->
-    <draggable
-        v-if="files.length > 0"
-        v-model="files"
-        item-key="name"
-        class="gallery"
-    >
+    <draggable v-if="files.length > 0" v-model="files" item-key="name" class="gallery">
       <template #item="{ element, index }">
         <div>
-          <img v-if="element.preview" :src="element.preview" alt="Náhled" class="text-primaryCustom" />
+          <img
+            v-if="element.preview"
+            :src="element.preview"
+            alt="Náhled"
+            class="text-primaryCustom"
+          />
           <span class="text-xs text-primaryCustom">{{ element.name }}</span>
         </div>
       </template>
     </draggable>
 
     <!-- Tlačítko pro odeslání na API -->
-    <BaseButton variant="primary" size="md" @click="uploadFiles" class="upload-btn">Nahrát soubory</BaseButton>
+    <BaseButton variant="primary" size="md" class="upload-btn" @click="uploadFiles"
+      >Nahrát soubory</BaseButton
+    >
   </div>
 </template>

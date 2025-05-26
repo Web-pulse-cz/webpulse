@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import { QuillEditor } from '@vueup/vue-quill';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const props = defineProps({
   modelValue: {
@@ -10,24 +10,23 @@ const props = defineProps({
   label: {
     type: String,
     required: false,
-    default: "Editor",
+    default: 'Editor',
   },
 });
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue']);
 </script>
 
 <template>
   <div>
-    <label
-      class="block text-xs lg:text-sm/6 font-medium text-grayCustom text-left"
-      >{{ label }}</label
-    >
+    <label class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6">{{
+      label
+    }}</label>
     <ClientOnly>
       <QuillEditor
         v-model:content="props.modelValue"
-        @update:content="emit('update:modelValue', $event)"
-        contentType="html"
+        content-type="html"
         class="my-quill-editor"
+        @update:content="emit('update:modelValue', $event)"
       />
     </ClientOnly>
   </div>
