@@ -48,34 +48,32 @@ function handleFileChange(event: Event) {
   if (!input.files) return;
 
   const filesArray = Array.from(input.files);
-  if(props.multiple) {
-  for (const file of filesArray) {
-    const reader = new FileReader();
-    const fileItem = { file, name: file.name, preview: '' };
-    if (file.type.startsWith('image/')) {
-      reader.onload = (e) => {
-        fileItem.preview = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    files.value.push(fileItem);
-  }
-  } else {
-    // Pokud není povoleno více souborů, přidejte pouze jeden soubor
-    const file = filesArray[0];
-    if (file) {
-      const reader = new FileReader();
-      const fileItem = { file, name: file.name, preview: '' };
-
+  if (props.multiple) {
+    for (const file of filesArray) {
       if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
         reader.onload = (e) => {
-          fileItem.preview = e.target?.result as string;
+          const preview = e.target?.result as string;
+          files.value.push({ file, name: file.name, preview });
         };
         reader.readAsDataURL(file);
+      } else {
+        files.value.push({ file, name: file.name });
       }
-
-      files.value = [fileItem]; // Přepište pole s jedním souborem
+    }
+  } else {
+    const file = filesArray[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = e.target?.result as string;
+          files.value = [{ file, name: file.name, preview }];
+        };
+        reader.readAsDataURL(file);
+      } else {
+        files.value = [{ file, name: file.name }];
+      }
     }
   }
 }
@@ -138,26 +136,20 @@ async function uploadFiles() {
       @change="handleFileChange"
     />
 
-
-    <!-- Galerie nahraných souborů -->
-    <draggable v-if="files.length > 0" v-model="files" item-key="name" class="ring-1 ring-inset ring-grayLight bg-gray-100 p-6 my-4 rounded">
-      <template #item="{ element, index }" class="flex flex-wrap flex-row gap-8 rounded-md">
-        <div class="rounded-md relative">
-          <UTooltip
-            text="Odstanit soubor"
-            placement="top"
-            class="absolute top-2 right-2 w-6 h-6">
-          <XMarkIcon
-            class="absolute top-2 right-2 w-6 h-6 text-danger cursor-pointer" @click="removeFile(index)" />
-          </UTooltip>
-          <img
-            :src="element.preview"
-            alt="Náhled"
-            class="text-primaryCustom"
-          />
-        </div>
-      </template>
-    </draggable>
+    <div :class="[multiple ? 'grid-cols-4' : 'grid-cols-1', 'grid w-full  gap-4 my-4 bg-gray-100 p-6 rounded ring-1 ring-inset ring-grayLight']">
+      <draggable v-model="files" item-key="name" style="display: contents;" class="cursor-grab">
+        <template #item="{ element, index }">
+          <div class="'col-span-full relative rounded-md overflow-hidden border border-gray-300']">
+            <UTooltip text="Odstranit soubor" placement="top" class="absolute top-1 right-1">
+              <div class="w-8 h-8 rounded-full ring-1 ring-danger bg-dangerLight inline-flex items-center justify-center cursor-pointer" @click="removeFile(index)">
+              <XMarkIcon class="w-4 h-4 text-white" />
+              </div>
+            </UTooltip>
+            <img :src="element.preview" alt="náhled" class="object-cover w-full h-full" />
+          </div>
+        </template>
+      </draggable>
+    </div>
 
     <div class="w-full flex flex-wrap gap-x-4">
       <BaseButton
