@@ -312,6 +312,7 @@ definePageMeta({
               :options="languageStore.languageOptions"
             />
           </div>
+          <div class="col-span-1 pb-6 border-b">
           <BaseFormCheckbox
             v-model="item.active"
             name="active"
@@ -321,7 +322,10 @@ definePageMeta({
             label-color="grayCustom"
             :reverse="true"
           />
-          <p class="text-dark">TODO:: obrázek</p>
+          </div>
+          <div class="col-span-1 pb-6 border-b">
+            <BaseFormUploadImage />
+          </div>
         </LayoutContainer>
       </div>
     </Form>

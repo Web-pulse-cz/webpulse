@@ -49,7 +49,8 @@
     "vue-cropperjs": "^5.0.0",
     "vue-router": "latest",
     "vue3-apexcharts": "^1.8.0",
-    "vue3-quill": "^0.3.1"
+    "vue3-quill": "^0.3.1",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.7.1",
