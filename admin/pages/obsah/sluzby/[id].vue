@@ -166,6 +166,10 @@ function fillEmptyTranslations() {
   });
 }
 
+function updateItemImage(files) {
+    item.value.image = files[0];
+}
+
 onMounted(() => {
   if (route.params.id !== 'pridat') {
     loadItem();
@@ -316,12 +320,15 @@ definePageMeta({
             />
           </div>
           <div class="col-span-1 border-b pb-6">
+            <pre>{{ item.image }}</pre>
             <BaseFormUploadImage
+                v-model="item.image"
               :multiple="false"
               type="service"
               format="small"
               label="Náhledový obrázek"
               class="pt-6"
+              @update-files="updateItemImage"
             />
           </div>
         </LayoutContainer>

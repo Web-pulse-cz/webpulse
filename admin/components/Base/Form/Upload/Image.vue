@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import Draggable from 'vuedraggable';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
 
+const toast = useToast();
+
 const props = defineProps({
   fileType: {
     type: String,
@@ -29,6 +31,7 @@ const props = defineProps({
     default: false,
   },
 });
+const emit = defineEmits(['update-files']);
 const imageFormatMessage = await useImageFormatMessage(props.multiple, props.type, props.format);
 
 const files = ref<{ file: File; name: string; preview?: string }[]>([]);
@@ -81,19 +84,35 @@ async function uploadFiles() {
   formData.append('securityKey', 'your_security_key_here'); // Přidejte svůj bezpečnostní klíč
   formData.append('type', 'service');
   try {
-    const response = await client<{}>('https://api.web-pulse.cz/api/filemanager/upload/images', {
+    const response = await client<{}>('/api/filemanager/upload/images', {
       method: 'POST',
       body: formData,
     });
-    formData.append({ securityKey: 'your_security_key_here' });
 
-    if (!response.ok) throw new Error('Nahrávání selhalo');
-    const result = await response.json();
-    console.log('Nahrané soubory:', result); // Vrácené pole názvů souborů
-    alert('Soubor(y) úspěšně nahrány!');
+    /*if(!response.ok) {
+      toast.add({
+        title: 'Chyba',
+        description: props.multiple ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.' : 'Nepodařilo se nahrát soubor. Zkuste to prosím později.',
+        color: 'red',
+      });
+      throw new Error('Nahrávání selhalo');
+    }*/
+
+    const result = await response;
+    emit('update-files', result);
+
+    toast.add({
+      title: 'Hotovo',
+      description: props.multiple ? 'Soubory byly úspěšně nahrány.' : 'Soubor byl úspěšně nahrán.',
+      color: 'green',
+    });
   } catch (error) {
-    console.error('Chyba při nahrávání:', error);
-    alert('Chyba při nahrávání souborů.');
+    console.log(error);
+    toast.add({
+      title: 'Chyba',
+      description: props.multiple ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.' : 'Nepodařilo se nahrát soubor. Zkuste to prosím později.',
+      color: 'red',
+    });
   }
 }
 </script>
@@ -132,7 +151,7 @@ async function uploadFiles() {
     </draggable>
 
     <!-- Tlačítko pro odeslání na API -->
-    <BaseButton variant="primary" size="md" class="upload-btn" @click="uploadFiles"
+    <BaseButton type="button" variant="primary" size="md" class="upload-btn" @click="uploadFiles"
       >Nahrát soubory</BaseButton
     >
   </div>
