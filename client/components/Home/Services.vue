@@ -43,16 +43,8 @@ function openDemandDialog(serviceId) {
             <BasePropsHeading type="h3" margin-bottom="mb-0">
               {{ service.name }}
             </BasePropsHeading>
-            <div
-              v-if="expandedIndex === index"
-              class="mt-4 opacity-100 transition-opacity duration-500"
-            >
-              <div
-                :class="[
-                  expandedIndex !== index ? 'hidden' : '',
-                  'transition-all duration-500 ease-in-out',
-                ]"
-              >
+            <div class="mt-4 opacity-100 transition-opacity duration-500">
+              <div>
                 <BasePropsParagraph :html="service.description" />
                 <div class="flex items-center justify-between">
                   <BasePropsParagraph bold="bold">
@@ -63,6 +55,10 @@ function openDemandDialog(serviceId) {
                       service.price_type === 'hourly' ? t('services.hour') : t('services.project')
                     }})
                   </BasePropsParagraph>
+                  <NuxtImg
+                    :src="'/content/images/service/large/' + service.image"
+                    :alt="service.name"
+                  />
                   <BaseButton
                     :href="`/services/${service.slug}`"
                     size="xl"

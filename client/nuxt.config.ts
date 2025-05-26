@@ -76,15 +76,15 @@ export default defineNuxtConfig({
     '/api/**': {
       proxy: `${process.env.API_URL ?? 'https://api.martinhanzl.cz/'}/api/**`,
     },
-    '/images/**': {
+    '/content/**': {
       proxy: process.env.API_URL
-        ? process.env.API_URL + '/images/**'
-        : 'http://api.martinhanzl/images/**',
+        ? process.env.API_URL + '/content/**'
+        : 'http://api.martinhanzl/content/**',
     },
     '/files/**': {
       proxy: process.env.API_URL
         ? process.env.API_URL + '/files/**'
-        : 'http://api.martinhanzl/files/**',
+        : 'http://api.martinhanzl/content/files/**',
     },
   },
   compatibilityDate: '2024-11-01',
