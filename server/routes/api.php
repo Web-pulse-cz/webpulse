@@ -28,7 +28,19 @@ use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Service\ServiceController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
+use App\Http\Controllers\FilemanagerController;
 
+Route::group([
+    'prefix' => 'filemanager'
+], function () {
+    Route::get('formats', [FilemanagerController::class, 'getImageFormats']);
+    Route::group([
+        'prefix' => 'upload'
+    ], function () {
+        Route::post('images', [FilemanagerController::class, 'uploadImages']);
+        //Route::post('files', [FilemanagerController::class, 'uploadFiles']);
+    });
+});
 
 Route::group([
     'prefix' => 'service'

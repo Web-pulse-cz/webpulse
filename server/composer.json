@@ -11,6 +11,8 @@
         "fakturoid/fakturoid-php": "^2.1",
         "google/apiclient": "2.15.0",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^3.11",
+        "intervention/image-laravel": "^1.5",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
