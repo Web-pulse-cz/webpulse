@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { Form } from "vee-validate";
-import { useCurrencyStore } from "~/stores/currencyStore";
-import { useTaxRateStore } from "~/stores/taxRateStore";
+import { ref } from 'vue';
+import { Form } from 'vee-validate';
+import { useCurrencyStore } from '~/stores/currencyStore';
+import { useTaxRateStore } from '~/stores/taxRateStore';
 
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();
@@ -13,46 +13,44 @@ const route = useRoute();
 const router = useRouter();
 
 const languageStore = useLanguageStore();
-const selectedLocale = ref("cs");
+const selectedLocale = ref('cs');
 
 const error = ref(false);
 const loading = ref(false);
 
-const pageTitle = ref(
-  route.params.id === "pridat" ? "Nová služby" : "Detail služby",
-);
+const pageTitle = ref(route.params.id === 'pridat' ? 'Nová služby' : 'Detail služby');
 
 const breadcrumbs = ref([
   {
-    name: "Služby",
-    link: "/obsah/sluzby",
+    name: 'Služby',
+    link: '/obsah/sluzby',
     current: false,
   },
   {
-    name: "Nová služba",
-    link: "/obsah/sluzby/pridat",
+    name: 'Nová služba',
+    link: '/obsah/sluzby/pridat',
     current: true,
   },
 ]);
 
 const item = ref({
   id: null as number | null,
-  type: "service" as string,
-  price_type: "hourly" as string,
+  type: 'service' as string,
+  price_type: 'hourly' as string,
   price: 0 as number,
   tax_rate_id: 5 as number,
   currency_id: 1 as number,
-  image: "" as string,
+  image: '' as string,
   active: true as boolean,
   translations: {} as object,
 });
 const translatableAttributes = ref([
-  { field: "name" as string, label: "Název" as string },
-  { field: "slug" as string, label: "Slug" as string },
-  { field: "perex" as string, label: "Perex" as string },
-  { field: "description" as string, label: "Popis" as string },
-  { field: "meta_title" as string, label: "Meta title" as string },
-  { field: "meta_description" as string, label: "Meta popis" as string },
+  { field: 'name' as string, label: 'Název' as string },
+  { field: 'slug' as string, label: 'Slug' as string },
+  { field: 'perex' as string, label: 'Perex' as string },
+  { field: 'description' as string, label: 'Popis' as string },
+  { field: 'meta_title' as string, label: 'Meta title' as string },
+  { field: 'meta_description' as string, label: 'Meta popis' as string },
 ]);
 
 async function loadItem() {
@@ -69,11 +67,11 @@ async function loadItem() {
     image: string;
     active: boolean;
     translations: object;
-  }>("/api/admin/service/" + route.params.id, {
-    method: "GET",
+  }>('/api/admin/service/' + route.params.id, {
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
   })
     .then((response) => {
@@ -81,7 +79,7 @@ async function loadItem() {
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
         name: item.value.name,
-        link: "/obsah/sluzby/" + route.params.id,
+        link: '/obsah/sluzby/' + route.params.id,
         current: true,
       });
       fillEmptyTranslations();
@@ -89,9 +87,9 @@ async function loadItem() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: "Chyba",
-        description: "Nepodařilo se načíst službu. Zkuste to prosím později.",
-        color: "red",
+        title: 'Chyba',
+        description: 'Nepodařilo se načíst službu. Zkuste to prosím později.',
+        color: 'red',
       });
     })
     .finally(() => {
@@ -114,37 +112,35 @@ async function saveItem() {
     active: boolean;
     translations: object;
   }>(
-    route.params.id === "pridat"
-      ? "/api/admin/service"
-      : "/api/admin/service/" + route.params.id,
+    route.params.id === 'pridat' ? '/api/admin/service' : '/api/admin/service/' + route.params.id,
     {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(item.value),
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     },
   )
     .then(() => {
       toast.add({
-        title: "Hotovo",
+        title: 'Hotovo',
         description:
-          route.params.id === "pridat"
-            ? "Služba byla úspěšně vytvořena."
-            : "Služba byla úspěšně upravena.",
-        color: "green",
+          route.params.id === 'pridat'
+            ? 'Služba byla úspěšně vytvořena.'
+            : 'Služba byla úspěšně upravena.',
+        color: 'green',
       });
-      router.push("/obsah/sluzby");
+      router.push('/obsah/sluzby');
       languageStore.fetchLanguages();
     })
     .catch(() => {
       error.value = true;
       toast.add({
-        title: "Chyba",
+        title: 'Chyba',
         description:
-          "Nepodařilo se upravit službu. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.",
-        color: "red",
+          'Nepodařilo se upravit službu. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
+        color: 'red',
       });
     })
     .finally(() => {
@@ -162,10 +158,8 @@ function fillEmptyTranslations() {
     if (item.value.translations[language.code] === undefined) {
       item.value.translations[language.code] = {};
       translatableAttributes.value.forEach((attribute) => {
-        if (
-          item.value.translations[language.code][attribute.field] === undefined
-        ) {
-          item.value.translations[language.code][attribute.field] = "";
+        if (item.value.translations[language.code][attribute.field] === undefined) {
+          item.value.translations[language.code][attribute.field] = '';
         }
       });
     }
@@ -173,13 +167,13 @@ function fillEmptyTranslations() {
 }
 
 onMounted(() => {
-  if (route.params.id !== "pridat") {
+  if (route.params.id !== 'pridat') {
     loadItem();
   }
   fillEmptyTranslations();
 });
 definePageMeta({
-  middleware: "sanctum:auth",
+  middleware: 'sanctum:auth',
 });
 </script>
 
@@ -193,9 +187,7 @@ definePageMeta({
       @save="saveItem"
     />
     <Form @submit="saveItem">
-      <div
-        class="grid grid-cols-1 lg:grid-cols-7 gap-x-4 gap-y-8 items-baseline"
-      >
+      <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
         <LayoutContainer class="col-span-5 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
@@ -303,7 +295,7 @@ definePageMeta({
           </div>
         </LayoutContainer>
         <LayoutContainer class="col-span-2 w-full">
-          <div class="col-span-1 pb-6 border-b">
+          <div class="col-span-1 border-b pb-6">
             <BaseFormSelect
               v-model="selectedLocale"
               label="Jazyk"
@@ -312,18 +304,18 @@ definePageMeta({
               :options="languageStore.languageOptions"
             />
           </div>
-          <div class="col-span-1 pb-6 border-b">
-          <BaseFormCheckbox
-            v-model="item.active"
-            name="active"
-            label="Aktivní"
-            class="col-span-1 justify-between flex-row-reverse mt-4"
-            :checked="item.active"
-            label-color="grayCustom"
-            :reverse="true"
-          />
+          <div class="col-span-1 border-b pb-6">
+            <BaseFormCheckbox
+              v-model="item.active"
+              name="active"
+              label="Aktivní"
+              class="col-span-1 mt-4 flex-row-reverse justify-between"
+              :checked="item.active"
+              label-color="grayCustom"
+              :reverse="true"
+            />
           </div>
-          <div class="col-span-1 pb-6 border-b">
+          <div class="col-span-1 border-b pb-6">
             <BaseFormUploadImage />
           </div>
         </LayoutContainer>
