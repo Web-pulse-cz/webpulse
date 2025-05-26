@@ -59,7 +59,7 @@ class FileManagerService
                 throw new \Exception("Invalid file upload.");
             }
 
-            $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $file->getClientOriginalExtension();
+            $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . strtolower($file->getClientOriginalExtension());
             foreach ($imageFormats as $configFormat) {
                 try {
                     $imageData = $this->parseImage($file, $configFormat);
