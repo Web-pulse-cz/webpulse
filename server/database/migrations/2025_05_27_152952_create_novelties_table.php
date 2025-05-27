@@ -22,9 +22,9 @@ return new class extends Migration {
         Schema::create('novelty_translations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('novelty_id');
-            $table->foreign('id')
+            $table->foreign('novelty_id')
                 ->references('id')
-                ->on('news')
+                ->on('novelties')
                 ->onDelete('cascade');
 
             $table->string('locale')->index();
@@ -35,7 +35,7 @@ return new class extends Migration {
             $table->text('text');
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->unique(['news_id', 'locale']);
+            $table->unique(['novelty_id', 'locale']);
 
             $table->timestamps();
         });
