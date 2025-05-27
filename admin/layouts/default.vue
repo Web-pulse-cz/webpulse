@@ -35,6 +35,7 @@ import {
   LanguageIcon,
   GlobeEuropeAfricaIcon,
   CurrencyEuroIcon,
+  WrenchScrewdriverIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -91,18 +92,18 @@ const navigation = ref([
         slug: 'demo',
       },
       {
-        name: 'Služby',
-        link: '/obsah/sluzby',
-        icon: ChatBubbleBottomCenterTextIcon,
-        current: false,
-        slug: 'services',
-      },
-      {
         name: 'Události a akce',
         link: '/demo',
         icon: CalendarIcon,
         current: false,
         slug: 'demo',
+      },
+      {
+        name: 'Služby',
+        link: '/obsah/sluzby',
+        icon: WrenchScrewdriverIcon,
+        current: false,
+        slug: 'services',
       },
     ],
   },
