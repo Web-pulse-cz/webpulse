@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, defineEmits, defineProps } from 'vue';
 import Draggable from 'vuedraggable';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
@@ -36,8 +36,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  modelValue: {
+    type: String,
+    default: '',
+    required: false,
+  },
 });
-const emit = defineEmits(['update-files']);
+
+const emit = defineEmits(['update-files', 'update:modelValue']);
+
 const imageFormatMessage = await useImageFormatMessage(
   props.fileType,
   props.multiple,
@@ -45,8 +52,25 @@ const imageFormatMessage = await useImageFormatMessage(
   props.format,
 );
 
-const files = ref<{ file: File; name: string; preview?: string }[]>([]);
-const acceptTypes = 'image/*,application/pdf,application/msword'; // Přijatelné typy
+// Inicializace souborů z v-model
+const files = ref<{ file: File | null; name: string; preview?: string }[]>([]);
+
+// Synchronizace files s v-model při změně modelValue
+watch(
+  () => props.modelValue,
+  () => {
+    files.value = [
+      {
+        file: null, // u předvyplněných souborů File není
+        name: props.modelValue,
+        preview: `https://api.martinhanzl.cz/content/images/${props.type}/${props.format}/${props.modelValue}`,
+      },
+    ];
+  },
+  { immediate: true },
+);
+
+const acceptTypes = 'image/*,application/pdf,application/msword';
 
 function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
@@ -60,10 +84,18 @@ function handleFileChange(event: Event) {
         reader.onload = (e) => {
           const preview = e.target?.result as string;
           files.value.push({ file, name: file.name, preview });
+          emit(
+            'update:modelValue',
+            files.value.map((f) => ({ name: f.name, preview: f.preview })),
+          );
         };
         reader.readAsDataURL(file);
       } else {
         files.value.push({ file, name: file.name });
+        emit(
+          'update:modelValue',
+          files.value.map((f) => ({ name: f.name, preview: f.preview })),
+        );
       }
     }
   } else {
@@ -74,10 +106,18 @@ function handleFileChange(event: Event) {
         reader.onload = (e) => {
           const preview = e.target?.result as string;
           files.value = [{ file, name: file.name, preview }];
+          emit(
+            'update:modelValue',
+            files.value.map((f) => ({ name: f.name, preview: f.preview })),
+          );
         };
         reader.readAsDataURL(file);
       } else {
         files.value = [{ file, name: file.name }];
+        emit(
+          'update:modelValue',
+          files.value.map((f) => ({ name: f.name, preview: f.preview })),
+        );
       }
     }
   }
@@ -85,17 +125,22 @@ function handleFileChange(event: Event) {
 
 function removeFile(index: number) {
   files.value.splice(index, 1);
+  emit(
+    'update:modelValue',
+    files.value.map((f) => ({ name: f.name, preview: f.preview })),
+  );
 }
 
 async function uploadFiles() {
   const formData = new FormData();
   files.value.forEach(({ file }) => {
-    formData.append('images[]', file);
+    if (file) formData.append('images[]', file);
   });
 
   const client = useSanctumClient();
-  formData.append('securityKey', 'your_security_key_here'); // Přidejte svůj bezpečnostní klíč
+  formData.append('securityKey', 'your_security_key_here');
   formData.append('type', props.type);
+
   try {
     const response = await client<{}>('/api/filemanager/upload/images', {
       method: 'POST',
@@ -133,7 +178,7 @@ async function uploadFiles() {
     >
       {{ imageFormatMessage }}
     </span>
-    <!-- Vstup pro nahrávání více souborů najednou -->
+
     <input
       ref="fileInput"
       type="file"
