@@ -2,12 +2,13 @@
 
 namespace App\Models\Novelty;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Novelty extends Model
 {
+    use Translatable;
     protected $table = 'novelties';
 
     protected $fillable = [
