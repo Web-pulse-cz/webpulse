@@ -5,7 +5,7 @@ import { XMarkIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
 
 const toast = useToast();
-
+const manualUploaded = ref(false);
 const props = defineProps({
   fileType: {
     type: String,
@@ -125,6 +125,7 @@ function handleFileChange(event: Event) {
       }
     }
   }
+  manualUploaded.value = true;
 }
 
 function removeFile(index: number) {
@@ -220,7 +221,7 @@ async function uploadFiles() {
         multiple ? 'Vybrat soubory' : 'Vybrat soubor'
       }}</BaseButton>
       <BaseButton
-        v-if="files && files.length"
+        v-if="files && files.length && manualUploaded"
         type="button"
         variant="primary"
         size="md"
