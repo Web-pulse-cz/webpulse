@@ -55,7 +55,8 @@ function openDemandDialog(serviceId) {
                       service.price_type === 'hourly' ? t('services.hour') : t('services.project')
                     }})
                   </BasePropsParagraph>
-                  <NuxtImg
+                  <BaseImage
+                    v-if="service.image"
                     :src="'/content/images/service/large/' + service.image"
                     :alt="service.name"
                   />
