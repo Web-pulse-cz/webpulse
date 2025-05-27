@@ -43,7 +43,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update-files', 'update:modelValue']);
+const emit = defineEmits(['update-files' /*, 'update:modelValue'*/]);
 
 const imageFormatMessage = await useImageFormatMessage(
   props.fileType,
@@ -88,18 +88,18 @@ function handleFileChange(event: Event) {
         reader.onload = (e) => {
           const preview = e.target?.result as string;
           files.value.push({ file, name: file.name, preview });
-          emit(
+          /* emit(
             'update:modelValue',
             files.value.map((f) => ({ name: f.name, preview: f.preview })),
-          );
+          );*/
         };
         reader.readAsDataURL(file);
       } else {
         files.value.push({ file, name: file.name });
-        emit(
+        /* emit(
           'update:modelValue',
           files.value.map((f) => ({ name: f.name, preview: f.preview })),
-        );
+        );*/
       }
     }
   } else {
@@ -110,18 +110,18 @@ function handleFileChange(event: Event) {
         reader.onload = (e) => {
           const preview = e.target?.result as string;
           files.value = [{ file, name: file.name, preview }];
-          emit(
+          /* emit(
             'update:modelValue',
             files.value.map((f) => ({ name: f.name, preview: f.preview })),
-          );
+          );*/
         };
         reader.readAsDataURL(file);
       } else {
         files.value = [{ file, name: file.name }];
-        emit(
+        /* emit(
           'update:modelValue',
           files.value.map((f) => ({ name: f.name, preview: f.preview })),
-        );
+        );*/
       }
     }
   }
@@ -129,10 +129,10 @@ function handleFileChange(event: Event) {
 
 function removeFile(index: number) {
   files.value.splice(index, 1);
-  emit(
+  /* emit(
     'update:modelValue',
     files.value.map((f) => ({ name: f.name, preview: f.preview })),
-  );
+  );*/
 }
 
 async function uploadFiles() {
