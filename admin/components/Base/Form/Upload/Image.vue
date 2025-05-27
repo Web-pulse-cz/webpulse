@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, defineEmits, defineProps } from 'vue';
+import { ref, watch } from 'vue';
 import Draggable from 'vuedraggable';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
@@ -59,6 +59,10 @@ const files = ref<{ file: File | null; name: string; preview?: string }[]>([]);
 watch(
   () => props.modelValue,
   () => {
+    if (!props.modelValue) {
+      files.value = [];
+      return;
+    }
     files.value = [
       {
         file: null, // u předvyplněných souborů File není
