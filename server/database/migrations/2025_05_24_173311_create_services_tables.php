@@ -40,7 +40,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('slug')->nullable();
             $table->text('perex')->nullable();
-            $table->text('description')->nullable();
+            $table->text('description')->nullable(); // TODO: rename to 'text' in the future
 
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
