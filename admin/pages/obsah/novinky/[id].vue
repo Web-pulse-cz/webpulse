@@ -40,7 +40,7 @@ const translatableAttributes = ref([
   { field: 'name' as string, label: 'Název' as string },
   { field: 'slug' as string, label: 'Slug' as string },
   { field: 'perex' as string, label: 'Perex' as string },
-  { field: 'description' as string, label: 'Popis' as string },
+  { field: 'text' as string, label: 'Popis' as string },
   { field: 'meta_title' as string, label: 'Meta title' as string },
   { field: 'meta_description' as string, label: 'Meta popis' as string },
 ]);
@@ -178,7 +178,7 @@ definePageMeta({
     />
     <Form @submit="saveItem">
       <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-        <LayoutContainer class="col-span-5 w-full">
+        <LayoutContainer class="col-span-4 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormSelect
               v-model="item.priority"
@@ -217,18 +217,6 @@ definePageMeta({
               name="meta_title"
               class="col-span-1"
             />
-            <br />
-            <div class="col-span-full">
-              <BaseFormUploadImage
-                v-model="item.image"
-                :multiple="true"
-                type="service"
-                format="small"
-                label="Náhledový obrázek"
-                class="pt-6"
-                @update-files="updateItemImage"
-              />
-            </div>
             <BaseFormTextarea
               v-if="
                 item.translations &&
@@ -255,16 +243,16 @@ definePageMeta({
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].description !== undefined
+                item.translations[selectedLocale].text !== undefined
               "
-              v-model="item.translations[selectedLocale].description"
+              v-model="item.translations[selectedLocale].text"
               label="Popis"
-              name="description"
+              name="text"
               class="col-span-2"
             />
           </div>
         </LayoutContainer>
-        <LayoutContainer class="col-span-2 w-full">
+        <LayoutContainer class="col-span-3 w-full">
           <div class="col-span-1 border-b pb-6">
             <BaseFormSelect
               v-model="selectedLocale"
@@ -289,8 +277,8 @@ definePageMeta({
             <BaseFormUploadImage
               v-model="item.image"
               :multiple="false"
-              type="service"
-              format="small"
+              type="novelty"
+              format="medium"
               label="Náhledový obrázek"
               class="pt-6"
               @update-files="updateItemImage"

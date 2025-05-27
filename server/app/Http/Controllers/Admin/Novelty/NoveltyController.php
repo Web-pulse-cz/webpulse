@@ -90,7 +90,8 @@ class NoveltyController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating service.'], 500);
+            return Response::json(['m' => $e->getMessage()]);
+            return Response::json(['message' => 'An error occurred while updating novelty.'], 500);
         }
 
         return Response::json(NoveltyResource::make($novelty));

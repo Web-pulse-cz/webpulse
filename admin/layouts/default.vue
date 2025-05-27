@@ -103,10 +103,10 @@ const navigation = ref([
       },
       {
         name: 'Novinky',
-        link: '/demo',
+        link: '/obsah/novinky',
         icon: NewspaperIcon,
         current: false,
-        slug: 'news',
+        slug: 'novelties',
       },
       {
         name: 'Služby',
