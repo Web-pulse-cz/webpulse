@@ -151,7 +151,7 @@ async function uploadFiles() {
     >
       <draggable v-model="files" item-key="name" style="display: contents" class="cursor-grab">
         <template #item="{ element, index }">
-          <div class="'col-span-full border-gray-300'] relative overflow-hidden rounded-md border">
+          <div class="relative col-span-full overflow-hidden rounded-md border border-gray-300">
             <UTooltip text="Odstranit soubor" placement="top" class="absolute right-1 top-1">
               <div
                 class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
@@ -167,14 +167,14 @@ async function uploadFiles() {
     </div>
 
     <div class="flex w-full flex-wrap gap-x-4">
-      <BaseButton type="button" variant="secondary" size="lg" @click="$refs.fileInput.click()">{{
+      <BaseButton type="button" variant="secondary" size="md" @click="$refs.fileInput.click()">{{
         multiple ? 'Vybrat soubory' : 'Vybrat soubor'
       }}</BaseButton>
       <BaseButton
         v-if="files && files.length"
         type="button"
         variant="primary"
-        size="lg"
+        size="md"
         @click="uploadFiles"
         >{{ multiple ? 'Nahrát soubory' : 'Nahrát soubor' }}</BaseButton
       >
