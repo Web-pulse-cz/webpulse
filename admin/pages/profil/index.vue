@@ -193,6 +193,10 @@ async function copyToClipboard() {
     });
 }
 
+function updateItemImage(files) {
+  item.value.avatar = files[0];
+}
+
 useHead({
   title: 'Profil',
 });
@@ -269,11 +273,15 @@ definePageMeta({
       </LayoutContainer>
       <LayoutContainer class="col-span-3 w-full lg:col-span-1">
         <div class="grid w-full grid-cols-2 gap-x-8 gap-y-4">
-          <div class="col-span-full text-center">
-            <NuxtImg
-              class="mx-auto size-full rounded-full"
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt=""
+          <div class="col-span-full">
+            <BaseFormUploadImage
+              v-model="item.avatar"
+              :multiple="false"
+              type="user"
+              format="thumb"
+              label="Avatar"
+              class="pt-6"
+              @update-files="updateItemImage"
             />
           </div>
           <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />

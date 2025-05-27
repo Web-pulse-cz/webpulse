@@ -167,7 +167,7 @@ function fillEmptyTranslations() {
 }
 
 function updateItemImage(files) {
-    item.value.image = files[0];
+  item.value.image = files[0];
 }
 
 onMounted(() => {
@@ -265,13 +265,13 @@ definePageMeta({
             <br />
             <div class="col-span-full">
               <BaseFormUploadImage
-                  v-model="item.image"
-                  :multiple="true"
-                  type="service"
-                  format="small"
-                  label="Náhledový obrázek"
-                  class="pt-6"
-                  @update-files="updateItemImage"
+                v-model="item.image"
+                :multiple="true"
+                type="service"
+                format="small"
+                label="Náhledový obrázek"
+                class="pt-6"
+                @update-files="updateItemImage"
               />
             </div>
             <BaseFormTextarea
@@ -332,7 +332,7 @@ definePageMeta({
           </div>
           <div class="col-span-1 border-b pb-6">
             <BaseFormUploadImage
-                v-model="item.image"
+              v-model="item.image"
               :multiple="false"
               type="service"
               format="small"

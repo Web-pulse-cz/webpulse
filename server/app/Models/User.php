@@ -61,9 +61,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(MessageBlueprint::class, 'user_id', 'id');
     }
-
-    public function getAvatarAttribute($value)
-    {
-        return $value ? asset('storage/' . $value) : null;
-    }
 }

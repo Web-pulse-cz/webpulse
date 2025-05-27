@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Draggable from 'vuedraggable';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
-import {XMarkIcon} from "@heroicons/vue/24/outline";
 
 const toast = useToast();
 
@@ -38,7 +38,12 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['update-files']);
-const imageFormatMessage = await useImageFormatMessage(props.fileType, props.multiple, props.type, props.format);
+const imageFormatMessage = await useImageFormatMessage(
+  props.fileType,
+  props.multiple,
+  props.type,
+  props.format,
+);
 
 const files = ref<{ file: File; name: string; preview?: string }[]>([]);
 const acceptTypes = 'image/*,application/pdf,application/msword'; // Přijatelné typy
@@ -90,7 +95,7 @@ async function uploadFiles() {
 
   const client = useSanctumClient();
   formData.append('securityKey', 'your_security_key_here'); // Přidejte svůj bezpečnostní klíč
-  formData.append('type', 'service');
+  formData.append('type', props.type);
   try {
     const response = await client<{}>('/api/filemanager/upload/images', {
       method: 'POST',
@@ -109,7 +114,9 @@ async function uploadFiles() {
     console.log(error);
     toast.add({
       title: 'Chyba',
-      description: props.multiple ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.' : 'Nepodařilo se nahrát soubor. Zkuste to prosím později.',
+      description: props.multiple
+        ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.'
+        : 'Nepodařilo se nahrát soubor. Zkuste to prosím později.',
       color: 'red',
     });
   }
@@ -122,7 +129,7 @@ async function uploadFiles() {
       label
     }}</label>
     <span
-      class="w-full inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+      class="inline-flex w-full items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
     >
       {{ imageFormatMessage }}
     </span>
@@ -130,36 +137,47 @@ async function uploadFiles() {
     <input
       ref="fileInput"
       type="file"
-      class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6 bg-indigo-400 hidden"
+      class="block hidden bg-indigo-400 text-left text-xs font-medium text-grayCustom lg:text-sm/6"
       :multiple="multiple"
       :accept="acceptTypes"
       @change="handleFileChange"
     />
 
-    <div :class="[multiple ? 'grid-cols-4' : 'grid-cols-1', 'grid w-full  gap-4 my-4 bg-gray-100 p-6 rounded ring-1 ring-inset ring-grayLight']">
-      <draggable v-model="files" item-key="name" style="display: contents;" class="cursor-grab">
+    <div
+      :class="[
+        multiple ? 'grid-cols-4' : 'grid-cols-1',
+        'my-4 grid w-full gap-4 rounded bg-gray-100 p-6 ring-1 ring-inset ring-grayLight',
+      ]"
+    >
+      <draggable v-model="files" item-key="name" style="display: contents" class="cursor-grab">
         <template #item="{ element, index }">
-          <div class="'col-span-full relative rounded-md overflow-hidden border border-gray-300']">
-            <UTooltip text="Odstranit soubor" placement="top" class="absolute top-1 right-1">
-              <div class="w-8 h-8 rounded-full ring-1 ring-danger bg-dangerLight inline-flex items-center justify-center cursor-pointer" @click="removeFile(index)">
-              <XMarkIcon class="w-4 h-4 text-white" />
+          <div class="'col-span-full border-gray-300'] relative overflow-hidden rounded-md border">
+            <UTooltip text="Odstranit soubor" placement="top" class="absolute right-1 top-1">
+              <div
+                class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
+                @click="removeFile(index)"
+              >
+                <XMarkIcon class="h-4 w-4 text-white" />
               </div>
             </UTooltip>
-            <img :src="element.preview" alt="náhled" class="object-cover w-full h-full" />
+            <img :src="element.preview" alt="náhled" class="h-full w-full object-cover" />
           </div>
         </template>
       </draggable>
     </div>
 
-    <div class="w-full flex flex-wrap gap-x-4">
+    <div class="flex w-full flex-wrap gap-x-4">
+      <BaseButton type="button" variant="secondary" size="lg" @click="$refs.fileInput.click()">{{
+        multiple ? 'Vybrat soubory' : 'Vybrat soubor'
+      }}</BaseButton>
       <BaseButton
-          type="button"
-          variant="secondary"
-          size="lg"
-          @click="$refs.fileInput.click()">{{ multiple ? 'Vybrat soubory' : 'Vybrat soubor' }}</BaseButton>
-    <BaseButton v-if="files && files.length" type="button" variant="primary" size="lg" @click="uploadFiles"
-      >{{ multiple ? 'Nahrát soubory' : 'Nahrát soubor'}}</BaseButton
-    >
+        v-if="files && files.length"
+        type="button"
+        variant="primary"
+        size="lg"
+        @click="uploadFiles"
+        >{{ multiple ? 'Nahrát soubory' : 'Nahrát soubor' }}</BaseButton
+      >
     </div>
   </div>
 </template>
