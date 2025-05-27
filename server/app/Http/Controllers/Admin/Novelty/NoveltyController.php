@@ -90,7 +90,7 @@ class NoveltyController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['m' => $e->getMessage(), 500]);
+            return Response::json(['m' => $e->getMessage()], 500);
             return Response::json(['message' => 'An error occurred while updating novelty.'], 500);
         }
 
