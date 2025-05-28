@@ -23,6 +23,7 @@ class DemandResource extends JsonResource
             'url' => $this->url,
             'text' => $this->text,
             'service' => ServiceResource::make($this->service),
+            'service_name' => $this->service ? $this->service->name : null,
             'offer_price' => $this->offer_price,
             'locale' => $this->locale,
         ];
