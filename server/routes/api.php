@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\Country\CountryController;
 use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Service\ServiceController;
 use App\Http\Controllers\Admin\Novelty\NoveltyController;
+use App\Http\Controllers\Admin\Demand\DemandController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\FilemanagerController;
@@ -270,6 +271,16 @@ Route::group([
             Route::get('{id}', [NoveltyController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [NoveltyController::class, 'store']);
             Route::delete('{id}', [NoveltyController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Demands routes
+        Route::group([
+            'prefix' => 'demand'
+        ], function () {
+            Route::get('', [DemandController::class, 'index']);
+            Route::get('{id}', [DemandController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [DemandController::class, 'store']);
+            Route::delete('{id}', [DemandController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Projects routes
