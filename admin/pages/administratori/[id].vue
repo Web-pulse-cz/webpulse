@@ -20,12 +20,12 @@ const pageTitle = ref(route.params.id === 'pridat' ? 'Nový uživatel' : 'Detail
 const breadcrumbs = ref([
   {
     name: 'Uživatelé',
-    link: '/uzivatele',
+    link: '/administratori',
     current: false,
   },
   {
     name: 'Nový uživatel',
-    link: '/uzivatele/pridat',
+    link: '/administratori/pridat',
     current: true,
   },
 ]);
@@ -78,7 +78,7 @@ async function loadItem() {
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
         name: item.value.firstname + ' ' + item.value.lastname,
-        link: '/uzivatele/' + route.params.id,
+        link: '/administratori/' + route.params.id,
         current: true,
       });
     })
@@ -144,7 +144,7 @@ async function saveItem() {
             : 'Uživatel byl úspěšně upraven.',
         color: 'green',
       });
-      router.push('/uzivatele');
+      router.push('/administratori');
     })
     .then(() => {
       refreshIdentity();

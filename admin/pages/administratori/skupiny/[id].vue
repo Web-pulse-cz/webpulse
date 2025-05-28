@@ -22,17 +22,17 @@ const pageTitle = ref(
 const breadcrumbs = ref([
   {
     name: 'Uživatelé',
-    link: '/uzivatele',
+    link: '/administratori',
     current: false,
   },
   {
     name: 'Uživatelské skupiny',
-    link: '/uzivatele/skupiny',
+    link: '/administratori/skupiny',
     current: false,
   },
   {
     name: 'Nová uživatelská skupina',
-    link: '/uzivatele/skupiny/pridat',
+    link: '/administratori/skupiny/pridat',
     current: true,
   },
 ]);
@@ -60,6 +60,7 @@ const allowedPermissions = ref([
   { name: 'Měny', value: 'Měny', slug: 'currencies' },
   { name: 'Služby', value: 'Služby', slug: 'services' },
   { name: 'Novinky', value: 'Novinky', slug: 'novelties' },
+  { name: 'Poptávky', value: 'Poptávky', slug: 'demands' },
 ]);
 
 const item = ref({
@@ -88,7 +89,7 @@ async function loadItem() {
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
         name: item.value.name,
-        link: '/uzivatele/skupiny/' + route.params.id,
+        link: '/administratori/skupiny/' + route.params.id,
         current: true,
       });
     })
@@ -136,7 +137,7 @@ async function saveItem() {
             : 'Skupina uživatelů byla úspěšně upravena.',
         color: 'green',
       });
-      router.push('/uzivatele/skupiny');
+      router.push('/administratori/skupiny');
     })
     .then(() => {
       refreshIdentity();

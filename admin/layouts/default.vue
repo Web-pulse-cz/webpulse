@@ -39,6 +39,7 @@ import {
   DocumentIcon,
   ArchiveBoxIcon,
   NewspaperIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -135,11 +136,11 @@ const navigation = ref([
         slug: 'demo',
       },
       {
-        name: 'Požadavky',
-        link: '/aktivita',
-        icon: CalendarIcon,
+        name: 'Poptávky',
+        link: '/uzivatele/poptavky',
+        icon: QuestionMarkCircleIcon,
         current: false,
-        slug: 'demo',
+        slug: 'demands',
       },
     ],
   },
@@ -270,14 +271,14 @@ const navigation = ref([
     menu: [
       {
         name: 'Uživatelé',
-        link: '/uzivatele',
+        link: '/administratori',
         icon: UsersIcon,
         current: false,
         slug: 'users',
       },
       {
         name: 'Uživatelské skupiny',
-        link: '/uzivatele/skupiny',
+        link: '/administratori/skupiny',
         icon: AdjustmentsHorizontalIcon,
         current: false,
         slug: 'user_groups',

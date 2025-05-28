@@ -1,25 +1,18 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import _ from 'lodash';
-import { useUserGroupStore } from '~/stores/userGroupStore';
-
-const userGroupStore = useUserGroupStore();
+import { definePageMeta } from '#imports';
 
 const toast = useToast();
-const pageTitle = ref('Uživatelské skupiny');
+const pageTitle = ref('Poptávky');
 
 const loading = ref(false);
 const error = ref(false);
 
 const breadcrumbs = ref([
   {
-    name: 'Uživatelé',
-    link: '/uzivatele',
-    current: false,
-  },
-  {
     name: pageTitle.value,
-    link: '/uzivatele/skupiny',
+    link: '/uzivatele/poptavky',
     current: true,
   },
 ]);
@@ -39,7 +32,7 @@ async function loadItems() {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/user/group', {
+  await client<{ id: number }>('/api/admin/demand', {
     method: 'GET',
     query: tableQuery.value,
     headers: {
@@ -55,7 +48,7 @@ async function loadItems() {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se načíst uživatelské skupiny. Zkuste to prosím později.',
+        description: 'Nepodařilo se načíst poptávky. Zkuste to prosím později.',
         color: 'red',
       });
     })
@@ -68,26 +61,24 @@ async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/user/group/' + id, {
+  await client<{ id: number }>('/api/admin/demand/' + id, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   })
-    .then(() => {})
     .catch(() => {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se smazat položku uživatelskou skupinu.',
+        description: 'Nepodařilo se smazat položku poptávky.',
         color: 'red',
       });
     })
     .finally(() => {
       loading.value = false;
       loadItems();
-      userGroupStore.fetchUserGroups();
     });
 }
 
@@ -125,34 +116,67 @@ definePageMeta({
 
 <template>
   <div>
-    <LayoutHeader
-      :title="pageTitle"
-      :breadcrumbs="breadcrumbs"
-      slug="user_groups"
-      :actions="[{ type: 'add', text: 'Přidat uživatelskou skupinu' }]"
-    />
+    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="demands" />
     <LayoutContainer>
       <BaseTable
         :items="items"
         :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Jméno', type: 'text', width: 80, hidden: false, sortable: true },
           {
-            key: 'users_count',
-            name: 'Počet uživatelů',
+            key: 'id',
+            name: 'ID',
+            type: 'text',
+            width: 80,
+            hidden: false,
+            sortable: true,
+          },
+          {
+            key: 'fullname',
+            name: 'Jméno a příjmení',
+            type: 'text',
+            width: 80,
+            hidden: false,
+            sortable: true,
+          },
+          {
+            key: 'email',
+            name: 'E-mail',
+            type: 'text',
+            width: 80,
+            hidden: false,
+            sortable: true,
+          },
+          {
+            key: 'phone',
+            name: 'Telefon',
+            type: 'text',
+            width: 80,
+            hidden: false,
+            sortable: true,
+          },
+          {
+            key: 'service_name',
+            name: 'Služba',
+            type: 'text',
+            width: 80,
+            hidden: false,
+            sortable: false,
+          },
+          {
+            key: 'offer_price',
+            name: 'Navrhovaná cena',
             type: 'number',
             width: 80,
-            hidden: true,
-            sortable: false,
+            hidden: false,
+            sortable: true,
           },
         ]"
         :actions="[{ type: 'edit' }, { type: 'delete' }]"
         :loading="loading"
         :error="error"
-        singular="Uživatelská skupiny"
-        plural="Uživatelské skupiny"
+        singular="Poptávku"
+        plural="Poptávky"
         :query="tableQuery"
-        slug="user_groups"
+        slug="demands"
         @delete-item="deleteItem"
         @update-sort="updateSort"
         @update-page="updatePage"

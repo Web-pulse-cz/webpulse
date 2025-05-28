@@ -138,7 +138,7 @@ async function loadItem() {
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
         name: item.value.firstname + ' ' + item.value.lastname,
-        link: '/uzivatele/' + route.params.id,
+        link: '/administratori/' + route.params.id,
         current: true,
       });
       if (

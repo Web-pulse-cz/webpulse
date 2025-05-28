@@ -12,7 +12,7 @@ const error = ref(false);
 const breadcrumbs = ref([
   {
     name: pageTitle.value,
-    link: '/uzivatele',
+    link: '/administratori',
     current: true,
   },
 ]);
