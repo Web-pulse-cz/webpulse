@@ -18,6 +18,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'image' => $this->image,
             'status' => $this->status,
+            'active' => $this->status === 'published',
             'published_from' => $this->published_from ? $this->published_from->toIso8601String() : null,
             'published_to' => $this->published_to ? $this->published_to->toIso8601String() : null,
             'name' => $this->name,
