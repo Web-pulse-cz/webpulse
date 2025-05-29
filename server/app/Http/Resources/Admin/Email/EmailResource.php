@@ -28,6 +28,7 @@ class EmailResource extends JsonResource
             'sent_at' => $this->sent_at->format('Y-m-d H:i:s'),
             'locale' => $this->locale,
             'template' => $this->template,
+            'sent' => $this->status === 'sent',
         ];
     }
 }
