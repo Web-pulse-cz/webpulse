@@ -33,6 +33,7 @@ use App\Http\Controllers\Client\Demand\DemandController as ClientDemandControlle
 use App\Http\Controllers\FilemanagerController;
 use App\Http\Controllers\Admin\Blog\PostCategoryController;
 use App\Http\Controllers\Admin\Blog\PostController;
+use App\Http\Controllers\Admin\Email\EmailController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -336,5 +337,12 @@ Route::group([
         Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
         Route::post('{id?}', [PriceOfferController::class, 'store']);
         Route::delete('{id}', [PriceOfferController::class, 'destroy'])->where('id', '[0-9]+');
+    });
+
+    // Log routes
+    Route::group([
+        'prefix' => 'log'
+    ], function () {
+        Route::get('email', [EmailController::class, 'index']);
     });
 });
