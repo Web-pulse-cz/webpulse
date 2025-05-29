@@ -343,6 +343,11 @@ Route::group([
     Route::group([
         'prefix' => 'log'
     ], function () {
-        Route::get('email', [EmailController::class, 'index']);
+        Route::group([
+            'prefix' => 'email'
+        ], function () {
+            Route::get('', [EmailController::class, 'index']);
+            Route::get('{id}', [EmailController::class, 'show'])->where('id', '[0-9]+');
+        });
     });
 });

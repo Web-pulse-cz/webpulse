@@ -7,6 +7,7 @@ use App\Http\Resources\Admin\Email\EmailResource;
 use App\Models\Email\Email;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
 
 class EmailController extends Controller
@@ -49,5 +50,19 @@ class EmailController extends Controller
 
         $emails = $query->get();
         return Response::json(EmailResource::collection($emails));
+    }
+
+    public function show(Request $request, int $id): JsonResponse
+    {
+        if (!$id) {
+            App::abort(400);
+        }
+
+        $email = Email::find($id);
+        if (!$email) {
+            App::abort(404);
+        }
+
+        return Response::json(EmailResource::make($email));
     }
 }
