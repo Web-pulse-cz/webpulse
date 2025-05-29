@@ -27,7 +27,7 @@ import {
   AdjustmentsHorizontalIcon,
   ChatBubbleBottomCenterTextIcon,
   ChartBarSquareIcon,
-  ChartBarIcon,
+  AtSymbolIcon,
   TrophyIcon,
   CalendarDaysIcon,
   DocumentCurrencyEuroIcon,
@@ -327,7 +327,7 @@ const navigation = ref([
       {
         name: 'E-maily',
         link: '/nastaveni/logy/emaily',
-        icon: ChartBarSquareIcon,
+        icon: AtSymbolIcon,
         current: false,
         slug: 'emails',
       },
