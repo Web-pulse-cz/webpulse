@@ -31,6 +31,8 @@ use App\Http\Controllers\Admin\Demand\DemandController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\FilemanagerController;
+use App\Http\Controllers\Admin\Blog\PostCategoryController;
+use App\Http\Controllers\Admin\Blog\PostController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -281,6 +283,24 @@ Route::group([
             Route::get('{id}', [DemandController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [DemandController::class, 'store']);
             Route::delete('{id}', [DemandController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::group([
+            'prefix' => 'post'
+        ], function () {
+            Route::group([
+                'prefix' => 'category'
+            ], function () {
+                Route::get('', [PostCategoryController::class, 'index']);
+                Route::get('{id}', [PostCategoryController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [PostCategoryController::class, 'store']);
+                Route::delete('{id}', [PostCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [PostController::class, 'index']);
+            Route::get('{id}', [PostController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PostController::class, 'store']);
+            Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Projects routes
