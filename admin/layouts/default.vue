@@ -12,7 +12,6 @@ import {
 } from '@headlessui/vue';
 import {
   Bars3Icon,
-  BellIcon,
   CalendarIcon,
   ChartPieIcon,
   StarIcon,

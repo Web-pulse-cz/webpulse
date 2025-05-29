@@ -113,6 +113,10 @@ definePageMeta({
             <p class="col-span-9 text-grayCustom">{{ item.phone }}</p>
           </div>
           <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+            <p class="col-span-3 font-semibold text-grayDark">URL projektu:</p>
+            <p class="col-span-9 text-grayCustom">{{ item.url }}</p>
+          </div>
+          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
             <p class="col-span-3 font-semibold text-grayDark">Zpráva:</p>
             <p class="col-span-9 text-grayCustom">{{ item.text }}</p>
           </div>
@@ -134,7 +138,7 @@ definePageMeta({
             <p class="col-span-3 font-semibold text-grayDark">Naše cena:</p>
             <p class="col-span-9 text-grayCustom">
               {{ item.service.price }} (cena za
-              {{ item.service.price_type === 'product' ? 'službu' : 'hodinu' }})
+              {{ item.service.price_type === 'total' ? 'službu' : 'hodinu' }})
             </p>
           </div>
         </LayoutContainer>
