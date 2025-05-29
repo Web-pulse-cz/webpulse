@@ -324,6 +324,13 @@ const navigation = ref([
         current: false,
         slug: 'demo',
       },
+      {
+        name: 'E-maily',
+        link: '/nastaveni/logy/emaily',
+        icon: ChartBarSquareIcon,
+        current: false,
+        slug: 'emails',
+      },
     ],
   },
 ]);
