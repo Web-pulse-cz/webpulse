@@ -82,8 +82,8 @@ const navigation = ref([
     title: 'Obsah',
     menu: [
       {
-        name: 'Blog',
-        link: '/kontakty',
+        name: 'Blogové članky',
+        link: '/obsah/clanky',
         icon: ArchiveBoxIcon,
         current: false,
         slug: 'posts',
