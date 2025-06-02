@@ -94,6 +94,10 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('blogs_tables');
+        Schema::dropIfExists('post_translations');
+        Schema::dropIfExists('posts_in_categories');
+        Schema::dropIfExists('post_category_translations');
+        Schema::dropIfExists('post_categories');
+        Schema::dropIfExists('posts');
     }
 };

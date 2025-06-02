@@ -34,6 +34,7 @@ use App\Http\Controllers\FilemanagerController;
 use App\Http\Controllers\Admin\Blog\PostCategoryController;
 use App\Http\Controllers\Admin\Blog\PostController;
 use App\Http\Controllers\Admin\Email\EmailController;
+use App\Http\Controllers\Admin\Page\PageController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -302,6 +303,16 @@ Route::group([
             Route::get('{id}', [PostController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [PostController::class, 'store']);
             Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Page routes
+        Route::group([
+            'prefix' => 'page'
+        ], function () {
+            Route::get('', [PageController::class, 'index']);
+            Route::get('{id}', [PageController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PageController::class, 'store']);
+            Route::delete('{id}', [PageController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Projects routes
