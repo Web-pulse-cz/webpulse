@@ -89,7 +89,7 @@ const navigation = ref([
       },
       {
         name: 'Informační stránky',
-        link: '/aktivita',
+        link: '/obsah/stranky',
         icon: DocumentIcon,
         current: false,
         slug: 'pages',
