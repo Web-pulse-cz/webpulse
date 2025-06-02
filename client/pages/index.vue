@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { useApi } from '@/composables/useApi';
 
 const { locale, t } = useI18n();
 
@@ -11,32 +12,21 @@ const benefits = Array.from({ length: 5 }, (_, i) => ({
 }));
 
 const services = ref([]);
-
-function loadServices() {
-  loading.value = true;
-  const client = useSanctumClient();
-
-  client('/api/service/' + locale.value, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      services.value = response;
+async function loadServices() {
+  useApi()
+    .service.services(locale.value)
+    .then((data) => {
+      services.value = data;
     })
-    .catch(() => {
-      services.value = [];
-      console.error('Failed to load services');
-    })
-    .finally(() => {
-      loading.value = false;
+    .catch((error) => {
+      console.error('Error loading services:', error);
     });
 }
-
 onMounted(() => {
-  loadServices();
+  loading.value = true;
+  loadServices().finally(() => {
+    loading.value = false;
+  });
 });
 </script>
 
@@ -44,7 +34,7 @@ onMounted(() => {
   <div>
     <LayoutContainer class="space-y-24">
       <HomeHero />
-      <div>
+      <!--      <div>
         <BasePropsHeading type="h2">
           {{ t('benefits.title') }}
         </BasePropsHeading>
@@ -58,8 +48,8 @@ onMounted(() => {
             class="col-span-1"
           />
         </div>
-      </div>
-      <HomeServices v-if="services && services.length" :services="services" />
+      </div>-->
+      <HomeServices v-if="services" :services="services" />
       <HomeTechnologies />
       <HomeContactForm />
     </LayoutContainer>
