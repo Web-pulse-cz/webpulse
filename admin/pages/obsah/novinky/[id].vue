@@ -201,6 +201,7 @@ definePageMeta({
               v-model="item.translations[selectedLocale].name"
               label="Název"
               type="text"
+              :key="`name-${selectedLocale}`"
               name="name"
               rules="required|min:3"
               class="col-span-1"
@@ -214,6 +215,7 @@ definePageMeta({
               v-model="item.translations[selectedLocale].meta_title"
               label="Meta název"
               type="text"
+              :key="`meta_title-${selectedLocale}`"
               name="meta_title"
               class="col-span-1"
             />
@@ -225,6 +227,7 @@ definePageMeta({
               "
               v-model="item.translations[selectedLocale].meta_description"
               label="Meta popis"
+              :key="`meta_description-${selectedLocale}`"
               name="meta_description"
               class="col-span-full"
             />
@@ -236,6 +239,7 @@ definePageMeta({
               "
               v-model="item.translations[selectedLocale].perex"
               label="Perex"
+              :key="`perex-${selectedLocale}`"
               name="perex"
               class="col-span-2"
             />
@@ -248,6 +252,7 @@ definePageMeta({
               v-model="item.translations[selectedLocale].text"
               label="Popis"
               name="text"
+              :key="`text-${selectedLocale}`"
               class="col-span-2"
             />
           </div>

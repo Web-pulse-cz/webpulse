@@ -247,6 +247,7 @@ definePageMeta({
               label="Název"
               type="text"
               name="name"
+              :key="`name-${selectedLocale}`"
               rules="required|min:3"
               class="col-span-1"
             />
@@ -259,21 +260,11 @@ definePageMeta({
               v-model="item.translations[selectedLocale].meta_title"
               label="Meta název"
               type="text"
+              :key="`meta_title-${selectedLocale}`"
               name="meta_title"
               class="col-span-1"
             />
             <br />
-            <div class="col-span-full">
-              <BaseFormUploadImage
-                v-model="item.image"
-                :multiple="true"
-                type="service"
-                format="small"
-                label="Náhledový obrázek"
-                class="pt-6"
-                @update-files="updateItemImage"
-              />
-            </div>
             <BaseFormTextarea
               v-if="
                 item.translations &&
@@ -282,6 +273,7 @@ definePageMeta({
               "
               v-model="item.translations[selectedLocale].meta_description"
               label="Meta popis"
+              :key="`meta_description-${selectedLocale}`"
               name="meta_description"
               class="col-span-full"
             />
@@ -294,6 +286,7 @@ definePageMeta({
               v-model="item.translations[selectedLocale].perex"
               label="Perex"
               name="perex"
+              :key="`perex-${selectedLocale}`"
               class="col-span-2"
             />
             <BaseFormEditor
@@ -305,6 +298,7 @@ definePageMeta({
               v-model="item.translations[selectedLocale].description"
               label="Popis"
               name="description"
+              :key="`description-${selectedLocale}`"
               class="col-span-2"
             />
           </div>
