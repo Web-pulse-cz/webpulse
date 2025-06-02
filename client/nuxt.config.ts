@@ -23,7 +23,14 @@ export default defineNuxtConfig({
       },
     ],
     '@nuxt/eslint',
-    '@nuxt/image',
+    [
+      '@nuxt/image',
+      {
+        domains: ['martinhanzl.cz', 'api.martinhanzl.cz'],
+        formats: ['webp', 'jpg', 'png', 'jpeg', 'svg'],
+        provider: 'ipx',
+      },
+    ],
     '@vee-validate/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',

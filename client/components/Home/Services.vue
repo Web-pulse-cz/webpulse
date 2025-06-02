@@ -16,7 +16,6 @@ const demandDialog = ref({
   service_id: null,
 });
 function openDemandDialog(serviceId) {
-  console.log(serviceId);
   demandDialog.value.service_id = serviceId;
   demandDialog.value.show = true;
 }
@@ -55,10 +54,14 @@ function openDemandDialog(serviceId) {
                       service.price_type === 'hourly' ? t('services.hour') : t('services.project')
                     }})
                   </BasePropsParagraph>
-                  <BaseImage
+                  <NuxtImg
                     v-if="service.image"
                     :src="'/content/images/service/large/' + service.image"
                     :alt="service.name"
+                    :lazyload="true"
+                    fit="contain"
+                    format="webp"
+                    sizes="620px"
                   />
                   <BaseButton
                     :href="`/services/${service.slug}`"
