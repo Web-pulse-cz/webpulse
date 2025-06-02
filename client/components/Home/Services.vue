@@ -56,7 +56,7 @@ function openDemandDialog(serviceId) {
                   </BasePropsParagraph>
                   <NuxtImg
                     v-if="service.image"
-                    :src="'/content/images/service/large/' + service.image"
+                    :src="'/img/service/small/' + service.image"
                     :alt="service.name"
                     :lazyload="true"
                     fit="contain"
