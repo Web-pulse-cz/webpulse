@@ -28,7 +28,7 @@ export default defineNuxtConfig({
       {
         domains: ['martinhanzl.cz', 'api.martinhanzl.cz'],
         formats: ['webp', 'jpg', 'png', 'jpeg', 'svg'],
-        provider: 'ipx',
+        alias: { img: 'http://api.martinhanzl.cz/content/images/' },
       },
     ],
     '@vee-validate/nuxt',
@@ -82,11 +82,6 @@ export default defineNuxtConfig({
   routeRules: {
     '/api/**': {
       proxy: `${process.env.API_URL ?? 'https://api.martinhanzl.cz/'}/api/**`,
-    },
-    '/content/**': {
-      proxy: process.env.API_URL
-        ? process.env.API_URL + '/content/**'
-        : 'http://api.martinhanzl/content/**',
     },
     '/files/**': {
       proxy: process.env.API_URL
