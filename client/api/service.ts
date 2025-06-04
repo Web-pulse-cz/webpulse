@@ -1,17 +1,17 @@
 import type { Service } from '~/types/service';
+
 export function useServiceApi() {
   const client = useSanctumClient();
 
   const services = async (locale: string): Promise<Service[]> => {
     const response = await client(`/api/service/${locale}`, { method: 'GET' });
 
-    // Ověříme, že response je pole (např. při testu backendu)
     if (!Array.isArray(response)) {
       console.warn('Unexpected API response format:', response);
       return [];
     }
 
-    // Převedeme na plain objekty
+    // Odstranění prototypů = čistý serializovatelný JSON
     return response.map((item) => JSON.parse(JSON.stringify(item)));
   };
 

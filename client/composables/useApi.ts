@@ -8,7 +8,6 @@ export function useApi() {
         return result;
       } catch (error) {
         console.error('API error:', error);
-        showError('Došlo k chybě při komunikaci se serverem.');
         throw error;
       }
     };
