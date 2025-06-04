@@ -12,6 +12,5 @@ provide('loading', loading);
     </main>
     <LayoutFooter />
     <LayoutCookiesBar />
-    <LayoutToast />
   </div>
 </template>

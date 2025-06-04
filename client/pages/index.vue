@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useApi } from '@/composables/useApi';
-import { useToastMessage } from '~/composables/useToastMessage';
-const { showSuccess } = useToastMessage();
+
 const { locale, t } = useI18n();
 
 const loading = inject('loading', ref(false));
@@ -28,7 +27,6 @@ onMounted(() => {
   loadServices().finally(() => {
     loading.value = false;
   });
-  showSuccess('Toasty fungují!');
 });
 </script>
 

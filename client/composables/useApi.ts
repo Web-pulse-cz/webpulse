@@ -1,13 +1,9 @@
 import { useServiceApi } from '~/api/service';
-import { useToastMessage } from '~/composables/useToastMessage';
 
 export function useApi() {
-  const { showSuccess, showError } = useToastMessage();
-
   const wrap = <T>(fn: (...args: any[]) => Promise<T>) => {
     return async (...args: any[]): Promise<T> => {
       try {
-        showSuccess('Probíhá komunikace se serverem...');
         const result = await fn(...args);
         return result;
       } catch (error) {
