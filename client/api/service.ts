@@ -1,33 +1,19 @@
 import type { Service } from '~/types/service';
 
-export function useServiceApi() {
+export function useServiceApi(
+  wrap: <T>(fn: (...args: any[]) => Promise<T>) => (...args: any[]) => Promise<T>,
+) {
   const client = useSanctumClient();
 
-  const services = async (locale: string): Promise<Service[]> => {
+  const services = wrap(async (locale: string): Promise<Service[]> => {
     const response = await client(`/api/service/${locale}`, { method: 'GET' });
+    return Array.isArray(response) ? JSON.parse(JSON.stringify(response)) : [];
+  });
 
-    if (!Array.isArray(response)) {
-      console.warn('Unexpected API response format:', response);
-      return [];
-    }
-
-    // Odstranění prototypů = čistý serializovatelný JSON
-    return response.map((item) => JSON.parse(JSON.stringify(item)));
-  };
-
-  const service = async (id: number): Promise<Service | null> => {
+  const service = wrap(async (id: number): Promise<Service | null> => {
     const response = await client(`/api/admin/services/${id}`, { method: 'GET' });
+    return response && typeof response === 'object' ? JSON.parse(JSON.stringify(response)) : null;
+  });
 
-    if (!response || typeof response !== 'object') {
-      console.warn('Unexpected API detail response:', response);
-      return null;
-    }
-
-    return JSON.parse(JSON.stringify(response));
-  };
-
-  return {
-    services,
-    service,
-  };
+  return { services, service };
 }
