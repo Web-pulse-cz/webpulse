@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useApi } from '@/composables/useApi';
-
+import { useToastMessage } from '~/composables/useToastMessage';
+const { showSuccess } = useToastMessage();
 const { locale, t } = useI18n();
 
 const loading = inject('loading', ref(false));
@@ -13,7 +14,7 @@ const benefits = Array.from({ length: 5 }, (_, i) => ({
 
 const services = ref([]);
 async function loadServices() {
-  useApi()
+  await useApi()
     .service.services(locale.value)
     .then((data) => {
       services.value = data;
@@ -27,6 +28,7 @@ onMounted(() => {
   loadServices().finally(() => {
     loading.value = false;
   });
+  showSuccess('Toasty fungují!');
 });
 </script>
 
@@ -34,7 +36,7 @@ onMounted(() => {
   <div>
     <LayoutContainer class="space-y-24">
       <HomeHero />
-      <!--      <div>
+      <div>
         <BasePropsHeading type="h2">
           {{ t('benefits.title') }}
         </BasePropsHeading>
@@ -48,7 +50,7 @@ onMounted(() => {
             class="col-span-1"
           />
         </div>
-      </div>-->
+      </div>
       <HomeServices v-if="services" :services="services" />
       <HomeTechnologies />
       <HomeContactForm />

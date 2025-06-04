@@ -1,16 +1,21 @@
+import type { Service } from '~/types/service';
+import { useSanctumClient } from '#auth';
+
 export function useServiceApi() {
   const client = useSanctumClient();
 
-  const services = async <T>(locale: string) => {
-    try {
-      return await client<T>(`/api/service/${locale}`, {
-        method: 'GET',
-      });
-    } catch (error) {
-      console.error('API GET Service error:', error);
-      throw error;
-    }
+  const services = async (locale: string): Promise<Service[]> => {
+    const response = await client<Service[]>(`/api/service/${locale}`, { method: 'GET' });
+    console.log('Client response:', response);
   };
 
-  return { services };
+  const service = async (id: number): Promise<Service | null> => {
+    const response = await client<Service>(`/api/admin/services/${id}`, { method: 'GET' });
+    return response ?? null;
+  };
+
+  return {
+    services,
+    service,
+  };
 }

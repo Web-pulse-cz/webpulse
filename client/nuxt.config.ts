@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     'v-gsap-nuxt',
   ],
 
-  plugins: ['~/plugins/formatPrice.client.ts'],
+  plugins: ['~/plugins/formatPrice.client.ts', '~/plugins/toast.ts'],
   devtools: { enabled: false },
 
   app: {

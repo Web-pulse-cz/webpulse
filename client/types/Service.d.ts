@@ -1,5 +1,6 @@
-import { TaxRate } from './TaxRate';
-import { Currency } from './Currency';
+import type { TaxRate } from './taxRate';
+import type { Currency } from './currency';
+
 export interface Service {
   id: number;
   type: string;
