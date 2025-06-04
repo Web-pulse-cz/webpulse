@@ -1,6 +1,4 @@
 import type { Service } from '~/types/service';
-import { useSanctumClient } from '#auth';
-
 export function useServiceApi() {
   const client = useSanctumClient();
 
