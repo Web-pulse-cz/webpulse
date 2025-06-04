@@ -4,8 +4,7 @@ export function useApi() {
   const wrap = <T>(fn: (...args: any[]) => Promise<T>) => {
     return async (...args: any[]): Promise<T> => {
       try {
-        const result = await fn(...args);
-        return result;
+        return await fn(...args);
       } catch (error) {
         console.error('API error:', error);
         throw error;
@@ -13,12 +12,9 @@ export function useApi() {
     };
   };
 
-  const serviceApi = useServiceApi();
+  const service = useServiceApi();
 
   return {
-    service: {
-      services: wrap(serviceApi.services),
-      service: wrap(serviceApi.service),
-    },
+    service,
   };
 }
