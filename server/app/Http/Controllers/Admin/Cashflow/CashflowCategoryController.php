@@ -37,9 +37,15 @@ class CashflowCategoryController extends Controller
                         ->whereMonth('end_date', $month)
                         ->whereYear('end_date', $year);
                 },
-                'cashflows' => function ($query) use ($month, $year) {
+                'cashflows' => function ($query) use ($request, $month, $year) {
                     $query->whereMonth('date', $month)
                         ->whereYear('date', $year);
+                    if ($request->has('day_from')) {
+                        $query->whereDay('start_date', '>=', $request->day_from);
+                    }
+                    if ($request->has('day_to')) {
+                        $query->whereDay('end_date', '<=', $request->day_to);
+                    }
                 }
             ]);
         } else {
