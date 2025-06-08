@@ -57,4 +57,16 @@ class Currency extends Model implements TranslatableContract
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
     }
+
+    public function convertToBase(float $amount): float
+    {
+        // Pokud je kurz 0, vyhoď výjimku (dělení nulou by dalo chybu)
+        if ($this->rate == 0) {
+            throw new \InvalidArgumentException("Currency rate cannot be zero.");
+        }
+
+        // Převod z měny na CZK = amount * rate
+        return $amount * $this->rate;
+    }
+
 }

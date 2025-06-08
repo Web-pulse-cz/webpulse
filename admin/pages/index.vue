@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+import { useCashflowCategoryStore } from '~/stores/cashflowCategoryStore';
+import { useCurrencyStore } from '~/stores/currencyStore';
+
+const cashflowCategoryStore = useCashflowCategoryStore();
+const currencyStore = useCurrencyStore();
 
 const toast = useToast();
 const pageTitle = ref('Přehled');
@@ -10,6 +15,12 @@ const error = ref(false);
 const breadcrumbs = ref([]);
 
 const dashboard = ref([]);
+
+const cashflowActionDialog = ref({
+  show: false as boolean,
+  day: 0 as number,
+  categoryId: null as number | null,
+});
 
 async function loadDashboard() {
   loading.value = true;
@@ -38,6 +49,74 @@ async function loadDashboard() {
     });
 }
 
+function openCashflowDialog() {
+  cashflowActionDialog.value.show = true;
+  cashflowActionDialog.value.categoryId = 50;
+  cashflowActionDialog.value.day = new Date().getDate();
+}
+
+async function saveDayRecords(data: {
+  categoryId: number | null;
+  currencyId: number;
+  day: number;
+  type: string;
+  dayRecords: Array<{ id: number | null; amount: number; description: string }>;
+}) {
+  const client = useSanctumClient();
+  // loading.value = true;
+  error.value = false;
+
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+
+  const formattedDate = new Date(Date.UTC(year, month - 1, data.day)).toISOString();
+
+  const categoryId = data.categoryId ? data.categoryId : null;
+  const currencyId = data.currencyId ? data.currencyId : null;
+  const type = data.type ? data.type : 'expense';
+  const records = data.dayRecords.map((record) => ({
+    id: record.id,
+    amount: record.amount,
+    description: record.description,
+  }));
+
+  await client<{
+    id: number;
+  }>(categoryId ? '/api/admin/cashflow/' + categoryId : '/api/admin/cashflow', {
+    method: 'POST',
+    body: JSON.stringify({
+      categoryId,
+      currencyId,
+      formattedDate,
+      type,
+      records,
+    }),
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(() => {
+      toast.add({
+        title: 'Hotovo',
+        description: 'Záznamy byly úspěšně uložen.',
+        color: 'green',
+      });
+    })
+    .catch(() => {
+      error.value = true;
+      toast.add({
+        title: 'Chyba',
+        description:
+          'Nepodařilo se uložit záznamy. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
+        color: 'red',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
 useHead({
   title: pageTitle.value,
 });
@@ -52,7 +131,12 @@ definePageMeta({
 
 <template>
   <div>
-    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" />
+    <LayoutHeader
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="[{ type: 'add-cashflow', text: 'Přidat útratu' }]"
+      @open-cashflow-dialog="openCashflowDialog"
+    />
     <div
       class="grid grid-cols-1 items-start justify-between gap-x-8 gap-y-2 lg:grid-cols-2 lg:gap-y-4"
     >
@@ -172,5 +256,13 @@ definePageMeta({
         </LayoutContainer>
       </div>
     </div>
+    <CashflowDialogExtendedAction
+      v-model:show="cashflowActionDialog.show"
+      :categories="cashflowCategoryStore.categoriesOptions"
+      :currencies="currencyStore.currenciesOptions"
+      :day="cashflowActionDialog.day"
+      :type="cashflowActionDialog.type"
+      @save-day-records="saveDayRecords($event)"
+    />
   </div>
 </template>

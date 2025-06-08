@@ -337,9 +337,9 @@ definePageMeta({
                   item.translations[selectedLocale] !== undefined &&
                   item.translations[selectedLocale].name !== undefined
                 "
+                :key="`name-${selectedLocale}`"
                 v-model="item.translations[selectedLocale].name"
                 label="Název"
-                :key="`name-${selectedLocale}`"
                 type="text"
                 name="name"
                 rules="required|min:3"
@@ -351,9 +351,9 @@ definePageMeta({
                   item.translations[selectedLocale] !== undefined &&
                   item.translations[selectedLocale].meta_title !== undefined
                 "
+                :key="`meta_title-${selectedLocale}`"
                 v-model="item.translations[selectedLocale].meta_title"
                 label="Meta název"
-                :key="`meta_title-${selectedLocale}`"
                 type="text"
                 name="meta_title"
                 class="col-span-1"
@@ -364,9 +364,9 @@ definePageMeta({
                   item.translations[selectedLocale] !== undefined &&
                   item.translations[selectedLocale].meta_description !== undefined
                 "
+                :key="`meta_description-${selectedLocale}`"
                 v-model="item.translations[selectedLocale].meta_description"
                 label="Meta popis"
-                :key="`meta_description-${selectedLocale}`"
                 name="meta_description"
                 class="col-span-full"
               />
@@ -376,9 +376,9 @@ definePageMeta({
                   item.translations[selectedLocale] !== undefined &&
                   item.translations[selectedLocale].perex !== undefined
                 "
+                :key="`perex-${selectedLocale}`"
                 v-model="item.translations[selectedLocale].perex"
                 label="Perex"
-                :key="`perex-${selectedLocale}`"
                 name="perex"
                 class="col-span-2"
               />
@@ -388,9 +388,9 @@ definePageMeta({
                   item.translations[selectedLocale] !== undefined &&
                   item.translations[selectedLocale].text !== undefined
                 "
+                :key="`text-${selectedLocale}`"
                 v-model="item.translations[selectedLocale].text"
                 label="Popis"
-                :key="`text-${selectedLocale}`"
                 name="text"
                 class="col-span-2"
               />

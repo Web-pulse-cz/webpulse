@@ -177,11 +177,11 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].name !== undefined
               "
+              :key="`name-${selectedLocale}`"
               v-model="item.translations[selectedLocale].name"
               label="Název"
               type="text"
               name="name"
-              :key="`name-${selectedLocale}`"
               rules="required|min:3"
               class="col-span-1"
             />
@@ -191,10 +191,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].meta_title !== undefined
               "
+              :key="`meta_title-${selectedLocale}`"
               v-model="item.translations[selectedLocale].meta_title"
               label="Meta název"
               type="text"
-              :key="`meta_title-${selectedLocale}`"
               name="meta_title"
               class="col-span-1"
             />
@@ -204,10 +204,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].meta_description !== undefined
               "
+              :key="`meta_description-${selectedLocale}`"
               v-model="item.translations[selectedLocale].meta_description"
               label="Meta popis"
               name="meta_description"
-              :key="`meta_description-${selectedLocale}`"
               class="col-span-full"
             />
             <BaseFormEditor
@@ -216,10 +216,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].perex !== undefined
               "
+              :key="`perex-${selectedLocale}`"
               v-model="item.translations[selectedLocale].perex"
               label="Perex"
               name="perex"
-              :key="`perex-${selectedLocale}`"
               class="col-span-2"
             />
             <BaseFormEditor
@@ -228,10 +228,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].text !== undefined
               "
+              :key="`text-${selectedLocale}`"
               v-model="item.translations[selectedLocale].text"
               label="Obsah"
               name="text"
-              :key="`text-${selectedLocale}`"
               class="col-span-2"
             />
           </div>

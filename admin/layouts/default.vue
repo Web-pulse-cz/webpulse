@@ -47,6 +47,7 @@ import { useLanguageStore } from '~/stores/languageStore';
 import { useCountryStore } from '~/stores/countryStore';
 import { useCurrencyStore } from '~/stores/currencyStore';
 import { useTaxRateStore } from '~/stores/taxRateStore';
+import { useCashflowCategoryStore } from '~/stores/cashflowCategoryStore';
 
 const userGroupStore = useUserGroupStore();
 const activityStore = useActivityStore();
@@ -54,6 +55,7 @@ const languageStore = useLanguageStore();
 const countryStore = useCountryStore();
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();
+const cashflowCategoryStore = useCashflowCategoryStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -398,6 +400,7 @@ onMounted(() => {
   countryStore.fetchCountries();
   currencyStore.fetchCurrencies();
   taxRateStore.fetchTaxRates();
+  cashflowCategoryStore.fetchCategories();
   setTimeout(() => {
     navigation.value = filterNavigationGroups(navigation.value);
   }, 100000);

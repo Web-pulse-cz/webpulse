@@ -198,10 +198,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].name !== undefined
               "
+              :key="`name-${selectedLocale}`"
               v-model="item.translations[selectedLocale].name"
               label="Název"
               type="text"
-              :key="`name-${selectedLocale}`"
               name="name"
               rules="required|min:3"
               class="col-span-1"
@@ -212,10 +212,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].meta_title !== undefined
               "
+              :key="`meta_title-${selectedLocale}`"
               v-model="item.translations[selectedLocale].meta_title"
               label="Meta název"
               type="text"
-              :key="`meta_title-${selectedLocale}`"
               name="meta_title"
               class="col-span-1"
             />
@@ -225,9 +225,9 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].meta_description !== undefined
               "
+              :key="`meta_description-${selectedLocale}`"
               v-model="item.translations[selectedLocale].meta_description"
               label="Meta popis"
-              :key="`meta_description-${selectedLocale}`"
               name="meta_description"
               class="col-span-full"
             />
@@ -237,9 +237,9 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].perex !== undefined
               "
+              :key="`perex-${selectedLocale}`"
               v-model="item.translations[selectedLocale].perex"
               label="Perex"
-              :key="`perex-${selectedLocale}`"
               name="perex"
               class="col-span-2"
             />
@@ -249,10 +249,10 @@ definePageMeta({
                 item.translations[selectedLocale] !== undefined &&
                 item.translations[selectedLocale].text !== undefined
               "
+              :key="`text-${selectedLocale}`"
               v-model="item.translations[selectedLocale].text"
               label="Popis"
               name="text"
-              :key="`text-${selectedLocale}`"
               class="col-span-2"
             />
           </div>

@@ -51,7 +51,13 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['save', 'update-filters', 'add-dialog', 'filter-dialog']);
+const emit = defineEmits([
+  'save',
+  'update-filters',
+  'add-dialog',
+  'filter-dialog',
+  'open-cashflow-dialog',
+]);
 const quickAccessItem = ref({
   id: null,
   name: props.title,
@@ -184,6 +190,15 @@ const emitUpdateFilters = () => {
             {{ action.text }}
           </BaseButton>
           <BaseButton
+            v-if="action.type === 'add-cashflow'"
+            variant="primary"
+            size="xl"
+            class="ml-4"
+            @click="emit('open-cashflow-dialog')"
+          >
+            {{ action.text }}
+          </BaseButton>
+          <BaseButton
             v-if="action.type === 'filter-dialog'"
             variant="primary"
             size="xl"
@@ -239,6 +254,14 @@ const emitUpdateFilters = () => {
         variant="primary"
         size="md"
         @click="emit('add-dialog')"
+      >
+        {{ action.text }}
+      </BaseButton>
+      <BaseButton
+        v-if="action.type === 'add-cashflow'"
+        variant="primary"
+        size="md"
+        @click="emit('open-cashflow-dialog')"
       >
         {{ action.text }}
       </BaseButton>
