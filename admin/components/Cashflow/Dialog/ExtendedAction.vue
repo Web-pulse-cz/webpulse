@@ -71,7 +71,7 @@ const emit = defineEmits(['save-day-records']);
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6"
+                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
               >
                 <Form
                   @submit="
@@ -118,38 +118,40 @@ const emit = defineEmits(['save-day-records']);
                           class="col-span-3"
                           tabindex="-1"
                         />
-                        <BaseFormSelect
-                          v-model="type"
-                          label="Typ"
-                          name="type"
-                          :autofocus="false"
-                          :options="[
-                            { label: 'Výdej', name: 'Výdej', value: 'expense' },
-                            { label: 'Příjem', name: 'Příjem', value: 'income' },
-                          ]"
-                          class="col-span-3"
-                          tabindex="-1"
-                        />
-                        <BaseFormSelect
-                          v-if="categories && categories.length"
-                          v-model="categoryId"
-                          label="Kategorie"
-                          name="category_id"
-                          :autofocus="false"
-                          :options="categories"
-                          class="col-span-2"
-                          tabindex="-1"
-                        />
-                        <BaseFormSelect
-                          v-if="currencies && currencies.length"
-                          v-model="currencyId"
-                          label="Měna"
-                          name="currency_id"
-                          :autofocus="false"
-                          :options="currencies"
-                          class="col-span-2"
-                          tabindex="-1"
-                        />
+                        <div class="col-span-full flex gap-x-4">
+                          <BaseFormSelect
+                            v-if="categories && categories.length"
+                            v-model="categoryId"
+                            label="Kategorie"
+                            name="category_id"
+                            :autofocus="false"
+                            :options="categories"
+                            class="w-1/2"
+                            tabindex="-1"
+                          />
+                          <BaseFormSelect
+                            v-if="currencies && currencies.length"
+                            v-model="currencyId"
+                            label="Měna"
+                            name="currency_id"
+                            :autofocus="false"
+                            :options="currencies"
+                            class="w-1/2"
+                            tabindex="-1"
+                          />
+                          <BaseFormSelect
+                            v-model="type"
+                            label="Typ"
+                            name="type"
+                            :autofocus="false"
+                            :options="[
+                              { label: 'Výdej', name: 'Výdej', value: 'expense' },
+                              { label: 'Příjem', name: 'Příjem', value: 'income' },
+                            ]"
+                            class="w-1/2"
+                            tabindex="-1"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
