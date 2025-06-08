@@ -6,6 +6,8 @@ const toast = useToast();
 const tableQuery = ref({
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
+  dayFrom: 1,
+  dayTo: 31,
 });
 
 const pageTitle = ref(`Cashflow ─ ${tableQuery.value.month}/${tableQuery.value.year}`);
@@ -280,6 +282,8 @@ definePageMeta({
       v-model:show="filterDialogIsOpen"
       v-model:year="tableQuery.year"
       v-model:month="tableQuery.month"
+      v-model:dayFrom="tableQuery.dayFrom"
+      v-model:dayTo="tableQuery.dayTo"
       @submit="loadItems"
     />
   </div>

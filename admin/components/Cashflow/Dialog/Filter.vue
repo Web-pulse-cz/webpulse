@@ -17,6 +17,14 @@ const month = defineModel('month', {
   type: String,
   default: new Date().getMonth() + 1,
 });
+const dayFrom = defineModel('dayFrom', {
+  type: Number,
+  default: 1,
+});
+const dayTo = defineModel('dayTo', {
+  type: Number,
+  default: 31,
+});
 const emit = defineEmits(['submit']);
 
 const years = computed(() => {
@@ -101,6 +109,24 @@ const years = computed(() => {
                             { value: '11', name: 'Listopad' },
                             { value: '12', name: 'Prosinec' },
                           ]"
+                          class="col-span-1"
+                        />
+                        <BaseFormInput
+                          v-model="dayFrom"
+                          name="dayFrom"
+                          label="Den od"
+                          type="number"
+                          :min="1"
+                          :max="31"
+                          class="col-span-1"
+                        />
+                        <BaseFormInput
+                          v-model="dayTo"
+                          name="dayTo"
+                          label="Den do"
+                          type="number"
+                          :min="1"
+                          :max="31"
                           class="col-span-1"
                         />
                       </div>
