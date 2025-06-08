@@ -20,6 +20,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 Log::error('Email queue command failed');
             });
+
+        $schedule->command('currency:sync-rates')
+            ->everyThirtyMinutes()
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->onFailure(function () {
+                Log::error('Currency sync command failed');
+            });
     }
 
     /**
