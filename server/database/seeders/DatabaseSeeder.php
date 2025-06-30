@@ -154,7 +154,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($languages as $language) {
             $languageId = DB::table('languages')->insertGetId([
-                'name' => $language['name'],
                 'code' => $language['code'],
                 'iso' => $language['iso'],
                 'active' => $language['active'],
@@ -232,7 +231,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($countries as $country) {
             $countryId = DB::table('countries')->insertGetId([
-                'name' => $country['name'],
                 'code' => $country['code'],
                 'iso' => $country['iso'],
                 'phone_prefix' => $country['phone_prefix'],
@@ -293,7 +291,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($currencies as $currency) {
             $currencyId = DB::table('currencies')->insertGetId([
-                'name' => $currency['name'],
                 'code' => $currency['code'],
                 'rate' => $currency['rate'],
                 'decimals' => $currency['decimals'],
