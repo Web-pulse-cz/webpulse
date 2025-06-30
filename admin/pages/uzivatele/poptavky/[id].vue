@@ -10,7 +10,7 @@ const router = useRouter();
 const error = ref(false);
 const loading = ref(false);
 
-const pageTitle = ref(route.params.id === 'pridat' ? 'Nová poptávka test' : 'Detail poptávky');
+const pageTitle = ref(route.params.id === 'pridat' ? 'Nová poptávka' : 'Detail poptávky');
 
 const breadcrumbs = ref([
   {
