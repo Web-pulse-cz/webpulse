@@ -39,6 +39,7 @@ import {
   ArchiveBoxIcon,
   NewspaperIcon,
   QuestionMarkCircleIcon,
+  CogIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -283,6 +284,13 @@ const navigation = ref([
         icon: AdjustmentsHorizontalIcon,
         current: false,
         slug: 'user_groups',
+      },
+      {
+        name: 'Nastavení',
+        link: '/nastaveni',
+        icon: CogIcon,
+        current: false,
+        slug: 'settings',
       },
       {
         name: 'Aktivity',

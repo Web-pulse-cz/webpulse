@@ -64,6 +64,7 @@ const allowedPermissions = ref([
   { name: 'Blogové články', value: 'Blogové články', slug: 'posts' },
   { name: 'Informační stránky', value: 'Informační stránky', slug: 'pages' },
   { name: 'E-maily', value: 'E-maily', slug: 'emails' },
+  { name: 'Nastavení', value: 'Nastavení', slug: 'settings' },
 ]);
 
 const item = ref({
