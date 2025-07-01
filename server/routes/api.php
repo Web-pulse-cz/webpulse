@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\Email\EmailController;
 use App\Http\Controllers\Admin\Page\PageController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Review\ReviewController;
+use App\Http\Controllers\Admin\Logo\LogoController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -382,6 +383,16 @@ Route::group([
         Route::get('{id}', [ReviewController::class, 'show'])->where('id', '[0-9]+');
         Route::post('{id?}', [ReviewController::class, 'store']);
         Route::delete('{id}', [ReviewController::class, 'destroy'])->where('id', '[0-9]+');
+    });
+
+    // Logo routes
+    Route::group([
+        'prefix' => 'logo'
+    ], function () {
+        Route::get('', [LogoController::class, 'index']);
+        Route::get('{id}', [LogoController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('{id?}', [LogoController::class, 'store']);
+        Route::delete('{id}', [LogoController::class, 'destroy'])->where('id', '[0-9]+');
     });
 
 });
