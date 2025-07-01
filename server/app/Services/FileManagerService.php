@@ -62,32 +62,26 @@ class FileManagerService
             $extension = strtolower($file->getClientOriginalExtension());
             $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
 
-            // Handle SVG files separately
-
             foreach ($imageFormats as $configFormat) {
                 try {
-                    if ($extension === 'svg') {
-                        $path = storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type . '/' . $configFormat['path']);
-                        if (!is_dir($path)) {
-                            mkdir($path, 0755, true);
-                        }
-                        $file->move($path, $filename);
-                        $uploadedImages[] = $filename;
-                        continue;
-                    } else {
-                        $imageData = $this->parseImage($file, $configFormat);
+                    $path = storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type . '/' . $configFormat['path']);
+                    if (!is_dir($path)) {
+                        mkdir($path, 0755, true);
                     }
+
+                    if ($extension === 'svg') {
+                        // Handle SVG files
+                        $file->move($path, $filename);
+                    } else {
+                        // Process other image formats
+                        $imageData = $this->parseImage($file, $configFormat);
+                        $imageData->save($path . '/' . $filename);
+                    }
+
+                    $uploadedImages[] = $filename;
                 } catch (\Exception $e) {
                     throw new \Exception("Error processing image: " . $e->getMessage());
                 }
-
-                // Ensure the directory exists
-                if (!is_dir($configFormat['path'])) {
-                    mkdir($configFormat['path'], 0755, true);
-                }
-
-                // Save the processed image
-                $imageData->save($configFormat['path'] . '/' . $filename);
             }
             $uploadedImages[] = $filename;
         }
