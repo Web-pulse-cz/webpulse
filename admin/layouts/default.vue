@@ -99,13 +99,6 @@ const navigation = ref([
         slug: 'pages',
       },
       {
-        name: 'Události a akce',
-        link: '/demo',
-        icon: CalendarIcon,
-        current: false,
-        slug: 'events',
-      },
-      {
         name: 'Novinky',
         link: '/obsah/novinky',
         icon: NewspaperIcon,
@@ -120,7 +113,7 @@ const navigation = ref([
         slug: 'services',
       },
       {
-        name: 'Události',
+        name: 'Události a akce',
         link: '/obsah/udalosti',
         icon: CalendarDaysIcon,
         current: false,
