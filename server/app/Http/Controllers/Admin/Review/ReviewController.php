@@ -85,7 +85,7 @@ class ReviewController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating service.'], 500);
+            return Response::json(['message' => 'An error occurred while updating review.'], 500);
         }
 
         return Response::json(ReviewResource::make($review));
