@@ -15,4 +15,9 @@ class Newsletter extends Model
         'lastname',
         'locale',
     ];
+
+    public function getFullNameAttribute()
+    {
+        return trim("{$this->firstname} {$this->lastname}");
+    }
 }
