@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
@@ -63,26 +62,33 @@ class FileManagerService
             $extension = strtolower($file->getClientOriginalExtension());
             $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
 
-            foreach ($imageFormats as $configFormat) {
-                try {
+            // Handle SVG files separately
+            if ($extension === 'svg') {
+                foreach ($imageFormats as $configFormat) {
                     $path = storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type . '/' . $configFormat['path']);
                     if (!is_dir($path)) {
                         mkdir($path, 0755, true);
                     }
-
-                    if ($extension === 'svg') {
-                        // Handle SVG files
-                        File::move($file->getRealPath(), $path . '/' . $filename);
-                    } else {
-                        // Process other image formats
-                        $imageData = $this->parseImage($file, $configFormat);
-                        $imageData->save($path . '/' . $filename);
-                    }
-
+                    $file->move($path, $filename);
                     $uploadedImages[] = $filename;
+                }
+                continue;
+            }
+
+            foreach ($imageFormats as $configFormat) {
+                try {
+                    $imageData = $this->parseImage($file, $configFormat);
                 } catch (\Exception $e) {
                     throw new \Exception("Error processing image: " . $e->getMessage());
                 }
+
+                // Ensure the directory exists
+                if (!is_dir($configFormat['path'])) {
+                    mkdir($configFormat['path'], 0755, true);
+                }
+
+                // Save the processed image
+                $imageData->save($configFormat['path'] . '/' . $filename);
             }
             $uploadedImages[] = $filename;
         }
