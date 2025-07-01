@@ -62,34 +62,32 @@ class FileManagerService
             $extension = strtolower($file->getClientOriginalExtension());
             $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
 
-            // Handle SVG files separately
-            if ($extension === 'svg') {
-                foreach ($imageFormats as $configFormat) {
-                    $path = storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type . '/' . $configFormat['path']);
-                    if (!is_dir($path)) {
-                        mkdir($path, 0755, true);
-                    }
-                    $file->move($path, $filename);
-                    $uploadedImages[] = $filename;
-                }
-                continue;
-            }
-
             foreach ($imageFormats as $configFormat) {
+                if (in_array($extension, ['svg', 'svgz']) || $file->getMimeType() === 'image/svg+xml') {
+                    if (!is_dir($configFormat['path'])) {
+                        mkdir($configFormat['path'], 0755, true);
+                    }
+
+                    // Copy the file (instead of move) into each directory
+                    copy($file->getRealPath(), $configFormat['path'] . '/' . $filename);
+
+                    continue; // Pokračuj na další formát
+                }
+
                 try {
                     $imageData = $this->parseImage($file, $configFormat);
                 } catch (\Exception $e) {
                     throw new \Exception("Error processing image: " . $e->getMessage());
                 }
 
-                // Ensure the directory exists
                 if (!is_dir($configFormat['path'])) {
                     mkdir($configFormat['path'], 0755, true);
                 }
 
-                // Save the processed image
                 $imageData->save($configFormat['path'] . '/' . $filename);
             }
+
+            // Store the filename for the uploaded image
             $uploadedImages[] = $filename;
         }
 
