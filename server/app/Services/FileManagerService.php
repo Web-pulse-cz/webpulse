@@ -59,7 +59,20 @@ class FileManagerService
                 throw new \Exception("Invalid file upload.");
             }
 
-            $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . strtolower($file->getClientOriginalExtension());
+            $extension = strtolower($file->getClientOriginalExtension());
+            $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
+
+            // Handle SVG files separately
+            if ($extension === 'svg') {
+                $path = storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type);
+                if (!is_dir($path)) {
+                    mkdir($path, 0755, true);
+                }
+                $file->move($path, $filename);
+                $uploadedImages[] = $filename;
+                continue;
+            }
+
             foreach ($imageFormats as $configFormat) {
                 try {
                     $imageData = $this->parseImage($file, $configFormat);
@@ -72,10 +85,8 @@ class FileManagerService
                     mkdir($configFormat['path'], 0755, true);
                 }
 
-
                 // Save the processed image
                 $imageData->save($configFormat['path'] . '/' . $filename);
-
             }
             $uploadedImages[] = $filename;
         }
