@@ -28,8 +28,6 @@ use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Service\ServiceController;
 use App\Http\Controllers\Admin\Novelty\NoveltyController;
 use App\Http\Controllers\Admin\Demand\DemandController;
-use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
-use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\FilemanagerController;
 use App\Http\Controllers\Admin\Blog\PostCategoryController;
 use App\Http\Controllers\Admin\Blog\PostController;
@@ -38,6 +36,17 @@ use App\Http\Controllers\Admin\Page\PageController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Review\ReviewController;
 use App\Http\Controllers\Admin\Logo\LogoController;
+use App\Http\Controllers\Admin\Newsletter\NewsletterController;
+use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
+use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
+use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
+use App\Http\Controllers\Client\Blog\PostController as ClientPostController;
+use App\Http\Controllers\Client\Page\PageController as ClientPageController;
+use App\Http\Controllers\Client\Logo\LogoController as ClientLogoController;
+use App\Http\Controllers\Client\Novelty\NoveltyController as ClientNoveltyController;
+use App\Http\Controllers\Client\Review\ReviewController as ClientReviewController;
+use App\Http\Controllers\Client\Setting\SettingController as ClientSettingController;
+use App\Http\Controllers\Client\Newsletter\NewsletterController as ClientNewsletterController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -52,6 +61,17 @@ Route::group([
 });
 
 Route::group([
+    'prefix' => 'setting'
+], function () {
+    Route::get('{lang?}', [ClientSettingController::class, 'index']);
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Client routes
+ * -------------------------------------------------------------------------
+ */
+Route::group([
     'prefix' => 'service'
 ], function () {
     Route::get('{lang?}', [ClientServiceController::class, 'index']);
@@ -64,6 +84,60 @@ Route::group([
     Route::post('{lang?}', [ClientDemandController::class, 'store']);
 });
 
+Route::group([
+    'prefix' => 'blog'
+], function () {
+    Route::group([
+        'prefix' => 'category'
+    ], function () {
+        Route::get('{lang?}', [ClientPostCategoryController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientPostCategoryController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'post'
+    ], function () {
+        Route::get('{lang?}', [ClientPostController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientPostController::class, 'show'])->where('id', '[0-9]+');
+    });
+});
+
+Route::group([
+    'prefix' => 'page'
+], function () {
+    Route::get('{id}/{lang?}', [ClientPageController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'logo'
+], function () {
+    Route::get('{lang?}', [ClientLogoController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'novelty'
+], function () {
+    Route::get('{lang?}', [ClientNoveltyController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientNoveltyController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'review'
+], function () {
+    Route::get('{lang?}', [ClientReviewController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'newsletter'
+], function () {
+    Route::post('{lang?}', [ClientNewsletterController::class, 'store']);
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Admin routes
+ * -------------------------------------------------------------------------
+ */
 Route::group([
     'prefix' => 'admin'
 ], function () {
@@ -395,4 +469,11 @@ Route::group([
         Route::delete('{id}', [LogoController::class, 'destroy'])->where('id', '[0-9]+');
     });
 
+    // Newsletter routes
+    Route::group([
+        'prefix' => 'newsletter'
+    ], function () {
+        Route::get('', [NewsletterController::class, 'index']);
+        Route::get('{id}', [NewsletterController::class, 'destroy'])->where('id', '[0-9]+');
+    });
 });
