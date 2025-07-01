@@ -140,7 +140,7 @@ definePageMeta({
             type: 'image',
             width: 80,
             hidden: false,
-            sortable: false,
+            sortable: true,
             path: 'logo/medium',
           },
           {
@@ -149,7 +149,7 @@ definePageMeta({
             type: 'text',
             width: 80,
             hidden: false,
-            sortable: false,
+            sortable: true,
           },
           {
             key: 'position',
@@ -165,7 +165,7 @@ definePageMeta({
             type: 'link',
             width: 80,
             hidden: true,
-            sortable: true,
+            sortable: false,
             target: '_blank',
           },
         ]"

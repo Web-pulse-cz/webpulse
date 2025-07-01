@@ -252,7 +252,7 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                   <NuxtLink
                     v-else-if="column.type === 'link'"
                     :to="item[column.key]"
-                    :target="item[column.target]"
+                    :target="column.target"
                     class="text-primaryLight"
                   >
                     {{ item[column.key] }}
