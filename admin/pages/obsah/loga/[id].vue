@@ -201,6 +201,17 @@ definePageMeta({
               rules="required|min:3"
               class="col-span-1"
             />
+            <div class="col-span-1">
+              <BaseFormUploadImage
+                v-model="item.image"
+                :multiple="false"
+                type="logo"
+                format="large"
+                label="Logo"
+                class="pt-6"
+                @update-files="updateItemImage"
+              />
+            </div>
           </div>
         </LayoutContainer>
         <LayoutContainer class="col-span-2 w-full">
@@ -213,7 +224,7 @@ definePageMeta({
               :options="languageStore.languageOptions"
             />
           </div>
-          <div class="col-span-1 border-b pb-6">
+          <div class="col-span-1">
             <BaseFormInput
               v-model="item.position"
               label="Pořadí ve výpisu"
@@ -221,17 +232,6 @@ definePageMeta({
               name="position"
               rules="required|min:3"
               class="col-span-1 pt-6"
-            />
-          </div>
-          <div class="col-span-1">
-            <BaseFormUploadImage
-              v-model="item.image"
-              :multiple="false"
-              type="logo"
-              format="small"
-              label="Náhledový obrázek"
-              class="pt-6"
-              @update-files="updateItemImage"
             />
           </div>
         </LayoutContainer>
