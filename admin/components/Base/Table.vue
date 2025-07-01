@@ -227,6 +227,12 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                   <span v-else-if="column.type === 'datetime'">
                     {{ new Date(item[column.key]).toLocaleString() }}
                   </span>
+                  <img
+                    v-if="column.type === 'image'"
+                    class="size-24 bg-gray-50"
+                    :src="`http://api.martinhanzl.cz/content/images/${column.path}/${item[column.key]}`"
+                    alt=""
+                  />
                   <span v-else-if="column.type === 'stars'" class="flex gap-x-1.5">
                     <StarIcon
                       v-for="star in 5"
