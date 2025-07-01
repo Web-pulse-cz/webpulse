@@ -40,6 +40,7 @@ import {
   NewspaperIcon,
   QuestionMarkCircleIcon,
   CogIcon,
+  PhotoIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -118,24 +119,45 @@ const navigation = ref([
         current: false,
         slug: 'services',
       },
+      {
+        name: 'Události',
+        link: '/obsah/udalosti',
+        icon: CalendarDaysIcon,
+        current: false,
+        slug: 'events',
+      },
+      {
+        name: 'Recenze',
+        link: '/obsah/recenze',
+        icon: StarIcon,
+        current: false,
+        slug: 'reviews',
+      },
+      {
+        name: 'Loga klientů',
+        link: '/obsah/loga',
+        icon: PhotoIcon,
+        current: false,
+        slug: 'logos',
+      },
+      {
+        name: 'Kvízy',
+        link: '/obsah/kvizy',
+        icon: QuestionMarkCircleIcon,
+        current: false,
+        slug: 'quizes',
+      },
     ],
   },
   {
     title: 'Uživatelé',
     menu: [
       {
-        name: 'Uživatelé',
-        link: '/sablony-zprav',
-        icon: ChatBubbleBottomCenterTextIcon,
-        current: false,
-        slug: 'demo',
-      },
-      {
         name: 'Odběry newsletteru',
         link: '/kontakty',
-        icon: UsersIcon,
+        icon: AtSymbolIcon,
         current: false,
-        slug: 'demo',
+        slug: 'newsletters',
       },
       {
         name: 'Poptávky',
@@ -190,13 +212,6 @@ const navigation = ref([
         icon: TrophyIcon,
         current: false,
         slug: 'leagues',
-      },
-      {
-        name: 'Akce',
-        link: '/demo',
-        icon: CalendarDaysIcon,
-        current: false,
-        slug: 'events',
       },
     ],
   },
@@ -272,14 +287,14 @@ const navigation = ref([
     title: 'Nastavení a správa',
     menu: [
       {
-        name: 'Uživatelé',
+        name: 'Administrátoři',
         link: '/administratori',
         icon: UsersIcon,
         current: false,
         slug: 'users',
       },
       {
-        name: 'Uživatelské skupiny',
+        name: 'Administrátorské skupiny',
         link: '/administratori/skupiny',
         icon: AdjustmentsHorizontalIcon,
         current: false,

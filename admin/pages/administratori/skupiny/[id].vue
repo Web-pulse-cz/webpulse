@@ -38,33 +38,40 @@ const breadcrumbs = ref([
 ]);
 
 const allowedPermissions = ref([
-  { name: 'Kontakty', value: 'Kontakty', slug: 'contacts' },
-  { name: 'Kalednář', value: 'Kalednář', slug: 'calendars' },
-  { name: 'Cashflow', value: 'Cashflow', slug: 'cashflows' },
-  { name: 'Projekty', value: 'Projekty', slug: 'projects' },
-  { name: 'Faktury', value: 'Faktury', slug: 'invoices' },
-  { name: 'Trackování', value: 'Trackování', slug: 'trackings' },
-  { name: 'Cenové nabídky', value: 'Nacenění', slug: 'price_offers' },
-  { name: 'Uživatelé', value: 'Uživatelé', slug: 'users' },
-  {
-    name: 'Uživatelské skupiny',
-    value: 'Uživatelské skupiny',
-    slug: 'user_groups',
-  },
-  { name: 'Šablony zpráv', value: 'Šablony zpráv', slug: 'message_blueprints' },
   { name: 'Aktivita', value: 'Aktivita', slug: 'users_has_activities' },
   { name: 'Aktivity', value: 'Aktivity', slug: 'activities' },
-  { name: 'Sazby DPH', value: 'Sazby DPH', slug: 'tax_rates' },
-  { name: 'Jazyky', value: 'Jazyky', slug: 'languages' },
-  { name: 'Země', value: 'Země', slug: 'countries' },
-  { name: 'Měny', value: 'Měny', slug: 'currencies' },
-  { name: 'Služby', value: 'Služby', slug: 'services' },
-  { name: 'Novinky', value: 'Novinky', slug: 'novelties' },
-  { name: 'Poptávky', value: 'Poptávky', slug: 'demands' },
+  { name: 'Administrátoři', value: 'Administrátoři', slug: 'users' },
+  { name: 'Administrátorské skupiny', value: 'Administrátorské skupiny', slug: 'user_groups' },
   { name: 'Blogové články', value: 'Blogové články', slug: 'posts' },
-  { name: 'Informační stránky', value: 'Informační stránky', slug: 'pages' },
+  { name: 'Cashflow', value: 'Cashflow', slug: 'cashflows' },
+  { name: 'Cenové nabídky', value: 'Nacenění', slug: 'price_offers' },
+  { name: 'Dodavatelé', value: 'Dodavatelé', slug: 'suppliers' },
   { name: 'E-maily', value: 'E-maily', slug: 'emails' },
+  { name: 'Faktury', value: 'Faktury', slug: 'invoices' },
+  { name: 'Informační stránky', value: 'Informační stránky', slug: 'pages' },
+  { name: 'Jazyky', value: 'Jazyky', slug: 'languages' },
+  { name: 'Kalednář', value: 'Kalednář', slug: 'calendars' },
+  { name: 'Klienti', value: 'Klienti', slug: 'clients' },
+  { name: 'Kontakty', value: 'Kontakty', slug: 'contacts' },
+  { name: 'Kvízy', value: 'Kvízy', slug: 'quizes' },
+  { name: 'Ligy', value: 'Ligy', slug: 'leagues' },
+  { name: 'Loga klientů', value: 'Loga klientů', slug: 'logos' },
+  { name: 'Měny', value: 'Měny', slug: 'currencies' },
   { name: 'Nastavení', value: 'Nastavení', slug: 'settings' },
+  { name: 'Novinky', value: 'Novinky', slug: 'novelties' },
+  { name: 'Oběry newsletteru', value: 'Odběry newsletteru', slug: 'newsletters' },
+  { name: 'Poptávky', value: 'Poptávky', slug: 'demands' },
+  { name: 'Projekty', value: 'Projekty', slug: 'projects' },
+  { name: 'Recenze', value: 'Recenze', slug: 'reviews' },
+  { name: 'Sazby DPH', value: 'Sazby DPH', slug: 'tax_rates' },
+  { name: 'Služby', value: 'Služby', slug: 'services' },
+  { name: 'Smlouvy', value: 'Smlouvy', slug: 'contracts' },
+  { name: 'Šablony zpráv', value: 'Šablony zpráv', slug: 'message_blueprints' },
+  { name: 'Trackování', value: 'Trackování', slug: 'trackings' },
+  { name: 'Události', value: 'Události', slug: 'events' },
+  { name: 'Úkoly', value: 'Úkoly', slug: 'tasks' },
+  { name: 'Zaměstnanci', value: 'Zaměstnanci', slug: 'employees' },
+  { name: 'Země', value: 'Země', slug: 'countries' },
 ]);
 
 const item = ref({
@@ -176,6 +183,15 @@ function removePermission(key: number) {
   item.value.permissions.splice(key, 1);
 }
 
+function availablePermissions(index: number) {
+  const selectedPermissions = item.value.permissions.map((p) => p.name);
+  const currentPermission = item.value.permissions[index]?.name;
+
+  return allowedPermissions.value.filter((perm) => {
+    return perm.value === currentPermission || !selectedPermissions.includes(perm.value);
+  });
+}
+
 watch(
   () => item.value.permissions,
   (newPermissions) => {
@@ -238,7 +254,7 @@ definePageMeta({
               :name="key + '_name'"
               rules="required|min:3"
               class="col-span-2"
-              :options="allowedPermissions"
+              :options="availablePermissions(key)"
             />
             <BaseFormCheckbox
               v-model="permission.permissions.view"
