@@ -154,7 +154,7 @@ const navigation = ref([
     menu: [
       {
         name: 'Odběry newsletteru',
-        link: '/kontakty',
+        link: '/uzivatele/newslettery',
         icon: AtSymbolIcon,
         current: false,
         slug: 'newsletters',
