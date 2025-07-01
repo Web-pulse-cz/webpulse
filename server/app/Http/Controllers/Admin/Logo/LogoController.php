@@ -63,7 +63,7 @@ class LogoController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'image' => 'required|integer|min:0|max:5',
+            'image' => 'required|string',
             'translations' => 'required|array',
             'translations.*.url' => 'nullable|string',
         ]);
