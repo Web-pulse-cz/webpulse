@@ -23,9 +23,9 @@ const deleteDialogItem = ref(null);
 
 defineProps({
   items: {
-    type: Array,
+    type: Object,
     required: true,
-    default: [] as [],
+    default: {} as {},
   },
   columns: {
     type: Array,
@@ -222,10 +222,16 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                     {{ enums[column.key][item[column.key]] }}
                   </span>
                   <span v-else-if="column.type === 'date'">
-                    {{ new Date(item[column.key]).toLocaleDateString() }}
+                    {{
+                      item[column.key] !== null
+                        ? new Date(item[column.key]).toLocaleDateString()
+                        : '-'
+                    }}
                   </span>
                   <span v-else-if="column.type === 'datetime'">
-                    {{ new Date(item[column.key]).toLocaleString() }}
+                    {{
+                      item[column.key] !== null ? new Date(item[column.key]).toLocaleString() : '-'
+                    }}
                   </span>
                   <img
                     v-if="column.type === 'image'"
