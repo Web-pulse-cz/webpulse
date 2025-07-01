@@ -269,7 +269,7 @@ definePageMeta({
     </div>
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
+        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
           <LayoutContainer class="col-span-5 w-full">
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
               <BaseFormSelect
@@ -298,7 +298,9 @@ definePageMeta({
                 name="published_to"
                 class="col-span-1"
               />
-              <div class="col-span-full grid grid-cols-4">
+              <div class="col-span-full border-b pb-6"></div>
+              <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-6">
+                <LayoutTitle class="col-span-full">Zařazení do kategorií</LayoutTitle>
                 <BaseFormCheckbox
                   v-for="(category, key) in categories"
                   :key="key"
@@ -313,7 +315,7 @@ definePageMeta({
             </div>
           </LayoutContainer>
           <LayoutContainer class="col-span-2 w-full">
-            <div class="col-span-1 border-b pb-6">
+            <div class="col-span-1">
               <BaseFormUploadImage
                 v-model="item.image"
                 :multiple="false"
@@ -397,7 +399,7 @@ definePageMeta({
             </div>
           </LayoutContainer>
           <LayoutContainer class="col-span-2 w-full">
-            <div class="col-span-1 border-b pb-6">
+            <div class="col-span-1">
               <BaseFormSelect
                 v-model="selectedLocale"
                 label="Jazyk"
