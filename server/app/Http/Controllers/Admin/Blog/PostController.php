@@ -79,6 +79,17 @@ class PostController extends Controller
         DB::beginTransaction();
         try {
             $post->fill($request->all());
+            if ($request->get('published_from') == "") {
+                $post->published_from = null;
+            } else {
+                $post->published_from = $request->get('published_from');
+            }
+
+            if ($request->get('published_to') == "") {
+                $post->published_to = null;
+            } else {
+                $post->published_to = $request->get('published_to');
+            }
 
             foreach ($request->translations as $locale => $translation) {
                 $translation['slug'] = Str::slug($translation['name']);
