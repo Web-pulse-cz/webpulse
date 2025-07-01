@@ -282,8 +282,8 @@ definePageMeta({
       v-model:show="filterDialogIsOpen"
       v-model:year="tableQuery.year"
       v-model:month="tableQuery.month"
-      v-model:dayFrom="tableQuery.dayFrom"
-      v-model:dayTo="tableQuery.dayTo"
+      v-model:day-from="tableQuery.dayFrom"
+      v-model:day-to="tableQuery.dayTo"
       @submit="loadItems"
     />
   </div>

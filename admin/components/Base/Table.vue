@@ -8,7 +8,7 @@ import {
   CheckIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid';
+import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
 
 const toast = useToast();
@@ -226,6 +226,15 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                   </span>
                   <span v-else-if="column.type === 'datetime'">
                     {{ new Date(item[column.key]).toLocaleString() }}
+                  </span>
+                  <span v-else-if="column.type === 'stars'" class="flex gap-x-1.5">
+                    <StarIcon
+                      v-for="star in 5"
+                      :key="star"
+                      :class="`h-4 w-4 ${
+                        star <= item[column.key] ? 'text-yellow-400' : 'text-grayLight'
+                      }`"
+                    />
                   </span>
                   <span v-else-if="column.type === 'status'">
                     <CheckIcon

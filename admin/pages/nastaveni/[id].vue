@@ -191,13 +191,13 @@ definePageMeta({
           </div>
         </LayoutContainer>
         <LayoutContainer
-          class="col-span-full mt-0 w-full"
           v-if="item.type === 'topMenu' || item.type === 'bottomMenu'"
+          class="col-span-full mt-0 w-full"
         >
           <div class="grid grid-cols-2 gap-x-8 gap-y-10">
             <div
-              v-if="item.translations[selectedLocale] && item.translations[selectedLocale].value"
               v-for="(group, index) in item.translations[selectedLocale].value.groups"
+              v-if="item.translations[selectedLocale] && item.translations[selectedLocale].value"
               :key="index"
               class="col-span-2 grid grid-cols-12 gap-x-4 gap-y-2"
             >
@@ -227,10 +227,10 @@ definePageMeta({
                 </div>
               </div>
               <div
-                class="col-span-full grid grid-cols-12 gap-x-4 gap-y-2"
-                v-if="group.submenu"
                 v-for="(submenu, key) in group.submenu"
+                v-if="group.submenu"
                 :key="key"
+                class="col-span-full grid grid-cols-12 gap-x-4 gap-y-2"
               >
                 <div class="col-span-1">&nbsp;</div>
                 <BaseFormInput

@@ -18,7 +18,7 @@ const emit = defineEmits(['update:modelValue']);
 
 <template>
   <div>
-    <label class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6">{{
+    <label class="mb-2 block text-left text-xs font-medium text-grayCustom lg:text-sm/6">{{
       label
     }}</label>
     <ClientOnly>
