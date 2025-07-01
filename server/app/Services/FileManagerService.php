@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
@@ -71,7 +72,7 @@ class FileManagerService
 
                     if ($extension === 'svg') {
                         // Handle SVG files
-                        $file->move($path, $filename);
+                        File::move($file->getRealPath(), $path . '/' . $filename);
                     } else {
                         // Process other image formats
                         $imageData = $this->parseImage($file, $configFormat);
