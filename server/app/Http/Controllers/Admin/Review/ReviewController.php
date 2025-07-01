@@ -65,7 +65,6 @@ class ReviewController extends Controller
         $validator = Validator::make($request->all(), [
             'rating' => 'required|integer|min:0|max:5',
             'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
             'translations.*.content' => 'required|string',
         ]);
 
