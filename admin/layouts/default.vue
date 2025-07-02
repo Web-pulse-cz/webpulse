@@ -9,6 +9,9 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
 } from '@headlessui/vue';
 import {
   Bars3Icon,
@@ -41,6 +44,7 @@ import {
   QuestionMarkCircleIcon,
   CogIcon,
   PhotoIcon,
+  ChevronRightIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -86,10 +90,21 @@ const navigation = ref([
     menu: [
       {
         name: 'Blogové članky',
-        link: '/obsah/clanky',
         icon: ArchiveBoxIcon,
         current: false,
         slug: 'posts',
+        submenu: [
+          {
+            name: 'Články',
+            link: '/obsah/clanky',
+            current: false,
+          },
+          {
+            name: 'Kategorie',
+            link: '/obsah/clanky/kategorie',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Informační stránky',
@@ -490,7 +505,9 @@ onMounted(() => {
                           @click="sidebarOpen = false"
                         >
                           <NuxtLink
-                            v-if="!item.slug || (item.slug && canView(item.slug))"
+                            v-if="
+                              (!item.slug || (item.slug && canView(item.slug))) && !item.submenu
+                            "
                             :to="item.link"
                             :class="[
                               item.current
@@ -502,21 +519,51 @@ onMounted(() => {
                             <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
                             <span class="truncate">{{ item.name }}</span>
                           </NuxtLink>
+                          <Disclosure
+                            as="div"
+                            class="w-full"
+                            v-else-if="!item.slug || (item.slug && canView(item.slug))"
+                            v-slot="{ open }"
+                          >
+                            <DisclosureButton
+                              :class="[
+                                item.current
+                                  ? 'bg-gray-800 text-white'
+                                  : 'text-gray-300 hover:bg-gray-800 hover:text-white',
+                                'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                              ]"
+                            >
+                              <component
+                                :is="item.icon"
+                                class="size-6 shrink-0"
+                                aria-hidden="true"
+                              />
+                              {{ item.name }}
+                              <ChevronRightIcon
+                                :class="[
+                                  open ? 'rotate-90 text-gray-500' : 'text-gray-400',
+                                  'size-5 shrink-0',
+                                ]"
+                                aria-hidden="true"
+                              />
+                            </DisclosureButton>
+                            <DisclosurePanel as="ul" class="mt-1 px-2">
+                              <li v-for="subItem in item.submenu" :key="subItem.name">
+                                <DisclosureButton
+                                  as="a"
+                                  :href="subItem.link"
+                                  :class="[
+                                    subItem.current ? 'bg-gray-50' : 'hover:bg-gray-50',
+                                    'block rounded-md py-2 pl-9 pr-2 text-sm/6 text-gray-700',
+                                  ]"
+                                  >{{ subItem.name }}</DisclosureButton
+                                >
+                              </li>
+                            </DisclosurePanel>
+                          </Disclosure>
                         </li>
                       </ul>
                     </li>
-                    <!--										<li class="mt-auto">
-											<a
-												href="#"
-												class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-300 hover:bg-gray-800 hover:text-white"
-											>
-												<Cog6ToothIcon
-													class="size-6 shrink-0"
-													aria-hidden="true"
-												/>
-												Settings
-											</a>
-										</li> -->
                   </ul>
                 </nav>
               </div>
@@ -542,7 +589,7 @@ onMounted(() => {
               <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li v-for="(item, key) in group.menu" :key="key">
                   <NuxtLink
-                    v-if="!item.slug || (item.slug && canView(item.slug))"
+                    v-if="(!item.slug || (item.slug && canView(item.slug))) && !item.submenu"
                     :to="item.link"
                     :class="[
                       item.current
@@ -554,6 +601,44 @@ onMounted(() => {
                     <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
                     <span class="truncate">{{ item.name }}</span>
                   </NuxtLink>
+                  <Disclosure
+                    as="div"
+                    class="w-full"
+                    v-else-if="!item.slug || (item.slug && canView(item.slug))"
+                    v-slot="{ open }"
+                  >
+                    <DisclosureButton
+                      :class="[
+                        item.current
+                          ? 'bg-gray-800 text-white'
+                          : 'text-gray-300 hover:bg-gray-800 hover:text-white',
+                        'group flex w-full gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                      ]"
+                    >
+                      <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                      {{ item.name }}
+                      <ChevronRightIcon
+                        :class="[
+                          open ? 'rotate-90 text-gray-500' : 'text-gray-400',
+                          'size-5 shrink-0',
+                        ]"
+                        aria-hidden="true"
+                      />
+                    </DisclosureButton>
+                    <DisclosurePanel as="ul" class="mt-1 px-2">
+                      <li v-for="subItem in item.children" :key="subItem.name">
+                        <DisclosureButton
+                          as="a"
+                          :href="subItem.href"
+                          :class="[
+                            subItem.current ? 'bg-gray-50' : 'hover:bg-gray-50',
+                            'block rounded-md py-2 pl-9 pr-2 text-sm/6 text-gray-700',
+                          ]"
+                          >{{ subItem.name }}</DisclosureButton
+                        >
+                      </li>
+                    </DisclosurePanel>
+                  </Disclosure>
                 </li>
               </ul>
             </li>
@@ -561,16 +646,6 @@ onMounted(() => {
               <LayoutPropsCountdown
                 class="z-50 rounded-lg border border-gray-300 bg-gray-900 px-4 py-10 text-center"
               />
-              <!--							<a
-								href="#"
-								class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-300 hover:bg-gray-800 hover:text-white"
-							>
-								<Cog6ToothIcon
-									class="size-6 shrink-0"
-									aria-hidden="true"
-								/>
-								Nastavení
-							</a> -->
             </li>
           </ul>
         </nav>
