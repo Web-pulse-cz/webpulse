@@ -26,6 +26,7 @@ class PostResource extends JsonResource
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,
             'categories' => PostCategoryResource::collection($this->whenLoaded('categories')),
+            'created_at' => $this->created_at,
         ];
     }
 }
