@@ -38,8 +38,8 @@ const item = ref({
 });
 
 const translatableAttributes = ref([
-  { field: 'question' as string, label: 'Název' as string },
-  { field: 'anwer' as string, label: 'Popis' as string },
+  { field: 'question' as string, label: 'Dotaz' as string },
+  { field: 'answer' as string, label: 'Odpověď' as string },
 ]);
 
 const categories = ref([]);
@@ -214,40 +214,44 @@ definePageMeta({
         <LayoutContainer class="col-span-5 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
-              v-model="item.position"
-              label="Pozice ve výpisu"
-              name="position"
-              class="col-span-1"
-              min="0"
-              type="number"
-            />
-            <br />
-            <BaseFormInput
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].name !== undefined
+                item.translations[selectedLocale].question !== undefined
               "
-              :key="`name-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].name"
-              label="Název"
+              :key="`question-${selectedLocale}`"
+              v-model="item.translations[selectedLocale].question"
+              label="Dotaz"
               type="text"
-              name="name"
+              name="question"
               rules="required|min:3"
               class="col-span-1"
             />
-            <BaseFormInput
+            <BaseFormEditor
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_title !== undefined
+                item.translations[selectedLocale].answer !== undefined
               "
-              :key="`meta_title-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_title"
-              label="Meta název"
-              type="text"
-              name="meta_title"
+              :key="`answer-${selectedLocale}`"
+              v-model="item.translations[selectedLocale].answer"
+              label="Odpověď"
+              name="answer"
+              class="col-span-2"
+            />
+          </div>
+          <div class="col-span-full border-b pb-6"></div>
+          <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-6 pt-6">
+            <LayoutTitle class="col-span-full">Zařazení do kategorií</LayoutTitle>
+            <BaseFormCheckbox
+              v-for="(category, key) in categories"
+              :key="key"
+              :label="category.name"
+              :name="category.id"
+              :value="item.categories.includes(category.id)"
+              :checked="item.categories.includes(category.id)"
               class="col-span-1"
+              @change="addRemoveItemCategory(category.id)"
             />
           </div>
         </LayoutContainer>
@@ -262,6 +266,16 @@ definePageMeta({
             />
           </div>
           <div class="col-span-1 border-b pb-6">
+            <BaseFormInput
+              v-model="item.position"
+              label="Pořadí ve výpisu"
+              type="number"
+              name="position"
+              rules="required|min:3"
+              class="col-span-1 pt-6"
+            />
+          </div>
+          <div class="col-span-1">
             <BaseFormCheckbox
               v-model="item.active"
               name="active"

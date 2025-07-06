@@ -23,7 +23,7 @@ class Faq extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(FaqCategory::class, 'faq_in_categories', 'faq_id', 'faq_category_id');
+        return $this->belongsToMany(FaqCategory::class, 'faqs_in_categories', 'faq_id', 'faq_category_id');
     }
 
     public function getAttribute($key)

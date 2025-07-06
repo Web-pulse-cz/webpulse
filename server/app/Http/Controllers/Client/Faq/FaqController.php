@@ -21,6 +21,12 @@ class FaqController extends Controller
             ->orderBy('position', 'asc')
             ->orderBy('id', 'desc');
 
+        if ($request->has('categoryId') && $request->get('categoryId') !== null) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('faqs_in_categories.id', $request->get('categoryId'));
+            });
+        }
+
         $faqs = $query->get();
 
         return Response::json(FaqResource::collection($faqs));

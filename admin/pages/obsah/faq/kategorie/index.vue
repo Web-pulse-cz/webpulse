@@ -153,7 +153,7 @@ definePageMeta({
           },
           {
             key: 'position',
-            name: 'Pozice ve výpisu',
+            name: 'Pořadí ve výpisu',
             type: 'number',
             width: 80,
             hidden: true,

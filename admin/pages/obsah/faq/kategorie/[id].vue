@@ -179,7 +179,7 @@ definePageMeta({
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
               v-model="item.position"
-              label="Pozice ve výpisu"
+              label="Pořadí ve výpisu"
               name="position"
               class="col-span-1"
               min="0"

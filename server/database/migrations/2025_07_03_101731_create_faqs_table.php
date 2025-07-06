@@ -46,7 +46,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('faq_in_categories', function (Blueprint $table) {
+        Schema::create('faqs_in_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('faq_id');
             $table->unsignedBigInteger('faq_category_id');
