@@ -164,7 +164,7 @@ definePageMeta({
             sortable: true,
           },
           {
-            key: 'posts_count',
+            key: 'faqs_count',
             name: 'Počet dotazů',
             type: 'number',
             width: 80,
