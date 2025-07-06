@@ -75,17 +75,6 @@ class FaqController extends Controller
         DB::beginTransaction();
         try {
             $faq->fill($request->all());
-            if ($request->get('published_from') == "") {
-                $faq->published_from = null;
-            } else {
-                $faq->published_from = $request->get('published_from');
-            }
-
-            if ($request->get('published_to') == "") {
-                $faq->published_to = null;
-            } else {
-                $faq->published_to = $request->get('published_to');
-            }
 
             foreach ($request->translations as $locale => $translation) {
                 $faq->translateOrNew($locale)->fill($translation);
