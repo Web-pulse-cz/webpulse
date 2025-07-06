@@ -88,7 +88,6 @@ class FaqController extends Controller
             }
 
             foreach ($request->translations as $locale => $translation) {
-                $translation['slug'] = Str::slug($translation['name']);
                 $faq->translateOrNew($locale)->fill($translation);
             }
             $faq->categories()->sync($request->get('categories', []));
