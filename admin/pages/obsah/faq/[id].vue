@@ -68,7 +68,7 @@ async function loadItem() {
       item.value = response;
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
-        name: item.value.name,
+        name: item.value.question,
         link: '/obsah/faq/' + route.params.id,
         current: true,
       });
@@ -206,7 +206,7 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader
-      :title="route.params.id === 'pridat' ? 'Nový dotaz' : item.name"
+      :title="route.params.id === 'pridat' ? 'Nový dotaz' : item.question"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }]"
       slug="faqs"

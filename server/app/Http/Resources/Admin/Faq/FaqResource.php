@@ -20,7 +20,7 @@ class FaqResource extends JsonResource
             'question' => $this->question,
             'answer' => $this->answer,
             'active' => $this->active,
-            'categories' => FaqCategoryResource::collection($this->whenLoaded('categories')),
+            'categories' => $this->categories->pluck('id')->toArray(),
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
         ];
     }

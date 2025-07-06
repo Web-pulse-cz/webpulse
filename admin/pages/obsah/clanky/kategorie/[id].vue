@@ -188,15 +188,6 @@ definePageMeta({
         <LayoutContainer class="col-span-5 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
-              v-model="item.position"
-              label="Pozice ve výpisu"
-              name="position"
-              class="col-span-1"
-              min="0"
-              type="number"
-            />
-            <br />
-            <BaseFormInput
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
@@ -269,6 +260,16 @@ definePageMeta({
               name="locale"
               class="w-full"
               :options="languageStore.languageOptions"
+            />
+          </div>
+          <div class="col-span-1 border-b py-6">
+            <BaseFormInput
+              v-model="item.position"
+              label="Pořadí ve výpisu"
+              name="position"
+              class="col-span-1"
+              min="0"
+              type="number"
             />
           </div>
           <div class="col-span-1 border-b pb-6">
