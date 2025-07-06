@@ -48,6 +48,7 @@ const allowedPermissions = ref([
   { name: 'Dodavatelé', value: 'Dodavatelé', slug: 'suppliers' },
   { name: 'E-maily', value: 'E-maily', slug: 'emails' },
   { name: 'Faktury', value: 'Faktury', slug: 'invoices' },
+  { name: 'FAQ', value: 'FAQ', slug: 'faqs' },
   { name: 'Informační stránky', value: 'Informační stránky', slug: 'pages' },
   { name: 'Jazyky', value: 'Jazyky', slug: 'languages' },
   { name: 'Kalednář', value: 'Kalednář', slug: 'calendars' },

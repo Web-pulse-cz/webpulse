@@ -4,15 +4,20 @@ import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
 const toast = useToast();
-const pageTitle = ref('Odběry newsletteru');
+const pageTitle = ref('Kategorie');
 
 const loading = ref(false);
 const error = ref(false);
 
 const breadcrumbs = ref([
   {
+    name: 'FAQ',
+    link: '/obsah/faq',
+    current: true,
+  },
+  {
     name: pageTitle.value,
-    link: '/uzivatele/newslettery',
+    link: '/obsah/faq/kategorie',
     current: true,
   },
 ]);
@@ -22,8 +27,8 @@ const tableQuery = ref({
   search: null as string | null,
   paginate: 12 as number,
   page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'desc' as string,
+  orderBy: 'position' as string,
+  orderWay: 'asc' as string,
 });
 
 const items = ref([]);
@@ -32,7 +37,7 @@ async function loadItems() {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/newsletter', {
+  await client<{ id: number }>('/api/admin/faq/category', {
     method: 'GET',
     query: tableQuery.value,
     headers: {
@@ -48,7 +53,7 @@ async function loadItems() {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se načíst odběry newsletteru. Zkuste to prosím později.',
+        description: 'Nepodařilo se načíst katgorie. Zkuste to prosím později.',
         color: 'red',
       });
     })
@@ -61,7 +66,7 @@ async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/newsletter/' + id, {
+  await client<{ id: number }>('/api/admin/faq/category/' + id, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -72,7 +77,7 @@ async function deleteItem(id: number) {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se smazat položku odběru newsletteru.',
+        description: 'Nepodařilo se smazat položku kategorie.',
         color: 'red',
       });
     })
@@ -116,7 +121,16 @@ definePageMeta({
 
 <template>
   <div>
-    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="newsletters" />
+    <LayoutHeader
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="[{ type: 'add', text: 'Přidat kategorii' }]"
+      :links="[
+        { name: 'Články', to: 'obsah-faq' },
+        { name: 'Kategorie', to: 'obsah-faq-kategorie' },
+      ]"
+      slug="faqs"
+    />
     <LayoutContainer>
       <BaseTable
         :items="items"
@@ -130,37 +144,45 @@ definePageMeta({
             sortable: true,
           },
           {
-            key: 'fullname',
-            name: 'Jméno a příjmení',
+            key: 'name',
+            name: 'Název',
             type: 'text',
             width: 80,
             hidden: false,
+            sortable: false,
+          },
+          {
+            key: 'position',
+            name: 'Pozice ve výpisu',
+            type: 'number',
+            width: 80,
+            hidden: true,
             sortable: true,
           },
           {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
+            key: 'active',
+            name: 'Aktivní',
+            type: 'status',
             width: 80,
-            hidden: false,
+            hidden: true,
             sortable: true,
           },
           {
-            key: 'locale',
-            name: 'Jazyk',
-            type: 'text',
+            key: 'posts_count',
+            name: 'Počet dotazů',
+            type: 'number',
             width: 80,
-            hidden: false,
-            sortable: true,
+            hidden: true,
+            sortable: false,
           },
         ]"
-        :actions="[{ type: 'delete' }]"
+        :actions="[{ type: 'edit' }, { type: 'delete' }]"
         :loading="loading"
         :error="error"
-        singular="Oděbr newsletteru"
-        plural="Odběry newsletteru"
+        singular="Kategorie"
+        plural="Kategorie"
         :query="tableQuery"
-        slug="newsletters"
+        slug="faqs"
         @delete-item="deleteItem"
         @update-sort="updateSort"
         @update-page="updatePage"

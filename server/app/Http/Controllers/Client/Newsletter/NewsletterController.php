@@ -27,6 +27,7 @@ class NewsletterController extends Controller
         $newsletter = new Newsletter();
 
         $newsletter->fill($request->all());
+        $newsletter->locale = $lang ?? app()->getLocale();
 
         $newsletter->save();
 

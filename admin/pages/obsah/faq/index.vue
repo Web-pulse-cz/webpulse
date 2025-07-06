@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
 const toast = useToast();
-const pageTitle = ref('Odběry newsletteru');
+const pageTitle = ref('FAQ');
 
 const loading = ref(false);
 const error = ref(false);
@@ -12,7 +12,7 @@ const error = ref(false);
 const breadcrumbs = ref([
   {
     name: pageTitle.value,
-    link: '/uzivatele/newslettery',
+    link: '/obsah/faq',
     current: true,
   },
 ]);
@@ -22,8 +22,8 @@ const tableQuery = ref({
   search: null as string | null,
   paginate: 12 as number,
   page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'desc' as string,
+  orderBy: 'position' as string,
+  orderWay: 'asc' as string,
 });
 
 const items = ref([]);
@@ -32,7 +32,7 @@ async function loadItems() {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/newsletter', {
+  await client<{ id: number }>('/api/admin/faq', {
     method: 'GET',
     query: tableQuery.value,
     headers: {
@@ -48,7 +48,7 @@ async function loadItems() {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se načíst odběry newsletteru. Zkuste to prosím později.',
+        description: 'Nepodařilo se načíst dotazy. Zkuste to prosím později.',
         color: 'red',
       });
     })
@@ -61,7 +61,7 @@ async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/newsletter/' + id, {
+  await client<{ id: number }>('/api/admin/faq/' + id, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -72,7 +72,7 @@ async function deleteItem(id: number) {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se smazat položku odběru newsletteru.',
+        description: 'Nepodařilo se smazat položku dotazu.',
         color: 'red',
       });
     })
@@ -116,7 +116,16 @@ definePageMeta({
 
 <template>
   <div>
-    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="newsletters" />
+    <LayoutHeader
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="[{ type: 'add', text: 'Přidat dotaz' }]"
+      :links="[
+        { name: 'Dotazy', to: 'obsah-faq' },
+        { name: 'Kategorie', to: 'obsah-faq-kategorie' },
+      ]"
+      slug="faqs"
+    />
     <LayoutContainer>
       <BaseTable
         :items="items"
@@ -130,37 +139,37 @@ definePageMeta({
             sortable: true,
           },
           {
-            key: 'fullname',
-            name: 'Jméno a příjmení',
+            key: 'question',
+            name: 'Dotaz',
             type: 'text',
             width: 80,
             hidden: false,
-            sortable: true,
+            sortable: false,
           },
           {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
+            key: 'position',
+            name: 'Pozice',
+            type: 'number',
             width: 80,
             hidden: false,
-            sortable: true,
+            sortable: false,
           },
           {
-            key: 'locale',
-            name: 'Jazyk',
-            type: 'text',
+            key: 'active',
+            name: 'Aktivní',
+            type: 'status',
             width: 80,
-            hidden: false,
-            sortable: true,
+            hidden: true,
+            sortable: false,
           },
         ]"
-        :actions="[{ type: 'delete' }]"
+        :actions="[{ type: 'edit' }, { type: 'delete' }]"
         :loading="loading"
         :error="error"
-        singular="Oděbr newsletteru"
-        plural="Odběry newsletteru"
+        singular="Dotaz"
+        plural="Dotazy"
         :query="tableQuery"
-        slug="newsletters"
+        slug="faqs"
         @delete-item="deleteItem"
         @update-sort="updateSort"
         @update-page="updatePage"

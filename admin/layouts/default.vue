@@ -155,6 +155,13 @@ const navigation = ref([
         current: false,
         slug: 'quizes',
       },
+      {
+        name: 'FAQ',
+        link: '/obsah/faq',
+        icon: QuestionMarkCircleIcon,
+        current: false,
+        slug: 'faqs',
+      },
     ],
   },
   {
@@ -520,10 +527,10 @@ onMounted(() => {
                             <span class="truncate">{{ item.name }}</span>
                           </NuxtLink>
                           <Disclosure
-                            as="div"
-                            class="w-full"
                             v-else-if="!item.slug || (item.slug && canView(item.slug))"
                             v-slot="{ open }"
+                            as="div"
+                            class="w-full"
                           >
                             <DisclosureButton
                               :class="[
@@ -602,10 +609,10 @@ onMounted(() => {
                     <span class="truncate">{{ item.name }}</span>
                   </NuxtLink>
                   <Disclosure
-                    as="div"
-                    class="w-full"
                     v-else-if="!item.slug || (item.slug && canView(item.slug))"
                     v-slot="{ open }"
+                    as="div"
+                    class="w-full"
                   >
                     <DisclosureButton
                       :class="[

@@ -37,6 +37,8 @@ use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Review\ReviewController;
 use App\Http\Controllers\Admin\Logo\LogoController;
 use App\Http\Controllers\Admin\Newsletter\NewsletterController;
+use App\Http\Controllers\Admin\Faq\FaqCategoryController;
+use App\Http\Controllers\Admin\Faq\FaqController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -47,6 +49,8 @@ use App\Http\Controllers\Client\Novelty\NoveltyController as ClientNoveltyContro
 use App\Http\Controllers\Client\Review\ReviewController as ClientReviewController;
 use App\Http\Controllers\Client\Setting\SettingController as ClientSettingController;
 use App\Http\Controllers\Client\Newsletter\NewsletterController as ClientNewsletterController;
+use App\Http\Controllers\Client\Faq\FaqController as ClientFaqController;
+use App\Http\Controllers\Client\Faq\FaqCategoryController as ClientFaqCategoryController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -131,6 +135,18 @@ Route::group([
     'prefix' => 'newsletter'
 ], function () {
     Route::post('{lang?}', [ClientNewsletterController::class, 'store']);
+});
+
+Route::group([
+    'prefix' => 'faq'
+], function () {
+    Route::group([
+        'prefix' => 'category'
+    ], function () {
+        Route::get('{lang?}', [ClientFaqCategoryController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientFaqCategoryController::class, 'show'])->where('id', '[0-9]+');
+    });
+    Route::get('{lang?}', [ClientFaqController::class, 'index']);
 });
 
 /**
@@ -475,5 +491,23 @@ Route::group([
     ], function () {
         Route::get('', [NewsletterController::class, 'index']);
         Route::get('{id}', [NewsletterController::class, 'destroy'])->where('id', '[0-9]+');
+    });
+
+    // Faq routes
+    Route::group([
+        'prefix' => 'faq'
+    ], function () {
+        Route::group([
+            'prefix' => 'category'
+        ], function () {
+            Route::get('', [FaqCategoryController::class, 'index']);
+            Route::get('{id}', [FaqCategoryController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [FaqCategoryController::class, 'store']);
+            Route::delete('{id}', [FaqCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+        Route::get('', [FaqController::class, 'index']);
+        Route::get('{id}', [FaqController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('{id?}', [FaqController::class, 'store']);
+        Route::delete('{id}', [FaqController::class, 'destroy'])->where('id', '[0-9]+');
     });
 });
