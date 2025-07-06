@@ -75,6 +75,7 @@ class FaqCategoryController extends Controller
             $faqCategory->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
+                $translation['slug'] = Str::slug($translation['name']);
                 $faqCategory->translateOrNew($locale)->fill($translation);
             }
             $faqCategory->save();
@@ -82,6 +83,7 @@ class FaqCategoryController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+            return Response::json(['message' => $e->getMessage()], 500);
             return Response::json(['message' => 'An error occurred while updating faq category.'], 500);
         }
 

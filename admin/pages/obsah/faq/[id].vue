@@ -36,6 +36,7 @@ const item = ref({
   translations: {} as object,
   categories: [] as number[],
 });
+
 const translatableAttributes = ref([
   { field: 'question' as string, label: 'Název' as string },
   { field: 'anwer' as string, label: 'Popis' as string },
@@ -208,21 +209,20 @@ definePageMeta({
       slug="faqs"
       @save="saveItem"
     />
-    </div>
-  <Form @submit="saveItem">
-    <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-      <LayoutContainer class="col-span-5 w-full">
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-          <BaseFormInput
+    <Form @submit="saveItem">
+      <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
+        <LayoutContainer class="col-span-5 w-full">
+          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
+            <BaseFormInput
               v-model="item.position"
               label="Pozice ve výpisu"
               name="position"
               class="col-span-1"
               min="0"
               type="number"
-          />
-          <br />
-          <BaseFormInput
+            />
+            <br />
+            <BaseFormInput
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
@@ -235,8 +235,8 @@ definePageMeta({
               name="name"
               rules="required|min:3"
               class="col-span-1"
-          />
-          <BaseFormInput
+            />
+            <BaseFormInput
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
@@ -248,21 +248,21 @@ definePageMeta({
               type="text"
               name="meta_title"
               class="col-span-1"
-          />
-        </div>
-      </LayoutContainer>
-      <LayoutContainer class="col-span-2 w-full">
-        <div class="col-span-1 border-b pb-6">
-          <BaseFormSelect
+            />
+          </div>
+        </LayoutContainer>
+        <LayoutContainer class="col-span-2 w-full">
+          <div class="col-span-1 border-b pb-6">
+            <BaseFormSelect
               v-model="selectedLocale"
               label="Jazyk"
               name="locale"
               class="w-full"
               :options="languageStore.languageOptions"
-          />
-        </div>
-        <div class="col-span-1 border-b pb-6">
-          <BaseFormCheckbox
+            />
+          </div>
+          <div class="col-span-1 border-b pb-6">
+            <BaseFormCheckbox
               v-model="item.active"
               name="active"
               label="Aktivní"
@@ -270,10 +270,10 @@ definePageMeta({
               :checked="item.active"
               label-color="grayCustom"
               :reverse="true"
-          />
-        </div>
-      </LayoutContainer>
-    </div>
-  </Form>
+            />
+          </div>
+        </LayoutContainer>
+      </div>
+    </Form>
   </div>
 </template>

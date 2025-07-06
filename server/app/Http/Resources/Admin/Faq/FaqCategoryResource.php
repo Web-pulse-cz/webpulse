@@ -17,6 +17,7 @@ class FaqCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'slug' => $this->slug,
             'position' => $this->position,
             'active' => $this->active,
             'faqs' => FaqResource::collection($this->whenLoaded('faqs')),

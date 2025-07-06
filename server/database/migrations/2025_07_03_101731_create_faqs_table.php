@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->foreignId('faq_category_id')->constrained('faq_categories')->onDelete('cascade');
             $table->string('locale')->index();
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->unique(['faq_category_id', 'locale']);

@@ -37,11 +37,14 @@ const item = ref({
   id: null as number | null,
   name: '' as string,
   active: true as boolean,
-  position: 0 as number;
+  position: 0 as number,
   translations: {} as object,
 });
-const translatableAttributes = ref([{ field: 'name' as string, label: 'Název' as string }, { field: 'meta_title' as string, label: 'Meta title' as string },
-  { field: 'meta_description' as string, label: 'Meta popis' as string },]);
+const translatableAttributes = ref([
+  { field: 'name' as string, label: 'Název' as string },
+  { field: 'meta_title' as string, label: 'Meta title' as string },
+  { field: 'meta_description' as string, label: 'Meta popis' as string },
+]);
 
 async function loadItem() {
   const client = useSanctumClient();
@@ -234,7 +237,7 @@ definePageMeta({
               :options="languageStore.languageOptions"
             />
           </div>
-          <div class="col-span-1 border-b pb-6">
+          <div class="col-span-1">
             <BaseFormCheckbox
               v-model="item.active"
               name="active"

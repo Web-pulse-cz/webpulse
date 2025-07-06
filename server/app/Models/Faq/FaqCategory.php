@@ -15,7 +15,7 @@ class FaqCategory extends Model
 
     protected $fillable = ['position', 'active'];
 
-    public $translatedAttributes = ['name', 'meta_title', 'meta_description'];
+    public $translatedAttributes = ['name', 'slug', 'meta_title', 'meta_description'];
 
     protected $casts = [
         'active' => 'boolean',
