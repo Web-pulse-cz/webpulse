@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->unique(['faq_category_id', 'locale']);
+            $table->timestamps();
         });
 
         Schema::create('faqs', function (Blueprint $table) {
@@ -42,6 +43,7 @@ return new class extends Migration {
             $table->string('question');
             $table->text('answer');
             $table->unique(['faq_id', 'locale']);
+            $table->timestamps();
         });
 
         Schema::create('faq_in_categories', function (Blueprint $table) {
