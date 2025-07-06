@@ -120,10 +120,6 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'add', text: 'Přidat dotaz' }]"
-      :links="[
-        { name: 'Dotazy', to: 'obsah-faq' },
-        { name: 'Kategorie', to: 'obsah-faq-kategorie' },
-      ]"
       slug="faqs"
     />
     <LayoutContainer>

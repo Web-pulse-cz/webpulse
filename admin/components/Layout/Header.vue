@@ -34,11 +34,6 @@ const props = defineProps({
     required: false,
     default: '' as string | null,
   },
-  links: {
-    type: Array,
-    required: false,
-    default: [] as [],
-  },
   filters: {
     type: Array,
     required: false,
@@ -136,12 +131,6 @@ const emitUpdateFilters = () => {
         >
           <StarIcon class="size-4 text-yellow-600 lg:size-5" aria-hidden="true" />
         </button>
-        <LayoutActionsDropdown v-if="links && links.length" :links="links" />
-        <!--				<LayoutActionsMobileDropdown
-					v-if="actions && actions.length"
-					:actions="actions"
-					:slug="slug"
-				/> -->
         <div
           v-for="(action, key) in actions"
           v-if="actions && actions.length"

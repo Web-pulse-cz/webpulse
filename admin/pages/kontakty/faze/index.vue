@@ -126,12 +126,6 @@ definePageMeta({
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'add', text: 'Přidat fázi procesu' }]"
       slug="contacts"
-      :links="[
-        { name: 'Kontakty', to: '/kontakty' },
-        { name: 'Fáze', to: '/faze' },
-        { name: 'Zdroje', to: '/zdroje' },
-        { name: 'Úkoly', to: '/ukoly' },
-      ]"
     />
     <LayoutContainer>
       <BaseTable

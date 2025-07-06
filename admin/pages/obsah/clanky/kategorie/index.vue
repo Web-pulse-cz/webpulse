@@ -125,10 +125,6 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'add', text: 'Přidat kategorii' }]"
-      :links="[
-        { name: 'Články', to: 'obsah-clanky' },
-        { name: 'Kategorie', to: 'obsah-clanky-kategorie' },
-      ]"
       slug="posts"
     />
     <LayoutContainer>

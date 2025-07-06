@@ -45,6 +45,7 @@ import {
   CogIcon,
   PhotoIcon,
   ChevronRightIcon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -157,10 +158,21 @@ const navigation = ref([
       },
       {
         name: 'FAQ',
-        link: '/obsah/faq',
-        icon: QuestionMarkCircleIcon,
+        icon: ChatBubbleLeftRightIcon,
         current: false,
         slug: 'faqs',
+        submenu: [
+          {
+            name: 'FAQ',
+            link: '/obsah/faq',
+            current: false,
+          },
+          {
+            name: 'Kategorie',
+            link: '/obsah/faq/kategorie',
+            current: false,
+          },
+        ],
       },
     ],
   },
@@ -188,10 +200,31 @@ const navigation = ref([
     menu: [
       {
         name: 'Kontakty',
-        link: '/kontakty',
         icon: UsersIcon,
         current: false,
         slug: 'contacts',
+        submenu: [
+          {
+            name: 'Seznam kontaktů',
+            link: '/kontakty',
+            current: false,
+          },
+          {
+            name: 'Zdroje',
+            link: '/kontakty/zdroje',
+            current: false,
+          },
+          {
+            name: 'Fáze',
+            link: '/kontakty/faze',
+            current: false,
+          },
+          {
+            name: 'Úkoly',
+            link: '/kontakty/ukoly',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Aktivita',
@@ -537,34 +570,35 @@ onMounted(() => {
                                 item.current
                                   ? 'bg-gray-800 text-white'
                                   : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                                'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                                'group flex w-full justify-between gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                               ]"
                             >
-                              <component
-                                :is="item.icon"
-                                class="size-6 shrink-0"
-                                aria-hidden="true"
-                              />
-                              {{ item.name }}
+                              <div class="flex gap-x-3">
+                                <component
+                                  :is="item.icon"
+                                  class="size-6 shrink-0"
+                                  aria-hidden="true"
+                                />
+                                {{ item.name }}
+                              </div>
                               <ChevronRightIcon
                                 :class="[
-                                  open ? 'rotate-90 text-gray-500' : 'text-gray-400',
-                                  'size-5 shrink-0',
+                                  open ? 'rotate-90 text-gray-600' : 'text-gray-600',
+                                  'size-6 shrink-0',
                                 ]"
                                 aria-hidden="true"
                               />
                             </DisclosureButton>
                             <DisclosurePanel as="ul" class="mt-1 px-2">
                               <li v-for="subItem in item.submenu" :key="subItem.name">
-                                <DisclosureButton
-                                  as="a"
-                                  :href="subItem.link"
-                                  :class="[
-                                    subItem.current ? 'bg-gray-50' : 'hover:bg-gray-50',
-                                    'block rounded-md py-2 pl-9 pr-2 text-sm/6 text-gray-700',
-                                  ]"
-                                  >{{ subItem.name }}</DisclosureButton
-                                >
+                                <DisclosureButton as="div" class="w-full">
+                                  <NuxtLink
+                                    v-if="subItem.link"
+                                    :to="subItem.link"
+                                    class="group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold text-gray-600 hover:bg-gray-800 hover:text-white"
+                                    >{{ subItem.name }}</NuxtLink
+                                  >
+                                </DisclosureButton>
                               </li>
                             </DisclosurePanel>
                           </Disclosure>
@@ -619,30 +653,31 @@ onMounted(() => {
                         item.current
                           ? 'bg-gray-800 text-white'
                           : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                        'group flex w-full gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                        'group flex w-full justify-between gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                       ]"
                     >
-                      <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
-                      {{ item.name }}
+                      <div class="flex gap-x-3">
+                        <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                        {{ item.name }}
+                      </div>
                       <ChevronRightIcon
                         :class="[
-                          open ? 'rotate-90 text-gray-500' : 'text-gray-400',
-                          'size-5 shrink-0',
+                          open ? 'rotate-90 text-gray-600' : 'text-gray-600',
+                          'size-6 shrink-0',
                         ]"
                         aria-hidden="true"
                       />
                     </DisclosureButton>
                     <DisclosurePanel as="ul" class="mt-1 px-2">
-                      <li v-for="subItem in item.children" :key="subItem.name">
-                        <DisclosureButton
-                          as="a"
-                          :href="subItem.href"
-                          :class="[
-                            subItem.current ? 'bg-gray-50' : 'hover:bg-gray-50',
-                            'block rounded-md py-2 pl-9 pr-2 text-sm/6 text-gray-700',
-                          ]"
-                          >{{ subItem.name }}</DisclosureButton
-                        >
+                      <li v-for="subItem in item.submenu" :key="subItem.name">
+                        <DisclosureButton as="div" class="w-full">
+                          <NuxtLink
+                            v-if="subItem.link"
+                            :to="subItem.link"
+                            class="group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold text-gray-600 hover:bg-gray-800 hover:text-white"
+                            >{{ subItem.name }}</NuxtLink
+                          >
+                        </DisclosureButton>
                       </li>
                     </DisclosurePanel>
                   </Disclosure>

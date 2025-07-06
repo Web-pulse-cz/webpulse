@@ -30,7 +30,8 @@ const breadcrumbs = ref([
 
 const item = ref({
   id: null as number | null,
-  name: '' as string,
+  question: '' as string,
+  answer: 0 as number,
   position: 0 as number,
   active: true as boolean,
   translations: {} as object,
@@ -50,7 +51,8 @@ async function loadItem() {
 
   await client<{
     id: number | null;
-    name: string;
+    question: string;
+    answer: string;
     position: number;
     active: boolean;
     translations: object;
@@ -122,7 +124,8 @@ async function saveItem() {
 
   await client<{
     id: number | null;
-    name: string;
+    question: string;
+    answer: string;
     position: number;
     active: boolean;
     translations: object;

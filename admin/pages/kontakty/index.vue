@@ -242,12 +242,6 @@ definePageMeta({
       ]"
       :filters-query="tableQuery"
       slug="contacts"
-      :links="[
-        { name: 'Kontakty', to: 'kontakty' },
-        { name: 'Fáze', to: 'kontakty-faze' },
-        { name: 'Zdroje', to: 'kontakty-zdroje' },
-        { name: 'Úkoly', to: 'kontakty-ukoly' },
-      ]"
       @update-filters="updateFilters"
     />
     <LayoutContainer>
