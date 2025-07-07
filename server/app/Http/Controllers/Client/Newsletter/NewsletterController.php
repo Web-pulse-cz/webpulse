@@ -19,7 +19,7 @@ class NewsletterController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
+            return Response::json([
                 'message' => $validator->errors()->first(),
             ], 422);
         }
@@ -31,6 +31,6 @@ class NewsletterController extends Controller
 
         $newsletter->save();
 
-        return response()->json();
+        return Response::json();
     }
 }

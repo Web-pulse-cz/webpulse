@@ -31,7 +31,7 @@ class FaqCategoryController extends Controller
         $this->handleLanguage($lang);
 
         if (!$id) {
-            return response()->json(['error' => 'Category ID is required'], 400);
+            return Response::json(['error' => 'Category ID is required'], 400);
         }
 
         $faqCategory = FaqCategory::query()
@@ -41,7 +41,7 @@ class FaqCategoryController extends Controller
             ->first();
 
         if (!$faqCategory) {
-            return response()->json(['error' => 'Category not found'], 404);
+            return Response::json(['error' => 'Category not found'], 404);
         }
 
         return Response::json(FaqCategoryResource::make($faqCategory));

@@ -38,7 +38,7 @@ class PostController extends Controller
         if ($request->has('paginate') && $request->get('paginate')) {
             $posts = $query->paginate($request->get('paginate'));
 
-            return response()->json([
+            return Response::json([
                 'data' => PostResource::collection($posts->items()),
                 'total' => $posts->total(),
                 'perPage' => $posts->perPage(),
@@ -49,7 +49,7 @@ class PostController extends Controller
 
         $posts = $query->get();
 
-        return response()->json(PostResource::collection($posts));
+        return Response::json(PostResource::collection($posts));
     }
 
     public function show(Request $request, int $id, string $lang = null): JsonResponse
@@ -57,7 +57,7 @@ class PostController extends Controller
         $this->handleLanguage($lang);
 
         if (!$id) {
-            return response()->json(['error' => 'Post ID is required'], 400);
+            return Response::json(['error' => 'Post ID is required'], 400);
         }
 
         $post = Post::query()
@@ -74,9 +74,9 @@ class PostController extends Controller
             ->find($id);
 
         if (!$post) {
-            return response()->json(['error' => 'Post not found'], 404);
+            return Response::json(['error' => 'Post not found'], 404);
         }
 
-        return response()->json(PostResource::make($post));
+        return Response::json(PostResource::make($post));
     }
 }

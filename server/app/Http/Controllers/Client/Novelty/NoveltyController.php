@@ -22,7 +22,7 @@ class NoveltyController extends Controller
         if ($request->has('paginate')) {
             $novelties = $query->paginate($request->get('paginate'));
 
-            return response()->json([
+            return Response::json([
                 'data' => NoveltyResource::collection($novelties->items()),
                 'total' => $novelties->total(),
                 'perPage' => $novelties->perPage(),
@@ -42,7 +42,7 @@ class NoveltyController extends Controller
         $this->handleLanguage($lang);
 
         if (!$id) {
-            return response()->json(['message' => 'Novelty ID is required'], 400);
+            return Response::json(['message' => 'Novelty ID is required'], 400);
         }
 
         $novelty = Novelty::query()
@@ -50,7 +50,7 @@ class NoveltyController extends Controller
             ->find($id);
 
         if (!$novelty) {
-            return response()->json(['message' => 'Novelty not found'], 404);
+            return Response::json(['message' => 'Novelty not found'], 404);
         }
 
         return Response::json(NoveltyResource::make($novelty));

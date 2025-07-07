@@ -21,7 +21,7 @@ class LogoController extends Controller
         if ($request->has('paginate')) {
             $logos = $query->paginate($request->get('paginate'));
 
-            return response()->json([
+            return Response::json([
                 'data' => LogoResource::collection($logos->items()),
                 'total' => $logos->total(),
                 'perPage' => $logos->perPage(),

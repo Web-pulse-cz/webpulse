@@ -22,7 +22,7 @@ class ReviewController extends Controller
         if ($request->has('paginate')) {
             $reviews = $query->paginate($request->get('paginate'));
 
-            return response()->json([
+            return Response::json([
                 'data' => ReviewResource::collection($reviews->items()),
                 'total' => $reviews->total(),
                 'perPage' => $reviews->perPage(),

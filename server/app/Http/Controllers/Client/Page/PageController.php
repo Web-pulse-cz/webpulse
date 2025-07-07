@@ -15,7 +15,7 @@ class PageController extends Controller
         $this->handleLanguage($lang);
 
         if (!$id) {
-            return response()->json(['error' => 'Page ID is required'], 400);
+            return Response::json(['error' => 'Page ID is required'], 400);
         }
 
         $page = Page::query()
@@ -23,9 +23,9 @@ class PageController extends Controller
             ->find($id);
 
         if (!$page) {
-            return response()->json(['error' => 'Page not found'], 404);
+            return Response::json(['error' => 'Page not found'], 404);
         }
 
-        return response()->json(PageResource::make($page));
+        return Response::json(PageResource::make($page));
     }
 }

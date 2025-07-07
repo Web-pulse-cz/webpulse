@@ -79,8 +79,8 @@ class FaqController extends Controller
             foreach ($request->translations as $locale => $translation) {
                 $faq->translateOrNew($locale)->fill($translation);
             }
-            $faq->categories()->sync($request->get('categories', []));
             $faq->save();
+            $faq->categories()->sync($request->get('categories', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
