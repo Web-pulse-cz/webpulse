@@ -178,7 +178,7 @@ definePageMeta({
         :enums="{
           status: {
             draft: 'Koncept',
-            published: 'Archivováno',
+            published: 'Publikováno',
             archived: 'Archivováno',
           },
         }"
