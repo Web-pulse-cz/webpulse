@@ -30,9 +30,9 @@ class PostController extends Controller
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc');
 
-        if ($request->has('categoryId') && $request->get('categoryId') !== null) {
+        if ($request->has('categoryId') && $request->get('categoryId') != null) {
             $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('posts_in_categories.id', $request->get('categoryId'));
+                $q->where('posts_in_categories.post_category_id', $request->get('categoryId'));
             });
         }
 
