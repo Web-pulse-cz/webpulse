@@ -19,7 +19,7 @@ class PostCategoryController extends Controller
             ->where('active', true)
             ->orderBy('position', 'asc');
 
-        if ($request->has('paginate') && $request->get('paginate')) {
+        if ($request->has('paginate')) {
             $categories = $query->paginate($request->get('paginate'));
 
             return Response::json([

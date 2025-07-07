@@ -7,6 +7,7 @@ use App\Http\Resources\Client\Blog\PostResource;
 use App\Models\Blog\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class PostController extends Controller
 {
@@ -35,7 +36,7 @@ class PostController extends Controller
             });
         }
 
-        if ($request->has('paginate') && $request->get('paginate')) {
+        if ($request->has('paginate')) {
             $posts = $query->paginate($request->get('paginate'));
 
             return Response::json([
