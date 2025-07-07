@@ -37,7 +37,7 @@ class PostController extends Controller
         }
 
         if ($request->has('paginate')) {
-            $posts = $query->paginate($request->get('paginate'));
+            $posts = $query->paginate((int)$request->get('paginate'));
 
             return Response::json([
                 'data' => PostResource::collection($posts->items()),
@@ -45,7 +45,6 @@ class PostController extends Controller
                 'perPage' => $posts->perPage(),
                 'currentPage' => $posts->currentPage(),
                 'lastPage' => $posts->lastPage(),
-                'request' => $request->all(),
             ]);
         }
 
