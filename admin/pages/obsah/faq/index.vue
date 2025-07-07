@@ -144,7 +144,7 @@ definePageMeta({
           },
           {
             key: 'position',
-            name: 'Pozice',
+            name: 'Pořadí ve výpisu',
             type: 'number',
             width: 80,
             hidden: false,
