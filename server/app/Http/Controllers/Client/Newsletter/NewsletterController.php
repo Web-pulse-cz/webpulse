@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Newsletter\Newsletter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class NewsletterController extends Controller

@@ -7,6 +7,7 @@ use App\Http\Resources\Client\Page\PageResource;
 use App\Models\Page\Page;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class PageController extends Controller
 {
