@@ -45,6 +45,7 @@ class PostController extends Controller
                 'perPage' => $posts->perPage(),
                 'currentPage' => $posts->currentPage(),
                 'lastPage' => $posts->lastPage(),
+                'posts' => $posts,
             ]);
         }
 
