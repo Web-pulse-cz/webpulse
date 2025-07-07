@@ -95,6 +95,7 @@ class PostController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $post->translateOrNew($locale)->fill($translation);
             }
+
             $post->save();
             $post->categories()->sync($request->get('categories', []));
 
