@@ -20,7 +20,7 @@ class FaqCategoryResource extends JsonResource
             'slug' => $this->slug,
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,
-            'faq' => FaqResource::collection($this->faqs),
+            'faqs' => FaqResource::collection($this->faqs),
         ];
     }
 }
