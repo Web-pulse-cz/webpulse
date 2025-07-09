@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('fullname');
             $table->string('email');
-            $table->string('phone_prefix');
+            $table->string('phone_prefix')->nullable();
             $table->string('phone');
             $table->string('url')->nullable();
             $table->string('text')->nullable();
