@@ -130,10 +130,26 @@ const navigation = ref([
       },
       {
         name: 'Události a akce',
-        link: '/obsah/udalosti',
         icon: CalendarDaysIcon,
         current: false,
         slug: 'events',
+        submenu: [
+          {
+            name: 'Události',
+            link: '/obsah/udalosti',
+            current: false,
+          },
+          {
+            name: 'Kategorie',
+            link: '/obsah/udalosti/kategorie',
+            current: false,
+          },
+          {
+            name: 'Registrace',
+            link: '/obsah/udalosti/registrace',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Recenze',
@@ -151,7 +167,7 @@ const navigation = ref([
       },
       {
         name: 'Kvízy',
-        link: '/obsah/kvizy',
+        link: '/demo',
         icon: QuestionMarkCircleIcon,
         current: false,
         slug: 'quizes',
@@ -268,7 +284,7 @@ const navigation = ref([
     menu: [
       {
         name: 'Klienti',
-        link: '/klienti',
+        link: '/demo',
         icon: BuildingOfficeIcon,
         current: false,
         slug: 'clients',
@@ -303,28 +319,28 @@ const navigation = ref([
       },
       {
         name: 'Dodavatelé',
-        link: '/dodavatele',
+        link: '/demo',
         icon: BuildingOfficeIcon,
         current: false,
         slug: 'suppliers',
       },
       {
         name: 'Zaměstnanci',
-        link: '/zamestnanci',
+        link: '/demo',
         icon: UsersIcon,
         current: false,
         slug: 'employees',
       },
       {
         name: 'Úkoly',
-        link: '/ukoly',
+        link: '/demo',
         icon: ChartBarSquareIcon,
         current: false,
         slug: 'tasks',
       },
       {
         name: 'Smlouvy',
-        link: '/smlouvy',
+        link: '/demo',
         icon: DocumentTextIcon,
         current: false,
         slug: 'contracts',

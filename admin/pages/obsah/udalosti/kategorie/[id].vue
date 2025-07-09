@@ -17,18 +17,18 @@ const pageTitle = ref(route.params.id === 'pridat' ? 'Nová kategorie' : 'Detail
 
 const breadcrumbs = ref([
   {
-    name: 'Blogové články',
-    link: '/obsah/clanky',
+    name: 'Události a akce',
+    link: '/obsah/udalosti',
     current: false,
   },
   {
     name: 'Kategorie',
-    link: '/obsah/clanky/kategorie',
+    link: '/obsah/udalosti/kategorie',
     current: false,
   },
   {
     name: 'Nová kategorie',
-    link: '/obsah/clanky/kategorie/pridat',
+    link: '/obsah/udalosti/kategorie/pridat',
     current: true,
   },
 ]);
@@ -37,7 +37,6 @@ const item = ref({
   id: null as number | null,
   name: '' as string,
   position: 0 as number,
-  image: '' as string,
   active: true as boolean,
   translations: {} as object,
 });
@@ -61,7 +60,7 @@ async function loadItem() {
     image: string;
     active: boolean;
     translations: object;
-  }>('/api/admin/post/category/' + route.params.id, {
+  }>('/api/admin/event/category/' + route.params.id, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -73,7 +72,7 @@ async function loadItem() {
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
         name: item.value.name,
-        link: '/obsah/clanky/kategorie/' + route.params.id,
+        link: '/obsah/udalosti/kategorie/' + route.params.id,
         current: true,
       });
       fillEmptyTranslations();
@@ -104,8 +103,8 @@ async function saveItem() {
     translations: object;
   }>(
     route.params.id === 'pridat'
-      ? '/api/admin/post/category'
-      : '/api/admin/post/category/' + route.params.id,
+      ? '/api/admin/event/category'
+      : '/api/admin/event/category/' + route.params.id,
     {
       method: 'POST',
       body: JSON.stringify(item.value),
@@ -124,7 +123,7 @@ async function saveItem() {
             : 'Kategorie byla úspěšně upravena.',
         color: 'green',
       });
-      router.push('/obsah/clanky/kategorie');
+      router.push('/obsah/udalosti/kategorie');
       languageStore.fetchLanguages();
     })
     .catch(() => {
@@ -180,7 +179,7 @@ definePageMeta({
       :title="route.params.id === 'pridat' ? 'Nová kategorie' : item.name"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }]"
-      slug="posts"
+      slug="events"
       @save="saveItem"
     />
     <Form @submit="saveItem">
@@ -268,11 +267,11 @@ definePageMeta({
               label="Pořadí ve výpisu"
               name="position"
               class="col-span-1"
-              min="0"
+              :min="0"
               type="number"
             />
           </div>
-          <div class="col-span-1 border-b pb-6">
+          <div class="col-span-1">
             <BaseFormCheckbox
               v-model="item.active"
               name="active"
@@ -281,17 +280,6 @@ definePageMeta({
               :checked="item.active"
               label-color="grayCustom"
               :reverse="true"
-            />
-          </div>
-          <div class="col-span-1 border-b pb-6">
-            <BaseFormUploadImage
-              v-model="item.image"
-              :multiple="false"
-              type="post_category"
-              format="medium"
-              label="Náhledový obrázek"
-              class="pt-6"
-              @update-files="updateItemImage"
             />
           </div>
         </LayoutContainer>

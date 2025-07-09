@@ -25,7 +25,7 @@ class EmailResource extends JsonResource
             'priority' => $this->priority,
             'status' => $this->status,
             'attempts' => $this->attempts,
-            'sent_at' => $this->sent_at->format('Y-m-d H:i:s'),
+            'sent_at' => $this->sent_at?->format('Y-m-d H:i:s'),
             'locale' => $this->locale,
             'template' => $this->template,
             'sent' => $this->status === 'sent',

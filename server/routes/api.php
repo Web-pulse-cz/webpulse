@@ -39,6 +39,9 @@ use App\Http\Controllers\Admin\Logo\LogoController;
 use App\Http\Controllers\Admin\Newsletter\NewsletterController;
 use App\Http\Controllers\Admin\Faq\FaqCategoryController;
 use App\Http\Controllers\Admin\Faq\FaqController;
+use App\Http\Controllers\Admin\Event\EventCategoryController;
+use App\Http\Controllers\Admin\Event\EventController;
+use App\Http\Controllers\Admin\Event\EventRegistrationController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -51,6 +54,9 @@ use App\Http\Controllers\Client\Setting\SettingController as ClientSettingContro
 use App\Http\Controllers\Client\Newsletter\NewsletterController as ClientNewsletterController;
 use App\Http\Controllers\Client\Faq\FaqController as ClientFaqController;
 use App\Http\Controllers\Client\Faq\FaqCategoryController as ClientFaqCategoryController;
+use App\Http\Controllers\Client\Event\EventCategoryController as ClientEventCategoryController;
+use App\Http\Controllers\Client\Event\EventController as ClientEventController;
+use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -147,6 +153,26 @@ Route::group([
         Route::get('{id}/{lang?}', [ClientFaqCategoryController::class, 'show'])->where('id', '[0-9]+');
     });
     Route::get('{lang?}', [ClientFaqController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'event'
+], function () {
+    Route::group([
+        'prefix' => 'category'
+    ], function () {
+        Route::get('{lang?}', [ClientEventCategoryController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientEventCategoryController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'registration'
+    ], function () {
+        Route::post('{lang?}', [ClientEventRegistrationController::class, 'store']);
+    });
+
+    Route::get('{lang?}', [ClientEventController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientEventController::class, 'show'])->where('id', '[0-9]+');
 });
 
 /**
@@ -509,5 +535,33 @@ Route::group([
         Route::get('{id}', [FaqController::class, 'show'])->where('id', '[0-9]+');
         Route::post('{id?}', [FaqController::class, 'store']);
         Route::delete('{id}', [FaqController::class, 'destroy'])->where('id', '[0-9]+');
+    });
+
+    // Event routes
+    Route::group([
+        'prefix' => 'event'
+    ], function () {
+        Route::group([
+            'prefix' => 'category'
+        ], function () {
+            Route::get('', [EventCategoryController::class, 'index']);
+            Route::get('{id}', [EventCategoryController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [EventCategoryController::class, 'store']);
+            Route::delete('{id}', [EventCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::group([
+            'prefix' => 'registration'
+        ], function () {
+            Route::get('', [EventRegistrationController::class, 'index']);
+            Route::get('{id}', [EventRegistrationController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [EventRegistrationController::class, 'store']);
+            Route::delete('{id}', [EventRegistrationController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::get('', [EventController::class, 'index']);
+        Route::get('{id}', [EventController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('{id?}', [EventController::class, 'store']);
+        Route::delete('{id}', [EventController::class, 'destroy'])->where('id', '[0-9]+');
     });
 });

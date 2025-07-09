@@ -19,6 +19,7 @@ class Faq extends Model
 
     protected $casts = [
         'active' => 'boolean',
+        'position' => 'integer',
     ];
 
     public function categories()

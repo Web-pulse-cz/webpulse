@@ -86,7 +86,6 @@ class FaqController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => $e->getMessage()], 500);
             return Response::json(['message' => 'An error occurred while updating faq.'], 500);
         }
 
