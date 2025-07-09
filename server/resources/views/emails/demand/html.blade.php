@@ -149,10 +149,12 @@
                         <td>{{ $demand->offer_price }}</td>
                     </tr>
                 @endif
-                <tr>
-                    <td>URL</td>
-                    <td>{{ $demand->url }}</td>
-                </tr>
+                @if($demand->url)
+                    <tr>
+                        <td>URL</td>
+                        <td>{{ $demand->url }}</td>
+                    </tr>
+                @endif
                 <tr>
                     <td>Zpráva</td>
                     <td>{{ $demand->text }}</td>

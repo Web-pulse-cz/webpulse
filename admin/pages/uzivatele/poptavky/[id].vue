@@ -97,52 +97,50 @@ definePageMeta({
       :breadcrumbs="breadcrumbs"
       slug="demands"
     />
-    <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-        <LayoutContainer class="col-span-full grid w-full grid-cols-12 gap-4">
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Celé jmeno:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.fullname }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">E-mail:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.email }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Telefon:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.phone }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">URL projektu:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.url }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Zpráva:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.text }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Navrhovaná cena:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.offer_price }}</p>
-          </div>
-          <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Název služby:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.service.name }}</p>
-          </div>
-          <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Typ služby:</p>
-            <p class="col-span-9 text-grayCustom">
-              {{ item.service.type === 'product' ? 'Produkt' : 'Služba' }}
-            </p>
-          </div>
-          <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Naše cena:</p>
-            <p class="col-span-9 text-grayCustom">
-              {{ item.service.price }} (cena za
-              {{ item.service.price_type === 'total' ? 'službu' : 'hodinu' }})
-            </p>
-          </div>
-        </LayoutContainer>
-      </div>
-    </Form>
+    <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
+      <LayoutContainer class="col-span-full grid w-full grid-cols-12 gap-4">
+        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">Celé jmeno:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.fullname }}</p>
+        </div>
+        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">E-mail:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.email }}</p>
+        </div>
+        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">Telefon:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.phone }}</p>
+        </div>
+        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">Zpráva:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.text }}</p>
+        </div>
+        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4" v-if="item.url">
+          <p class="col-span-3 font-semibold text-grayDark">URL projektu:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.url }}</p>
+        </div>
+        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4" v-if="item.offer_price">
+          <p class="col-span-3 font-semibold text-grayDark">Navrhovaná cena:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.offer_price }}</p>
+        </div>
+        <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">Název služby:</p>
+          <p class="col-span-9 text-grayCustom">{{ item.service.name }}</p>
+        </div>
+        <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">Typ služby:</p>
+          <p class="col-span-9 text-grayCustom">
+            {{ item.service.type === 'product' ? 'Produkt' : 'Služba' }}
+          </p>
+        </div>
+        <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
+          <p class="col-span-3 font-semibold text-grayDark">Naše cena:</p>
+          <p class="col-span-9 text-grayCustom">
+            {{ item.service.price }} (cena za
+            {{ item.service.price_type === 'total' ? 'službu' : 'hodinu' }})
+          </p>
+        </div>
+      </LayoutContainer>
+    </div>
   </div>
 </template>
