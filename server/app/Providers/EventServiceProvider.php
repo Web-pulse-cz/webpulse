@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\CareerApplicationSaved;
 use App\Events\ContactUpdatedEvent;
 use App\Events\DemandSaved;
 use App\Events\EventRegistrationSaved;
 use App\Events\ProjectSavedEvent;
 use App\Events\ProjectSavedListener;
+use App\Listeners\CareerApplicationEmail;
 use App\Listeners\ContactUpdated;
 use App\Listeners\DemandEmail;
 use App\Listeners\EventRegistrationEmail;
@@ -37,6 +39,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         EventRegistrationSaved::class => [
             EventRegistrationEmail::class,
+        ],
+        CareerApplicationSaved::class => [
+            CareerApplicationEmail::class,
         ],
     ];
 

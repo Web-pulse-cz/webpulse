@@ -62,6 +62,7 @@ const allowedPermissions = ref([
   { name: 'Novinky', value: 'Novinky', slug: 'novelties' },
   { name: 'Oběry newsletteru', value: 'Odběry newsletteru', slug: 'newsletters' },
   { name: 'Poptávky', value: 'Poptávky', slug: 'demands' },
+  { name: 'Pracovní pozice', value: 'Pracovní pozice', slug: 'careers' },
   { name: 'Projekty', value: 'Projekty', slug: 'projects' },
   { name: 'Recenze', value: 'Recenze', slug: 'reviews' },
   { name: 'Sazby DPH', value: 'Sazby DPH', slug: 'tax_rates' },

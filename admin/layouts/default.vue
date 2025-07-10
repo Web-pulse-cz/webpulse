@@ -166,6 +166,24 @@ const navigation = ref([
         slug: 'logos',
       },
       {
+        name: 'Pracovní pozice',
+        icon: QuestionMarkCircleIcon,
+        current: false,
+        slug: 'careers',
+        submenu: [
+          {
+            name: 'Pracovní pozice',
+            link: '/obsah/pracovni-pozice',
+            current: false,
+          },
+          {
+            name: 'Žádosti',
+            link: '/obsah/pracovni-pozice/zadosti',
+            current: false,
+          },
+        ],
+      },
+      {
         name: 'Kvízy',
         link: '/demo',
         icon: QuestionMarkCircleIcon,

@@ -42,6 +42,8 @@ use App\Http\Controllers\Admin\Faq\FaqController;
 use App\Http\Controllers\Admin\Event\EventCategoryController;
 use App\Http\Controllers\Admin\Event\EventController;
 use App\Http\Controllers\Admin\Event\EventRegistrationController;
+use App\Http\Controllers\Admin\Career\CareerController;
+use App\Http\Controllers\Admin\Career\CareerApplicationController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -57,6 +59,8 @@ use App\Http\Controllers\Client\Faq\FaqCategoryController as ClientFaqCategoryCo
 use App\Http\Controllers\Client\Event\EventCategoryController as ClientEventCategoryController;
 use App\Http\Controllers\Client\Event\EventController as ClientEventController;
 use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
+use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
+use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -173,6 +177,19 @@ Route::group([
 
     Route::get('{lang?}', [ClientEventController::class, 'index']);
     Route::get('{id}/{lang?}', [ClientEventController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'career'
+], function () {
+    Route::group([
+        'prefix' => 'application'
+    ], function () {
+        Route::post('{lang?}', [ClientCareerApplicationController::class, 'store']);
+    });
+
+    Route::get('{lang?}', [ClientCareerController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientCareerController::class, 'show'])->where('id', '[0-9]+');
 });
 
 /**
@@ -563,5 +580,24 @@ Route::group([
         Route::get('{id}', [EventController::class, 'show'])->where('id', '[0-9]+');
         Route::post('{id?}', [EventController::class, 'store']);
         Route::delete('{id}', [EventController::class, 'destroy'])->where('id', '[0-9]+');
+    });
+
+    // Career routes
+    Route::group([
+        'prefix' => 'career'
+    ], function () {
+        Route::group([
+            'prefix' => 'application'
+        ], function () {
+            Route::get('', [CareerApplicationController::class, 'index']);
+            Route::get('{id}', [CareerApplicationController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [CareerApplicationController::class, 'store']);
+            Route::delete('{id}', [CareerApplicationController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::get('', [CareerController::class, 'index']);
+        Route::get('{id}', [CareerController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('{id?}', [CareerController::class, 'store']);
+        Route::delete('{id}', [CareerController::class, 'destroy'])->where('id', '[0-9]+');
     });
 });
