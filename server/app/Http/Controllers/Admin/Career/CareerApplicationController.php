@@ -8,6 +8,7 @@ use App\Models\Career\CareerApplication;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -87,7 +88,7 @@ class CareerApplicationController extends Controller
         DB::beginTransaction();
         try {
             $careerApplication->fill($request->all());
-            $careerApplication->user_id = $request->user()->id;
+            $careerApplication->user_id = Auth::user()->id;
             $careerApplication->save();
 
             DB::commit();
