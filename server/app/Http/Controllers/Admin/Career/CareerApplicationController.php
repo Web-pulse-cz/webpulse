@@ -88,7 +88,7 @@ class CareerApplicationController extends Controller
         DB::beginTransaction();
         try {
             $careerApplication->fill($request->all());
-            $careerApplication->user_id = Auth::check() ? Auth::user()->id : null;
+            //$careerApplication->user_id = Auth::check() ? Auth::user()->id : null; //TODO!!!
             $careerApplication->save();
 
             DB::commit();
