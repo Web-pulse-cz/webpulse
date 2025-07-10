@@ -93,6 +93,7 @@ class CareerApplicationController extends Controller
             DB::commit();
         } catch (\Throwable | \Exception $e) {
             DB::rollBack();
+            return Response::json(['error' => $e->getMessage() . ' ' . $e->getLine()], 500);
             return Response::json(['error' => 'An error occurred while processing your request.'], 500);
         }
 
