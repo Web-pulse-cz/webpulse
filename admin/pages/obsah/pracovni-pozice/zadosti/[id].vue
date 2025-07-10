@@ -237,7 +237,7 @@ definePageMeta({
               label="Stav žádosti"
               :options="[
                 { value: 'pending', name: 'Čeká na vyřízení' },
-                { value: 'reviewd', name: 'Zobrazeno' },
+                { value: 'reviewed', name: 'Zobrazeno' },
                 { value: 'accepted', name: 'Přijato' },
                 { value: 'rejected', name: 'Odmítnuto' },
               ]"
