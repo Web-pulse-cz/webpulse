@@ -21,7 +21,8 @@ class CareerApplication extends Model
         'salary_expectation',
         'availability',
         'source',
-        'locale'
+        'locale',
+        'user_id',
     ];
 
     public function career()
