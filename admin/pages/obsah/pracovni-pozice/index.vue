@@ -153,7 +153,7 @@ definePageMeta({
           {
             key: 'position',
             name: 'Pořadí ve výpisu',
-            type: 'enum',
+            type: 'number',
             width: 80,
             hidden: true,
             sortable: true,

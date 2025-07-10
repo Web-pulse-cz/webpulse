@@ -46,6 +46,7 @@ import {
   PhotoIcon,
   ChevronRightIcon,
   ChatBubbleLeftRightIcon,
+  AcademicCapIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/stores/userGroupStore';
@@ -167,7 +168,7 @@ const navigation = ref([
       },
       {
         name: 'Pracovní pozice',
-        icon: QuestionMarkCircleIcon,
+        icon: AcademicCapIcon,
         current: false,
         slug: 'careers',
         submenu: [

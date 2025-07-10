@@ -169,7 +169,7 @@ definePageMeta({
           {
             key: 'availability',
             name: 'Nástup možný od',
-            type: 'enum',
+            type: 'text',
             width: 80,
             hidden: false,
             sortable: true,

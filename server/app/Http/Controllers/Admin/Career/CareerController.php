@@ -85,6 +85,9 @@ class CareerController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $career->translateOrNew($locale)->fill($translation);
             }
+            if (!$id) {
+                $career->generateCode();
+            }
             $career->save();
 
             DB::commit();
