@@ -27,7 +27,7 @@ class CareerApplicationController extends Controller
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
             'cover_letter' => 'nullable|string',
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'salary_expectation' => 'nullable|numeric|min:0',
             'availability' => 'nullable|string|max:255',
             'source' => 'nullable|string|max:255',
