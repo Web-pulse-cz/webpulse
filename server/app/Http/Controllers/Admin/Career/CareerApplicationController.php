@@ -88,13 +88,12 @@ class CareerApplicationController extends Controller
         DB::beginTransaction();
         try {
             $careerApplication->fill($request->all());
-            $careerApplication->user_id = Auth::user()->id;
+            $careerApplication->user_id = Auth::check() ? Auth::user()->id : null;
             $careerApplication->save();
 
             DB::commit();
         } catch (\Throwable | \Exception $e) {
             DB::rollBack();
-            return Response::json(['error' => $e->getMessage() . ' ' . $e->getLine()], 500);
             return Response::json(['error' => 'An error occurred while processing your request.'], 500);
         }
 
