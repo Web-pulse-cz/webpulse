@@ -97,7 +97,7 @@ class CareerApplicationController extends Controller
                 'salary_expectation',
                 'status',
             ));
-            //$careerApplication->user_id = Auth::check() ? Auth::user()->id : null; //TODO!!!
+            $careerApplication->user_id = Auth::check() ? Auth::user()->id : null; //TODO!!!
             $careerApplication->save();
 
             DB::commit();
