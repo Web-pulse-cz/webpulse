@@ -87,7 +87,7 @@ class CareerApplicationController extends Controller
         DB::beginTransaction();
         try {
             $careerApplication->fill($request->all());
-            $careerApplication->user_id = $request->user('id');
+            $careerApplication->user_id = $request->user()->id;
             $careerApplication->save();
 
             DB::commit();

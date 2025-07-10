@@ -13,9 +13,7 @@ const selectedLocale = ref('cs');
 const error = ref(false);
 const loading = ref(false);
 
-const pageTitle = ref(
-  route.params.id === 'pridat' ? 'Nová pracovní pozice' : 'Detail pracovní pozice',
-);
+const pageTitle = ref('Detail žádosti');
 
 const breadcrumbs = ref([
   {
@@ -24,51 +22,49 @@ const breadcrumbs = ref([
     current: false,
   },
   {
-    name: 'Nová pracovní pozice',
-    link: '/obsah/pracovni-pozice/pridat',
+    name: 'Žádosti',
+    link: '/obsah/pracovni-pozice/zadosti',
+    current: false,
+  },
+  {
+    name: pageTitle.value,
+    link: '/obsah/pracovni-pozice/zadosti/' + route.params.id,
     current: true,
   },
 ]);
 
 const item = ref({
   id: null as number | null,
-  position: 0 as number,
-  type: 'full-time' as string,
-  status: 'open' as string,
-  salary_from: null as number | null,
-  salary_to: null as number | null,
-  salary_type: 'hourly' as string,
-  start_date: null as string | null,
-  name: '' as string,
-  translations: {} as object,
+  firstname: '' as string,
+  lastname: '' as string,
+  email: '' as string,
+  phone: '' as string,
+  cover_letter: '' as string,
+  resume: '' as string,
+  status: 'pending' as string,
+  salary_expectation: null as number | null,
+  availability: null as string | null,
+  source: '' as string,
+  locale: '' as string,
 });
-const translatableAttributes = ref([
-  { field: 'name' as string, label: 'Název' as string },
-  { field: 'slug' as string, label: 'Slug' as string },
-  { field: 'perex' as string, label: 'Perex' as string },
-  { field: 'text' as string, label: 'Popis' as string },
-  { field: 'meta_title' as string, label: 'Meta title' as string },
-  { field: 'meta_description' as string, label: 'Meta popis' as string },
-  { field: 'location' as string, label: 'Lokace' as string },
-  { field: 'benefits' as string, label: 'Benefity' as string },
-  { field: 'requirements' as string, label: 'Požadavky' as string },
-]);
 
 async function loadItem() {
   const client = useSanctumClient();
   loading.value = true;
 
   await client<{
-    id: null | number;
-    position: number;
-    type: string;
+    id: number | null;
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    cover_letter: string;
+    resume: string;
     status: string;
-    salary_from: number | null;
-    salary_to: number | null;
-    salary_type: string;
-    start_date: string | null;
-    name: string;
-    translations: object;
+    salary_expectation: number | null;
+    availability: string | null;
+    source: string;
+    locale: string;
   }>('/api/admin/career/application/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -78,19 +74,13 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      breadcrumbs.value.pop();
-      breadcrumbs.value.push({
-        name: item.value.name,
-        link: '/obsah/pracovni-pozice/' + route.params.id,
-        current: true,
-      });
-      fillEmptyTranslations();
+      pageTitle.value = `Žádost o pracovní pozici ${item.value.career.name}`;
     })
     .catch(() => {
       error.value = true;
       toast.add({
         title: 'Chyba',
-        description: 'Nepodařilo se načíst pracovní pozici. Zkuste to prosím později.',
+        description: 'Nepodařilo se načíst žádost. Zkuste to prosím později.',
         color: 'red',
       });
     })
@@ -104,16 +94,18 @@ async function saveItem() {
   loading.value = true;
 
   await client<{
-    id: null | number;
-    position: number;
-    type: string;
+    id: number | null;
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    cover_letter: string;
+    resume: string;
     status: string;
-    salary_from: number | null;
-    salary_to: number | null;
-    salary_type: string;
-    start_date: string | null;
-    name: string;
-    translations: object;
+    salary_expectation: number | null;
+    availability: string | null;
+    source: string;
+    locale: string;
   }>(
     route.params.id === 'pridat'
       ? '/api/admin/career/application'
@@ -132,11 +124,11 @@ async function saveItem() {
         title: 'Hotovo',
         description:
           route.params.id === 'pridat'
-            ? 'Pracovní pozice byla úspěšně vytvořena.'
-            : 'Pracovní pozice byla úspěšně upravena.',
+            ? 'Žádost byla úspěšně vytvořena.'
+            : 'Žádost byla úspěšně upravena.',
         color: 'green',
       });
-      router.push('/obsah/pracovni-pozice');
+      router.push('/obsah/pracovni-pozice/zadosti');
       languageStore.fetchLanguages();
     })
     .catch(() => {
@@ -144,7 +136,7 @@ async function saveItem() {
       toast.add({
         title: 'Chyba',
         description:
-          'Nepodařilo se upravit pracovní pozici. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
+          'Nepodařilo se upravit žádost. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         color: 'red',
       });
     })
@@ -157,29 +149,10 @@ useHead({
   title: pageTitle.value,
 });
 
-function fillEmptyTranslations() {
-  // Set default translations for all languages
-  languageStore.languages.forEach((language) => {
-    if (item.value.translations[language.code] === undefined) {
-      item.value.translations[language.code] = {};
-      translatableAttributes.value.forEach((attribute) => {
-        if (item.value.translations[language.code][attribute.field] === undefined) {
-          item.value.translations[language.code][attribute.field] = '';
-        }
-      });
-    }
-  });
-}
-
-function updateItemImage(files) {
-  item.value.image = files[0];
-}
-
 onMounted(() => {
   if (route.params.id !== 'pridat') {
     loadItem();
   }
-  fillEmptyTranslations();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -189,7 +162,7 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader
-      :title="route.params.id === 'pridat' ? 'Nová pracovní pozice' : item.name"
+      :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }]"
       slug="careers"
@@ -197,81 +170,91 @@ definePageMeta({
     />
     <Form @submit="saveItem">
       <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-        <LayoutContainer class="col-span-4 w-full">
+        <LayoutContainer class="col-span-5 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].name !== undefined
-              "
-              :key="`name-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
+              v-model="item.firstname"
+              name="firstname"
+              label="Jméno"
               class="col-span-1"
             />
             <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_title !== undefined
-              "
-              :key="`meta_title-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_title"
-              label="Meta název"
+              v-model="item.lastname"
+              name="lastname"
+              label="Příjmení"
+              class="col-span-1"
+            />
+            <BaseFormInput
+              v-model="item.email"
+              name="email"
+              label="E-mail"
+              type="email"
+              class="col-span-1"
+            />
+            <BaseFormInput
+              v-model="item.phone"
+              name="phone"
+              label="Telefon"
               type="text"
-              name="meta_title"
               class="col-span-1"
             />
             <BaseFormTextarea
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_description !== undefined
-              "
-              :key="`meta_description-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_description"
-              label="Meta popis"
-              name="meta_description"
-              class="col-span-full"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].perex !== undefined
-              "
-              :key="`perex-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].perex"
-              label="Perex"
-              name="perex"
+              v-model="item.cover_letter"
+              name="cover_letter"
+              label="Motivační dopis"
               class="col-span-2"
             />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].text !== undefined
-              "
-              :key="`text-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].text"
-              label="Popis"
-              name="text"
-              class="col-span-2"
+            <BaseFormInput
+              v-model="item.salary_expectation"
+              name="salary_expectation"
+              label="Očekávaný plat"
+              type="number"
+              class="col-span-1"
+            />
+            <BaseFormInput
+              v-model="item.availability"
+              name="availability"
+              label="Dostupnost"
+              type="text"
+              disabled
+              class="col-span-1"
             />
           </div>
         </LayoutContainer>
-        <LayoutContainer class="col-span-3 w-full">
-          <div class="col-span-1 border-b py-6">
-            <BaseFormSelect
-              v-model="selectedLocale"
-              label="Jazyk"
+        <LayoutContainer class="col-span-2 w-full">
+          <div class="grid grid-cols-1 gap-x-8 gap-y-4">
+            <BaseFormInput
+              v-model="item.locale"
               name="locale"
-              class="w-full"
-              :options="languageStore.languageOptions"
+              label="Jazyk"
+              type="text"
+              :disabled="true"
+              class="col-span-1"
+            />
+            <BaseFormSelect
+              v-model="item.status"
+              name="status"
+              label="Stav žádosti"
+              :options="[
+                { value: 'pending', name: 'Čeká na vyřízení' },
+                { value: 'reviewd', name: 'Zobrazeno' },
+                { value: 'accepted', name: 'Přijato' },
+                { value: 'rejected', name: 'Odmítnuto' },
+              ]"
+              class="col-span-1"
+            />
+            <BaseFormSelect
+              v-model="item.source"
+              name="source"
+              label="Zdroj"
+              :options="[
+                { value: 'website', name: 'Webová stránka' },
+                { value: 'referral', name: 'Odkaz' },
+                { value: 'social_media', name: 'Sociální sítě' },
+                { value: 'job_board', name: 'Portál nabídek' },
+                { value: 'other', name: 'Jiné' },
+              ]"
+              class="col-span-1"
             />
           </div>
         </LayoutContainer>
