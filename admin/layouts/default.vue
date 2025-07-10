@@ -371,17 +371,21 @@ const navigation = ref([
     menu: [
       {
         name: 'Administrátoři',
-        link: '/administratori',
         icon: UsersIcon,
         current: false,
         slug: 'users',
-      },
-      {
-        name: 'Administrátorské skupiny',
-        link: '/administratori/skupiny',
-        icon: AdjustmentsHorizontalIcon,
-        current: false,
-        slug: 'user_groups',
+        submenu: [
+          {
+            name: 'Administrátoři',
+            link: '/administratori',
+            current: false,
+          },
+          {
+            name: 'Skupiny a oprávnění',
+            link: '/administratori/skupiny',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Nastavení',
