@@ -513,7 +513,7 @@ onMounted(() => {
   cashflowCategoryStore.fetchCategories();
   setTimeout(() => {
     navigation.value = filterNavigationGroups(navigation.value);
-  }, 100000);
+  }, 1000);
 });
 </script>
 
