@@ -59,12 +59,12 @@ class QuizController extends Controller
      */
     public function store(Request $request, int $id): JsonResponse
     {
-        if(!$id) {
+        if (!$id) {
             App::abort(400, 'Quiz ID is required');
         }
 
         $quiz = Quiz::with(['questions', 'questions.answers'])->find($id);
-        if(!$quiz) {
+        if (!$quiz) {
             App::abort(404, 'Quiz not found');
         }
 
@@ -73,8 +73,8 @@ class QuizController extends Controller
         foreach ($request['questions'] as $question) {
             foreach ($question['answers'] as $answer) {
                 $originalAnswer = $quiz->questions->find($question['id'])->answers->find($answer['id']);
-                if($originalAnswer) {
-                    if($originalAnswer->is_correct && $answer['is_selected']) {
+                if ($originalAnswer) {
+                    if ($originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = true;
                         $correctAnswers++;
                     } else if (!$originalAnswer->is_correct && $answer['is_selected']) {
@@ -114,8 +114,11 @@ class QuizController extends Controller
             App::abort(400, 'Quiz ID is required');
         }
 
-        $quiz = Quiz::with(['questions', 'questions.answers'])
-            ->whereIn('status', ['public', 'private'])
+        $quiz = Quiz::with(['questions' => function ($query) {
+            $query->orderByRaw('RAND()');
+        }, 'questions.answers' => function ($query) {
+            $query->orderByRaw('RAND()');
+        }])->whereIn('status', ['public', 'private'])
             ->find($id);
         if (!$quiz) {
             App::abort(404, 'Quiz not found');
