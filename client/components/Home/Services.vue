@@ -23,7 +23,7 @@ function openDemandDialog(serviceId) {
 
 <template>
   <div class="space-y-2">
-    <BasePropsHeading type="h2" class="text-center">
+    <BasePropsHeading type="h1" class="text-center">
       {{ t('services.title') }}
     </BasePropsHeading>
     <div

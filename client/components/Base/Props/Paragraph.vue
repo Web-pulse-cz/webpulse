@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const sizeClasses = ref({
+  large: 'text-sm md:text-base lg:text-lg',
   base: 'text-xs md:text-md lg:text-base',
   small: 'text-xs md:text-sm lg:text-md',
 });
@@ -15,11 +16,12 @@ const colorClasses = ref({
   warning: 'text-warning',
   danger: 'text-danger',
   light: 'text-light',
+  textDescription: 'text-textDescription',
 });
 const props = defineProps({
   size: {
     type: String,
-    default: 'base',
+    default: 'large',
     required: false,
   },
   bold: {
@@ -29,7 +31,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: 'primary',
+    default: 'textDescription',
     required: false,
   },
   html: {
@@ -39,7 +41,7 @@ const props = defineProps({
   },
 });
 const baseClass = computed(() => {
-  return `${sizeClasses.value[props.size] || ''} ${boldClasses.value[props.bold] || ''} ${colorClasses.value[props.color] || ''} leading-6 tracking-tight`;
+  return `font-quicksand ${sizeClasses.value[props.size] || ''} ${boldClasses.value[props.bold] || ''} ${colorClasses.value[props.color] || ''} leading-6 tracking-tight`;
 });
 </script>
 

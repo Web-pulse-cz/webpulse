@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
+const { t, locale } = useI18n();
 const props = defineProps({
   page: {
     type: Number,
@@ -51,25 +52,23 @@ generatePages();
 </script>
 
 <template>
-  <div
-    class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
-  >
+  <div class="flex items-center justify-between py-3">
     <div class="flex flex-1 justify-between sm:hidden">
       <span
         class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 lg:px-4 lg:py-2 lg:text-sm"
         @click="page !== 1 ? emit('update-page', Number(page - 1)) : null"
-        >Předchozí</span
+        >{{ t('pagination.previous') }}</span
       >
       <span
         class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 lg:px-4 lg:py-2 lg:text-sm"
         @click="page !== lastPage ? emit('update-page', Number(page + 1)) : null"
-        >Následující</span
+        >{{ t('pagination.next') }}</span
       >
     </div>
     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
       <div>
         <p class="text-grayLight text-sm">
-          Zobrazeno
+          {{ t('pagination.shown') }}
           {{ ' ' }}
           <span class="font-medium">{{ (page - 1) * perPage + 1 }}</span>
           {{ ' ' }}
@@ -77,11 +76,11 @@ generatePages();
           {{ ' ' }}
           <span class="font-medium">{{ Math.min(page * perPage, total) }}</span>
           {{ ' ' }}
-          z
+          {{ t('pagination.of') }}
           {{ ' ' }}
           <span class="font-medium">{{ total }}</span>
           {{ ' ' }}
-          výsledků
+          {{ t('pagination.results') }}
         </p>
       </div>
       <div>
@@ -92,7 +91,7 @@ generatePages();
               'relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0',
             ]"
           >
-            <span class="sr-only">Předchozí</span>
+            <span class="sr-only">{{ t('pagination.previous') }}</span>
             <ChevronLeftIcon
               class="size-5"
               aria-hidden="true"
@@ -122,7 +121,7 @@ generatePages();
               'relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0',
             ]"
           >
-            <span class="sr-only">Následující</span>
+            <span class="sr-only">{{ t('pagination.next') }}</span>
             <ChevronRightIcon
               class="size-5"
               aria-hidden="true"

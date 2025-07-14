@@ -1,16 +1,21 @@
 <script setup lang="ts">
 const colorClasses = {
-  light: 'text-light',
-  primary: 'text-primary',
+  black: 'text-textBlack',
+  brand: 'text-brand',
+  white: 'text-white',
 };
 
 const typeClasses = {
-  h1: 'text-5xl font-bold tracking-tight sm:text-7xl',
-  h2: 'text-4xl font-semibold sm:text-5xl',
-  h3: 'text-3xl font-semibold sm:text-4xl',
-  h4: 'text-2xl font-medium sm:text-3xl',
-  h5: 'text-xl font-medium sm:text-2xl',
-  h6: 'text-lg font-medium sm:text-xl',
+  h1: 'text-[28px] font-semibold  lg:text-[44px] xl:text-[64px]',
+  h2: 'text-[20px] font-semibold  lg:text-[40px] xl:text-[56px]',
+  h3: 'text-4xl font-semibold  lg:text-5xl',
+  h4: 'text-2xl font-medium  lg:text-[32px] xl:text-4xl',
+  h5: 'text-[22px] font-medium  lg:text-xl xl:text-2xl',
+  h6: 'text-lg font-medium  lg:text-xl xl:text-xl',
+  h7: 'text-lg font-medium  lg:text-xl',
+  h8: 'text-base font-semibold  lg:text-lg',
+  h9: 'text-sm font-semibold  lg:text-base',
+  h10: 'text-xs font-medium  lg:text-sm',
 };
 
 const props = defineProps({
@@ -21,7 +26,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: 'primary',
+    default: 'black',
     required: false,
   },
   marginBottom: {
@@ -32,7 +37,7 @@ const props = defineProps({
 });
 
 const baseClass = computed(() => {
-  return `${typeClasses[props.type] || typeClasses.h1} ${colorClasses[props.color] || colorClasses.light} text-balance ${props.marginBottom} leading-tight tracking-normal`;
+  return `${typeClasses[props.type] || typeClasses.h1} ${colorClasses[props.color] || colorClasses.black} text-balance ${props.marginBottom} leading-tight tracking-normal`;
 });
 </script>
 

@@ -1,7 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { Form } from 'vee-validate';
 
 const { t, locale } = useI18n();
+const api = useApi();
+const toast = useToast();
 
 const props = defineProps({
   services: {
@@ -24,25 +26,21 @@ const serviceId = defineModel('serviceId', {
 });
 
 function submitForm(values) {
-  const client = useSanctumClient();
-  client('/api/demand/' + locale.value, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      ...values,
-      service_id: props.type === 'service' ? values.service_id : null,
-    }),
-  })
-    .then(() => {
-      useToast().success(t('contactForm.successMessage'));
-    })
-    .catch((error) => {
-      console.error('Failed to submit form:', error);
-      useToast().error(t('contactForm.errorMessage'));
-    });
+  useAsyncData('contactForm', () =>
+    api.global
+      .demand(values, locale.value)
+      .then(() => {
+        toast.success({
+          title: 'Success!',
+          message: 'Your action was completed successfully.',
+          position: 'topRight',
+        });
+      })
+      .catch((error) => {
+        toast.error({ title: 'Error!', message: 'Something went wrong.', position: 'topRight' });
+        console.error('Error submitting contact form:', error);
+      }),
+  );
 }
 </script>
 

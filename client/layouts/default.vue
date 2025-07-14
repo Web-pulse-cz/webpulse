@@ -1,19 +1,40 @@
 <script setup lang="ts">
-import { useLoadingStore } from '~/stores/loading';
 import { computed, provide } from 'vue';
+import { useLoadingStore } from '~/stores/loading';
+import { useSettingStore } from '~/stores/settingStore';
+import FooterContainer from '~/components/Layout/FooterContainer.vue';
 
+const settingStore = useSettingStore();
+
+const { t, locale } = useI18n({
+  useScope: 'global',
+});
 const loadingStore = useLoadingStore();
 const loading = computed(() => loadingStore.isLoading);
 
 provide('loading', loading);
+
+watch(locale, (newLocale) => {
+  settingStore.fetchSettings(newLocale);
+});
+
+onMounted(() => {
+  settingStore.fetchSettings(locale.value);
+  setInterval(() => {
+    settingStore.fetchSettings(locale.value);
+  }, 60000);
+});
 </script>
 
 <template>
   <div>
     <LayoutNavbar />
+    <!-- Dummy div so Navbar is not over component -->
+    <div class="h-20 bg-chppGray"></div>
     <main>
       <NuxtPage />
     </main>
+    <LayoutContact />
     <LayoutFooter />
     <LayoutCookiesBar />
 

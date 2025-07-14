@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,7 +17,6 @@ body, html {
     background: #f9fafb;
     min-height: 100vh;
     color: #082f49;
-    font-family: 'Montserrat', sans-serif;
 }
 
 * {
@@ -24,4 +26,18 @@ body, html {
 
 .hero_circle {
     z-index: -1;
+}
+
+h1{
+    @apply text-[28px] font-semibold lg:text-[44px] xl:text-[64px] mb-8 text-textBlack;
+}
+
+h2 {
+    @apply text-[24px] font-semibold lg:text-[36px] xl:text-4xl mb-4 text-textBlack;
+}
+footer{
+    ul{
+        list-style: none;
+        padding-left: 0px;
+    }
 }

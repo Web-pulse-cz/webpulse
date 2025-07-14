@@ -6,13 +6,11 @@ export function useServiceApi(
   const client = useSanctumClient();
 
   const services = wrap(async (locale: string): Promise<Service[]> => {
-    const response = await client(`/api/service/${locale}`, { method: 'GET' });
-    return Array.isArray(response) ? JSON.parse(JSON.stringify(response)) : [];
+    return await client(`/api/service/${locale}`, { method: 'GET' });
   });
 
   const service = wrap(async (id: number): Promise<Service | null> => {
-    const response = await client(`/api/admin/services/${id}`, { method: 'GET' });
-    return response && typeof response === 'object' ? JSON.parse(JSON.stringify(response)) : null;
+    return await client(`/api/service/${id}`, { method: 'GET' });
   });
 
   return { services, service };

@@ -26,7 +26,7 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-light/75 transition-opacity" />
+        <div class="fixed inset-0 bg-gray-200/75 transition-opacity" />
       </TransitionChild>
 
       <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -43,14 +43,14 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg border border-light bg-primary px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-6"
+              class="relative transform overflow-hidden rounded-lg border border-brand bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-6"
             >
               <div>
                 <div class="mt-3 sm:mt-5">
-                  <BasePropsHeading type="h3" color="light">
+                  <BasePropsHeading type="h3" color="bg-gray">
                     {{ t('cookies.title') }}
                   </BasePropsHeading>
-                  <div class="mt-5 text-light sm:mt-6">
+                  <div class="mt-5 text-black sm:mt-6">
                     <div class="flex py-3">
                       <BaseFormCheckbox
                         v-model="cookies.technical"
@@ -59,10 +59,10 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
                         name="technical"
                       />
                       <div class="ml-4">
-                        <BasePropsParagraph color="light" bold="bold" class="mb-2">
+                        <BasePropsParagraph color="black" bold="bold" class="mb-2">
                           {{ t('cookies.technicalCookiesTitle') }}
                         </BasePropsParagraph>
-                        <BasePropsParagraph color="light">
+                        <BasePropsParagraph color="black">
                           {{ t('cookies.technicalCookiesDescription') }}
                         </BasePropsParagraph>
                       </div>
@@ -74,10 +74,10 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
                         name="marketing"
                       />
                       <div class="ml-4">
-                        <BasePropsParagraph color="light" bold="bold" class="mb-2">
+                        <BasePropsParagraph color="black" bold="bold" class="mb-2">
                           {{ t('cookies.marketingCookiesTitle') }}
                         </BasePropsParagraph>
-                        <BasePropsParagraph color="light">
+                        <BasePropsParagraph color="black">
                           {{ t('cookies.marketingCookiesDescription') }}
                         </BasePropsParagraph>
                       </div>
@@ -89,10 +89,10 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
                         name="analytics"
                       />
                       <div class="ml-4">
-                        <BasePropsParagraph color="light" bold="bold" class="mb-2">
+                        <BasePropsParagraph color="black" bold="bold" class="mb-2">
                           {{ t('cookies.analyticsCookiesTitle') }}
                         </BasePropsParagraph>
-                        <BasePropsParagraph color="light">
+                        <BasePropsParagraph color="black">
                           {{ t('cookies.analyticsCookiesDescription') }}
                         </BasePropsParagraph>
                       </div>
@@ -104,10 +104,10 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
                         name="advertisement"
                       />
                       <div class="ml-4">
-                        <BasePropsParagraph color="light" bold="bold" class="mb-2">
+                        <BasePropsParagraph color="black" bold="bold" class="mb-2">
                           {{ t('cookies.advertisementCookiesTitle') }}
                         </BasePropsParagraph>
-                        <BasePropsParagraph color="light">
+                        <BasePropsParagraph color="black">
                           {{ t('cookies.advertisementCookiesDescription') }}
                         </BasePropsParagraph>
                       </div>

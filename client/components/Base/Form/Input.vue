@@ -4,11 +4,13 @@ import { Field, ErrorMessage, defineRule } from 'vee-validate';
 const labelClasses = {
   dark: 'block text-xs lg:text-sm/6 font-medium text-primary',
   light: 'block text-xs lg:text-sm/6 font-medium text-light',
+  newsletter: 'block text-xs lg:text-sm/6 font-medium text-white',
 };
 
 const inputClasses = {
   light: 'ring-secondary focus:ring-light',
   dark: 'ring-secondary focus:ring-secondary',
+  newsletter: 'ring-[#707070] focus:ring-[#707070]',
 };
 
 const model = defineModel({
@@ -118,7 +120,6 @@ const inputClass = computed(() => {
       aria-autocomplete="none"
       autocomplete="off"
       :autofocus="false"
-      tabindex="-1"
       :class="[inputClass, { 'bg-grayLight': disabled }]"
     />
     <Field
@@ -135,7 +136,6 @@ const inputClass = computed(() => {
       :min="min > 0 ? min : 0"
       :max="max > 0 ? max : 999999999"
       :autofocus="false"
-      tabindex="-1"
       :class="[inputClass, { 'bg-grayLight': disabled }]"
     />
     <ErrorMessage :name="name" class="text-xs text-danger" />

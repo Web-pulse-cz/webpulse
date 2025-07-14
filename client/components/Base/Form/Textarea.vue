@@ -82,8 +82,8 @@ const inputClass = computed(() => {
           :rows="rows"
           :name="name"
           :maxlength="max"
+          :placeholder="placeholder"
           :autofocus="false"
-          tabindex="-1"
           :class="[inputClass, { 'bg-light': disabled }]"
         />
       </Field>

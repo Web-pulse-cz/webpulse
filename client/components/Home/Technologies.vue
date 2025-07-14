@@ -18,7 +18,7 @@ const technologies = [
 
 <template>
   <div class="text-center">
-    <BasePropsHeading type="h2" class="mb-6 text-center">
+    <BasePropsHeading type="h1" class="mb-6 text-center">
       {{ t('home.technologiesTitle') }}
     </BasePropsHeading>
     <div class="flex flex-wrap justify-center gap-x-6">

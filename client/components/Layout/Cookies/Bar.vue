@@ -95,9 +95,9 @@ onMounted(() => {
   <div>
     <div
       v-if="showBar"
-      class="fixed bottom-0 left-0 right-8 z-10 w-full max-w-full rounded border border-light bg-primary p-6 text-light shadow-lg md:bottom-4 md:left-4 md:max-w-md"
+      class="fixed bottom-0 left-0 right-8 z-10 w-full max-w-full rounded border border-brand bg-chppGray p-6 text-black shadow-lg md:bottom-4 md:left-4 md:max-w-md"
     >
-      <BasePropsParagraph class="mb-4" size="base" color="light">
+      <BasePropsParagraph class="mb-4" size="base" color="black">
         {{ t('cookies.description') }}
       </BasePropsParagraph>
       <div class="flex gap-x-4">
@@ -117,7 +117,7 @@ onMounted(() => {
     </div>
     <div
       v-if="showIcon"
-      class="bg-dark fixed bottom-0 left-0 right-8 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded border border-secondary p-2 md:bottom-4 md:left-4"
+      class="bg-dark fixed bottom-0 left-0 right-8 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded border border-brand p-2 md:bottom-4 md:left-4"
     >
       <CookieIcon class="h-6 w-6 cursor-pointer" @click="showBar = true" />
     </div>

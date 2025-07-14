@@ -4,17 +4,13 @@ export default defineNuxtConfig({
     [
       'nuxt-auth-sanctum',
       {
-        ssr: true,
-        nitro: {
-          preset: 'node',
-        },
         baseUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz/',
         mode: 'token',
         endpoints: {
           csrf: '/sanctum/csrf-cookie',
-          login: '/api/admin/auth/login',
-          logout: '/api/admin/auth/logout',
-          user: '/api/admin/auth/me',
+          login: '/api/auth/login',
+          logout: '/api/auth/logout',
+          user: '/api/auth/me',
         },
         csrf: {
           cookie: 'XSRF-TOKEN',
@@ -36,17 +32,19 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     'v-gsap-nuxt',
+    'nuxt-toast',
   ],
 
   plugins: ['~/plugins/formatPrice.client.ts'],
+  ssr: false,
   devtools: { enabled: false },
 
   app: {
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-      title: 'Martin Hanzl',
-      titleTemplate: '%s | Martin Hanzl',
+      title: 'Inovujeme svět pasportizace',
+      // titleTemplate: '%s | Martin Hanzl',
       htmlAttrs: {
         lang: 'cs',
       },
@@ -73,11 +71,22 @@ export default defineNuxtConfig({
           type: 'image/x-icon',
           href: '/favicon.ico',
         },
+
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap',
+        },
       ],
     },
   },
 
   css: ['~/assets/css/style.css'],
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz',
+      appUrl: process.env.APP_URL ?? 'https://chpp.cz',
+    },
+  },
 
   routeRules: {
     '/api/**': {
@@ -86,7 +95,7 @@ export default defineNuxtConfig({
     '/files/**': {
       proxy: process.env.API_URL
         ? process.env.API_URL + '/files/**'
-        : 'http://api.martinhanzl/content/files/**',
+        : 'http://api.martinhanzl.cz/content/files/**',
     },
   },
   compatibilityDate: '2024-11-01',
@@ -107,6 +116,12 @@ export default defineNuxtConfig({
   i18n: {
     lazy: true,
     defaultLocale: 'cs',
+    compilation: {
+      strictMessage: false,
+    },
+    strategy: 'prefix_except_default',
+    customRoutes: 'config',
+    detectBrowserLanguage: true,
     locales: [
       {
         code: 'cs',
@@ -134,6 +149,50 @@ export default defineNuxtConfig({
         file: 'pl.ts',
       },
     ],
+    pages: {
+      'blog/index': {
+        en: '/blog',
+        cs: '/blog',
+        sk: '/blog',
+        de: '/blog',
+        pl: '/blog',
+      },
+      'blog/category/[id]/[slug]/index': {
+        en: '/blog/categories/[id]/[slug]',
+        cs: '/blog/kategorie/[id]/[slug]',
+        sk: '/blog/kategorie/[id]/[slug]',
+        de: '/blog/kategorien/[id]/[slug]',
+        pl: '/blog/kategorie/[id]/[slug]',
+      },
+      'blog/[id]/[slug]/index': {
+        en: '/blog/posts/[id]/[slug]',
+        cs: '/blog/clanky/[id]/[slug]',
+        sk: '/blog/clanky/[id]/[slug]',
+        de: '/blog/beitrage/[id]/[slug]',
+        pl: '/blog/artykuly/[id]/[slug]',
+      },
+      'info/[id]/[slug]/index': {
+        en: '/info/[id]/[slug]',
+        cs: '/info/[id]/[slug]',
+        sk: '/info/[id]/[slug]',
+        de: '/info/[id]/[slug]',
+        pl: '/info/[id]/[slug]',
+      },
+      'faq/index': {
+        cs: '/faq',
+        sk: '/faq',
+        en: '/faq',
+        de: '/faq',
+        pl: '/faq',
+      },
+      'faq/category/[id]/[slug]/index': {
+        cs: '/faq/kategorie/[id]/[slug]',
+        sk: '/faq/kategorie/[id]/[slug]',
+        en: '/faq/categories/[id]/[slug]',
+        de: '/faq/kategorien/[id]/[slug]',
+        pl: '/faq/kategorie/[id]/[slug]',
+      },
+    },
   },
 
   vgsap: {

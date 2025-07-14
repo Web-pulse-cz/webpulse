@@ -22,13 +22,53 @@ export default {
     advertisementCookiesDescription:
       'Reklamní cookies nám umožňují zobrazovat reklamy, které odpovídají vašim zájmům, a sledovat jejich účinnost. Tyto cookies můžete odmítnout.',
   },
-  navbar: {
-    home: 'Domů',
-    about: 'O mně',
-    portfolio: 'Portfolio',
-    technologies: 'Technologie',
-    services: 'Služby',
-    contact: 'Kontakt',
+  general: {
+    categories: 'Kategorie',
+    aboutUs: 'O nás',
+  },
+  carousel: {
+    slide1: {
+      title: 'Inovujeme svět',
+      titleColor: 'pasportizace',
+      description: 'Pasportizace, přizpůsobená vašim jedinečným potřebám.',
+    },
+    slide2: {
+      title: 'Efektivní skenování',
+      titleColor: 'dronem',
+      description: 'Jakýkoliv terén nebo objekt, od liniových po složité stavby',
+    },
+    slide3: {
+      title: 'Na míru Vašim',
+      titleColor: 'potřebám',
+      description: 'Řízení projektu pro konkrétní potřeby a specifikace.',
+    },
+  },
+  benefitCard: {
+    pasportization: {
+      title: 'Pasportizace budov',
+      description:
+        'Pasportizace budov je naším hlavním směrem, která je klíčová pro efektivní správu budov.',
+    },
+    engineering: {
+      title: 'Inženýrská činnost',
+      description:
+        'Při koordinaci inženýrských služeb využíváme spolupráci se špičkami ve stavebnictví.',
+    },
+    facilityManagement: {
+      title: 'Facility management',
+      description:
+        'Kooperujeme s experty ve facility managmentu pro ideální spojení pasportizace a správy.',
+    },
+  },
+  colaborations: {
+    title: 'Spolupracujeme',
+    description:
+      'V oblasti pasportizace uplatňujeme komplexní přístup a spolupracujeme s předními firmami v oboru.',
+  },
+  homePhotoAndText: {
+    title: 'Podporujeme efektivní správu nemovitostí pasportizací',
+    description:
+      'Efektivně spravujte své nemovitosti díky pasportizaci. Získáte komplexní přehled o stavu objektu, což usnadňuje plánování rekonstrukcí a údržby. Naše interní metodika vychází ze zkušeností v oboru, zaměřuje se na přesné a aktuální zaznamenávání informací o budovách. Naším cílem je zajistit, že informace o budově jsou vždy aktuální, přesné a snadno dostupné.',
   },
   home: {
     hero: {
@@ -79,18 +119,67 @@ export default {
     submitButton: 'Odeslat poptávku',
   },
   contactForm: {
-    title: 'Kontaktujte nás',
-    fullName: 'Jméno a příjmení',
+    title: 'Kontaktujte nás!',
+    fullName: 'Jméno',
     email: 'E-mail',
     phonePrefix: 'Předvolba',
     phone: 'Telefon',
-    message: 'Zpráva',
+    message: 'Váš dotaz',
     offerPrice: 'Navrhovaná cena',
     url: 'URL projektu',
     service: 'Služba',
     submit: 'Odeslat',
+    submitForm: 'Odesláním fromuláře souhlasíte se',
+    personalInformation: 'zpracováním osobních údajů',
+    button: 'Kontakt',
+  },
+  layoutContact: {
+    title: 'Ozveme se vám co nejdříve!',
+  },
+  whyUs: {
+    tittle: 'Proč my?',
+    subtitle: 'Koordinace na jednom místě',
+    description:
+      'S týmem odborníků zajišťujeme vše od pasportizace budov, přes inženýrské služby až po komplexní facility management, vše přesně dle vašich specifických potřeb a požadavků.',
   },
   footer: {
     rightsReserved: 'Všechna práva vyhrazena',
+    company: 'Společnost',
+    home: 'Domů',
+    services: 'Služby',
+    clients: 'Klienti',
+    projects: 'Projekty',
+    blog: 'Blog',
+    support: 'Podpora',
+    FAQ: 'Často kladené dotazy',
+    GDPR: 'GDPR',
+    cookies: 'Soubory cookies',
+    stayInTouch: 'Zůstaňme v kontaktu',
+    email: 'E-mail',
+    submitForm: 'Odesláním fromuláře souhlasíte se',
+    personalInformation: 'zpracováním osobních údajů',
+    createdBy: 'Vytvořil Martin Hanzl',
+  },
+  pagination: {
+    previous: 'Předchozí',
+    next: 'Další',
+    shown: 'Zobrazeno',
+    of: 'z',
+    results: 'výsledků',
+  },
+  canonical: {
+    references: 'reference',
+    services: 'sluzby',
+    blog: 'blog',
+    category: 'kategorie',
+    faq: 'faq',
+    info: 'info',
+    post: 'clanky',
+  },
+  faq: {
+    title: 'Často kladené dotazy',
+    meta_title: 'Často kladené dotazy | CHPP',
+    meta_description:
+      'Zde najdete odpovědi na nejčastější dotazy týkající se našich služeb, pasportizace budov a dalších témat.',
   },
 };

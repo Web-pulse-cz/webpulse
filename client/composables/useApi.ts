@@ -1,10 +1,14 @@
+import { useGlobalApi } from '~/api/global';
 import { useServiceApi } from '~/api/service';
-import { useLoadingStore } from '~/stores/loading';
+import { useBlogApi } from '~/api/blog';
+import { usePageApi } from '~/api/page';
+import { useLogoApi } from '~/api/logo';
+import { useFaqApi } from '~/api/faq';
 
 export function useApi() {
   const loading = useLoadingStore();
 
-  const wrap = <T>(fn: (...args: any[]) => Promise<T>) => {
+  const wrapWithLoading = <T>(fn: (...args: any[]) => Promise<T>) => {
     return async (...args: any[]): Promise<T> => {
       try {
         loading.start();
@@ -18,7 +22,30 @@ export function useApi() {
     };
   };
 
-  const service = useServiceApi(wrap);
+  const wrapSilent = <T>(fn: (...args: any[]) => Promise<T>) => {
+    return async (...args: any[]): Promise<T> => {
+      try {
+        return await fn(...args);
+      } catch (error) {
+        console.error('API error:', error);
+        throw error;
+      }
+    };
+  };
 
-  return { service };
+  const global = useGlobalApi(wrapSilent);
+  const service = useServiceApi(wrapWithLoading);
+  const blog = useBlogApi(wrapWithLoading);
+  const page = usePageApi(wrapWithLoading);
+  const logo = useLogoApi(wrapSilent);
+  const faq = useFaqApi(wrapWithLoading);
+
+  return {
+    global,
+    service,
+    blog,
+    page,
+    logo,
+    faq,
+  };
 }
