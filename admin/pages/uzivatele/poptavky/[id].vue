@@ -115,11 +115,11 @@ definePageMeta({
           <p class="col-span-3 font-semibold text-grayDark">Zpráva:</p>
           <p class="col-span-9 text-grayCustom">{{ item.text }}</p>
         </div>
-        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4" v-if="item.url">
+        <div v-if="item.url" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
           <p class="col-span-3 font-semibold text-grayDark">URL projektu:</p>
           <p class="col-span-9 text-grayCustom">{{ item.url }}</p>
         </div>
-        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4" v-if="item.offer_price">
+        <div v-if="item.offer_price" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
           <p class="col-span-3 font-semibold text-grayDark">Navrhovaná cena:</p>
           <p class="col-span-9 text-grayCustom">{{ item.offer_price }}</p>
         </div>

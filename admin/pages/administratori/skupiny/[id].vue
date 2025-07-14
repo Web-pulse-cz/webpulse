@@ -54,7 +54,7 @@ const allowedPermissions = ref([
   { name: 'Kalednář', value: 'Kalednář', slug: 'calendars' },
   { name: 'Klienti', value: 'Klienti', slug: 'clients' },
   { name: 'Kontakty', value: 'Kontakty', slug: 'contacts' },
-  { name: 'Kvízy', value: 'Kvízy', slug: 'quizes' },
+  { name: 'Kvízy', value: 'Kvízy', slug: 'quizzes' },
   { name: 'Ligy', value: 'Ligy', slug: 'leagues' },
   { name: 'Loga klientů', value: 'Loga klientů', slug: 'logos' },
   { name: 'Měny', value: 'Měny', slug: 'currencies' },

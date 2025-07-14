@@ -186,10 +186,10 @@ const navigation = ref([
       },
       {
         name: 'Kvízy',
-        link: '/demo',
+        link: '/obsah/kvizy',
         icon: QuestionMarkCircleIcon,
         current: false,
-        slug: 'quizes',
+        slug: 'quizzes',
       },
       {
         name: 'FAQ',

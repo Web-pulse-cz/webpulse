@@ -61,6 +61,7 @@ use App\Http\Controllers\Client\Event\EventController as ClientEventController;
 use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
 use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
 use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
+use App\Http\Controllers\Admin\Quiz\QuizController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -599,5 +600,15 @@ Route::group([
         Route::get('{id}', [CareerController::class, 'show'])->where('id', '[0-9]+');
         Route::post('{id?}', [CareerController::class, 'store']);
         Route::delete('{id}', [CareerController::class, 'destroy'])->where('id', '[0-9]+');
+    });
+
+    // Quiz routes
+    Route::group([
+        'prefix' => 'quiz'
+    ], function () {
+        Route::get('', [QuizController::class, 'index']);
+        Route::get('{id}', [QuizController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('{id?}', [QuizController::class, 'store']);
+        Route::delete('{id}', [QuizController::class, 'destroy'])->where('id', '[0-9]+');
     });
 });

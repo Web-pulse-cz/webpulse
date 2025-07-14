@@ -170,7 +170,7 @@ async function loadCategories() {
     },
   })
     .then((response) => {
-      let categories = response.map((category) => ({
+      const categories = response.map((category) => ({
         value: category.id,
         name: category.translations?.['cs']?.name || 'Neznámá kategorie',
       }));
