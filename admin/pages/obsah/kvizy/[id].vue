@@ -145,7 +145,7 @@ function addQuestion() {
       { id: null, name: '', is_correct: false },
       { id: null, name: '', is_correct: false },
       { id: null, name: '', is_correct: false },
-    ]
+    ],
   });
 }
 
@@ -246,7 +246,7 @@ definePageMeta({
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#otazky')">
         <LayoutContainer class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
-          <div class="col-span-full grid grid-cols-7" v-for="(question, index) in item.questions">
+          <div v-for="(question, index) in item.questions" class="col-span-full grid grid-cols-7">
             <div class="col-span-6">
               <BaseFormInput
                 v-model="question.name"
@@ -265,7 +265,7 @@ definePageMeta({
                 Odstranit
               </BaseButton>
             </div>
-            <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-2 mt-2">
+            <div class="col-span-full mt-2 grid grid-cols-4 gap-x-4 gap-y-2">
               <BaseFormInput
                 v-for="(answer, answerIndex) in question.answers"
                 :key="answerIndex"
@@ -284,13 +284,7 @@ definePageMeta({
             </div>
           </div>
           <div class="col-span-full text-center">
-            <BaseButton
-              type="button"
-              variant="primary"
-              size="lg"
-              @click="addQuestion"
-              class="mb-4"
-            >
+            <BaseButton type="button" variant="primary" size="lg" class="mb-4" @click="addQuestion">
               Přidat otázku
             </BaseButton>
           </div>

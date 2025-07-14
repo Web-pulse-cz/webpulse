@@ -137,7 +137,6 @@ const transformedLogos = computed(() => {
       </div>
     </LayoutContainer>
 
-
     <LayoutContainer class="py-20">
       <!-- <pre>{{ data }}</pre> -->
       <HomeColaborations
@@ -155,7 +154,6 @@ const transformedLogos = computed(() => {
         :title="t('homePhotoAndText.title')"
         :description="t('homePhotoAndText.description')"
       >
-
       </HomePhotoAndText>
     </LayoutContainer>
 

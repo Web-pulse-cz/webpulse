@@ -24,7 +24,7 @@ export default {
   },
   general: {
     categories: 'Kategorie',
-    aboutUs: 'O nas'
+    aboutUs: 'O nas',
   },
   carousel: {
     slide1: {
