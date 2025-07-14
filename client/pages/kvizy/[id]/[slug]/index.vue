@@ -88,7 +88,12 @@ useHead(() => {
       <p class="mb-4 text-gray-600 dark:text-gray-400" v-html="quizData?.description" />
       <p v-if="!quizStarted">Počet otázek: {{ quizData?.questions.length }}</p>
       <p v-if="!quizStarted">Průměrná úspěšnost: {{ quizData?.accuracy }}%</p>
-      <BaseButton v-if="!quizStarted" size="xxl" variant="primary" @click="quizStarted = true" class="mt-6"
+      <BaseButton
+        v-if="!quizStarted"
+        size="xxl"
+        variant="primary"
+        class="mt-6"
+        @click="quizStarted = true"
         >Zahájit kvíz</BaseButton
       >
     </div>
@@ -143,9 +148,7 @@ useHead(() => {
       <p class="mb-4 text-gray-600 dark:text-gray-400">
         Počet správných odpovědí: {{ stats?.correctAnswers }} z {{ quizData?.questions.length }}
       </p>
-      <p class="mb-4 text-gray-600 dark:text-gray-400">
-        Vaše úspěšnost: {{ stats?.accuracy }}%
-      </p>
+      <p class="mb-4 text-gray-600 dark:text-gray-400">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
       <NuxtLink to="/kvizy">
         <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
       </NuxtLink>

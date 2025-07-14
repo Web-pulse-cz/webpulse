@@ -5,8 +5,8 @@ export function useQuizApi(
 ) {
   const client = useSanctumClient();
 
-  const quizzes = wrap(async (): Promise<Quiz[]> => {
-    return await client(`/api/quiz`, { method: 'GET' });
+  const quizzes = wrap(async (search?: string): Promise<Quiz[]> => {
+    return await client(`/api/quiz`, { method: 'GET', query: { search: search } });
   });
 
   const quiz = wrap(async (id: number): Promise<Quiz> => {

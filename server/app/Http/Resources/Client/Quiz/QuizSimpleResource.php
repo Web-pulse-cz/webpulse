@@ -20,6 +20,8 @@ class QuizSimpleResource extends JsonResource
             'description' => $this->description,
             'slug' => $this->slug,
             'tags' => $this->tags,
+            'tags_array' => explode(',', $this->tags),
+            'questions_count' => $this->questions->count(),
             'accuracy' => $this->accuracy,
             'attempts' => $this->attempts,
         ];
