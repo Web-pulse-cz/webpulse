@@ -44,6 +44,7 @@ use App\Http\Controllers\Admin\Event\EventController;
 use App\Http\Controllers\Admin\Event\EventRegistrationController;
 use App\Http\Controllers\Admin\Career\CareerController;
 use App\Http\Controllers\Admin\Career\CareerApplicationController;
+use App\Http\Controllers\Admin\Quiz\QuizController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -61,7 +62,7 @@ use App\Http\Controllers\Client\Event\EventController as ClientEventController;
 use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
 use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
 use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
-use App\Http\Controllers\Admin\Quiz\QuizController;
+use App\Http\Controllers\Client\QUiz\QuizController as ClientQuizController;
 
 Route::group([
     'prefix' => 'filemanager'
@@ -191,6 +192,14 @@ Route::group([
 
     Route::get('{lang?}', [ClientCareerController::class, 'index']);
     Route::get('{id}/{lang?}', [ClientCareerController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'quiz'
+], function () {
+    Route::get('', [ClientQuizController::class, 'index']);
+    Route::get('{id}', [ClientQuizController::class, 'show'])->where('id', '[0-9]+');
+    Route::post('{id}', [ClientQuizController::class, 'store'])->where('id', '[0-9]+');
 });
 
 /**

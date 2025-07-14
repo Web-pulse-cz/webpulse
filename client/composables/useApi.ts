@@ -4,6 +4,7 @@ import { useBlogApi } from '~/api/blog';
 import { usePageApi } from '~/api/page';
 import { useLogoApi } from '~/api/logo';
 import { useFaqApi } from '~/api/faq';
+import { useQuizApi } from '~/api/quiz';
 
 export function useApi() {
   const loading = useLoadingStore();
@@ -39,6 +40,7 @@ export function useApi() {
   const page = usePageApi(wrapWithLoading);
   const logo = useLogoApi(wrapSilent);
   const faq = useFaqApi(wrapWithLoading);
+  const quiz = useQuizApi(wrapWithLoading);
 
   return {
     global,
@@ -47,5 +49,6 @@ export function useApi() {
     page,
     logo,
     faq,
+    quiz,
   };
 }
