@@ -18,7 +18,8 @@ class QuizController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Quiz::query();
+        $query = Quiz::query()
+            ->where('status', 'public');
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -113,7 +114,9 @@ class QuizController extends Controller
             App::abort(400, 'Quiz ID is required');
         }
 
-        $quiz = Quiz::with(['questions', 'questions.answers'])->find($id);
+        $quiz = Quiz::with(['questions', 'questions.answers'])
+            ->whereIn('status', ['public', 'private'])
+            ->find($id);
         if (!$quiz) {
             App::abort(404, 'Quiz not found');
         }
