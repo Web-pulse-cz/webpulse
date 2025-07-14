@@ -91,7 +91,7 @@ class QuizController extends Controller
 
         // average accuracy calculation
         if ($quiz->accuracy) {
-            $quiz->accuracy = round((($quiz->accuracy * ($quiz->attempts - 1)) + $accuracy) / $quiz->attempts);
+            $quiz->accuracy = (($quiz->accuracy * ($quiz->attempts - 1)) + $accuracy) / $quiz->attempts;
         } else {
             $quiz->accuracy = $accuracy;
         }
