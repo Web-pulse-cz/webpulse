@@ -14,7 +14,7 @@ const {
   status: quizzesStatus,
   error: quizzesError,
   pending: quizzesPending,
-} = useAsyncData(`quiz`, () => api.quiz.quizzes());
+} = useAsyncData(`quiz`, () => api.quiz.quizzes(search.value));
 
 watch(
   search,
