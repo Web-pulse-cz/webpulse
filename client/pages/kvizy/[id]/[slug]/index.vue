@@ -85,7 +85,11 @@ useHead(() => {
       :class="[quizStarted ? 'justify-start' : 'justify-center', 'mb-6 flex flex-col items-center']"
     >
       <BasePropsHeading type="h1">{{ quizData?.name }}</BasePropsHeading>
-      <p v-if="!quizStarted" class="mb-4 text-center text-gray-600 dark:text-gray-400" v-html="quizData?.description" />
+      <p
+        v-if="!quizStarted"
+        class="mb-4 text-center text-gray-600 dark:text-gray-400"
+        v-html="quizData?.description"
+      />
       <p v-if="!quizStarted">Počet otázek: {{ quizData?.questions.length }}</p>
       <p v-if="!quizStarted">Průměrná úspěšnost: {{ quizData?.accuracy }}%</p>
       <BaseButton
@@ -109,13 +113,13 @@ useHead(() => {
         class="mb-4 text-center font-bold text-primary"
         v-html="quizData?.questions[currentQuestionIndex]?.name"
       />
-      <div class="grid grid-cols-1 gap-4 lg:gap-6 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
         <div
           v-for="(answer, index) in quizData?.questions[currentQuestionIndex]?.answers"
           :key="index"
           :class="[
             answer.is_selected ? 'bg-primary text-white' : 'bg-white text-gray-500',
-            'cursor-pointer rounded-lg p-4 lg:p-6 text-sm shadow',
+            'cursor-pointer rounded-lg p-4 text-sm shadow lg:p-6',
           ]"
           @click="markSelected(answer)"
         >
@@ -126,7 +130,7 @@ useHead(() => {
     <div v-if="quizStarted && !quizFinished" class="mt-12 flex justify-between">
       <div v-if="currentQuestionIndex === 0">&nbsp;</div>
       <BaseButton
-          v-if="currentQuestionIndex > 0"
+        v-if="currentQuestionIndex > 0"
         variant="secondary"
         size="xxl"
         :disabled="currentQuestionIndex === 0"
@@ -155,5 +159,11 @@ useHead(() => {
         <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
       </NuxtLink>
     </div>
+    <NuxtLink
+      to="/kvizy"
+      class="relative bottom-2 left-1/2 mt-6 inline-block -translate-x-1/2 transform rounded-lg p-2 text-center text-xs text-primary ring-1 ring-primary lg:hidd"
+    >
+      Zpět na kvízy
+    </NuxtLink>
   </div>
 </template>
