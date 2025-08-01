@@ -13,7 +13,7 @@ const variantClasses = ref({
   primary:
     'bg-brand hover:bg-transparent hover:text-brand text-white border border-brand transition duration-300 ',
   secondary:
-    'bg-white ring-1 ring-inset ring-grayLight hover:bg-gray-50 focus-visible:outline-grayLight text-grayDark',
+    'bg-white ring-1 ring-inset ring-primary hover:bg-gray-50 focus-visible:outline-grayLight text-primary',
   success: 'bg-success hover:bg-successLight focus-visible:outline-successLight text-white',
   danger: 'bg-danger hover:bg-dangerLight focus-visible:outline-dangerLight text-white',
   reverse: 'bg-clear hover:bg-brand hover:text-white text-black border border-brand',

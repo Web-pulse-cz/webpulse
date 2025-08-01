@@ -85,7 +85,7 @@ useHead(() => {
       :class="[quizStarted ? 'justify-start' : 'justify-center', 'mb-6 flex flex-col items-center']"
     >
       <BasePropsHeading type="h1">{{ quizData?.name }}</BasePropsHeading>
-      <p class="mb-4 text-gray-600 dark:text-gray-400" v-html="quizData?.description" />
+      <p class="mb-4 text-center text-gray-600 dark:text-gray-400" v-html="quizData?.description" />
       <p v-if="!quizStarted">Počet otázek: {{ quizData?.questions.length }}</p>
       <p v-if="!quizStarted">Průměrná úspěšnost: {{ quizData?.accuracy }}%</p>
       <BaseButton
@@ -106,7 +106,7 @@ useHead(() => {
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12">
       <p
-        class="mb-4 text-gray-600 dark:text-gray-400"
+        class="mb-4 text-center font-bold text-gray-600 dark:text-gray-400"
         v-html="quizData?.questions[currentQuestionIndex]?.name"
       />
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -124,7 +124,9 @@ useHead(() => {
       </div>
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12 flex justify-between">
+      <div v-if="currentQuestionIndex === 0">&nbsp;</div>
       <BaseButton
+          v-if="currentQuestionIndex > 0"
         variant="secondary"
         size="xxl"
         :disabled="currentQuestionIndex === 0"
