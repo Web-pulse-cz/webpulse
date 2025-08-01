@@ -136,14 +136,14 @@ useHead(() => {
         :disabled="currentQuestionIndex === 0"
         @click="getPreviousQuestion"
       >
-        Předchozí otázka</BaseButton
+        Předchozí</BaseButton
       >
       <BaseButton
         v-if="currentQuestionIndex < quizData?.questions.length - 1"
         variant="secondary"
         size="xxl"
         @click="getNextQuestion"
-        >Další otázka</BaseButton
+        >Další</BaseButton
       >
       <BaseButton v-else variant="secondary" size="xxl" @click="submitQuiz"
         >Dokončit kvíz</BaseButton
