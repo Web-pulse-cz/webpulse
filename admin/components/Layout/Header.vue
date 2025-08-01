@@ -52,6 +52,7 @@ const emit = defineEmits([
   'add-dialog',
   'filter-dialog',
   'open-cashflow-dialog',
+  'copy',
 ]);
 const quickAccessItem = ref({
   id: null,
@@ -204,6 +205,15 @@ const emitUpdateFilters = () => {
             @click="print"
           >
             <PrinterIcon class="size-5 text-primaryLight" />
+          </BaseButton>
+          <BaseButton
+            v-if="action.type === 'copy'"
+            variant="secondary"
+            size="xl"
+            class="ml-4 hidden lg:block"
+            @click="emit('copy')"
+          >
+            {{ action.text }}
           </BaseButton>
         </div>
       </div>

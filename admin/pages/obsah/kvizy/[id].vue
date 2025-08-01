@@ -149,6 +149,26 @@ function addQuestion() {
   });
 }
 
+function copyQuizUrl() {
+  const quizUrl = `https://client.martinhanzl.cz/kvizy/${item.value.id}/${item.value.slug}`;
+  navigator.clipboard
+    .writeText(quizUrl)
+    .then(() => {
+      toast.add({
+        title: 'Odkaz zkopírován',
+        description: 'Odkaz na kvíz byl úspěšně zkopírován do schránky.',
+        color: 'green',
+      });
+    })
+    .catch(() => {
+      toast.add({
+        title: 'Chyba',
+        description: 'Nepodařilo se zkopírovat odkaz do schránky.',
+        color: 'red',
+      });
+    });
+}
+
 function removeItemQuestion(index: number) {
   item.value.questions.splice(index, 1);
 }
@@ -172,8 +192,14 @@ definePageMeta({
     <LayoutHeader
       :title="route.params.id === 'pridat' ? 'Nový kvíz' : item.name"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }]"
+      :actions="[
+        route.params.id === 'pridat'
+          ? { type: 'save' }
+          : { type: 'copy', text: 'Kopírovat odkaz na kvíz' },
+        { type: 'save' },
+      ]"
       slug="quizzes"
+      @copy="copyQuizUrl"
       @save="saveItem"
     />
     <div>
