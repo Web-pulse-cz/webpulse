@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     [
       'nuxt-auth-sanctum',
       {
-        baseUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz/',
+        baseUrl: process.env.API_URL ?? 'https://web-pulse.cz/',
         mode: 'token',
         endpoints: {
           csrf: '/sanctum/csrf-cookie',
@@ -22,9 +22,9 @@ export default defineNuxtConfig({
     [
       '@nuxt/image',
       {
-        domains: ['martinhanzl.cz', 'api.martinhanzl.cz'],
+        domains: ['martinhanzl.cz', 'web-pulse.cz'],
         formats: ['webp', 'jpg', 'png', 'jpeg', 'svg'],
-        alias: { img: 'http://api.martinhanzl.cz/content/images/' },
+        alias: { img: 'https://web-pulse.cz/content/images/' },
       },
     ],
     '@vee-validate/nuxt',
@@ -83,19 +83,19 @@ export default defineNuxtConfig({
   css: ['~/assets/css/style.css'],
   runtimeConfig: {
     public: {
-      apiUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz',
+      apiUrl: process.env.API_URL ?? 'https://web-pulse.cz',
       appUrl: process.env.APP_URL ?? 'https://chpp.cz',
     },
   },
 
   routeRules: {
     '/api/**': {
-      proxy: `${process.env.API_URL ?? 'https://api.martinhanzl.cz/'}/api/**`,
+      proxy: `${process.env.API_URL ?? 'https://web-pulse.cz/'}/api/**`,
     },
     '/files/**': {
       proxy: process.env.API_URL
         ? process.env.API_URL + '/files/**'
-        : 'http://api.martinhanzl.cz/content/files/**',
+        : 'http://web-pulse.cz/content/files/**',
     },
   },
   compatibilityDate: '2024-11-01',
