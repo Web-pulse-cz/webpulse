@@ -192,12 +192,11 @@ definePageMeta({
     <LayoutHeader
       :title="route.params.id === 'pridat' ? 'Nový kvíz' : item.name"
       :breadcrumbs="breadcrumbs"
-      :actions="[
+      :actions="
         route.params.id === 'pridat'
-          ? { type: 'save' }
-          : { type: 'copy', text: 'Kopírovat odkaz na kvíz' },
-        { type: 'save' },
-      ]"
+          ? [{ type: 'save' }]
+          : [{ type: 'copy', text: 'Kopírovat odkaz na kvíz' }, { type: 'save' }]
+      "
       slug="quizzes"
       @copy="copyQuizUrl"
       @save="saveItem"
