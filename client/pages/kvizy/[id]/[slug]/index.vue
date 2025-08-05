@@ -155,15 +155,15 @@ useHead(() => {
       <p class="mb-4 text-gray-600">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
       <div v-for="(answer, index) in stats.answers" :key="index" :class="[answer.isCorrect ? 'hidden lg:grid bg-green-100 text-green-500' : 'bg-red-100 text-red-500', ' text-center grid grid-cols-1 lg:grid-cols-3 gap-4 w-full p-4 rounded-lg shadow mb-4 text-wrap text-xs lg:text-sm']">
         <div class="col-span-1 text-wrap">
-          <pre>{{ answer.question }}</pre>
+          <p>{{ answer.question }}</p>
         </div>
         <div class="col-span-1 text-wrap">
           <p class="font-bold">Vaše odpověď:</p>
-          <pre>{{ answer.userAnswer }}</pre>
+          <p>{{ answer.userAnswer }}</p>
         </div>
         <div class="col-span-1 text-wrap">
           <p class="font-bold">Správná odpověď:</p>
-          <pre>{{ answer.correctAnswer }}</pre>
+          <p>{{ answer.correctAnswer }}</p>
         </div>
       </div>
     <NuxtLink v-if="quizFinished" to="/kvizy" class="mt-2">
