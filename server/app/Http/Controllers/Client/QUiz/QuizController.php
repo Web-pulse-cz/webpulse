@@ -68,17 +68,29 @@ class QuizController extends Controller
             App::abort(404, 'Quiz not found');
         }
 
+        $answers = [];
+
         $correctAnswers = 0;
         $incorrectAnswers = 0;
-        foreach ($request['questions'] as $question) {
+        foreach ($request['questions'] as $key => $question) {
+            $answers[$key] = [
+                'id' => $question['id'],
+                'correct' => null,
+                'user_answer' => null,
+                'is_correct' => false,
+            ];
+
             foreach ($question['answers'] as $answer) {
                 $originalAnswer = $quiz->questions->find($question['id'])->answers->find($answer['id']);
                 if ($originalAnswer) {
+                    $answers[$key]['correct'] .= $originalAnswer->is_correct ? $originalAnswer->name : '';
                     if ($originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = true;
+                        $answers[$key]['user_answer'] .= $originalAnswer->name;
                         $correctAnswers++;
                     } else if (!$originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = false;
+                        $answers[$key]['user_answer'] .= $originalAnswer->name;
                         $incorrectAnswers++;
                     }
                 }
@@ -101,7 +113,8 @@ class QuizController extends Controller
             'accuracy' => $accuracy,
             'quizAccuracy' => $quiz->accuracy,
             'correctAnswers' => $correctAnswers,
-            'incorrectAnswers' => $incorrectAnswers
+            'incorrectAnswers' => $incorrectAnswers,
+            'answers' => $answers,
         ]);
     }
 
