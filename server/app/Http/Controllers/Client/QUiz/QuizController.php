@@ -74,10 +74,10 @@ class QuizController extends Controller
         $incorrectAnswers = 0;
         foreach ($request['questions'] as $key => $question) {
             $answers[$key] = [
-                'id' => $question['id'],
-                'correct' => null,
-                'user_answer' => null,
-                'is_correct' => false,
+                'question' => $question->name,
+                'correctAnswer' => null,
+                'userAnswer' => null,
+                'isCorrect' => false,
             ];
 
             foreach ($question['answers'] as $answer) {
@@ -87,6 +87,7 @@ class QuizController extends Controller
                     if ($originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = true;
                         $answers[$key]['user_answer'] .= $originalAnswer->name;
+                        $answers[$key]['isCorrect'] = true;
                         $correctAnswers++;
                     } else if (!$originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = false;
