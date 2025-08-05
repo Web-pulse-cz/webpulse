@@ -37,7 +37,7 @@ const props = defineProps({
 });
 
 const baseClass = computed(() => {
-  return `${typeClasses[props.type] || typeClasses.h1} ${colorClasses[props.color] || colorClasses.black} text-balance ${props.marginBottom} leading-tight tracking-normal`;
+  return `${typeClasses[props.type] || typeClasses.h1} ${colorClasses[props.color] || colorClasses.black} text-balance ${props.marginBottom} leading-tight tracking-normal text-center`;
 });
 </script>
 

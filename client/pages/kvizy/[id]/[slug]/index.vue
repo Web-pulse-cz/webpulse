@@ -47,9 +47,7 @@ function submitQuiz() {
     api.quiz
       .submit(route.params.id, quizData.value)
       .then((response) => {
-        console.log(response);
         stats.value = response;
-        console.log(stats.value);
         quizFinished.value = true;
       })
       .catch((error) => {
@@ -82,12 +80,12 @@ useHead(() => {
 <template>
   <div>
     <div
-      :class="[quizStarted ? 'justify-start' : 'justify-center', 'mb-6 flex flex-col items-center']"
+      class="justify-center mb-6 flex flex-col items-center"
     >
-      <BasePropsHeading type="h1">{{ quizData?.name }}</BasePropsHeading>
+      <BasePropsHeading type="h1" class="text-center">{{ quizData?.name }}</BasePropsHeading>
       <p
         v-if="!quizStarted"
-        class="mb-4 text-center text-gray-600 dark:text-gray-400"
+        class="mb-4 text-center text-gray-600"
         v-html="quizData?.description"
       />
       <p v-if="!quizStarted">Počet otázek: {{ quizData?.questions.length }}</p>
@@ -119,11 +117,11 @@ useHead(() => {
           :key="index"
           :class="[
             answer.is_selected ? 'bg-primary text-white' : 'bg-white text-gray-500',
-            'cursor-pointer rounded-lg p-4 text-sm shadow lg:p-6',
+            'cursor-pointer rounded-lg p-4 text-sm shadow lg:p-6 text-wrap',
           ]"
           @click="markSelected(answer)"
         >
-          <pre>{{ answer.name }}</pre>
+          <p>{{ answer.name }}</p>
         </div>
       </div>
     </div>
@@ -149,17 +147,31 @@ useHead(() => {
         >Dokončit kvíz</BaseButton
       >
     </div>
-    <div v-if="quizFinished" class="mb-6 flex flex-col items-center justify-center">
+    <div v-if="quizFinished && stats" class="mb-6 flex flex-col items-center justify-center">
       <BasePropsHeading type="h2" class="mt-12">Výsledky kvízu</BasePropsHeading>
       <p class="mb-4 text-gray-600 dark:text-gray-400">
         Počet správných odpovědí: {{ stats?.correctAnswers }} z {{ quizData?.questions.length }}
       </p>
-      <p class="mb-4 text-gray-600 dark:text-gray-400">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
-      <NuxtLink to="/kvizy">
-        <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
-      </NuxtLink>
+      <p class="mb-4 text-gray-600 dark:text-gray-600">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
+      <div v-for="(answer, index) in stats.answers" :key="index" :class="[answer.isCorrect ? 'hidden lg:grid bg-green-100 text-green-500' : 'bg-red-100 text-red-500', ' text-center grid grid-cols-1 lg:grid-cols-3 gap-4 w-full p-4 rounded-lg shadow mb-4 text-wrap text-xs lg:text-sm']">
+        <div class="col-span-1 text-wrap">
+          <pre>{{ answer.question }}</pre>
+        </div>
+        <div class="col-span-1 text-wrap">
+          <p class="font-bold">Vaše odpověď:</p>
+          <pre>{{ answer.userAnswer }}</pre>
+        </div>
+        <div class="col-span-1 text-wrap">
+          <p class="font-bold">Správná odpověď:</p>
+          <pre>{{ answer.correctAnswer }}</pre>
+        </div>
+      </div>
+    <NuxtLink v-if="quizFinished" to="/kvizy" class="mt-2">
+      <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
+    </NuxtLink>
     </div>
     <NuxtLink
+        v-if="!quizFinished"
       to="/kvizy"
       class="relative bottom-2 left-1/2 mt-6 inline-block -translate-x-1/2 transform rounded-lg p-2 text-center text-xs text-primary ring-1 ring-primary lg:hidd"
     >
