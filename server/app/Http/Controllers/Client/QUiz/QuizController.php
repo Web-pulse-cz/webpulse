@@ -83,15 +83,15 @@ class QuizController extends Controller
             foreach ($question['answers'] as $answer) {
                 $originalAnswer = $quiz->questions->find($question['id'])->answers->find($answer['id']);
                 if ($originalAnswer) {
-                    $answers[$key]['correct'] .= $originalAnswer->is_correct ? $originalAnswer->name : '';
+                    $answers[$key]['correctAnswer'] .= $originalAnswer->is_correct ? $originalAnswer->name : '';
                     if ($originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = true;
-                        $answers[$key]['user_answer'] .= $originalAnswer->name;
+                        $answers[$key]['userAnswer'] .= $originalAnswer->name;
                         $answers[$key]['isCorrect'] = true;
                         $correctAnswers++;
                     } else if (!$originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = false;
-                        $answers[$key]['user_answer'] .= $originalAnswer->name;
+                        $answers[$key]['userAnswer'] .= $originalAnswer->name;
                         $incorrectAnswers++;
                     }
                 }
