@@ -149,10 +149,10 @@ useHead(() => {
     </div>
     <div v-if="quizFinished && stats" class="mb-6 flex flex-col items-center justify-center">
       <BasePropsHeading type="h2" class="mt-12">Výsledky kvízu</BasePropsHeading>
-      <p class="mb-4 text-gray-600 dark:text-gray-400">
+      <p class="mb-4 text-gray-600">
         Počet správných odpovědí: {{ stats?.correctAnswers }} z {{ quizData?.questions.length }}
       </p>
-      <p class="mb-4 text-gray-600 dark:text-gray-600">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
+      <p class="mb-4 text-gray-600">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
       <div v-for="(answer, index) in stats.answers" :key="index" :class="[answer.isCorrect ? 'hidden lg:grid bg-green-100 text-green-500' : 'bg-red-100 text-red-500', ' text-center grid grid-cols-1 lg:grid-cols-3 gap-4 w-full p-4 rounded-lg shadow mb-4 text-wrap text-xs lg:text-sm']">
         <div class="col-span-1 text-wrap">
           <pre>{{ answer.question }}</pre>
