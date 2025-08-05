@@ -74,7 +74,7 @@ class QuizController extends Controller
         $incorrectAnswers = 0;
         foreach ($request['questions'] as $key => $question) {
             $answers[$key] = [
-                'question' => $question->name,
+                'question' => $question['name'],
                 'correctAnswer' => null,
                 'userAnswer' => null,
                 'isCorrect' => false,
