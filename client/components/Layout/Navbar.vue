@@ -44,7 +44,7 @@ const topMenu = ref({});
         <a class="-m-1.5 p-1.5">
           <span class="sr-only">CHPP s. r. o.</span>
           <NuxtLink to="/">
-            <img class="h-14 w-auto" src="/static/img/LOGO-CHPP.svg" alt="logo" />
+            <!--            <img class="h-14 w-auto" src="./static/img/LOGO-CHPP.svg" alt="logo" /> -->
           </NuxtLink>
         </a>
       </div>
@@ -142,7 +142,7 @@ const topMenu = ref({});
         <div class="flex items-center justify-between">
           <a href="#" class="-m-1.5 p-1.5">
             <span class="sr-only">Your Company</span>
-            <img class="h-8 w-auto" src="public/static/img/LOGO-CHPP.svg" alt="" />
+            <!--            <img class="h-8 w-auto" src="public/static/img/LOGO-CHPP.svg" alt="" /> -->
           </a>
           <button
             type="button"
