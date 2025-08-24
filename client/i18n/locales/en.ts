@@ -1,5 +1,35 @@
 export default {
-  welcome: "Welcome to Martin CHPP's website",
+  general: {
+    metaTitle: 'We innovate the world of passportization',
+    metaDescription:
+      'With a team of experts, we provide everything from building passportization, through engineering services, to comprehensive facility management — all tailored precisely to your specific needs and requirements.',
+    categories: 'Categories',
+    aboutUs: 'About us',
+  },
+  layout: {
+    home: 'Home',
+    contact: {
+      title: 'We will get back to you as soon as possible!',
+    },
+    footer: {
+      rightsReserved: 'All rights reserved',
+      company: 'Company',
+      home: 'Home',
+      services: 'Services',
+      clients: 'Clients',
+      projects: 'Projects',
+      blog: 'Blog',
+      support: 'Support',
+      FAQ: 'Frequently Asked Questions',
+      GDPR: 'GDPR',
+      cookies: 'Cookies',
+      stayInTouch: 'Let’s stay in touch',
+      email: 'E-mail',
+      submitForm: 'By submitting the form, you agree to the',
+      personalInformation: 'processing of personal data',
+      createdBy: 'Created by Martin Hanzl',
+    },
+  },
   cookies: {
     title: 'Cookies',
     description:
@@ -22,104 +52,6 @@ export default {
     advertisementCookiesDescription:
       'Advertisement cookies allow us to display ads that match your interests and track their effectiveness. You may refuse these cookies.',
   },
-  general: {
-    categories: 'Categories',
-    aboutUs: 'About us',
-  },
-  carousel: {
-    slide1: {
-      title: 'We innovate the world',
-      titleColor: 'with passportization',
-      description: 'Passportization tailored to your unique needs.',
-    },
-    slide2: {
-      title: 'Efficient scanning',
-      titleColor: 'by drone',
-      description: 'Any terrain or object, from linear structures to complex buildings.',
-    },
-    slide3: {
-      title: 'Tailored to your',
-      titleColor: 'needs',
-      description: 'Project management customized to specific needs and requirements.',
-    },
-  },
-  benefitCard: {
-    pasportization: {
-      title: 'Building Passportization',
-      description:
-        'Building passportization is our main focus and a key component of effective building management.',
-    },
-    engineering: {
-      title: 'Engineering Services',
-      description:
-        'We coordinate engineering services in cooperation with top professionals in the construction industry.',
-    },
-    facilityManagement: {
-      title: 'Facility Management',
-      description:
-        'We collaborate with facility management experts to ensure the perfect integration of passportization and operations.',
-    },
-  },
-  colaborations: {
-    title: 'Our Collaborations',
-    description:
-      'In the field of passportization, we apply a comprehensive approach and work with leading companies in the industry.',
-  },
-  homePhotoAndText: {
-    title: 'Podporujeme efektivní správu nemovitostí pasportizací',
-    description:
-      'Efektivně spravujte své nemovitosti díky pasportizaci. Získáte komplexní přehled o stavu objektu, což usnadňuje plánování rekonstrukcí a údržby. Naše interní metodika vychází ze zkušeností v oboru, zaměřuje se na přesné a aktuální zaznamenávání informací o budovách. Naším cílem je zajistit, že informace o budově jsou vždy aktuální, přesné a snadno dostupné.',
-  },
-  home: {
-    hero: {
-      titleMark: 'We create websites',
-      title: 'that pulse with your success',
-      description:
-        'Every project is unique. We build websites and applications tailored to your needs.',
-    },
-    technologiesTitle: 'Technologies we use',
-  },
-  benefits: {
-    title: 'Why choose us?',
-    data: [
-      {
-        title: 'Websites and applications that pulse with your success.',
-        description: 'We listen to what you need and find the best possible solutions.',
-      },
-      {
-        title: 'Quality and functionality',
-        description:
-          'Modern design and custom technical solutions perfectly aligned with your needs.',
-      },
-      {
-        title: 'Speed and reliability',
-        description:
-          'We deliver on time and without unnecessary issues so you can focus on your business.',
-      },
-      {
-        title: 'Innovation and creativity',
-        description:
-          'We’re not afraid of new technologies and approaches because we believe in constant progress.',
-      },
-      {
-        title: 'Friendly communication',
-        description:
-          'We’re not boring IT folks, but partners on your path to success, sharing your passion for results.',
-      },
-    ],
-  },
-  services: {
-    title: 'Services we offer',
-    pricePer: 'price per ',
-    hour: 'hour',
-    project: 'project',
-    demand: 'Request a quote',
-    price: 'Price',
-  },
-  demand: {
-    title: 'Non-binding inquiry',
-    submitButton: 'Submit inquiry',
-  },
   contactForm: {
     title: 'Contact us!',
     fullName: 'Full name',
@@ -130,37 +62,16 @@ export default {
     offerPrice: 'Proposed price',
     url: 'Project URL',
     service: 'Service',
-    submit: 'Send',
+    submit: 'Submit',
     submitForm: 'By submitting the form, you agree to the',
     personalInformation: 'processing of personal data',
     button: 'Contact',
   },
-  layoutContact: {
-    title: 'We will get back to you as soon as possible!',
-  },
   whyUs: {
-    tittle: 'Why us?',
+    title: 'Why us?',
     subtitle: 'Coordination in one place',
     description:
-      'With our team of experts, we provide everything from building passportization and engineering services to comprehensive facility management — all tailored to your specific needs and requirements.',
-  },
-  footer: {
-    rightsReserved: 'All rights reserved',
-    company: 'Company',
-    home: 'Home',
-    services: 'Services',
-    clients: 'Clients',
-    projects: 'Projects',
-    blog: 'Blog',
-    support: 'Support',
-    FAQ: 'Frequently Asked Questions',
-    GDPR: 'GDPR',
-    cookies: 'Cookies',
-    stayInTouch: 'Let’s stay in touch',
-    email: 'E-mail',
-    submitForm: 'By submitting the form, you agree to the',
-    personalInformation: 'processing of personal data',
-    createdBy: 'Created by Martin Hanzl',
+      'With a team of experts, we provide everything from building passportization, through engineering services, to comprehensive facility management — all tailored precisely to your specific needs and requirements.',
   },
   pagination: {
     previous: 'Previous',
@@ -177,11 +88,71 @@ export default {
     faq: 'faq',
     info: 'info',
     post: 'posts',
+    review: 'reference',
   },
   faq: {
     title: 'Frequently Asked Questions',
-    meta_title: 'Frequently Asked Questions | CHPP',
+    meta_title: 'Frequently Asked Questions',
     meta_description:
-      'Here you will find answers to the most common questions about our services, building passportization, and other related topics.',
+      'Here you will find answers to the most common questions about our services, building passportization, and other topics.',
+  },
+  carousel: {
+    data: [
+      {
+        title: 'We innovate the world',
+        titleColor: 'with passportization',
+        description: 'Passportization tailored to your unique needs.',
+        img: '/static/img/slide-1.svg',
+      },
+      {
+        title: 'Efficient scanning',
+        titleColor: 'by drone',
+        description: 'Any terrain or object, from linear structures to complex buildings.',
+        img: '/static/img/slide-2.svg',
+      },
+      {
+        title: 'Tailored to your',
+        titleColor: 'needs',
+        description: 'Project management for specific needs and specifications.',
+        img: '/static/img/slide-3.svg',
+      },
+    ],
+  },
+  home: {
+    photoAndText: {
+      title: 'We support efficient property management through passportization',
+      description:
+        'Manage your properties effectively thanks to passportization. You gain a comprehensive overview of the object’s condition, facilitating the planning of renovations and maintenance. Our internal methodology is based on industry experience and focuses on accurate and up-to-date recording of building information. Our goal is to ensure that building information is always current, precise, and easily accessible.',
+    },
+    collaborations: {
+      title: 'Our collaborations',
+      description:
+        'In the field of passportization, we apply a comprehensive approach and collaborate with leading companies in the industry.',
+    },
+  },
+  demand: {
+    title: 'Non-binding inquiry',
+    submitButton: 'Submit inquiry',
+  },
+  review: {
+    title: 'References',
+    meta_title: 'References',
+    meta_description:
+      'Here you will find references from our clients who have used our services in building passportization and facility management.',
+  },
+  blog: {
+    title: 'Blog',
+    meta_title: 'Blog',
+    meta_description:
+      'On our blog, you will find articles and news about building passportization, facility management, and other topics related to our services.',
+  },
+  info: {
+    title: 'Information page',
+    meta_title: 'Information page',
+    meta_description:
+      'Here you will find important information about our company, our services, and other topics related to building passportization and facility management.',
+  },
+  error: {
+    title: 'Sorry, the page was not found',
   },
 };

@@ -43,8 +43,8 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-      title: 'Inovujeme svět pasportizace',
-      // titleTemplate: '%s | Martin Hanzl',
+      title: 'Martin Hanzl',
+      titleTemplate: '%s | Martin Hanzl',
       htmlAttrs: {
         lang: 'cs',
       },
@@ -84,18 +84,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_URL ?? 'https://web-pulse.cz',
-      appUrl: process.env.APP_URL ?? 'https://chpp.cz',
+      appUrl: process.env.APP_URL ?? 'https://web-pulse.cz',
     },
   },
 
   routeRules: {
     '/api/**': {
       proxy: `${process.env.API_URL ?? 'https://web-pulse.cz/'}/api/**`,
-    },
-    '/files/**': {
-      proxy: process.env.API_URL
-        ? process.env.API_URL + '/files/**'
-        : 'http://web-pulse.cz/content/files/**',
     },
   },
   compatibilityDate: '2024-11-01',
@@ -191,6 +186,27 @@ export default defineNuxtConfig({
         en: '/faq/categories/[id]/[slug]',
         de: '/faq/kategorien/[id]/[slug]',
         pl: '/faq/kategorie/[id]/[slug]',
+      },
+      'review/index': {
+        cs: '/reference',
+        sk: '/referencie',
+        en: '/reference',
+        de: '/referenz',
+        pl: '/odniesienie',
+      },
+      'review/category/[id]/[slug]/index': {
+        cs: '/reference/kategorie/[id]/[slug]',
+        sk: '/referencie/kategorie/[id]/[slug]',
+        en: '/reference/categories/[id]/[slug]',
+        de: '/referenz/kategorien/[id]/[slug]',
+        pl: '/odniesienie/kategorie/[id]/[slug]',
+      },
+      'review/[id]/[slug]/index': {
+        cs: '/reference/[id]/[slug]',
+        sk: '/referencie/[id]/[slug]',
+        en: '/reference/[id]/[slug]',
+        de: '/referenz/[id]/[slug]',
+        pl: '/odniesienie/[id]/[slug]',
       },
     },
   },

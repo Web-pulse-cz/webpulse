@@ -1,9 +1,39 @@
 export default {
-  welcome: 'Witamy na stronie CHPP',
+  general: {
+    metaTitle: 'Innowujemy świat paszportyzacji',
+    metaDescription:
+      'Z zespołem ekspertów zapewniamy wszystko – od paszportyzacji budynków, przez usługi inżynieryjne, aż po kompleksowy facility management, wszystko dokładnie według Twoich specyficznych potrzeb i wymagań.',
+    categories: 'Kategorie',
+    aboutUs: 'O nas',
+  },
+  layout: {
+    home: 'Strona główna',
+    contact: {
+      title: 'Skontaktujemy się z Tobą jak najszybciej!',
+    },
+    footer: {
+      rightsReserved: 'Wszelkie prawa zastrzeżone',
+      company: 'Firma',
+      home: 'Strona główna',
+      services: 'Usługi',
+      clients: 'Klienci',
+      projects: 'Projekty',
+      blog: 'Blog',
+      support: 'Wsparcie',
+      FAQ: 'Najczęściej zadawane pytania',
+      GDPR: 'RODO',
+      cookies: 'Pliki cookies',
+      stayInTouch: 'Pozostańmy w kontakcie',
+      email: 'E-mail',
+      submitForm: 'Przesyłając formularz, zgadzasz się na',
+      personalInformation: 'przetwarzanie danych osobowych',
+      createdBy: 'Stworzone przez Martin Hanzl',
+    },
+  },
   cookies: {
     title: 'Pliki cookies',
     description:
-      'Ta strona korzysta z plików cookies, aby zapewnić prawidłowe działanie oraz poprawić komfort użytkowania.',
+      'Ta strona używa plików cookies, aby zapewnić prawidłowe działanie i poprawić Twoje doświadczenie użytkownika.',
     acceptAll: 'Akceptuj wszystkie',
     acceptSelected: 'Akceptuj wybrane',
     acceptNecessary: 'Akceptuj tylko niezbędne',
@@ -11,119 +41,22 @@ export default {
     settingsTitle: 'Ustawienia plików cookies',
     technicalCookiesTitle: 'Techniczne pliki cookies',
     technicalCookiesDescription:
-      'Techniczne pliki cookies są niezbędne do prawidłowego funkcjonowania strony. Zapewniają bezpieczeństwo, prawidłowe wyświetlanie na różnych urządzeniach, umożliwiają wypełnianie i wysyłanie formularzy, zarządzanie koszykiem i logowanie. Bez tych plików cookies sklep internetowy nie działa. Nie można ich odrzucić.',
+      'Techniczne pliki cookies są niezbędne do prawidłowego działania strony. Zapewniają bezpieczeństwo, prawidłowe wyświetlanie na różnych urządzeniach, umożliwiają wypełnianie i wysyłanie formularzy, zarządzanie koszykiem i logowanie. Bez tych plików cookies sklep internetowy nie działa. Nie można ich odrzucić.',
     marketingCookiesTitle: 'Marketingowe pliki cookies',
     marketingCookiesDescription:
-      'Marketingowe pliki cookies służą do wyświetlania reklam dopasowanych do Twoich zainteresowań. Pomagają nam śledzić i oceniać skuteczność naszych kampanii reklamowych. Możesz je odrzucić.',
+      'Marketingowe pliki cookies służą do wyświetlania reklam odpowiednich dla Ciebie. Pomagają nam śledzić i oceniać skuteczność naszych kampanii reklamowych. Możesz je odrzucić.',
     analyticsCookiesTitle: 'Analityczne pliki cookies',
     analyticsCookiesDescription:
-      'Analityczne pliki cookies dostarczają nam informacji o tym, jak korzystasz z naszej strony i usług. Dzięki nim możemy stale ulepszać treści i doświadczenia użytkownika oraz śledzić skuteczność kampanii reklamowych. Możesz je odrzucić.',
+      'Analityczne pliki cookies dostarczają nam informacji o tym, jak korzystasz z naszej strony i usług. Dzięki nim możemy stale ulepszać zawartość i doświadczenie użytkownika oraz monitorować skuteczność kampanii reklamowych. Możesz je odrzucić.',
     advertisementCookiesTitle: 'Reklamowe pliki cookies',
     advertisementCookiesDescription:
       'Reklamowe pliki cookies pozwalają nam wyświetlać reklamy dopasowane do Twoich zainteresowań i śledzić ich skuteczność. Możesz je odrzucić.',
-  },
-  general: {
-    categories: 'Kategorie',
-    aboutUs: 'O nas',
-  },
-  carousel: {
-    slide1: {
-      title: 'Innowujemy świat',
-      titleColor: 'paszportyzacja',
-      description: 'Paszportyzacja dostosowana do Twoich unikalnych potrzeb.',
-    },
-    slide2: {
-      title: 'Efektywne skanowanie',
-      titleColor: 'dronem',
-      description: 'Każdy teren lub obiekt – od liniowych struktur po złożone budowle.',
-    },
-    slide3: {
-      title: 'Dopasowane do Twoich',
-      titleColor: 'potrzeb',
-      description: 'Zarządzanie projektem zgodnie z konkretnymi wymaganiami i specyfikacją.',
-    },
-  },
-  benefitCard: {
-    pasportization: {
-      title: 'Paszportyzacja budynków',
-      description:
-        'Paszportyzacja budynków to nasz główny kierunek, kluczowy dla efektywnego zarządzania nieruchomościami.',
-    },
-    engineering: {
-      title: 'Działalność inżynieryjna',
-      description:
-        'W koordynacji usług inżynieryjnych współpracujemy z czołowymi specjalistami z branży budowlanej.',
-    },
-    facilityManagement: {
-      title: 'Facility management',
-      description:
-        'Współpracujemy z ekspertami z zakresu facility management, aby połączyć paszportyzację z kompleksowym zarządzaniem.',
-    },
-  },
-  colaborations: {
-    title: 'Współpraca',
-    description:
-      'W zakresie paszportyzacji stosujemy kompleksowe podejście i współpracujemy z wiodącymi firmami w branży.',
-  },
-  homePhotoAndText: {
-    title: 'Podporujeme efektivní správu nemovitostí pasportizací',
-    description:
-      'Efektivně spravujte své nemovitosti díky pasportizaci. Získáte komplexní přehled o stavu objektu, což usnadňuje plánování rekonstrukcí a údržby. Naše interní metodika vychází ze zkušeností v oboru, zaměřuje se na přesné a aktuální zaznamenávání informací o budovách. Naším cílem je zajistit, že informace o budově jsou vždy aktuální, přesné a snadno dostupné.',
-  },
-  home: {
-    hero: {
-      titleMark: 'Tworzymy strony internetowe',
-      title: 'które pulsują Twoim sukcesem',
-      description:
-        'Każdy projekt to oryginał. Tworzymy strony i aplikacje dopasowane do Twoich potrzeb.',
-    },
-    technologiesTitle: 'Technologie, których używamy',
-  },
-  benefits: {
-    title: 'Dlaczego warto nas wybrać?',
-    data: [
-      {
-        title: 'Strony i aplikacje, które pulsują Twoim sukcesem.',
-        description: 'Słuchamy Twoich potrzeb i szukamy najlepszych rozwiązań.',
-      },
-      {
-        title: 'Jakość i funkcjonalność',
-        description: 'Nowoczesny design i rozwiązania techniczne dostosowane do Twoich potrzeb.',
-      },
-      {
-        title: 'Szybkość i niezawodność',
-        description:
-          'Dostarczamy na czas i bez zbędnych problemów, abyś mógł skupić się na swoim biznesie.',
-      },
-      {
-        title: 'Innowacje i kreatywność',
-        description:
-          'Nie boimy się nowych technologii i podejść, ponieważ wierzymy w ciągły rozwój.',
-      },
-      {
-        title: 'Przyjazna komunikacja',
-        description:
-          'Nie jesteśmy nudnymi informatykami, ale partnerami na drodze do sukcesu, którzy dzielą z Tobą pasję do efektów.',
-      },
-    ],
-  },
-  services: {
-    title: 'Usługi, które oferujemy',
-    pricePer: 'cena za ',
-    hour: 'godzinę',
-    project: 'projekt',
-    demand: 'Zapytaj niezobowiązująco',
-    price: 'Cena',
-  },
-  demand: {
-    title: 'Niezobowiązujące zapytanie',
-    submitButton: 'Wyślij zapytanie',
   },
   contactForm: {
     title: 'Skontaktuj się z nami!',
     fullName: 'Imię i nazwisko',
     email: 'E-mail',
-    phonePrefix: 'Prefix',
+    phonePrefix: 'Prefiks',
     phone: 'Telefon',
     message: 'Twoje zapytanie',
     offerPrice: 'Proponowana cena',
@@ -134,32 +67,11 @@ export default {
     personalInformation: 'przetwarzanie danych osobowych',
     button: 'Kontakt',
   },
-  layoutContact: {
-    title: 'Skontaktujemy się z Tobą tak szybko, jak to możliwe!',
-  },
   whyUs: {
-    tittle: 'Dlaczego my?',
+    title: 'Dlaczego my?',
     subtitle: 'Koordynacja w jednym miejscu',
     description:
-      'Zespół naszych specjalistów zapewnia wszystko – od paszportyzacji budynków, przez usługi inżynieryjne, aż po kompleksowy facility management – wszystko zgodnie z Twoimi indywidualnymi potrzebami i wymaganiami.',
-  },
-  footer: {
-    rightsReserved: 'Wszelkie prawa zastrzeżone',
-    company: 'Firma',
-    home: 'Strona główna',
-    services: 'Usługi',
-    clients: 'Klienci',
-    projects: 'Projekty',
-    blog: 'Blog',
-    support: 'Wsparcie',
-    FAQ: 'Najczęściej zadawane pytania',
-    GDPR: 'RODO',
-    cookies: 'Pliki cookies',
-    stayInTouch: 'Pozostańmy w kontakcie',
-    email: 'E-mail',
-    submitForm: 'Przesyłając formularz, zgadzasz się na',
-    personalInformation: 'przetwarzanie danych osobowych',
-    createdBy: 'Stworzone przez Martin Hanzl',
+      'Z zespołem ekspertów zapewniamy wszystko – od paszportyzacji budynków, przez usługi inżynieryjne, aż po kompleksowy facility management – wszystko dokładnie według Twoich specyficznych potrzeb i wymagań.',
   },
   pagination: {
     previous: 'Poprzednia',
@@ -176,11 +88,71 @@ export default {
     faq: 'faq',
     info: 'info',
     post: 'artykuły',
+    review: 'odniesienie',
   },
   faq: {
     title: 'Najczęściej zadawane pytania',
-    meta_title: 'Najczęściej zadawane pytania | CHPP',
+    meta_title: 'Najczęściej zadawane pytania',
     meta_description:
       'Tutaj znajdziesz odpowiedzi na najczęściej zadawane pytania dotyczące naszych usług, paszportyzacji budynków i innych tematów.',
+  },
+  carousel: {
+    data: [
+      {
+        title: 'Innowujemy świat',
+        titleColor: 'paszportyzacja',
+        description: 'Paszportyzacja dostosowana do Twoich unikalnych potrzeb.',
+        img: '/static/img/slide-1.svg',
+      },
+      {
+        title: 'Efektywne skanowanie',
+        titleColor: 'dronem',
+        description: 'Każdy teren lub obiekt – od liniowych struktur po złożone budowle.',
+        img: '/static/img/slide-2.svg',
+      },
+      {
+        title: 'Dopasowane do Twoich',
+        titleColor: 'potrzeb',
+        description: 'Zarządzanie projektem zgodnie z konkretnymi wymaganiami i specyfikacją.',
+        img: '/static/img/slide-3.svg',
+      },
+    ],
+  },
+  home: {
+    photoAndText: {
+      title: 'Wspieramy efektywne zarządzanie nieruchomościami dzięki paszportyzacji',
+      description:
+        'Efektywnie zarządzaj swoimi nieruchomościami dzięki paszportyzacji. Uzyskasz kompleksowy przegląd stanu obiektu, co ułatwia planowanie remontów i konserwacji. Nasza wewnętrzna metodologia opiera się na doświadczeniu w branży i koncentruje się na precyzyjnym oraz aktualnym rejestrowaniu informacji o budynkach. Naszym celem jest zapewnienie, że informacje o budynku są zawsze aktualne, dokładne i łatwo dostępne.',
+    },
+    collaborations: {
+      title: 'Współpracujemy',
+      description:
+        'W dziedzinie paszportyzacji stosujemy kompleksowe podejście i współpracujemy z wiodącymi firmami w branży.',
+    },
+  },
+  demand: {
+    title: 'Niezobowiązujące zapytanie',
+    submitButton: 'Wyślij zapytanie',
+  },
+  review: {
+    title: 'Referencje',
+    meta_title: 'Referencje',
+    meta_description:
+      'Tutaj znajdziesz referencje naszych klientów, którzy korzystali z naszych usług w zakresie paszportyzacji budynków i facility managementu.',
+  },
+  blog: {
+    title: 'Blog',
+    meta_title: 'Blog',
+    meta_description:
+      'Na naszym blogu znajdziesz artykuły i nowości z zakresu paszportyzacji budynków, facility managementu i innych tematów związanych z naszymi usługami.',
+  },
+  info: {
+    title: 'Strona informacyjna',
+    meta_title: 'Strona informacyjna',
+    meta_description:
+      'Tutaj znajdziesz ważne informacje o naszej firmie, naszych usługach oraz innych tematach związanych z paszportyzacją budynków i facility managementem.',
+  },
+  error: {
+    title: 'Przepraszamy, strona nie została znaleziona',
   },
 };
