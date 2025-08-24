@@ -1,5 +1,35 @@
 export default {
-  welcome: 'Willkommen auf der Website von CHPP',
+  general: {
+    metaTitle: 'Wir revolutionieren die Welt der Passpunktierung',
+    metaDescription:
+      'Mit einem Expertenteam bieten wir alles – von der Gebäudepasspunktierung über Ingenieurdienstleistungen bis hin zum umfassenden Facility Management – genau nach Ihren spezifischen Bedürfnissen und Anforderungen.',
+    categories: 'Kategorien',
+    aboutUs: 'Über uns',
+  },
+  layout: {
+    home: 'Startseite',
+    contact: {
+      title: 'Wir melden uns so schnell wie möglich bei Ihnen!',
+    },
+    footer: {
+      rightsReserved: 'Alle Rechte vorbehalten',
+      company: 'Unternehmen',
+      home: 'Startseite',
+      services: 'Dienstleistungen',
+      clients: 'Kunden',
+      projects: 'Projekte',
+      blog: 'Blog',
+      support: 'Support',
+      FAQ: 'Häufig gestellte Fragen',
+      GDPR: 'DSGVO',
+      cookies: 'Cookies',
+      stayInTouch: 'Bleiben wir in Kontakt',
+      email: 'E-Mail',
+      submitForm: 'Mit dem Absenden des Formulars stimmen Sie der',
+      personalInformation: 'Verarbeitung personenbezogener Daten',
+      createdBy: 'Erstellt von Martin Hanzl',
+    },
+  },
   cookies: {
     title: 'Cookies',
     description:
@@ -22,145 +52,26 @@ export default {
     advertisementCookiesDescription:
       'Werbe-Cookies ermöglichen es uns, Werbung anzuzeigen, die Ihren Interessen entspricht, und deren Wirksamkeit zu verfolgen. Diese Cookies können abgelehnt werden.',
   },
-  general: {
-    categories: 'Kategorien',
-    aboutUs: 'Über uns',
-  },
-  carousel: {
-    slide1: {
-      title: 'Wir verändern die Welt',
-      titleColor: 'durch Digitalisierung',
-      description: 'Digitalisierung, angepasst an Ihre individuellen Bedürfnisse.',
-    },
-    slide2: {
-      title: 'Effizientes Scannen',
-      titleColor: 'mit Drohne',
-      description: 'Jedes Gelände oder Objekt – von Leitungen bis zu komplexen Bauwerken.',
-    },
-    slide3: {
-      title: 'Individuell auf Ihre',
-      titleColor: 'Bedürfnisse',
-      description: 'Projektmanagement abgestimmt auf konkrete Anforderungen und Spezifikationen.',
-    },
-  },
-  benefitCard: {
-    pasportization: {
-      title: 'Gebäudepassportisierung',
-      description:
-        'Die Gebäudepassportisierung ist unser Hauptfokus und entscheidend für ein effektives Gebäudemanagement.',
-    },
-    engineering: {
-      title: 'Ingenieurdienstleistungen',
-      description:
-        'Bei der Koordination von Ingenieurdienstleistungen arbeiten wir mit Spitzenkräften der Baubranche zusammen.',
-    },
-    facilityManagement: {
-      title: 'Facility Management',
-      description:
-        'Wir kooperieren mit Experten im Facility Management, um eine ideale Verbindung von Passportisierung und Verwaltung zu schaffen.',
-    },
-  },
-  colaborations: {
-    title: 'Unsere Partner',
-    description:
-      'Im Bereich der Gebäudepassportisierung verfolgen wir einen ganzheitlichen Ansatz und arbeiten mit führenden Unternehmen der Branche zusammen.',
-  },
-  homePhotoAndText: {
-    title: 'Podporujeme efektivní správu nemovitostí pasportizací',
-    description:
-      'Efektivně spravujte své nemovitosti díky pasportizaci. Získáte komplexní přehled o stavu objektu, což usnadňuje plánování rekonstrukcí a údržby. Naše interní metodika vychází ze zkušeností v oboru, zaměřuje se na přesné a aktuální zaznamenávání informací o budovách. Naším cílem je zajistit, že informace o budově jsou vždy aktuální, přesné a snadno dostupné.',
-  },
-  home: {
-    hero: {
-      titleMark: 'Wir erstellen Websites',
-      title: 'die von Ihrem Erfolg leben',
-      description:
-        'Jedes Projekt ist ein Unikat. Wir entwickeln Websites und Anwendungen, die auf Ihre Bedürfnisse zugeschnitten sind.',
-    },
-    technologiesTitle: 'Technologien, die wir verwenden',
-  },
-  benefits: {
-    title: 'Warum Sie uns wählen sollten?',
-    data: [
-      {
-        title: 'Websites und Anwendungen, die von Ihrem Erfolg leben.',
-        description: 'Wir hören zu und finden die besten Lösungen für Ihre Bedürfnisse.',
-      },
-      {
-        title: 'Qualität und Funktionalität',
-        description:
-          'Modernes Design und maßgeschneiderte technische Lösungen, die perfekt zu Ihnen passen.',
-      },
-      {
-        title: 'Schnelligkeit und Zuverlässigkeit',
-        description:
-          'Wir liefern pünktlich und ohne unnötige Komplikationen, damit Sie sich auf Ihr Business konzentrieren können.',
-      },
-      {
-        title: 'Innovation und Kreativität',
-        description:
-          'Wir scheuen keine neuen Technologien oder Ansätze, weil wir an ständige Weiterentwicklung glauben.',
-      },
-      {
-        title: 'Freundliche Kommunikation',
-        description:
-          'Wir sind keine langweiligen ITler, sondern Partner auf dem Weg zum Erfolg, die Ihre Begeisterung für Ergebnisse teilen.',
-      },
-    ],
-  },
-  services: {
-    title: 'Dienstleistungen, die wir anbieten',
-    pricePer: 'Preis pro ',
-    hour: 'Stunde',
-    project: 'Projekt',
-    demand: 'Unverbindlich anfragen',
-    price: 'Preis',
-  },
-  demand: {
-    title: 'Unverbindliche Anfrage',
-    submitButton: 'Anfrage absenden',
-  },
   contactForm: {
     title: 'Kontaktieren Sie uns!',
     fullName: 'Name',
     email: 'E-Mail',
     phonePrefix: 'Vorwahl',
     phone: 'Telefon',
-    message: 'Ihre Anfrage',
+    message: 'Ihre Nachricht',
     offerPrice: 'Vorgeschlagener Preis',
     url: 'Projekt-URL',
     service: 'Dienstleistung',
     submit: 'Absenden',
     submitForm: 'Mit dem Absenden des Formulars stimmen Sie der',
-    personalInformation: 'Verarbeitung personenbezogener Daten',
+    personalInformation: 'Verarbeitung personenbezogener Daten zu',
     button: 'Kontakt',
   },
-  layoutContact: {
-    title: 'Wir melden uns so schnell wie möglich bei Ihnen!',
-  },
   whyUs: {
-    tittle: 'Warum wir?',
+    title: 'Warum wir?',
     subtitle: 'Koordination an einem Ort',
     description:
-      'Mit einem Expertenteam bieten wir alles aus einer Hand – von der Gebäudepassportisierung über Ingenieurdienstleistungen bis hin zum umfassenden Facility Management, exakt nach Ihren spezifischen Anforderungen und Bedürfnissen.',
-  },
-  footer: {
-    rightsReserved: 'Alle Rechte vorbehalten',
-    company: 'Unternehmen',
-    home: 'Startseite',
-    services: 'Dienstleistungen',
-    clients: 'Kunden',
-    projects: 'Projekte',
-    blog: 'Blog',
-    support: 'Support',
-    FAQ: 'Häufig gestellte Fragen',
-    GDPR: 'DSGVO',
-    cookies: 'Cookies',
-    stayInTouch: 'Bleiben wir in Kontakt',
-    email: 'E-Mail',
-    submitForm: 'Mit dem Absenden des Formulars stimmen Sie der',
-    personalInformation: 'Verarbeitung personenbezogener Daten',
-    createdBy: 'Erstellt von Martin Hanzl',
+      'Mit einem Expertenteam bieten wir alles – von der Gebäudepassportierung über Ingenieurdienstleistungen bis hin zum umfassenden Facility Management – genau nach Ihren spezifischen Bedürfnissen und Anforderungen.',
   },
   pagination: {
     previous: 'Zurück',
@@ -177,11 +88,71 @@ export default {
     faq: 'faq',
     info: 'info',
     post: 'artikel',
+    review: 'referenz',
   },
   faq: {
     title: 'Häufig gestellte Fragen',
-    meta_title: 'Häufig gestellte Fragen | CHPP',
+    meta_title: 'Häufig gestellte Fragen',
     meta_description:
-      'Hier finden Sie Antworten auf die häufigsten Fragen zu unseren Dienstleistungen, der Gebäudepassportisierung und weiteren Themen.',
+      'Hier finden Sie Antworten auf die häufigsten Fragen zu unseren Dienstleistungen, der Gebäudepassportierung und weiteren Themen.',
+  },
+  carousel: {
+    data: [
+      {
+        title: 'Wir revolutionieren die Welt',
+        titleColor: 'der Passpunktierung',
+        description: 'Passpunktierung, angepasst an Ihre individuellen Bedürfnisse.',
+        img: '/static/img/slide-1.svg',
+      },
+      {
+        title: 'Effizientes Scannen',
+        titleColor: 'mit Drohne',
+        description: 'Jedes Gelände oder Objekt – von Leitungen bis zu komplexen Bauwerken.',
+        img: '/static/img/slide-2.svg',
+      },
+      {
+        title: 'Maßgeschneidert auf Ihre',
+        titleColor: 'Bedürfnisse',
+        description: 'Projektmanagement für spezifische Anforderungen und Spezifikationen.',
+        img: '/static/img/slide-3.svg',
+      },
+    ],
+  },
+  home: {
+    photoAndText: {
+      title: 'Wir unterstützen effizientes Immobilienmanagement durch Passpunktierung',
+      description:
+        'Verwalten Sie Ihre Immobilien effizient dank Passpunktierung. Sie erhalten einen umfassenden Überblick über den Zustand des Objekts, was die Planung von Renovierungen und Wartungen erleichtert. Unsere interne Methodik basiert auf Branchenerfahrungen und konzentriert sich auf präzise und aktuelle Erfassung von Gebäudedaten. Unser Ziel ist es sicherzustellen, dass die Informationen über das Gebäude stets aktuell, genau und leicht zugänglich sind.',
+    },
+    collaborations: {
+      title: 'Unsere Partner',
+      description:
+        'Im Bereich der Passpunktierung verfolgen wir einen ganzheitlichen Ansatz und arbeiten mit führenden Unternehmen der Branche zusammen.',
+    },
+  },
+  demand: {
+    title: 'Unverbindliche Anfrage',
+    submitButton: 'Anfrage absenden',
+  },
+  review: {
+    title: 'Referenzen',
+    meta_title: 'Referenzen',
+    meta_description:
+      'Hier finden Sie Referenzen unserer Kunden, die unsere Dienstleistungen im Bereich der Gebäudepassportisierung und des Facility Managements genutzt haben.',
+  },
+  blog: {
+    title: 'Blog',
+    meta_title: 'Blog',
+    meta_description:
+      'In unserem Blog finden Sie Artikel und Neuigkeiten rund um Gebäudepassportisierung, Facility Management und weitere Themen, die mit unseren Dienstleistungen zusammenhängen.',
+  },
+  info: {
+    title: 'Informationsseite',
+    meta_title: 'Informationsseite',
+    meta_description:
+      'Hier finden Sie wichtige Informationen über unser Unternehmen, unsere Dienstleistungen und weitere Themen im Zusammenhang mit Gebäudepassportisierung und Facility Management.',
+  },
+  error: {
+    title: 'Entschuldigung, die Seite wurde nicht gefunden',
   },
 };
