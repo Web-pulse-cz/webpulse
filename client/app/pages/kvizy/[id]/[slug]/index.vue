@@ -33,9 +33,9 @@ function markSelected(answer) {
     const currentQuestion = quizData.value.questions[currentQuestionIndex.value];
     currentQuestion.answers.forEach((ans) => {
       if (ans.id === answer.id) {
-        ans.is_selected = true; // Toggle selection
+        ans.is_selected = true;
       } else {
-        ans.is_selected = false; // Deselect other answers
+        ans.is_selected = false;
       }
     });
   }
@@ -57,12 +57,9 @@ function submitQuiz() {
 }
 
 const api = useApi();
-const {
-  data: quizData,
-  status: quizStatus,
-  error: quizError,
-  pending: quizPending,
-} = useAsyncData(`quiz-${route.params.id}`, () => api.quiz.quiz(route.params.id));
+const { data: quizData } = useAsyncData(`quiz-${route.params.id}`, () =>
+  api.quiz.quiz(route.params.id),
+);
 
 useHead(() => {
   return {
@@ -79,9 +76,7 @@ useHead(() => {
 
 <template>
   <div>
-    <div
-      class="justify-center mb-6 flex flex-col items-center"
-    >
+    <div class="mb-6 flex flex-col items-center justify-center">
       <BasePropsHeading type="h1" class="text-center">{{ quizData?.name }}</BasePropsHeading>
       <p
         v-if="!quizStarted"
@@ -116,8 +111,10 @@ useHead(() => {
           v-for="(answer, index) in quizData?.questions[currentQuestionIndex]?.answers"
           :key="index"
           :class="[
-            answer.is_selected ? 'bg-primary text-white' : 'bg-white text-gray-500',
-            'cursor-pointer rounded-lg p-4 text-sm shadow lg:p-6 text-wrap',
+            answer.is_selected || answer.is_selected === true
+              ? 'bg-primary text-white'
+              : 'bg-white text-gray-500',
+            'cursor-pointer text-wrap rounded-lg p-4 text-sm shadow lg:p-6',
           ]"
           @click="markSelected(answer)"
         >
@@ -153,7 +150,16 @@ useHead(() => {
         Počet správných odpovědí: {{ stats?.correctAnswers }} z {{ quizData?.questions.length }}
       </p>
       <p class="mb-4 text-gray-600">Vaše úspěšnost: {{ stats?.accuracy }}%</p>
-      <div v-for="(answer, index) in stats.answers" :key="index" :class="[answer.isCorrect ? 'hidden lg:grid bg-green-100 text-green-500' : 'bg-red-100 text-red-500', ' text-center grid grid-cols-1 lg:grid-cols-3 gap-4 w-full p-4 rounded-lg shadow mb-4 text-wrap text-xs lg:text-sm']">
+      <div
+        v-for="(answer, index) in stats.answers"
+        :key="index"
+        :class="[
+          answer.isCorrect
+            ? 'hidden bg-green-100 text-green-500 lg:grid'
+            : 'bg-red-100 text-red-500',
+          'mb-4 grid w-full grid-cols-1 gap-4 text-wrap rounded-lg p-4 text-center text-xs shadow lg:grid-cols-3 lg:text-sm',
+        ]"
+      >
         <div class="col-span-1 text-wrap">
           <p>{{ answer.question }}</p>
         </div>
@@ -166,14 +172,14 @@ useHead(() => {
           <p>{{ answer.correctAnswer }}</p>
         </div>
       </div>
-    <NuxtLink v-if="quizFinished" to="/kvizy" class="mt-2">
-      <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
-    </NuxtLink>
+      <NuxtLink v-if="quizFinished" to="/kvizy" class="mt-2">
+        <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
+      </NuxtLink>
     </div>
     <NuxtLink
-        v-if="!quizFinished"
+      v-if="!quizFinished"
       to="/kvizy"
-      class="relative bottom-2 left-1/2 mt-6 inline-block -translate-x-1/2 transform rounded-lg p-2 text-center text-xs text-primary ring-1 ring-primary lg:hidd"
+      class="lg:hidd relative bottom-2 left-1/2 mt-6 inline-block -translate-x-1/2 transform rounded-lg p-2 text-center text-xs text-primary ring-1 ring-primary"
     >
       Zpět na kvízy
     </NuxtLink>
