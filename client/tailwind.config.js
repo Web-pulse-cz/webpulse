@@ -11,7 +11,7 @@ export default {
         danger: '#ef4444',
         brand: '#e20e17',
         redShadow: '#ffede9',
-        chppGray: '#F4F7FB',
+        chppGray: '#F4F6FA',
         footerGray: '#263238',
         textBlack: '#263238',
         textDescription: '#717171',

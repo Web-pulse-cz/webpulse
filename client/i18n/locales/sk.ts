@@ -1,5 +1,35 @@
 export default {
-  welcome: 'Vitajte na stránkach CHPP',
+  general: {
+    metaTitle: 'Inovujeme svet pasportizácie',
+    metaDescription:
+      'S tímom odborníkov zabezpečujeme všetko od pasportizácie budov, cez inžinierske služby až po komplexný facility management, všetko presne podľa vašich špecifických potrieb a požiadaviek.',
+    categories: 'Kategórie',
+    aboutUs: 'O nás',
+  },
+  layout: {
+    home: 'Domov',
+    contact: {
+      title: 'Ozveme sa vám čo najskôr!',
+    },
+    footer: {
+      rightsReserved: 'Všetky práva vyhradené',
+      company: 'Spoločnosť',
+      home: 'Domov',
+      services: 'Služby',
+      clients: 'Klienti',
+      projects: 'Projekty',
+      blog: 'Blog',
+      support: 'Podpora',
+      FAQ: 'Často kladené otázky',
+      GDPR: 'GDPR',
+      cookies: 'Súbory cookies',
+      stayInTouch: 'Zostaňme v kontakte',
+      email: 'E-mail',
+      submitForm: 'Odoslaním formulára súhlasíte so',
+      personalInformation: 'spracovaním osobných údajov',
+      createdBy: 'Vytvoril Martin Hanzl',
+    },
+  },
   cookies: {
     title: 'Cookies',
     description:
@@ -22,103 +52,6 @@ export default {
     advertisementCookiesDescription:
       'Reklamné cookies nám umožňujú zobrazovať reklamy, ktoré zodpovedajú vašim záujmom, a sledovať ich účinnosť. Tieto cookies môžete odmietnuť.',
   },
-  general: {
-    categories: 'Kategórie',
-    aboutUs: 'O nás',
-  },
-  carousel: {
-    slide1: {
-      title: 'Inovujeme svet',
-      titleColor: 'pasportizácia',
-      description: 'Pasportizácia prispôsobená vašim jedinečným potrebám.',
-    },
-    slide2: {
-      title: 'Efektívne skenovanie',
-      titleColor: 'dronom',
-      description: 'Akýkoľvek terén alebo objekt, od líniových až po zložité stavby.',
-    },
-    slide3: {
-      title: 'Na mieru vašim',
-      titleColor: 'potrebám',
-      description: 'Riadenie projektu podľa konkrétnych potrieb a špecifikácií.',
-    },
-  },
-  benefitCard: {
-    pasportization: {
-      title: 'Pasportizácia budov',
-      description:
-        'Pasportizácia budov je naším hlavným smerom, ktorý je kľúčový pre efektívnu správu budov.',
-    },
-    engineering: {
-      title: 'Inžinierska činnosť',
-      description:
-        'Pri koordinácii inžinierskych služieb využívame spoluprácu s poprednými odborníkmi v stavebníctve.',
-    },
-    facilityManagement: {
-      title: 'Facility management',
-      description:
-        'Spolupracujeme s expertmi vo facility managemente pre ideálne spojenie pasportizácie a správy.',
-    },
-  },
-  colaborations: {
-    title: 'Spolupracujeme',
-    description:
-      'V oblasti pasportizácie uplatňujeme komplexný prístup a spolupracujeme s poprednými firmami v odbore.',
-  },
-  homePhotoAndText: {
-    title: 'Podporujeme efektivní správu nemovitostí pasportizací',
-    description:
-      'Efektivně spravujte své nemovitosti díky pasportizaci. Získáte komplexní přehled o stavu objektu, což usnadňuje plánování rekonstrukcí a údržby. Naše interní metodika vychází ze zkušeností v oboru, zaměřuje se na přesné a aktuální zaznamenávání informací o budovách. Naším cílem je zajistit, že informace o budově jsou vždy aktuální, přesné a snadno dostupné.',
-  },
-  home: {
-    hero: {
-      titleMark: 'Vytvárame weby',
-      title: 'ktoré pulzujú vaším úspechom',
-      description: 'Každý projekt je originál. Tvoríme weby a aplikácie na mieru vašim potrebám.',
-    },
-    technologiesTitle: 'Technológie, ktoré používame',
-  },
-  benefits: {
-    title: 'Prečo si vybrať nás?',
-    data: [
-      {
-        title: 'Weby a aplikácie, ktoré pulzujú vaším úspechom.',
-        description: 'Počúvame, čo potrebujete, a hľadáme tie najlepšie riešenia.',
-      },
-      {
-        title: 'Kvalita a funkčnosť',
-        description:
-          'Moderný dizajn aj technické riešenie na mieru, ktoré dokonale ladí s vašimi potrebami.',
-      },
-      {
-        title: 'Rýchlosť a spoľahlivosť',
-        description:
-          'Dodávame načas a bez zbytočných problémov, aby ste sa mohli sústrediť na svoj biznis.',
-      },
-      {
-        title: 'Inovácie a kreativita',
-        description:
-          'Nebojíme sa nových technológií a prístupov, pretože veríme v neustály pokrok.',
-      },
-      {
-        title: 'Priateľská komunikácia',
-        description:
-          'Nie sme nudní ajťáci, ale parťáci na ceste k úspechu, ktorí s vami zdieľajú nadšenie pre výsledky.',
-      },
-    ],
-  },
-  services: {
-    title: 'Služby, ktoré ponúkame',
-    pricePer: 'cena za ',
-    hour: 'hodinu',
-    project: 'projekt',
-    demand: 'Nezáväzná dopyt',
-    price: 'Cena',
-  },
-  demand: {
-    title: 'Nezáväzný dopyt',
-    submitButton: 'Odoslať dopyt',
-  },
   contactForm: {
     title: 'Kontaktujte nás!',
     fullName: 'Meno',
@@ -134,32 +67,11 @@ export default {
     personalInformation: 'spracovaním osobných údajov',
     button: 'Kontakt',
   },
-  layoutContact: {
-    title: 'Ozveme sa vám čo najskôr!',
-  },
   whyUs: {
-    tittle: 'Prečo my?',
+    title: 'Prečo my?',
     subtitle: 'Koordinácia na jednom mieste',
     description:
       'S tímom odborníkov zabezpečujeme všetko od pasportizácie budov, cez inžinierske služby až po komplexný facility management, všetko presne podľa vašich špecifických potrieb a požiadaviek.',
-  },
-  footer: {
-    rightsReserved: 'Všetky práva vyhradené',
-    company: 'Spoločnosť',
-    home: 'Domov',
-    services: 'Služby',
-    clients: 'Klienti',
-    projects: 'Projekty',
-    blog: 'Blog',
-    support: 'Podpora',
-    FAQ: 'Často kladené otázky',
-    GDPR: 'GDPR',
-    cookies: 'Súbory cookies',
-    stayInTouch: 'Zostaňme v kontakte',
-    email: 'E-mail',
-    submitForm: 'Odoslaním formulára súhlasíte so',
-    personalInformation: 'spracovaním osobných údajov',
-    createdBy: 'Vytvoril Martin Hanzl',
   },
   pagination: {
     previous: 'Predchádzajúca',
@@ -176,11 +88,71 @@ export default {
     faq: 'faq',
     info: 'info',
     post: 'články',
+    review: 'referencie',
   },
   faq: {
     title: 'Často kladené otázky',
-    meta_title: 'Často kladené otázky | CHPP',
-    meta_description:
+    metaTitle: 'Často kladené otázky',
+    metaDescription:
       'Tu nájdete odpovede na najčastejšie otázky týkajúce sa našich služieb, pasportizácie budov a ďalších tém.',
+  },
+  carousel: {
+    data: [
+      {
+        title: 'Inovujeme svet',
+        titleColor: 'pasportizácia',
+        description: 'Pasportizácia prispôsobená vašim jedinečným potrebám.',
+        img: '/static/img/slide-1.svg',
+      },
+      {
+        title: 'Efektívne skenovanie',
+        titleColor: 'dronom',
+        description: 'Akýkoľvek terén alebo objekt, od líniových až po zložité stavby.',
+        img: '/static/img/slide-2.svg',
+      },
+      {
+        title: 'Na mieru vašim',
+        titleColor: 'potrebám',
+        description: 'Riadenie projektu podľa konkrétnych potrieb a špecifikácií.',
+        img: '/static/img/slide-3.svg',
+      },
+    ],
+  },
+  home: {
+    photoAndText: {
+      title: 'Podporujeme efektívnu správu nehnuteľností pomocou pasportizácie',
+      description:
+        'Efektívne spravujte svoje nehnuteľnosti vďaka pasportizácii. Získate komplexný prehľad o stave objektu, čo uľahčuje plánovanie rekonštrukcií a údržby. Naša interná metodika vychádza zo skúseností v odbore a zameriava sa na presné a aktuálne zaznamenávanie informácií o budovách. Naším cieľom je zabezpečiť, aby informácie o budove boli vždy aktuálne, presné a ľahko dostupné.',
+    },
+    collaborations: {
+      title: 'Spolupracujeme',
+      description:
+        'V oblasti pasportizácie uplatňujeme komplexný prístup a spolupracujeme s poprednými firmami v odbore.',
+    },
+  },
+  demand: {
+    title: 'Nezáväzný dopyt',
+    submitButton: 'Odoslať dopyt',
+  },
+  review: {
+    title: 'Referencie',
+    meta_title: 'Referencie',
+    meta_description:
+      'Tu nájdete referencie našich klientov, ktorí využili naše služby v oblasti pasportizácie budov a facility managementu.',
+  },
+  blog: {
+    title: 'Blog',
+    meta_title: 'Blog',
+    meta_description:
+      'Na našom blogu nájdete články a novinky z oblasti pasportizácie budov, facility managementu a ďalších tém súvisiacich s našimi službami.',
+  },
+  info: {
+    title: 'Informačná stránka',
+    meta_title: 'Informačná stránka',
+    meta_description:
+      'Tu nájdete dôležité informácie o našej spoločnosti, našich službách a ďalších témach súvisiacich s pasportizáciou budov a facility managementom.',
+  },
+  error: {
+    title: 'Prepáčte, stránka nebola nájdená',
   },
 };
