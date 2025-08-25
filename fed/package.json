@@ -48,7 +48,8 @@
     "video.js": "^8.22.0",
     "vue": "latest",
     "vue-router": "latest",
-    "vue3-apexcharts": "^1.8.0"
+    "vue3-apexcharts": "^1.8.0",
+    "vue3-carousel": "^0.16.0"
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.7.1",
@@ -63,5 +64,6 @@
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "vite-svg-loader": "^5.1.0"
-  }
+  },
+  "engines": { "node": ">=22.10.0" }
 }

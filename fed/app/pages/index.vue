@@ -42,13 +42,12 @@ useHead({
       <div class="mt-6 hidden grid-cols-2 text-sm font-medium text-gray-400 ring-sky-600 sm:grid">
         <div class="text-sky-400">
           <p>Builder letní akce</p>
-          <NuxtImg src="/img/builder.jpg" alt="Builder logo" class="mt-2 h-6 w-auto" />
         </div>
         <div class="text-right font-bold text-sky-950">
           <p>Free enterprise day 1. 11. 2025</p>
-          <NuxtImg src="/img/fed.jpeg" alt="FED logo" class="mt-2 inline h-6 w-auto" />
         </div>
       </div>
     </div>
+    <BaseCarousel class="mt-8" />
   </div>
 </template>
