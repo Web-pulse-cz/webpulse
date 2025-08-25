@@ -28,18 +28,15 @@ useHead({
 
 <template>
   <div>
-    <BaseHeading type="h1"> Postup odměny na FED </BaseHeading>
-    <BaseCountdown />
-    <p class="mb-4 font-semibold text-gray-600">
-      Počet KM1: <span class="font-bold underline">269</span>
-    </p>
+    <BaseHeading type="h1"> 1000 KM1 loading...</BaseHeading>
+    <BaseCountdown class="mb-6" />
     <div class="mt-6" aria-hidden="true">
       <div class="overflow-hidden rounded-full bg-white/10 ring-1 ring-sky-600/10">
         <div
           class="inline-flex h-7 items-center justify-center rounded-full bg-sky-500"
           style="width: 26.9%"
         >
-          <span class="text-xs">26.9%</span>
+          <span class="text-xs">0 z 1000</span>
         </div>
       </div>
       <div class="mt-6 hidden grid-cols-2 text-sm font-medium text-gray-400 ring-sky-600 sm:grid">

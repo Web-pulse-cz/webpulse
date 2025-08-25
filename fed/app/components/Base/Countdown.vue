@@ -20,7 +20,7 @@ function updateCountdown() {
   const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((duration % (1000 * 60)) / 1000);
 
-  countdown.value = `${days} dnů - ${hours} hodin ${minutes} minut ${seconds} sekund`;
+  countdown.value = `${days} dnů ${hours} hodin ${minutes} minut ${seconds} sekund`;
 }
 
 let intervalId: number;
@@ -37,11 +37,11 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <p class="mb-4 font-semibold text-gray-600">
+    <p class="mb-4 text-center text-gray-600">
       Do
-      <NuxtLink to="https://fed2025.cz/" class="font-bold underline" target="_blank">FED</NuxtLink>
+      <NuxtLink to="https://fed2025.cz/" class="font-bold" target="_blank">FED</NuxtLink>
       zbývá:
-      {{ countdown }}
+      <span class="text-red-600">{{ countdown }}</span>
     </p>
   </div>
 </template>
