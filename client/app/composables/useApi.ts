@@ -1,10 +1,11 @@
-import { useGlobalApi } from '../../api/global';
-import { useServiceApi } from '../../api/service';
-import { useBlogApi } from '../../api/blog';
-import { usePageApi } from '../../api/page';
-import { useLogoApi } from '../../api/logo';
-import { useFaqApi } from '../../api/faq';
-import { useQuizApi } from '../../api/quiz';
+import { useGlobalApi } from '~/../api/global';
+import { useServiceApi } from '~/../api/service';
+import { useBlogApi } from '~/../api/blog';
+import { usePageApi } from '~/../api/page';
+import { useLogoApi } from '~/../api/logo';
+import { useFaqApi } from '~/../api/faq';
+import { useQuizApi } from '~/../api/quiz';
+import { useLoadingStore } from '~/../stores/loading';
 
 export function useApi() {
   const loading = useLoadingStore();
