@@ -4,8 +4,27 @@ import 'vue3-carousel/carousel.css';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 
 const carouselConfig = {
-  itemsToShow: 1,
   wrapAround: true,
+  autoplay: 5000,
+  gap: 0,
+  breakpoints: {
+    1440: {
+      itemsToShow: 4,
+      height: 300,
+    },
+    1024: {
+      itemsToShow: 3,
+      height: 400,
+    },
+    640: {
+      itemsToShow: 2,
+      height: 400,
+    },
+    0: {
+      itemsToShow: 1,
+      height: 400,
+    },
+  },
 };
 
 const images = ref([
@@ -17,18 +36,14 @@ const images = ref([
 </script>
 
 <template>
-  <Carousel v-bind="carouselConfig" :autoplay="3000" class="carousel" :gap="0" slideEffect="fade">
+  <Carousel v-bind="carouselConfig" class="carousel">
     <Slide v-for="slide in images" :key="slide">
       <div class="carousel__item">
-        <NuxtImg
-          :src="slide"
-          alt="Carousel image"
-          class="xl:h-128 h-48 w-full rounded-xl object-cover sm:h-64 md:h-72 lg:h-96"
-        />
+        <NuxtImg :src="slide" alt="Carousel image" class="h-auto w-full rounded-lg object-cover" />
       </div>
     </Slide>
 
-    <template #addons class="w-64">
+    <template #addons>
       <Navigation />
     </template>
   </Carousel>

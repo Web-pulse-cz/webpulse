@@ -1,33 +1,11 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-
-const { locale, t } = useI18n();
-
-const pageMeta = ref({
-  title: t('general.metaTitle'),
-  description: t('general.metaDescription'),
-  meta_title: t('general.metaTitle'),
-  meta_description: t('general.metaDescription'),
-});
-
 useHead({
-  title: pageMeta.value.title,
-  meta: [
-    { name: 'description', content: pageMeta.value.meta_description },
-    { property: 'og:title', content: pageMeta.value.meta_title },
-    { property: 'og:description', content: pageMeta.value.meta_description },
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: useRuntimeConfig().public.appUrl + (locale.value !== 'cs' ? `/${locale.value}` : ''),
-    },
-  ],
+  title: 'Odměna FED 2025',
 });
 </script>
 
 <template>
-  <div class="py-16">
+  <div class="py-8">
     <BaseHeading type="h1"> 1000 KM1 loading...</BaseHeading>
     <BaseCountdown class="mb-6" />
     <div class="mt-6" aria-hidden="true">
@@ -48,6 +26,6 @@ useHead({
         </div>
       </div>
     </div>
-    <BaseCarousel class="mt-24" />
+    <BaseCarousel class="mt-16" />
   </div>
 </template>
