@@ -1,4 +1,4 @@
-import type { Quiz } from '~/types/quiz';
+import type { Quiz } from '../types/Quiz';
 
 export function useQuizApi(
   wrap: <T>(fn: (...args: any[]) => Promise<T>) => (...args: any[]) => Promise<T>,
