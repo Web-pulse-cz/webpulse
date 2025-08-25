@@ -124,21 +124,10 @@ const navigation = ref([
       },
       {
         name: 'Služby',
+        link: '/obsah/sluzby',
         icon: WrenchScrewdriverIcon,
         current: false,
         slug: 'services',
-        submenu: [
-          {
-            name: 'Služby',
-            link: '/obsah/sluzby',
-            current: false,
-          },
-          {
-            name: 'Kategorie',
-            link: '/obsah/sluzby/kategorie',
-            current: false,
-          },
-        ],
       },
       {
         name: 'Události a akce',
@@ -164,22 +153,11 @@ const navigation = ref([
         ],
       },
       {
-        name: 'Reference',
+        name: 'Recenze',
+        link: '/obsah/recenze',
         icon: StarIcon,
         current: false,
         slug: 'reviews',
-        submenu: [
-          {
-            name: 'Reference',
-            link: '/obsah/reference',
-            current: false,
-          },
-          {
-            name: 'Kategorie',
-            link: '/obsah/reference/kategorie',
-            current: false,
-          },
-        ],
       },
       {
         name: 'Loga klientů',
@@ -208,10 +186,10 @@ const navigation = ref([
       },
       {
         name: 'Kvízy',
-        link: '/demo',
+        link: '/obsah/kvizy',
         icon: QuestionMarkCircleIcon,
         current: false,
-        slug: 'quizes',
+        slug: 'quizzes',
       },
       {
         name: 'FAQ',
@@ -595,11 +573,7 @@ onMounted(() => {
               >
                 <div class="flex h-24 shrink-0 items-center justify-center">
                   <NuxtLink to="https://klient.chpp.cz" target="_blank">
-                    <img
-                      class="h-8 w-auto"
-                      src="/../public/static/img/logo.png"
-                      alt="Your Company"
-                    />
+                    <!--                    <img class="h-8 w-auto" src="/static/img/logo.png" alt="Your Company" />-->
                   </NuxtLink>
                 </div>
                 <nav class="flex flex-1 flex-col">
@@ -690,7 +664,7 @@ onMounted(() => {
       <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
         <div class="flex h-24 shrink-0 items-center justify-center">
           <NuxtLink to="https://klient.chpp.cz" target="_blank">
-            <img class="h-12 w-auto" src="/../public/static/img/logo.png" alt="Your Company" />
+            <!--            <img class="h-12 w-auto" src="~/../public/static/img/logo.png" alt="Your Company" />-->
           </NuxtLink>
         </div>
         <nav class="flex flex-1 flex-col">
