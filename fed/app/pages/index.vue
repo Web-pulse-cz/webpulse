@@ -27,7 +27,7 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div class="py-16">
     <BaseHeading type="h1"> 1000 KM1 loading...</BaseHeading>
     <BaseCountdown class="mb-6" />
     <div class="mt-6" aria-hidden="true">
@@ -48,6 +48,6 @@ useHead({
         </div>
       </div>
     </div>
-    <BaseCarousel class="mt-8" />
+    <BaseCarousel class="mt-24" />
   </div>
 </template>

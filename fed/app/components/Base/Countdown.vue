@@ -37,10 +37,12 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <p class="mb-4 text-center text-gray-600">
-      Do
-      <NuxtLink to="https://fed2025.cz/" class="font-bold" target="_blank">FED</NuxtLink>
-      zbývá:
+    <p class="mb-4 text-center text-xs text-gray-600 md:text-sm lg:text-base">
+      <span class="hidden md:block"
+        >Do
+        <NuxtLink to="https://fed2025.cz/" class="font-bold" target="_blank">FED</NuxtLink>
+        zbývá</span
+      >
       <span class="text-red-600">{{ countdown }}</span>
     </p>
   </div>
