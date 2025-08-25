@@ -41,3 +41,14 @@ footer{
         padding-left: 0px;
     }
 }
+
+.carousel__prev, .carousel__next {
+    background-color: rgba(255, 255, 255, 0.50) !important;
+    border-radius: 100px !important;
+    margin: 0 14px !important;
+}
+
+.carousel__prev *, .carousel__next * {
+    fill: rgba(0, 0, 0, 0.75) !important;
+}
+
