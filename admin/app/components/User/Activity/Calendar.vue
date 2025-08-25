@@ -8,7 +8,7 @@ import {
   PhoneIcon,
   LifebuoyIcon,
 } from '@heroicons/vue/24/outline';
-import DumbbellIcon from 'public/static/img/icon/dumbbell.svg';
+import DumbbellIcon from '~/../public/static/img/icon/dumbbell.svg';
 import SmileFullIcon from '~/../public/static/img/icon/smile-full.svg';
 import SmileAudioIcon from '~/../public/static/img/icon/smile-audio.svg';
 import SmileAudioBookIcon from '~/../public/static/img/icon/smile-audiobook.svg';
