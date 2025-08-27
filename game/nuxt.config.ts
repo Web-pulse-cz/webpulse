@@ -79,6 +79,10 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.API_URL ?? 'https://web-pulse.cz',
       appUrl: process.env.APP_URL ?? 'https://web-pulse.cz',
+      supabase: {
+        url: 'https://tuesjhaxnsguyakzyflb.supabase.co',
+        key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZXNqaGF4bnNndXlha3p5ZmxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMTk4ODcsImV4cCI6MjA3MTg5NTg4N30.YpuybsHsN5sMBwL2axkbSIcmxM668MR6ymKAGcuiSCQ',
+      },
     },
   },
 

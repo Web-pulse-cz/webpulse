@@ -20,6 +20,7 @@
     "@nuxt/image": "^1.8.1",
     "@nuxt/ui": "^2.22.0",
     "@nuxtjs/i18n": "^9.5.4",
+    "@nuxtjs/supabase": "^1.6.1",
     "@pinia/nuxt": "^0.8.0",
     "@types/lodash": "^4.17.13",
     "@vee-validate/nuxt": "^4.14.7",
@@ -64,5 +65,7 @@
     "typescript": "^5.6.3",
     "vite-svg-loader": "^5.1.0"
   },
-  "engines": { "node": ">=22.10.0" }
+  "engines": {
+    "node": ">=22.10.0"
+  }
 }
