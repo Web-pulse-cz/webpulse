@@ -6,12 +6,6 @@ export default defineNuxtConfig({
       {
         baseUrl: process.env.API_URL ?? 'https://web-pulse.cz/',
         mode: 'token',
-        endpoints: {
-          csrf: '/sanctum/csrf-cookie',
-          login: '/api/auth/login',
-          logout: '/api/auth/logout',
-          user: '/api/auth/me',
-        },
         csrf: {
           cookie: 'XSRF-TOKEN',
           header: 'X-XSRF-TOKEN',
