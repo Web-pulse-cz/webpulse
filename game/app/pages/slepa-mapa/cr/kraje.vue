@@ -50,12 +50,12 @@ function isCorrectClass(id: string) {
   const district = districts.value.find((d) => d.id === id);
   if (district) {
     if (district.isCorrect === true) {
-      return 'fill-green-400';
+      return 'fill-green-400 cursor-pointer';
     } else if (district.isCorrect === false) {
-      return 'fill-red-600';
+      return 'fill-red-600 cursor-pointer';
     }
   }
-  return 'fill-grayLight hover:fill-primary transition duration-300 cursor-pointer';
+  return 'fill-secondaryLight hover:fill-primary transition duration-300 cursor-pointer';
 }
 </script>
 

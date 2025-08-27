@@ -42,7 +42,7 @@ const games = ref([
     name: 'Slepá mapa',
     imageUrl:
       'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2Fc93bc83a10564636b3abd0a30eab1919/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAP7lDdyXInj1Lxehkdo3tdlADinuTxCxH_O9MjVUf-RK&exp=1756330767&osig=AAAAAAAAAAAAAAAAAAAAAIebKg8vogXQED7WOdMuYYPzbVR-t2TZobQINdYqW95F&signer=media-rpc&x-canva-quality=screen_2x',
-    linkUrl: '/slepa-mapa/cr/kraje',
+    linkUrl: '/slepa-mapa',
   },
 ]);
 </script>
