@@ -2,19 +2,10 @@
 import { useApi } from '~/composables/useApi';
 import { useAsyncData } from '#app';
 
-definePageMeta({
-  layout: 'quiz',
-});
-
 const search = ref('');
 
 const api = useApi();
-const {
-  data: quizzesData,
-  status: quizzesStatus,
-  error: quizzesError,
-  pending: quizzesPending,
-} = useAsyncData(`quiz`, () => api.quiz.quizzes(search.value));
+const { data: quizzesData } = useAsyncData(`quiz`, () => api.quiz.quizzes(search.value));
 
 watch(
   search,

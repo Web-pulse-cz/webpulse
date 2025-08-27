@@ -18,6 +18,7 @@ export default {
         textWhiteFooter: '#F5F7FA',
       },
       fontFamily: {
+        winky: ['Winky Rough', 'cursive'],
         sans: ['Comfortaa', 'sans-serif'],
         quicksand: ['Quicksand', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
