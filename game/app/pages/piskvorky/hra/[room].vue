@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { createClient } from '@supabase/supabase-js';
 import { useTicTacToe } from '~/composables/useTicTacToe';
 
 type PresencePayload = {
@@ -7,9 +8,12 @@ type PresencePayload = {
   symbol?: 'X' | 'O';
 };
 
+const config = useRuntimeConfig();
+
 const route = useRoute();
 const room = computed(() => String(route.params.room));
-const client = useSupabaseClient();
+const client = createClient(config.public.supabase.url, config.public.supabase.key);
+
 const { board, turn, winner, isFull, isOver, reset, playAt } = useTicTacToe();
 
 const channel = ref<ReturnType<typeof client.channel> | null>(null);
@@ -132,8 +136,8 @@ async function copyLink() {
               v-for="(cell, i) in board"
               :key="i"
               class="flex aspect-square items-center justify-center rounded-xl border text-4xl font-bold transition hover:shadow"
-              @click="handleMove(i)"
               :disabled="!canPlay(i)"
+              @click="handleMove(i)"
             >
               {{ cell }}
             </button>
@@ -165,9 +169,3 @@ async function copyLink() {
     </div>
   </main>
 </template>
-
-<style scoped>
-main {
-  background: radial-gradient(1200px 600px at 70% 0%, rgba(255, 255, 255, 0.06), transparent);
-}
-</style>
