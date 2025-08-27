@@ -1,55 +1,14 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { onMounted, onUnmounted } from 'vue';
-import { useApi } from '~/../app/composables/useApi';
-import { useAsyncData } from '#app';
 
 const { locale, t } = useI18n();
 
-const isOpen = ref(false);
-
 const pageMeta = ref({
-  title: t('general.metaTitle'),
+  title: 'Herní centrum',
   description: t('general.metaDescription'),
   meta_title: t('general.metaTitle'),
   meta_description: t('general.metaDescription'),
 });
-
-const carouselSlides = Array.from({ length: 3 }, (_, i) => ({
-  title: t(`carousel.data.${i}.title`),
-  titleColor: t(`carousel.data.${i}.titleColor`),
-  description: t(`carousel.data.${i}.description`),
-  img: t(`carousel.data.${i}.img`),
-}));
-
-const benefitCards = [
-  // TODO: nahradíme za reálná data
-  {
-    title: 'Pasportizace budov',
-    description:
-      'Pasportizace budov je naším hlavním směrem, která je klíčová pro efektivní správu budov.',
-    image: 'static/img/cards/PasportizaceBudov.svg',
-    link: '/sluzby',
-  },
-  {
-    title: 'Inženýrská činnost',
-    description:
-      'Při koordinaci inženýrských služeb využíváme spolupráci se špičkami ve stavebnictví.',
-    image: 'static/img/cards/InzenyrskaCinnost.svg',
-    link: '/sluzby',
-  },
-  {
-    title: 'Facility management',
-    description:
-      'Kooperujeme s experty ve facility managmentu pro ideální spojení pasportizace a správy.',
-    image: 'static/img/cards/FacilityManagment.svg',
-    link: '/sluzby',
-  },
-];
-
-const { data, status, error, pending } = useAsyncData('logos', () =>
-  useApi().logo.logo(locale.value),
-);
 
 useHead({
   title: pageMeta.value.title,
@@ -65,64 +24,38 @@ useHead({
     },
   ],
 });
-const transformedLogos = computed(() => {
-  if (!data.value || !Array.isArray(data.value)) return [];
 
-  return data.value.map((item) => ({
-    // src: item.logo,
-    src: `/static/img/CompanyLogos/${item.name === 'Komplex CR' || item.name === 'Capexus' ? item.name + '.svg' : item.name + '.png'}`,
-    alt: item.name,
-    link: item.url,
-  }));
-});
-const cardContainer = ref<HTMLElement | null>(null);
-const isVisible = ref(false);
-let lastScrollY = window.scrollY;
-let isScrolling = false;
-
-onMounted(() => {
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      isVisible.value = entry.isIntersecting;
-    },
-    { threshold: 0.7 },
-  );
-  if (cardContainer.value) observer.observe(cardContainer.value);
-
-  onUnmounted(() => {
-    if (cardContainer.value) observer.unobserve(cardContainer.value);
-  });
-});
-
-function onScroll() {
-  if (!cardContainer.value || !isVisible.value || isScrolling) return;
-  const currentScrollY = window.scrollY;
-  const direction = currentScrollY > lastScrollY ? 1 : -1;
-  cardContainer.value.scrollBy({
-    left: direction * 0.1,
-    behavior: 'smooth',
-  });
-  isScrolling = true;
-  lastScrollY = currentScrollY;
-  setTimeout(() => {
-    isScrolling = false;
-    // Timeout between scrolls
-  }, 500);
-}
-
-const localePath = useLocalePath();
-console.log(localePath({ name: 'review-index' }));
-
-onMounted(() => {
-  window.addEventListener('scroll', onScroll);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll);
-});
+const games = ref([
+  {
+    name: 'Kvízy',
+    imageUrl:
+      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2Fb00c85104f0844f28c97ba6f4cc96ba3/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAI5r31kmL9V6auuHo8qD7rCvhgRVmdQcGIyc0szypPt4&exp=1756330706&osig=AAAAAAAAAAAAAAAAAAAAAISx-sr2jdD7R6d8cC-psMyAFkLMYzfGsGgG1irPVdzA&signer=media-rpc&x-canva-quality=screen_2x',
+    linkUrl: 'kvizy',
+  },
+  {
+    name: 'Piškvorky',
+    imageUrl:
+      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F1dfbd69077dd420c81b810ea60ed7d85/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAGEMcVYVE5frpwbu-aRNhG2jgHlMYikYjY1hGKMeZace&exp=1756331824&osig=AAAAAAAAAAAAAAAAAAAAAHdtbF_-zfOhUEpcSvJ_55Ip-PGcpNjKqZNvEbjiESLW&signer=media-rpc&x-canva-quality=screen_2x',
+    linkUrl: '/games/game2',
+  },
+  {
+    name: 'Slepá mapa',
+    imageUrl:
+      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2Fc93bc83a10564636b3abd0a30eab1919/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAP7lDdyXInj1Lxehkdo3tdlADinuTxCxH_O9MjVUf-RK&exp=1756330767&osig=AAAAAAAAAAAAAAAAAAAAAIebKg8vogXQED7WOdMuYYPzbVR-t2TZobQINdYqW95F&signer=media-rpc&x-canva-quality=screen_2x',
+    linkUrl: '/slepa-mapa/cr/kraje',
+  },
+]);
 </script>
 
 <template>
-  <div>
-    <HomeGameCard><p>Test</p></HomeGameCard>
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+    <HomeGameCard
+      v-for="game in games"
+      :key="game.name"
+      class="col-span-1"
+      :text="game.name"
+      :image-url="game.imageUrl"
+      :link-url="game.linkUrl"
+    />
   </div>
 </template>

@@ -1,23 +1,20 @@
 <script setup lang="ts">
 defineProps<{
-  card: {
-    id: number;
-    name: string;
-    description: string;
-    image: string;
-    price: number;
-    attack: number;
-    health: number;
-    mana: number;
-    type: string;
-  };
+  // Define any props if needed
+  text: string;
+  imageUrl: string;
+  linkUrl: string;
 }>();
 </script>
 
 <template>
-  <div
-    class="font-winky relative h-64 w-48 overflow-hidden rounded-lg border-4 border-black bg-white shadow-lg"
+  <NuxtLink
+    :to="linkUrl"
+    class="m-2 w-full rounded-lg bg-white p-4 font-winky shadow-lg transition-transform duration-300 hover:scale-105"
   >
-    <slot />
-  </div>
+    <div class="flex flex-col items-center">
+      <img :src="imageUrl" :alt="text" class="mb-4 h-40 w-40 rounded-lg object-cover" />
+      <h2 class="text-center text-xl font-bold text-gray-800">{{ text }}</h2>
+    </div>
+  </NuxtLink>
 </template>

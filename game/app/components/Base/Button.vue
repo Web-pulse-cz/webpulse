@@ -11,7 +11,7 @@ const sizeClasses = ref({
 });
 const variantClasses = ref({
   primary:
-    'bg-brand hover:bg-transparent hover:text-brand text-white border border-brand transition duration-300 ',
+    'bg-primary text-primaryDark dark:bg-primaryDark dark:text-primary hover:bg-transparent hover:text-brand text-white border border-brand transition duration-300 ',
   secondary:
     'bg-white ring-1 ring-inset ring-grayLight hover:bg-gray-50 focus-visible:outline-grayLight text-grayDark',
   success: 'bg-success hover:bg-successLight focus-visible:outline-successLight text-white',
