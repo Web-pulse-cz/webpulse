@@ -36,7 +36,7 @@ const games = ref([
     name: 'Piškvorky',
     imageUrl:
       'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F1dfbd69077dd420c81b810ea60ed7d85/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAGEMcVYVE5frpwbu-aRNhG2jgHlMYikYjY1hGKMeZace&exp=1756331824&osig=AAAAAAAAAAAAAAAAAAAAAHdtbF_-zfOhUEpcSvJ_55Ip-PGcpNjKqZNvEbjiESLW&signer=media-rpc&x-canva-quality=screen_2x',
-    linkUrl: '/games/game2',
+    linkUrl: '/piskvorky',
   },
   {
     name: 'Slepá mapa',
