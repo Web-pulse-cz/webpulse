@@ -8,18 +8,18 @@ type PresencePayload = {
   symbol?: 'X' | 'O';
 };
 
+const route = useRoute();
+const router = useRouter();
+
 const runtimeConfig = useRuntimeConfig();
 
-const route = useRoute();
-const room = computed(() => String(route.params.room));
-const client = createClient(runtimeConfig.public.supabase.url, runtimeConfig.public.supabase.key);
-
+const supabase = createClient(runtimeConfig.public.supabase.url, runtimeConfig.public.supabase.key);
 const { board, turn, winner, isFull, isOver, reset, playAt } = useTicTacToe();
 
-const channel = ref<ReturnType<typeof client.channel> | null>(null);
+const channel = ref<ReturnType<typeof supabase.channel> | null>(null);
 const connected = ref(false);
 
-const selfId = crypto.randomUUID();
+const selfId = ref('');
 const playersMap = ref<Record<string, PresencePayload>>({});
 const mySymbol = ref<'X' | 'O' | null>(null);
 
@@ -28,16 +28,22 @@ const playersList = computed(() =>
 );
 const playersCount = computed(() => playersList.value.length);
 
-const localTurnText = computed(() => {
-  if (winner.value) return 'konec';
-  return turn.value;
-});
+const localTurnText = computed(() => (winner.value ? 'konec' : turn.value));
+const hash = ref<string>(''); // aktuální kód místnosti
+const lobbyMode = computed(() => !hash.value); // lobby se ukazuje pokud hash chybí
+const hashInput = ref('');
 
-// připojení k Realtime channelu
-onMounted(async () => {
-  console.log(true);
-  const ch = client.channel(`room:${room.value}`, {
-    config: { presence: { key: selfId } },
+// připojení do místnosti
+async function joinRoom(roomId: string) {
+  if (channel.value) {
+    try {
+      await channel.value.unsubscribe();
+    } catch {}
+    channel.value = null;
+  }
+
+  const ch = supabase.channel(`room:${roomId}`, {
+    config: { presence: { key: selfId.value } },
   });
   channel.value = ch;
 
@@ -50,11 +56,10 @@ onMounted(async () => {
     });
     playersMap.value = flat;
 
-    // přiřazení symbolů
     const order = Object.values(flat).sort((a, b) => a.joinedAt - b.joinedAt);
     if (order[0]) order[0].symbol = 'X';
     if (order[1]) order[1].symbol = 'O';
-    mySymbol.value = flat[selfId]?.symbol || null;
+    mySymbol.value = flat[selfId.value]?.symbol || null;
   });
 
   ch.on('broadcast', { event: 'move' }, ({ payload }) => {
@@ -62,17 +67,53 @@ onMounted(async () => {
     playAt(index, symbol);
   });
 
-  ch.on('broadcast', { event: 'reset' }, () => {
-    reset();
-  });
+  ch.on('broadcast', { event: 'reset' }, () => reset());
 
-  await ch.subscribe(async (status) => {
+  await ch.subscribe((status: string) => {
     if (status === 'SUBSCRIBED') {
       connected.value = true;
-      ch.track({ id: selfId, joinedAt: Date.now() } as PresencePayload);
+      ch.track({ id: selfId.value, joinedAt: Date.now() } as PresencePayload);
     }
   });
+}
+
+// vytvoření nové hry
+async function createRoom() {
+  const id = crypto.randomUUID().slice(0, 8);
+  await router.push({ path: '/piskvorky', query: { hash: id } });
+}
+
+// připojení k existující hře
+async function connectToHashInput() {
+  const id = hashInput.value.trim();
+  if (!id) return;
+  await router.push({ path: '/piskvorky', query: { hash: id } });
+}
+
+// lifecycle
+onMounted(async () => {
+  selfId.value = crypto.randomUUID();
+  const incoming = (route.query.hash as string | undefined)?.trim();
+  if (incoming) {
+    hash.value = incoming;
+    await joinRoom(hash.value);
+  }
 });
+
+watch(
+  () => route.query.hash,
+  async (val) => {
+    const next = (val as string | undefined)?.trim();
+    if (next && next !== hash.value) {
+      hash.value = next;
+      reset();
+      await joinRoom(hash.value);
+    } else if (!next) {
+      hash.value = '';
+      reset();
+    }
+  },
+);
 
 onBeforeUnmount(() => {
   channel.value?.unsubscribe();
@@ -89,7 +130,6 @@ function canPlay(i: number) {
 function handleMove(i: number) {
   if (!channel.value || !mySymbol.value) return;
   if (!canPlay(i)) return;
-
   channel.value.send({
     type: 'broadcast',
     event: 'move',
@@ -108,12 +148,36 @@ async function copyLink() {
 </script>
 
 <template>
-  <main class="flex min-h-screen flex-col items-center gap-6 p-6">
-    <div class="w-full max-w-3xl">
+  <main class="flex min-h-screen items-center justify-center p-6">
+    <!-- Lobby -->
+    <div v-if="lobbyMode" class="w-full max-w-md space-y-6">
+      <h1 class="text-center text-3xl font-bold">Piškvorky online</h1>
+      <div class="space-y-4 rounded-2xl border bg-white/5 p-6 shadow">
+        <button class="w-full rounded-2xl border py-3 transition hover:shadow" @click="createRoom">
+          Vytvořit novou hru
+        </button>
+
+        <div class="flex items-center gap-3">
+          <input
+            v-model="hashInput"
+            type="text"
+            placeholder="Zadej kód místnosti"
+            class="flex-1 rounded-xl border bg-transparent px-3 py-2"
+          />
+          <button class="rounded-xl border px-4 py-2" @click="connectToHashInput">Připojit</button>
+        </div>
+      </div>
+      <p class="text-center text-sm opacity-70">
+        Po vytvoření místnosti dostaneš odkaz <code>/piskvorky?hash=...</code>
+      </p>
+    </div>
+
+    <!-- Hra -->
+    <div v-else class="w-full max-w-3xl">
       <div class="flex items-center justify-between">
-        <NuxtLink to="/" class="text-sm underline">Zpět</NuxtLink>
+        <NuxtLink to="/piskvorky" class="text-sm underline">Zpět do lobby</NuxtLink>
         <div class="text-sm opacity-70">
-          Místnost: <strong>{{ room }}</strong>
+          Místnost: <strong>{{ hash }}</strong>
         </div>
       </div>
 
@@ -136,7 +200,7 @@ async function copyLink() {
             <button
               v-for="(cell, i) in board"
               :key="i"
-              class="flex aspect-square items-center justify-center rounded-xl border text-4xl font-bold transition hover:shadow"
+              class="flex aspect-square items-center justify-center rounded-xl border text-4xl font-bold transition hover:shadow disabled:opacity-50"
               :disabled="!canPlay(i)"
               @click="handleMove(i)"
             >
@@ -158,12 +222,8 @@ async function copyLink() {
               {{ p.id === selfId ? 'Ty' : 'Host' }} {{ p.symbol ? `(${p.symbol})` : '' }}
             </li>
           </ul>
-
           <div class="pt-2 text-sm">
             Tvoje značka: <strong>{{ mySymbol || 'čekám...' }}</strong>
-          </div>
-          <div class="text-xs opacity-70">
-            Sdílej odkaz, aby se druhý hráč přidal do stejné místnosti.
           </div>
         </aside>
       </div>
