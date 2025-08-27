@@ -8,11 +8,11 @@ type PresencePayload = {
   symbol?: 'X' | 'O';
 };
 
-const config = useRuntimeConfig();
+const runtimeConfig = useRuntimeConfig();
 
 const route = useRoute();
 const room = computed(() => String(route.params.room));
-const client = createClient(config.public.supabase.url, config.public.supabase.key);
+const client = createClient(runtimeConfig.public.supabase.url, runtimeConfig.public.supabase.key);
 
 const { board, turn, winner, isFull, isOver, reset, playAt } = useTicTacToe();
 
@@ -35,6 +35,7 @@ const localTurnText = computed(() => {
 
 // připojení k Realtime channelu
 onMounted(async () => {
+  console.log(true);
   const ch = client.channel(`room:${room.value}`, {
     config: { presence: { key: selfId } },
   });
