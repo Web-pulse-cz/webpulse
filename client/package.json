@@ -64,5 +64,5 @@
     "typescript": "^5.6.3",
     "vite-svg-loader": "^5.1.0"
   },
-  "engines": { "node": ">=22.10.0" },
+  "engines": { "node": ">=22.10.0" }
 }
