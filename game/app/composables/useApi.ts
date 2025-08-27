@@ -1,9 +1,4 @@
 import { useGlobalApi } from '~/../api/global';
-import { useServiceApi } from '~/../api/service';
-import { useBlogApi } from '~/../api/blog';
-import { usePageApi } from '~/../api/page';
-import { useLogoApi } from '~/../api/logo';
-import { useFaqApi } from '~/../api/faq';
 import { useQuizApi } from '~/../api/quiz';
 import { useLoadingStore } from '~/../stores/loading';
 
@@ -36,20 +31,10 @@ export function useApi() {
   };
 
   const global = useGlobalApi(wrapSilent);
-  const service = useServiceApi(wrapWithLoading);
-  const blog = useBlogApi(wrapWithLoading);
-  const page = usePageApi(wrapWithLoading);
-  const logo = useLogoApi(wrapSilent);
-  const faq = useFaqApi(wrapWithLoading);
   const quiz = useQuizApi(wrapWithLoading);
 
   return {
     global,
-    service,
-    blog,
-    page,
-    logo,
-    faq,
     quiz,
   };
 }
