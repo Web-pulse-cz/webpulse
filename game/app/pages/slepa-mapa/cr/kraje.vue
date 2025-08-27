@@ -62,7 +62,7 @@ function isCorrectClass(id: string) {
 <template>
   <LayoutContainer>
     <BasePropsHeading type="h1" class="w-full text-center">Slepá mapa krajů ČR</BasePropsHeading>
-    <BasePropsHeading type="h2" class="w-full text-center">
+    <BasePropsHeading type="h4" class="w-full text-center">
       Najděte <span class="text-primaryDark">{{ districtToFind || 'kraj' }}</span>
     </BasePropsHeading>
     <svg

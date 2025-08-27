@@ -10,10 +10,10 @@ defineProps<{
 <template>
   <NuxtLink
     :to="linkUrl"
-    class="m-2 w-full rounded-lg bg-white p-4 font-winky shadow-lg transition-transform duration-300 hover:scale-105"
+    class="m-2 flex h-48 w-full items-end rounded-lg p-4 font-winky shadow-lg transition-transform duration-300 hover:scale-105"
+    :style="`background-image: url('${imageUrl}'); background-size: cover; background-position: center;`"
   >
-    <div class="flex flex-col items-center">
-      <img :src="imageUrl" :alt="text" class="mb-4 h-40 w-40 rounded-lg object-cover" />
+    <div class="flex flex-col items-center rounded-lg bg-white bg-opacity-85 p-2">
       <h2 class="text-center text-xl font-bold text-gray-800">{{ text }}</h2>
     </div>
   </NuxtLink>
