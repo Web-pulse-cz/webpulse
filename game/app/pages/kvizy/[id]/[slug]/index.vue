@@ -2,10 +2,6 @@
 import { useApi } from '~/composables/useApi';
 import { useAsyncData } from '#app';
 
-definePageMeta({
-  layout: 'quiz',
-});
-
 const route = useRoute();
 
 const stats = ref([]);
