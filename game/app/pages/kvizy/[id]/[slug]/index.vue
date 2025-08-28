@@ -83,7 +83,7 @@ useHead(() => {
       <p v-if="!quizStarted">Průměrná úspěšnost: {{ quizData?.accuracy }}%</p>
       <BaseButton
         v-if="!quizStarted"
-        size="xxl"
+        size="lg"
         variant="primary"
         class="mt-6"
         @click="quizStarted = true"
@@ -172,12 +172,11 @@ useHead(() => {
         <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
       </NuxtLink>
     </div>
-    <NuxtLink
-      v-if="!quizFinished"
-      to="/kvizy"
-      class="lg:hidd relative bottom-2 left-1/2 mt-6 inline-block -translate-x-1/2 transform rounded-lg p-2 text-center text-xs text-primary ring-1 ring-primary"
+    <BaseButton
+      class="relative bottom-2 left-1/2 mt-6 inline-block -translate-x-1/2 transform"
+      size="sm"
     >
-      Zpět na kvízy
-    </NuxtLink>
+      <NuxtLink v-if="!quizFinished" to="/kvizy"> Zpět na kvízy </NuxtLink>
+    </BaseButton>
   </div>
 </template>

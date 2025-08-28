@@ -174,9 +174,7 @@ async function copyLink() {
     <div v-if="lobbyMode" class="w-full max-w-md space-y-6">
       <h1 class="text-center text-3xl font-bold">Piškvorky online</h1>
       <div class="space-y-4 rounded-2xl border bg-white/5 p-6 shadow">
-        <button class="w-full rounded-2xl border py-3 transition hover:shadow" @click="createRoom">
-          Vytvořit novou hru
-        </button>
+        <BaseButton class="w-full" @click="createRoom"> Vytvořit novou hru </BaseButton>
 
         <div class="flex items-center gap-3">
           <input
@@ -185,7 +183,9 @@ async function copyLink() {
             placeholder="Zadej kód místnosti"
             class="flex-1 rounded-xl border bg-transparent px-3 py-2"
           />
-          <button class="rounded-xl border px-4 py-2" @click="connectToHashInput">Připojit</button>
+          <BaseButton class="rounded-xl border px-4 py-2" @click="connectToHashInput"
+            >Připojit</BaseButton
+          >
         </div>
       </div>
       <p class="text-center text-sm opacity-70">
