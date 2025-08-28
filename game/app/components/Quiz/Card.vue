@@ -15,7 +15,7 @@ const cardClass = computed(() => {
     'cursor-pointer rounded-lg p-6 text-sm shadow transition-shadow duration-200 hover:shadow-lg';
   if (props.quiz.attempts < 5) {
     return `${baseClass} bg-new`;
-  } else if (props.quiz.accuracy >= 75) {
+  } else if (props.quiz.accuracy >= 80) {
     return `${baseClass} bg-success`;
   } else if (props.quiz.accuracy >= 50) {
     return `${baseClass} bg-warning`;
@@ -31,7 +31,7 @@ const localePath = useLocalePath();
   <NuxtLink :to="localePath(`/kvizy/${props.quiz.id}/${props.quiz.slug}`)" class="block">
     <div :class="cardClass">
       <h3 class="mb-2 text-xl font-semibold">{{ props.quiz.name }}</h3>
-      <p class="mb-4 text-xs text-gray-600 dark:text-gray-500" v-html="props.quiz.description" />
+      <p class="mb-4 text-xs text-gray-600" v-html="props.quiz.description" />
       <span
         v-for="(tag, index) in quiz.tags_array"
         v-if="quiz.tags_array && quiz.tags_array.length"
@@ -44,8 +44,8 @@ const localePath = useLocalePath();
         </span>
       </span>
       <div class="mt-4 flex justify-between">
-        <p class="text-xs text-gray-600 dark:text-gray-400">{{ quiz.accuracy }}% úspěšnost</p>
-        <p class="text-xs text-gray-600 dark:text-gray-400">otázek {{ quiz.questions_count }}</p>
+        <p class="text-xs text-gray-600">{{ quiz.accuracy }}% úspěšnost</p>
+        <p class="text-xs text-gray-600">otázek {{ quiz.questions_count }}</p>
       </div>
     </div>
   </NuxtLink>
