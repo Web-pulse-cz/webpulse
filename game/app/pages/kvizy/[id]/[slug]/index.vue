@@ -93,13 +93,13 @@ useHead(() => {
     <div v-if="quizStarted && !quizFinished" class="mt-6">
       <div class="mt-6" aria-hidden="true">
         <div class="overflow-hidden rounded-full bg-gray-200">
-          <div class="h-2 rounded-full bg-primary" :style="`width: ${progress}%`" />
+          <div class="h-2 rounded-full bg-primaryDark" :style="`width: ${progress}%`" />
         </div>
       </div>
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12">
       <p
-        class="mb-4 text-center font-bold text-primary"
+        class="mb-4 text-center font-semibold text-primaryDark"
         v-html="quizData?.questions[currentQuestionIndex]?.name"
       />
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
@@ -107,12 +107,13 @@ useHead(() => {
           v-for="(answer, index) in quizData?.questions[currentQuestionIndex]?.answers"
           :key="index"
           :class="[
-            answer.is_selected || answer.is_selected === true
-              ? 'bg-primary text-white'
-              : 'bg-white text-gray-500',
+            answer.is_selected === true ? 'bg-primaryDark text-white' : 'bg-white',
             'cursor-pointer text-wrap rounded-lg p-4 text-sm shadow lg:p-6',
           ]"
-          @click="markSelected(answer)"
+          @click="
+            markSelected(answer);
+            answer.is_selected = true;
+          "
         >
           <p>{{ answer.name }}</p>
         </div>
