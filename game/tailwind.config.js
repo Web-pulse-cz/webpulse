@@ -20,9 +20,10 @@ export default {
         textLight: '#000000',
         text: '#333333',
         textDark: '#FFFFFF',
-        danger: '#FF6347',
-        warning: '#FFA500',
-        success: '#32CD32',
+        new: 'oklch(95.1% 0.026 236.824)',
+        danger: 'oklch(93.6% 0.032 17.717)',
+        warning: 'oklch(97.3% 0.071 103.193)',
+        success: 'oklch(96.2% 0.044 156.743)',
       },
       fontFamily: {
         winky: ['Winky Rough', 'cursive'],
