@@ -20,6 +20,9 @@ export default {
         textLight: '#000000',
         text: '#333333',
         textDark: '#FFFFFF',
+        danger: '#FF6347',
+        warning: '#FFA500',
+        success: '#32CD32',
       },
       fontFamily: {
         winky: ['Winky Rough', 'cursive'],

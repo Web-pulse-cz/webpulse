@@ -169,23 +169,23 @@ async function copyLink() {
 </script>
 
 <template>
-  <main class="flex min-h-screen items-center justify-center p-6">
+  <main class="flex min-h-screen items-center justify-center">
     <!-- Lobby -->
     <div v-if="lobbyMode" class="w-full max-w-md space-y-6">
       <h1 class="text-center text-3xl font-bold">Piškvorky online</h1>
       <div class="space-y-4 rounded-2xl border bg-white/5 p-6 shadow">
-        <button class="w-full rounded-2xl border py-3 transition hover:shadow" @click="createRoom">
-          Vytvořit novou hru
-        </button>
+        <BaseButton class="w-full" @click="createRoom"> Vytvořit novou hru </BaseButton>
 
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
           <input
             v-model="hashInput"
             type="text"
             placeholder="Zadej kód místnosti"
             class="flex-1 rounded-xl border bg-transparent px-3 py-2"
           />
-          <button class="rounded-xl border px-4 py-2" @click="connectToHashInput">Připojit</button>
+          <BaseButton class="flex-1 rounded-xl border px-4 py-2" @click="connectToHashInput"
+            >Připojit</BaseButton
+          >
         </div>
       </div>
       <p class="text-center text-sm opacity-70">
