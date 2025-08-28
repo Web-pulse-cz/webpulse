@@ -38,7 +38,9 @@ async function joinRoom(roomId: string) {
   if (channel.value) {
     try {
       await channel.value.unsubscribe();
-    } catch {}
+    } catch {
+      /* empty */
+    }
     channel.value = null;
   }
 
@@ -121,24 +123,43 @@ onBeforeUnmount(() => {
 
 // herní akce
 function canPlay(i: number) {
-  if (!mySymbol.value) return false;
-  if (isOver.value) return false;
-  if (board.value[i]) return false;
+  if (!mySymbol.value) {
+    console.log('canPlay: no symbol');
+    return false;
+  }
+  if (isOver.value) {
+    console.log('canPlay: game over');
+    return false;
+  }
+  if (board.value[i]) {
+    console.log('canPlay: cell occupied');
+    return false;
+  }
   return turn.value === mySymbol.value && playersCount.value >= 2;
 }
 
 function handleMove(i: number) {
-  if (!channel.value || !mySymbol.value) return;
-  if (!canPlay(i)) return;
+  if (!channel.value || !mySymbol.value) {
+    console.log('handleMove: no channel or symbol');
+    return;
+  }
+  if (!canPlay(i)) {
+    console.log('handleMove: cannot play');
+    return;
+  }
   channel.value.send({
     type: 'broadcast',
     event: 'move',
     payload: { index: i, symbol: mySymbol.value },
   });
+  playAt(i, mySymbol.value);
 }
 
 function emitReset() {
-  if (!channel.value) return;
+  if (!channel.value) {
+    console.log(true);
+    return;
+  }
   channel.value.send({ type: 'broadcast', event: 'reset', payload: {} });
 }
 
@@ -188,7 +209,11 @@ async function copyLink() {
             <p v-if="!connected" class="text-sm">Připojování...</p>
             <p v-else-if="playersCount < 2" class="text-sm">Čekám na protihráče</p>
             <p v-else class="text-sm">
-              Na tahu: <strong>{{ localTurnText }}</strong>
+              Na tahu:
+              <strong
+                :class="[localTurnText === 'O' ? 'text-primaryDark' : 'text-secondaryDark']"
+                >{{ localTurnText }}</strong
+              >
             </p>
             <p v-if="winner" class="mt-1 text-lg font-semibold">
               Výsledek: {{ winner === 'X' ? 'Vyhrál hráč X' : 'Vyhrál hráč O' }}
@@ -200,7 +225,10 @@ async function copyLink() {
             <button
               v-for="(cell, i) in board"
               :key="i"
-              class="flex aspect-square items-center justify-center rounded-xl border text-4xl font-bold transition hover:shadow disabled:opacity-50"
+              :class="[
+                cell === 'O' ? 'text-primaryDark' : 'text-secondaryDark',
+                'flex aspect-square items-center justify-center rounded-xl border text-4xl font-bold transition hover:shadow disabled:opacity-50',
+              ]"
               :disabled="!canPlay(i)"
               @click="handleMove(i)"
             >
