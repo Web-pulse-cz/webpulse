@@ -13,7 +13,7 @@ const props = defineProps<{
 const cardClass = computed(() => {
   const baseClass =
     'cursor-pointer rounded-lg p-6 text-sm shadow transition-shadow duration-200 hover:shadow-lg';
-  if (props.quiz.attempts < 5) {
+  if (props.quiz.attempts <= 3) {
     return `${baseClass} bg-new`;
   } else if (props.quiz.accuracy >= 80) {
     return `${baseClass} bg-success`;
