@@ -44,6 +44,12 @@ const games = ref([
       'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2Fc93bc83a10564636b3abd0a30eab1919/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAP7lDdyXInj1Lxehkdo3tdlADinuTxCxH_O9MjVUf-RK&exp=1756330767&osig=AAAAAAAAAAAAAAAAAAAAAIebKg8vogXQED7WOdMuYYPzbVR-t2TZobQINdYqW95F&signer=media-rpc&x-canva-quality=screen_2x',
     linkUrl: '/slepa-mapa',
   },
+  {
+    name: 'Aréna',
+    imageUrl:
+      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F39141a1b0d754beaba199e70e816ff15/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAABJDJlkuPHmTyF7IQgxoqpiS4kYyaGsn4dxuImjfLano&exp=1756559801&osig=AAAAAAAAAAAAAAAAAAAAACkDDMqp7G0rQaTHgi53KBzTx7QJ-9yJMUaxMWlRy-lY&signer=media-rpc&x-canva-quality=screen_2x',
+    linkUrl: '/arena',
+  },
 ]);
 </script>
 
