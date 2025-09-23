@@ -8,7 +8,7 @@ export default defineNuxtConfig({
         nitro: {
           preset: 'node',
         },
-        baseUrl: process.env.API_URL ?? 'https://web-pulse.cz/',
+        baseUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz.cz/',
         mode: 'token',
         endpoints: {
           csrf: '/sanctum/csrf-cookie',
@@ -71,7 +71,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/api/**': {
-      proxy: `${process.env.API_URL ?? 'https://web-pulse.cz/'}/api/**`,
+      proxy: `${process.env.API_URL ?? 'https://api.martinhanzl.cz.cz/'}/api/**`,
     },
   },
   compatibilityDate: '2024-11-01',
