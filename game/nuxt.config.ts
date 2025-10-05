@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     [
       'nuxt-auth-sanctum',
       {
-        baseUrl: process.env.API_URL ?? 'https://web-pulse.cz/',
+        baseUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz/',
         mode: 'token',
         csrf: {
           cookie: 'XSRF-TOKEN',
@@ -16,9 +16,9 @@ export default defineNuxtConfig({
     [
       '@nuxt/image',
       {
-        domains: ['martinhanzl.cz', 'web-pulse.cz'],
+        domains: ['martinhanzl.cz', 'api.martinhanzl.cz'],
         formats: ['webp', 'jpg', 'png', 'jpeg', 'svg'],
-        alias: { img: 'https://web-pulse.cz/content/images/' },
+        alias: { img: 'https://api.martinhanzl.cz/content/images/' },
       },
     ],
     '@vee-validate/nuxt',
@@ -77,8 +77,8 @@ export default defineNuxtConfig({
   css: ['~/assets/css/style.css'],
   runtimeConfig: {
     public: {
-      apiUrl: process.env.API_URL ?? 'https://web-pulse.cz',
-      appUrl: process.env.APP_URL ?? 'https://web-pulse.cz',
+      apiUrl: process.env.API_URL ?? 'https://api.martinhanzl.cz',
+      appUrl: process.env.APP_URL ?? 'https://api.martinhanzl.cz',
       supabase: {
         url: 'https://tuesjhaxnsguyakzyflb.supabase.co',
         key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZXNqaGF4bnNndXlha3p5ZmxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMTk4ODcsImV4cCI6MjA3MTg5NTg4N30.YpuybsHsN5sMBwL2axkbSIcmxM668MR6ymKAGcuiSCQ',
@@ -88,7 +88,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/api/**': {
-      proxy: `${process.env.API_URL ?? 'https://web-pulse.cz/'}/api/**`,
+      proxy: `${process.env.API_URL ?? 'https://api.martinhanzl.cz/'}/api/**`,
     },
   },
   compatibilityDate: '2024-11-01',
