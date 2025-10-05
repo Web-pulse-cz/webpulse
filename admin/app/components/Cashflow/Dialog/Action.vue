@@ -17,6 +17,11 @@ const props = defineProps({
     required: true,
     default: 'expense',
   },
+  category: {
+    type: String,
+    required: true,
+    default: 'Příjem',
+  },
   dayRecords: {
     type: Array,
     required: true,
@@ -76,7 +81,8 @@ const emit = defineEmits(['save-day-records']);
                         as="h3"
                         class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
                       >
-                        Upravit denní záznam
+                        Upravit denní záznam -
+                        <span class="text-primaryLight">kategorie {{ category }}</span>
                       </DialogTitle>
                       <div
                         v-for="(data, index) in dayRecords"

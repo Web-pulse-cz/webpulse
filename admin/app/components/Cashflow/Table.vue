@@ -6,22 +6,22 @@ const daysInMonth = (month: number, year: number) => {
 const props = defineProps({
   categories: {
     type: Array,
-    required: true,
+    required: false,
     default: [],
   },
   income: {
     type: Array,
-    required: true,
+    required: false,
     default: [],
   },
   year: {
     type: Number,
-    required: true,
+    required: false,
     default: new Date().getFullYear(),
   },
   month: {
     type: Number,
-    required: true,
+    required: false,
     default: new Date().getMonth() + 1,
   },
 });
@@ -32,6 +32,7 @@ const cashflowActionDialog = ref({
   day: 0 as number,
   type: 'expense' as string,
   categoryId: null as number | null,
+  category: null as string | null,
 });
 
 const cashflowBudgetDialog = ref({
@@ -141,10 +142,11 @@ function updateCashflow(type: string, categoryId: number | null, day: number) {
     amount: 0,
   });
   cashflowActionDialog.value.type = type;
+  cashflowActionDialog.value.category = category ? category.name : 'Příjem';
   cashflowActionDialog.value.show = true;
 }
 
-function updateCashflowIncome(day: number) {
+function updateCashflowIncome(day: number, categoryId: number | null = null) {
   cashflowActionDialog.value.day = day;
   cashflowActionDialog.value.categoryId = null;
 
@@ -246,16 +248,16 @@ function formatAmount(amount: number) {
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <table class="min-w-full divide-y divide-gray-300">
             <thead>
-              <tr class="divide-x divide-gray-200">
+              <tr class="divide-x divide-gray-300">
                 <th
                   scope="col"
-                  class="w-[80px] bg-gray-900 px-2 py-2 text-center text-xs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-sm"
+                  class="w-[80px] bg-primaryLight px-2 py-2 text-center text-xxs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-xs"
                 >
                   Datum
                 </th>
                 <th
                   scope="col"
-                  class="w-[110px] bg-gray-900 py-2 pl-2 pr-2 text-left text-xs font-semibold text-gray-300 sm:pr-0 lg:py-3.5 lg:pl-4 lg:pr-4 lg:text-sm"
+                  class="w-auto bg-primaryLight py-2 pl-2 pr-2 text-left text-xs font-semibold text-gray-300 sm:pr-0 lg:py-3.5 lg:pl-4 lg:pr-4 lg:text-xs"
                 >
                   Příjem
                 </th>
@@ -263,7 +265,7 @@ function formatAmount(amount: number) {
                   v-for="(category, index) in categories"
                   :key="index"
                   scope="col"
-                  class="w-[110px] bg-gray-900 px-2 py-2 text-left text-xs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-sm"
+                  class="w-auto bg-primaryLight px-2 py-2 text-left text-xs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-xs"
                   :class="{ 'vertical-line': index === categories.length - 1 }"
                   @mouseover="handleMouseOver"
                   @click="handleClick"
@@ -272,7 +274,7 @@ function formatAmount(amount: number) {
                 </th>
                 <th
                   scope="col"
-                  class="bg-gray-900 py-2 pl-2 pr-2 text-left text-xs font-semibold text-gray-300 sm:pr-0 lg:py-3.5 lg:pl-4 lg:pr-4 lg:text-sm"
+                  class="bg-primaryLight py-2 pl-2 pr-2 text-left text-xs font-semibold text-gray-300 sm:pr-0 lg:py-3.5 lg:pl-4 lg:pr-4 lg:text-xs"
                 >
                   Poznámky
                 </th>
@@ -285,7 +287,7 @@ function formatAmount(amount: number) {
                 class="divide-x divide-gray-200"
               >
                 <td
-                  class="whitespace-nowrap p-1 text-center text-sm font-semibold text-gray-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-sm font-semibold text-gray-500 lg:p-2 lg:text-xs"
                 >
                   {{ day }}
                 </td>
@@ -312,7 +314,7 @@ function formatAmount(amount: number) {
               </tr>
               <tr class="divide-x divide-gray-200">
                 <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
                   colspan="2"
                 >
                   Celkem utraceno
@@ -320,19 +322,19 @@ function formatAmount(amount: number) {
                 <td
                   v-for="(category, index) in categories"
                   :key="index"
-                  class="whitespace-nowrap p-1 text-end text-xs font-semibold text-gray-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-end text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
                 >
                   {{ formatAmount(totalSpent(category.id)) + ' Kč' }}
                 </td>
                 <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-xs"
                 >
                   {{ formatAmount(summaryMonthlySpent()) }} Kč
                 </td>
               </tr>
               <tr class="divide-x divide-gray-200">
                 <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
                   colspan="2"
                 >
                   Měsíční budget
@@ -340,20 +342,20 @@ function formatAmount(amount: number) {
                 <td
                   v-for="(category, index) in categories"
                   :key="index"
-                  class="cursor-pointer whitespace-nowrap p-1 text-end text-xs font-semibold text-gray-500 hover:bg-gray-100 lg:p-2 lg:text-sm"
+                  class="cursor-pointer whitespace-nowrap p-1 text-end text-xs font-semibold text-gray-500 hover:bg-gray-100 lg:p-2 lg:text-xs"
                   @click="updateBudget(category.id, monthlyCategoryBudget(category.id))"
                 >
                   {{ formatAmount(monthlyCategoryBudget(category.id)) + ' Kč' }}
                 </td>
                 <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-xs"
                 >
                   {{ formatAmount(summaryMonthlyBudget()) }} Kč
                 </td>
               </tr>
               <tr class="divide-x divide-gray-200">
                 <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
                   colspan="2"
                 >
                   Zůstává z budgetu
@@ -363,13 +365,13 @@ function formatAmount(amount: number) {
                   :key="index"
                   :class="
                     leftFromBudgetTextClass(category.id) +
-                    ' whitespace-nowrap p-1 text-end text-xs font-semibold lg:p-2 lg:text-sm'
+                    ' whitespace-nowrap p-1 text-end text-xs font-semibold lg:p-2 lg:text-xs'
                   "
                 >
                   {{ formatAmount(leftFromBudget(category.id)) + ' Kč' }}
                 </td>
                 <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-sm"
+                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-xs"
                 >
                   {{ formatAmount(summaryMonthlyLeft()) }} Kč
                 </td>
@@ -384,6 +386,7 @@ function formatAmount(amount: number) {
       :day="cashflowActionDialog.day"
       :day-records="cashflowActionDialog.dayRecords"
       :type="cashflowActionDialog.type"
+      :category="cashflowActionDialog.category ? cashflowActionDialog.category : 'Příjem'"
       @save-day-records="
         emit(
           'save-day-records',
@@ -431,9 +434,5 @@ function formatAmount(amount: number) {
 
 .highlight {
   background-color: #f9fafb;
-}
-
-th {
-  background-color: #111827 !important;
 }
 </style>
