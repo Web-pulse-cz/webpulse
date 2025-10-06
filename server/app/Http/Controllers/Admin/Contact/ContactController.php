@@ -61,6 +61,12 @@ class ContactController extends Controller
             }
         }
 
+        if($request->has('contact_list_id') && $request->get('contact_list_id') != null) {
+            $query->whereHas('lists', function ($q) use ($request) {
+                $q->where('contact_list_id', $request->get('contact_list_id'));
+            });
+        }
+
         if ($request->has('orderWay') && $request->get('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
         }
@@ -142,6 +148,7 @@ class ContactController extends Controller
 
             if ($id) {
                 $contact->syncTasks($request);
+                $contact->syncLists($request);
             }
 
             if ($request->has('contact_id')) {

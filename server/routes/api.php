@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Contact\ContactController;
 use App\Http\Controllers\Admin\Contact\ContactPhaseController;
 use App\Http\Controllers\Admin\Contact\ContactSourceController;
 use App\Http\Controllers\Admin\Contact\ContactTaskController;
+use App\Http\Controllers\Admin\Contact\ContactListController;
 use App\Http\Controllers\Admin\Message\MessageBlueprintController;
 use App\Http\Controllers\Admin\Project\ProjectController;
 use App\Http\Controllers\Admin\Project\ProjectStatusController;
@@ -306,6 +307,16 @@ Route::group([
                 Route::get('{id}', [ContactTaskController::class, 'show'])->where('id', '[0-9]+');
                 Route::post('{id?}', [ContactTaskController::class, 'store']);
                 Route::delete('{id}', [ContactTaskController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            // Contact list routes
+            Route::group([
+                'prefix' => 'list'
+            ], function () {
+                Route::get('', [ContactListController::class, 'index']);
+                Route::get('{id}', [ContactListController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ContactListController::class, 'store']);
+                Route::delete('{id}', [ContactListController::class, 'destroy'])->where('id', '[0-9]+');
             });
 
             Route::get('', [ContactController::class, 'index']);

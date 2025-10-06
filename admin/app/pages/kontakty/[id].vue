@@ -13,6 +13,7 @@ const loading = ref(false);
 const phases = ref([]);
 const sources = ref([]);
 const tasks = ref([]);
+const lists = ref([]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nový kontakt' : 'Detail kontaktu');
 
@@ -135,6 +136,7 @@ async function loadItem() {
     .then((response) => {
       item.value = response;
       item.value.tasks = response.tasks.map((task) => task.id);
+      item.value.lists = response.lists.map((list) => list.id);
       breadcrumbs.value.pop();
       pageTitle.value = item.value.firstname + ' ' + item.value.lastname;
       breadcrumbs.value.push({
@@ -247,6 +249,33 @@ async function loadTasks() {
       toast.add({
         title: 'Chyba',
         description: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
+        color: 'red',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
+async function loadLists() {
+  const client = useSanctumClient();
+  loading.value = true;
+
+  await client<{ id: number }>('/api/admin/contact/list', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      lists.value = response;
+    })
+    .catch(() => {
+      error.value = true;
+      toast.add({
+        title: 'Chyba',
+        description: 'Nepodařilo se načíst seznamy kontaktů. Zkuste to prosím později.',
         color: 'red',
       });
     })
@@ -421,6 +450,15 @@ function addRemoveItemTask(taskId) {
   }
 }
 
+function addRemoveItemList(listId) {
+  if (item.value.lists.includes(listId)) {
+    item.value.lists = item.value.lists.filter((list) => list !== listId);
+    return;
+  } else {
+    item.value.lists.push(listId);
+  }
+}
+
 function editHistoryItem(history) {
   historyDialog.value.item = history;
   historyDialog.value.open = true;
@@ -452,6 +490,7 @@ onMounted(() => {
   loadPhases();
   loadSources();
   loadTasks();
+  loadLists();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -589,6 +628,23 @@ definePageMeta({
                 class="col-span-full"
               />
               <ContactAutocomplete v-model="item.contact_id" class="col-span-full" label="Od" />
+            </div>
+          </LayoutContainer>
+          <LayoutContainer class="col-span-full w-full">
+            <LayoutTitle>Zařazení do seznamů</LayoutTitle>
+            <div class="grid grid-cols-1 gap-x-4 gap-y-8 lg:grid-cols-4">
+              <BaseFormCheckbox
+                v-for="(list, key) in lists"
+                :key="key"
+                :label="list.name"
+                :name="list.id"
+                :value="item.lists.includes(list.id)"
+                :checked="item.lists.includes(list.id)"
+                class="col-span-1"
+                type="badge"
+                :color="list.color"
+                @change="addRemoveItemList(list.id)"
+              />
             </div>
           </LayoutContainer>
         </div>

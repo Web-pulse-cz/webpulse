@@ -240,8 +240,13 @@ const navigation = ref([
         slug: 'contacts',
         submenu: [
           {
-            name: 'Seznam kontaktů',
+            name: 'Kontakty',
             link: '/kontakty',
+            current: false,
+          },
+          {
+            name: 'Seznamy kontaktů',
+            link: '/kontakty/seznamy',
             current: false,
           },
           {
