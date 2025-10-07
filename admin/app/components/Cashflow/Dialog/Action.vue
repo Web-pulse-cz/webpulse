@@ -81,7 +81,7 @@ const emit = defineEmits(['save-day-records']);
                         as="h3"
                         class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
                       >
-                        Upravit denní záznam -
+                        Upravit záznamy - {{ day }}. -
                         <span class="text-primaryLight">kategorie {{ category }}</span>
                       </DialogTitle>
                       <div

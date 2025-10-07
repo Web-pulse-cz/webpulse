@@ -116,6 +116,15 @@ function descriptionByDay(day: number) {
   }, '');
 }
 
+function descriptionByDayIncome(day: number) {
+  return props.income.reduce((acc: string, cashflow: any) => {
+    if (new Date(cashflow.date).getDate() === day) {
+      return acc ? `${acc}, ${cashflow.description}` : cashflow.description + '';
+    }
+    return acc + '';
+  }, '');
+}
+
 function updateCashflow(type: string, categoryId: number | null, day: number) {
   cashflowActionDialog.value.day = day;
   cashflowActionDialog.value.categoryId = categoryId;
@@ -265,7 +274,7 @@ function formatAmount(amount: number) {
                   v-for="(category, index) in categories"
                   :key="index"
                   scope="col"
-                  class="w-auto bg-primaryLight px-2 py-2 text-left text-xs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-xs"
+                  class="w-auto min-w-[130px] bg-primaryLight px-2 py-2 text-left text-xs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-xs"
                   :class="{ 'vertical-line': index === categories.length - 1 }"
                   @mouseover="handleMouseOver"
                   @click="handleClick"
@@ -309,7 +318,9 @@ function formatAmount(amount: number) {
                   >
                 </td>
                 <td class="whitespace-nowrap p-1 text-xs text-gray-500 lg:p-2">
-                  {{ descriptionByDay(day) }}
+                  <span v-if="descriptionByDayIncome(day) !== ''" class="text-success">{{ descriptionByDayIncome(day)}} </span>
+                  <span v-if="descriptionByDayIncome(day) !== ''">, </span>
+                  <span v-if="descriptionByDay(day) !== ''" class="text-danger">{{ descriptionByDay(day)}}</span>
                 </td>
               </tr>
               <tr class="divide-x divide-gray-200">
