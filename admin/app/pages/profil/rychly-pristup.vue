@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const loading = ref(false);
 const error = ref(false);
@@ -56,11 +56,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst položky rychlého přístupu. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -82,11 +81,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku rychlého přístupu.',
         severity: 'error',
-        group: 'bc'
       });
     })
     .finally(() => {

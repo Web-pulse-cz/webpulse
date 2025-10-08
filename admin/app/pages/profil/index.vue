@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
-import { useToast } from 'primevue/usetoast';
+
 import { definePageMeta } from '#imports';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
 const userGroupStore = useUserGroupStore();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const error = ref(false);
 const loading = ref(false);
 const { refreshIdentity, logout } = useSanctumAuth();
@@ -67,7 +67,7 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         title: 'Chyba',
         description: 'Nepodařilo se načíst uživatelský profil. Zkuste to prosím později.',
         color: 'red',
@@ -105,22 +105,20 @@ async function saveItem() {
       item.value = response;
     })
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail: 'Uživatelský profil byl úspěšně upraven.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       refreshIdentity();
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se uložit uživatelský profil. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -130,7 +128,7 @@ async function saveItem() {
 
 async function savePassword() {
   if (passwords.value.new_password !== passwords.value.confirm_new_password) {
-    toast.add({
+    $toast.show({
       summary: 'Chyba',
       detail: 'Pole nové heslo a potvrzení nového hesla se neshodují.',
       severity: 'error',
@@ -157,11 +155,10 @@ async function savePassword() {
     })
     .then(() => {
       refreshIdentity();
-      toast.add({
+      $toast.show({
         summary: 'Úspěch',
         detail: 'Nové heslo bylo změněno. Nyní dojde k odhlášení.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       setTimeout(() => {
         logout();
@@ -169,12 +166,11 @@ async function savePassword() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se uložit heslo. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -186,19 +182,17 @@ async function copyToClipboard() {
   await navigator.clipboard
     .writeText(item.value.invitation_token)
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Kopírováno',
         detail: 'Kód pozvánky byl zkopírován do schránky.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
     })
     .catch(() => {
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se zkopírovat kód pozvánky do schránky.',
         severity: 'error',
-        group: 'bc',
       });
     });
 }

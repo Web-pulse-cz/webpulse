@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { useActivityStore } from '~/../stores/activityStore';
 
 const activityStore = useActivityStore();
@@ -8,7 +8,7 @@ const activityStore = useActivityStore();
 const route = useRoute();
 const router = useRouter();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Statistiky');
 
 const loading = ref(false);
@@ -56,11 +56,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

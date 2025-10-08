@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
@@ -8,7 +8,7 @@ import { useTaxRateStore } from '~/../stores/taxRateStore';
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -75,11 +75,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst logo. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -110,14 +109,13 @@ async function saveItem(redirect = true as boolean) {
     },
   })
     .then((response) => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat'
             ? 'Logo bylo úspěšně vytvořeno.'
             : 'Logo bylo úspěšně upraveno.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push('/obsah/loga/' + response.id);
@@ -129,12 +127,11 @@ async function saveItem(redirect = true as boolean) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se upravit logo. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

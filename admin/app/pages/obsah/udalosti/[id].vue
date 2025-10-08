@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
@@ -8,7 +8,7 @@ import { useTaxRateStore } from '~/../stores/taxRateStore';
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -145,11 +145,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst událost. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -181,11 +180,10 @@ async function loadCategories() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst kategorie. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -226,14 +224,13 @@ async function saveItem(redirect = true as boolean) {
     },
   })
     .then((response) => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat'
             ? 'Událost byla úspěšně vytvořena.'
             : 'Událost byla úspěšně upravena.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push('/obsah/udalosti/' + response.id);
@@ -245,12 +242,11 @@ async function saveItem(redirect = true as boolean) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se upravit událost. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -292,14 +288,13 @@ async function saveRegistrationItem() {
     },
   )
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat'
             ? 'Registrace byla úspěšně vytvořena.'
             : 'Registrace byla úspěšně upravena.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       registrationDialog.value.show = false;
       registrationDialog.value.item = {
@@ -323,12 +318,11 @@ async function saveRegistrationItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se upravit registraci. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -349,11 +343,10 @@ async function deleteRegistrationItem(id: number) {
   })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku registrace.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

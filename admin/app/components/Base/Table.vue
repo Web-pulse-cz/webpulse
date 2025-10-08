@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import {
   BoltIcon,
   MagnifyingGlassIcon,
@@ -12,7 +12,7 @@ import {
 import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const user = useSanctumUser();
 const userGroupStore = useUserGroupStore();
@@ -122,19 +122,17 @@ async function copyToClipboard(item, key) {
   await navigator.clipboard
     .writeText(item[key])
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Kopírováno',
         detail: 'Zpráva byla úspěšně zkopírována do schránky.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
     })
     .catch(() => {
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se zkopírovat zprávu do schránky.',
         severity: 'error',
-        group: 'bc',
       });
     });
 }
