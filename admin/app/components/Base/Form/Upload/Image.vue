@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import Draggable from 'vuedraggable';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const manualUploaded = ref(false);
 const props = defineProps({
   fileType: {
@@ -156,15 +156,15 @@ async function uploadFiles() {
     const result = await response;
     emit('update-files', result);
 
-    toast.add({
+    $toast.show({
       summary: 'Hotovo',
       detail: props.multiple ? 'Soubory byly úspěšně nahrány.' : 'Soubor byl úspěšně nahrán.',
-      severity: 'succcess',
+      severity: 'success',
       group: 'bc',
     });
   } catch (error) {
     console.log(error);
-    toast.add({
+    $toast.show({
       summary: 'Chyba',
       detail: props.multiple
         ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.'

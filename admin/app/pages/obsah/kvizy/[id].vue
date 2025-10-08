@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { Form } from 'vee-validate';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -71,11 +71,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -104,18 +103,18 @@ async function saveItem() {
     },
   })
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat' ? 'Kvíz byl úspěšně vytvořen.' : 'Kvíz byl úspěšně upraven.',
-        severity: 'succcess',
+        severity: 'success',
         group: 'br',
       });
       // router.push('/obsah/kvizy');
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se upravit kvíz. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
@@ -158,14 +157,14 @@ function copyQuizUrl() {
   navigator.clipboard
     .writeText(quizUrl)
     .then(() => {
-      toast.add({
+      $toast.show({
         title: 'Odkaz zkopírován',
         description: 'Odkaz na kvíz byl úspěšně zkopírován do schránky.',
         color: 'green',
       });
     })
     .catch(() => {
-      toast.add({
+      $toast.show({
         title: 'Chyba',
         description: 'Nepodařilo se zkopírovat odkaz do schránky.',
         color: 'red',

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, provide } from 'vue';
-import Toast from 'primevue/toast';
 import {
   Dialog,
   DialogPanel,
@@ -897,8 +896,8 @@ onMounted(() => {
       </div>
 
       <main class="py-10">
-        <Toast />
         <div class="px-4 sm:px-6 lg:px-8">
+          <UiToastContainer />
           <slot />
         </div>
       </main>

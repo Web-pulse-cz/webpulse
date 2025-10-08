@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import _ from 'lodash';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
 const userGroupStore = useUserGroupStore();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Administrátorské skupiny');
 
 const loading = ref(false);
@@ -54,11 +54,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst administrátorské skupiny. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -80,11 +79,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku administrátorské skupinu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

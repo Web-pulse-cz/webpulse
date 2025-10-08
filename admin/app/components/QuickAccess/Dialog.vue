@@ -2,9 +2,8 @@
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { Form } from 'vee-validate';
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const showDeleteDialog = ref(false);
 const deleteDialogItem = ref(null);
 
@@ -44,26 +43,24 @@ async function submitForm() {
     },
   )
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           'Položka rychlého přístupu byla úspěšně ' +
           (form.value.id == null ? 'přidána' : 'upravena') +
           '.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       refreshIdentity();
     })
     .catch(() => {
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se ' +
           (form.value.id == null ? 'přidat' : 'upravit') +
           ' položku rychlého přístupu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -87,20 +84,18 @@ async function deleteItem() {
     },
   })
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail: 'Položka rychlého přístupu byla úspěšně smazána.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       refreshIdentity();
     })
     .catch(() => {
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku rychlého přístupu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

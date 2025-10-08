@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 
 const cashflowCategoryStore = useCashflowCategoryStore();
 const currencyStore = useCurrencyStore();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Přehled');
 
 const loading = ref(false);
@@ -39,11 +39,10 @@ async function loadDashboard() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst přehled. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -99,21 +98,19 @@ async function saveDayRecords(data: {
     },
   })
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail: 'Záznamy byly úspěšně uložen.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se uložit záznamy. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

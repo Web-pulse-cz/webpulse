@@ -29,7 +29,6 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    '@primevue/nuxt-module',
   ],
   devtools: { enabled: false },
 

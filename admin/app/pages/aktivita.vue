@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { definePageMeta } from '#imports';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Aktivita');
 
 const loading = ref(false);
@@ -46,11 +46,10 @@ async function loadItems(month: number, year: number) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -72,11 +71,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat aktivitu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -101,21 +99,19 @@ async function saveItem(item) {
     },
   )
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail: 'Aktivita byla úspěšně uložena.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se uložit aktivitu. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

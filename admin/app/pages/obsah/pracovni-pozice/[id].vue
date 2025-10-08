@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { Form } from 'vee-validate';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -101,11 +101,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst pracovní pozici. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -140,14 +139,13 @@ async function saveItem(redirect = true as boolean) {
     },
   })
     .then((response) => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat'
             ? 'Pracovní pozice byla úspěšně vytvořena.'
             : 'Pracovní pozice byla úspěšně upravena.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push('/obsah/pracovni-pozice/' + response.id);
@@ -159,12 +157,11 @@ async function saveItem(redirect = true as boolean) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se upravit pracovní pozici. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'primevue/usetoast';
+
 import { Form } from 'vee-validate';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
 const userGroupStore = useUserGroupStore();
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -88,11 +88,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst uživatelský profil. Zkuste to prosím později.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -106,7 +105,7 @@ async function saveItem(redirect = true as boolean) {
     item.value.new_password !== null &&
     item.value.new_password !== item.value.confirm_new_password
   ) {
-    toast.add({
+    $toast.show({
       summary: 'Chyba',
       detail: 'Pole heslo a pole pro potvrzení hesla se neshodují.',
       severity: 'error',
@@ -142,14 +141,13 @@ async function saveItem(redirect = true as boolean) {
     },
   })
     .then((response) => {
-      toast.add({
+      $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat'
             ? 'Administrátor byl úspěšně vytvořen.'
             : 'Administrátor byl úspěšně upraven.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push(`/administratori/${response.id}`);
@@ -164,12 +162,11 @@ async function saveItem(redirect = true as boolean) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail:
           'Nepodařilo se uložit administrátora. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'bc',
       });
     })
     .finally(() => {
@@ -181,19 +178,17 @@ async function copyToClipboard() {
   await navigator.clipboard
     .writeText(item.value.invitation_token)
     .then(() => {
-      toast.add({
+      $toast.show({
         summary: 'Kopírováno',
         detail: 'Kód pozvánky byl zkopírován do schránky.',
-        severity: 'succcess',
-        group: 'bc',
+        severity: 'success',
       });
     })
     .catch(() => {
-      toast.add({
+      $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se zkopírovat kód pozvánky do schránky.',
         severity: 'error',
-        group: 'bc',
       });
     });
 }
