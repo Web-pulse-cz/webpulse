@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
+import { useToast } from 'primevue/usetoast';
 import { definePageMeta } from '#imports';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
@@ -105,19 +106,21 @@ async function saveItem() {
     })
     .then(() => {
       toast.add({
-        title: 'Hotovo',
-        description: 'Uživatelský profil byl úspěšně upraven.',
-        color: 'green',
+        summary: 'Hotovo',
+        detail: 'Uživatelský profil byl úspěšně upraven.',
+        severity: 'succcess',
+        group: 'bc',
       });
       refreshIdentity();
     })
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit uživatelský profil. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -128,9 +131,10 @@ async function saveItem() {
 async function savePassword() {
   if (passwords.value.new_password !== passwords.value.confirm_new_password) {
     toast.add({
-      title: 'Chyba',
-      description: 'Pole nové heslo a potvrzení nového hesla se neshodují.',
-      color: 'red',
+      summary: 'Chyba',
+      detail: 'Pole nové heslo a potvrzení nového hesla se neshodují.',
+      severity: 'error',
+      group: 'bc',
     });
     return;
   }
@@ -154,9 +158,10 @@ async function savePassword() {
     .then(() => {
       refreshIdentity();
       toast.add({
-        title: 'Úspěch',
-        description: 'Nové heslo bylo změněno. Nyní dojde k odhlášení.',
-        color: 'green',
+        summary: 'Úspěch',
+        detail: 'Nové heslo bylo změněno. Nyní dojde k odhlášení.',
+        severity: 'succcess',
+        group: 'bc',
       });
       setTimeout(() => {
         logout();
@@ -165,10 +170,11 @@ async function savePassword() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit heslo. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -181,16 +187,18 @@ async function copyToClipboard() {
     .writeText(item.value.invitation_token)
     .then(() => {
       toast.add({
-        title: 'Kopírováno',
-        description: 'Kód pozvánky byl zkopírován do schránky.',
-        color: 'green',
+        summary: 'Kopírováno',
+        detail: 'Kód pozvánky byl zkopírován do schránky.',
+        severity: 'succcess',
+        group: 'bc',
       });
     })
     .catch(() => {
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se zkopírovat kód pozvánky do schránky.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se zkopírovat kód pozvánky do schránky.',
+        severity: 'error',
+        group: 'bc',
       });
     });
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { Form } from 'vee-validate';
 
 const form = ref({
@@ -14,16 +15,18 @@ function handleSubmit() {
     login(form.value)
       .then(() => {
         toast.add({
-          title: 'Přihlášení',
-          description: 'Byli jste úspěšně přihlášeni.',
-          color: 'green',
+          summary: 'Přihlášení',
+          detail: 'Byli jste úspěšně přihlášeni.',
+          severity: 'succcess',
+          group: 'bc',
         });
       })
       .catch(() => {
         toast.add({
-          title: 'Chyba',
-          description: 'Nepodařilo se přihlásit. Zkontrolujte prosím zadané údaje.',
-          color: 'red',
+          summary: 'Chyba',
+          detail: 'Nepodařilo se přihlásit. Zkontrolujte prosím zadané údaje.',
+          severity: 'error',
+          group: 'bc',
         });
       });
   }

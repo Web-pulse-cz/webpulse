@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { Form } from 'vee-validate';
 
 const toast = useToast();
@@ -77,9 +78,10 @@ async function loadItem() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -111,12 +113,13 @@ async function saveItem(redirect = true as boolean) {
   )
     .then((response) => {
       toast.add({
-        title: 'Hotovo',
-        description:
+        summary: 'Hotovo',
+        detail:
           route.params.id === 'pridat'
             ? 'Novinka byla úspěšně vytvořena.'
             : 'Novinka byla úspěšně upravena.',
-        color: 'green',
+        severity: 'succcess',
+        group: 'bc',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push('/obsah/novinky/' + response.id);
@@ -129,10 +132,11 @@ async function saveItem(redirect = true as boolean) {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se upravit novinku. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {

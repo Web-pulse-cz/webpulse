@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
@@ -56,9 +57,10 @@ async function loadItems() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -83,9 +85,10 @@ async function loadPhases() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -110,9 +113,10 @@ async function loadSources() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -135,9 +139,10 @@ async function deleteItem(id: number) {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat položku kontaktu.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat položku kontaktu.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -160,18 +165,20 @@ async function saveItem(item) {
   })
     .then(() => {
       toast.add({
-        title: 'Hotovo',
-        description: 'Kontakt byl úspěšně uložen.',
-        color: 'green',
+        summary: 'Hotovo',
+        detail: 'Kontakt byl úspěšně uložen.',
+        severity: 'succcess',
+        group: 'bc',
       });
     })
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit kontakt. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
+        group: 'bc'
       });
     })
     .finally(() => {

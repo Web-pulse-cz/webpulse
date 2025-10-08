@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { Form } from 'vee-validate';
 
 const toast = useToast();
@@ -71,9 +72,10 @@ async function loadItem() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -103,20 +105,22 @@ async function saveItem() {
   })
     .then(() => {
       toast.add({
-        title: 'Hotovo',
-        description:
+        summary: 'Hotovo',
+        detail:
           route.params.id === 'pridat' ? 'Kvíz byl úspěšně vytvořen.' : 'Kvíz byl úspěšně upraven.',
-        color: 'green',
+        severity: 'succcess',
+        group: 'br',
       });
-      router.push('/obsah/kvizy');
+      // router.push('/obsah/kvizy');
     })
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se upravit kvíz. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
+        group: 'br',
       });
     })
     .finally(() => {

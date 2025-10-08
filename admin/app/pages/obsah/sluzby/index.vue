@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
@@ -47,9 +48,10 @@ async function loadItems() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst služby. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst služby. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -71,9 +73,10 @@ async function deleteItem(id: number) {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat položku služby.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat položku služby.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {

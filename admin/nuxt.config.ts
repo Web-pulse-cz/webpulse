@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import Aura from '@primeuix/themes/aura';
+
 export default defineNuxtConfig({
   modules: [
     [
@@ -23,11 +25,11 @@ export default defineNuxtConfig({
       },
     ],
     '@nuxt/eslint',
-    '@nuxt/ui',
     '@nuxt/image',
     '@vee-validate/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
+    '@primevue/nuxt-module',
   ],
   devtools: { enabled: false },
 
@@ -86,6 +88,14 @@ export default defineNuxtConfig({
       stylistic: {
         indent: 'tab',
         semi: true,
+      },
+    },
+  },
+
+  primevue: {
+    options: {
+      theme: {
+        preset: Aura,
       },
     },
   },

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import {
   BoltIcon,
   MagnifyingGlassIcon,
@@ -122,16 +123,18 @@ async function copyToClipboard(item, key) {
     .writeText(item[key])
     .then(() => {
       toast.add({
-        title: 'Kopírováno',
-        description: 'Zpráva byla úspěšně zkopírována do schránky.',
-        color: 'green',
+        summary: 'Kopírováno',
+        detail: 'Zpráva byla úspěšně zkopírována do schránky.',
+        severity: 'succcess',
+        group: 'bc',
       });
     })
     .catch(() => {
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se zkopírovat zprávu do schránky.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se zkopírovat zprávu do schránky.',
+        severity: 'error',
+        group: 'bc',
       });
     });
 }

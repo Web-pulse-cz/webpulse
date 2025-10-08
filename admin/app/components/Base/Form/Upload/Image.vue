@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import Draggable from 'vuedraggable';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
@@ -156,18 +157,20 @@ async function uploadFiles() {
     emit('update-files', result);
 
     toast.add({
-      title: 'Hotovo',
-      description: props.multiple ? 'Soubory byly úspěšně nahrány.' : 'Soubor byl úspěšně nahrán.',
-      color: 'green',
+      summary: 'Hotovo',
+      detail: props.multiple ? 'Soubory byly úspěšně nahrány.' : 'Soubor byl úspěšně nahrán.',
+      severity: 'succcess',
+      group: 'bc',
     });
   } catch (error) {
     console.log(error);
     toast.add({
-      title: 'Chyba',
-      description: props.multiple
+      summary: 'Chyba',
+      detail: props.multiple
         ? 'Nepodařilo se nahrát jeden nebo více souborů. Zkuste to prosím později.'
         : 'Nepodařilo se nahrát soubor. Zkuste to prosím později.',
-      color: 'red',
+      severity: 'error',
+      group: 'bc',
     });
   }
 }

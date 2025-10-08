@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import _ from 'lodash';
 import { useActivityStore } from '~/../stores/activityStore';
 
@@ -49,9 +50,10 @@ async function loadItems() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -74,9 +76,10 @@ async function deleteItem(id: number) {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat pložku aktivity.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat pložku aktivity.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {

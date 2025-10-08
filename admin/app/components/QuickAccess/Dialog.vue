@@ -2,6 +2,7 @@
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { Form } from 'vee-validate';
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 
 const toast = useToast();
 const showDeleteDialog = ref(false);
@@ -44,23 +45,25 @@ async function submitForm() {
   )
     .then(() => {
       toast.add({
-        title: 'Hotovo',
-        description:
+        summary: 'Hotovo',
+        detail:
           'Položka rychlého přístupu byla úspěšně ' +
           (form.value.id == null ? 'přidána' : 'upravena') +
           '.',
-        color: 'green',
+        severity: 'succcess',
+        group: 'bc',
       });
       refreshIdentity();
     })
     .catch(() => {
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se ' +
           (form.value.id == null ? 'přidat' : 'upravit') +
           ' položku rychlého přístupu.',
-        color: 'red',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -85,17 +88,19 @@ async function deleteItem() {
   })
     .then(() => {
       toast.add({
-        title: 'Hotovo',
-        description: 'Položka rychlého přístupu byla úspěšně smazána.',
-        color: 'green',
+        summary: 'Hotovo',
+        detail: 'Položka rychlého přístupu byla úspěšně smazána.',
+        severity: 'succcess',
+        group: 'bc',
       });
       refreshIdentity();
     })
     .catch(() => {
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat položku rychlého přístupu.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat položku rychlého přístupu.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
