@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { Form } from 'vee-validate';
-import { ref } from 'vue';
-
-const toast = useToast();
-const showDeleteDialog = ref(false);
-const deleteDialogItem = ref(null);
 
 const show = defineModel('show', {
   type: Boolean,

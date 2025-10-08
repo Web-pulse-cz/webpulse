@@ -1,29 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { Form } from 'vee-validate';
 
 const form = ref({
   email: '' as string,
   password: '' as string,
 });
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const { login } = useSanctumAuth();
 function handleSubmit() {
   if (form.value.email && form.value.password) {
     login(form.value)
       .then(() => {
-        toast.add({
-          title: 'Přihlášení',
-          description: 'Byli jste úspěšně přihlášeni.',
-          color: 'green',
+        $toast.show({
+          summary: 'Přihlášení',
+          detail: 'Byli jste úspěšně přihlášeni.',
+          severity: 'success',
+          group: 'bc',
         });
       })
       .catch(() => {
-        toast.add({
-          title: 'Chyba',
-          description: 'Nepodařilo se přihlásit. Zkontrolujte prosím zadané údaje.',
-          color: 'red',
+        $toast.show({
+          summary: 'Chyba',
+          detail: 'Nepodařilo se přihlásit. Zkontrolujte prosím zadané údaje.',
+          severity: 'error',
+          group: 'bc',
         });
       });
   }

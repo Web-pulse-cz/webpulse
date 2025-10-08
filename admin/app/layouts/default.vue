@@ -27,7 +27,6 @@ import {
   BuildingOfficeIcon,
   WalletIcon,
   DocumentTextIcon,
-  AdjustmentsHorizontalIcon,
   ChatBubbleBottomCenterTextIcon,
   ChartBarSquareIcon,
   AtSymbolIcon,
@@ -898,6 +897,7 @@ onMounted(() => {
 
       <main class="py-10">
         <div class="px-4 sm:px-6 lg:px-8">
+          <UiToastContainer />
           <slot />
         </div>
       </main>

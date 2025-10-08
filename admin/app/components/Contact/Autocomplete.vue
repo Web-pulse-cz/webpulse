@@ -23,7 +23,7 @@ defineProps({
     default: '' as string | null,
   },
 });
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const model = ref<number | null>(null);
 
@@ -60,10 +60,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {

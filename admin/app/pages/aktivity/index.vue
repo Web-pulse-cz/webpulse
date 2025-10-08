@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+
 import _ from 'lodash';
 import { useActivityStore } from '~/../stores/activityStore';
 
 const activityStore = useActivityStore();
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Aktivity');
 
 const loading = ref(false);
@@ -48,10 +49,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -73,10 +74,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat pložku aktivity.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat pložku aktivity.',
+        severity: 'error',
       });
     })
     .finally(() => {

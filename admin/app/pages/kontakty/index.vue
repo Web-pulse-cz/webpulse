@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+
 import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Kontakty');
 
 const sources = ref([]);
@@ -55,10 +56,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -82,10 +83,10 @@ async function loadPhases() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -109,10 +110,10 @@ async function loadSources() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -134,10 +135,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat položku kontaktu.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat položku kontaktu.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -159,19 +160,19 @@ async function saveItem(item) {
     },
   })
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: 'Kontakt byl úspěšně uložen.',
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: 'Kontakt byl úspěšně uložen.',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit kontakt. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {

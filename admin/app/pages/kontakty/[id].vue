@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { Form } from 'vee-validate';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -155,10 +156,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst detail kontaktu. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst detail kontaktu. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -187,10 +188,10 @@ async function loadPhases() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -219,10 +220,10 @@ async function loadSources() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -246,10 +247,10 @@ async function loadTasks() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -273,10 +274,10 @@ async function loadLists() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst seznamy kontaktů. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst seznamy kontaktů. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -338,13 +339,13 @@ async function saveItem(redirect = true as boolean) {
     },
   )
     .then((response) => {
-      toast.add({
-        title: 'Hotovo',
-        description:
+      $toast.show({
+        summary: 'Hotovo',
+        detail:
           route.params.id === 'pridat'
             ? 'Kontakt byl úspěšně vytvořen.'
             : 'Kontakt byl úspěšně upraven.',
-        color: 'green',
+        severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push(`/kontakty/${response.id}`);
@@ -356,11 +357,11 @@ async function saveItem(redirect = true as boolean) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit kontakt. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -386,19 +387,19 @@ async function saveHistoryItem(item: { id: number }) {
     },
   )
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: `Záznám historie byl úspěšně ${!item.id ? 'vytvořen' : 'uložen'}.`,
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: `Záznám historie byl úspěšně ${!item.id ? 'vytvořen' : 'uložen'}.`,
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit záznam historie. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -421,18 +422,18 @@ async function deleteHistoryItem(item: { id: number }) {
     },
   })
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: `Záznám historie byl úspěšně smazán.`,
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: `Záznám historie byl úspěšně smazán.`,
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat záznam historie.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat záznam historie.',
+        severity: 'error',
       });
     })
     .finally(() => {

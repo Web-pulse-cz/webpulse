@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Form } from 'vee-validate';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -90,10 +89,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst poptávku. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst poptávku. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {

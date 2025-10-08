@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { definePageMeta } from '#imports';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const pageTitle = ref('Aktivita');
 
 const loading = ref(false);
@@ -45,10 +46,10 @@ async function loadItems(month: number, year: number) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -70,10 +71,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat aktivitu.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat aktivitu.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -98,19 +99,19 @@ async function saveItem(item) {
     },
   )
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: 'Aktivita byla úspěšně uložena.',
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: 'Aktivita byla úspěšně uložena.',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit aktivitu. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {

@@ -318,9 +318,13 @@ function formatAmount(amount: number) {
                   >
                 </td>
                 <td class="whitespace-nowrap p-1 text-xs text-gray-500 lg:p-2">
-                  <span v-if="descriptionByDayIncome(day) !== ''" class="text-success">{{ descriptionByDayIncome(day)}} </span>
+                  <span v-if="descriptionByDayIncome(day) !== ''" class="text-success"
+                    >{{ descriptionByDayIncome(day) }}
+                  </span>
                   <span v-if="descriptionByDayIncome(day) !== ''">, </span>
-                  <span v-if="descriptionByDay(day) !== ''" class="text-danger">{{ descriptionByDay(day)}}</span>
+                  <span v-if="descriptionByDay(day) !== ''" class="text-danger">{{
+                    descriptionByDay(day)
+                  }}</span>
                 </td>
               </tr>
               <tr class="divide-x divide-gray-200">

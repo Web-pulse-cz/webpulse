@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { definePageMeta } from '#imports';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 const tableQuery = ref({
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
@@ -58,10 +59,10 @@ async function loadItems() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst cashflow. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst cashflow. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -84,10 +85,10 @@ async function deleteItem(id: number) {
     .then(() => {})
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat aktivitu.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat aktivitu.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -112,19 +113,19 @@ async function saveCategory(item) {
     },
   })
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: 'Kategorie byla úspěšně uložena.',
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: 'Kategorie byla úspěšně uložena.',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit kategorii. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -159,19 +160,19 @@ async function saveDayRecords(categoryId: number | null, day: number, type: stri
     },
   })
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: 'Záznamy byly úspěšně uložen.',
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: 'Záznamy byly úspěšně uloženy.',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit záznamy. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -203,19 +204,19 @@ async function saveBudget(categoryId: number, budget: number) {
     },
   })
     .then(() => {
-      toast.add({
-        title: 'Hotovo',
-        description: 'Měsíční budget byl úspěšně uložena.',
-        color: 'green',
+      $toast.show({
+        summary: 'Hotovo',
+        detail: 'Měsíční budget byl úspěšně uložena.',
+        severity: 'success',
       });
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit měsíční budget. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {

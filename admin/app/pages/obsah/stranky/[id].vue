@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { Form } from 'vee-validate';
 
-const toast = useToast();
+const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
@@ -72,10 +73,10 @@ async function loadItem() {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst stránku. Zkuste to prosím později.',
-        color: 'red',
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst stránku. Zkuste to prosím později.',
+        severity: 'error',
       });
     })
     .finally(() => {
@@ -105,13 +106,13 @@ async function saveItem(redirect = true as boolean) {
     },
   })
     .then((response) => {
-      toast.add({
-        title: 'Hotovo',
-        description:
+      $toast.show({
+        summary: 'Hotovo',
+        detail:
           route.params.id === 'pridat'
             ? 'Stránka byla úspěšně vytvořena.'
             : 'Stránka byla úspěšně upravena.',
-        color: 'green',
+        severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
         router.push('/obsah/stranky/' + response.id);
@@ -123,11 +124,11 @@ async function saveItem(redirect = true as boolean) {
     })
     .catch(() => {
       error.value = true;
-      toast.add({
-        title: 'Chyba',
-        description:
+      $toast.show({
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se upravit stránku. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
       });
     })
     .finally(() => {
