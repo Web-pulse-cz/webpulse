@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useToast } from 'primevue/usetoast';
 import { ref, watch, computed } from 'vue';
 import {
   Combobox,
@@ -61,9 +62,10 @@ async function loadItems() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst kontakty. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {

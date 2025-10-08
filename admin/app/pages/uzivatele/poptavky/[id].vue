@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 
 const toast = useToast();
 
@@ -67,9 +68,10 @@ async function loadItem() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst poptávku. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst poptávku. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {

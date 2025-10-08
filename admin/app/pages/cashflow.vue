@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { definePageMeta } from '#imports';
 
 const toast = useToast();
@@ -59,9 +60,10 @@ async function loadItems() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst cashflow. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst cashflow. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -85,9 +87,10 @@ async function deleteItem(id: number) {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se smazat aktivitu.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat aktivitu.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {

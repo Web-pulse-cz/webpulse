@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 
@@ -39,9 +40,10 @@ async function loadDashboard() {
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description: 'Nepodařilo se načíst přehled. Zkuste to prosím později.',
-        color: 'red',
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst přehled. Zkuste to prosím později.',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
@@ -98,18 +100,20 @@ async function saveDayRecords(data: {
   })
     .then(() => {
       toast.add({
-        title: 'Hotovo',
-        description: 'Záznamy byly úspěšně uložen.',
-        color: 'green',
+        summary: 'Hotovo',
+        detail: 'Záznamy byly úspěšně uložen.',
+        severity: 'succcess',
+        group: 'bc',
       });
     })
     .catch(() => {
       error.value = true;
       toast.add({
-        title: 'Chyba',
-        description:
+        summary: 'Chyba',
+        detail:
           'Nepodařilo se uložit záznamy. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        color: 'red',
+        severity: 'error',
+        group: 'bc',
       });
     })
     .finally(() => {
