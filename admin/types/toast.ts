@@ -18,5 +18,4 @@ export interface Toast extends Required<Omit<ToastOptions, 'id'>> {
   _timer?: ReturnType<typeof setTimeout> | null;
   _endAt?: number | null;
   _paused?: boolean;
-  test: boolean;
 }
