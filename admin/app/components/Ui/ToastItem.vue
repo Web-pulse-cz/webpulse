@@ -39,7 +39,7 @@ function onMouseLeave() {
 
 <template>
   <div
-    class="pointer-events-auto w-9/12 overflow-hidden rounded-xl shadow-lg ring-1"
+    class="pointer-events-auto w-96 overflow-hidden rounded-xl shadow-lg ring-1"
     :class="[cls.base, 'ring-1', cls.ring]"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
