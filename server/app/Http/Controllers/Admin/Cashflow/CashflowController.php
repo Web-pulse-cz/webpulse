@@ -67,11 +67,11 @@ class CashflowController extends Controller
                 $cashflow->fill([
                     'amount' => $amount,
                     'description' => $record['description'],
-                    'type' => $type,
                     'date' => new \DateTime($formattedDate),
                 ]);
+                $cashflow->type = $type;
                 $cashflow->user_id = $request->user()->id;
-                if ($categoryId) {
+                if ($categoryId && $type != 'income') {
                     $cashflow->cashflow_category_id = $categoryId;
                 }
                 $cashflow->save();
