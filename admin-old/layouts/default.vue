@@ -841,7 +841,7 @@ onMounted(() => {
                 <span class="sr-only">Open user menu</span>
                 <img
                   class="size-8 rounded-full bg-gray-50"
-                  :src="'http://api.martinhanzl.cz/content/images/user/icon/' + user.avatar"
+                  :src="'http://www.martinhanzl.cz/content/images/user/icon/' + user.avatar"
                   alt=""
                 />
                 <span class="hidden lg:flex lg:items-center">

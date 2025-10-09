@@ -67,7 +67,7 @@ watch(
       {
         file: null, // u předvyplněných souborů File není
         name: props.modelValue,
-        preview: `https://api.martinhanzl.cz/content/images/${props.type}/${props.format}/${props.modelValue}`,
+        preview: `https://www.martinhanzl.cz/content/images/${props.type}/${props.format}/${props.modelValue}`,
       },
     ];
   },
