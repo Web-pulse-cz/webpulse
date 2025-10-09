@@ -13,7 +13,7 @@ const posClass = computed(() => {
     case 'bottom-left':
       return 'bottom-4 left-4';
     default:
-      return 'bottom-4 left-1/2 -translate-x-1/2';
+      return 'bottom-4 right-4';
   }
 });
 </script>
