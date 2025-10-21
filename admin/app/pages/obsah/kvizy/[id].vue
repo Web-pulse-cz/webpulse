@@ -274,7 +274,10 @@ definePageMeta({
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#otazky')">
         <LayoutContainer class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
-          <div v-for="(question, index) in item.questions" class="col-span-full grid grid-cols-7">
+          <div
+            v-for="(question, index) in item.questions"
+            class="col-span-full grid grid-cols-7 rounded-lg bg-gray-100 p-6"
+          >
             <div class="col-span-6">
               <BaseFormInput
                 v-model="question.name"
@@ -287,28 +290,50 @@ definePageMeta({
               <BaseButton
                 type="button"
                 variant="danger"
-                size="lg"
+                size="sm"
                 @click="removeItemQuestion(index)"
               >
-                Odstranit
+                Odstranit otázku
               </BaseButton>
             </div>
-            <div class="col-span-full mt-2 grid grid-cols-4 gap-x-4 gap-y-2">
-              <BaseFormInput
-                v-for="(answer, answerIndex) in question.answers"
-                :key="answerIndex"
-                v-model="answer.name"
-                :label="'Odpověď ' + (answerIndex + 1)"
-                :name="'answer_' + answerIndex + '_' + index"
-                required
-              />
-              <BaseFormCheckbox
-                v-for="(answer, answerIndex) in question.answers"
-                :key="'correct-' + answerIndex"
-                v-model="answer.is_correct"
-                :label="'Správná odpověď ' + (answerIndex + 1)"
-                :name="'isCorrect_' + answerIndex + '_' + index"
-              />
+            <LayoutDivider />
+            <div class="col-span-full mt-2 grid grid-cols-1 gap-4">
+              <div v-for="(answer, answerIndex) in question.answers" :key="answerIndex">
+                <div class="flex items-end gap-4">
+                  <BaseFormInput
+                    v-model="answer.name"
+                    :label="'Odpověď ' + (answerIndex + 1)"
+                    :name="'answer_' + answerIndex + '_' + index"
+                    class="flex-1"
+                    required
+                  />
+                  <!-- Button for remove answer -->
+                  <BaseButton
+                    v-if="question.answers.length > 2"
+                    type="button"
+                    variant="danger"
+                    size="sm"
+                    class="col-span-2 mt-2"
+                    :disabled="question.answers.length <= 2"
+                    @click="question.answers.splice(answerIndex, 1)"
+                    >Odstranit odpověď</BaseButton
+                  >
+                </div>
+                <BaseFormCheckbox
+                  v-model="answer.is_correct"
+                  :label="'Správná odpověď ' + (answerIndex + 1)"
+                  :name="'isCorrect_' + answerIndex + '_' + index"
+                />
+              </div>
+              <BaseButton
+                type="button"
+                variant="primary"
+                size="sm"
+                class="mt-2"
+                @click="question.answers.push({ id: null, name: '', is_correct: false })"
+              >
+                Přidat odpověď
+              </BaseButton>
             </div>
           </div>
           <div class="col-span-full text-center">
