@@ -13,14 +13,7 @@ export default defineNuxtConfig({
       },
     ],
     '@nuxt/eslint',
-    [
-      '@nuxt/image',
-      {
-        domains: ['martinhanzl.cz', 'www.martinhanzl.cz'],
-        formats: ['webp', 'jpg', 'png', 'jpeg', 'svg'],
-        alias: { img: 'https://www.martinhanzl.cz/content/images/' },
-      },
-    ],
+    '@nuxt/image',
     '@vee-validate/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
