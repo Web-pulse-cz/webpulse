@@ -53,9 +53,19 @@ function submitQuiz() {
 }
 
 const api = useApi();
-const { data: quizData } = useAsyncData(`quiz-${route.params.id}`, () =>
+const quizData = ref(null);
+
+const { data: quizDataRaw } = await useAsyncData(`quiz-${route.params.id}`, () =>
   api.quiz.quiz(route.params.id),
 );
+
+// Po načtení převeď data na reaktivní objekt
+watchEffect(() => {
+  if (quizDataRaw.value) {
+    // vytvoříme hlubokou kopii, abychom zajistili reaktivitu všech úrovní
+    quizData.value = reactive(JSON.parse(JSON.stringify(quizDataRaw.value)));
+  }
+});
 
 useHead(() => {
   return {
@@ -107,7 +117,7 @@ useHead(() => {
           v-for="(answer, index) in quizData?.questions[currentQuestionIndex]?.answers"
           :key="index"
           :class="[
-            answer.is_selected === true ? 'bg-primaryDark text-white' : 'bg-white',
+            answer.is_selected ? 'bg-primaryDark text-white' : 'bg-white',
             'cursor-pointer text-wrap rounded-lg p-4 text-sm shadow lg:p-6',
           ]"
           @click="

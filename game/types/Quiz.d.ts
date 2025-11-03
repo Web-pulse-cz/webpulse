@@ -19,4 +19,5 @@ export interface QuizAnswer {
   question_id: number;
   name: string;
   is_correct: boolean;
+  is_selected: false;
 }

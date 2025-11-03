@@ -35,6 +35,8 @@ class QuizController extends Controller
             }
         }
 
+        $query->where('user_id', $request->user()->id);
+
         if ($request->has('orderBy') && $request->has('orderWay')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
         }
@@ -88,7 +90,7 @@ class QuizController extends Controller
         try {
             $quiz->fill($request->all());
             $quiz->slug = Str::slug($request->name);
-            $quiz->user_id = 1;
+            $quiz->user_id = $request->user()->id;
             $quiz->save();
             $quiz->questions()->delete();
             foreach ($request->questions as $questionData) {
