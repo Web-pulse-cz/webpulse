@@ -119,7 +119,7 @@ function addDayRecord() {
                           :name="'dayRecords[' + index + '][is_repeated]'"
                           label="Opakovaně"
                           class="col-span-1"
-                          :checked="dayRecords[index].is_repeated"
+                          :checked="data.is_repeated"
                           label-color="grayCustom"
                         />
                       </div>

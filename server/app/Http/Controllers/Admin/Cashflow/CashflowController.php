@@ -68,6 +68,7 @@ class CashflowController extends Controller
                     'amount' => $amount,
                     'description' => $record['description'],
                     'date' => new \DateTime($formattedDate),
+                    'is_repeated' => $record['is_repeated'],
                 ]);
                 $cashflow->type = $type;
                 $cashflow->user_id = $request->user()->id;
