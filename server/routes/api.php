@@ -495,140 +495,141 @@ Route::group([
         // Dashboard and statistics routes
         Route::get('dashboard', [BaseController::class, 'dashboard']);
         Route::get('statistics', [BaseController::class, 'statistics']);
-    });
 
-    // Price offer routes
-    Route::group([
-        'prefix' => 'price-offer'
-    ], function () {
-        Route::get('', [PriceOfferController::class, 'index']);
-        Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [PriceOfferController::class, 'store']);
-        Route::delete('{id}', [PriceOfferController::class, 'destroy'])->where('id', '[0-9]+');
-    });
 
-    // Log routes
-    Route::group([
-        'prefix' => 'log'
-    ], function () {
+        // Price offer routes
         Route::group([
-            'prefix' => 'email'
+            'prefix' => 'price-offer'
         ], function () {
-            Route::get('', [EmailController::class, 'index']);
-            Route::get('{id}', [EmailController::class, 'show'])->where('id', '[0-9]+');
-        });
-    });
-
-    // Service routes
-    Route::group([
-        'prefix' => 'setting'
-    ], function () {
-        Route::get('', [SettingController::class, 'index']);
-        Route::get('{id}', [SettingController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [SettingController::class, 'store']);
-        Route::delete('{id}', [SettingController::class, 'destroy'])->where('id', '[0-9]+');
-    });
-
-    // Review routes
-    Route::group([
-        'prefix' => 'review'
-    ], function () {
-        Route::get('', [ReviewController::class, 'index']);
-        Route::get('{id}', [ReviewController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [ReviewController::class, 'store']);
-        Route::delete('{id}', [ReviewController::class, 'destroy'])->where('id', '[0-9]+');
-    });
-
-    // Logo routes
-    Route::group([
-        'prefix' => 'logo'
-    ], function () {
-        Route::get('', [LogoController::class, 'index']);
-        Route::get('{id}', [LogoController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [LogoController::class, 'store']);
-        Route::delete('{id}', [LogoController::class, 'destroy'])->where('id', '[0-9]+');
-    });
-
-    // Newsletter routes
-    Route::group([
-        'prefix' => 'newsletter'
-    ], function () {
-        Route::get('', [NewsletterController::class, 'index']);
-        Route::get('{id}', [NewsletterController::class, 'destroy'])->where('id', '[0-9]+');
-    });
-
-    // Faq routes
-    Route::group([
-        'prefix' => 'faq'
-    ], function () {
-        Route::group([
-            'prefix' => 'category'
-        ], function () {
-            Route::get('', [FaqCategoryController::class, 'index']);
-            Route::get('{id}', [FaqCategoryController::class, 'show'])->where('id', '[0-9]+');
-            Route::post('{id?}', [FaqCategoryController::class, 'store']);
-            Route::delete('{id}', [FaqCategoryController::class, 'destroy'])->where('id', '[0-9]+');
-        });
-        Route::get('', [FaqController::class, 'index']);
-        Route::get('{id}', [FaqController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [FaqController::class, 'store']);
-        Route::delete('{id}', [FaqController::class, 'destroy'])->where('id', '[0-9]+');
-    });
-
-    // Event routes
-    Route::group([
-        'prefix' => 'event'
-    ], function () {
-        Route::group([
-            'prefix' => 'category'
-        ], function () {
-            Route::get('', [EventCategoryController::class, 'index']);
-            Route::get('{id}', [EventCategoryController::class, 'show'])->where('id', '[0-9]+');
-            Route::post('{id?}', [EventCategoryController::class, 'store']);
-            Route::delete('{id}', [EventCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::get('', [PriceOfferController::class, 'index']);
+            Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PriceOfferController::class, 'store']);
+            Route::delete('{id}', [PriceOfferController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
+        // Log routes
         Route::group([
-            'prefix' => 'registration'
+            'prefix' => 'log'
         ], function () {
-            Route::get('', [EventRegistrationController::class, 'index']);
-            Route::get('{id}', [EventRegistrationController::class, 'show'])->where('id', '[0-9]+');
-            Route::post('{id?}', [EventRegistrationController::class, 'store']);
-            Route::delete('{id}', [EventRegistrationController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::group([
+                'prefix' => 'email'
+            ], function () {
+                Route::get('', [EmailController::class, 'index']);
+                Route::get('{id}', [EmailController::class, 'show'])->where('id', '[0-9]+');
+            });
         });
 
-        Route::get('', [EventController::class, 'index']);
-        Route::get('{id}', [EventController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [EventController::class, 'store']);
-        Route::delete('{id}', [EventController::class, 'destroy'])->where('id', '[0-9]+');
-    });
-
-    // Career routes
-    Route::group([
-        'prefix' => 'career'
-    ], function () {
+        // Service routes
         Route::group([
-            'prefix' => 'application'
+            'prefix' => 'setting'
         ], function () {
-            Route::get('', [CareerApplicationController::class, 'index']);
-            Route::get('{id}', [CareerApplicationController::class, 'show'])->where('id', '[0-9]+');
-            Route::post('{id?}', [CareerApplicationController::class, 'store']);
-            Route::delete('{id}', [CareerApplicationController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::get('', [SettingController::class, 'index']);
+            Route::get('{id}', [SettingController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [SettingController::class, 'store']);
+            Route::delete('{id}', [SettingController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
-        Route::get('', [CareerController::class, 'index']);
-        Route::get('{id}', [CareerController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [CareerController::class, 'store']);
-        Route::delete('{id}', [CareerController::class, 'destroy'])->where('id', '[0-9]+');
-    });
+        // Review routes
+        Route::group([
+            'prefix' => 'review'
+        ], function () {
+            Route::get('', [ReviewController::class, 'index']);
+            Route::get('{id}', [ReviewController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ReviewController::class, 'store']);
+            Route::delete('{id}', [ReviewController::class, 'destroy'])->where('id', '[0-9]+');
+        });
 
-    // Quiz routes
-    Route::group([
-        'prefix' => 'quiz'
-    ], function () {
-        Route::get('', [QuizController::class, 'index']);
-        Route::get('{id}', [QuizController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [QuizController::class, 'store']);
-        Route::delete('{id}', [QuizController::class, 'destroy'])->where('id', '[0-9]+');
+        // Logo routes
+        Route::group([
+            'prefix' => 'logo'
+        ], function () {
+            Route::get('', [LogoController::class, 'index']);
+            Route::get('{id}', [LogoController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [LogoController::class, 'store']);
+            Route::delete('{id}', [LogoController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Newsletter routes
+        Route::group([
+            'prefix' => 'newsletter'
+        ], function () {
+            Route::get('', [NewsletterController::class, 'index']);
+            Route::get('{id}', [NewsletterController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Faq routes
+        Route::group([
+            'prefix' => 'faq'
+        ], function () {
+            Route::group([
+                'prefix' => 'category'
+            ], function () {
+                Route::get('', [FaqCategoryController::class, 'index']);
+                Route::get('{id}', [FaqCategoryController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [FaqCategoryController::class, 'store']);
+                Route::delete('{id}', [FaqCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+            Route::get('', [FaqController::class, 'index']);
+            Route::get('{id}', [FaqController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [FaqController::class, 'store']);
+            Route::delete('{id}', [FaqController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Event routes
+        Route::group([
+            'prefix' => 'event'
+        ], function () {
+            Route::group([
+                'prefix' => 'category'
+            ], function () {
+                Route::get('', [EventCategoryController::class, 'index']);
+                Route::get('{id}', [EventCategoryController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [EventCategoryController::class, 'store']);
+                Route::delete('{id}', [EventCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::group([
+                'prefix' => 'registration'
+            ], function () {
+                Route::get('', [EventRegistrationController::class, 'index']);
+                Route::get('{id}', [EventRegistrationController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [EventRegistrationController::class, 'store']);
+                Route::delete('{id}', [EventRegistrationController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [EventController::class, 'index']);
+            Route::get('{id}', [EventController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [EventController::class, 'store']);
+            Route::delete('{id}', [EventController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Career routes
+        Route::group([
+            'prefix' => 'career'
+        ], function () {
+            Route::group([
+                'prefix' => 'application'
+            ], function () {
+                Route::get('', [CareerApplicationController::class, 'index']);
+                Route::get('{id}', [CareerApplicationController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [CareerApplicationController::class, 'store']);
+                Route::delete('{id}', [CareerApplicationController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [CareerController::class, 'index']);
+            Route::get('{id}', [CareerController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [CareerController::class, 'store']);
+            Route::delete('{id}', [CareerController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Quiz routes
+        Route::group([
+            'prefix' => 'quiz'
+        ], function () {
+            Route::get('', [QuizController::class, 'index']);
+            Route::get('{id}', [QuizController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [QuizController::class, 'store']);
+            Route::delete('{id}', [QuizController::class, 'destroy'])->where('id', '[0-9]+');
+        });
     });
 });
