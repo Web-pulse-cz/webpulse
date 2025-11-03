@@ -67,11 +67,11 @@ const handleSubmit = () => {
             <img src="/../public/static/img/LOGO-2.svg" alt="Company name" />
           </NuxtLink>
           <div>
-            <p class="text-sm/6 text-textWhiteFooter">
+            <p class="text-textWhiteFooter text-sm/6">
               &copy; {{ new Date().getFullYear() }} Webpulse,
               {{ t('layout.footer.rightsReserved') }}.
             </p>
-            <p class="text-sm/6 text-textWhiteFooter">
+            <p class="text-textWhiteFooter text-sm/6">
               {{ t('layout.footer.createdBy') }}
             </p>
           </div>
@@ -108,7 +108,7 @@ const handleSubmit = () => {
                         name: item.link !== '' && item.link !== null ? item.link : 'index',
                       })
                     "
-                    class="text-sm/6 text-textWhiteFooter"
+                    class="text-textWhiteFooter text-sm/6"
                     >{{ item.name }}</NuxtLink
                   >
                 </li>
@@ -150,7 +150,7 @@ const handleSubmit = () => {
             </form>
           </div>
 
-          <p class="mt-2 text-sm/6 text-textWhiteFooter">
+          <p class="text-textWhiteFooter mt-2 text-sm/6">
             {{ t('layout.footer.submitForm') }}
             <!-- TODO: Add link to privacy policy -->
             <NuxtLink to="#" class="textWhiteFooter underline">

@@ -26,7 +26,7 @@ const topMenu = ref({});
 
 <template>
   <BaseModalContactForm :open="isOpen" @close="isOpen = false" />
-  <header class="fixed z-10 w-full bg-chppGray backdrop-blur-md">
+  <header class="bg-chppGray fixed z-10 w-full backdrop-blur-md">
     <nav
       class="mx-auto flex max-w-[1880px] items-center justify-between px-8 py-6 lg:px-8 lg:py-0 2xl:px-72"
       aria-label="Global"
@@ -64,7 +64,7 @@ const topMenu = ref({});
             :to="
               localePath({ name: group.link !== '' && group.link !== null ? group.link : 'index' })
             "
-            class="duration-30 px-6 py-6 text-base font-semibold text-black transition-colors hover:text-brand"
+            class="duration-30 hover:text-brand px-6 py-6 text-base font-semibold text-black transition-colors"
           >
             {{ group.name }}
           </NuxtLink>
@@ -78,7 +78,7 @@ const topMenu = ref({});
                 params: { id: 1, slug: 'zasady-zpracovani-osobnich-udaju' },
               })
             "
-            class="duration-30 px-6 py-6 text-base font-semibold text-brand transition-colors hover:text-brand"
+            class="duration-30 text-brand hover:text-brand px-6 py-6 text-base font-semibold transition-colors"
             >{{ t('general.aboutUs') }}</NuxtLink
           >
 
@@ -110,7 +110,7 @@ const topMenu = ref({});
                 <NuxtLink
                   v-for="locale in locales"
                   :key="locale.code"
-                  class="block rounded-lg px-2.5 py-2 text-sm/6 text-black hover:bg-brand"
+                  class="hover:bg-brand block rounded-lg px-2.5 py-2 text-sm/6 text-black"
                   :to="switchLocalePath(locale.code)"
                 >
                   <img
@@ -162,7 +162,7 @@ const topMenu = ref({});
                     name: group.link !== '' && group.link !== null ? group.link : 'index',
                   })
                 "
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-medium text-black hover:text-brand"
+                class="hover:text-brand -mx-3 block rounded-lg px-3 py-2 text-base font-medium text-black"
               >
                 {{ group.name }}
               </NuxtLink>
@@ -173,7 +173,7 @@ const topMenu = ref({});
                     params: { id: 1, slug: 'zasady-zpracovani-osobnich-udaju' },
                   })
                 "
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-medium text-black hover:text-brand"
+                class="hover:text-brand -mx-3 block rounded-lg px-3 py-2 text-base font-medium text-black"
                 >{{ t('general.aboutUs') }}</NuxtLink
               >
             </div>
@@ -181,7 +181,7 @@ const topMenu = ref({});
               <NuxtLink
                 v-for="locale in locales"
                 :key="locale.code"
-                class="rounded-lg px-2.5 py-2 pr-3 text-sm/7 text-black hover:text-brand"
+                class="hover:text-brand rounded-lg px-2.5 py-2 pr-3 text-sm/7 text-black"
                 :to="switchLocalePath(locale.code)"
               >
                 <img

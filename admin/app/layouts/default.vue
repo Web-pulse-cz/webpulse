@@ -576,8 +576,12 @@ onMounted(() => {
                 class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10"
               >
                 <div class="flex h-24 shrink-0 items-center justify-center">
-                  <NuxtLink to="https://klient.chpp.cz" target="_blank">
-                    <!--                    <img class="h-8 w-auto" src="/static/img/logo.png" alt="Your Company" /> -->
+                  <NuxtLink to="https://hry.martinhanzl.cz" target="_blank">
+                    <img
+                      class="h-8 w-auto"
+                      src="/static/img/logo-gray-300.png"
+                      alt="Your Company"
+                    />
                   </NuxtLink>
                 </div>
                 <nav class="flex flex-1 flex-col">
@@ -667,8 +671,8 @@ onMounted(() => {
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
         <div class="flex h-24 shrink-0 items-center justify-center">
-          <NuxtLink to="https://klient.chpp.cz" target="_blank">
-            <!--            <img class="h-12 w-auto" src="~/../public/static/img/logo.png" alt="Your Company" /> -->
+          <NuxtLink to="https://hry.martinhanzl.cz" target="_blank">
+            <img class="h-12 w-auto" src="/static/img/logo-gray-300.png" alt="Your Company" />
           </NuxtLink>
         </div>
         <nav class="flex flex-1 flex-col">

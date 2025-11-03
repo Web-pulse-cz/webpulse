@@ -43,7 +43,7 @@ const emit = defineEmits(['acceptSelected', 'acceptAll']);
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg border border-brand bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-6"
+              class="border-brand relative transform overflow-hidden rounded-lg border bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-6"
             >
               <div>
                 <div class="mt-3 sm:mt-5">

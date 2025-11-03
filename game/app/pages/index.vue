@@ -28,26 +28,22 @@ useHead({
 const games = ref([
   {
     name: 'Kvízy',
-    imageUrl:
-      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2Fb00c85104f0844f28c97ba6f4cc96ba3/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAI5r31kmL9V6auuHo8qD7rCvhgRVmdQcGIyc0szypPt4&exp=1756330706&osig=AAAAAAAAAAAAAAAAAAAAAISx-sr2jdD7R6d8cC-psMyAFkLMYzfGsGgG1irPVdzA&signer=media-rpc&x-canva-quality=screen_2x',
+    imageUrl: '/static/img/cards/kvizy.png',
     linkUrl: 'kvizy',
   },
   {
     name: 'Piškvorky',
-    imageUrl:
-      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F1dfbd69077dd420c81b810ea60ed7d85/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAGEMcVYVE5frpwbu-aRNhG2jgHlMYikYjY1hGKMeZace&exp=1756331824&osig=AAAAAAAAAAAAAAAAAAAAAHdtbF_-zfOhUEpcSvJ_55Ip-PGcpNjKqZNvEbjiESLW&signer=media-rpc&x-canva-quality=screen_2x',
+    imageUrl: '/static/img/cards/piskvorky.png',
     linkUrl: '/piskvorky',
   },
   {
     name: 'Slepá mapa',
-    imageUrl:
-      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2Fc93bc83a10564636b3abd0a30eab1919/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAAP7lDdyXInj1Lxehkdo3tdlADinuTxCxH_O9MjVUf-RK&exp=1756330767&osig=AAAAAAAAAAAAAAAAAAAAAIebKg8vogXQED7WOdMuYYPzbVR-t2TZobQINdYqW95F&signer=media-rpc&x-canva-quality=screen_2x',
+    imageUrl: '/static/img/cards/mapa.png',
     linkUrl: '/slepa-mapa',
   },
   {
     name: 'Aréna',
-    imageUrl:
-      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F39141a1b0d754beaba199e70e816ff15/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAABJDJlkuPHmTyF7IQgxoqpiS4kYyaGsn4dxuImjfLano&exp=1756559801&osig=AAAAAAAAAAAAAAAAAAAAACkDDMqp7G0rQaTHgi53KBzTx7QJ-9yJMUaxMWlRy-lY&signer=media-rpc&x-canva-quality=screen_2x',
+    imageUrl: '/static/img/cards/arena.png',
     linkUrl: '/arena',
   },
 ]);
