@@ -35,6 +35,15 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['save-day-records']);
+
+function addDayRecord() {
+  props.dayRecords.push({
+    id: null,
+    amount: 0,
+    is_repeated: false,
+    description: '',
+  });
+}
 </script>
 
 <template>
@@ -81,31 +90,37 @@ const emit = defineEmits(['save-day-records']);
                         as="h3"
                         class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
                       >
-                        Upravit záznamy - {{ day }}. -
+                        Upravit záznamy - den {{ day }}. -
                         <span class="text-primaryLight">kategorie {{ category }}</span>
                       </DialogTitle>
                       <div
                         v-for="(data, index) in dayRecords"
                         :key="index"
-                        class="mt-6 grid w-full grid-cols-5 gap-4"
+                        class="mt-6 grid w-full grid-cols-5 gap-x-4 gap-y-1"
                       >
-                        <input
-                          v-model="dayRecords[index].amount"
+                        <BaseFormInput
+                          v-model="data.amount"
+                          label="Částka"
                           :min="0"
                           step="0.01"
                           type="number"
-                          class="sm:text-sm/6' col-span-2 mt-2 block w-full rounded-md border-0 py-2 text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight"
                           :name="'dayRecords[' + index + '][amount]'"
-                          :autofocus="false"
-                          tabindex="-1"
+                          class="col-span-2"
                         />
-                        <input
-                          v-model="dayRecords[index].description"
+                        <BaseFormInput
+                          v-model="data.description"
+                          label="Popis"
                           type="text"
-                          class="sm:text-sm/6' col-span-3 mt-2 block w-full rounded-md border-0 py-2 text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight"
                           :name="'dayRecords[' + index + '][description]'"
-                          :autofocus="false"
-                          tabindex="-1"
+                          class="col-span-3"
+                        />
+                        <BaseFormCheckbox
+                          v-model="data.is_repeated"
+                          :name="'dayRecords[' + index + '][is_repeated]'"
+                          label="Opakovaně"
+                          class="col-span-1"
+                          :checked="dayRecords[index].is_repeated"
+                          label-color="grayCustom"
                         />
                       </div>
                     </div>
@@ -114,6 +129,9 @@ const emit = defineEmits(['save-day-records']);
                     class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
                   >
                     <BaseButton type="submit" variant="success" size="lg"> Uložit </BaseButton>
+                    <BaseButton type="button" variant="warning" size="lg" @click="addDayRecord">
+                      Přidat záznam
+                    </BaseButton>
                     <BaseButton
                       ref="cancelButtonRef"
                       type="button"

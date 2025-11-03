@@ -144,12 +144,6 @@ function updateCashflow(type: string, categoryId: number | null, day: number) {
     cashflowActionDialog.value.dayRecords = [];
   }
 
-  // Přidání prázdného záznamu mimo reaktivní změny
-  cashflowActionDialog.value.dayRecords.push({
-    id: null,
-    description: '',
-    amount: 0,
-  });
   cashflowActionDialog.value.type = type;
   cashflowActionDialog.value.category = category ? category.name : 'Příjem';
   cashflowActionDialog.value.show = true;
@@ -168,13 +162,6 @@ function updateCashflowIncome(day: number, categoryId: number | null = null) {
     }));
 
   cashflowActionDialog.value.dayRecords = dayRecords;
-
-  // Přidání prázdného záznamu mimo reaktivní změny
-  cashflowActionDialog.value.dayRecords.push({
-    id: null,
-    description: '',
-    amount: 0,
-  });
   cashflowActionDialog.value.type = 'income';
   cashflowActionDialog.value.show = true;
 }

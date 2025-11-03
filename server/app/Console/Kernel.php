@@ -28,6 +28,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 Log::error('Currency sync command failed');
             });
+
+        $schedule->command('cashflows:sync-is-repeated')
+            ->monthlyOn(1, '00:30')
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->onFailure(function () {
+                Log::error('Currency is sync command failed');
+            });
     }
 
     /**

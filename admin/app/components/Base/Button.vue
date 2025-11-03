@@ -13,6 +13,7 @@ const variantClasses = ref({
     'bg-white ring-1 ring-inset ring-grayLight hover:bg-gray-50 focus-visible:outline-grayLight text-grayDark',
   success: 'bg-success hover:bg-successLight focus-visible:outline-successLight text-white',
   danger: 'bg-danger hover:bg-dangerLight focus-visible:outline-dangerLight text-white',
+  warning: 'bg-warning hover:bg-warningLight focus-visible:outline-warningLight text-grayDark',
 });
 const props = defineProps({
   variant: {
