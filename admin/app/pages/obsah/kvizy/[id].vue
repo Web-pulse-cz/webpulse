@@ -175,6 +175,14 @@ function removeItemQuestion(index: number) {
   item.value.questions.splice(index, 1);
 }
 
+function updateQuestionImage(files, index) {
+  item.value.questions[index].image = files[0];
+}
+
+function removeQuestionImage(index) {
+  item.value.questions[index].image = null;
+}
+
 useHead({
   title: pageTitle.value,
 });
@@ -278,6 +286,16 @@ definePageMeta({
             class="col-span-full grid grid-cols-7 rounded-lg bg-gray-100 p-6"
           >
             <div class="col-span-6">
+              <BaseFormUploadImage
+                v-model="question.image"
+                :multiple="false"
+                type="quiz"
+                format="large"
+                label="Obrázek"
+                class="pt-6"
+                @update-files="updateQuestionImage($event, index)"
+                @remove-file="removeQuestionImage(index)"
+              />
               <BaseFormInput
                 v-model="question.name"
                 :label="'Otázka ' + (index + 1)"

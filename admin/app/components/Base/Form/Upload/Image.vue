@@ -44,7 +44,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update-files' /* , 'update:modelValue' */]);
+const emit = defineEmits(['update-files', 'remove-file']);
 
 const imageFormatMessage = await useImageFormatMessage(
   props.fileType,
@@ -131,6 +131,7 @@ function handleFileChange(event: Event) {
 
 function removeFile(index: number) {
   files.value.splice(index, 1);
+  emit('remove-file');
   /* emit(
     'update:modelValue',
     files.value.map((f) => ({ name: f.name, preview: f.preview })),

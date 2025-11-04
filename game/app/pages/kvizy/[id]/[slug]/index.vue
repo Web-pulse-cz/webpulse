@@ -108,6 +108,16 @@ useHead(() => {
       </div>
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12">
+      <div class="mt-4 flex justify-center">
+        <NuxtImg
+          v-if="quizData?.questions[currentQuestionIndex]?.image"
+          :src="`/content/images/quiz/large/${quizData?.questions[currentQuestionIndex]?.image}`"
+          fit="cover"
+          width="256"
+          height="256"
+          preload
+        />
+      </div>
       <p
         class="mb-4 text-center font-semibold text-primaryDark"
         v-html="quizData?.questions[currentQuestionIndex]?.name"
