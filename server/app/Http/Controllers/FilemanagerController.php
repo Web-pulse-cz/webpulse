@@ -35,7 +35,7 @@ class FilemanagerController extends Controller
             'type' => 'required|string', // e.g., 'product', 'blog', etc.
             'format' => 'nullable|string', // e.g., 'thumbnail', 'full', etc.
             'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
         ]);
 
         if ($validator->fails()) {
