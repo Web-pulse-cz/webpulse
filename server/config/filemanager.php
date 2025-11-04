@@ -54,6 +54,7 @@ return [
             ['format' => 'small', 'width' => 64, 'height' => 64, 'keepAspectRatio' => true, 'path' => 'small'],
             ['format' => 'medium', 'width' => 128, 'height' => 128, 'keepAspectRatio' => true, 'path' => 'medium'],
             ['format' => 'large', 'width' => 256, 'height' => 256, 'keepAspectRatio' => true, 'path' => 'large'],
+            ['format' => 'screen', 'width' => 1024, 'height' => 768, 'keepAspectRatio' => true, 'path' => 'large'],
         ],
     ]
 ];

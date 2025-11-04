@@ -111,10 +111,10 @@ useHead(() => {
       <div class="mt-4 flex justify-center">
         <NuxtImg
           v-if="quizData?.questions[currentQuestionIndex]?.image"
-          :src="`/content/images/quiz/large/${quizData?.questions[currentQuestionIndex]?.image}`"
+          :src="`/content/images/quiz/screen/${quizData?.questions[currentQuestionIndex]?.image}`"
           fit="cover"
-          width="256"
-          height="256"
+          width="1024"
+          height="748"
           preload
         />
       </div>
