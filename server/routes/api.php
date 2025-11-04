@@ -201,6 +201,7 @@ Route::group([
     Route::get('', [ClientQuizController::class, 'index']);
     Route::get('{id}', [ClientQuizController::class, 'show'])->where('id', '[0-9]+');
     Route::post('{id}', [ClientQuizController::class, 'store'])->where('id', '[0-9]+');
+    Route::get('filter', [ClientQuizController::class, 'filters']);
 });
 
 /**

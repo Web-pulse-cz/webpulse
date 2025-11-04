@@ -140,4 +140,35 @@ class QuizController extends Controller
 
         return Response::json(QuizResource::make($quiz));
     }
+
+    public function filters(Request $request): JsonResponse
+    {
+        $query = Quiz::query()
+            ->select('tags')
+            ->distinct()
+            ->pluck('tags');
+
+        $rawTags = [];
+        foreach ($query as $tag) {
+            $tags = explode(',', $tag);
+            foreach ($tags as $item) {
+                if (!array_key_exists($item, $rawTags)) {
+                    $rawTags[ucfirst(trim($item))] = [
+                        'name' => ucfirst(trim($item)),
+                        'count' => Quiz::query()
+                            ->where('status', '=', 'public')
+                            ->where('tags', 'like', "%$item%")
+                            ->count(),
+                    ];
+                }
+            }
+        }
+
+        $tags = [];
+        foreach ($rawTags as $item) {
+            $tags[] = $item;
+        }
+
+        return Response::json($tags);
+    }
 }

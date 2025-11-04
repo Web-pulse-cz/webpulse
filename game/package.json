@@ -29,6 +29,7 @@
     "ckeditor5": "^44.1.0",
     "ckeditor5-premium-features": "^44.1.0",
     "dayjs": "^1.11.13",
+    "fslightbox-vue": "^3.0.1",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^4.0.3",

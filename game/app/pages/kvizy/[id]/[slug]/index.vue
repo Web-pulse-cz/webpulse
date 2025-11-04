@@ -108,16 +108,15 @@ useHead(() => {
       </div>
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12">
-      <div class="mb-4 flex justify-center">
+      <div class="mb-4 flex justify-center" v-if="quizData?.questions[currentQuestionIndex]?.image">
         <BaseImage
-          v-if="quizData?.questions[currentQuestionIndex]?.image"
           :image="quizData?.questions[currentQuestionIndex]?.image"
           type="quiz"
           size="screen"
           :width="512"
           :height="288"
-          preload
         />
+
       </div>
       <p
         class="mb-4 text-center font-semibold text-primaryDark"
