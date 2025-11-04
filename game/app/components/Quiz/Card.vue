@@ -30,7 +30,9 @@ const localePath = useLocalePath();
 <template>
   <NuxtLink :to="localePath(`/kvizy/${props.quiz.id}/${props.quiz.slug}`)" class="block">
     <div :class="cardClass">
-      <h3 class="mb-2 text-xl font-semibold">{{ props.quiz.name }}</h3>
+      <BasePropsHeading type="h6" class="mb-2 font-semibold">{{
+        props.quiz.name
+      }}</BasePropsHeading>
       <p class="mb-4 text-xs text-gray-600" v-html="props.quiz.description" />
       <span
         v-for="(tag, index) in quiz.tags_array"

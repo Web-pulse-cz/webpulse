@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FsLightbox from 'fslightbox-vue';
+// import FsLightbox from 'fslightbox-vue';
 
 defineProps({
   image: {
@@ -40,9 +40,9 @@ const toggler = ref(false);
       preload
       @click="toggler = !toggler"
     />
-    <FsLightbox
+    <!--    <FsLightbox
       :toggler="toggler"
       :sources="['https://martinhanzl.cz/content/images/quiz/screen/6909eb2d5e43b8.17377525.jpg']"
-    />
+    />-->
   </div>
 </template>

@@ -92,7 +92,7 @@ const labelClass = computed(() => {
 });
 
 const inputClass = computed(() => {
-  return `text-primary mt-2 block w-full rounded-md border-0 py-1.5 lg:py-2 shadow-sm ring-1 ring-inset focus:ring-1 focus:ring-inset text-xs lg:text-sm/6 ${inputClasses[props.variant]}`;
+  return `text-primary mt-2 block w-full rounded-md border-0 py-1.5 lg:py-2 shadow-sm ring-1 ring-inset ring-gray-200 text-xs lg:text-sm/6`;
 });
 </script>
 

@@ -33,6 +33,14 @@ class QuizController extends Controller
             }
         }
 
+        if ($request->has('filters') && is_array($request->get('filters')) && count($request->get('filters')) > 0) {
+            $filters = $request->get('filters');
+            foreach ($filters as $filter) {
+                $query->where('tags', 'like', '%' . $filter . '%')
+                    ->orWhere('tags', 'like', $filter);
+            }
+        }
+
         if ($request->has('orderBy') && $request->has('orderWay')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
         }
@@ -157,7 +165,10 @@ class QuizController extends Controller
                         'name' => ucfirst(trim($item)),
                         'count' => Quiz::query()
                             ->where('status', '=', 'public')
-                            ->where('tags', 'like', "%$item%")
+                            ->where(function ($query) use ($item) {
+                                $query->where('tags', 'like', '%' . $item . '%')
+                                    ->orWhere('tags', 'like', $item);
+                            })
                             ->count(),
                     ];
                 }
