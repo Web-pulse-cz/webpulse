@@ -153,7 +153,7 @@ const navigation = ref([
       },
       {
         name: 'Recenze',
-        link: '/obsah/recenze',
+        link: '/obsah/reference',
         icon: StarIcon,
         current: false,
         slug: 'reviews',

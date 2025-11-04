@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
 import { Form } from 'vee-validate';
-import { useCurrencyStore } from '~/../stores/currencyStore';
-import { useTaxRateStore } from '~/../stores/taxRateStore';
-
-const currencyStore = useCurrencyStore();
-const taxRateStore = useTaxRateStore();
+import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
 

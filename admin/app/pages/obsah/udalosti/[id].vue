@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
 import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
+import { useLanguageStore } from '~~/stores/languageStore';
 
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();

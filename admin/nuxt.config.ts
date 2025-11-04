@@ -75,6 +75,9 @@ export default defineNuxtConfig({
     '/api/**': {
       proxy: `${process.env.API_URL ?? 'https://www.martinhanzl.cz/'}/api/**`,
     },
+    '/content/**': {
+      proxy: `${process.env.API_URL ?? 'https://www.martinhanzl.cz/'}/content/**`,
+    },
   },
   compatibilityDate: '2024-11-01',
 

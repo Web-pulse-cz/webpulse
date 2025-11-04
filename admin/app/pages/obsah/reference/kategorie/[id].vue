@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
 import { Form } from 'vee-validate';
+import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
 

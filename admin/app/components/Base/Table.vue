@@ -237,7 +237,7 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                   <img
                     v-if="column.type === 'image'"
                     class="size-24 bg-gray-50"
-                    :src="`http://api.chpp.cz/content/images/${column.path}/${item[column.key]}`"
+                    :src="`/content/images/${column.path}/${item[column.key]}`"
                     alt=""
                   />
                   <span v-else-if="column.type === 'stars'" class="flex gap-x-1.5">

@@ -68,7 +68,7 @@ watch(
       {
         file: null, // u předvyplněných souborů File není
         name: props.modelValue,
-        preview: `https://api.chpp.cz/content/images/${props.type}/${props.format}/${props.modelValue}`,
+        preview: `/content/images/${props.type}/${props.format}/${props.modelValue}`,
       },
     ];
   },
