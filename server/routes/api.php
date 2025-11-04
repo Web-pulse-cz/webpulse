@@ -63,7 +63,7 @@ use App\Http\Controllers\Client\Event\EventController as ClientEventController;
 use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
 use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
 use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
-use App\Http\Controllers\Client\QUiz\QuizController as ClientQuizController;
+use App\Http\Controllers\Client\Quiz\QuizController as ClientQuizController;
 
 Route::group([
     'prefix' => 'filemanager'

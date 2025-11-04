@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client\QUiz;
+namespace App\Http\Controllers\Client\Quiz;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Client\Quiz\QuizResource;

@@ -96,6 +96,7 @@ class QuizController extends Controller
             foreach ($request->questions as $questionData) {
                 $question = $quiz->questions()->create([
                     'name' => $questionData['name'],
+                    'image' => $questionData['image'],
                 ]);
                 foreach ($questionData['answers'] as $answer) {
                     $question->answers()->create([
