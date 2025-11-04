@@ -142,9 +142,9 @@ export default defineNuxtConfig({
 
   image: {
     domains: ['https://martinhanzl.cz/'],
-      alias: {
-        content: 'https://martinhanzl.cz/content'
-      }
+    alias: {
+      content: 'https://martinhanzl.cz/content',
+    },
   },
 
   vgsap: {
