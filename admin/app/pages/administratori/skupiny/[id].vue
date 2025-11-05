@@ -77,6 +77,7 @@ const allowedPermissions = ref([
   { name: 'Úkoly', value: 'Úkoly', slug: 'tasks' },
   { name: 'Zaměstnanci', value: 'Zaměstnanci', slug: 'employees' },
   { name: 'Země', value: 'Země', slug: 'countries' },
+  { name: 'Životopisy', value: 'Životopisy', slug: 'biographies' },
 ]);
 
 const item = ref({

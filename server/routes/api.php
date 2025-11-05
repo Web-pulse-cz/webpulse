@@ -46,6 +46,7 @@ use App\Http\Controllers\Admin\Event\EventRegistrationController;
 use App\Http\Controllers\Admin\Career\CareerController;
 use App\Http\Controllers\Admin\Career\CareerApplicationController;
 use App\Http\Controllers\Admin\Quiz\QuizController;
+use App\Http\Controllers\Admin\Biography\BiographyController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -631,6 +632,17 @@ Route::group([
             Route::get('{id}', [QuizController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [QuizController::class, 'store']);
             Route::delete('{id}', [QuizController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Quiz routes
+        Route::group([
+            'prefix' => 'biography'
+        ], function () {
+            Route::get('', [BiographyController::class, 'index']);
+            Route::get('{id}', [BiographyController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [BiographyController::class, 'store']);
+            Route::delete('{id}', [BiographyController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::post('download/{id}', [BiographyController::class, 'download'])->where('id', '[0-9]+');
         });
     });
 });

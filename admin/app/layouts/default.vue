@@ -313,6 +313,13 @@ const navigation = ref([
         slug: 'clients',
       },
       {
+        name: 'Životopisy',
+        link: '/zivotopisy',
+        icon: DocumentIcon,
+        current: false,
+        slug: 'biographies',
+      },
+      {
         name: 'Projekty',
         link: '/projekty',
         icon: BuildingOfficeIcon,
