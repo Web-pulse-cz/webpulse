@@ -90,7 +90,7 @@ class BiographyController extends Controller
             $biography->user_id = $request->user()->id;
 
             $biography->save();
-            //BiographySaved::dispatch($biography);
+            BiographySaved::dispatch($biography, $request);
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

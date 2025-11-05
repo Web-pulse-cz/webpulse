@@ -2,38 +2,38 @@
 
 namespace App\Listeners;
 
-use App\Events\CareerApplicationSaved as Event;
-
-use App\Services\EmailService;
+use App\Events\BiographySaved as Event;
+use Illuminate\Support\Facades\App;
 
 class BiographyGenerator
 {
-    protected EmailService $emailService;
-
-    public function __construct(EmailService $emailService)
-    {
-        $this->emailService = $emailService;
-    }
 
     public function handle(Event $event): void
     {
-        $careerApplication = $event->getCareerApplication();
-        $careerApplication->load('career');
+        $biography = $event->getBiography();
 
-        // build and add email to queue for client
-        $this->emailService->buildEmail(
-            'careerApplication',
-            'martas.hanzl@email.cz', // TODO: replace with dynamic email
-            'Žádost o pracovní pozici ' . $careerApplication->career->name,
-            data: ['careerApplication' => $careerApplication, 'type' => 'client']
-        );
+        if ($biography->filename && file_exists(storage_path('app/public/biographies/' . $biography->filename))) {
+            unlink(storage_path('app/public/biographies/' . $biography->filename));
+        }
 
-        // build and add email to queue for employee
-        $this->emailService->buildEmail(
-            'careerApplication',
-            'martas.hanzl@email.cz', // TODO: replace with dynamic email
-            'Nová žádost o pracovní pozici ' . $careerApplication->career->name,
-            data: ['careerApplication' => $careerApplication, 'type' => 'admin']
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf.biography.' . $biography->template,
+            [
+                'biography' => $biography,
+                'user' => $event->getUser(),
+            ]
         );
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->setOptions(['dpi' => 300, 'defaultFont' => 'DejaVu Sans']);
+        $output = $pdf->output();
+
+        $filename = 'biography_' . $biography->id . '_' . time() . '.pdf';
+        if (!file_exists(storage_path('app/public/biographies/'))) {
+            mkdir(storage_path('app/public/biographies/'), 0755, true);
+        }
+        $path = storage_path('app/public/biographies/' . $filename);
+        file_put_contents($path, $output);
+        $biography->filename = $filename;
+        $biography->save();
     }
 }
