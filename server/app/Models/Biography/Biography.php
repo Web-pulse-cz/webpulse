@@ -37,4 +37,18 @@ class Biography extends Model
         'hard_skills' => 'json',
         'soft_skills' => 'json',
     ];
+
+    /**
+     * Convert a comma-separated string of skills into an array.
+     * @param array $skills
+     * @return string
+     */
+    public function setSkillsToString(array $skills): string
+    {
+        $string = '';
+        foreach ($skills as $skill) {
+            $string .= trim($skill['name']) . ', ';
+        }
+        return rtrim($string, ', ');
+    }
 }

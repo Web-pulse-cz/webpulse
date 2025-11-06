@@ -7,6 +7,8 @@ import { definePageMeta } from '#imports';
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Životopisy');
 
+const user = useSanctumUser();
+
 const loading = ref(false);
 const error = ref(false);
 
@@ -83,6 +85,62 @@ async function deleteItem(id: number) {
     });
 }
 
+async function downloadFile(id: number) {
+  loading.value = true;
+  const client = useSanctumClient();
+
+  try {
+    const res = await client.raw(`/api/admin/biography/download/${id}`, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob', // klíčové pro binární data s ofetch
+    });
+
+    if (!res.ok) {
+      throw new Error(`Chyba při stahování souboru (${res.status})`);
+    }
+
+    const blob: Blob = res._data as Blob;
+
+    // název souboru z Content-Disposition
+    const dispo = res.headers.get('content-disposition') || '';
+    let filename = 'zivotopis_' + user.value.lastname;
+
+    // filename*="UTF-8''nazev.pdf"
+    let match = dispo.match(/filename\*=(?:UTF-8'')?([^;]+)/i);
+    if (match && match[1]) {
+      filename = decodeURIComponent(match[1].replace(/["']/g, '').trim());
+    } else {
+      // fallback: filename="nazev.pdf"
+      match = dispo.match(/filename=([^;]+)/i);
+      if (match && match[1]) {
+        filename = match[1].replace(/["']/g, '').trim();
+      }
+    }
+
+    // doplnění přípony, pokud chybí
+    if (!/\.[a-z0-9]{2,8}$/i.test(filename)) {
+      const ext = blob.type?.split('/')[1];
+      filename += ext ? `.${ext}` : '.bin';
+    }
+
+    // stažení
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Download selhal:', error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+
 function updateSort(column: string) {
   if (tableQuery.value.orderBy === column) {
     tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
@@ -146,7 +204,7 @@ definePageMeta({
             sortable: true,
           },
         ]"
-        :actions="[{ type: 'copy', key: 'message' }, { type: 'edit' }, { type: 'delete' }]"
+        :actions="[{ type: 'download' }, { type: 'edit' }, { type: 'delete' }]"
         :loading="loading"
         :error="error"
         singular="Životopis"
@@ -156,6 +214,7 @@ definePageMeta({
         @delete-item="deleteItem"
         @update-sort="updateSort"
         @update-page="updatePage"
+        @download="downloadFile($event)"
       />
     </LayoutContainer>
   </div>

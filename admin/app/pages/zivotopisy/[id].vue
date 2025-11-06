@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import { VPdfViewer } from '@vue-pdf-viewer/viewer';
 import { Form } from 'vee-validate';
 
 const { $toast } = useNuxtApp();
@@ -225,7 +225,7 @@ watchEffect(() => {
 });
 
 function addJobExperience() {
-  item.value.job_experiences.push({
+  item.value.job_experiences.unshift({
     position: '',
     company: '',
     start_date: '',
@@ -244,7 +244,7 @@ function removeJobExperience(index) {
 }
 
 function addEducation() {
-  item.value.education.push({
+  item.value.education.unshift({
     institution: '',
     degree: '',
     start_date: '',
@@ -432,9 +432,9 @@ function removeSkill(groupIndex: number, skillIndex: number) {
             <LayoutTitle>Dovednosti</LayoutTitle>
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
               <div
-                class="col-span-1 grid grid-cols-3 items-end gap-4 rounded-lg bg-gray-100 p-4"
                 v-for="(group, index) in item.skills"
                 :key="index"
+                class="col-span-1 grid grid-cols-3 items-end gap-4 rounded-lg bg-gray-100 p-4"
               >
                 <BaseFormInput
                   v-model="group.name"
@@ -448,8 +448,8 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                   type="button"
                   variant="danger"
                   size="xl"
-                  @click="removeSkillGroup(index)"
                   class="col-span-1"
+                  @click="removeSkillGroup(index)"
                   >Smazat skupinu</BaseButton
                 >
                 <LayoutDivider />
@@ -478,8 +478,8 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                     type="button"
                     variant="danger"
                     size="xl"
-                    @click="removeSkill(index, key)"
                     class="col-span-1 mt-6"
+                    @click="removeSkill(index, key)"
                     >Smazat</BaseButton
                   >
                 </div>
@@ -494,8 +494,8 @@ function removeSkill(groupIndex: number, skillIndex: number) {
               type="button"
               variant="primary"
               size="xl"
-              @click="addSkillGroup"
               class="mt-4"
+              @click="addSkillGroup"
               >Přidat skupinu dovedností</BaseButton
             >
           </LayoutContainer>
@@ -642,6 +642,17 @@ function removeSkill(groupIndex: number, skillIndex: number) {
           </LayoutContainer>
         </div>
       </template>
+      <template v-if="tabs.find((tab) => tab.current && tab.link === '#nahled')">
+        <LayoutContainer>
+          <VPdfViewer :src="'/content/biographies/' + item.filename" />
+        </LayoutContainer>
+      </template>
     </Form>
   </div>
 </template>
+
+<style scoped>
+.vpv-sidebar-wrapper {
+  display: none !important;
+}
+</style>

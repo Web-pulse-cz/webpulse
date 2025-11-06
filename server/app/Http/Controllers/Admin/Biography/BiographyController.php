@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BiographyController extends Controller
 {
@@ -90,7 +91,6 @@ class BiographyController extends Controller
             $biography->user_id = $request->user()->id;
 
             $biography->save();
-            BiographySaved::dispatch($biography, $request);
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
@@ -135,8 +135,32 @@ class BiographyController extends Controller
         return Response::json();
     }
 
-    public function download(int $id)
+    public function download(Request $request, int $id): BinaryFileResponse|JsonResponse
     {
-        //
+        if (!$id) {
+            App::abort(400);
+        }
+
+        $biography = Biography::where('user_id', $request->user()->id)
+            ->find($id);
+
+        if (!$biography) {
+            App::abort(404);
+        }
+
+        DB::beginTransaction();
+        try {
+            $biography->save();
+            BiographySaved::dispatch($biography, $request);
+        } catch (\Throwable|\Exception $e) {
+            DB::rollBack();
+            return Response::json(['message' => $e->getMessage()], 500);
+        }
+
+        if (!file_exists(storage_path('app/public/biographies/' . $biography->filename))) {
+            App::abort(404);
+        }
+
+        return response()->download(storage_path('app/public/biographies/' . $biography->filename));
     }
 }

@@ -8,6 +8,7 @@ import {
   ClipboardDocumentIcon,
   CheckIcon,
   XMarkIcon,
+    ArrowDownTrayIcon
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
@@ -149,7 +150,7 @@ function redirect(itemId: number, action: object) {
   }
 }
 
-const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dialog']);
+const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dialog', 'download']);
 </script>
 
 <template>
@@ -276,6 +277,11 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                       "
                       class="ml-2 size-3 cursor-pointer text-primaryCustom hover:text-primaryLight lg:ml-4 lg:size-5"
                       @click="redirect(item.id, action)"
+                    />
+                    <ArrowDownTrayIcon
+                      v-if="action.type === 'download'"
+                      class="ml-2 size-4 cursor-pointer text-success hover:text-successLight lg:ml-4 lg:size-5"
+                      @click="emit('download', item.id)"
                     />
                     <ClipboardDocumentIcon
                       v-if="action.type === 'copy'"

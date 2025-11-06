@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <title>CV</title>
 </head>
 <style>
     *, *::before, *::after {
         box-sizing: border-box;
+        text-wrap: wrap;
+        text-align: justify;
     }
 
     * {
@@ -21,7 +23,7 @@
     }
 
     body {
-        line-height: 1.5;
+        line-height: 1.4;
         -webkit-font-smoothing: antialiased;
     }
 
@@ -59,44 +61,105 @@
 
     body {
         font-family: DejaVu Sans, sans-serif;
-        font-size: 12px;
     }
 
     .sidebar {
         position: fixed;
         top: 0;
         left: 0;
-        width: 42mm;
+        width: 56mm;
         height: 297mm;
-        background-color: #022F2EFF;
-        color: #F0FDFAFF;
-    }
-
-    .sidebar a {
-        display: block;
-        color: #F0FDFAFF;
-        text-decoration: none;
-        padding: 5px 10px;
     }
 
     .wrapper {
         position: fixed;
         top: 0;
-        margin-left: 42mm;
-        width: calc(210mm - 42mm);
-        padding: 10mm;
-        height: 100%;
+        margin-left: 56mm;
+        width: calc(210mm - 56mm);
     }
 
     .height-fill {
-        height: 17mm;
+        height: 37mm;
+        border-bottom: 1px solid #101828FF;
+    }
+
+    .height-fill p {
+        color: #45556CFF;
+        font-size: 80px;
+        font-weight: 64;
+    }
+
+    .height-fill h1 {
+        color: #0F172BFF;
+        font-size: 96px;
+        font-weight: 700;
+    }
+
+    .block {
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 0;
+    }
+
+    .infos {
+        height: 297mm;
+        border-right: 1px solid #101828FF;
+        padding: 32px 64px;
+    }
+
+    h2 {
+        color: #99A1AFFF;
+        font-size: 56px;
+        margin-top: 44px;
+    }
+
+    h3 {
+        color: #101828FF;
+        font-size: 52px;
+    }
+
+    p, span, a {
+        font-size: 32px;
+    }
+
+    a {
+        color: #101828FF;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .experience_or_education {
+        margin-top: 32px;
+    }
+
+    .date {
+        color: #45556CFF;
+        font-weight: 600;
+        font-size: 36px;
+    }
+
+    .main-content {
+        padding: 32px 64px;
+    }
+
+    .height-fill-main-content {
+        padding-left: 64px;
+    }
+
+    .height-fill-main-content h1{
+        padding-top: 48px;
+    }
+
+    .page-break {
+        page-break-after: always;
     }
 </style>
 <body>
 <main>
     <div class="sidebar">
         <div class="height-fill"></div>
-        <div class="informations">
+        <div class="block infos">
             @if ($biography->email)
                 <a href="mailto:{{ $biography->email }}">{{ $biography->email }}</a>
             @endif
@@ -112,14 +175,82 @@
             @if ($biography->github)
                 <a href="{{ $biography->github }}" target="_blank">{{ $biography->github }}</a>
             @endif
+            @if ($biography->address)
+                <p>{{ $biography->address }}</p>
+            @endif
         </div>
     </div>
     <div class="wrapper">
-        <div class="height-fill">
-            <p>{{ $user->firstname }}</p>
-            <p>{{ $user->lastname }}</p>
+        <div class="height-fill height-fill-main-content">
+            <h1>{{ $user->firstname . ' ' . $user->lastname }}</h1>
+            @if ($biography->job_title)
+                <p>{{ $biography->job_title  }}</p>
+            @endif
+        </div>
+        <div class="block main-content">
+            @if($biography->summary)
+                <p>{{ $biography->summary }}</p>
+            @endif
+            @if($biography->job_experiences)
+                <div>
+                    <h2>Pracovní zkušenosti</h2>
+                    @foreach($biography->job_experiences as $experience)
+                        <div class="experience_or_education">
+                            <h3>{{ $experience['position'] }} | {{ $experience['company'] }}</h3>
+                            <p class="date">
+                                {{ \Carbon\Carbon::parse($experience['start_date'])->format('m/Y') }}
+                                -
+                                @if($experience['end_date'])
+                                    {{\Carbon\Carbon::parse($experience['end_date'])->format('m/Y')}}
+                                @else
+                                    současnost
+                                @endif
+                            </p>
+                            <p>{{ $experience['description'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            @if($biography->education)
+                <div>
+                    <h2>Vzdělání</h2>
+                    @foreach($biography->education as $education)
+                        <div class="experience_or_education">
+                            <h3>{{ $education['institution'] }}</h3>
+                            <p class="date">
+                                {{ \Carbon\Carbon::parse($education['start_date'])->format('m/Y') }}
+                                -
+                                @if($education['end_date'])
+                                    {{\Carbon\Carbon::parse($education['end_date'])->format('m/Y')}}
+                                @else
+                                    současnost
+                                @endif
+                            </p>
+                            <p>{{ $education['description'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            @if($biography->skills)
+                <div>
+                    <h2>Dovednosti</h2>
+                    @foreach($biography->skills as $i => $skill_group)
+                        <div>
+                            <h3>{{ $skill_group['name'] }}</h3>
+                            <p>{{ $biography->setSkillsToString($skill_group['skills']) }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            @if($biography->about_me)
+                <div>
+                    <h2>O mně</h2>
+                    <p>{{ $biography->about_me }}</p>
+                </div>
+            @endif
         </div>
     </div>
+    <div class="page-break"></div>
 </main>
 </body>
 </html>

@@ -642,7 +642,7 @@ Route::group([
             Route::get('{id}', [BiographyController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [BiographyController::class, 'store']);
             Route::delete('{id}', [BiographyController::class, 'destroy'])->where('id', '[0-9]+');
-            Route::post('download/{id}', [BiographyController::class, 'download'])->where('id', '[0-9]+');
+            Route::get('download/{id}', [BiographyController::class, 'download'])->where('id', '[0-9]+');
         });
     });
 });
