@@ -140,7 +140,6 @@ async function downloadFile(id: number) {
   }
 }
 
-
 function updateSort(column: string) {
   if (tableQuery.value.orderBy === column) {
     tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';

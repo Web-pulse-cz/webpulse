@@ -8,7 +8,7 @@ import {
   ClipboardDocumentIcon,
   CheckIcon,
   XMarkIcon,
-    ArrowDownTrayIcon
+  ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';

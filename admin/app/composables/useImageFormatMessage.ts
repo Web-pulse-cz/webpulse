@@ -22,7 +22,7 @@ export default async function (
         response.width +
         'x' +
         response.height +
-        ' (soubor nesmí být větší než 4MB).'
+        'px (soubor nesmí být větší než 4MB).'
       );
     } else {
       return 'Nahrávejte pouze soubory se příponou .pdf, .docx, .doc, .txt, .rtf, .odt, .xls, .xlsx, .csv, .ppt, .pptx (soubor nesmí být větší než 4MB).';

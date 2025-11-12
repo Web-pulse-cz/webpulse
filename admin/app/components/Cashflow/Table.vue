@@ -137,7 +137,7 @@ function updateCashflow(type: string, categoryId: number | null, day: number) {
         id: cashflow.id,
         description: cashflow.description,
         amount: cashflow.amount,
-        is_repeated: cashflow.is_repeated
+        is_repeated: cashflow.is_repeated,
       }));
 
     cashflowActionDialog.value.dayRecords = dayRecords;
@@ -160,7 +160,7 @@ function updateCashflowIncome(day: number, categoryId: number | null = null) {
       id: cashflow.id,
       description: cashflow.description,
       amount: cashflow.amount,
-      is_repeated: cashflow.is_repeated
+      is_repeated: cashflow.is_repeated,
     }));
 
   cashflowActionDialog.value.dayRecords = dayRecords;

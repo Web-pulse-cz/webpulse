@@ -19,6 +19,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update-files', 'remove-file']);
+const isUploadDialogVisible = ref(false);
 
 const imageFormatMessage = await useImageFormatMessage(
   props.fileType,
@@ -131,6 +132,7 @@ async function uploadFiles() {
       severity: 'error',
     });
   }
+  isUploadDialogVisible.value = false;
 }
 
 /**
@@ -247,55 +249,16 @@ async function uploadFromRemoteUrl() {
     });
   } finally {
     remoteLoading.value = false;
+    isUploadDialogVisible.value = false;
   }
 }
 </script>
 
 <template>
-  <div class="col-span-full w-full">
+  <div class="col-span-full w-full" @click="isUploadDialogVisible = true">
     <label class="mb-2 block text-left text-xs font-medium text-grayCustom lg:text-sm/6">
       {{ label }}
     </label>
-
-    <span
-      class="inline-flex w-full items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
-    >
-      {{ imageFormatMessage }}
-    </span>
-
-    <input
-      ref="fileInput"
-      type="file"
-      class="block hidden bg-indigo-400 text-left text-xs font-medium text-grayCustom lg:text-sm/6"
-      :multiple="multiple"
-      :accept="acceptTypes"
-      @change="handleFileChange"
-    />
-
-    <!-- Nahrát z URL pomocí serveru -->
-    <div v-if="allowRemoteUrl" class="mt-4 grid grid-cols-2 gap-3">
-      <BaseFormInput
-        v-model="remoteUrl"
-        label="Nahrát z URL"
-        type="text"
-        name="remote_url"
-        placeholder="https://example.com/image.jpg"
-        class="col-span-2 lg:col-span-2"
-      />
-      <div class="col-span-2">
-        <BaseButton
-          v-if="remoteUrl"
-          type="button"
-          variant="secondary"
-          size="md"
-          :loading="remoteLoading"
-          :disabled="remoteLoading || !remoteUrl"
-          @click="uploadFromRemoteUrl"
-        >
-          Nahrát z URL
-        </BaseButton>
-      </div>
-    </div>
 
     <div
       :class="[
@@ -308,7 +271,7 @@ async function uploadFromRemoteUrl() {
           <div
             :class="[
               multiple ? 'col-span-1' : 'col-span-full',
-              'relative col-span-full overflow-hidden rounded-md border border-gray-300',
+              'relative overflow-hidden rounded-md border border-gray-300',
             ]"
           >
             <UTooltip text="Odstranit soubor" placement="top" class="absolute right-1 top-1">
@@ -324,7 +287,7 @@ async function uploadFromRemoteUrl() {
               v-if="element.preview"
               :src="element.preview"
               alt="náhled"
-              class="h-full w-full object-cover"
+              class="max-h-64 w-auto object-cover"
             />
             <div
               v-else
@@ -337,20 +300,19 @@ async function uploadFromRemoteUrl() {
       </draggable>
     </div>
 
-    <div class="flex w-full flex-wrap gap-x-4">
-      <BaseButton type="button" variant="secondary" size="md" @click="$refs.fileInput.click()">
-        {{ multiple ? 'Vybrat soubory' : 'Vybrat soubor' }}
-      </BaseButton>
-
-      <BaseButton
-        v-if="files && files.length && manualUploaded"
-        type="button"
-        variant="primary"
-        size="md"
-        @click="uploadFiles"
-      >
-        {{ multiple ? 'Nahrát soubory' : 'Nahrát soubor' }}
-      </BaseButton>
-    </div>
+    <BaseFormUploadDialog
+      v-model:show="isUploadDialogVisible"
+      v-model:remote-url="remoteUrl"
+      v-model:files="files"
+      v-model:manual-uploaded="manualUploaded"
+      :message="imageFormatMessage"
+      :multiple="multiple"
+      :accept-types="acceptTypes"
+      :allow-remote-url="true"
+      :remote-loading="remoteLoading"
+      @upload-remote-url="uploadFromRemoteUrl"
+      @handle-file-change="handleFileChange"
+      @upload-files="uploadFiles"
+    />
   </div>
 </template>
