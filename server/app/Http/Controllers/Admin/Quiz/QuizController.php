@@ -96,7 +96,7 @@ class QuizController extends Controller
             foreach ($request->questions as $questionData) {
                 $question = $quiz->questions()->create([
                     'name' => $questionData['name'],
-                    'image' => $questionData['image'],
+                    'image' => array_key_exists('image', $questionData) ? $questionData['image'] : null,
                 ]);
                 foreach ($questionData['answers'] as $answer) {
                     $question->answers()->create([
@@ -111,7 +111,7 @@ class QuizController extends Controller
             return Response::json(['error' => 'An error occurred while saving the quiz.'], 500);
         }
 
-        return Response::json();
+        return Response::json(QuizResource::make($quiz));
     }
 
     /**

@@ -81,7 +81,7 @@ async function loadItem() {
     });
 }
 
-async function saveItem() {
+async function saveItem(redirect = true as boolean) {
   const client = useSanctumClient();
   loading.value = true;
 
@@ -101,15 +101,20 @@ async function saveItem() {
       'Content-Type': 'application/json',
     },
   })
-    .then(() => {
+    .then((response) => {
       $toast.show({
         summary: 'Hotovo',
         detail:
           route.params.id === 'pridat' ? 'Kvíz byl úspěšně vytvořen.' : 'Kvíz byl úspěšně upraven.',
         severity: 'success',
-        group: 'br',
       });
-      // router.push('/obsah/kvizy');
+      if (!redirect && route.params.id === 'pridat') {
+        router.push('/obsah/kvizy/' + response.id);
+      } else if (redirect) {
+        router.push('/obsah/kvizy');
+      } else {
+        loadItem();
+      }
     })
     .catch(() => {
       error.value = true;
@@ -118,7 +123,6 @@ async function saveItem() {
         detail:
           'Nepodařilo se upravit kvíz. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
         severity: 'error',
-        group: 'br',
       });
     })
     .finally(() => {
@@ -205,7 +209,11 @@ definePageMeta({
       :actions="
         route.params.id === 'pridat'
           ? [{ type: 'save' }]
-          : [{ type: 'copy', text: 'Kopírovat odkaz na kvíz' }, { type: 'save' }]
+          : [
+              { type: 'copy', text: 'Kopírovat odkaz na kvíz' },
+              { type: 'save' },
+              { type: 'save-and-stay' },
+            ]
       "
       slug="quizzes"
       @copy="copyQuizUrl"

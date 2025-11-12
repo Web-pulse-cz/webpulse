@@ -248,7 +248,7 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
       slug="posts"
       @save="saveItem"
     />

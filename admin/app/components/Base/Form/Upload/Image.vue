@@ -196,6 +196,7 @@ async function uploadFiles() {
       :accept="acceptTypes"
       @change="handleFileChange"
     />
+    <!-- Download image by url -->
     <div
       :class="[
         multiple ? 'grid-cols-4' : 'grid-cols-1',
