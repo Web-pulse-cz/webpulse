@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import Draggable from 'vuedraggable';
-import { XMarkIcon } from '@heroicons/vue/24/outline';
+import { TrashIcon, PlusIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
 
 const { $toast } = useNuxtApp();
@@ -255,39 +255,49 @@ async function uploadFromRemoteUrl() {
 </script>
 
 <template>
-  <div class="col-span-full w-full" @click="isUploadDialogVisible = true">
-    <label class="mb-2 block text-left text-xs font-medium text-grayCustom lg:text-sm/6">
-      {{ label }}
-    </label>
-
+  <div class="col-span-full w-full">
     <div
       :class="[
         multiple ? 'grid-cols-4' : 'grid-cols-1',
-        'my-4 grid w-full gap-4 rounded bg-gray-100 p-6 ring-1 ring-inset ring-grayLight',
+        'my-4 grid w-full gap-4 rounded border-2 border-dashed border-gray-300 bg-gray-50 p-4',
       ]"
     >
+      <div
+        v-if="files.length === 0"
+        class="flex cursor-pointer flex-col items-center gap-y-2 col-span-1"
+        @click="isUploadDialogVisible = true"
+      >
+        <PlusIcon class="h-8 w-8 text-gray-600" />
+        <p class="text-gray-600">Nahrát {{ multiple ? 'obrázek' : 'obrázky' }}</p>
+      </div>
       <draggable v-model="files" item-key="name" style="display: contents" class="cursor-grab">
         <template #item="{ element, index }">
           <div
             :class="[
-              multiple ? 'col-span-1' : 'col-span-full',
-              'relative overflow-hidden rounded-md border border-gray-300',
+              !multiple ? 'col-span-1' : 'w-1/2',
+              'relative overflow-hidden',
             ]"
           >
-            <UTooltip text="Odstranit soubor" placement="top" class="absolute right-1 top-1">
+            <div class="absolute left-4 top-4 flex gap-x-2">
               <div
-                class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
+                class="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
                 @click="removeFile(index)"
               >
-                <XMarkIcon class="h-4 w-4 text-white" />
+                <TrashIcon class="h-3 w-3 text-white" />
               </div>
-            </UTooltip>
+              <div
+                class="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-warningLight ring-1 ring-warning"
+                @click="isUploadDialogVisible = true"
+              >
+                <ArrowPathIcon class="h-3 w-3 text-white" />
+              </div>
+            </div>
 
             <img
               v-if="element.preview"
               :src="element.preview"
               alt="náhled"
-              class="max-h-64 w-auto object-cover"
+              class="max-h-72 w-auto object-cover"
             />
             <div
               v-else

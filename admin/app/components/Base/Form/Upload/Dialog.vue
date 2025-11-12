@@ -100,7 +100,7 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
                       <div
                         :class="[
                           allowRemoteUrl ? 'grid-cols-2' : 'grid-cols-1',
-                          'mt-8 grid gap-x-16 rounded-lg border border-dashed border-gray-400 p-4',
+                          'mt-8 grid gap-x-16 p-4',
                         ]"
                       >
                         <div class="col-span-1">
@@ -114,9 +114,10 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
                             @change="emit('handle-file-change', $event)"
                           />
                           <div
+                            v-if="files && files.length"
                             :class="[
                               multiple ? 'grid-cols-4' : 'grid-cols-1',
-                              'my-4 grid w-full gap-4 rounded bg-gray-50 p-2 ring-1 ring-inset ring-gray-300',
+                              'my-4 grid w-full gap-4 rounded border-2 border-dashed border-gray-300 bg-gray-50 p-2',
                             ]"
                           >
                             <draggable
