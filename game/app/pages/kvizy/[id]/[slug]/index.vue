@@ -83,7 +83,12 @@ useHead(() => {
 <template>
   <div>
     <div class="mb-6 flex flex-col items-center justify-center">
-      <BasePropsHeading type="h1" class="text-center">{{ quizData?.name }}</BasePropsHeading>
+      <BasePropsHeading
+        type="h1"
+        class="text-center"
+        :margin-bottom="!quizStarted ? 'mb-8' : 'mb-0'"
+        >{{ quizData?.name }}</BasePropsHeading
+      >
       <p
         v-if="!quizStarted"
         class="mb-4 text-center text-gray-600"
