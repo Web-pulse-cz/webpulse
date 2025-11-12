@@ -108,7 +108,7 @@ useHead(() => {
       </div>
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12">
-      <div class="mb-4 flex justify-center" v-if="quizData?.questions[currentQuestionIndex]?.image">
+      <div v-if="quizData?.questions[currentQuestionIndex]?.image" class="mb-4 flex justify-center">
         <BaseImage
           :image="quizData?.questions[currentQuestionIndex]?.image"
           type="quiz"
@@ -116,9 +116,9 @@ useHead(() => {
           :width="512"
           :height="288"
         />
-
       </div>
       <p
+        v-if="quizData?.questions[currentQuestionIndex]?.name"
         class="mb-4 text-center font-semibold text-primaryDark"
         v-html="quizData?.questions[currentQuestionIndex]?.name"
       />
@@ -178,7 +178,15 @@ useHead(() => {
         ]"
       >
         <div class="col-span-1 text-wrap">
-          <p>{{ answer.question }}</p>
+          <BaseImage
+            v-if="answer.image"
+            :image="answer.image"
+            type="quiz"
+            size="screen"
+            :width="128"
+            :height="128"
+          />
+          <p v-if="answer.question">{{ answer.question }}</p>
         </div>
         <div class="col-span-1 text-wrap">
           <p class="font-bold">Vaše odpověď:</p>

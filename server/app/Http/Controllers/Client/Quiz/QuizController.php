@@ -82,7 +82,8 @@ class QuizController extends Controller
         $incorrectAnswers = 0;
         foreach ($request['questions'] as $key => $question) {
             $answers[$key] = [
-                'question' => $question['name'],
+                'question' => array_key_exists('name', $question) ? $question['name'] : null,
+                'image' => array_key_exists('image', $question) ? $question['image'] : null,
                 'correctAnswer' => null,
                 'userAnswer' => null,
                 'isCorrect' => false,
@@ -153,6 +154,7 @@ class QuizController extends Controller
     {
         $query = Quiz::query()
             ->select('tags')
+            ->where('status', '=', 'public')
             ->distinct()
             ->pluck('tags');
 

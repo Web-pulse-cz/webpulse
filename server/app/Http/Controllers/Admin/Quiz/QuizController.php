@@ -77,7 +77,7 @@ class QuizController extends Controller
             'description' => 'nullable|string',
             'tags' => 'nullable|string',
             'questions' => 'required|array',
-            'questions.*.name' => 'required|string|max:255', //TODO: změnit na name
+            //'questions.*.name' => 'required|string|max:255', //TODO: změnit na name
             'questions.*.answers' => 'required|array|min:2',
             'questions.*.answers.*.name' => 'required|string|max:255',
         ]);
