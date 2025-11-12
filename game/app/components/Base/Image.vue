@@ -1,7 +1,8 @@
 <script setup lang="ts">
-// import FsLightbox from 'fslightbox-vue';
+import { ref } from 'vue';
+import FsLightbox from 'fslightbox-vue';
 
-defineProps({
+const props = defineProps({
   image: {
     type: String,
     default: '',
@@ -27,6 +28,7 @@ defineProps({
     default: 128,
   },
 });
+
 const toggler = ref(false);
 </script>
 
@@ -40,9 +42,10 @@ const toggler = ref(false);
       preload
       @click="toggler = !toggler"
     />
-    <!--    <FsLightbox
+    <FsLightbox
+      :key="image"
       :toggler="toggler"
-      :sources="['https://martinhanzl.cz/content/images/quiz/screen/6909eb2d5e43b8.17377525.jpg']"
-    />-->
+      :sources="[`/content/images/${type}/screen/${image}`]"
+    />
   </div>
 </template>
