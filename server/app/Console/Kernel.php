@@ -36,6 +36,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 Log::error('Currency is sync command failed');
             });
+
+        $schedule->command('storage:clean-images')
+            ->weeklyOn('1', '02:00')
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->onFailure(function () {
+                Log::error('Image cleaning command failed');
+            });
     }
 
     /**
