@@ -259,7 +259,7 @@ async function uploadFromRemoteUrl() {
     <div
       :class="[
         multiple ? 'grid-cols-4' : 'grid-cols-1',
-        'my-4 grid w-full gap-4 rounded border-2 border-dashed border-gray-300 bg-gray-50 p-4',
+        'mt-4 grid w-full gap-4 rounded border-2 border-dashed border-gray-300 bg-gray-50 p-4',
       ]"
     >
       <div

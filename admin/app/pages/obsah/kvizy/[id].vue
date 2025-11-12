@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import { TrashIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -291,20 +292,9 @@ definePageMeta({
         <LayoutContainer class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
           <div
             v-for="(question, index) in item.questions"
-            class="col-span-full grid grid-cols-7 rounded-lg bg-gray-100 p-6"
+            class="col-span-full grid grid-cols-12 items-end gap-x-4 rounded-lg bg-gray-100 p-6"
           >
-            <div class="col-span-6">
-              <BaseFormUploadImage
-                v-model="question.image"
-                :multiple="false"
-                type="quiz"
-                format="large"
-                label="Obrázek"
-                class="pt-6"
-                :allow-remote-url="true"
-                @update-files="updateQuestionImage($event, index)"
-                @remove-file="removeQuestionImage(index)"
-              />
+            <div class="col-span-8">
               <BaseFormInput
                 v-model="question.name"
                 :label="'Otázka ' + (index + 1)"
@@ -312,14 +302,26 @@ definePageMeta({
                 required
               />
             </div>
-            <div class="col-span-1 flex items-center justify-center">
+            <div class="col-span-3">
+              <BaseFormUploadImage
+                v-model="question.image"
+                :multiple="false"
+                type="quiz"
+                format="large"
+                label="Obrázek"
+                :allow-remote-url="true"
+                @update-files="updateQuestionImage($event, index)"
+                @remove-file="removeQuestionImage(index)"
+              />
+            </div>
+            <div class="col-span-1 flex justify-end">
               <BaseButton
                 type="button"
                 variant="danger"
-                size="sm"
+                size="md"
                 @click="removeItemQuestion(index)"
               >
-                Odstranit otázku
+                <TrashIcon class="h-5 w-5" />
               </BaseButton>
             </div>
             <LayoutDivider />
@@ -338,12 +340,13 @@ definePageMeta({
                     v-if="question.answers.length > 2"
                     type="button"
                     variant="danger"
-                    size="sm"
+                    size="md"
                     class="col-span-2 mt-2"
                     :disabled="question.answers.length <= 2"
                     @click="question.answers.splice(answerIndex, 1)"
-                    >Odstranit odpověď</BaseButton
                   >
+                    <TrashIcon class="h-5 w-5" />
+                  </BaseButton>
                 </div>
                 <BaseFormCheckbox
                   v-model="answer.is_correct"
