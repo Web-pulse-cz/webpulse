@@ -47,37 +47,69 @@ class FileManagerService
         return $formats;
     }
 
-    public function uploadImages(array $files, string $type, string $format = null, int $keepName = 0): array
+    public function uploadImages(string $type, string $format = null, int $keepName = 0, array $files = [], string $url = null): array
     {
         $uploadedImages = [];
 
         // Validate type
         $imageFormats = $this->getImageFormats($type, $format);
-        foreach ($files as $file) {
-            // Validate file
-            if (!$file->isValid()) {
-                throw new \Exception("Invalid file upload.");
-            }
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                // Validate file
+                if (!$file->isValid()) {
+                    throw new \Exception("Invalid file upload.");
+                }
 
-            $extension = strtolower($file->getClientOriginalExtension());
-            $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
+                $extension = strtolower($file->getClientOriginalExtension());
+                $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
 
-            foreach ($imageFormats as $configFormat) {
-                if (in_array($extension, ['svg', 'svgz']) || $file->getMimeType() === 'image/svg+xml') {
+                foreach ($imageFormats as $configFormat) {
+                    if (in_array($extension, ['svg', 'svgz']) || $file->getMimeType() === 'image/svg+xml') {
+                        if (!is_dir($configFormat['path'])) {
+                            mkdir($configFormat['path'], 0755, true);
+                        }
+
+                        // Copy the file (instead of move) into each directory
+                        copy($file->getRealPath(), $configFormat['path'] . '/' . $filename);
+
+                        continue; // Pokračuj na další formát
+                    }
+
+                    try {
+                        $imageData = $this->parseImage($file, $configFormat);
+                    } catch (\Exception $e) {
+                        throw new \Exception("Error processing image: " . $e->getMessage());
+                    }
+
                     if (!is_dir($configFormat['path'])) {
                         mkdir($configFormat['path'], 0755, true);
                     }
 
-                    // Copy the file (instead of move) into each directory
-                    copy($file->getRealPath(), $configFormat['path'] . '/' . $filename);
-
-                    continue; // Pokračuj na další formát
+                    $imageData->save($configFormat['path'] . '/' . $filename);
                 }
 
+                // Store the filename for the uploaded image
+                $uploadedImages[] = $filename;
+            }
+        } else if ($url) {
+            // Handle URL upload
+            $imageContents = file_get_contents($url);
+            if ($imageContents === false) {
+                throw new \Exception("Failed to fetch image from URL.");
+            }
+
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'img_');
+            file_put_contents($tempFilePath, $imageContents);
+
+            $file = new \Illuminate\Http\File($tempFilePath);
+            $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
+            $filename = $keepName ? basename(parse_url($url, PHP_URL_PATH)) : uniqid('', true) . '.jpg';
+
+            foreach ($imageFormats as $configFormat) {
                 try {
                     $imageData = $this->parseImage($file, $configFormat);
                 } catch (\Exception $e) {
-                    throw new \Exception("Error processing image: " . $e->getMessage());
+                    throw new \Exception("Error processing image from URL: " . $e->getMessage());
                 }
 
                 if (!is_dir($configFormat['path'])) {
@@ -89,6 +121,9 @@ class FileManagerService
 
             // Store the filename for the uploaded image
             $uploadedImages[] = $filename;
+
+            // Clean up temporary file
+            unlink($tempFilePath);
         }
 
         return $uploadedImages;

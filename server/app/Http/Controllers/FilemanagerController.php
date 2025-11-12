@@ -34,8 +34,8 @@ class FilemanagerController extends Controller
         $validator = Validator::make($request->all(), [
             'type' => 'required|string', // e.g., 'product', 'blog', etc.
             'format' => 'nullable|string', // e.g., 'thumbnail', 'full', etc.
-            'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',
+            /*'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',*/
         ]);
 
         if ($validator->fails()) {
@@ -44,10 +44,11 @@ class FilemanagerController extends Controller
 
         try {
             $result = $this->fileManagerService->uploadImages(
-                $request->file('images'),
                 $request->get('type'),
                 $request->get('format', null),
-                $request->get('keepName', 0)
+                $request->get('keepName', 0),
+                $request->file('images', []),
+                $request->get('url', null)
             );
         } catch (\Throwable|\Exception $e) {
             return Response::json(['error' => $e->getMessage()], 500);

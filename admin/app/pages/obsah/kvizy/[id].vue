@@ -301,6 +301,7 @@ definePageMeta({
                 format="large"
                 label="Obrázek"
                 class="pt-6"
+                :allow-remote-url="true"
                 @update-files="updateQuestionImage($event, index)"
                 @remove-file="removeQuestionImage(index)"
               />
