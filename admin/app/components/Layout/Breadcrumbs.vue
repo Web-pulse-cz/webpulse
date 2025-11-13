@@ -15,7 +15,7 @@ defineProps({
     <ol role="list" class="flex items-center space-x-2">
       <li>
         <div>
-          <NuxtLink to="/admin/public" class="text-gray-400 hover:text-grayCustom">
+          <NuxtLink to="/" class="text-gray-400 hover:text-grayCustom">
             <HomeIcon class="size-3 shrink-0 lg:size-4" aria-hidden="true" />
             <span class="sr-only">Home</span>
           </NuxtLink>
