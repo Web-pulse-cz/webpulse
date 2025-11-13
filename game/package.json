@@ -22,6 +22,7 @@
     "@nuxtjs/i18n": "^9.5.4",
     "@nuxtjs/supabase": "^1.6.1",
     "@pinia/nuxt": "^0.8.0",
+    "@stefanobartoletti/nuxt-social-share": "^2.2.1",
     "@types/lodash": "^4.17.13",
     "@vee-validate/nuxt": "^4.14.7",
     "@vee-validate/rules": "^4.14.7",
