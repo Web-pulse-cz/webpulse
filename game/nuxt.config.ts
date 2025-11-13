@@ -20,7 +20,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'v-gsap-nuxt',
     'nuxt-toast',
-    '@stefanobartoletti/nuxt-social-share',
   ],
 
   plugins: ['~/plugins/formatPrice.client.ts'],
@@ -146,10 +145,6 @@ export default defineNuxtConfig({
     alias: {
       content: 'https://martinhanzl.cz/content',
     },
-  },
-
-  socialShare: {
-    baseUrl: 'https://hry.martinhanzl.cz',
   },
 
   vgsap: {

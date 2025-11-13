@@ -202,7 +202,6 @@ useHead(() => {
           <p>{{ answer.correctAnswer }}</p>
         </div>
       </div>
-      <SocialShare network="facebook" />
       <NuxtLink v-if="quizFinished" to="/kvizy" class="mt-2">
         <BaseButton size="xxl" variant="primary">Zahrát si další kvízy</BaseButton>
       </NuxtLink>
