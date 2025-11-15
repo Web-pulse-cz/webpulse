@@ -19,6 +19,7 @@ class NewsletterResource extends JsonResource
             'email' => $this->email,
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
+            'addressing' => $this->addressing,
             'locale' => $this->locale,
         ];
     }

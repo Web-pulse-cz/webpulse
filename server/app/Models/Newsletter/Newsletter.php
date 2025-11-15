@@ -13,6 +13,7 @@ class Newsletter extends Model
         'email',
         'firstname',
         'lastname',
+        'addressing',
         'locale',
     ];
 

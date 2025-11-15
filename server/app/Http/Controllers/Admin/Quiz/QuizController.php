@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Quiz;
 
+use App\Events\QuizSaved;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Quiz\QuizResource;
 use App\Http\Resources\Admin\Quiz\QuizSimpleResource;
@@ -105,6 +106,9 @@ class QuizController extends Controller
                     ]);
                 }
             }
+
+            QuizSaved::dispatch($quiz);
+
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();

@@ -24,6 +24,7 @@ class NewsletterController extends Controller
             } else {
                 $query->where('firstname', '=', $searchString)
                     ->orWhere('lastname', 'like', '%' . $searchString . '%')
+                    ->orWhere('addressing', 'like', '%' . $searchString . '%')
                     ->orWhere('email', 'like', '%' . $searchString . '%');
             }
         }

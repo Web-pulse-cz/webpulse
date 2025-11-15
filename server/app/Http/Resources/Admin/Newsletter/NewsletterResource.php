@@ -20,6 +20,7 @@ class NewsletterResource extends JsonResource
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'fullname' => $this->fullname,
+            'addressing' => $this->addressing,
             'locale' => $this->locale,
         ];
     }
