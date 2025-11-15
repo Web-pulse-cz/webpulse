@@ -6,8 +6,8 @@ const colorClasses = {
 };
 
 const typeClasses = {
-  h1: 'text-[28px] font-semibold  lg:text-[44px] xl:text-[64px]',
-  h2: 'text-[20px] font-semibold  lg:text-[40px] xl:text-[56px]',
+  h1: 'text-[32px] font-semibold  lg:text-[44px] xl:text-[64px]',
+  h2: 'text-[24px] font-semibold  lg:text-[40px] xl:text-[56px]',
   h3: 'text-4xl font-semibold  lg:text-5xl',
   h4: 'text-2xl font-medium  lg:text-[32px] xl:text-4xl',
   h5: 'text-[22px] font-medium  lg:text-xl xl:text-2xl',
