@@ -292,17 +292,30 @@ definePageMeta({
         <LayoutContainer class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
           <div
             v-for="(question, index) in item.questions"
-            class="col-span-full grid grid-cols-12 items-end gap-x-4 rounded-lg bg-gray-100 p-6"
+            class="col-span-full grid grid-cols-12 items-end justify-between gap-x-4 rounded-lg bg-gray-100 p-6"
           >
-            <div class="col-span-8">
+            <div class="col-span-full md:hidden mb-4 md:mb-0">
+              <BaseFormUploadImage
+                v-model="question.image"
+                :multiple="false"
+                type="quiz"
+                format="large"
+                label="Obrázek"
+                :allow-remote-url="true"
+                @update-files="updateQuestionImage($event, index)"
+                @remove-file="removeQuestionImage(index)"
+              />
+            </div>
+            <div class="col-span-11 md:col-span-8">
               <BaseFormInput
                 v-model="question.name"
                 :label="'Otázka ' + (index + 1)"
                 :name="'question_' + index"
+                class="col-span-8"
                 required
               />
             </div>
-            <div class="col-span-3">
+            <div class="col-span-3 hidden md:block">
               <BaseFormUploadImage
                 v-model="question.image"
                 :multiple="false"
