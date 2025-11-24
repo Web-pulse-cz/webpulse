@@ -164,6 +164,7 @@
         margin-bottom: 8px;
         font-size: 32px;
     }
+
     .skill_group {
         margin-bottom: 24px;
     }
@@ -174,7 +175,7 @@
         <div class="height-fill"></div>
         <div class="block infos">
             <div class="content">
-                <h2>Kontaktní údaje</h2>
+                <h2>Contact</h2>
                 @if ($biography->email)
                     <a href="mailto:{{ $biography->email }}">{{ $biography->email }}</a>
                 @endif
@@ -198,7 +199,7 @@
             </div>
             @if($biography->skills)
                 <div class="content">
-                    <h2>Dovednosti</h2>
+                    <h2>Skills</h2>
                     @foreach($biography->skills as $i => $skill_group)
                         <div class="skill_group">
                             <h3>{{ $skill_group['name'] }}</h3>
@@ -223,13 +224,13 @@
         <div class="block main-content">
             @if($biography->summary)
                 <div class="content">
-                    <h2>Sourhn</h2>
+                    <h2>Profile</h2>
                     <p>{{ $biography->summary }}</p>
                 </div>
             @endif
             @if($biography->job_experiences)
                 <div class="content">
-                    <h2>Pracovní zkušenosti</h2>
+                    <h2>Work experience</h2>
                     @foreach($biography->job_experiences as $experience)
                         <div class="experience_or_education">
                             <h3>{{ $experience['position'] }} | {{ $experience['company'] }}</h3>
@@ -249,7 +250,7 @@
             @endif
             @if($biography->education)
                 <div class="content">
-                    <h2>Vzdělání</h2>
+                    <h2>Education</h2>
                     @foreach($biography->education as $education)
                         <div class="experience_or_education">
                             <h3>{{ $education['institution'] }}</h3>
@@ -269,7 +270,7 @@
             @endif
             @if($biography->about_me)
                 <div class="content">
-                    <h2>O mně</h2>
+                    <h2>About me</h2>
                     <p>{{ $biography->about_me }}</p>
                 </div>
             @endif

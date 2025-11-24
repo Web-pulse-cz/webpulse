@@ -55,6 +55,7 @@ const item = ref({
   user_id: null as number | null,
   job_title: '' as string,
   summary: '' as string,
+  template: 'default' as 'default',
 });
 
 async function loadItem() {
@@ -82,6 +83,7 @@ async function loadItem() {
     user_id: number | null;
     job_title: string;
     summary: string;
+    template: string;
   }>('/api/admin/biography/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -137,6 +139,7 @@ async function saveItem(redirect = true as boolean) {
     user_id: number | null;
     job_title: string;
     summary: string;
+    template: string;
   }>(
     route.params.id === 'pridat'
       ? '/api/admin/biography'
@@ -318,6 +321,15 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 rules="required|min:3"
                 class="col-span-1"
               />
+              <BaseFormSelect
+                v-model="item.template"
+                :options="[{ name: 'Výchozí šablona', value: 'default' }, { name: 'Výchozí šablona - anglická verze', value: 'default_en' }]"
+                label="Šablona"
+                name="template"
+                rules="required"
+                class="col-span-1"
+              />
+              <div class="col-span-2"></div>
               <BaseFormInput
                 v-model="item.job_title"
                 label="Název pracovní pozice"
@@ -334,6 +346,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 rules="min:3"
                 class="col-span-2"
               />
+              <div class="col-span-1"></div>
               <div class="col-span-1 flex items-end">
                 <BaseFormInput
                   v-model="item.email"

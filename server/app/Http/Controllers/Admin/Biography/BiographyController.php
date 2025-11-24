@@ -86,7 +86,7 @@ class BiographyController extends Controller
         DB::beginTransaction();
         try {
             $biography->fill($request->all());
-            $biography->template = 'default';
+            $biography->template = $request->get('template', 'default'); //TODO: create more templates
             $biography->phone_prefix = '+420';
             $biography->user_id = $request->user()->id;
 
