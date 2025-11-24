@@ -431,6 +431,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 name="about_me"
                 rules="min:3"
                 class="col-span-2"
+                :max="1000"
               />
               <BaseFormTextarea
                 v-model="item.summary"
@@ -438,6 +439,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 name="summary"
                 rules="min:3"
                 class="col-span-2"
+                :max="1000"
               />
             </div>
           </LayoutContainer>
@@ -560,6 +562,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 :name="`job_experiences[${index}][description]`"
                 rules="min:3"
                 class="col-span-2"
+                :max="1000"
               />
               <LayoutDivider />
               <div class="col-span-4 grid grid-cols-8 gap-4">
@@ -642,6 +645,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 :name="`education[${index}][description]`"
                 rules="min:3"
                 class="col-span-2"
+                :max="1000"
               />
               <div class="col-span-full">
                 <BaseButton type="button" variant="danger" size="xl" @click="removeEducation(index)"
