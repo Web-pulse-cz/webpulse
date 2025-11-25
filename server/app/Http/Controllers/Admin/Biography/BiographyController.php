@@ -152,15 +152,16 @@ class BiographyController extends Controller
         try {
             $biography->save();
             BiographySaved::dispatch($biography, $request);
+            DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
             return Response::json(['message' => $e->getMessage()], 500);
         }
 
-        if (!file_exists(storage_path('app/public/biographies/' . $biography->filename))) {
+        if (!file_exists(storage_path('app/public/files/biographies/' . $biography->filename))) {
             App::abort(404);
         }
 
-        return response()->download(storage_path('app/public/biographies/' . $biography->filename));
+        return response()->download(storage_path('app/public/files/biographies/' . $biography->filename));
     }
 }
