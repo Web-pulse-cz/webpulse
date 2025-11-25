@@ -240,7 +240,7 @@
                                 @if($experience['end_date'])
                                     {{\Carbon\Carbon::parse($experience['end_date'])->format('m/Y')}}
                                 @else
-                                    současnost
+                                    present
                                 @endif
                             </p>
                             <p>{{ $experience['description'] }}</p>
@@ -260,7 +260,7 @@
                                 @if($education['end_date'])
                                     {{\Carbon\Carbon::parse($education['end_date'])->format('m/Y')}}
                                 @else
-                                    současnost
+                                    present
                                 @endif
                             </p>
                             <p>{{ $education['description'] }}</p>
