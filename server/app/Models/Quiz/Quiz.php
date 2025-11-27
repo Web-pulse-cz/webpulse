@@ -17,7 +17,8 @@ class Quiz extends Model
         'status',
         'accuracy',
         'attempts',
-        'user_id'
+        'user_id',
+        'published_at'
     ];
 
     protected $casts = [

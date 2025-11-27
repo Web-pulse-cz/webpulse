@@ -21,7 +21,7 @@ class QuizSavedEmail
     {
         $quiz = $event->getQuiz();
 
-        if ($quiz->status != 'public') {
+        if ($quiz->status != 'public' || $quiz->published_at != null) {
             return;
         }
 

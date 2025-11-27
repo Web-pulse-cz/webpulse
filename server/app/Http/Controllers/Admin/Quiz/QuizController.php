@@ -89,10 +89,13 @@ class QuizController extends Controller
 
         DB::beginTransaction();
         try {
+            if ($quiz->status != 'public' && $request->get('status') == 'public' && $quiz->published_at == null) {
+                $quiz->published_at = now();
+            }
+            $quiz->save();
             $quiz->fill($request->all());
             $quiz->slug = Str::slug($request->name);
             $quiz->user_id = $request->user()->id;
-            $quiz->save();
             $quiz->questions()->delete();
             foreach ($request->questions as $questionData) {
                 $question = $quiz->questions()->create([
