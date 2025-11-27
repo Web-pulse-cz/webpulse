@@ -79,7 +79,7 @@ class EmailService
             // Odeslání e-mailu pomocí Laravel Mail
             Mail::send([], $data, function ($message) use ($email) {
                 $message->to($email->to)
-                    ->from($email->from, 'Test Sender') // TODO: Změnit na skutečného odesílatele
+                    ->from($email->from, 'Martin Hanzl')
                     ->subject($email->subject);
 
                 // CC a BCC
