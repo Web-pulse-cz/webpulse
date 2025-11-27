@@ -8,7 +8,7 @@ export function useQuizApi(
   const quizzes = wrap(async (search?: string, filters?: []): Promise<Quiz[]> => {
     return await client(`/api/quiz`, {
       method: 'GET',
-      query: { search: search, orderBy: 'created_at', orderWay: 'desc', 'filters[]': filters },
+      query: { search: search, orderBy: 'published_at', orderWay: 'desc', 'filters[]': filters },
     });
   });
 
