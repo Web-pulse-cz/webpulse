@@ -21,23 +21,23 @@ class QuizSavedEmail
     {
         $quiz = $event->getQuiz();
 
-        if ($quiz->published_at != null) {
-            return;
-        }
-
-        $newsletters = Newsletter::query()->get();
-        foreach ($newsletters as $newsletter) {
-            $this->emailService->buildEmail(
-                'quizSaved',
-                $newsletter->email,
-                'Nový kvíz vytvořený: ' . $quiz->name,
-                null,
-                null,
-                [
-                    'quiz' => $quiz,
-                    'newsletter' => $newsletter,
-                ]
-            );
+        if ($quiz->status == 'public' && $quiz->published_at == null) {
+            $newsletters = Newsletter::query()->get();
+            foreach ($newsletters as $newsletter) {
+                $this->emailService->buildEmail(
+                    'quizSaved',
+                    $newsletter->email,
+                    'Nový kvíz vytvořený: ' . $quiz->name,
+                    null,
+                    null,
+                    [
+                        'quiz' => $quiz,
+                        'newsletter' => $newsletter,
+                    ]
+                );
+            }
+            $quiz->published_at = now();
+            $quiz->save();
         }
     }
 }
