@@ -32,7 +32,7 @@ class Quiz extends Model
         return $this->hasMany(QuizQuestion::class, 'quiz_id', 'id');
     }
 
-    public function getUrlAttribute($key)
+    public function getUrlAttribute()
     {
         return sprintf('https://hry.martinhanzl.cz/kvizy/%s/%s', $this->id, $this->slug);
     }
