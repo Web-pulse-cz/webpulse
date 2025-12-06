@@ -69,34 +69,6 @@ async function loadItems() {
       loading.value = false;
     });
 }
-
-async function deleteItem(id: number) {
-  loading.value = true;
-  error.value = false;
-  const client = useSanctumClient();
-
-  await client<{ id: number }>('/api/admin/casfhlow/category/' + id, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(() => {})
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se smazat aktivitu.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-      loadItems();
-    });
-}
-
 async function saveCategory(item) {
   const client = useSanctumClient();
   loading.value = true;
@@ -225,6 +197,30 @@ async function saveBudget(categoryId: number, budget: number) {
     });
 }
 
+function previousMonth() {
+  const month = tableQuery.value.month - 1;
+  const year = tableQuery.value.year;
+  tableQuery.value = {
+    month: month < 1 ? 12 : month,
+    year: month < 1 ? year - 1 : year,
+    dayFrom: 1,
+    dayTo: 31,
+  };
+  loadItems();
+}
+
+function nextMonth() {
+  const month = tableQuery.value.month + 1;
+  const year = tableQuery.value.year;
+  tableQuery.value = {
+    month: month > 12 ? 1 : month,
+    year: month > 12 ? year + 1 : year,
+    dayFrom: 1,
+    dayTo: 31,
+  };
+  loadItems();
+}
+
 watch(
   tableQuery,
   () => {
@@ -260,6 +256,10 @@ definePageMeta({
       ]"
       @filter-dialog="filterDialogIsOpen = true"
     />
+    <div class="mt-5 flex justify-between items-center">
+      <BaseButton v-if="tableQuery.year >= 2025" @click="previousMonth" size="lg">Předchozí měsíc</BaseButton>
+      <BaseButton @click="nextMonth" size="lg">Následující měsíc</BaseButton>
+    </div>
     <div class="w-full overflow-x-scroll lg:overflow-hidden">
       <CashflowTable
         v-if="!loading && !error"

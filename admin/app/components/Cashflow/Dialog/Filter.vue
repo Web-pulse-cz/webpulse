@@ -27,7 +27,7 @@ const emit = defineEmits(['submit']);
 const years = computed(() => {
   const currentYear = new Date().getFullYear();
   const years = [];
-  for (let i = currentYear; i >= 2024; i--) {
+  for (let i = currentYear + 1; i >= 2024; i--) {
     years.push({ value: i.toString(), name: i.toString() });
   }
   return years;
