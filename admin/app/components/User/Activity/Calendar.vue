@@ -8,6 +8,7 @@ import {
   PhoneIcon,
   LifebuoyIcon,
 } from '@heroicons/vue/24/outline';
+import { Switch } from '@headlessui/vue';
 import DumbbellIcon from '~/../public/static/img/icon/dumbbell.svg';
 import SmileFullIcon from '~/../public/static/img/icon/smile-full.svg';
 import SmileAudioIcon from '~/../public/static/img/icon/smile-audio.svg';
@@ -25,6 +26,8 @@ const props = defineProps({
     default: [],
   },
 });
+
+const enabled = ref(true);
 
 const emit = defineEmits(['update-item', 'load-items', 'add-item']);
 
@@ -118,35 +121,68 @@ const activitiesByDay = computed(() => {
     });
   };
 });
+
+const activityNameById = computed(() => {
+  return (id: number) => {
+    return props.activities.find((activity) => activity.activity.id === id)?.activity.name;
+  };
+});
 </script>
 
 <template>
   <div>
     <div class="mb-4 flex items-center justify-between">
       <BaseButton variant="primary" size="lg" @click="prevMonth"> Předchozí měsíc </BaseButton>
-      <h2 class="text-sm font-semibold text-primaryCustom lg:text-lg">
-        {{
-          currentDate
-            .toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' })[0]
-            .toUpperCase() +
-          currentDate.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' }).slice(1)
-        }}
-      </h2>
+      <div class="flex flex-col items-center justify-center gap-y-2">
+        <h2 class="text-sm font-semibold text-primaryCustom lg:text-lg">
+          {{
+            currentDate
+              .toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' })[0]
+              .toUpperCase() +
+            currentDate.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' }).slice(1)
+          }}
+        </h2>
+        <BaseFormSwitch
+          v-model:enabled="enabled"
+          disabled-text="Zobrazit byznys aktivitu"
+          enabled-text="Zobrazit veškerou aktivitu"
+        />
+      </div>
       <BaseButton variant="primary" size="lg" @click="nextMonth"> Následující měsíc </BaseButton>
     </div>
     <div class="grid grid-cols-7">
       <div
-        class="lg:text-md rounded-l-lg bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2"
+        class="lg:text-md rounded-l-lg bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
       >
         Po
       </div>
-      <div class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2">Út</div>
-      <div class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2">St</div>
-      <div class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2">Čt</div>
-      <div class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2">Pá</div>
-      <div class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2">So</div>
       <div
-        class="lg:text-md rounded-r-lg bg-grayDark py-1.5 text-center text-xs font-semibold lg:py-2"
+        class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
+      >
+        Út
+      </div>
+      <div
+        class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
+      >
+        St
+      </div>
+      <div
+        class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
+      >
+        Čt
+      </div>
+      <div
+        class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
+      >
+        Pá
+      </div>
+      <div
+        class="lg:text-md bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
+      >
+        So
+      </div>
+      <div
+        class="lg:text-md rounded-r-lg bg-grayDark py-1.5 text-center text-xs font-semibold text-grayLight lg:py-2"
       >
         Ne
       </div>
@@ -177,72 +213,120 @@ const activitiesByDay = computed(() => {
           >
             <div
               v-if="[6, 8, 11, 12].includes(activityItem.activity.id) && !activityItem.completed"
-              class="border-b-2 border-r-2 border-danger p-2 lg:p-4"
-            />
+              class="text-md col-span-1 flex items-center justify-center text-xs font-semibold text-dangerLight"
+            >
+              <div class="flex h-8 w-8 items-center justify-center border-b border-r border-danger">
+                {{ activityNameById(activityItem.activity.id) }}
+              </div>
+            </div>
             <div
               v-else-if="
                 [6, 8, 11, 12].includes(activityItem.activity.id) && activityItem.completed
               "
-              class="border-2 border-danger bg-danger p-2 lg:p-4"
-            />
-            <PhoneIcon
+              class="text-md col-span-1 flex items-center justify-center text-xs font-semibold text-grayLight"
+            >
+              <div class="flex h-8 w-8 items-center justify-center border border-danger bg-danger">
+                {{ activityNameById(activityItem.activity.id) }}
+              </div>
+            </div>
+            <div
               v-if="activityItem.activity.id === 1"
-              class="col-span-1 size-5 text-amber-600 lg:size-8"
-            />
-            <ChatBubbleBottomCenterIcon
-              v-if="activityItem.activity.id === 27"
-              class="col-span-1 size-5 text-purple-600 lg:size-8"
-            />
-            <HeartIcon
-              v-if="activityItem.activity.id === 28 && !activityItem.completed"
-              class="col-span-1 size-5 text-pink-600 lg:size-8"
-            />
-            <HeartIcon
-              v-if="activityItem.activity.id === 28 && activityItem.completed"
-              class="col-span-1 size-5 fill-pink-600 text-danger lg:size-8"
-            />
-            <PauseCircleIcon
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <PhoneIcon class="col-span-1 size-5 text-amber-600 lg:size-8" />
+            </div>
+            <!-- Pozvánka na rande -->
+            <div
+              v-if="activityItem.activity.id === 27 && enabled"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <ChatBubbleBottomCenterIcon class="col-span-1 size-5 text-purple-600 lg:size-8" />
+            </div>
+            <!-- Naplánované rande -->
+            <div
+              v-if="activityItem.activity.id === 28 && !activityItem.completed && enabled"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <HeartIcon class="col-span-1 size-5 text-pink-600 lg:size-8" />
+            </div>
+            <!-- Uskutečněné rande -->
+            <div
+              v-if="activityItem.activity.id === 28 && activityItem.completed && enabled"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <HeartIcon class="col-span-1 size-5 fill-pink-600 text-danger lg:size-8" />
+            </div>
+            <!-- Registrace -->
+            <div
               v-if="activityItem.activity.id === 10"
-              class="col-span-1 size-5 text-danger lg:size-8"
-            />
-            <StarIcon
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <PauseCircleIcon class="col-span-1 size-5 text-danger lg:size-8" />
+            </div>
+            <!-- Lístek na seminář -->
+            <div
               v-if="activityItem.activity.id === 22"
-              class="col-span-1 size-5 fill-danger text-danger lg:size-8"
-            />
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <StarIcon class="col-span-1 size-5 fill-danger text-danger lg:size-8" />
+            </div>
+            <!-- Lístek na seminář -->
             <div
               v-if="activityItem.activity.id === 21"
-              class="col-span-1 border-2 border-grayDark p-2 lg:p-4"
-            />
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <div class="col-span-1 h-8 w-8 border border-grayDark" />
+            </div>
+            <!-- Seminář, školení, akce za odměnu -->
             <div
-              v-if="[13, 14, 23].includes(activityItem.activity.id)"
-              class="col-span-1 border-2 border-primaryLight p-2 lg:p-4"
-            />
+              v-if="[13, 15, 23].includes(activityItem.activity.id)"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <div class="col-span-1 h-8 w-8 border border-blue-600" />
+            </div>
+            <!-- Konzultace s upline -->
             <div
               v-if="activityItem.activity.id === 18"
-              class="text-md col-span-1 flex items-center justify-center font-semibold text-success lg:text-lg"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
             >
-              K
+              <div
+                class="text-md col-span-1 flex items-center justify-center font-semibold text-success lg:text-lg"
+              >
+                K
+              </div>
             </div>
+            <!-- Konzutlace s downline -->
             <div
               v-if="activityItem.activity.id === 20"
               class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
             >
-              K
+              <div
+                class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+              >
+                K
+              </div>
             </div>
+            <!-- Cvičení -->
             <div
-              v-if="activityItem.activity.id === 25"
+              v-if="activityItem.activity.id === 25 && enabled"
               class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
             >
               <DumbbellIcon class="size-5 fill-warning lg:size-8" />
             </div>
-            <LifebuoyIcon
-              v-if="activityItem.activity.id === 29"
-              class="col-span-1 size-5 fill-success text-success lg:size-8"
-            />
-            <NoPepsiIcon
-              v-if="activityItem.activity.id === 30"
-              class="col-span-1 size-5 fill-success lg:size-8"
-            />
+            <!-- Nekouření -->
+            <div
+              v-if="activityItem.activity.id === 29 && enabled"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <LifebuoyIcon class="col-span-1 size-5 fill-success text-success lg:size-8" />
+            </div>
+            <!-- Nepití pepsí -->
+            <div
+              v-if="activityItem.activity.id === 30 && enabled"
+              class="text-md col-span-1 flex items-center justify-center font-semibold text-primaryLight lg:text-lg"
+            >
+              <NoPepsiIcon class="col-span-1 size-5 fill-success lg:size-8" />
+            </div>
           </div>
           <div v-if="checkSmile(day) !== 'empty'" class="col-span-1 flex flex-col justify-center">
             <SmileBookIcon
