@@ -256,9 +256,11 @@ definePageMeta({
       ]"
       @filter-dialog="filterDialogIsOpen = true"
     />
-    <div class="mt-5 flex justify-between items-center">
-      <BaseButton v-if="tableQuery.year >= 2025" @click="previousMonth" size="lg">Předchozí měsíc</BaseButton>
-      <BaseButton @click="nextMonth" size="lg">Následující měsíc</BaseButton>
+    <div class="mt-5 flex items-center justify-between">
+      <BaseButton v-if="tableQuery.year >= 2025" size="lg" @click="previousMonth"
+        >Předchozí měsíc</BaseButton
+      >
+      <BaseButton size="lg" @click="nextMonth">Následující měsíc</BaseButton>
     </div>
     <div class="w-full overflow-x-scroll lg:overflow-hidden">
       <CashflowTable

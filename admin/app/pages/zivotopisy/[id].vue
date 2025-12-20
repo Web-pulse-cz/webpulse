@@ -55,7 +55,7 @@ const item = ref({
   user_id: null as number | null,
   job_title: '' as string,
   summary: '' as string,
-  template: 'default' as 'default',
+  template: 'default' as const,
 });
 
 async function loadItem() {
@@ -323,7 +323,10 @@ function removeSkill(groupIndex: number, skillIndex: number) {
               />
               <BaseFormSelect
                 v-model="item.template"
-                :options="[{ name: 'Výchozí šablona', value: 'default' }, { name: 'Výchozí šablona - anglická verze', value: 'default_en' }]"
+                :options="[
+                  { name: 'Výchozí šablona', value: 'default' },
+                  { name: 'Výchozí šablona - anglická verze', value: 'default_en' },
+                ]"
                 label="Šablona"
                 name="template"
                 rules="required"

@@ -294,7 +294,7 @@ definePageMeta({
             v-for="(question, index) in item.questions"
             class="col-span-full grid grid-cols-12 items-end justify-between gap-x-4 rounded-lg bg-gray-100 p-6"
           >
-            <div class="col-span-full md:hidden mb-4 md:mb-0">
+            <div class="col-span-full mb-4 md:mb-0 md:hidden">
               <BaseFormUploadImage
                 v-model="question.image"
                 :multiple="false"

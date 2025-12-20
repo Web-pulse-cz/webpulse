@@ -264,20 +264,17 @@ async function uploadFromRemoteUrl() {
     >
       <div
         v-if="files.length === 0"
-        class="flex cursor-pointer flex-col items-center gap-y-2 col-span-1"
+        class="col-span-1 flex cursor-pointer flex-col items-center gap-y-2"
         @click="isUploadDialogVisible = true"
       >
-        <PlusIcon class="h-4 w-4 md:h-8 md:w-8 text-gray-600" />
-        <p class="text-gray-600 text-xs md:text-base">Nahrát {{ multiple ? 'obrázky' : 'obrázek' }}</p>
+        <PlusIcon class="h-4 w-4 text-gray-600 md:h-8 md:w-8" />
+        <p class="text-xs text-gray-600 md:text-base">
+          Nahrát {{ multiple ? 'obrázky' : 'obrázek' }}
+        </p>
       </div>
       <draggable v-model="files" item-key="name" style="display: contents" class="cursor-grab">
         <template #item="{ element, index }">
-          <div
-            :class="[
-              !multiple ? 'col-span-1' : 'w-1/2',
-              'relative overflow-hidden',
-            ]"
-          >
+          <div :class="[!multiple ? 'col-span-1' : 'w-1/2', 'relative overflow-hidden']">
             <div class="absolute left-4 top-4 flex gap-x-2">
               <div
                 class="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"

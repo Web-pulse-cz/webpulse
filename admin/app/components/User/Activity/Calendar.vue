@@ -212,7 +212,9 @@ const activityNameById = computed(() => {
             @click="emit('update-item', activityItem)"
           >
             <div
-              v-if="[6, 8, 11, 12, 33].includes(activityItem.activity.id) && !activityItem.completed"
+              v-if="
+                [6, 8, 11, 12, 33].includes(activityItem.activity.id) && !activityItem.completed
+              "
               class="text-md col-span-1 flex items-center justify-center text-xs font-semibold text-dangerLight"
             >
               <div class="flex h-8 w-8 items-center justify-center border-b border-r border-danger">
