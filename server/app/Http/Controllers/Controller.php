@@ -34,6 +34,7 @@ class Controller extends BaseController
         $lastAddedContacts = Contact::without(['phase', 'source', 'tasks'])
             ->orderBy('created_at', 'desc')
             ->where('user_id', $request->user()->id)
+            ->limit(10)
             ->get();
 
         $contactsToCall = Contact::without(['phase', 'source', 'tasks'])
