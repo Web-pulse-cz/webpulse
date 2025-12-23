@@ -25,7 +25,7 @@ class ServiceResource extends JsonResource
             'tax_rate' => TaxRateResource::make($this->taxRate),
             'currency_id' => $this->currency_id,
             'currency' => CurrencyResource::make($this->currency),
-            'image' => $this->image,
+            'image' => $this->main_image,
             'active' => $this->active,
             'name' => $this->name,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),

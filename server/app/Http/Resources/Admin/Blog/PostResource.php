@@ -16,7 +16,7 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => $this->image,
+            'image' => $this->main_image,
             'status' => $this->status,
             'active' => $this->status === 'published',
             'published_from' => $this->published_from ? $this->published_from->toIso8601String() : null,

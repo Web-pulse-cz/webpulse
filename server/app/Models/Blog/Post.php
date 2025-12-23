@@ -2,18 +2,18 @@
 
 namespace App\Models\Blog;
 
+use App\Traits\Imagable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Post extends Model
 {
-    use Translatable;
+    use Translatable, Imagable;
 
     protected $table = 'posts';
 
     protected $fillable = [
-        'image',
         'status',
         'published_from',
         'published_to',
@@ -59,5 +59,16 @@ class Post extends Model
 
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
+    }
+
+
+    public function getMainImageAttribute()
+    {
+        return $this->getMainImage($this);
+    }
+
+    public function getImagesAttribute()
+    {
+        return $this->imagesAttribute($this);
     }
 }

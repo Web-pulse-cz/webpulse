@@ -79,6 +79,7 @@ class LogoController extends Controller
             foreach ($request->translations as $locale => $translation) {
                 $logo->translateOrNew($locale)->fill($translation);
             }
+            $logo->saveImages($logo, $request);
             $logo->save();
 
             DB::commit();

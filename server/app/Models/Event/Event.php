@@ -4,19 +4,19 @@ namespace App\Models\Event;
 
 use App\Models\Currency\Currency;
 use App\Models\TaxRate;
+use App\Traits\Imagable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Event extends Model
 {
-    use Translatable;
+    use Translatable, Imagable;
 
     protected $table = 'events';
 
     protected $fillable = [
         'code',
-        'image',
         'status',
         'position',
         'place',
@@ -97,5 +97,16 @@ class Event extends Model
     public function registrations()
     {
         return $this->hasMany(EventRegistration::class, 'event_id', 'id');
+    }
+
+
+    public function getMainImageAttribute()
+    {
+        return $this->getMainImage($this);
+    }
+
+    public function getImagesAttribute()
+    {
+        return $this->imagesAttribute($this);
     }
 }

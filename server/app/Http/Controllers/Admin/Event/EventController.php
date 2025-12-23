@@ -110,7 +110,7 @@ class EventController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $event->translateOrNew($locale)->fill($translation);
             }
-
+            $event->saveImage($event, $request);
             $event->save();
 
             DB::commit();

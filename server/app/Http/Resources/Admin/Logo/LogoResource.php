@@ -16,7 +16,7 @@ class LogoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => $this->image,
+            'image' => $this->main_image,
             'name' => $this->name,
             'position' => $this->position,
             'url' => $this->url,

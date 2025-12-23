@@ -19,7 +19,7 @@ class CareerResource extends JsonResource
             'code' => $this->code,
             'name' => $this->name,
             'position' => $this->position,
-            'image' => $this->image,
+            'image' => $this->main_image,
             'type' => $this->type,
             'status' => $this->status,
             'salary_from' => $this->salary_from,

@@ -2,6 +2,7 @@
 
 namespace App\Models\Logo;
 
+use App\Traits\Imagable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class Logo extends Model
 {
-    use Translatable;
+    use Translatable, Imagable;
 
     protected $table = 'logos';
 
@@ -47,5 +48,15 @@ class Logo extends Model
 
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
+    }
+
+    public function getMainImageAttribute()
+    {
+        return $this->getMainImage($this);
+    }
+
+    public function getImagesAttribute()
+    {
+        return $this->imagesAttribute($this);
     }
 }

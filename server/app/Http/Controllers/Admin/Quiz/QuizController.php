@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Quiz\QuizResource;
 use App\Http\Resources\Admin\Quiz\QuizSimpleResource;
 use App\Models\Quiz\Quiz;
+use App\Models\Quiz\QuizQuestion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -89,16 +90,16 @@ class QuizController extends Controller
 
         DB::beginTransaction();
         try {
-            $quiz->save();
             $quiz->fill($request->all());
             $quiz->slug = Str::slug($request->name);
             $quiz->user_id = $request->user()->id;
+            $quiz->save();
             $quiz->questions()->delete();
             foreach ($request->questions as $questionData) {
-                $question = $quiz->questions()->create([
-                    'name' => $questionData['name'],
-                    'image' => array_key_exists('image', $questionData) ? $questionData['image'] : null,
-                ]);
+                $question = new QuizQuestion();
+                $question->fill($questionData);
+                $question->saveImages($question, $request);
+                $quiz->questions()->save($question);
                 foreach ($questionData['answers'] as $answer) {
                     $question->answers()->create([
                         'name' => $answer['name'],

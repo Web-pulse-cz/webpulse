@@ -2,17 +2,18 @@
 
 namespace App\Models\Novelty;
 
+use App\Traits\Imagable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Novelty extends Model
 {
-    use Translatable;
+    use Translatable, Imagable;
+
     protected $table = 'novelties';
 
     protected $fillable = [
-        'image',
         'active',
         'priority',
     ];
@@ -51,5 +52,16 @@ class Novelty extends Model
 
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
+    }
+
+
+    public function getMainImageAttribute()
+    {
+        return $this->getMainImage($this);
+    }
+
+    public function getImagesAttribute()
+    {
+        return $this->imagesAttribute($this);
     }
 }

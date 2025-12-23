@@ -16,7 +16,7 @@ class NoveltyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => $this->image,
+            'image' => $this->main_image,
             'active' => $this->active,
             'priority' => $this->priority,
             'name' => $this->name,
