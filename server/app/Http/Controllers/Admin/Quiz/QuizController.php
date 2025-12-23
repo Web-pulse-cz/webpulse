@@ -115,7 +115,6 @@ class QuizController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             return Response::json(['error' => 'An error occurred while saving the quiz.'], 500);
         }
 
