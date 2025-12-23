@@ -11,6 +11,7 @@ use App\Models\Project\Project;
 use App\Models\Quiz\QuizQuestion;
 use App\Models\Service\Service;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CleanStorageImages extends Command
@@ -26,7 +27,8 @@ class CleanStorageImages extends Command
         $this->output->progressStart(count($images));
 
         foreach ($images as $image) {
-            if (!$this->imageExistsInDatabase($image['filename'])) {
+            $exists = DB::table('images')->where('image', $filename)->exists();
+            if ($exists) {
                 $this->deleteImage($image['path']);
             }
             $this->output->progressAdvance();
@@ -52,29 +54,6 @@ class CleanStorageImages extends Command
 
         return $images;
     }
-
-    private function imageExistsInDatabase(string $filename): bool
-    {
-        $models = [
-            Career::class,
-            Event::class,
-            Logo::class,
-            Novelty::class,
-            Post::class,
-            Project::class,
-            QuizQuestion::class,
-            Service::class,
-        ];
-
-        foreach ($models as $model) {
-            if ($model::query()->where('image', $filename)->exists()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 
     private function deleteImage(string $path): void
     {
