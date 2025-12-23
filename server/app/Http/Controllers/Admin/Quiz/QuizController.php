@@ -99,7 +99,9 @@ class QuizController extends Controller
                 $question = new QuizQuestion();
                 $question->fill($questionData);
                 $quiz->questions()->save($question);
-                $question->saveImages($question, $questionData['image']);
+                if (array_key_exists('image', $questionData)) {
+                    $question->saveImages($question, $questionData['image']);
+                }
                 foreach ($questionData['answers'] as $answer) {
                     $question->answers()->create([
                         'name' => $answer['name'],
