@@ -83,7 +83,7 @@ class PostCategoryController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $postCategory->translateOrNew($locale)->fill($translation);
             }
-            $postCategory->saveImages($postCategory, $request);
+            $postCategory->saveImages($postCategory, $request->get('image'));
             $postCategory->save();
 
             DB::commit();

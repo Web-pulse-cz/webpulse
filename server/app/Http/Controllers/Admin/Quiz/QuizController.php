@@ -98,8 +98,8 @@ class QuizController extends Controller
             foreach ($request->questions as $questionData) {
                 $question = new QuizQuestion();
                 $question->fill($questionData);
-                $question->saveImages($question, $request);
                 $quiz->questions()->save($question);
+                $question->saveImages($question, $questionData['image']);
                 foreach ($questionData['answers'] as $answer) {
                     $question->answers()->create([
                         'name' => $answer['name'],
@@ -113,6 +113,7 @@ class QuizController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             return Response::json(['error' => 'An error occurred while saving the quiz.'], 500);
         }
 

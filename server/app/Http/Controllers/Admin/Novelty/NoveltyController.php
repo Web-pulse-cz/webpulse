@@ -85,7 +85,7 @@ class NoveltyController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $novelty->translateOrNew($locale)->fill($translation);
             }
-            $novelty->saveImages($novelty, $request);
+            $novelty->saveImages($novelty, $request->get('image'));
             $novelty->save();
 
             DB::commit();

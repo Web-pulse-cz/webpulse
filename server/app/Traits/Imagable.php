@@ -13,23 +13,23 @@ trait Imagable
     /**
      * Save image to model through morph relation.
      * @param Model $model
-     * @param Request $request
+     * @param array|string $images
      *
      * @return void
      */
-    public function saveImages(Model $model, Request $request): void
+    public function saveImages(Model $model, array|string $images): void
     {
         DB::table('images')
             ->where('imagable_id', $model->id)
             ->where('imagable_type', get_class($model))
             ->delete();
 
-        if ($request->has('images') && is_array($request->get('images'))) {
-            foreach ($request->get('images') as $image) {
+        if ($images && is_array($images)) {
+            foreach ($images as $image) {
                 $this->insertImage($model, $image);
             }
         } else {
-            $this->insertImage($model, $request->get('image'));
+            $this->insertImage($model, $images);
         }
     }
 
