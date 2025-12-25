@@ -99,7 +99,7 @@ class QuizController extends Controller
                 $question = new QuizQuestion();
                 $question->fill($questionData);
                 $quiz->questions()->save($question);
-                if (array_key_exists('image', $questionData)) {
+                if (array_key_exists('image', $questionData) && $questionData['image'] != null) {
                     $question->saveImages($question, $questionData['image']);
                 }
                 foreach ($questionData['answers'] as $answer) {
@@ -115,6 +115,7 @@ class QuizController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             return Response::json(['error' => 'An error occurred while saving the quiz.'], 500);
         }
 
