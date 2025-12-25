@@ -67,6 +67,14 @@ watchEffect(() => {
   }
 });
 
+function questionTabClass(tabIndex: number) {
+  if (tabIndex === currentQuestionIndex.value) {
+    return 'bg-accent';
+  } else {
+    return 'bg-primary';
+  }
+}
+
 useHead(() => {
   return {
     title: 'Kvízy',
@@ -105,12 +113,15 @@ useHead(() => {
         >Zahájit kvíz</BaseButton
       >
     </div>
-    <div v-if="quizStarted && !quizFinished" class="mt-6">
-      <div class="mt-6" aria-hidden="true">
-        <div class="overflow-hidden rounded-full bg-gray-200">
-          <div class="h-2 rounded-full bg-primaryDark" :style="`width: ${progress}%`" />
-        </div>
-      </div>
+    <div v-if="quizStarted && !quizFinished" class="mt-6 flex w-full justify-center gap-x-2">
+      <div
+        v-for="(tab, index) in quizData.questions.length"
+        :key="index"
+        :class="[
+          tab === currentQuestionIndex ? 'bg-primaryDark' : 'bg-primaryLight',
+          'w-full rounded-full p-1',
+        ]"
+      />
     </div>
     <div v-if="quizStarted && !quizFinished" class="mt-12">
       <div v-if="quizData?.questions[currentQuestionIndex]?.image" class="mb-4 flex justify-center">
