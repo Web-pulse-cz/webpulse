@@ -44,6 +44,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 Log::error('Image cleaning command failed');
             });
+
+        $schedule->command('contacts:update-next-call')
+            ->dailyAt('01:00')
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->onFailure(function () {
+                Log::error('Contacts next call update command failed');
+            });
     }
 
     /**
