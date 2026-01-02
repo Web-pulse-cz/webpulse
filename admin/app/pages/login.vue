@@ -41,27 +41,28 @@ definePageMeta({
 </script>
 
 <template>
-  <LayoutContainer class="mt-24 w-full max-w-md lg:mt-60">
-    <h1 class="text-md mb-4 text-center font-semibold text-grayDark lg:text-2xl">Přihlášení</h1>
+  <LayoutContainer
+    class="mt-16 w-full max-w-sm lg:mt-16"
+    :background-show="false"
+  >
+    <h1 class="text-md mb-4 text-center font-semibold lg:text-2xl text-inherit">Přihlášení</h1>
     <Form @submit="handleSubmit">
-      <div class="grid grid-cols-1 gap-y-4">
+      <div class="grid grid-cols-1 gap-y-6">
         <BaseFormInput
           v-model="form.email"
           class="col-span-full"
-          label="E-mail"
           type="email"
           name="email"
-          rules="required|email"
+          placeholder="E-mail"
         />
         <BaseFormInput
           v-model="form.password"
           class="col-span-full"
-          label="Heslo"
           type="password"
           name="password"
-          rules="required"
+          placeholder="Heslo"
         />
-        <BaseButton class="col-span-full mt-4" type="submit" variant="primary" size="xl">
+        <BaseButton class="col-span-full mt-2" type="submit" variant="primary" size="xl">
           Přihlásit se
         </BaseButton>
       </div>
