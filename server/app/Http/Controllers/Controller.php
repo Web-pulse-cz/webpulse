@@ -40,6 +40,7 @@ class Controller extends BaseController
         $contactsToCall = Contact::without(['phase', 'source', 'tasks'])
             ->whereDate('next_contact', now()->toDateString())
             ->where('user_id', $request->user()->id)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $comingEvents = Contact::without(['phase', 'source', 'tasks'])
