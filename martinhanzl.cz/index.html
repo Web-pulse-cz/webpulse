@@ -1,85 +1,104 @@
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4T6XGKLFD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-H4T6XGKLFD');
+    </script>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Martin Hanzl - Fullstack Developer Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+            rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#00a388",
-              "background-light": "#f1f2f4",
-              "background-dark": "#080a0c",
-              "surface-dark": "#181C20",
-              "surface-light": "#ffffff",
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#00a388",
+                        "background-light": "#f1f2f4",
+                        "background-dark": "#080a0c",
+                        "surface-dark": "#181C20",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        display: ["Space Grotesk", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                    boxShadow: {
+                        glow: "0 0 15px -3px rgba(0, 163, 136, 0.3)",
+                        "glow-hover": "0 0 25px -5px rgba(0, 163, 136, 0.5)",
+                    },
+                },
             },
-            fontFamily: {
-              display: ["Space Grotesk", "sans-serif"],
-              body: ["Inter", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
-            },
-            boxShadow: {
-              glow: "0 0 15px -3px rgba(0, 163, 136, 0.3)",
-              "glow-hover": "0 0 25px -5px rgba(0, 163, 136, 0.5)",
-            },
-          },
-        },
-      };
+        };
     </script>
     <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      h1, h2, h3, h4, h5, h6, nav {
-        font-family: 'Space Grotesk', sans-serif;
-      }
-      /* Custom scrollbar for webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #080a0c;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #181C20;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #00a388;
-      }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6, nav {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #080a0c;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #181C20;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00a388;
+        }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    <script type="importmap">
+        {
+          "imports": {
+            "react": "https://esm.sh/react@^19.2.3",
+            "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+            "react/": "https://esm.sh/react@^19.2.3/"
+          }
+        }
+    </script>
+    <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-x-hidden selection:bg-primary selection:text-white">
-    <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-x-hidden selection:bg-primary selection:text-white">
+<div id="root"></div>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
