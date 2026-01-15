@@ -157,7 +157,7 @@ function addQuestion() {
 }
 
 function copyQuizUrl() {
-  const quizUrl = `https://client.martinhanzl.cz/kvizy/${item.value.id}/${item.value.slug}`;
+  const quizUrl = `https://hry.martinhanzl.cz/kvizy/${item.value.id}/${item.value.slug}`;
   navigator.clipboard
     .writeText(quizUrl)
     .then(() => {

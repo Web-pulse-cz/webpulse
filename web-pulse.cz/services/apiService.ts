@@ -1,6 +1,6 @@
 import { DemandPayload, FaqItem, Locale, ServiceItem, SettingItem } from '../types';
 
-const API_BASE = 'https://martinhanzl.cz/api';
+const API_BASE = 'https://api.web-pulse.cz/api';
 
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url, {
