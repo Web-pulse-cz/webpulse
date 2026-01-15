@@ -28,8 +28,6 @@ onMounted(() => {
 <template>
   <div>
     <LayoutNavbar />
-    <!-- Dummy div so Navbar is not over component -->
-    <div class="h-20 bg-chppGray"></div>
     <main>
       <NuxtPage />
     </main>

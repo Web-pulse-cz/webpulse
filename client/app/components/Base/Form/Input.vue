@@ -8,8 +8,8 @@ const labelClasses = {
 };
 
 const inputClasses = {
-  light: 'ring-secondary focus:ring-light',
-  dark: 'ring-secondary focus:ring-secondary',
+  light: 'ring-primary focus:ring-light',
+  dark: 'ring-primary focus:ring-primary',
   newsletter: 'ring-[#707070] focus:ring-[#707070]',
 };
 

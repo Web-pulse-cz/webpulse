@@ -26,9 +26,9 @@ const topMenu = ref({});
 
 <template>
   <BaseModalContactForm :open="isOpen" @close="isOpen = false" />
-  <header class="fixed z-10 w-full bg-chppGray backdrop-blur-md">
+  <header class="fixed z-10 w-full backdrop-blur-md mt-0">
     <nav
-      class="mx-auto flex max-w-[1880px] items-center justify-between px-8 py-6 lg:px-8 lg:py-0 2xl:px-72"
+      class="mx-auto flex items-center justify-between px-8 py-6 lg:px-8 lg:py-0 2xl:px-72"
       aria-label="Global"
     >
       <div class="flex lg:flex-1">
