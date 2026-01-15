@@ -1,0 +1,116 @@
+import React from 'react';
+
+const Experience: React.FC = () => {
+  return (
+    <section id="experience" className="py-24 md:py-32 bg-white dark:bg-[#0b0e11] relative border-t border-gray-200 dark:border-white/5">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 dark:text-white">Professional Experience</h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              A timeline of my professional career and growth.
+            </p>
+          </div>
+          <div className="h-1 w-20 bg-primary rounded-full"></div>
+        </div>
+
+        <div className="relative">
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-white/10 -translate-x-1/2 hidden md:block"></div>
+          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-white/10 md:hidden"></div>
+          
+          <div className="flex flex-col gap-12">
+            {/* Item 1 */}
+            <div className="relative flex flex-col md:flex-row items-start group">
+              <div className="hidden md:flex w-1/2 justify-end pr-12 pt-1">
+                <span className="font-display text-primary font-bold text-lg">
+                  2025 - Present
+                </span>
+              </div>
+              <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-background-light dark:bg-background-dark border-2 border-primary z-10 shadow-[0_0_0_4px_rgba(0,163,136,0.2)]"></div>
+              <div className="md:w-1/2 pl-12 md:pl-12 ml-4 md:ml-0">
+                <span className="md:hidden font-display text-primary font-bold text-sm mb-1 block">
+                  2025 - Present
+                </span>
+                <div className="p-6 rounded-xl bg-gray-50 dark:bg-surface-dark border border-gray-200 dark:border-white/5 hover:border-primary/50 transition-all duration-300 group-hover:shadow-glow/20">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Fiosoft
+                    </h3>
+                    <span className="px-2 py-1 rounded text-xs font-bold bg-primary/20 text-primary">
+                      Backend
+                    </span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    Currently leading backend architectural decisions, optimizing
+                    database queries, and building robust APIs for high-traffic
+                    applications.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Item 2 */}
+            <div className="relative flex flex-col md:flex-row-reverse items-start group">
+              <div className="hidden md:flex w-1/2 justify-start pl-12 pt-1">
+                <span className="font-display text-slate-500 dark:text-slate-400 font-bold text-lg">
+                  2025
+                </span>
+              </div>
+              <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-background-light dark:bg-background-dark border-2 border-slate-400 dark:border-slate-600 z-10 group-hover:border-primary transition-colors"></div>
+              <div className="md:w-1/2 pl-12 md:pr-12 md:pl-0 ml-4 md:ml-0 text-left md:text-right">
+                <span className="md:hidden font-display text-slate-500 dark:text-slate-400 font-bold text-sm mb-1 block">
+                  2025
+                </span>
+                <div className="p-6 rounded-xl bg-gray-50 dark:bg-surface-dark border border-gray-200 dark:border-white/5 hover:border-primary/30 transition-all duration-300">
+                  <div className="flex justify-between md:justify-end items-start md:items-center mb-2 gap-2 flex-col md:flex-row-reverse">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Cortex a.s.
+                    </h3>
+                    <span className="px-2 py-1 rounded text-xs font-bold bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-300">
+                      Backend
+                    </span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    Focused on microservices development and legacy code
+                    refactoring to improve system stability and performance.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Item 3 */}
+            <div className="relative flex flex-col md:flex-row items-start group">
+              <div className="hidden md:flex w-1/2 justify-end pr-12 pt-1">
+                <span className="font-display text-slate-500 dark:text-slate-400 font-bold text-lg">
+                  2023 - 2025
+                </span>
+              </div>
+              <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-background-light dark:bg-background-dark border-2 border-slate-400 dark:border-slate-600 z-10 group-hover:border-primary transition-colors"></div>
+              <div className="md:w-1/2 pl-12 md:pl-12 ml-4 md:ml-0">
+                <span className="md:hidden font-display text-slate-500 dark:text-slate-400 font-bold text-sm mb-1 block">
+                  2023 - 2025
+                </span>
+                <div className="p-6 rounded-xl bg-gray-50 dark:bg-surface-dark border border-gray-200 dark:border-white/5 hover:border-primary/30 transition-all duration-300">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Monster Media
+                    </h3>
+                    <span className="px-2 py-1 rounded text-xs font-bold bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-300">
+                      Fullstack
+                    </span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    Developed comprehensive e-commerce solutions and custom CMS
+                    modules using Vue.js and Laravel.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Experience;
