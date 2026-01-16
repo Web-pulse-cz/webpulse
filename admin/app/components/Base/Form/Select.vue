@@ -44,6 +44,11 @@ defineProps({
     required: false,
     default: 0,
   },
+  theme: {
+    type: String,
+    required: false,
+    default: 'light',
+  },
 });
 defineRule('required', (value) => {
   if (!value) {
@@ -68,7 +73,8 @@ defineRule('required', (value) => {
       :disabled="disabled"
       :autofocus="false"
       :class="[
-        'mt-2 block w-full rounded-md border-0 py-1.5 text-xs text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6',
+        theme === 'dark' ? 'bg-gray-900 text-gray-300' : 'bg-white text-grayDark',
+        'mt-2 block w-full rounded-md border-0 py-1.5 text-xs shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6',
         { 'bg-grayLight': disabled },
       ]"
     >

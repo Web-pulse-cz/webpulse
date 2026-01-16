@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {inject, ref} from 'vue';
 
 const { $toast } = useNuxtApp();
 
 const route = useRoute();
+const router = useRouter();
 
 const error = ref(false);
 const loading = ref(false);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nová poptávka' : 'Detail poptávky');
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const breadcrumbs = ref([
   {
@@ -52,6 +54,7 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -71,11 +74,16 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst poptávku. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/uzivatele/poptavky');
     })
     .finally(() => {
       loading.value = false;
     });
 }
+
+watch(selectedSiteHash, () => {
+  loadItem();
+});
 
 useHead({
   title: pageTitle.value,
