@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import { inject, ref } from 'vue';
 
 const { $toast } = useNuxtApp();
 

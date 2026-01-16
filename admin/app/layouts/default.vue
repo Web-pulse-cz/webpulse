@@ -644,7 +644,11 @@ onMounted(() => {
                   </NuxtLink>
                 </div>
                 <div v-if="user.sites && user.sites.length">
-                  <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark" />
+                  <BaseFormSelect
+                    v-model="selectedSiteHash"
+                    :options="sitesForSelect"
+                    theme="dark"
+                  />
                 </div>
                 <nav class="flex flex-1 flex-col">
                   <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -746,7 +750,7 @@ onMounted(() => {
         </div>
         <!-- site select -->
         <div v-if="user.sites && user.sites.length">
-          <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark"/>
+          <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark" />
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
