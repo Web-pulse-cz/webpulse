@@ -12,8 +12,6 @@ const { $toast } = useNuxtApp();
 const user = useSanctumUser();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const selectedSiteHash = ref(inject('selectedSiteHash', ''));
-
 const route = useRoute();
 const router = useRouter();
 
