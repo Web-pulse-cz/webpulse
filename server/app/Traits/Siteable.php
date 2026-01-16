@@ -17,7 +17,7 @@ trait Siteable
     public function saveSites(Model $model, array $sites): void
     {
         DB::table('siteables')
-            ->where('siteable_idd', $model->id)
+            ->where('siteable_id', $model->id)
             ->where('siteable_type', get_class($model))
             ->delete();
 
