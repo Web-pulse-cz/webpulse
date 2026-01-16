@@ -17,7 +17,10 @@ class SettingController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Setting::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Setting::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -76,6 +79,9 @@ class SettingController extends Controller
             foreach ($request->translations as $locale => $translation) {
                 $setting->translateOrNew($locale)->fill($translation);
             }
+
+            $setting->saveSites($setting, $request->get('sites', []));
+
             $setting->save();
 
             DB::commit();

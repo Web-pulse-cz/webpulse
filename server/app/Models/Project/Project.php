@@ -5,7 +5,7 @@ namespace App\Models\Project;
 use App\Models\Contact\Contact;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
-use App\Models\TaxRate;
+use App\Models\TaxRate\TaxRate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

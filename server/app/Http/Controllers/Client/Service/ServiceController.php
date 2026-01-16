@@ -15,6 +15,7 @@ class ServiceController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Service::query();
 
@@ -58,15 +59,18 @@ class ServiceController extends Controller
         return Response::json(ServiceResource::collection($services));
     }
 
-    public function show(int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         if (!$id) {
             App::abort(400);
         }
 
-        $service = Service::find($id);
+        $service = Service::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$service) {
             App::abort(404);
         }

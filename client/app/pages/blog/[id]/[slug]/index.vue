@@ -69,7 +69,7 @@ useHead({
       <div class="bg-white px-28 py-24">
         <div class="flex flex-col items-center justify-start gap-16">
           <div class="flex w-[800px] flex-col items-center justify-start gap-6">
-            <div class="text-base leading-snug text-textDescription">
+            <div class="text-textDescription text-base leading-snug">
               {{ dayjs(postData.created_at).format('DD. MM. YYYY') }}
             </div>
 
@@ -86,7 +86,7 @@ useHead({
                 :key="category.id"
                 class="rounded-full bg-indigo-50 px-3 py-1.5"
               >
-                <div class="text-center text-sm leading-tight text-brand">
+                <div class="text-brand text-center text-sm leading-tight">
                   {{ category.name }}
                 </div>
               </div>
@@ -104,7 +104,7 @@ useHead({
         <div class="mt-16 flex flex-col items-start justify-start gap-16 px-52">
           <div class="flex w-[800px] flex-col items-start justify-start gap-6">
             <div
-              class="self-stretch text-lg leading-7 text-textDescription"
+              class="text-textDescription self-stretch text-lg leading-7"
               v-html="postData.text"
             ></div>
           </div>
@@ -113,7 +113,7 @@ useHead({
             class="inline-flex items-center justify-between self-stretch border-t border-slate-200 pt-8"
           >
             <div class="flex items-center justify-start gap-4">
-              <div class="text-base leading-relaxed text-textDescription">
+              <div class="text-textDescription text-base leading-relaxed">
                 {{ dayjs(postData.created_at).format('DD. MM. YYYY') }}
               </div>
             </div>

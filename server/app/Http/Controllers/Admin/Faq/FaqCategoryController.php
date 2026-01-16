@@ -17,7 +17,10 @@ class FaqCategoryController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = FaqCategory::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = FaqCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -78,6 +81,9 @@ class FaqCategoryController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $faqCategory->translateOrNew($locale)->fill($translation);
             }
+
+            $faqCategory->saveSites($faqCategory, $request->get('sites', []));
+
             $faqCategory->save();
 
             DB::commit();

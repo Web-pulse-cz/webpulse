@@ -8,6 +8,7 @@ export const useSettingStore = defineStore({
   actions: {
     async fetchSettings(locale: string) {
       const client = useSanctumClient();
+      const config = useRuntimeConfig();
       await client<{
         id: number;
       }>('/api/setting/' + locale, {
@@ -15,6 +16,7 @@ export const useSettingStore = defineStore({
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          'X-Site-Hash': config.public.siteHash,
         },
       }).then((response) => {
         this.settings = response;

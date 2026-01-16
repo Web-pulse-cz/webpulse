@@ -17,7 +17,7 @@ defineProps({
         <li>
           <NuxtLink
             to="/client/public"
-            class="flex items-center text-gray-600 transition-colors duration-1000 hover:text-brand"
+            class="hover:text-brand flex items-center text-gray-600 transition-colors duration-1000"
           >
             <HomeIcon class="size-3 shrink-0 lg:mb-1 lg:size-4" aria-hidden="true" />
             <span class="sr-only">Home</span>
@@ -31,7 +31,7 @@ defineProps({
               class="ml-2 rounded-full text-xs transition-colors duration-1000 lg:text-sm"
               :class="
                 link.current
-                  ? 'bg-red-50 font-semibold text-brand'
+                  ? 'text-brand bg-red-50 font-semibold'
                   : 'text-gray-600 hover:bg-gray-100'
               "
               :aria-current="link.current ? 'page' : undefined"

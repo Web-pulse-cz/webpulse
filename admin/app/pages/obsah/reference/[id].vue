@@ -4,6 +4,7 @@ import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
+const user = useSanctumUser();
 
 const route = useRoute();
 const router = useRouter();
@@ -37,7 +38,7 @@ const item = ref({
   name: '' as string,
   active: true as boolean,
   translations: {} as object,
-  categories: [] as number[],
+  sites: [] as number[],
 });
 const translatableAttributes = ref([
   { field: 'name' as string, label: 'Název' as string },
@@ -57,7 +58,6 @@ async function loadItem() {
     name: string;
     active: boolean;
     translations: object;
-    categories: number[];
   }>('/api/admin/review/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -67,6 +67,7 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites.map((site) => site.id);
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -89,33 +90,6 @@ async function loadItem() {
     });
 }
 
-async function loadReviewCategories() {
-  const client = useSanctumClient();
-  loading.value = true;
-
-  await client<{}>('/api/admin/review/category', {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      categories.value = response;
-    })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se načíst kategorie referencí. Zkuste to prosím později.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-}
-
 async function saveItem(redirect = true as boolean) {
   const client = useSanctumClient();
   loading.value = true;
@@ -126,7 +100,6 @@ async function saveItem(redirect = true as boolean) {
     name: string;
     active: boolean;
     translations: object;
-    categories: number[];
   }>(route.params.id === 'pridat' ? '/api/admin/review' : '/api/admin/review/' + route.params.id, {
     method: 'POST',
     body: JSON.stringify(item.value),
@@ -170,15 +143,6 @@ useHead({
   title: pageTitle.value,
 });
 
-function addRemoveItemCategory(categoryId) {
-  if (item.value.categories.includes(categoryId)) {
-    item.value.categories = item.value.categories.filter((category) => category !== categoryId);
-    return;
-  } else {
-    item.value.categories.push(categoryId);
-  }
-}
-
 function fillEmptyTranslations() {
   // Set default translations for all languages
   languageStore.languages.forEach((language) => {
@@ -206,8 +170,16 @@ function updateItemImages(files) {
   item.value.images = files;
 }
 
+function addRemoveItemSite(siteId) {
+  if (item.value.sites.includes(siteId)) {
+    item.value.sites = item.value.sites.filter((site) => site !== siteId);
+    return;
+  } else {
+    item.value.sites.push(siteId);
+  }
+}
+
 onMounted(() => {
-  loadReviewCategories();
   if (route.params.id !== 'pridat') {
     loadItem();
   }
@@ -279,20 +251,6 @@ definePageMeta({
               label="Galerie obrázků"
               @update-files="updateItemImages"
             />
-            <LayoutDivider>Zařazení do kategorií</LayoutDivider>
-            <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-6 pt-6">
-              <BaseFormCheckbox
-                v-for="(category, key) in categories"
-                :key="key"
-                :label="category.name"
-                :name="category.id"
-                :value="item.categories.includes(category.id)"
-                :checked="item.categories.includes(category.id)"
-                class="col-span-1"
-                label-color="grayCustom"
-                @change="addRemoveItemCategory(category.id)"
-              />
-            </div>
             <LayoutDivider>SEO</LayoutDivider>
             <BaseFormInput
               v-if="
@@ -352,6 +310,20 @@ definePageMeta({
               @update-files="updateItemImage"
             />
           </div>
+          <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
+          <BaseFormCheckbox
+            v-for="(site, key) in user.sites"
+            v-if="item.sites && user.sites"
+            :key="key"
+            :label="site.name"
+            :name="site.id"
+            :value="item.sites.includes(site.id)"
+            :checked="item.sites.includes(site.id)"
+            class="col-span-full"
+            :reverse="true"
+            label-color="grayCustom"
+            @change="addRemoveItemSite(site.id)"
+          />
         </LayoutContainer>
       </div>
     </Form>

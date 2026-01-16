@@ -117,7 +117,7 @@ onMounted(() => {
     </div>
     <div
       v-if="showIcon"
-      class="border-primary bg-beige fixed bottom-0 left-0 right-8 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded border p-2 md:bottom-4 md:left-4"
+      class="fixed bottom-0 left-0 right-8 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded border border-primary bg-beige p-2 md:bottom-4 md:left-4"
     >
       <CookieIcon class="h-6 w-6 cursor-pointer fill-primary" @click="showBar = true" />
     </div>

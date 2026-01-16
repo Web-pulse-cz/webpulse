@@ -14,8 +14,10 @@ class ReviewController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Review::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->orderBy('created_at', 'desc');
 

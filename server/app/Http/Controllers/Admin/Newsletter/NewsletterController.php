@@ -14,7 +14,10 @@ class NewsletterController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Newsletter::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Newsletter::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');

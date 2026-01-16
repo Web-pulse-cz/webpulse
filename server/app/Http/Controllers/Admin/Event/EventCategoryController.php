@@ -20,7 +20,10 @@ class EventCategoryController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = EventCategory::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = EventCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -83,6 +86,8 @@ class EventCategoryController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $eventCategory->translateOrNew($locale)->fill($translation);
             }
+
+            $eventCategory->saveSites($eventCategory, $request->get('sites', []));
 
             $eventCategory->save();
             DB::commit();

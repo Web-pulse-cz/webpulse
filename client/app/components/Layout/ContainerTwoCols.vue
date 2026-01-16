@@ -27,10 +27,10 @@ const isActive = (link: any) => {
           v-for="(link, index) in links"
           :key="index"
           :to="localePath({ name: path, params: { id: link.id, slug: link.slug } })"
-          class="block py-2 text-lg font-medium text-brand transition-all duration-300 hover:text-brand"
+          class="text-brand hover:text-brand block py-2 text-lg font-medium transition-all duration-300"
           :class="{
-            '-ml-2 rounded-md px-2 text-brand': isActive(link),
-            '-ml-2 rounded-md px-2 text-textBlack hover:text-brand': !isActive(link),
+            'text-brand -ml-2 rounded-md px-2': isActive(link),
+            'text-textBlack hover:text-brand -ml-2 rounded-md px-2': !isActive(link),
           }"
         >
           {{ link.name }}

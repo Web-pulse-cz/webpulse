@@ -128,7 +128,7 @@ const badgeClass = computed(() => (color: string) => {
               type="checkbox"
               :checked="checked"
               :disabled="disabled"
-              class="border-grayLight checked:bg-dark indeterminate:bg-dark active:bg-dark col-start-1 row-start-1 appearance-none rounded border bg-chppGray checked:border-chppGray indeterminate:border-chppGray focus:border-chppGray focus:bg-chppGray active:border-chppGray disabled:border-chppGray disabled:bg-chppGray disabled:checked:bg-chppGray"
+              class="border-grayLight checked:bg-dark indeterminate:bg-dark active:bg-dark bg-chppGray checked:border-chppGray indeterminate:border-chppGray focus:border-chppGray focus:bg-chppGray active:border-chppGray disabled:border-chppGray disabled:bg-chppGray disabled:checked:bg-chppGray col-start-1 row-start-1 appearance-none rounded border"
             />
             <svg
               class="pointer-events-none col-start-1 row-start-1 size-1.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"

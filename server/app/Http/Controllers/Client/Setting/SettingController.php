@@ -14,8 +14,10 @@ class SettingController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $settings = Setting::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->get();
 
         return Response::json(SettingResource::collection($settings));

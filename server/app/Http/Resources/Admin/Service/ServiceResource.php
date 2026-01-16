@@ -29,6 +29,7 @@ class ServiceResource extends JsonResource
             'active' => $this->active,
             'name' => $this->name,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
+            'sites' => $this->sites
         ];
     }
 }

@@ -14,8 +14,10 @@ class FaqCategoryController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = FaqCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->with(['faqs'])
             ->orderBy('position', 'asc')
@@ -29,12 +31,14 @@ class FaqCategoryController extends Controller
     public function show(Request $request, int $id, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         if (!$id) {
             return Response::json(['error' => 'Category ID is required'], 400);
         }
 
         $faqCategory = FaqCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->where('id', $id)
             ->with(['faqs'])

@@ -6,6 +6,7 @@ use App\Models\Activity\Activity;
 use App\Models\Activity\UserActivity;
 use App\Models\Cashflow\CashflowCategory;
 use App\Models\Contact\Contact;
+use App\Models\Site\Site;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -27,6 +28,19 @@ class Controller extends BaseController
         App::setLocale($lang);
 
         return $lang;
+    }
+
+    public function handleSite(?string $hash = null): int
+    {
+        if (!$hash) {
+            App::abort(404);
+        }
+        $site = Site::query()->where('hash', $hash)->first();
+        if (!$site) {
+            App::abort(404);
+        }
+
+        return $site->id;
     }
 
     public function dashboard(Request $request): JsonResponse

@@ -21,6 +21,7 @@ class LogoResource extends JsonResource
             'position' => $this->position,
             'url' => $this->url,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
+            'sites' => $this->sites
         ];
     }
 }

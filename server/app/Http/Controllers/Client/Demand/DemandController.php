@@ -16,6 +16,7 @@ class DemandController extends Controller
     public function store(Request $request, string $lang = null): JsonResponse
     {
         $lang = $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string|max:255',
@@ -33,7 +34,11 @@ class DemandController extends Controller
             $demand->fill($request->all());
             $demand->service_id = $request->get('service_id', null);
             $demand->locale = $lang;
+
+            $demand->saveSites($demand, [$siteId]);
+
             $demand->save();
+
             DB::commit();
 
             DemandSaved::dispatch($demand);

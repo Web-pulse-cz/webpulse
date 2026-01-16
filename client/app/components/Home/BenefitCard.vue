@@ -28,7 +28,7 @@ defineProps({
 <template>
   <div class="flex h-96 w-80 justify-center text-center">
     <div
-      class="w-1/3 flex-auto rounded-lg border border-white bg-white p-6 shadow-xl shadow-gray-200 transition-all duration-1000 hover:shadow-redShadow lg:w-1/4"
+      class="hover:shadow-redShadow w-1/3 flex-auto rounded-lg border border-white bg-white p-6 shadow-xl shadow-gray-200 transition-all duration-1000 lg:w-1/4"
     >
       <NuxtLink :to="link">
         <div class="flex justify-center">

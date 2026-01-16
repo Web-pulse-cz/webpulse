@@ -46,6 +46,7 @@ import {
   ChevronRightIcon,
   ChatBubbleLeftRightIcon,
   AcademicCapIcon,
+  GlobeAltIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
@@ -72,6 +73,9 @@ const sidebarOpen = ref(false);
 
 const searchString = ref('');
 provide('searchString', searchString);
+
+const selectedSiteHash = ref('');
+provide('selectedSiteHash', selectedSiteHash);
 
 const navigation = ref([
   {
@@ -399,6 +403,13 @@ const navigation = ref([
         ],
       },
       {
+        name: 'Stránky',
+        link: '/nastaveni/stranky',
+        icon: GlobeAltIcon,
+        current: false,
+        slug: 'sites',
+      },
+      {
         name: 'Nastavení',
         link: '/nastaveni',
         icon: CogIcon,
@@ -441,13 +452,6 @@ const navigation = ref([
         slug: 'currencies',
       },
       {
-        name: 'Odkazy',
-        link: '/aktivity',
-        icon: ChartBarSquareIcon,
-        current: false,
-        slug: 'demo',
-      },
-      {
         name: 'E-maily',
         link: '/nastaveni/logy/emaily',
         icon: AtSymbolIcon,
@@ -477,11 +481,11 @@ watchEffect(() => {
 
 function filterNavigationGroups(navigation: any[]): any[] {
   return navigation.filter((group: any) =>
-    group.menu.some((item: any) => !item.slug || (item.slug && canView(item.slug))),
+    group.menu.some((item: any) => !item.slug || (item.slug && canViewBySlug(item.slug))),
   );
 }
 
-function canView(slug: string): boolean {
+function canViewBySlug(slug: string): boolean {
   if (user && user.value && (user.value as any).user_group_id && userGroupStore.userGroups) {
     const userGroup = userGroupStore.userGroups.find(
       (group: any) => group.id === (user.value as any).user_group_id,
@@ -491,6 +495,26 @@ function canView(slug: string): boolean {
         (permission: any) => permission.slug === slug,
       );
       if (currentPermissionSlug && currentPermissionSlug.permissions.view === true) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function canViewBySite(slug: string): boolean {
+  if (user && user.value && user.value.sites) {
+    const currentSite = user.value.sites.find((site: any) => site.hash === selectedSiteHash.value);
+    if (
+      currentSite &&
+      currentSite.settings &&
+      currentSite.settings.enabled_modules &&
+      currentSite.is_active
+    ) {
+      const currentModuleSlug = currentSite.settings.enabled_modules.find(
+        (module: any) => module === slug,
+      );
+      if (currentModuleSlug) {
         return true;
       }
     }
@@ -511,9 +535,37 @@ watchEffect(() => {
   getQuickAccess();
 });
 
+const sitesForSelect = computed(() => {
+  return user.value.sites.map((site: any) => ({
+    label: site.name,
+    name: site.name,
+    value: site.hash,
+  }));
+});
+
+watch(
+  () => selectedSiteHash.value,
+  (newValue) => {
+    localStorage.setItem('selectedSiteHash', newValue);
+    refreshIdentity();
+  },
+);
+
 onMounted(() => {
   refreshIdentity();
   getQuickAccess();
+
+  if (
+    !localStorage.getItem('selectedSiteHash') &&
+    user.value.sites &&
+    user.value.sites.length > 0
+  ) {
+    localStorage.setItem('selectedSiteHash', user.value.sites[0].hash);
+  }
+
+  if (localStorage.getItem('selectedSiteHash')) {
+    selectedSiteHash.value = localStorage.getItem('selectedSiteHash') || '';
+  }
 
   userGroupStore.fetchUserGroups();
   activityStore.fetchActivities();
@@ -591,6 +643,9 @@ onMounted(() => {
                     />
                   </NuxtLink>
                 </div>
+                <div v-if="user.sites && user.sites.length">
+                  <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" />
+                </div>
                 <nav class="flex flex-1 flex-col">
                   <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li v-for="(group, index) in navigation" :key="index">
@@ -605,7 +660,11 @@ onMounted(() => {
                         >
                           <NuxtLink
                             v-if="
-                              (!item.slug || (item.slug && canView(item.slug))) && !item.submenu
+                              (!item.slug ||
+                                (item.slug &&
+                                  canViewBySite(item.slug) &&
+                                  canViewBySlug(item.slug))) &&
+                              !item.submenu
                             "
                             :to="item.link"
                             :class="[
@@ -619,7 +678,10 @@ onMounted(() => {
                             <span class="truncate">{{ item.name }}</span>
                           </NuxtLink>
                           <Disclosure
-                            v-else-if="!item.slug || (item.slug && canView(item.slug))"
+                            v-else-if="
+                              !item.slug ||
+                              (item.slug && canViewBySite(item.slug) && canViewBySlug(item.slug))
+                            "
                             v-slot="{ open }"
                             as="div"
                             class="w-full"
@@ -682,6 +744,10 @@ onMounted(() => {
             <img class="h-12 w-auto" src="/static/img/logo-gray-300.png" alt="Your Company" />
           </NuxtLink>
         </div>
+        <!-- site select -->
+        <div v-if="user.sites && user.sites.length">
+          <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" />
+        </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
             <li v-for="(group, index) in navigation" :key="index">
@@ -691,7 +757,11 @@ onMounted(() => {
               <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li v-for="(item, key) in group.menu" :key="key">
                   <NuxtLink
-                    v-if="(!item.slug || (item.slug && canView(item.slug))) && !item.submenu"
+                    v-if="
+                      (!item.slug ||
+                        (item.slug && canViewBySite(item.slug) && canViewBySlug(item.slug))) &&
+                      !item.submenu
+                    "
                     :to="item.link"
                     :class="[
                       item.current
@@ -704,7 +774,10 @@ onMounted(() => {
                     <span class="truncate">{{ item.name }}</span>
                   </NuxtLink>
                   <Disclosure
-                    v-else-if="!item.slug || (item.slug && canView(item.slug))"
+                    v-else-if="
+                      !item.slug ||
+                      (item.slug && canViewBySite(item.slug) && canViewBySlug(item.slug))
+                    "
                     v-slot="{ open }"
                     as="div"
                     class="w-full"

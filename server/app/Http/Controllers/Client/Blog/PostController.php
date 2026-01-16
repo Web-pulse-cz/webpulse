@@ -14,8 +14,10 @@ class PostController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Post::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('status', 'published')
             ->where(function ($query) {
                 $query->whereNull('published_from')
@@ -56,12 +58,14 @@ class PostController extends Controller
     public function show(Request $request, int $id, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         if (!$id) {
             return Response::json(['error' => 'Post ID is required'], 400);
         }
 
         $post = Post::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('status', 'published')
             ->where(function ($query) {
                 $query->whereNull('published_from')

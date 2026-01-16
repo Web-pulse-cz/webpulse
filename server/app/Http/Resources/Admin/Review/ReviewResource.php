@@ -23,6 +23,7 @@ class ReviewResource extends JsonResource
             'name' => $this->name,
             'content' => $this->content,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
+            'sites' => $this->sites,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

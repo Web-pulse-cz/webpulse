@@ -17,7 +17,10 @@ class ReviewController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Review::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Review::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -79,6 +82,9 @@ class ReviewController extends Controller
             foreach ($request->translations as $locale => $translation) {
                 $review->translateOrNew($locale)->fill($translation);
             }
+
+            $review->saveSites($review, $request->get('sites', []));
+
             $review->save();
 
             DB::commit();

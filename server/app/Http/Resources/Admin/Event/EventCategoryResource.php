@@ -25,6 +25,7 @@ class EventCategoryResource extends JsonResource
             'meta_description' => $this->meta_description,
             'events_count' => $this->events()->count(),
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
+            'sites' => $this->sites
         ];
     }
 }

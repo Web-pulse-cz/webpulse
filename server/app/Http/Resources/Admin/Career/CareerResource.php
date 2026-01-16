@@ -29,6 +29,7 @@ class CareerResource extends JsonResource
             'active' => $this->status === 'open',
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'application_count' => $this->applications->count(),
+            'sites' => $this->sites,
             'applications' => [
                 'data' => CareerApplicationResource::collection($this->applications),
             ]

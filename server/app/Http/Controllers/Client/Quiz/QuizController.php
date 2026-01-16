@@ -18,7 +18,10 @@ class QuizController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         $query = Quiz::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('status', 'public');
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
@@ -131,8 +134,10 @@ class QuizController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400, 'Quiz ID is required');
         }
@@ -141,7 +146,9 @@ class QuizController extends Controller
             $query->orderByRaw('RAND()');
         }, 'questions.answers' => function ($query) {
             $query->orderByRaw('RAND()');
-        }])->whereIn('status', ['public', 'private'])
+        }])
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->whereIn('status', ['public', 'private'])
             ->find($id);
         if (!$quiz) {
             App::abort(404, 'Quiz not found');

@@ -3,16 +3,18 @@
 namespace App\Models\Service;
 
 use App\Models\Currency\Currency;
-use App\Models\TaxRate;
+use App\Models\TaxRate\TaxRate;
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Service extends Model
 {
-    use Translatable;
+    use Translatable, Siteable;
 
     protected $table = 'services';
+
     protected $fillable = [
         'type',
         'price_type',
@@ -74,4 +76,8 @@ class Service extends Model
         return parent::getAttribute($key);
     }
 
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
+    }
 }

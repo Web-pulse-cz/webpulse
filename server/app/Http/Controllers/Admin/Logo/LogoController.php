@@ -16,7 +16,10 @@ class LogoController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Logo::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Logo::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -79,12 +82,16 @@ class LogoController extends Controller
             foreach ($request->translations as $locale => $translation) {
                 $logo->translateOrNew($locale)->fill($translation);
             }
+
             $logo->saveImages($logo, $request->get('image'));
+            $logo->saveSites($logo, $request->get('sites', []));
+
             $logo->save();
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return Response::json(['message' => 'An error occurred while updating review.'], 500);
         }
 

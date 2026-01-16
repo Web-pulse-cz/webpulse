@@ -2,6 +2,7 @@
 
 namespace App\Models\Setting;
 
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class Setting extends Model
 {
-    use Translatable;
+    use Translatable, Siteable;
 
     protected $table = 'settings';
 
@@ -41,5 +42,10 @@ class Setting extends Model
 
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

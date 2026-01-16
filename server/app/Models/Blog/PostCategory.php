@@ -3,13 +3,14 @@
 namespace App\Models\Blog;
 
 use App\Traits\Imagable;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Support\Facades\App;
 
 class PostCategory extends Model
 {
-    use Translatable, Imagable;
+    use Translatable, Imagable, Siteable;
 
     protected $table = 'post_categories';
     protected $fillable = [
@@ -67,5 +68,10 @@ class PostCategory extends Model
     public function getImagesAttribute()
     {
         return $this->imagesAttribute($this);
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

@@ -45,6 +45,7 @@ class EventResource extends JsonResource
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'registrations_count' => $this->registrations->count(),
             'registrations' => ['data' => EventRegistrationResource::collection($this->registrations)],
+            'sites' => $this->sites
         ];
     }
 }

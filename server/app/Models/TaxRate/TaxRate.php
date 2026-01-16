@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\TaxRate;
 
 use App\Models\Project\Project;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

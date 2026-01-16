@@ -79,7 +79,7 @@ const inputClass = computed(() => {
 <template>
   <div>
     <label :for="name" :class="labelClass"
-      >{{ label }}<span v-if="rules.includes('required')" class="ml-1 text-danger">*</span></label
+      >{{ label }}<span v-if="rules.includes('required')" class="text-danger ml-1">*</span></label
     >
     <Field
       v-bind="$attrs"
@@ -97,6 +97,6 @@ const inputClass = computed(() => {
         {{ option.name }}
       </option>
     </Field>
-    <ErrorMessage :name="name" class="text-xs text-danger" />
+    <ErrorMessage :name="name" class="text-danger text-xs" />
   </div>
 </template>

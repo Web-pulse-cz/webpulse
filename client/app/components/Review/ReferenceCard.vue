@@ -25,13 +25,13 @@ const matchingReview = computed(() =>
         },
       })
     "
-    class="flex flex-col items-center overflow-hidden rounded-lg bg-white shadow-xl backdrop-blur-lg transition-all duration-1000 hover:shadow-xl hover:shadow-redShadow"
+    class="hover:shadow-redShadow flex flex-col items-center overflow-hidden rounded-lg bg-white shadow-xl backdrop-blur-lg transition-all duration-1000 hover:shadow-xl"
   >
     <img v-if="image" :src="image" :alt="name" class="mb-4 h-96 w-full bg-black object-cover" />
     <div v-else class="mb-4 h-96 w-full bg-black"></div>
 
     <div class="justify-end text-center">
-      <h5 class="mb-2 text-primary transition-all duration-1000 hover:text-brand">
+      <h5 class="hover:text-brand mb-2 text-primary transition-all duration-1000">
         {{ name }}
       </h5>
     </div>

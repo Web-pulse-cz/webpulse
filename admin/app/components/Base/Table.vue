@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 
 import {
   BoltIcon,
@@ -22,6 +22,8 @@ const route = useRoute();
 const router = useRouter();
 const showDeleteDialog = ref(false);
 const deleteDialogItem = ref(null);
+
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 defineProps({
   items: {
@@ -90,6 +92,26 @@ function canEdit(slug: string) {
         currentPermissionSlug.slug === slug &&
         currentPermissionSlug.permissions.edit
       ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function canEditOrDeleteBySite(slug: string) {
+  if (user && user.value && user.value.sites) {
+    const currentSite = user.value.sites.find((site) => site.hash === selectedSiteHash.value);
+    if (
+      currentSite &&
+      currentSite.settings &&
+      currentSite.settings.enabled_modules &&
+      currentSite.is_active
+    ) {
+      const currentModuleSlug = currentSite.settings.enabled_modules.find(
+        (module) => module === slug,
+      );
+      if (currentModuleSlug) {
         return true;
       }
     }
@@ -265,6 +287,14 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                   >
                     {{ item[column.key] }}
                   </NuxtLink>
+                  <a
+                    v-else-if="column.type === 'external_link'"
+                    :href="item[column.key]"
+                    target="_blank"
+                    class="text-primaryLight"
+                  >
+                    {{ item[column.key] }}
+                  </a>
                 </td>
                 <td
                   class="relative flex w-[150px] items-center justify-end whitespace-nowrap py-2 pl-1.5 pr-2 text-right text-xs font-medium sm:pr-6 lg:py-4 lg:pl-3 lg:pr-8 lg:text-sm"
@@ -272,7 +302,7 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                   <span v-for="(action, index) in actions" :key="index">
                     <MagnifyingGlassIcon
                       v-if="
-                        (action.type === 'edit' && canEdit(slug)) ||
+                        (action.type === 'edit' && canEditOrDeleteBySite(slug) && canEdit(slug)) ||
                         (action.type === 'edit' && slug === '')
                       "
                       class="ml-2 size-3 cursor-pointer text-primaryCustom hover:text-primaryLight lg:ml-4 lg:size-5"
@@ -290,7 +320,9 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                     />
                     <BoltIcon
                       v-if="
-                        (action.type === 'edit-dialog' && canEdit(slug)) ||
+                        (action.type === 'edit-dialog' &&
+                          canEditOrDeleteBySite(slug) &&
+                          canEdit(slug)) ||
                         (action.type === 'edit-dialog' && slug === '')
                       "
                       class="ml-2 size-4 cursor-pointer text-warning hover:text-warningLight lg:ml-4 lg:size-5"
@@ -298,7 +330,9 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                     />
                     <TrashIcon
                       v-if="
-                        (action.type === 'delete' && canDelete(slug)) ||
+                        (action.type === 'delete' &&
+                          canEditOrDeleteBySite(slug) &&
+                          canDelete(slug)) ||
                         (action.type === 'delete' && slug === '')
                       "
                       class="ml-2 size-4 cursor-pointer text-danger hover:text-dangerLight lg:ml-4 lg:size-5"

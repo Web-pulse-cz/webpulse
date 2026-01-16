@@ -155,7 +155,7 @@ useHead(() => {
         :key="index"
         :class="[
           answer.isCorrect
-            ? 'hidden bg-green-100 text-green-500 lg:grid'
+            ? 'bg-green-100 text-green-500 hidden lg:grid'
             : 'bg-red-100 text-red-500',
           'mb-4 grid w-full grid-cols-1 gap-4 text-wrap rounded-lg p-4 text-center text-xs shadow lg:grid-cols-3 lg:text-sm',
         ]"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { StarIcon, PrinterIcon, ServerIcon } from '@heroicons/vue/24/outline';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
 const userGroupStore = useUserGroupStore();
@@ -9,6 +9,8 @@ const user = useSanctumUser();
 const route = useRoute();
 const router = useRouter();
 const quickAccessDialogShow = ref(false);
+
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const props = defineProps({
   title: {
@@ -81,6 +83,26 @@ function canEdit(slug: string) {
   return false;
 }
 
+function canEditBySite(slug: string) {
+  if (user && user.value && user.value.sites) {
+    const currentSite = user.value.sites.find((site) => site.hash === selectedSiteHash.value);
+    if (
+      currentSite &&
+      currentSite.settings &&
+      currentSite.settings.enabled_modules &&
+      currentSite.is_active
+    ) {
+      const currentModuleSlug = currentSite.settings.enabled_modules.find(
+        (module) => module === slug,
+      );
+      if (currentModuleSlug) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 const isInQuickAccess = computed(() => {
   if (user.value) {
     return user.value.quick_access.some((item) => item.link === route.fullPath);
@@ -139,7 +161,7 @@ const emitUpdateFilters = () => {
         >
           <BaseButton
             v-if="
-              (action.type === 'save-and-stay' && canEdit(slug)) ||
+              (action.type === 'save-and-stay' && canEditBySite(slug) && canEdit(slug)) ||
               (action.type === 'save-and-stay' && slug === '')
             "
             variant="secondary"
@@ -151,7 +173,8 @@ const emitUpdateFilters = () => {
           </BaseButton>
           <BaseButton
             v-if="
-              (action.type === 'save' && canEdit(slug)) || (action.type === 'save' && slug === '')
+              (action.type === 'save' && canEditBySite(slug) && canEdit(slug)) ||
+              (action.type === 'save' && slug === '')
             "
             variant="primary"
             size="xl"
@@ -161,7 +184,7 @@ const emitUpdateFilters = () => {
             Uložit
           </BaseButton>
           <BaseButton
-            v-if="action.type === 'add' && canEdit(slug)"
+            v-if="action.type === 'add' && canEditBySite(slug) && canEdit(slug)"
             variant="primary"
             size="xl"
             class="ml-4"
@@ -170,7 +193,7 @@ const emitUpdateFilters = () => {
             {{ action.text }}
           </BaseButton>
           <BaseButton
-            v-if="action.type === 'add-dialog' && canEdit(slug)"
+            v-if="action.type === 'add-dialog' && canEditBySite(slug) && canEdit(slug)"
             variant="primary"
             size="xl"
             class="ml-4"
@@ -215,7 +238,10 @@ const emitUpdateFilters = () => {
       class="mt-4 flex gap-x-4 lg:hidden"
     >
       <BaseButton
-        v-if="(action.type === 'save' && canEdit(slug)) || (action.type === 'save' && slug === '')"
+        v-if="
+          (action.type === 'save' && canEditBySite(slug) && canEdit(slug)) ||
+          (action.type === 'save' && slug === '')
+        "
         variant="secondary"
         size="md"
         @click="emit('save', true)"
@@ -223,7 +249,10 @@ const emitUpdateFilters = () => {
         Uložit a odejít
       </BaseButton>
       <BaseButton
-        v-if="(action.type === 'save' && canEdit(slug)) || (action.type === 'save' && slug === '')"
+        v-if="
+          (action.type === 'save' && canEditBySite(slug) && canEdit(slug)) ||
+          (action.type === 'save' && slug === '')
+        "
         variant="primary"
         size="md"
         @click="emit('save', false)"
@@ -231,7 +260,7 @@ const emitUpdateFilters = () => {
         Uložit
       </BaseButton>
       <BaseButton
-        v-if="action.type === 'add' && canEdit(slug)"
+        v-if="action.type === 'add' && canEditBySite(slug) && canEdit(slug)"
         variant="primary"
         size="md"
         @click="router.push(route.fullPath + '/pridat')"
@@ -239,7 +268,7 @@ const emitUpdateFilters = () => {
         {{ action.text }}
       </BaseButton>
       <BaseButton
-        v-if="action.type === 'add-dialog' && canEdit(slug)"
+        v-if="action.type === 'add-dialog' && canEditBySite(slug) && canEdit(slug)"
         variant="primary"
         size="md"
         @click="emit('add-dialog')"

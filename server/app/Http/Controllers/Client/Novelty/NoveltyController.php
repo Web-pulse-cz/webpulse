@@ -14,8 +14,10 @@ class NoveltyController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Novelty::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->orderBy('priority', 'asc');
 
@@ -40,12 +42,14 @@ class NoveltyController extends Controller
     public function show(Request $request, int $id, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         if (!$id) {
             return Response::json(['message' => 'Novelty ID is required'], 400);
         }
 
         $novelty = Novelty::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->find($id);
 

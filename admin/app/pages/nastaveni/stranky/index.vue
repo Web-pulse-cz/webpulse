@@ -5,20 +5,15 @@ import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
-const pageTitle = ref('Kategorie služeb');
+const pageTitle = ref('Stránky');
 
 const loading = ref(false);
 const error = ref(false);
 
 const breadcrumbs = ref([
   {
-    name: 'Služby',
-    link: '/obsah/sluzby',
-    current: false,
-  },
-  {
     name: pageTitle.value,
-    link: '/obsah/sluzby/kategorie',
+    link: '/nastaveni/stranky',
     current: true,
   },
 ]);
@@ -28,8 +23,8 @@ const tableQuery = ref({
   search: null as string | null,
   paginate: 12 as number,
   page: 1 as number,
-  orderBy: 'position' as string,
-  orderWay: 'asc' as string,
+  orderBy: 'id' as string,
+  orderWay: 'desc' as string,
 });
 
 const items = ref([]);
@@ -38,7 +33,7 @@ async function loadItems() {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/service/category', {
+  await client<{ id: number }>('/api/admin/site', {
     method: 'GET',
     query: tableQuery.value,
     headers: {
@@ -54,7 +49,7 @@ async function loadItems() {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se načíst kategorie služeb. Zkuste to prosím později.',
+        detail: 'Nepodařilo se načíst stránky. Zkuste to prosím později.',
         severity: 'error',
       });
     })
@@ -67,7 +62,7 @@ async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/service/category/' + id, {
+  await client<{ id: number }>('/api/admin/site/' + id, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -78,7 +73,7 @@ async function deleteItem(id: number) {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se smazat položku kategorie služby.',
+        detail: 'Nepodařilo se smazat položku stránky.',
         severity: 'error',
       });
     })
@@ -125,53 +120,47 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'add', text: 'Přidat kategorii služeb' }]"
-      slug="services"
+      :actions="[{ type: 'add', text: 'Přidat stránku' }]"
+      slug="sites"
     />
     <LayoutContainer>
       <BaseTable
         :items="items"
         :columns="[
+          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
           {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
+            key: 'url',
+            name: 'URL',
+            type: 'external_link',
             width: 80,
             hidden: false,
             sortable: true,
           },
           {
-            key: 'name',
-            name: 'Název',
-            type: 'text',
+            key: 'is_secure',
+            name: 'Zabezpečeno',
+            type: 'status',
             width: 80,
             hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'position',
-            name: 'Pořadí ve výpisu',
-            type: 'number',
-            width: 80,
-            hidden: true,
             sortable: true,
           },
           {
-            key: 'services_count',
-            name: 'Počet služeb',
-            type: 'number',
+            key: 'is_active',
+            name: 'Aktivní',
+            type: 'status',
             width: 80,
-            hidden: true,
-            sortable: false,
+            hidden: false,
+            sortable: true,
           },
         ]"
         :actions="[{ type: 'edit' }, { type: 'delete' }]"
         :loading="loading"
         :error="error"
-        singular="Kategorii"
-        plural="Kategorie"
+        singular="Stránku"
+        plural="Stránky"
         :query="tableQuery"
-        slug="services"
+        slug="sites"
         @delete-item="deleteItem"
         @update-sort="updateSort"
         @update-page="updatePage"

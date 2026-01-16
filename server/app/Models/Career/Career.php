@@ -2,6 +2,7 @@
 
 namespace App\Models\Career;
 
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Str;
 
 class Career extends Model
 {
-    use Translatable;
+    use Translatable, Siteable;
 
     protected $table = 'careers';
 
@@ -76,5 +77,10 @@ class Career extends Model
     public function applications()
     {
         return $this->hasMany(CareerApplication::class, 'career_id', 'id');
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

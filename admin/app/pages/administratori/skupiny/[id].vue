@@ -71,6 +71,7 @@ const allowedPermissions = ref([
   { name: 'Sazby DPH', value: 'Sazby DPH', slug: 'tax_rates' },
   { name: 'Služby', value: 'Služby', slug: 'services' },
   { name: 'Smlouvy', value: 'Smlouvy', slug: 'contracts' },
+  { name: 'Stránky', value: 'Stránky', slug: 'sites' },
   { name: 'Šablony zpráv', value: 'Šablony zpráv', slug: 'message_blueprints' },
   { name: 'Trackování', value: 'Trackování', slug: 'trackings' },
   { name: 'Události', value: 'Události', slug: 'events' },
@@ -84,6 +85,7 @@ const item = ref({
   id: null as number | null,
   name: '' as string,
   permissions: [] as [],
+  sites: [] as number[],
 });
 
 async function loadItem() {

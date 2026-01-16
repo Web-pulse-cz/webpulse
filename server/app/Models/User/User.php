@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Message\MessageBlueprint;
 use App\Models\QuickAccess\QuickAccess;
-use App\Models\User\UserGroup;
+use App\Models\Site\Site;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -60,5 +60,10 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(MessageBlueprint::class, 'user_id', 'id');
+    }
+
+    public function sites()
+    {
+        return $this->belongsToMany(Site::class, 'sites_has_users', 'user_id');
     }
 }

@@ -25,6 +25,7 @@ class QuizResource extends JsonResource
             'attempts' => $this->attempts,
             'questions' => QuizQuestionResource::collection($this->whenLoaded('questions')),
             'published_at' => $this->published_at,
+            'sites' => $this->sites
         ];
     }
 }

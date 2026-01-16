@@ -308,12 +308,12 @@ function isCorrectClass(id: string) {
           @click="handleClick('Ústecký kraj')"
         />
         <rect
+          id="rect84"
           x="1010.3"
           y="744.25"
           width="5.4365"
           height="14.571"
           rx="1.6359"
-          id="rect84"
           ry="1.6359"
           clip-rule="evenodd"
           fill="#fff"
@@ -326,13 +326,13 @@ function isCorrectClass(id: string) {
           style="paint-order: stroke fill markers"
         />
         <rect
+          id="rect86"
           transform="matrix(0,1,1,0,0,0)"
           x="691.88"
           y="1075.5"
           width="3.0584"
           height="8.9796"
           rx="1.0081"
-          id="rect86"
           ry="1.0081"
           clip-rule="evenodd"
           fill="#fff"
@@ -345,12 +345,12 @@ function isCorrectClass(id: string) {
           style="paint-order: stroke fill markers"
         />
         <rect
+          id="rect88"
           x="1079.4"
           y="694.35"
           width="10.873"
           height="11.513"
           rx="1.2925"
-          id="rect88"
           ry="1.2925"
           clip-rule="evenodd"
           fill="#fff"

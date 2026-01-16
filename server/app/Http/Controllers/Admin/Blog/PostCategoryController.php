@@ -17,7 +17,9 @@ class PostCategoryController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = PostCategory::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+        $query = PostCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -84,6 +86,8 @@ class PostCategoryController extends Controller
                 $postCategory->translateOrNew($locale)->fill($translation);
             }
             $postCategory->saveImages($postCategory, $request->get('image'));
+            $postCategory->saveSites($postCategory, $request->get('sites', []));
+
             $postCategory->save();
 
             DB::commit();

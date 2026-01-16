@@ -18,8 +18,10 @@ class CareerController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Career::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('status', 'open');
 
         if($request->has('search') && in_array($request->input('search'), ['', null])) {
@@ -48,15 +50,19 @@ class CareerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         if(!$id) {
             App::abort(400, 'Invalid career ID');
         }
 
-        $career = Career::find($id);
+        $career = Career::query
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
+
         if(!$career) {
             App::abort(404, 'Career not found');
         }

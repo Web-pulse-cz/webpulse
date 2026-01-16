@@ -17,7 +17,10 @@ class PageController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Page::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Page::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -83,6 +86,9 @@ class PageController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $page->translateOrNew($locale)->fill($translation);
             }
+
+            $page->saveSites($page, $request->get('sites', []));
+
             $page->save();
 
             DB::commit();

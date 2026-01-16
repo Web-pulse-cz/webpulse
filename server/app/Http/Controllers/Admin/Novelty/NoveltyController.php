@@ -17,7 +17,10 @@ class NoveltyController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Novelty::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Novelty::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -85,13 +88,15 @@ class NoveltyController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $novelty->translateOrNew($locale)->fill($translation);
             }
+
             $novelty->saveImages($novelty, $request->get('image'));
+            $novelty->saveSites($novelty, $request->get('sites', []));
+
             $novelty->save();
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['m' => $e->getMessage()], 500);
             return Response::json(['message' => 'An error occurred while updating novelty.'], 500);
         }
 

@@ -21,7 +21,10 @@ class EventController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Event::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Event::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -110,7 +113,10 @@ class EventController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $event->translateOrNew($locale)->fill($translation);
             }
+
             $event->saveImage($event, $request);
+            $event->saveSites($event, $request->get('sites', []));
+
             $event->save();
 
             DB::commit();

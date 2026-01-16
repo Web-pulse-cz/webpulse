@@ -23,7 +23,10 @@ class QuizController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Quiz::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Quiz::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -93,6 +96,9 @@ class QuizController extends Controller
             $quiz->fill($request->all());
             $quiz->slug = Str::slug($request->name);
             $quiz->user_id = $request->user()->id;
+
+            $quiz->saveSites($quiz, $request->get('sites', []));
+
             $quiz->save();
             $quiz->questions()->delete();
             foreach ($request->questions as $questionData) {

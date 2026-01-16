@@ -16,7 +16,7 @@ const formattedDate = computed(() => dayjs(props.post.created_at).format('DD. MM
 <template>
   <NuxtLink
     :to="localePath({ name: 'blog-id-slug', params: { id: post.id, slug: post.slug } })"
-    class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-all duration-1000 hover:shadow-xl hover:shadow-redShadow"
+    class="hover:shadow-redShadow group block overflow-hidden rounded-3xl bg-white shadow-xl transition-all duration-1000 hover:shadow-xl"
   >
     <div
       class="flex flex-col justify-end bg-cover bg-center"

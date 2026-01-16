@@ -18,7 +18,7 @@ defineProps<{
       class="py-6 first:pt-0 last:pb-0"
     >
       <dt>
-        <DisclosureButton class="flex w-full items-start justify-between text-left text-textBlack">
+        <DisclosureButton class="text-textBlack flex w-full items-start justify-between text-left">
           <BasePropsHeading type="h4" class="text-xl/7 font-semibold">{{
             faq.question
           }}</BasePropsHeading>

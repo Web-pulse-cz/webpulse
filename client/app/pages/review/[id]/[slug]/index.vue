@@ -101,7 +101,7 @@ const randomReviews = computed(() => {
 <!-- TODO random reviews,they used to work, but now are not -->
 <template>
   <div>
-    <div class="w-full rounded-br-[160px] bg-chppGray md:rounded-br-[300px]">
+    <div class="bg-chppGray w-full rounded-br-[160px] md:rounded-br-[300px]">
       <LayoutContainer>
         <div
           class="relative grid h-full min-h-[512px] w-full grid-cols-1 items-center gap-6 py-6 md:grid-cols-2"

@@ -3,6 +3,7 @@
 namespace App\Models\Logo;
 
 use App\Traits\Imagable;
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\App;
 
 class Logo extends Model
 {
-    use Translatable, Imagable;
+    use Translatable, Imagable, Siteable;
 
     protected $table = 'logos';
 
@@ -58,5 +59,10 @@ class Logo extends Model
     public function getImagesAttribute()
     {
         return $this->imagesAttribute($this);
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

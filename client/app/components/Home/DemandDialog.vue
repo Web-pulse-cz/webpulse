@@ -32,7 +32,7 @@ const props = defineProps({
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-light/75 transition-opacity" />
+        <div class="bg-light/75 fixed inset-0 transition-opacity" />
       </TransitionChild>
 
       <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -49,14 +49,14 @@ const props = defineProps({
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative transform overflow-hidden rounded-lg border border-light bg-primary px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-6"
+              class="border-light relative transform overflow-hidden rounded-lg border bg-primary px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-6"
             >
               <div>
                 <div class="mt-3 sm:mt-5">
                   <BasePropsHeading type="h3" color="light">
                     {{ t('demand.title') }}
                   </BasePropsHeading>
-                  <div class="mt-5 text-light sm:mt-6">
+                  <div class="text-light mt-5 sm:mt-6">
                     <HomeContactForm
                       :service-id="serviceId"
                       :services="services"

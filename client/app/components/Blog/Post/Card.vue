@@ -14,7 +14,7 @@ const props = defineProps<BlogPostCardProps>();
 <template>
   <NuxtLink
     :to="localePath({ name: 'blog-id-slug', params: { id: props.post.id, slug: props.post.slug } })"
-    class="group block overflow-hidden rounded-lg bg-white shadow-xl transition-all duration-1000 hover:shadow-xl hover:shadow-redShadow"
+    class="hover:shadow-redShadow group block overflow-hidden rounded-lg bg-white shadow-xl transition-all duration-1000 hover:shadow-xl"
   >
     <div class="inline-flex w-96 flex-col items-start justify-end gap-5 overflow-hidden">
       <img class="relative h-56 self-stretch rounded-3xl" :src="post.image" :alt="post.name" />
@@ -31,11 +31,11 @@ const props = defineProps<BlogPostCardProps>();
             </span>
           </div>
         </div>
-        <div class="justify-start self-stretch text-2xl font-bold leading-loose text-textBlack">
+        <div class="text-textBlack justify-start self-stretch text-2xl font-bold leading-loose">
           {{ post.name }}
         </div>
         <div
-          class="justify-start self-stretch text-base font-normal leading-relaxed text-textDescription"
+          class="text-textDescription justify-start self-stretch text-base font-normal leading-relaxed"
           v-html="post.perex"
         ></div>
       </div>

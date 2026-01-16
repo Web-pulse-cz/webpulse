@@ -19,6 +19,7 @@ class CareerApplicationController extends Controller
     public function store(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $validator = Validator::make($request->all(), [
             'career_id' => 'required|exists:careers,id',
@@ -46,6 +47,9 @@ class CareerApplicationController extends Controller
             $careerApplication->career_id = $request->input('career_id');
             $careerApplication->fill($request->all());
             $careerApplication->locale = $lang;
+
+            $careerApplication->saveSites($careerApplication, [$siteId]);
+
             $careerApplication->save();
 
             DB::commit();

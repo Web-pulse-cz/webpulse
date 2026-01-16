@@ -21,7 +21,8 @@ class NoveltyResource extends JsonResource
             'priority' => $this->priority,
             'name' => $this->name,
             'slug' => $this->slug,
-            'translations' => array_column($this->translations->toArray(), null, 'locale')
+            'translations' => array_column($this->translations->toArray(), null, 'locale'),
+            'sites' => $this->sites
         ];
     }
 }

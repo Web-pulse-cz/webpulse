@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
@@ -9,6 +9,9 @@ const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();
 
 const { $toast } = useNuxtApp();
+const user = useSanctumUser();
+
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
 const router = useRouter();
@@ -82,6 +85,7 @@ const item = ref({
   tax_rate_id: null as number | null,
   registrations: [] as Array<object>,
   translations: {} as object,
+  sites: [] as number[],
 });
 const translatableAttributes = ref([
   { field: 'name' as string, label: 'Název' as string },
@@ -125,6 +129,7 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites.map((site) => site.id);
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -169,6 +174,7 @@ async function loadCategories() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -393,6 +399,15 @@ watchEffect(() => {
     router.push(route.path + '#info');
   }
 });
+
+function addRemoveItemSite(siteId) {
+  if (item.value.sites.includes(siteId)) {
+    item.value.sites = item.value.sites.filter((site) => site !== siteId);
+    return;
+  } else {
+    item.value.sites.push(siteId);
+  }
+}
 
 onMounted(() => {
   loadCategories();
@@ -641,6 +656,20 @@ definePageMeta({
                 :options="eventCategories"
               />
             </div>
+            <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
+            <BaseFormCheckbox
+              v-for="(site, key) in user.sites"
+              v-if="item.sites && user.sites"
+              :key="key"
+              :label="site.name"
+              :name="site.id"
+              :value="item.sites.includes(site.id)"
+              :checked="item.sites.includes(site.id)"
+              class="col-span-full"
+              :reverse="true"
+              label-color="grayCustom"
+              @change="addRemoveItemSite(site.id)"
+            />
           </LayoutContainer>
         </div>
       </template>

@@ -2,6 +2,7 @@
 
 namespace App\Models\Event;
 
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class EventCategory extends Model
 {
-    use Translatable;
+    use Translatable, Siteable;
 
     protected $table = 'event_categories';
 
@@ -48,5 +49,10 @@ class EventCategory extends Model
     public function events()
     {
         return $this->hasMany(Event::class, 'event_category_id', 'id');
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

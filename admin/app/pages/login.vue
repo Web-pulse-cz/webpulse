@@ -41,11 +41,8 @@ definePageMeta({
 </script>
 
 <template>
-  <LayoutContainer
-    class="mt-16 w-full max-w-sm lg:mt-16"
-    :background-show="false"
-  >
-    <h1 class="text-md mb-4 text-center font-semibold lg:text-2xl text-inherit">Přihlášení</h1>
+  <LayoutContainer class="mt-16 w-full max-w-sm lg:mt-16" :background-show="false">
+    <h1 class="text-md mb-4 text-center font-semibold text-inherit lg:text-2xl">Přihlášení</h1>
     <Form @submit="handleSubmit">
       <div class="grid grid-cols-1 gap-y-6">
         <BaseFormInput

@@ -20,7 +20,10 @@ class CareerController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Career::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Career::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -88,6 +91,9 @@ class CareerController extends Controller
             if (!$id) {
                 $career->generateCode();
             }
+
+            $career->saveSites($career, $request->get('sites', []));
+
             $career->save();
 
             DB::commit();

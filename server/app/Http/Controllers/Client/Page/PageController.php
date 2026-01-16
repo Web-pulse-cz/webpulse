@@ -14,12 +14,14 @@ class PageController extends Controller
     public function show(Request $request, int $id, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         if (!$id) {
             return Response::json(['error' => 'Page ID is required'], 400);
         }
 
         $page = Page::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->find($id);
 

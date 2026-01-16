@@ -71,7 +71,7 @@ useHead(() => {
               class="h-5 w-5 text-primaryDark"
             />
           </DisclosureButton>
-          <DisclosurePanel class="flex gap-2 flex-wrap">
+          <DisclosurePanel class="flex flex-wrap gap-2">
             <div
               v-for="(filter, index) in filtersData"
               :key="index"

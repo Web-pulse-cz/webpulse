@@ -19,7 +19,7 @@ const props = defineProps<categoryProps>();
         params: { id: props.category.id, slug: props.category.slug },
       })
     "
-    class="flex aspect-square items-center justify-center rounded-lg p-2 shadow transition-all duration-1000 hover:bg-gray-50 hover:shadow-lg hover:shadow-redShadow"
+    class="hover:shadow-redShadow flex aspect-square items-center justify-center rounded-lg p-2 shadow transition-all duration-1000 hover:bg-gray-50 hover:shadow-lg"
   >
     <BasePropsHeading type="h5">
       {{ category.name }}

@@ -4,6 +4,7 @@ import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
+const user = useSanctumUser();
 
 const route = useRoute();
 const router = useRouter();
@@ -40,6 +41,7 @@ const item = ref({
   position: 0 as number,
   active: true as boolean,
   translations: {} as object,
+  sites: [] as number[],
 });
 const translatableAttributes = ref([
   { field: 'name' as string, label: 'Název' as string },
@@ -70,6 +72,7 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites.map((site) => site.id);
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -163,6 +166,15 @@ function fillEmptyTranslations() {
       });
     }
   });
+}
+
+function addRemoveItemSite(siteId) {
+  if (item.value.sites.includes(siteId)) {
+    item.value.sites = item.value.sites.filter((site) => site !== siteId);
+    return;
+  } else {
+    item.value.sites.push(siteId);
+  }
 }
 
 onMounted(() => {
@@ -285,6 +297,20 @@ definePageMeta({
               :reverse="true"
             />
           </div>
+          <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
+          <BaseFormCheckbox
+            v-for="(site, key) in user.sites"
+            v-if="item && item.sites && user.sites"
+            :key="key"
+            :label="site.name"
+            :name="site.id"
+            :value="item.sites.includes(site.id)"
+            :checked="item.sites.includes(site.id)"
+            class="col-span-full"
+            :reverse="true"
+            label-color="grayCustom"
+            @change="addRemoveItemSite(site.id)"
+          />
         </LayoutContainer>
       </div>
     </Form>

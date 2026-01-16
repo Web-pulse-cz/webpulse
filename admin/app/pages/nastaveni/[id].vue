@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
 import { Form } from 'vee-validate';
 import { TrashIcon, PlusIcon } from '@heroicons/vue/24/outline';
+import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
+const user = useSanctumUser();
 
 const route = useRoute();
 const router = useRouter();
@@ -34,6 +35,7 @@ const item = ref({
   id: null as number | null,
   type: 'topMenu' as string,
   translations: {} as object,
+  sites: [] as number[],
 });
 
 async function loadItem() {
@@ -53,6 +55,7 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites.map((site) => site.id);
     })
     .catch(() => {
       error.value = true;
@@ -127,6 +130,15 @@ function addSubmenu(groups: any[], index: number) {
   });
 }
 
+function addRemoveItemSite(siteId) {
+  if (item.value.sites.includes(siteId)) {
+    item.value.sites = item.value.sites.filter((site) => site !== siteId);
+    return;
+  } else {
+    item.value.sites.push(siteId);
+  }
+}
+
 useHead({
   title: pageTitle.value,
 });
@@ -187,6 +199,20 @@ definePageMeta({
               name="locale"
               class="w-full"
               :options="languageStore.languageOptions"
+            />
+            <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
+            <BaseFormCheckbox
+              v-for="(site, key) in user.sites"
+              v-if="item.sites && user.sites"
+              :key="key"
+              :label="site.name"
+              :name="site.id"
+              :value="item.sites.includes(site.id)"
+              :checked="item.sites.includes(site.id)"
+              class="col-span-full"
+              :reverse="true"
+              label-color="grayCustom"
+              @change="addRemoveItemSite(site.id)"
             />
           </div>
         </LayoutContainer>

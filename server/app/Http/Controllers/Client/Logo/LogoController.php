@@ -14,8 +14,10 @@ class LogoController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Logo::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->orderBy('position', 'asc');
 
         if ($request->has('paginate')) {

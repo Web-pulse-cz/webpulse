@@ -2,11 +2,14 @@
 
 namespace App\Models\Career;
 
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CareerApplication extends Model
 {
+    use Siteable;
+
     protected $table = 'career_applications';
 
     protected $fillable = [
@@ -28,6 +31,11 @@ class CareerApplication extends Model
     public function career()
     {
         return $this->belongsTo(Career::class, 'career_id', 'id');
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 
     public function getRealAvailabilityAttribute(): string

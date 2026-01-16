@@ -3,15 +3,16 @@
 namespace App\Models\Event;
 
 use App\Models\Currency\Currency;
-use App\Models\TaxRate;
+use App\Models\TaxRate\TaxRate;
 use App\Traits\Imagable;
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Event extends Model
 {
-    use Translatable, Imagable;
+    use Translatable, Imagable, Siteable;
 
     protected $table = 'events';
 
@@ -108,5 +109,10 @@ class Event extends Model
     public function getImagesAttribute()
     {
         return $this->imagesAttribute($this);
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

@@ -17,7 +17,10 @@ class ServiceController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Service::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Service::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -85,6 +88,9 @@ class ServiceController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $service->translateOrNew($locale)->fill($translation);
             }
+
+            $service->saveSites($service, $request->get('sites', []));
+
             $service->save();
 
             DB::commit();

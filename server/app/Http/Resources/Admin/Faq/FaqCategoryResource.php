@@ -23,6 +23,7 @@ class FaqCategoryResource extends JsonResource
             'faqs' => FaqResource::collection($this->whenLoaded('faqs')),
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'faqs_count' => $this->faqs->count(),
+            'sites' => $this->sites
         ];
     }
 }

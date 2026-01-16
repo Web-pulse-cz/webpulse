@@ -14,8 +14,10 @@ class FaqController extends Controller
     public function index(Request $request, string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
         $query = Faq::query()
+            ->whereRelation('sites', 'site_id', $siteId)
             ->where('active', true)
             ->with(['categories'])
             ->orderBy('position', 'asc')
