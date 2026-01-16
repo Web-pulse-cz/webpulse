@@ -21,7 +21,8 @@ class DemandController extends Controller
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:15',
+            'phone' => 'required|string|max:17',
+            'message' => 'required|string',
         ]);
 
         if ($validator->fails()) {
