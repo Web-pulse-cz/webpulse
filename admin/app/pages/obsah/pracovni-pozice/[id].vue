@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
 
@@ -413,7 +413,7 @@ definePageMeta({
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-2 w-full grid grid-cols-1 gap-4">
+          <LayoutContainer class="col-span-2 grid w-full grid-cols-1 gap-4">
             <div class="col-span-1">
               <BaseFormSelect
                 v-model="selectedLocale"

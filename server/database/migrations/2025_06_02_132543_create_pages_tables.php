@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('page_id');
             $table->foreign('page_id')
                 ->references('id')
-                ->on('posts')
+                ->on('pages')
                 ->onDelete('cascade');
             $table->string('locale')->index();
 

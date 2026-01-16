@@ -34,9 +34,9 @@ class NewsletterController extends Controller
             $newsletter->fill($request->all());
             $newsletter->locale = $lang ?? app()->getLocale();
 
-            $newsletter->saveSites($newsletter, [$siteId]);
-
             $newsletter->save();
+
+            $newsletter->saveSites($newsletter, [$siteId]);
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

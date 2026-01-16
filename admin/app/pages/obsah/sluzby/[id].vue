@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';

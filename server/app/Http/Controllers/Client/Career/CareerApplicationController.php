@@ -48,9 +48,9 @@ class CareerApplicationController extends Controller
             $careerApplication->fill($request->all());
             $careerApplication->locale = $lang;
 
-            $careerApplication->saveSites($careerApplication, [$siteId]);
-
             $careerApplication->save();
+
+            $careerApplication->saveSites($careerApplication, [$siteId]);
 
             DB::commit();
 

@@ -72,6 +72,7 @@ class PageController extends Controller
         $validator = Validator::make($request->all(), [
             'translations' => 'required|array',
             'translations.*.name' => 'required|string',
+            'translations.*.text' => 'required|string',
         ]);
 
         if ($validator->fails()) {

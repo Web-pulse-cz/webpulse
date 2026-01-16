@@ -35,9 +35,9 @@ class DemandController extends Controller
             $demand->service_id = $request->get('service_id', null);
             $demand->locale = $lang;
 
-            $demand->saveSites($demand, [$siteId]);
-
             $demand->save();
+
+            $demand->saveSites($demand, [$siteId]);
 
             DB::commit();
 
