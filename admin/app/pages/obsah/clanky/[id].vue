@@ -104,6 +104,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst článek. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/clanky');
     })
     .finally(() => {
       loading.value = false;

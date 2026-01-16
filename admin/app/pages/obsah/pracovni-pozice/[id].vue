@@ -111,6 +111,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst pracovní pozici. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/pracovni-pozice');
     })
     .finally(() => {
       loading.value = false;

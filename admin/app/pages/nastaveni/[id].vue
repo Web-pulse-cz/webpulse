@@ -66,6 +66,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst nastavení. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/nastaveni');
     })
     .finally(() => {
       loading.value = false;

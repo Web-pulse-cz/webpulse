@@ -84,6 +84,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst dotaz. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/faq');
     })
     .finally(() => {
       loading.value = false;

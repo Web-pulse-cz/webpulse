@@ -74,7 +74,7 @@ async function loadItem() {
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
         name: pageTitle.value,
-        link: '/obsah/novinky/' + route.params.id,
+        link: '/obsah/reference/' + route.params.id,
         current: true,
       });
       fillEmptyTranslations();
@@ -86,6 +86,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst referenci. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/reference');
     })
     .finally(() => {
       loading.value = false;

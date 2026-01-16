@@ -80,6 +80,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst logo. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/loga');
     })
     .finally(() => {
       loading.value = false;

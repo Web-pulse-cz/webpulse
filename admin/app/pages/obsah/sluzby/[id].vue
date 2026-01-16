@@ -98,6 +98,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst službu. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/sluzby');
     })
     .finally(() => {
       loading.value = false;

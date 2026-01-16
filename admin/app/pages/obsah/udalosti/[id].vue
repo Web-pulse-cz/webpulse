@@ -155,6 +155,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst událost. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/udalosti');
     })
     .finally(() => {
       loading.value = false;

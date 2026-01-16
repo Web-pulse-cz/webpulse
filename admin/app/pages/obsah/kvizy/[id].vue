@@ -78,9 +78,10 @@ async function loadItem() {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
+        detail: 'Nepodařilo se načíst kvíz. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/kvizy');
     })
     .finally(() => {
       loading.value = false;

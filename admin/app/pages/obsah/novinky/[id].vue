@@ -87,6 +87,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst novinku. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/novinky');
     })
     .finally(() => {
       loading.value = false;

@@ -83,6 +83,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst stránku. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/stranky');
     })
     .finally(() => {
       loading.value = false;

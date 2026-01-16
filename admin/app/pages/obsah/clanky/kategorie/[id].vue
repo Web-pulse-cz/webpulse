@@ -92,6 +92,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst kategorii. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/clanky/kategorie');
     })
     .finally(() => {
       loading.value = false;

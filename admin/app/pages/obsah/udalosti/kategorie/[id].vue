@@ -91,6 +91,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst kategorii. Zkuste to prosím později.',
         severity: 'error',
       });
+      router.push('/obsah/udalosti/kategorie');
     })
     .finally(() => {
       loading.value = false;
