@@ -110,6 +110,8 @@ useHead({
   title: pageTitle.value,
 });
 
+watch(selectedSiteHash, () => loadItems());
+
 onMounted(() => {
   loadItems();
 });

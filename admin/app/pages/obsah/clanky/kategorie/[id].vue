@@ -153,6 +153,10 @@ async function saveItem(redirect = true as boolean) {
     });
 }
 
+watch(selectedSiteHash, () => {
+  loadItem();
+});
+
 useHead({
   title: pageTitle.value,
 });
@@ -326,7 +330,7 @@ definePageMeta({
             class="col-span-full"
             :reverse="true"
             label-color="grayCustom"
-            @change="addRemoveItemList(site.id)"
+            @change="addRemoveItemSite(site.id)"
           />
         </LayoutContainer>
       </div>

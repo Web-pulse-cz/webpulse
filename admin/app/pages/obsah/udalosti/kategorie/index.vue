@@ -111,6 +111,8 @@ watch(searchString, () => {
   debouncedLoadItems();
 });
 
+watch(selectedSiteHash, () => loadItems());
+
 useHead({
   title: pageTitle.value,
 });

@@ -38,7 +38,6 @@ const item = ref({
   position: 0 as number,
   active: true as boolean,
   translations: {} as object,
-  categories: [] as number[],
   sites: [] as number[],
 });
 
@@ -46,8 +45,6 @@ const translatableAttributes = ref([
   { field: 'question' as string, label: 'Dotaz' as string },
   { field: 'answer' as string, label: 'Odpověď' as string },
 ]);
-
-const categories = ref([]);
 
 async function loadItem() {
   const client = useSanctumClient();
@@ -60,7 +57,6 @@ async function loadItem() {
     position: number;
     active: boolean;
     translations: object;
-    categories: number[];
   }>('/api/admin/faq/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -94,37 +90,6 @@ async function loadItem() {
     });
 }
 
-async function loadCategories() {
-  const client = useSanctumClient();
-  loading.value = true;
-
-  await client<{}>('/api/admin/faq/category', {
-    method: 'GET',
-    query: {
-      orderBy: 'position',
-      orderWay: 'asc',
-    },
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      categories.value = response;
-    })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se načíst kategorie. Zkuste to prosím později.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-}
-
 async function saveItem(redirect = true as boolean) {
   const client = useSanctumClient();
   loading.value = true;
@@ -136,7 +101,6 @@ async function saveItem(redirect = true as boolean) {
     position: number;
     active: boolean;
     translations: object;
-    categories: number[];
   }>(route.params.id === 'pridat' ? '/api/admin/faq' : '/api/admin/faq/' + route.params.id, {
     method: 'POST',
     body: JSON.stringify(item.value),
@@ -180,15 +144,6 @@ useHead({
   title: pageTitle.value,
 });
 
-function addRemoveItemCategory(categoryId) {
-  if (item.value.categories.includes(categoryId)) {
-    item.value.categories = item.value.categories.filter((category) => category !== categoryId);
-    return;
-  } else {
-    item.value.categories.push(categoryId);
-  }
-}
-
 function fillEmptyTranslations() {
   // Set default translations for all languages
   languageStore.languages.forEach((language) => {
@@ -212,8 +167,11 @@ function addRemoveItemSite(siteId) {
   }
 }
 
+watch(selectedSiteHash, () => {
+  loadItem();
+});
+
 onMounted(() => {
-  loadCategories();
   if (route.params.id !== 'pridat') {
     loadItem();
   }
@@ -262,20 +220,6 @@ definePageMeta({
               label="Odpověď"
               name="answer"
               class="col-span-2"
-            />
-          </div>
-          <LayoutDivider>Zařazení do kategorií</LayoutDivider>
-          <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-6 pt-6">
-            <BaseFormCheckbox
-              v-for="(category, key) in categories"
-              :key="key"
-              :label="category.name"
-              :name="category.id"
-              :value="item.categories.includes(category.id)"
-              :checked="item.categories.includes(category.id)"
-              class="col-span-1"
-              label-color="grayCustom"
-              @change="addRemoveItemCategory(category.id)"
             />
           </div>
         </LayoutContainer>

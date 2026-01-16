@@ -160,6 +160,10 @@ async function saveItem(redirect = true as boolean) {
     });
 }
 
+watch(selectedSiteHash, () => {
+  loadItem();
+});
+
 useHead({
   title: pageTitle.value,
 });

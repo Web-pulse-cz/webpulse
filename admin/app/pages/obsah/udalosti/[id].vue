@@ -361,6 +361,11 @@ async function deleteRegistrationItem(id: number) {
     });
 }
 
+watch(selectedSiteHash, () => {
+  loadItem();
+  loadCategories();
+});
+
 useHead({
   title: pageTitle.value,
 });

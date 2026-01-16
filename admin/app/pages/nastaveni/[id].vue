@@ -141,6 +141,10 @@ function addRemoveItemSite(siteId) {
   }
 }
 
+watch(selectedSiteHash, () => {
+  loadItem();
+});
+
 useHead({
   title: pageTitle.value,
 });
