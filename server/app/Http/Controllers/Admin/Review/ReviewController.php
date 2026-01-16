@@ -66,7 +66,7 @@ class ReviewController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'rating' => 'required|integer|min:0|max:5',
+            //'rating' => 'required|integer|min:0|max:5',
             'translations' => 'required|array',
             'translations.*.content' => 'required|string',
         ]);
@@ -83,9 +83,9 @@ class ReviewController extends Controller
                 $review->translateOrNew($locale)->fill($translation);
             }
 
-            $review->saveSites($review, $request->get('sites', []));
-
             $review->save();
+
+            $review->saveSites($review, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

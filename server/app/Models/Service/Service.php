@@ -21,7 +21,6 @@ class Service extends Model
         'price',
         'tax_rate_id',
         'currency_id',
-        'image',
         'active',
     ];
 

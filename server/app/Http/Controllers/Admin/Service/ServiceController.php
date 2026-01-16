@@ -89,9 +89,8 @@ class ServiceController extends Controller
                 $service->translateOrNew($locale)->fill($translation);
             }
 
-            $service->saveSites($service, $request->get('sites', []));
-
             $service->save();
+            $service->saveSites($service, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

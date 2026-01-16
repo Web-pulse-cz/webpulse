@@ -92,9 +92,8 @@ class CareerController extends Controller
                 $career->generateCode();
             }
 
-            $career->saveSites($career, $request->get('sites', []));
-
             $career->save();
+            $career->saveSites($career, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

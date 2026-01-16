@@ -87,9 +87,9 @@ class PageController extends Controller
                 $page->translateOrNew($locale)->fill($translation);
             }
 
-            $page->saveSites($page, $request->get('sites', []));
-
             $page->save();
+
+            $page->saveSites($page, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

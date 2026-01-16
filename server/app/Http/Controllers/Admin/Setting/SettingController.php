@@ -80,9 +80,9 @@ class SettingController extends Controller
                 $setting->translateOrNew($locale)->fill($translation);
             }
 
-            $setting->saveSites($setting, $request->get('sites', []));
 
             $setting->save();
+            $setting->saveSites($setting, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

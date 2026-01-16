@@ -82,9 +82,9 @@ class FaqCategoryController extends Controller
                 $faqCategory->translateOrNew($locale)->fill($translation);
             }
 
-            $faqCategory->saveSites($faqCategory, $request->get('sites', []));
 
             $faqCategory->save();
+            $faqCategory->saveSites($faqCategory, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

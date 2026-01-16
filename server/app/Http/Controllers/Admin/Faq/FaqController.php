@@ -83,9 +83,9 @@ class FaqController extends Controller
                 $faq->translateOrNew($locale)->fill($translation);
             }
 
-            $faq->saveSites($faq, $request->get('sites', []));
 
             $faq->save();
+            $faq->saveSites($faq, $request->get('sites', []));
             $faq->categories()->sync($request->get('categories', []));
 
             DB::commit();

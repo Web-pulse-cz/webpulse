@@ -87,9 +87,8 @@ class EventCategoryController extends Controller
                 $eventCategory->translateOrNew($locale)->fill($translation);
             }
 
-            $eventCategory->saveSites($eventCategory, $request->get('sites', []));
-
             $eventCategory->save();
+            $eventCategory->saveSites($eventCategory, $request->get('sites', []));
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();

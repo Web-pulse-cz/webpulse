@@ -44,7 +44,7 @@ const item = ref({
 const translatableAttributes = ref([
   { field: 'name' as string, label: 'Název' as string },
   { field: 'perex' as string, label: 'Perex' as string },
-  { field: 'text' as string, label: 'Slug' as string },
+  { field: 'content' as string, label: 'Text' as string },
   { field: 'meta_title' as string, label: 'Meta název' as string },
   { field: 'meta_description' as string, label: 'Meta popis' as string },
 ]);
@@ -159,7 +159,6 @@ function fillEmptyTranslations() {
         if (item.value.translations[language.code][attribute.field] === undefined) {
           item.value.translations[language.code][attribute.field] = '';
         }
-        route.params.id === 'pridat' ? 'Nový projekt' : item.value.name;
       });
     }
   });
@@ -241,12 +240,12 @@ definePageMeta({
               v-if="
                 item.translations &&
                 item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].text !== undefined
+                item.translations[selectedLocale].content !== undefined
               "
-              :key="`text-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].text"
+              :key="`content-${selectedLocale}`"
+              v-model="item.translations[selectedLocale].content"
               label="Text"
-              name="text"
+              name="content"
               rules="required|min:21"
               class="col-span-full"
             />

@@ -17,7 +17,7 @@ class NewsletterController extends Controller
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $validator = $validator = Validator::make($request->all(), [
+        /*$validator = $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:newsletters,email',
         ]);
 
@@ -25,7 +25,7 @@ class NewsletterController extends Controller
             return Response::json([
                 'message' => $validator->errors()->first(),
             ], 422);
-        }
+        }*/
 
         DB::beginTransaction();
         try {

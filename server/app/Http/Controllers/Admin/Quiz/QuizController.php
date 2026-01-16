@@ -97,9 +97,10 @@ class QuizController extends Controller
             $quiz->slug = Str::slug($request->name);
             $quiz->user_id = $request->user()->id;
 
+            $quiz->save();
+
             $quiz->saveSites($quiz, $request->get('sites', []));
 
-            $quiz->save();
             $quiz->questions()->delete();
             foreach ($request->questions as $questionData) {
                 $question = new QuizQuestion();

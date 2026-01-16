@@ -10,6 +10,7 @@ class PageTranslation extends Model
     protected $table = 'page_translations';
 
     protected $fillable = [
+        'page_id',
         'name',
         'slug',
         'perex',
@@ -17,4 +18,6 @@ class PageTranslation extends Model
         'meta_title',
         'meta_description',
     ];
+
+    protected $translationForeignKey = 'page_id';
 }

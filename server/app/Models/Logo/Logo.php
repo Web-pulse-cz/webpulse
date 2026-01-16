@@ -16,7 +16,6 @@ class Logo extends Model
     protected $table = 'logos';
 
     protected $fillable = [
-        'image',
         'name',
         'position',
     ];

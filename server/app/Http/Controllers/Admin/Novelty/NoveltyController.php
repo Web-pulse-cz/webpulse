@@ -89,10 +89,10 @@ class NoveltyController extends Controller
                 $novelty->translateOrNew($locale)->fill($translation);
             }
 
+            $novelty->save();
+
             $novelty->saveImages($novelty, $request->get('image'));
             $novelty->saveSites($novelty, $request->get('sites', []));
-
-            $novelty->save();
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

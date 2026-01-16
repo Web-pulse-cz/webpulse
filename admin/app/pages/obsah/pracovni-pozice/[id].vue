@@ -413,7 +413,7 @@ definePageMeta({
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-2 w-full space-y-6">
+          <LayoutContainer class="col-span-2 w-full grid grid-cols-1 gap-4">
             <div class="col-span-1">
               <BaseFormSelect
                 v-model="selectedLocale"

@@ -114,10 +114,10 @@ class EventController extends Controller
                 $event->translateOrNew($locale)->fill($translation);
             }
 
-            $event->saveImage($event, $request);
-            $event->saveSites($event, $request->get('sites', []));
-
             $event->save();
+
+            $event->saveImages($event, $request->get('image'));
+            $event->saveSites($event, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {

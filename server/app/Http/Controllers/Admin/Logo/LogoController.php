@@ -83,15 +83,14 @@ class LogoController extends Controller
                 $logo->translateOrNew($locale)->fill($translation);
             }
 
+            $logo->save();
+
             $logo->saveImages($logo, $request->get('image'));
             $logo->saveSites($logo, $request->get('sites', []));
-
-            $logo->save();
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
             return Response::json(['message' => 'An error occurred while updating review.'], 500);
         }
 

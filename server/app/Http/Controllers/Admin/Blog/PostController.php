@@ -97,10 +97,11 @@ class PostController extends Controller
                 $translation['slug'] = Str::slug($translation['name']);
                 $post->translateOrNew($locale)->fill($translation);
             }
-            $post->saveImages($post, $request->get('image'));
-            $post->saveSites($post, $request->get('sites', []));
 
             $post->save();
+
+            $post->saveImages($post, $request->get('image'));
+            $post->saveSites($post, $request->get('sites', []));
             $post->categories()->sync($request->get('categories', []));
 
             DB::commit();
