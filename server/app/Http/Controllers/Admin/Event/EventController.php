@@ -129,13 +129,17 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $event = Event::with(['registrations'])->find($id);
+        $event = Event::with(['registrations'])
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);;
         if (!$event) {
             App::abort(404);
         }

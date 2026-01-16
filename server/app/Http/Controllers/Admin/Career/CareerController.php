@@ -108,13 +108,17 @@ class CareerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $career = Career::find($id);
+        $career = Career::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$career) {
             App::abort(404);
         }

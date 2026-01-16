@@ -102,13 +102,17 @@ class ServiceController extends Controller
         return Response::json(ServiceResource::make($service));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $service = Service::find($id);
+        $service = Service::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$service) {
             App::abort(404);
         }

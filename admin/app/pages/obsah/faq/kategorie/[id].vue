@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {inject, ref} from 'vue';
 import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
 const router = useRouter();
@@ -64,6 +65,7 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {

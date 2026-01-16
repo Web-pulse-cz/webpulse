@@ -96,13 +96,17 @@ class ReviewController extends Controller
         return Response::json(ReviewResource::make($review));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $review = Review::find($id);
+        $review = Review::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$review) {
             App::abort(404);
         }

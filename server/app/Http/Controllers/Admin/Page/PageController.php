@@ -100,13 +100,17 @@ class PageController extends Controller
         return Response::json(PageResource::make($page));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $page = Page::find($id);
+        $page = Page::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$page) {
             App::abort(404);
         }

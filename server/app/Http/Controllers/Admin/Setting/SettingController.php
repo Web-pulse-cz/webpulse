@@ -93,13 +93,17 @@ class SettingController extends Controller
         return Response::json(SettingResource::make($setting));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $setting = Setting::find($id);
+        $setting = Setting::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$setting) {
             App::abort(404);
         }

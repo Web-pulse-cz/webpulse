@@ -102,13 +102,17 @@ class EventCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $eventCategory = EventCategory::find($id);
+        $eventCategory = EventCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$eventCategory) {
             App::abort(404);
         }

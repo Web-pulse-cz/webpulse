@@ -83,7 +83,7 @@ class FaqController extends Controller
                 $faq->translateOrNew($locale)->fill($translation);
             }
 
-            $faq->saveSites($faqCategory, $request->get('sites', []));
+            $faq->saveSites($faq, $request->get('sites', []));
 
             $faq->save();
             $faq->categories()->sync($request->get('categories', []));
@@ -97,13 +97,17 @@ class FaqController extends Controller
         return Response::json(FaqResource::make($faq));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $faq = Faq::find($id);
+        $faq = Faq::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$faq) {
             App::abort(404);
         }

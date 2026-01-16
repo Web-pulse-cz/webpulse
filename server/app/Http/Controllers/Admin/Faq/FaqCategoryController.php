@@ -95,13 +95,17 @@ class FaqCategoryController extends Controller
         return Response::json(FaqCategoryResource::make($faqCategory));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $faqCategory = FaqCategory::find($id);
+        $faqCategory = FaqCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$faqCategory) {
             App::abort(404);
         }

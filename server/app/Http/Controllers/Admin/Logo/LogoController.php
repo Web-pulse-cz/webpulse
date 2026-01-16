@@ -98,13 +98,17 @@ class LogoController extends Controller
         return Response::json(LogoResource::make($logo));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $logo = Logo::find($id);
+        $logo = Logo::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$logo) {
             App::abort(404);
         }

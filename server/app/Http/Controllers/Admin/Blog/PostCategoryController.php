@@ -99,13 +99,17 @@ class PostCategoryController extends Controller
         return Response::json(PostCategoryResource::make($postCategory));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
         if (!$id) {
             App::abort(400);
         }
 
-        $postCategory = PostCategory::find($id);
+        $postCategory = PostCategory::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (!$postCategory) {
             App::abort(404);
         }

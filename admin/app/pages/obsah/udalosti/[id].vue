@@ -10,6 +10,7 @@ const taxRateStore = useTaxRateStore();
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
@@ -125,6 +126,7 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
