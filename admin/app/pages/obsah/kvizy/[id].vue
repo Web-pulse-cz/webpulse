@@ -194,15 +194,6 @@ function removeQuestionImage(index) {
   item.value.questions[index].image = null;
 }
 
-function addRemoveItemSite(siteId) {
-  if (item.value.sites.includes(siteId)) {
-    item.value.sites = item.value.sites.filter((site) => site !== siteId);
-    return;
-  } else {
-    item.value.sites.push(siteId);
-  }
-}
-
 watch(selectedSiteHash, () => {
   loadItem();
 });
@@ -263,8 +254,8 @@ definePageMeta({
     </div>
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
-          <LayoutContainer class="col-span-4 w-full">
+        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+          <LayoutContainer class="col-span-9 w-full">
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
               <BaseFormInput
                 v-model="item.name"
@@ -289,36 +280,19 @@ definePageMeta({
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-3 w-full">
-            <div class="col-span-1">
-              <BaseFormSelect
-                v-model="item.status"
-                label="Stav"
-                name="status"
-                :options="[
-                  { value: 'draft', name: 'Koncept' },
-                  { value: 'public', name: 'Veřejný' },
-                  { value: 'private', name: 'Soukromý' },
-                  { value: 'archived', name: 'Archivováno' },
-                ]"
-                class="pt-6"
-              />
-            </div>
-            <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
-            <BaseFormCheckbox
-              v-for="(site, key) in user.sites"
-              v-if="item.sites && user.sites"
-              :key="key"
-              :label="site.name"
-              :name="site.id"
-              :value="item.sites.includes(site.id)"
-              :checked="item.sites.includes(site.id)"
-              class="col-span-full"
-              :reverse="true"
-              label-color="grayCustom"
-              @change="addRemoveItemSite(site.id)"
-            />
-          </LayoutContainer>
+          <LayoutActionsDetailBlock
+            v-model:state="item.status"
+            v-model:sites="item.sites"
+            :allow-image="false"
+            :states="[
+              { value: 'draft', name: 'Koncept' },
+              { value: 'public', name: 'Veřejný' },
+              { value: 'private', name: 'Soukromý' },
+              { value: 'archived', name: 'Archivováno' },
+            ]"
+            :allow-state="true"
+            class="col-span-3"
+          />
         </div>
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#otazky')">

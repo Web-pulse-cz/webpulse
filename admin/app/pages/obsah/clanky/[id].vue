@@ -227,10 +227,6 @@ function fillEmptyTranslations() {
   });
 }
 
-function updateItemImage(files) {
-  item.value.image = files[0];
-}
-
 watchEffect(() => {
   const routeTabHash = route.hash;
   if (routeTabHash && routeTabHash !== '') {
@@ -242,15 +238,6 @@ watchEffect(() => {
     router.push(route.path + '#info');
   }
 });
-
-function addRemoveItemSite(siteId) {
-  if (item.value.sites.includes(siteId)) {
-    item.value.sites = item.value.sites.filter((site) => site !== siteId);
-    return;
-  } else {
-    item.value.sites.push(siteId);
-  }
-}
 
 watch(selectedSiteHash, () => {
   loadItem();
@@ -302,21 +289,9 @@ definePageMeta({
     </div>
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
-          <LayoutContainer class="col-span-5 w-full">
+        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+          <LayoutContainer class="col-span-9 w-full">
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-              <BaseFormSelect
-                v-model="item.status"
-                label="Stav"
-                name="priority"
-                class="col-span-1"
-                :options="[
-                  { value: 'draft', name: 'Koncept' },
-                  { value: 'published', name: 'Publikováno' },
-                  { value: 'archived', name: 'Archivováno' },
-                ]"
-              />
-              <br />
               <BaseFormInput
                 v-model="item.published_from"
                 label="Publikovat od"
@@ -347,23 +322,24 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-2 w-full space-y-6">
-            <div class="col-span-1">
-              <BaseFormUploadImage
-                v-model="item.image"
-                :multiple="false"
-                type="post"
-                format="medium"
-                label="Náhledový obrázek"
-                @update-files="updateItemImage"
-              />
-            </div>
-          </LayoutContainer>
+          <LayoutActionsDetailBlock
+            v-model:image="item.image"
+            v-model:state="item.status"
+            v-model:sites="item.sites"
+            :allow-translations="false"
+            :allow-state="true"
+            :states="[
+              { value: 'draft', name: 'ass' },
+              { value: 'published', name: 'Publikováno' },
+              { value: 'archived', name: 'Archivováno' },
+            ]"
+            class="col-span-3"
+          />
         </div>
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#obsah')">
-        <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-9">
-          <LayoutContainer class="col-span-7 w-full">
+        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+          <LayoutContainer class="col-span-9 w-full">
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
               <BaseFormInput
                 v-if="
@@ -430,31 +406,12 @@ definePageMeta({
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-2 w-full">
-            <div class="col-span-1">
-              <BaseFormSelect
-                v-model="selectedLocale"
-                label="Jazyk"
-                name="locale"
-                class="w-full"
-                :options="languageStore.languageOptions"
-              />
-            </div>
-            <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
-            <BaseFormCheckbox
-              v-for="(site, key) in user.sites"
-              v-if="item.sites && user.sites"
-              :key="key"
-              :label="site.name"
-              :name="site.id"
-              :value="item.sites.includes(site.id)"
-              :checked="item.sites.includes(site.id)"
-              class="col-span-full"
-              :reverse="true"
-              label-color="grayCustom"
-              @change="addRemoveItemSite(site.id)"
-            />
-          </LayoutContainer>
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            :allow-image="false"
+            :allow-sites="false"
+            class="col-span-3"
+          />
         </div>
       </template>
     </Form>

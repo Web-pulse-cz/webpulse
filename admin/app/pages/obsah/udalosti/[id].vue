@@ -390,10 +390,6 @@ function fillEmptyTranslations() {
   });
 }
 
-function updateItemImage(files) {
-  item.value.image = files[0];
-}
-
 watchEffect(() => {
   const routeTabHash = route.hash;
   if (routeTabHash && routeTabHash !== '') {
@@ -405,15 +401,6 @@ watchEffect(() => {
     router.push(route.path + '#info');
   }
 });
-
-function addRemoveItemSite(siteId) {
-  if (item.value.sites.includes(siteId)) {
-    item.value.sites = item.value.sites.filter((site) => site !== siteId);
-    return;
-  } else {
-    item.value.sites.push(siteId);
-  }
-}
 
 onMounted(() => {
   loadCategories();
@@ -463,8 +450,8 @@ definePageMeta({
     </div>
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
-          <LayoutContainer class="col-span-5 w-full">
+        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+          <LayoutContainer class="col-span-9 w-full">
             <div class="grid grid-cols-4 gap-8">
               <BaseFormInput
                 v-model="item.code"
@@ -609,74 +596,26 @@ definePageMeta({
                 name="text"
                 class="col-span-full"
               />
-              <BaseFormUploadImage
-                v-model="item.image"
-                :multiple="false"
-                type="event"
-                format="medium"
-                label="Náhledový obrázek"
-                class="col-span-full pt-6"
-                @update-files="updateItemImage"
-              />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-2 w-full">
-            <div class="col-span-1 border-b py-6">
-              <BaseFormSelect
-                v-model="selectedLocale"
-                label="Jazyk"
-                name="locale"
-                class="w-full"
-                :options="languageStore.languageOptions"
-              />
-            </div>
-            <div class="col-span-1 border-b py-6">
-              <BaseFormSelect
-                v-model="item.status"
-                label="Stav"
-                name="status"
-                class="col-span-1"
-                :options="[
-                  { value: 'draft', name: 'Koncept' },
-                  { value: 'published', name: 'Publikováno' },
-                  { value: 'archived', name: 'Archivováno' },
-                ]"
-              />
-            </div>
-            <div class="col-span-1 border-b py-6">
-              <BaseFormInput
-                v-model="item.position"
-                label="Pořadí ve výpisu"
-                name="position"
-                class="col-span-1"
-                :min="0"
-                type="number"
-              />
-            </div>
-            <div class="col-span-1 py-6">
-              <BaseFormSelect
-                v-model="item.event_category_id"
-                label="Kategorie"
-                name="event_category_id"
-                class="col-span-1"
-                :options="eventCategories"
-              />
-            </div>
-            <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
-            <BaseFormCheckbox
-              v-for="(site, key) in user.sites"
-              v-if="item.sites && user.sites"
-              :key="key"
-              :label="site.name"
-              :name="site.id"
-              :value="item.sites.includes(site.id)"
-              :checked="item.sites.includes(site.id)"
-              class="col-span-full"
-              :reverse="true"
-              label-color="grayCustom"
-              @change="addRemoveItemSite(site.id)"
-            />
-          </LayoutContainer>
+          <LayoutActionsDetailBlock
+            v-model:state="item.status"
+            v-model:category-id="item.event_category_id"
+            v-model:position="item.position"
+            v-model:sites="item.sites"
+            v-model:image="item.image"
+            v-model:selected-locale="selectedLocale"
+            :allow-state="true"
+            :states="[
+              { value: 'draft', name: 'Koncept' },
+              { value: 'published', name: 'Publikováno' },
+              { value: 'archived', name: 'Archivováno' },
+            ]"
+            :allow-categories="true"
+            :categories="eventCategories"
+            :allow-position="true"
+            class="col-span-3"
+          />
         </div>
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#registrace')">

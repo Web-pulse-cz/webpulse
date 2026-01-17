@@ -197,19 +197,6 @@ function fillEmptyTranslations() {
   });
 }
 
-function updateItemImage(files) {
-  item.value.image = files[0];
-}
-
-function addRemoveItemSite(siteId) {
-  if (item.value.sites.includes(siteId)) {
-    item.value.sites = item.value.sites.filter((site) => site !== siteId);
-    return;
-  } else {
-    item.value.sites.push(siteId);
-  }
-}
-
 watchEffect(() => {
   const routeTabHash = route.hash;
   if (routeTabHash && routeTabHash !== '') {
@@ -268,8 +255,8 @@ definePageMeta({
     </div>
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
-          <LayoutContainer class="col-span-5 w-full">
+        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+          <LayoutContainer class="col-span-9 w-full">
             <div class="grid grid-cols-4 gap-4">
               <BaseFormInput
                 v-model="item.code"
@@ -402,64 +389,22 @@ definePageMeta({
                 name="requirements"
                 class="col-span-2"
               />
-              <BaseFormUploadImage
-                v-model="item.image"
-                :multiple="false"
-                type="career"
-                format="medium"
-                label="Náhledový obrázek"
-                class="col-span-full pt-6"
-                @update-files="updateItemImage"
-              />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-2 grid w-full grid-cols-1 gap-4">
-            <div class="col-span-1">
-              <BaseFormSelect
-                v-model="selectedLocale"
-                label="Jazyk"
-                name="locale"
-                class="w-full"
-                :options="languageStore.languageOptions"
-              />
-            </div>
-            <div class="col-span-1">
-              <BaseFormSelect
-                v-model="item.status"
-                label="Stav"
-                name="status"
-                class="col-span-1"
-                :options="[
-                  { value: 'open', name: 'Otevřená' },
-                  { value: 'closed', name: 'Uzavřená' },
-                ]"
-              />
-            </div>
-            <div class="col-span-1 py-6">
-              <BaseFormInput
-                v-model="item.position"
-                label="Pořadí ve výpisu"
-                name="position"
-                class="col-span-1"
-                :min="0"
-                type="number"
-              />
-            </div>
-            <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
-            <BaseFormCheckbox
-              v-for="(site, key) in user.sites"
-              v-if="item.sites && user.sites"
-              :key="key"
-              :label="site.name"
-              :name="site.id"
-              :value="item.sites.includes(site.id)"
-              :checked="item.sites.includes(site.id)"
-              class="col-span-full"
-              :reverse="true"
-              label-color="grayCustom"
-              @change="addRemoveItemSite(site.id)"
-            />
-          </LayoutContainer>
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:sites="item.sites"
+            v-model:image="item.image"
+            v-model:position="item.position"
+            v-model:state="item.status"
+            :allow-position="true"
+            :allow-state="true"
+            :states="[
+              { value: 'open', name: 'Otevřená' },
+              { value: 'closed', name: 'Uzavřená' },
+            ]"
+            class="col-span-3"
+          />
         </div>
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#zadosti')">

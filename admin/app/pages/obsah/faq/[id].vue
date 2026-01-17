@@ -205,15 +205,6 @@ function fillEmptyTranslations() {
   });
 }
 
-function addRemoveItemSite(siteId) {
-  if (item.value.sites.includes(siteId)) {
-    item.value.sites = item.value.sites.filter((site) => site !== siteId);
-    return;
-  } else {
-    item.value.sites.push(siteId);
-  }
-}
-
 watch(selectedSiteHash, () => {
   loadItem();
   loadCategories();
@@ -241,8 +232,8 @@ definePageMeta({
       @save="saveItem"
     />
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-        <LayoutContainer class="col-span-5 w-full">
+      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+        <LayoutContainer class="col-span-9 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
               v-if="
@@ -286,52 +277,16 @@ definePageMeta({
             />
           </div>
         </LayoutContainer>
-        <LayoutContainer class="col-span-2 w-full space-y-6">
-          <div class="col-span-1">
-            <BaseFormSelect
-              v-model="selectedLocale"
-              label="Jazyk"
-              name="locale"
-              class="w-full"
-              :options="languageStore.languageOptions"
-            />
-          </div>
-          <div class="col-span-1">
-            <BaseFormInput
-              v-model="item.position"
-              label="Pořadí ve výpisu"
-              type="number"
-              name="position"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-          </div>
-          <div class="col-span-1">
-            <BaseFormCheckbox
-              v-model="item.active"
-              name="active"
-              label="Aktivní"
-              class="col-span-1 flex-row-reverse justify-between"
-              :checked="item.active"
-              label-color="grayCustom"
-              :reverse="true"
-            />
-          </div>
-          <LayoutDivider v-if="user && user.sites">Zařazení do stránek</LayoutDivider>
-          <BaseFormCheckbox
-            v-for="(site, key) in user.sites"
-            v-if="item.sites && user.sites"
-            :key="key"
-            :label="site.name"
-            :name="site.id"
-            :value="item.sites.includes(site.id)"
-            :checked="item.sites.includes(site.id)"
-            class="col-span-full"
-            :reverse="true"
-            label-color="grayCustom"
-            @change="addRemoveItemSite(site.id)"
-          />
-        </LayoutContainer>
+        <LayoutActionsDetailBlock
+          v-model:selected-locale="selectedLocale"
+          v-model:position="item.position"
+          v-model:active="item.active"
+          v-model:sites="item.sites"
+          :allow-image="false"
+          :allow-position="true"
+          :allow-is-active="true"
+          class="col-span-3"
+        />
       </div>
     </Form>
   </div>
