@@ -503,6 +503,9 @@ function canViewBySlug(slug: string): boolean {
 }
 
 function canViewBySite(slug: string): boolean {
+  if(user && (!user.value.sites || !user.value.sites.length)) {
+    return true;
+  }
   if (user && user.value && user.value.sites) {
     const currentSite = user.value.sites.find((site: any) => site.hash === selectedSiteHash.value);
     if (
