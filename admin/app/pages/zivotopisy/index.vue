@@ -145,14 +145,14 @@ async function replicateItem(id: number) {
   const client = useSanctumClient();
 
   await client<{ id: number }>('/api/admin/biography/replicate/' + id, {
-    method: 'GET',
+    method: 'POST',
     query: tableQuery.value,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => {
+    .then(() => {
       loadItems();
     })
     .catch(() => {
