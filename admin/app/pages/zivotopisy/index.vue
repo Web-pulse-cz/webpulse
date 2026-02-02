@@ -140,6 +140,34 @@ async function downloadFile(id: number) {
   }
 }
 
+async function replicateItem(id: number) {
+  loading.value = true;
+  const client = useSanctumClient();
+
+  await client<{ id: number }>('/api/admin/biography/replicate/' + id, {
+    method: 'GET',
+    query: tableQuery.value,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      loadItems();
+    })
+    .catch(() => {
+      error.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se zduplikovat životopis. Zkuste to prosím později.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
 function updateSort(column: string) {
   if (tableQuery.value.orderBy === column) {
     tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
@@ -203,7 +231,12 @@ definePageMeta({
             sortable: true,
           },
         ]"
-        :actions="[{ type: 'download' }, { type: 'edit' }, { type: 'delete' }]"
+        :actions="[
+          { type: 'download' },
+          { type: 'replicate' },
+          { type: 'edit' },
+          { type: 'delete' },
+        ]"
         :loading="loading"
         :error="error"
         singular="Životopis"
@@ -214,6 +247,7 @@ definePageMeta({
         @update-sort="updateSort"
         @update-page="updatePage"
         @download="downloadFile($event)"
+        @replicate="replicateItem($event)"
       />
     </LayoutContainer>
   </div>

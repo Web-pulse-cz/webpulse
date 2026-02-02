@@ -172,7 +172,7 @@ function redirect(itemId: number, action: object) {
   }
 }
 
-const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dialog', 'download']);
+const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dialog', 'download', 'replicate']);
 </script>
 
 <template>
@@ -317,6 +317,11 @@ const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dia
                       v-if="action.type === 'copy'"
                       class="ml-2 size-4 cursor-pointer text-secondary hover:text-secondaryLight lg:ml-4 lg:size-5"
                       @click="copyToClipboard(item, action.key)"
+                    />
+                    <ClipboardDocumentIcon
+                      v-if="action.type === 'replicate'"
+                      class="ml-2 size-4 cursor-pointer text-secondary hover:text-secondaryLight lg:ml-4 lg:size-5"
+                      @click="emit('replicate', item.id)"
                     />
                     <BoltIcon
                       v-if="

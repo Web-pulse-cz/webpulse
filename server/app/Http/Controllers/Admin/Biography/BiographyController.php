@@ -164,4 +164,23 @@ class BiographyController extends Controller
 
         return response()->download(storage_path('app/public/files/biographies/' . $biography->filename));
     }
+
+    public function replicate(Request $request, int $id): JsonResponse
+    {
+        if (!$id) {
+            App::abort(400);
+        }
+
+        $biography = Biography::where('user_id', $request->user()->id)
+            ->find($id);
+        if (!$biography) {
+            App::abort(404);
+        }
+
+        $newBiography = $biography->replicate();
+        $newBiography->name = $biography->name . ' (copy)';
+        $newBiography->save();
+
+        return Response::json(BiographyResource::make($newBiography));
+    }
 }

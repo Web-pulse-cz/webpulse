@@ -709,34 +709,54 @@ definePageMeta({
           <LayoutContainer class="col-span-full flex w-full items-center justify-between">
             <LayoutTitle>Historie</LayoutTitle>
             <BaseButton
-              variant="primary"
-              size="lg"
-              type="button"
-              @click="
-                historyDialog.item = {};
-                historyDialog.open = true;
-              "
+                variant="primary"
+                size="lg"
+                type="button"
+                @click="
+          historyDialog.item = {};
+          historyDialog.open = true;
+        "
             >
               Přidat záznam
             </BaseButton>
           </LayoutContainer>
         </div>
-        <div class="mt-5 grid grid-cols-1 gap-8">
-          <ol class="relative border-s border-gray-200 dark:border-gray-700">
-            <ContactHistoryCard
-              v-for="(history, index) in item.history"
-              :key="index"
-              :history="history"
-              @edit-history="editHistoryItem(history)"
-              @delete-item="deleteHistoryItem(history)"
-            />
-          </ol>
+
+        <div class="mt-10 relative">
+          <div class="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-gray-200 dark:bg-gray-700"></div>
+
+          <div class="flex flex-col gap-8">
+            <div
+                v-for="(history, index) in item.history"
+                :key="index"
+                class="relative flex w-full items-center"
+                :class="index % 2 === 0 ? 'justify-start' : 'justify-end'"
+            >
+              <div
+                  class="w-1/2 relative"
+                  :class="index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'"
+              >
+                <div
+                    class="absolute top-4 h-4 w-4 rounded-full border border-white bg-gray-200 dark:border-gray-900 dark:bg-gray-700"
+                    :class="index % 2 === 0 ? '-right-2' : '-left-2'"
+                ></div>
+
+                <ContactHistoryCard
+                    :history="history"
+                    :alignment="index % 2 === 0 ? 'right' : 'left'"
+                    @edit-history="editHistoryItem(history)"
+                    @delete-item="deleteHistoryItem(history)"
+                />
+              </div>
+            </div>
+          </div>
         </div>
+
         <ContactHistoryDialog
-          v-model:show="historyDialog.open"
-          v-model:item="historyDialog.item"
-          :phases="phases"
-          @save-item="saveHistoryItem"
+            v-model:show="historyDialog.open"
+            v-model:item="historyDialog.item"
+            :phases="phases"
+            @save-item="saveHistoryItem"
         />
       </template>
       <template

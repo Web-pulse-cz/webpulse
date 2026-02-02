@@ -644,6 +644,7 @@ Route::group([
             Route::post('{id?}', [BiographyController::class, 'store']);
             Route::delete('{id}', [BiographyController::class, 'destroy'])->where('id', '[0-9]+');
             Route::get('download/{id}', [BiographyController::class, 'download'])->where('id', '[0-9]+');
+            Route::post('replicate/{id}', [BiographyController::class, 'replicate'])->where('id', '[0-9]+');
         });
 
         // Sites routes
