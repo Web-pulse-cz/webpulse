@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="py-24 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-white/5">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16">
           <div className="flex flex-col justify-center reveal-on-scroll">
             <div className="inline-block px-3 py-1 rounded bg-primary/10 text-primary text-sm font-bold mb-6 w-fit">
@@ -49,13 +49,13 @@ const Contact: React.FC = () => {
               Máte v hlavě projekt nebo chcete prodiskutovat moderní webovou architekturu? Jsem otevřen novým příležitostem.
             </p>
             <div className="flex flex-col gap-6">
-              <a href="mailto:hello@martinhanzl.dev" className="flex items-center gap-4 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors group">
+              <a href="mailto:martas.hanzl@email.cz" className="flex items-center gap-4 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors group">
                 <div className="w-12 h-12 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors shadow-sm">
                   <span className="material-symbols-outlined">mail</span>
                 </div>
-                <span className="text-lg font-medium">hello@martinhanzl.dev</span>
+                <span className="text-lg font-medium">martas.hanzl@email.cz</span>
               </a>
-              <a href="#" className="flex items-center gap-4 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors group">
+              <a href="https://www.linkedin.com/in/martin-hanzl-618784173/" className="flex items-center gap-4 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors group" target="_blank" rel="noopener noreferrer">
                 <div className="w-12 h-12 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors shadow-sm">
                   <span className="material-symbols-outlined">link</span>
                 </div>

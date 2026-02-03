@@ -85,7 +85,7 @@ function App() {
       <Experience />
       <Projects />
       <TechStack />
-      <FAQ items={faqItems} />
+      {/*<FAQ items={faqItems} />*/}
       <Contact />
       <Footer menuGroups={bottomMenu} />
     </div>

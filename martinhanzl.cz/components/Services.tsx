@@ -6,20 +6,19 @@ interface ServicesProps {
 }
 
 const Services: React.FC<ServicesProps> = ({ services }) => {
-  // Helper to map dynamic slugs to icons
-  const getIcon = (slug: string) => {
-    switch(slug) {
-      case 'landing-pages': return 'rocket_launch';
-      case 'corporate-websites': return 'business'; // fallback if exists
-      case 'content-websites': return 'article';
-      case 'web-applications': return 'dns'; // approximate mapping
+  const getIcon = (id: number) => {
+    switch(id) {
+      case 2: return 'rocket_launch';
+      case 3: return 'badge'; // fallback if exists
+      case 5: return 'article';
+      case 4: return 'dns'; // approximate mapping
       default: return 'engineering';
     }
   };
 
   return (
     <section id="services" className="py-24 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-white/5">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16 reveal-on-scroll">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Co dělám</h2>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
@@ -36,7 +35,7 @@ const Services: React.FC<ServicesProps> = ({ services }) => {
             >
               <div className="w-14 h-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <span className="material-symbols-outlined text-[32px]">
-                  {getIcon(service.slug)}
+                  {getIcon(service.id)}
                 </span>
               </div>
               <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{service.name}</h3>
