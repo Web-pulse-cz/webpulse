@@ -14,7 +14,7 @@ const Projects: React.FC = () => {
           
           <a href="https://chpp.cz/cs" target="_blank" className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-200 dark:border-white/5 transition-all duration-300 hover:border-primary/30 shadow-sm reveal-on-scroll" style={{transitionDelay: '0ms'}}>
             <div className="aspect-video overflow-hidden">
-              <img alt="Projekt 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../public/images/chpp.png"/>
+              <img alt="Projekt 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://api.web-pulse.cz/content/seo/chpp.png"/>
             </div>
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">CHPP s. r. o.</h3>
@@ -26,7 +26,7 @@ const Projects: React.FC = () => {
 
           <a href="https://web-pulse.cz" target="_blank"className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-200 dark:border-white/5 transition-all duration-300 hover:border-primary/30 shadow-sm reveal-on-scroll" style={{transitionDelay: '150ms'}}>
             <div className="aspect-video overflow-hidden">
-              <img alt="Projekt 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../public/images/webpulse.png"/>
+              <img alt="Projekt 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://api.web-pulse.cz/content/seo/webpulse.png"/>
             </div>
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Web-pulse</h3>
@@ -38,7 +38,7 @@ const Projects: React.FC = () => {
 
           <a href="https://zahrady-chytre.cz/cs/" target="_blank" className="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-200 dark:border-white/5 transition-all duration-300 hover:border-primary/30 shadow-sm reveal-on-scroll" style={{transitionDelay: '300ms'}}>
             <div className="aspect-video overflow-hidden">
-              <img alt="Projekt 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="../public/images/zahrady.png"/>
+              <img alt="Projekt 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://api.web-pulse.cz/content/seo/zahrady.png"/>
             </div>
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Zahrady-chytře</h3>
