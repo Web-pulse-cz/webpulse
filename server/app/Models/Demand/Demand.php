@@ -22,7 +22,8 @@ class Demand extends Model
         'text',
         'service_id',
         'offer_price',
-        'locale'
+        'locale',
+        'message'
     ];
 
     protected $casts = [
