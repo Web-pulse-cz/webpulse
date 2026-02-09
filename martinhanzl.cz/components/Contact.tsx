@@ -23,8 +23,8 @@ const Contact: React.FC = () => {
       const payload = {
         fullname: formData.fullname,
         email: formData.email,
-        phone: '', 
-        text: `Subject: ${formData.subject}\n\n${formData.message}`,
+        phone: '',
+        message: `Subject: ${formData.subject}\n\n${formData.message}`,
       };
 
       await sendDemand(payload);
