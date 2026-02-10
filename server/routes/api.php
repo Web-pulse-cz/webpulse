@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\Career\CareerApplicationController;
 use App\Http\Controllers\Admin\Quiz\QuizController;
 use App\Http\Controllers\Admin\Biography\BiographyController;
 use App\Http\Controllers\Admin\Site\SiteController;
+use App\Http\Controllers\Admin\Changelog\ChangelogController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -655,6 +656,16 @@ Route::group([
             Route::get('{id}', [SiteController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [SiteController::class, 'store']);
             Route::delete('{id}', [SiteController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Changelog routes
+        Route::group([
+            'prefix' => 'changelog'
+        ], function () {
+            Route::get('', [ChangelogController::class, 'index']);
+            Route::get('{id}', [ChangelogController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ChangelogController::class, 'store']);
+            Route::delete('{id}', [ChangelogController::class, 'destroy'])->where('id', '[0-9]+');
         });
     });
 });

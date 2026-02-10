@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Country;
+namespace App\Http\Controllers\Admin\Changelog;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\Country\CountryResource;
-use App\Models\Country\Country;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Changelog\Changelog;
+use App\Http\Resources\Admin\Changelog\ChangelogResource;
 
-class CountryController extends Controller
+class ChangelogController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Country::query();
+        $query = Changelog::query();
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -24,9 +24,9 @@ class CountryController extends Controller
                 $searchString = explode(':', $searchString);
                 $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
             } else {
-                $query->where('code', '=', $searchString)
-                    ->orWhere('iso', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%');
+                $query->where('version', '=', $searchString)
+                    ->orWhere('title', 'like', '%' . $searchString . '%')
+                    ->orWhere('subtitle', 'like', '%' . $searchString . '%');
             }
         }
 
@@ -35,36 +35,35 @@ class CountryController extends Controller
         }
 
         if ($request->has('paginate')) {
-            $countries = $query->paginate($request->get('paginate'));
+            $changelogs = $query->paginate($request->get('paginate'));
 
             return Response::json([
-                'data' => CountryResource::collection($countries->items()),
-                'total' => $countries->total(),
-                'perPage' => $countries->perPage(),
-                'currentPage' => $countries->currentPage(),
-                'lastPage' => $countries->lastPage(),
+                'data' => ChangelogResource::collection($changelogs->items()),
+                'total' => $changelogs->total(),
+                'perPage' => $changelogs->perPage(),
+                'currentPage' => $changelogs->currentPage(),
+                'lastPage' => $changelogs->lastPage(),
             ]);
         }
 
-        $countries = $query->get();
-        return Response::json(CountryResource::collection($countries));
+        $changelogs = $query->get();
+        return Response::json(ChangelogResource::collection($changelogs));
     }
 
     public function store(Request $request, int $id = null): JsonResponse
     {
         if ($id) {
-            $country = Country::find($id);
+            $country = Changelog::find($id);
             if (!$country) {
                 App::abort(404);
             }
         } else {
-            $country = new Country();
+            $country = new Changelog();
         }
 
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string',
-            'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
+            'version' => 'required|string',
+            'title' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -75,19 +74,15 @@ class CountryController extends Controller
             DB::beginTransaction();
 
             $country->fill($request->all());
-
-            foreach ($request->translations as $locale => $translation) {
-                $country->translateOrNew($locale)->fill($translation);
-            }
             $country->save();
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating country.'], 500);
+            return Response::json(['message' => 'An error occurred while updating changelog.'], 500);
         }
 
-        return Response::json(CountryResource::make($country));
+        return Response::json(ChangelogResource::make($country));
     }
 
     public function show(int $id): JsonResponse
@@ -96,12 +91,12 @@ class CountryController extends Controller
             App::abort(400);
         }
 
-        $country = Country::find($id);
+        $country = Changelog::find($id);
         if (!$country) {
             App::abort(404);
         }
 
-        return Response::json(CountryResource::make($country));
+        return Response::json(ChangelogResource::make($country));
     }
 
     public function destroy(int $id)
@@ -110,7 +105,7 @@ class CountryController extends Controller
             App::abort(400);
         }
 
-        $country = Country::find($id);
+        $country = Changelog::find($id);
         if (!$country) {
             App::abort(404);
         }
