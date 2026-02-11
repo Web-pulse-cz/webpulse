@@ -21,6 +21,7 @@ class ChangelogResource extends JsonResource
             'subtitle' => $this->subtitle,
             'description' => $this->description,
             'type' => $this->type,
+            'priority' => $this->priority,
             'updated_at' => $this->updated_at
         ];
     }
