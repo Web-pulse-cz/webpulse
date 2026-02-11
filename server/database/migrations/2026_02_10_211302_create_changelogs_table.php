@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->string('description')->nullable();
             $table->enum('type', ['feature', 'bugfix', 'design', 'other'])->default('other');
+            $table->enum('priority', ['high', 'medium', 'low'])->default('medium');
             $table->timestamps();
         });
     }

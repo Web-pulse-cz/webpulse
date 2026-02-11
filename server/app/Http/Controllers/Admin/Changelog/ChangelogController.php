@@ -53,12 +53,12 @@ class ChangelogController extends Controller
     public function store(Request $request, int $id = null): JsonResponse
     {
         if ($id) {
-            $country = Changelog::find($id);
-            if (!$country) {
+            $changelog = Changelog::find($id);
+            if (!$changelog) {
                 App::abort(404);
             }
         } else {
-            $country = new Changelog();
+            $changelog = new Changelog();
         }
 
         $validator = Validator::make($request->all(), [
@@ -73,8 +73,8 @@ class ChangelogController extends Controller
         try {
             DB::beginTransaction();
 
-            $country->fill($request->all());
-            $country->save();
+            $changelog->fill($request->all());
+            $changelog->save();
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
@@ -82,7 +82,7 @@ class ChangelogController extends Controller
             return Response::json(['message' => 'An error occurred while updating changelog.'], 500);
         }
 
-        return Response::json(ChangelogResource::make($country));
+        return Response::json(ChangelogResource::make($changelog));
     }
 
     public function show(int $id): JsonResponse
@@ -91,12 +91,12 @@ class ChangelogController extends Controller
             App::abort(400);
         }
 
-        $country = Changelog::find($id);
-        if (!$country) {
+        $changelog = Changelog::find($id);
+        if (!$changelog) {
             App::abort(404);
         }
 
-        return Response::json(ChangelogResource::make($country));
+        return Response::json(ChangelogResource::make($changelog));
     }
 
     public function destroy(int $id)
@@ -105,12 +105,12 @@ class ChangelogController extends Controller
             App::abort(400);
         }
 
-        $country = Changelog::find($id);
-        if (!$country) {
+        $changelog = Changelog::find($id);
+        if (!$changelog) {
             App::abort(404);
         }
 
-        $country->delete();
+        $changelog->delete();
         return Response::json();
     }
 }

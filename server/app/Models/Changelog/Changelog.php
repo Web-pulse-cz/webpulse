@@ -8,5 +8,12 @@ class Changelog extends Model
 {
     protected $table = 'changelogs';
 
-    protected $fillable = ['version', 'title', 'subtitle', 'description', 'type'];
+    protected $fillable = [
+        'version',
+        'title',
+        'subtitle',
+        'description',
+        'type',
+        'priority'
+    ];
 }
