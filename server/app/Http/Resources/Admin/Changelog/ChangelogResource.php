@@ -20,7 +20,8 @@ class ChangelogResource extends JsonResource
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'description' => $this->description,
-            'type' => $this->type
+            'type' => $this->type,
+            'updated_at' => $this->updated_at
         ];
     }
 }
