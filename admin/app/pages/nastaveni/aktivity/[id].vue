@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { useActivityStore } from '~/../stores/activityStore';
+import { useActivityStore } from '~~/stores/activityStore';
 
 const activityStore = useActivityStore();
 
@@ -19,12 +19,12 @@ const pageTitle = ref(route.params.id === 'pridat' ? 'Nová aktivita' : 'Detail 
 const breadcrumbs = ref([
   {
     name: 'Aktivity',
-    link: '/aktivity',
+    link: '/nastaveni/aktivity',
     current: false,
   },
   {
     name: pageTitle.value,
-    link: '/aktivity/pridat',
+    link: '/nastaveni/aktivity/pridat',
     current: true,
   },
 ]);
@@ -58,7 +58,7 @@ async function loadItem() {
       breadcrumbs.value.pop();
       breadcrumbs.value.push({
         name: pageTitle.value,
-        link: '/aktivity/' + route.params.id,
+        link: '/nastaveni/aktivity/' + route.params.id,
         current: true,
       });
     })
@@ -105,9 +105,9 @@ async function saveItem(redirect = true as boolean) {
         severity: 'success',
       });
       if (!redirect && route.params.id !== 'pridat') {
-        router.push(`/aktivity/${response.id}`);
+        router.push(`/nastaveni/aktivity/${response.id}`);
       } else if (redirect) {
-        router.push('/aktivity');
+        router.push('/nastaveni/aktivity');
       } else {
         loadItem();
       }

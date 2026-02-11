@@ -48,6 +48,7 @@ const allowedPermissions = ref([
   { name: 'Blogové články', value: 'Blogové články', slug: 'posts' },
   { name: 'Cashflow', value: 'Cashflow', slug: 'cashflows' },
   { name: 'Cenové nabídky', value: 'Nacenění', slug: 'price_offers' },
+  { name: 'Changelog', value: 'Changelog', slug: 'changelogs' },
   { name: 'Dodavatelé', value: 'Dodavatelé', slug: 'suppliers' },
   { name: 'E-maily', value: 'E-maily', slug: 'emails' },
   { name: 'Faktury', value: 'Faktury', slug: 'invoices' },

@@ -2,12 +2,9 @@
 import { ref, inject } from 'vue';
 
 import _ from 'lodash';
-import { useActivityStore } from '~/../stores/activityStore';
-
-const activityStore = useActivityStore();
 
 const { $toast } = useNuxtApp();
-const pageTitle = ref('Aktivity');
+const pageTitle = ref('Changelog');
 
 const loading = ref(false);
 const error = ref(false);
@@ -15,7 +12,7 @@ const error = ref(false);
 const breadcrumbs = ref([
   {
     name: pageTitle.value,
-    link: '/aktivity',
+    link: '/nastaveni/changelog',
     current: true,
   },
 ]);
@@ -35,7 +32,7 @@ async function loadItems() {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/activity', {
+  await client<{ id: number }>('/api/admin/changelog', {
     method: 'GET',
     query: tableQuery.value,
     headers: {
@@ -51,7 +48,7 @@ async function loadItems() {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se načíst aktivity. Zkuste to prosím později.',
+        detail: 'Nepodařilo se načíst changelogy. Zkuste to prosím později.',
         severity: 'error',
       });
     })
@@ -64,7 +61,7 @@ async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/activity/' + id, {
+  await client<{ id: number }>('/api/admin/changelog/' + id, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -76,14 +73,13 @@ async function deleteItem(id: number) {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se smazat pložku aktivity.',
+        detail: 'Nepodařilo se smazat pložku changelogy.',
         severity: 'error',
       });
     })
     .finally(() => {
       loading.value = false;
       loadItems();
-      activityStore.fetchActivities();
     });
 }
 
@@ -124,8 +120,8 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      slug="activities"
-      :actions="[{ type: 'add', text: 'Přidat aktivitu' }]"
+      slug="changelogs"
+      :actions="[{ type: 'add', text: 'Přidat changelog' }]"
     />
     <LayoutContainer>
       <BaseTable
@@ -133,13 +129,36 @@ definePageMeta({
         :columns="[
           { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
           {
-            key: 'name',
-            name: 'Jméno',
-            type: 'badge',
+            key: 'version',
+            name: 'Verze',
+            type: 'text',
             width: 80,
             hidden: false,
             sortable: true,
-            colorKey: 'color',
+          },
+          {
+            key: 'title',
+            name: 'Nadpis',
+            type: 'text',
+            width: 80,
+            hidden: false,
+            sortable: true,
+          },
+          {
+            key: 'type',
+            name: 'Typ',
+            type: 'enum',
+            width: 80,
+            hidden: false,
+            sortable: true,
+          },
+          {
+            key: 'priority',
+            name: 'Priorita',
+            type: 'enum',
+            width: 80,
+            hidden: false,
+            sortable: true,
           },
           {
             key: 'updated_at',
@@ -150,13 +169,22 @@ definePageMeta({
             sortable: true,
           },
         ]"
+        :enums="{
+          type: {
+            feature: 'Nová funkce',
+            bugfix: 'Oprava chyby',
+            design: 'Vylepšení designu',
+            other: 'Ostatní',
+          },
+          priority: { low: 'Nízká', medium: 'Normální', high: 'Vysoká' },
+        }"
         :actions="[{ type: 'edit' }, { type: 'delete' }]"
         :loading="loading"
         :error="error"
-        singular="Aktivita"
-        plural="Aktivity"
+        singular="Chnagelog"
+        plural="Changelogy"
         :query="tableQuery"
-        slug="activities"
+        slug="changelogs"
         @delete-item="deleteItem"
         @update-sort="updateSort"
         @update-page="updatePage"

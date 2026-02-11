@@ -47,6 +47,7 @@ import {
   ChatBubbleLeftRightIcon,
   AcademicCapIcon,
   GlobeAltIcon,
+    CodeBracketIcon
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
@@ -417,8 +418,15 @@ const navigation = ref([
         slug: 'settings',
       },
       {
+        name: 'Changelog',
+        link: '/nastaveni/changelog',
+        icon: CodeBracketIcon,
+        current: false,
+        slug: 'changelogs',
+      },
+      {
         name: 'Aktivity',
-        link: '/aktivity',
+        link: '/nastaveni/aktivity',
         icon: ChartBarSquareIcon,
         current: false,
         slug: 'activities',

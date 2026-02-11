@@ -48,3 +48,13 @@ pre {
 .vpv-sidebar-wrapper, .vp-items-center, .vpv-toolbar-start, .vpv-toolbar-end, .vpv-body>div:last-child {
     display: none !important;
 }
+
+.custom-list-style ul {
+    list-style: disc !important;
+    margin-left: 36px;
+}
+
+.custom-list-style ol {
+    list-style: disc !important;
+    margin-left: 36px;
+}

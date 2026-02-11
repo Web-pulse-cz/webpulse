@@ -16,6 +16,7 @@ const error = ref(false);
 const breadcrumbs = ref([]);
 
 const dashboard = ref([]);
+const changelog = ref([]);
 
 const cashflowActionDialog = ref({
   show: false as boolean,
@@ -42,6 +43,37 @@ async function loadDashboard() {
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst přehled. Zkuste to prosím později.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
+async function loadChangelog() {
+  loading.value = true;
+  const client = useSanctumClient();
+
+  await client<{ id: number }>('/api/admin/changelog', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    query: {
+      orderBy: 'id',
+      orderWay: 'desc',
+    }
+  })
+    .then((response) => {
+      changelog.value = response;
+    })
+    .catch(() => {
+      error.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst changelog. Zkuste to prosím později.',
         severity: 'error',
       });
     })
@@ -124,6 +156,7 @@ useHead({
 
 onMounted(() => {
   loadDashboard();
+  loadChangelog();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -141,45 +174,6 @@ definePageMeta({
     <div
       class="grid grid-cols-1 items-start justify-between gap-x-8 gap-y-2 lg:grid-cols-2 lg:gap-y-4"
     >
-      <div class="col-span-full lg:col-span-1">
-        <LayoutContainer>
-          <LayoutTitle>Naposledy přidané kontakty</LayoutTitle>
-          <BaseTable
-            :items="dashboard.lastAddedContacts"
-            :columns="[
-              {
-                key: 'firstname',
-                name: 'Jméno',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'lastname',
-                name: 'Příjmení',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'phone',
-                name: 'Telefon',
-                type: 'text',
-                width: 80,
-                hidden: true,
-                sortable: false,
-              },
-            ]"
-            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-            :loading="loading"
-            :error="error"
-            singular="Poseldní přidaný kontakt"
-            plural="Poslední přidané kontakty"
-          />
-        </LayoutContainer>
-      </div>
       <div class="col-span-full lg:col-span-1">
         <LayoutContainer>
           <LayoutTitle>Dnes máš zavolat těmto kontaktům</LayoutTitle>
@@ -253,6 +247,16 @@ definePageMeta({
             :error="error"
             singular="Nadcházející schůzka"
             plural="Nadházející schůzky"
+          />
+        </LayoutContainer>
+      </div>
+      <div>
+        <LayoutContainer class="col-span-full lg:col-span-1 max-h-[512px] overflow-y-auto space-y-4">
+          <LayoutTitle>Changelog</LayoutTitle>
+          <ChangelogCard
+            v-for="(changelogItem, index) in changelog"
+            :key="index"
+            :changelog="changelogItem"
           />
         </LayoutContainer>
       </div>
