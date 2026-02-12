@@ -36,7 +36,7 @@ function openDeleteDialog() {
 <template>
   <li class="mb-4 ms-6">
     <div
-      class="absolute -start-3 mt-3 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-gray-200 dark:border-gray-900 dark:bg-gray-700"
+      class="absolute -start-3 mt-3 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-gray-200"
     >
       <CogIcon v-if="history.origin === 'system'" class="size-4 shrink-0 lg:size-5" />
       <UserIcon v-if="history.origin === 'user'" class="size-4 shrink-0 lg:size-5" />

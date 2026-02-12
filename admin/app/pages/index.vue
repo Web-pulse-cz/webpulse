@@ -64,7 +64,7 @@ async function loadChangelog() {
     query: {
       orderBy: 'id',
       orderWay: 'desc',
-    }
+    },
   })
     .then((response) => {
       changelog.value = response;
@@ -251,7 +251,9 @@ definePageMeta({
         </LayoutContainer>
       </div>
       <div>
-        <LayoutContainer class="col-span-full lg:col-span-1 max-h-[512px] overflow-y-auto space-y-4">
+        <LayoutContainer
+          class="col-span-full max-h-[512px] space-y-4 overflow-y-auto lg:col-span-1"
+        >
           <LayoutTitle>Changelog</LayoutTitle>
           <ChangelogCard
             v-for="(changelogItem, index) in changelog"

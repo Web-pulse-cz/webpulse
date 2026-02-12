@@ -172,7 +172,14 @@ function redirect(itemId: number, action: object) {
   }
 }
 
-const emit = defineEmits(['delete-item', 'update-sort', 'update-page', 'open-dialog', 'download', 'replicate']);
+const emit = defineEmits([
+  'delete-item',
+  'update-sort',
+  'update-page',
+  'open-dialog',
+  'download',
+  'replicate',
+]);
 </script>
 
 <template>

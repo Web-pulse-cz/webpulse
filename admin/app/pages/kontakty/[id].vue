@@ -43,6 +43,14 @@ const breadcrumbs = ref([
   },
 ]);
 
+const intrests = ref([
+  { key: 'business', name: 'Vlastní byznys, tvoření PP', value: 0 },
+  { key: 'extra', name: 'Přivýdělek/extra příjem k tomu, co děláš teď', value: 0 },
+  { key: 'growth', name: 'Osobní a podnikatelský růst', value: 0 },
+  { key: 'comunity', name: 'Komunitu lidí, co na sobě pracují a vzájemně se podporují', value: 0 },
+  { key: 'health', name: 'Prevenci zdraví, healthspan', value: 0 },
+]);
+
 const item = ref({
   id: null as number | null,
   firstname: '' as string,
@@ -68,6 +76,12 @@ const item = ref({
   contact_id: null as number | null,
   history: [] as [],
   contacts: [] as [],
+  interests: [] as [],
+  parent_contact: {
+    id: 0 as number | null,
+    firstname: '' as string,
+    lastname: '' as string,
+  },
   source: {
     id: null as number | null,
     name: '' as string,
@@ -78,11 +92,14 @@ const item = ref({
     name: '' as string,
     color: '' as string,
   },
-  tasks: {
-    id: null as number | null,
-    name: '' as string,
-    phase_id: null as number | null,
-  } as [],
+  tasks: [] as [],
+  lists: [] as [],
+});
+
+const parentContactOptions = ref({
+  firstname: 'Osobní' as string,
+  lastname: 'kontakt' as string,
+  id: null as number | null,
 });
 
 async function loadItem() {
@@ -112,6 +129,11 @@ async function loadItem() {
     last_contacted_at: string;
     formatted_last_contacted_at: string;
     contact_id: number | null;
+    parent_contact: {
+      id: number | null;
+      firstname: string;
+      lastname: string;
+    };
     source: {
       id: number | null;
       name: string;
@@ -127,6 +149,11 @@ async function loadItem() {
       name: string;
       phase_id: string;
     }[];
+    lists: {
+      id: number | null;
+      name: string;
+    };
+    interests: number[];
   }>('/api/admin/contact/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -138,6 +165,9 @@ async function loadItem() {
       item.value = response;
       item.value.tasks = response.tasks.map((task) => task.id);
       item.value.lists = response.lists.map((list) => list.id);
+      if (!item.value.interests || !item.value.interests.length) {
+        item.value.interests = intrests.value;
+      }
       breadcrumbs.value.pop();
       pageTitle.value = item.value.firstname + ' ' + item.value.lastname;
       breadcrumbs.value.push({
@@ -152,6 +182,13 @@ async function loadItem() {
         tabs.value.find((tab) => tab.link === '#lide')
       ) {
         tabs.value.pop();
+      }
+      if (item.value.parent_contact) {
+        parentContactOptions.value = {
+          firstname: item.value.parent_contact.firstname,
+          lastname: item.value.parent_contact.lastname,
+          id: item.value.parent_contact.id,
+        };
       }
     })
     .catch(() => {
@@ -312,6 +349,11 @@ async function saveItem(redirect = true as boolean) {
     last_contacted_at: string;
     formatted_last_contacted_at: string;
     contact_id: number | null;
+    parent_contact: {
+      id: number | null;
+      firstname: string;
+      lastname: string;
+    };
     source: {
       id: number | null;
       name: string;
@@ -327,6 +369,11 @@ async function saveItem(redirect = true as boolean) {
       name: string;
       phase_id: string;
     }[];
+    lists: {
+      id: number | null;
+      name: string;
+    };
+    interests: number[];
   }>(
     route.params.id === 'pridat' ? '/api/admin/contact' : '/api/admin/contact/' + route.params.id,
     {
@@ -487,6 +534,7 @@ onMounted(() => {
   } else {
     tabs.value.pop();
     tabs.value.pop();
+    item.value.interests = intrests.value;
   }
   loadPhases();
   loadSources();
@@ -531,8 +579,8 @@ definePageMeta({
     </div>
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 gap-x-8 gap-y-2 lg:grid-cols-2 lg:gap-y-4">
-          <LayoutContainer class="col-span-1 w-full">
+        <div class="grid grid-cols-1 items-baseline gap-x-8 gap-y-2 lg:grid-cols-5 lg:gap-y-4">
+          <LayoutContainer class="col-span-2 w-full">
             <LayoutTitle>Základní údaje</LayoutTitle>
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
               <BaseFormInput
@@ -566,7 +614,7 @@ definePageMeta({
                 name="phone"
                 class="col-span-full"
               />
-              <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />
+              <LayoutDivider>Adresa</LayoutDivider>
               <BaseFormInput
                 v-model="item.company"
                 label="Firma"
@@ -597,7 +645,7 @@ definePageMeta({
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-1 w-full">
+          <LayoutContainer class="col-span-3 w-full">
             <LayoutTitle>Rozšiřující údaje</LayoutTitle>
             <div class="grid grid-cols-2 gap-x-8 gap-y-4">
               <BaseFormInput
@@ -614,7 +662,6 @@ definePageMeta({
                 name="goal"
                 class="col-span-full"
               />
-              <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />
               <BaseFormTextarea
                 v-model="item.note"
                 label="Poznámka"
@@ -626,32 +673,34 @@ definePageMeta({
                 :options="sources"
                 label="Zdroj kontaktu"
                 name="contact_source_id"
-                class="col-span-full"
-              />
-              <ContactAutocomplete v-model="item.contact_id" class="col-span-full" label="Od" />
-            </div>
-          </LayoutContainer>
-          <LayoutContainer class="col-span-full w-full">
-            <LayoutTitle>Zařazení do seznamů</LayoutTitle>
-            <div class="grid grid-cols-1 gap-x-4 gap-y-8 lg:grid-cols-4">
-              <BaseFormCheckbox
-                v-for="(list, key) in lists"
-                :key="key"
-                :label="list.name"
-                :name="list.id"
-                :value="item.lists.includes(list.id)"
-                :checked="item.lists.includes(list.id)"
                 class="col-span-1"
-                type="badge"
-                :color="list.color"
-                @change="addRemoveItemList(list.id)"
               />
+              <ContactAutocomplete
+                v-model="item.contact_id"
+                :contact-options="parentContactOptions"
+                class="col-span-1"
+                label="Od koho znám"
+              />
+              <LayoutDivider v-if="lists && lists.length">Zařazení do seznamů</LayoutDivider>
+              <div class="col-span-full flex flex-wrap items-center gap-4 gap-x-6">
+                <BaseFormCheckbox
+                  v-for="(list, key) in lists"
+                  :key="key"
+                  :label="list.name"
+                  :name="list.id"
+                  :value="item.lists.includes(list.id)"
+                  :checked="item.lists.includes(list.id)"
+                  type="badge"
+                  :color="list.color"
+                  @change="addRemoveItemList(list.id)"
+                />
+              </div>
             </div>
           </LayoutContainer>
         </div>
       </template>
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#proces')">
-        <div class="grid grid-cols-1 gap-x-4 gap-y-8 lg:grid-cols-7">
+        <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-6">
           <LayoutContainer class="col-span-5 w-full lg:col-span-2">
             <LayoutTitle>Proces</LayoutTitle>
             <div class="grid grid-cols-3 gap-x-8 gap-y-4">
@@ -685,9 +734,23 @@ definePageMeta({
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-5 w-full">
+          <LayoutContainer class="col-span-2 w-full">
+            <LayoutTitle>Co ho/ji zajímá nejvíce</LayoutTitle>
+            <div class="grid grid-cols-1 gap-x-8 gap-y-4">
+              <BaseFormInput
+                v-for="(interest, index) in item.interests"
+                :key="index"
+                v-model="interest.value"
+                type="number"
+                :name="interest.key"
+                :label="interest.name"
+                class="col-span-full"
+              />
+            </div>
+          </LayoutContainer>
+          <LayoutContainer class="col-span-2 max-h-[424px] w-full overflow-y-auto">
             <LayoutTitle>Úkoly</LayoutTitle>
-            <div class="grid grid-cols-1 gap-x-4 gap-y-8 lg:grid-cols-4">
+            <div class="grid grid-cols-1 gap-x-8 gap-y-4">
               <BaseFormCheckbox
                 v-for="(task, key) in tasks"
                 :key="key"
@@ -709,54 +772,36 @@ definePageMeta({
           <LayoutContainer class="col-span-full flex w-full items-center justify-between">
             <LayoutTitle>Historie</LayoutTitle>
             <BaseButton
-                variant="primary"
-                size="lg"
-                type="button"
-                @click="
-          historyDialog.item = {};
-          historyDialog.open = true;
-        "
+              variant="primary"
+              size="lg"
+              type="button"
+              @click="
+                historyDialog.item = {};
+                historyDialog.open = true;
+              "
             >
               Přidat záznam
             </BaseButton>
           </LayoutContainer>
         </div>
 
-        <div class="mt-10 relative">
-          <div class="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-gray-200 dark:bg-gray-700"></div>
-
-          <div class="flex flex-col gap-8">
-            <div
-                v-for="(history, index) in item.history"
-                :key="index"
-                class="relative flex w-full items-center"
-                :class="index % 2 === 0 ? 'justify-start' : 'justify-end'"
-            >
-              <div
-                  class="w-1/2 relative"
-                  :class="index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'"
-              >
-                <div
-                    class="absolute top-4 h-4 w-4 rounded-full border border-white bg-gray-200 dark:border-gray-900 dark:bg-gray-700"
-                    :class="index % 2 === 0 ? '-right-2' : '-left-2'"
-                ></div>
-
-                <ContactHistoryCard
-                    :history="history"
-                    :alignment="index % 2 === 0 ? 'right' : 'left'"
-                    @edit-history="editHistoryItem(history)"
-                    @delete-item="deleteHistoryItem(history)"
-                />
-              </div>
-            </div>
-          </div>
+        <div class="mt-5 grid grid-cols-1 gap-8">
+          <ol class="relative border-s border-gray-200 dark:border-gray-700">
+            <ContactHistoryCard
+              v-for="(history, index) in item.history"
+              :key="index"
+              :history="history"
+              @edit-history="editHistoryItem(history)"
+              @delete-item="deleteHistoryItem(history)"
+            />
+          </ol>
         </div>
 
         <ContactHistoryDialog
-            v-model:show="historyDialog.open"
-            v-model:item="historyDialog.item"
-            :phases="phases"
-            @save-item="saveHistoryItem"
+          v-model:show="historyDialog.open"
+          v-model:item="historyDialog.item"
+          :phases="phases"
+          @save-item="saveHistoryItem"
         />
       </template>
       <template

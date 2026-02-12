@@ -173,28 +173,28 @@ definePageMeta({
           />
           <BaseFormSelect
             v-model="item.type"
-              label="Typ"
-              name="type"
-              :options="[
+            label="Typ"
+            name="type"
+            :options="[
               { value: 'bugfix', name: 'Oprava chyby' },
               { value: 'feature', name: 'Nová funkce' },
               { value: 'design', name: 'Vylepšení designu' },
               { value: 'other', name: 'Ostatní' },
             ]"
             rules="required"
-              class="col-span-1"
+            class="col-span-1"
           />
           <BaseFormSelect
-              v-model="item.priority"
-              label="Priorita"
-              name="priority"
-              :options="[
+            v-model="item.priority"
+            label="Priorita"
+            name="priority"
+            :options="[
               { value: 'low', name: 'Nízká' },
               { value: 'medium', name: 'Normální' },
               { value: 'high', name: 'Vysoká' },
             ]"
-              rules="required"
-              class="col-span-1"
+            rules="required"
+            class="col-span-1"
           />
           <BaseFormInput
             v-model="item.title"
