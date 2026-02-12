@@ -47,7 +47,7 @@ import {
   ChatBubbleLeftRightIcon,
   AcademicCapIcon,
   GlobeAltIcon,
-    CodeBracketIcon
+  CodeBracketIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
@@ -511,7 +511,7 @@ function canViewBySlug(slug: string): boolean {
 }
 
 function canViewBySite(slug: string): boolean {
-  if(user && (!user.value.sites || !user.value.sites.length)) {
+  if (user && (!user.value.sites || !user.value.sites.length)) {
     return true;
   }
   if (user && user.value && user.value.sites) {
@@ -654,7 +654,7 @@ onMounted(() => {
                     />
                   </NuxtLink>
                 </div>
-                <div v-if="user.sites && user.sites.length">
+                <div v-if="user && user.sites && user.sites.length">
                   <BaseFormSelect
                     v-model="selectedSiteHash"
                     :options="sitesForSelect"
@@ -760,7 +760,7 @@ onMounted(() => {
           </NuxtLink>
         </div>
         <!-- site select -->
-        <div v-if="user.sites && user.sites.length">
+        <div v-if="user && user.sites && user.sites.length">
           <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark" />
         </div>
         <nav class="flex flex-1 flex-col">
