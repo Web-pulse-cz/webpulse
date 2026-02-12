@@ -1,0 +1,37 @@
+import type { Quiz } from '../types/Quiz';
+
+export function useQuizApi(
+  wrap: <T>(fn: (...args: any[]) => Promise<T>) => (...args: any[]) => Promise<T>,
+) {
+  const client = useSanctumClient();
+  const runtimeConfig = useRuntimeConfig();
+
+  const quizzes = wrap(async (search?: string, filters?: []): Promise<Quiz[]> => {
+    return await client(`/api/quiz`, {
+      method: 'GET',
+      headers: { Accept: 'application/json', 'X-Site-Hash': runtimeConfig.public.siteHash },
+      query: { search: search, orderBy: 'published_at', orderWay: 'desc', 'filters[]': filters },
+    });
+  });
+
+  const quiz = wrap(async (id: number): Promise<Quiz> => {
+    return await client(`/api/quiz/${id}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json', 'X-Site-Hash': runtimeConfig.public.siteHash },
+    });
+  });
+
+  const filter = wrap(async (id: number): Promise<Quiz> => {
+    return await client(`/api/quiz/filter`, { method: 'GET' });
+  });
+
+  const submit = wrap(async (id: number, data: Quiz): Promise<Quiz> => {
+    return await client(`/api/quiz/${id}`, {
+      method: 'POST',
+      body: data,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  return { quizzes, quiz, filter, submit };
+}

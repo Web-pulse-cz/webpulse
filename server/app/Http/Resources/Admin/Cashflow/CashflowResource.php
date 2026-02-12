@@ -20,7 +20,8 @@ class CashflowResource extends JsonResource
             'amount' => (float)$this->amount,
             'type' => $this->type,
             'description' => $this->description,
-            'date' => $this->date->format('Y-m-d')
+            'date' => $this->date->format('Y-m-d'),
+            'is_repeated' => $this->is_repeated
         ];
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Models\Contact;
 
 use App\Models\Project\Project;
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -85,15 +85,34 @@ class Contact extends Model
         return $this->hasMany(Project::class, 'client_id', 'id');
     }
 
+    public function lists()
+    {
+        return $this->belongsToMany(ContactList::class, 'contacts_in_lists', 'contact_id', 'contact_list_id');
+    }
+
     public function syncTasks(Request $request)
     {
         $tasks = $request->get('tasks', []);
-        if(!empty($tasks)) {
-            DB::table('contacts_has_tasks')->where('contact_id', $this->id)->delete();
+        DB::table('contacts_has_tasks')->where('contact_id', $this->id)->delete();
+        if (!empty($tasks)) {
             foreach ($tasks as $task) {
                 DB::table('contacts_has_tasks')->insert([
                     'contact_id' => $this->id,
                     'contact_task_id' => $task
+                ]);
+            }
+        }
+    }
+
+    public function syncLists(Request $request)
+    {
+        $lists = $request->get('lists', []);
+        DB::table('contacts_in_lists')->where('contact_id', $this->id)->delete();
+        if (!empty($lists)) {
+            foreach ($lists as $list) {
+                DB::table('contacts_in_lists')->insert([
+                    'contact_id' => $this->id,
+                    'contact_list_id' => $list
                 ]);
             }
         }

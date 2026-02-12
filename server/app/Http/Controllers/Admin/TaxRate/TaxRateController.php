@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\TaxRate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\TaxRate\TaxRateResource;
-use App\Models\TaxRate;
+use App\Models\TaxRate\TaxRate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;

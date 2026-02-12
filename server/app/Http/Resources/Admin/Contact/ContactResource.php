@@ -39,6 +39,7 @@ class ContactResource extends JsonResource
             'contacts' => [
                 'data' => ContactSimpleResource::collection($this->contacts),
             ],
+            'lists' => ContactListResource::collection($this->lists),
             'last_contacted_at' => $this->last_contacted_at,
             'formatted_last_contacted_at' => $this->last_contacted_at?->format('Y-m-d H:i:s'),
             'next_meeting' => $this->next_meeting,

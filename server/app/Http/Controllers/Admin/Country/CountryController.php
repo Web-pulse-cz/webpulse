@@ -35,19 +35,19 @@ class CountryController extends Controller
         }
 
         if ($request->has('paginate')) {
-            $countrys = $query->paginate($request->get('paginate'));
+            $countries = $query->paginate($request->get('paginate'));
 
             return Response::json([
-                'data' => CountryResource::collection($countrys->items()),
-                'total' => $countrys->total(),
-                'perPage' => $countrys->perPage(),
-                'currentPage' => $countrys->currentPage(),
-                'lastPage' => $countrys->lastPage(),
+                'data' => CountryResource::collection($countries->items()),
+                'total' => $countries->total(),
+                'perPage' => $countries->perPage(),
+                'currentPage' => $countries->currentPage(),
+                'lastPage' => $countries->lastPage(),
             ]);
         }
 
-        $countrys = $query->get();
-        return Response::json(CountryResource::collection($countrys));
+        $countries = $query->get();
+        return Response::json(CountryResource::collection($countries));
     }
 
     public function store(Request $request, int $id = null): JsonResponse
@@ -84,7 +84,7 @@ class CountryController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating language.'], 500);
+            return Response::json(['message' => 'An error occurred while updating country.'], 500);
         }
 
         return Response::json(CountryResource::make($country));

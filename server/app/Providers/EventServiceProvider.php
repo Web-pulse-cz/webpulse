@@ -2,10 +2,20 @@
 
 namespace App\Providers;
 
+use App\Events\BiographySaved;
+use App\Events\CareerApplicationSaved;
 use App\Events\ContactUpdatedEvent;
+use App\Events\DemandSaved;
+use App\Events\EventRegistrationSaved;
 use App\Events\ProjectSavedEvent;
 use App\Events\ProjectSavedListener;
+use App\Events\QuizSaved;
+use App\Listeners\BiographyGenerator;
+use App\Listeners\CareerApplicationEmail;
 use App\Listeners\ContactUpdated;
+use App\Listeners\DemandEmail;
+use App\Listeners\EventRegistrationEmail;
+use App\Listeners\QuizSavedEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,6 +38,21 @@ class EventServiceProvider extends ServiceProvider
         ProjectSavedEvent::class => [
             ProjectSavedListener::class
         ],
+        DemandSaved::class => [
+            DemandEmail::class
+        ],
+        EventRegistrationSaved::class => [
+            EventRegistrationEmail::class,
+        ],
+        CareerApplicationSaved::class => [
+            CareerApplicationEmail::class,
+        ],
+        BiographySaved::class => [
+            BiographyGenerator::class
+        ],
+        QuizSaved::class => [
+            QuizSavedEmail::class
+        ]
     ];
 
     /**

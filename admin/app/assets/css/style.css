@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, html {
+    background: #f1f5f9;
+    min-height: 100dvh;
+}
+
+pre {
+    background: #0f172a;
+    padding: 16px;
+    color: #cbd5e1;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}
+
+.apexcharts-datalabel {
+    fill: #111827;
+    font-weight: 100;
+}
+
+.apexcharts-tooltip {
+    background: #f3f3f3;
+    color: #111827;
+}
+
+.ql-container {
+    height: auto !important;
+    min-height: 200px !important;
+    border: 1px solid #ccc;
+}
+
+.ql-editor {
+    min-height: 150px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #000;
+}
+
+.vpv-sidebar-wrapper, .vp-items-center, .vpv-toolbar-start, .vpv-toolbar-end, .vpv-body>div:last-child {
+    display: none !important;
+}
+
+.custom-list-style ul {
+    list-style: disc !important;
+    margin-left: 36px;
+}
+
+.custom-list-style ol {
+    list-style: disc !important;
+    margin-left: 36px;
+}

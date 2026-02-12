@@ -14,6 +14,7 @@ class LoginController extends Controller
 {
     public function login(Request $request): JsonResponse
     {
+        $this->handleLanguage('cs');
         $data = $request->all();
 
         $validator = Validator::make($data, [
