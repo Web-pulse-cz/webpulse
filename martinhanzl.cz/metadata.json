@@ -1,0 +1,5 @@
+{
+  "name": "Martin Hanzl Portfolio",
+  "description": "A professional fullstack developer portfolio with dynamic content loading from external APIs.",
+  "requestFramePermissions": []
+}

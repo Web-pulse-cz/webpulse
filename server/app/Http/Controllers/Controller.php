@@ -6,36 +6,60 @@ use App\Models\Activity\Activity;
 use App\Models\Activity\UserActivity;
 use App\Models\Cashflow\CashflowCategory;
 use App\Models\Contact\Contact;
+use App\Models\Site\Site;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function handleLanguage(?string $lang = null): string
+    {
+        if (!$lang) {
+            $lang = App::getLocale();
+        }
+        App::setLocale($lang);
+
+        return $lang;
+    }
+
+    public function handleSite(?string $hash = null): int
+    {
+        if (!$hash) {
+            App::abort(404);
+        }
+        $site = Site::query()->where('hash', $hash)->first();
+        if (!$site) {
+            App::abort(404);
+        }
+
+        return $site->id;
+    }
+
     public function dashboard(Request $request): JsonResponse
     {
         $lastAddedContacts = Contact::without(['phase', 'source', 'tasks'])
             ->orderBy('created_at', 'desc')
-            ->limit(5)
             ->where('user_id', $request->user()->id)
+            ->limit(10)
             ->get();
 
         $contactsToCall = Contact::without(['phase', 'source', 'tasks'])
             ->whereDate('next_contact', now()->toDateString())
             ->where('user_id', $request->user()->id)
-            ->limit(5)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $comingEvents = Contact::without(['phase', 'source', 'tasks'])
             ->whereDate('next_meeting', '>=', now()->toDateString())
             ->orderBy('next_meeting')
-            ->limit(5)
             ->where('user_id', $request->user()->id)
             ->get();
 

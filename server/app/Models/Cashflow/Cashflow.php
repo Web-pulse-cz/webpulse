@@ -17,11 +17,13 @@ class Cashflow extends Model
         'amount',
         'type',
         'description',
-        'date'
+        'date',
+        'is_repeated'
     ];
 
     protected $casts = [
-        'date' => 'date'
+        'date' => 'date',
+        'is_repeated' => 'boolean'
     ];
 
     public function category()

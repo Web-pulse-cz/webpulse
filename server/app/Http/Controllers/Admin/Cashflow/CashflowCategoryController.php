@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Cashflow;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Cashflow\CashflowCategoryResource;
+use App\Http\Resources\Admin\Cashflow\CashflowCategorySimpleResource;
 use App\Models\Cashflow\Cashflow;
 use App\Models\Cashflow\CashflowBudget;
 use App\Models\Cashflow\CashflowCategory;
@@ -19,46 +20,72 @@ class CashflowCategoryController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $month = (int)$request->month;
-        $year = (int)$request->year;
+        $month = $request->has('month') ? (int)$request->month : (int)date('m');
+        $year = $request->has('year') ? (int)$request->year : (int)date('Y');
 
-        $categoriesQuery = CashflowCategory::with([
-            'budgets' => function ($query) use ($month, $year) {
-                $query->whereMonth('start_date', $month)
-                    ->whereYear('start_date', $year)
-                    ->whereMonth('end_date', $month)
-                    ->whereYear('end_date', $year);
-            },
-            'cashflows' => function ($query) use ($month, $year) {
-                $query->whereMonth('date', $month)
-                    ->whereYear('date', $year);
-            }
-        ])
-            ->where('user_id', $request->user()->id);
+        // determine if we want to load only categories without cashflows and budgets (used on admin homepage)
+        $onlyCategories = $request->has('only_categories') && (bool)$request->only_categories;
+        $onlyCategories = (bool)$onlyCategories;
 
-        $incomeQuery = Cashflow::query()
-            ->where('user_id', $request->user()->id)
-            ->whereMonth('date', $month)
-            ->whereYear('date', $year)
-            ->where('type', 'income');
+        $categoriesQuery = CashflowCategory::query();
+
+        if (!$onlyCategories) {
+            $categoriesQuery->with([
+                'budgets' => function ($query) use ($month, $year) {
+                    $query->whereMonth('start_date', $month)
+                        ->whereYear('start_date', $year)
+                        ->whereMonth('end_date', $month)
+                        ->whereYear('end_date', $year);
+                },
+                'cashflows' => function ($query) use ($request, $month, $year) {
+                    $query->whereMonth('date', $month)
+                        ->whereYear('date', $year);
+                    if ($request->has('dayFrom')) {
+                        $query->whereDay('date', '>=', $request->dayFrom);
+                    }
+                    if ($request->has('dayTo')) {
+                        $query->whereDay('date', '<=', $request->dayTo);
+                    }
+                }
+            ]);
+        } else {
+            $categoriesQuery->without(['budgets', 'cashflows']);
+        }
+
+        $categoriesQuery->where('user_id', $request->user()->id);
+
+        if (!$onlyCategories) {
+            $incomeQuery = Cashflow::query()
+                ->where('user_id', $request->user()->id)
+                ->whereMonth('date', $month)
+                ->whereYear('date', $year)
+                ->where('type', 'income');
+        }
 
         $categories = $categoriesQuery->get();
-        foreach ($categories as $category) {
-            if ($category->budgets->isEmpty()) {
-                $budget = new CashflowBudget();
-                $budget->fill([
-                    'user_id' => $request->user()->id,
-                    'type' => 'month',
-                    'amount' => 1000,
-                    'start_date' => date('Y-m-01', strtotime("first day of $year-$month")),
-                    'end_date' => date('Y-m-t', strtotime("last day of $year-$month")),
-                    'cashflow_category_id' => $category->id
-                ]);
-                $budget->cashflow_category_id = $category->id;
-                $budget->save();
 
-                $category->budgets->push($budget);
+        if (!$onlyCategories) {
+            foreach ($categories as $category) {
+                if ($category->budgets->isEmpty()) {
+                    $budget = new CashflowBudget();
+                    $budget->fill([
+                        'user_id' => $request->user()->id,
+                        'type' => 'month',
+                        'amount' => 1000,
+                        'start_date' => date('Y-m-01', strtotime("first day of $year-$month")),
+                        'end_date' => date('Y-m-t', strtotime("last day of $year-$month")),
+                        'cashflow_category_id' => $category->id
+                    ]);
+                    $budget->cashflow_category_id = $category->id;
+                    $budget->save();
+
+                    $category->budgets->push($budget);
+                }
             }
+        }
+
+        if ($onlyCategories) {
+            return Response::json(CashflowCategorySimpleResource::collection($categories));
         }
 
         return Response::json([
@@ -84,9 +111,8 @@ class CashflowCategoryController extends Controller
             return Response::json(['errors' => $validator->errors()], 422);
         }
 
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-
             $cashflowCategory->fill($request->all());
             $cashflowCategory->user_id = $request->user()->id;
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Contact\ContactController;
 use App\Http\Controllers\Admin\Contact\ContactPhaseController;
 use App\Http\Controllers\Admin\Contact\ContactSourceController;
 use App\Http\Controllers\Admin\Contact\ContactTaskController;
+use App\Http\Controllers\Admin\Contact\ContactListController;
 use App\Http\Controllers\Admin\Message\MessageBlueprintController;
 use App\Http\Controllers\Admin\Project\ProjectController;
 use App\Http\Controllers\Admin\Project\ProjectStatusController;
@@ -25,17 +26,192 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Currency\CurrencyController;
 use App\Http\Controllers\Admin\Country\CountryController;
 use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
+use App\Http\Controllers\Admin\Service\ServiceController;
+use App\Http\Controllers\Admin\Novelty\NoveltyController;
+use App\Http\Controllers\Admin\Demand\DemandController;
+use App\Http\Controllers\FilemanagerController;
+use App\Http\Controllers\Admin\Blog\PostCategoryController;
+use App\Http\Controllers\Admin\Blog\PostController;
+use App\Http\Controllers\Admin\Email\EmailController;
+use App\Http\Controllers\Admin\Page\PageController;
+use App\Http\Controllers\Admin\Setting\SettingController;
+use App\Http\Controllers\Admin\Review\ReviewController;
+use App\Http\Controllers\Admin\Logo\LogoController;
+use App\Http\Controllers\Admin\Newsletter\NewsletterController;
+use App\Http\Controllers\Admin\Faq\FaqCategoryController;
+use App\Http\Controllers\Admin\Faq\FaqController;
+use App\Http\Controllers\Admin\Event\EventCategoryController;
+use App\Http\Controllers\Admin\Event\EventController;
+use App\Http\Controllers\Admin\Event\EventRegistrationController;
+use App\Http\Controllers\Admin\Career\CareerController;
+use App\Http\Controllers\Admin\Career\CareerApplicationController;
+use App\Http\Controllers\Admin\Quiz\QuizController;
+use App\Http\Controllers\Admin\Biography\BiographyController;
+use App\Http\Controllers\Admin\Site\SiteController;
+use App\Http\Controllers\Admin\Changelog\ChangelogController;
+use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
+use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
+use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
+use App\Http\Controllers\Client\Blog\PostController as ClientPostController;
+use App\Http\Controllers\Client\Page\PageController as ClientPageController;
+use App\Http\Controllers\Client\Logo\LogoController as ClientLogoController;
+use App\Http\Controllers\Client\Novelty\NoveltyController as ClientNoveltyController;
+use App\Http\Controllers\Client\Review\ReviewController as ClientReviewController;
+use App\Http\Controllers\Client\Setting\SettingController as ClientSettingController;
+use App\Http\Controllers\Client\Newsletter\NewsletterController as ClientNewsletterController;
+use App\Http\Controllers\Client\Faq\FaqController as ClientFaqController;
+use App\Http\Controllers\Client\Faq\FaqCategoryController as ClientFaqCategoryController;
+use App\Http\Controllers\Client\Event\EventCategoryController as ClientEventCategoryController;
+use App\Http\Controllers\Client\Event\EventController as ClientEventController;
+use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
+use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
+use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
+use App\Http\Controllers\Client\Quiz\QuizController as ClientQuizController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+Route::group([
+    'prefix' => 'filemanager'
+], function () {
+    Route::get('formats', [FilemanagerController::class, 'getImageFormats']);
+    Route::group([
+        'prefix' => 'upload'
+    ], function () {
+        Route::post('images', [FilemanagerController::class, 'uploadImages']);
+        //Route::post('files', [FilemanagerController::class, 'uploadFiles']);
+    });
+});
+
+Route::group([
+    'prefix' => 'setting'
+], function () {
+    Route::get('{lang?}', [ClientSettingController::class, 'index']);
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Client routes
+ * -------------------------------------------------------------------------
+ */
+Route::group([
+    'prefix' => 'service'
+], function () {
+    Route::get('{lang?}', [ClientServiceController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientServiceController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'demand'
+], function () {
+    Route::post('{lang?}', [ClientDemandController::class, 'store']);
+});
+
+Route::group([
+    'prefix' => 'blog'
+], function () {
+    Route::group([
+        'prefix' => 'category'
+    ], function () {
+        Route::get('{lang?}', [ClientPostCategoryController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientPostCategoryController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'post'
+    ], function () {
+        Route::get('{lang?}', [ClientPostController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientPostController::class, 'show'])->where('id', '[0-9]+');
+    });
+});
+
+Route::group([
+    'prefix' => 'page'
+], function () {
+    Route::get('{id}/{lang?}', [ClientPageController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'logo'
+], function () {
+    Route::get('{lang?}', [ClientLogoController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'novelty'
+], function () {
+    Route::get('{lang?}', [ClientNoveltyController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientNoveltyController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'review'
+], function () {
+    Route::get('{lang?}', [ClientReviewController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'newsletter'
+], function () {
+    Route::post('{lang?}', [ClientNewsletterController::class, 'store']);
+});
+
+Route::group([
+    'prefix' => 'faq'
+], function () {
+    Route::group([
+        'prefix' => 'category'
+    ], function () {
+        Route::get('{lang?}', [ClientFaqCategoryController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientFaqCategoryController::class, 'show'])->where('id', '[0-9]+');
+    });
+    Route::get('{lang?}', [ClientFaqController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'event'
+], function () {
+    Route::group([
+        'prefix' => 'category'
+    ], function () {
+        Route::get('{lang?}', [ClientEventCategoryController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientEventCategoryController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'registration'
+    ], function () {
+        Route::post('{lang?}', [ClientEventRegistrationController::class, 'store']);
+    });
+
+    Route::get('{lang?}', [ClientEventController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientEventController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'career'
+], function () {
+    Route::group([
+        'prefix' => 'application'
+    ], function () {
+        Route::post('{lang?}', [ClientCareerApplicationController::class, 'store']);
+    });
+
+    Route::get('{lang?}', [ClientCareerController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientCareerController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'quiz'
+], function () {
+    Route::get('', [ClientQuizController::class, 'index']);
+    Route::get('{id}', [ClientQuizController::class, 'show'])->where('id', '[0-9]+');
+    Route::post('{id}', [ClientQuizController::class, 'store'])->where('id', '[0-9]+');
+    Route::get('filter', [ClientQuizController::class, 'filters']);
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Admin routes
+ * -------------------------------------------------------------------------
+ */
 Route::group([
     'prefix' => 'admin'
 ], function () {
@@ -137,6 +313,16 @@ Route::group([
                 Route::delete('{id}', [ContactTaskController::class, 'destroy'])->where('id', '[0-9]+');
             });
 
+            // Contact list routes
+            Route::group([
+                'prefix' => 'list'
+            ], function () {
+                Route::get('', [ContactListController::class, 'index']);
+                Route::get('{id}', [ContactListController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ContactListController::class, 'store']);
+                Route::delete('{id}', [ContactListController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
             Route::get('', [ContactController::class, 'index']);
             Route::get('{id}', [ContactController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [ContactController::class, 'store']);
@@ -232,6 +418,64 @@ Route::group([
             Route::delete('{id}', [CountryController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
+        // Service routes
+        Route::group([
+            'prefix' => 'service'
+        ], function () {
+            Route::get('', [ServiceController::class, 'index']);
+            Route::get('{id}', [ServiceController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ServiceController::class, 'store']);
+            Route::delete('{id}', [ServiceController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Novelties routes
+        Route::group([
+            'prefix' => 'novelty'
+        ], function () {
+            Route::get('', [NoveltyController::class, 'index']);
+            Route::get('{id}', [NoveltyController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [NoveltyController::class, 'store']);
+            Route::delete('{id}', [NoveltyController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Demands routes
+        Route::group([
+            'prefix' => 'demand'
+        ], function () {
+            Route::get('', [DemandController::class, 'index']);
+            Route::get('{id}', [DemandController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [DemandController::class, 'store']);
+            Route::delete('{id}', [DemandController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::group([
+            'prefix' => 'post'
+        ], function () {
+            Route::group([
+                'prefix' => 'category'
+            ], function () {
+                Route::get('', [PostCategoryController::class, 'index']);
+                Route::get('{id}', [PostCategoryController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [PostCategoryController::class, 'store']);
+                Route::delete('{id}', [PostCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [PostController::class, 'index']);
+            Route::get('{id}', [PostController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PostController::class, 'store']);
+            Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Page routes
+        Route::group([
+            'prefix' => 'page'
+        ], function () {
+            Route::get('', [PageController::class, 'index']);
+            Route::get('{id}', [PageController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PageController::class, 'store']);
+            Route::delete('{id}', [PageController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
         // Projects routes
         Route::group([
             'prefix' => 'project'
@@ -255,15 +499,173 @@ Route::group([
         // Dashboard and statistics routes
         Route::get('dashboard', [BaseController::class, 'dashboard']);
         Route::get('statistics', [BaseController::class, 'statistics']);
-    });
 
-    // Price offer routes
-    Route::group([
-        'prefix' => 'price-offer'
-    ], function () {
-        Route::get('', [PriceOfferController::class, 'index']);
-        Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('{id?}', [PriceOfferController::class, 'store']);
-        Route::delete('{id}', [PriceOfferController::class, 'destroy'])->where('id', '[0-9]+');
+
+        // Price offer routes
+        Route::group([
+            'prefix' => 'price-offer'
+        ], function () {
+            Route::get('', [PriceOfferController::class, 'index']);
+            Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PriceOfferController::class, 'store']);
+            Route::delete('{id}', [PriceOfferController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Log routes
+        Route::group([
+            'prefix' => 'log'
+        ], function () {
+            Route::group([
+                'prefix' => 'email'
+            ], function () {
+                Route::get('', [EmailController::class, 'index']);
+                Route::get('{id}', [EmailController::class, 'show'])->where('id', '[0-9]+');
+            });
+        });
+
+        // Service routes
+        Route::group([
+            'prefix' => 'setting'
+        ], function () {
+            Route::get('', [SettingController::class, 'index']);
+            Route::get('{id}', [SettingController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [SettingController::class, 'store']);
+            Route::delete('{id}', [SettingController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Review routes
+        Route::group([
+            'prefix' => 'review'
+        ], function () {
+            Route::get('', [ReviewController::class, 'index']);
+            Route::get('{id}', [ReviewController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ReviewController::class, 'store']);
+            Route::delete('{id}', [ReviewController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Logo routes
+        Route::group([
+            'prefix' => 'logo'
+        ], function () {
+            Route::get('', [LogoController::class, 'index']);
+            Route::get('{id}', [LogoController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [LogoController::class, 'store']);
+            Route::delete('{id}', [LogoController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Newsletter routes
+        Route::group([
+            'prefix' => 'newsletter'
+        ], function () {
+            Route::get('', [NewsletterController::class, 'index']);
+            Route::get('{id}', [NewsletterController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Faq routes
+        Route::group([
+            'prefix' => 'faq'
+        ], function () {
+            Route::group([
+                'prefix' => 'category'
+            ], function () {
+                Route::get('', [FaqCategoryController::class, 'index']);
+                Route::get('{id}', [FaqCategoryController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [FaqCategoryController::class, 'store']);
+                Route::delete('{id}', [FaqCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+            Route::get('', [FaqController::class, 'index']);
+            Route::get('{id}', [FaqController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [FaqController::class, 'store']);
+            Route::delete('{id}', [FaqController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Event routes
+        Route::group([
+            'prefix' => 'event'
+        ], function () {
+            Route::group([
+                'prefix' => 'category'
+            ], function () {
+                Route::get('', [EventCategoryController::class, 'index']);
+                Route::get('{id}', [EventCategoryController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [EventCategoryController::class, 'store']);
+                Route::delete('{id}', [EventCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::group([
+                'prefix' => 'registration'
+            ], function () {
+                Route::get('', [EventRegistrationController::class, 'index']);
+                Route::get('{id}', [EventRegistrationController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [EventRegistrationController::class, 'store']);
+                Route::delete('{id}', [EventRegistrationController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [EventController::class, 'index']);
+            Route::get('{id}', [EventController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [EventController::class, 'store']);
+            Route::delete('{id}', [EventController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Career routes
+        Route::group([
+            'prefix' => 'career'
+        ], function () {
+            Route::group([
+                'prefix' => 'application'
+            ], function () {
+                Route::get('', [CareerApplicationController::class, 'index']);
+                Route::get('{id}', [CareerApplicationController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [CareerApplicationController::class, 'store']);
+                Route::delete('{id}', [CareerApplicationController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [CareerController::class, 'index']);
+            Route::get('{id}', [CareerController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [CareerController::class, 'store']);
+            Route::delete('{id}', [CareerController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Quiz routes
+        Route::group([
+            'prefix' => 'quiz'
+        ], function () {
+            Route::get('', [QuizController::class, 'index']);
+            Route::get('{id}', [QuizController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [QuizController::class, 'store']);
+            Route::delete('{id}', [QuizController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Biographies routes
+        Route::group([
+            'prefix' => 'biography'
+        ], function () {
+            Route::get('', [BiographyController::class, 'index']);
+            Route::get('{id}', [BiographyController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [BiographyController::class, 'store']);
+            Route::delete('{id}', [BiographyController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::get('download/{id}', [BiographyController::class, 'download'])->where('id', '[0-9]+');
+            Route::post('replicate/{id}', [BiographyController::class, 'replicate'])->where('id', '[0-9]+');
+        });
+
+        // Sites routes
+        Route::group([
+            'prefix' => 'site'
+        ], function () {
+            Route::get('', [SiteController::class, 'index']);
+            Route::get('{id}', [SiteController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [SiteController::class, 'store']);
+            Route::delete('{id}', [SiteController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Changelog routes
+        Route::group([
+            'prefix' => 'changelog'
+        ], function () {
+            Route::get('', [ChangelogController::class, 'index']);
+            Route::get('{id}', [ChangelogController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ChangelogController::class, 'store']);
+            Route::delete('{id}', [ChangelogController::class, 'destroy'])->where('id', '[0-9]+');
+        });
     });
 });

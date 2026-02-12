@@ -14,10 +14,8 @@ return [
         'cs',
         'sk',
         'en',
-        /*'es' => [
-            'MX', // mexican spanish
-            'CO', // colombian spanish
-        ],*/
+        'de',
+        'pl'
     ],
 
     /*
@@ -57,7 +55,7 @@ return [
     | $useTranslationFallback when defined
     |
     */
-    'use_fallback' => false,
+    'use_fallback' => true,
 
     /*
     |--------------------------------------------------------------------------

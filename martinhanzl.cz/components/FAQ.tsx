@@ -1,0 +1,69 @@
+import React, { useState } from 'react';
+import { FaqItem } from '../types';
+
+interface FAQProps {
+  items: FaqItem[];
+}
+
+const FAQ: React.FC<FAQProps> = ({ items }) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <section id="faq" className="py-24 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-white/5">
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-16 reveal-on-scroll">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">FAQ</h2>
+          <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            Často kladené otázky
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {items.map((item, index) => (
+            <div
+              key={item.id}
+              className={`rounded-2xl border transition-all duration-300 overflow-hidden bg-white dark:bg-surface-dark reveal-on-scroll ${
+                openIndex === index
+                  ? 'border-primary shadow-glow/10'
+                  : 'border-gray-200 dark:border-white/5 hover:border-primary/30'
+              }`}
+              style={{transitionDelay: `${index * 50}ms`}}
+            >
+              <button
+                onClick={() => toggle(index)}
+                className="w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none"
+              >
+                <span className={`font-bold text-lg md:text-xl font-display ${openIndex === index ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
+                  {item.question}
+                </span>
+                <span
+                  className={`material-symbols-outlined transition-transform duration-300 text-2xl ${
+                    openIndex === index ? 'rotate-180 text-primary' : 'text-slate-400'
+                  }`}
+                >
+                  keyboard_arrow_down
+                </span>
+              </button>
+              
+              <div
+                className={`transition-all duration-300 ease-in-out ${
+                  openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="px-6 pb-6 text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <div dangerouslySetInnerHTML={{ __html: item.answer }} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FAQ;
