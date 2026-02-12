@@ -102,30 +102,10 @@ definePageMeta({
           text: 'Filtrovat',
         },
       ]"
+      :modify-bottom="false"
       @filter-dialog="filterDialogIsOpen = true"
     />
-    <div>
-      <div class="mt-5 block">
-        <nav class="isolate flex divide-x divide-gray-200 rounded-lg shadow-sm" aria-label="Tabs">
-          <NuxtLink
-            v-for="(tab, index) in tabs"
-            :key="index"
-            :to="tab.link"
-            class="group relative min-w-0 flex-1 overflow-hidden bg-white px-2 py-2.5 text-center text-xs font-medium text-grayCustom hover:bg-gray-50 hover:text-grayDark focus:z-10 lg:px-4 lg:py-4 lg:text-sm"
-          >
-            <span>{{ tab.name }}</span>
-            <span
-              aria-hidden="true"
-              :class="
-                tab.current
-                  ? 'absolute inset-x-0 bottom-0 h-0.5 bg-primaryCustom'
-                  : 'absolute inset-x-0 bottom-0 h-0.5 bg-transparent'
-              "
-            />
-          </NuxtLink>
-        </nav>
-      </div>
-    </div>
+    <LayoutTabs :tabs="tabs" />
     <template v-if="tabs.find((tab) => tab.current && tab.link === '#byznys')">
       <!--      <StatisticsStatsBusinessGrowth /> -->
       <LayoutContainer v-if="items && !error && !loading">
