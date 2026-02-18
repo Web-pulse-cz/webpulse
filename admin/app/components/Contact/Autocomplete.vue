@@ -11,7 +11,12 @@ import {
 import { ChevronUpDownIcon } from '@heroicons/vue/20/solid';
 import { debounce } from 'lodash';
 
-defineProps({
+const model = defineModel({
+  type: Number,
+  required: true,
+});
+
+const props = defineProps({
   label: {
     type: Number,
     required: true,
@@ -22,19 +27,25 @@ defineProps({
     required: true,
     default: '' as string | null,
   },
+  contactOptions: {
+    type: Object,
+    required: false,
+  },
 });
 const { $toast } = useNuxtApp();
-
-const model = ref<number | null>(null);
 
 const error = ref(false);
 const loading = ref(false);
 
-const contacts = ref([{ id: null, firstname: 'Osobní', lastname: 'kontakt' }]);
+const contacts = ref([
+  {
+    id: props.contactOptions.id,
+    firstname: props.contactOptions.firstname,
+    lastname: props.contactOptions.lastname,
+  },
+]);
 
 const query = ref('');
-
-const emit = defineEmits(['update:modelValue']);
 
 async function loadItems() {
   if (query.value === '' || query.value.length < 3) {
@@ -56,7 +67,11 @@ async function loadItems() {
   })
     .then((response) => {
       contacts.value = response;
-      contacts.value.unshift({ id: null, firstname: 'Osobní', lastname: 'kontakt' });
+      contacts.value.unshift({
+        id: props.contactOptions.id,
+        firstname: props.contactOptions.firstname,
+        lastname: props.contactOptions.lastname,
+      });
     })
     .catch(() => {
       error.value = true;
@@ -78,10 +93,6 @@ const selectedContact = computed(() => {
   return (
     contacts.value.find((contact) => contact.id === model.value) || { firstname: '', lastname: '' }
   );
-});
-
-watch(model, (newValue) => {
-  emit('update:modelValue', newValue);
 });
 </script>
 

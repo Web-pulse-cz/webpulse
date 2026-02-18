@@ -46,6 +46,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  modifyBottom: {
+    type: Boolean,
+    required: false,
+    default: true as boolean,
+  },
 });
 
 const emit = defineEmits([
@@ -127,7 +132,10 @@ const emitUpdateFilters = () => {
 
 <template>
   <div
-    class="no-print rounded-lg bg-white py-4 pb-4 pl-5 pr-5 shadow lg:py-6 lg:pb-6 lg:pl-8 lg:pr-8"
+    :class="[
+      modifyBottom ? 'rounded-lg' : 'rounded-t-lg',
+      'no-print bg-white py-4 pl-5 pr-5 shadow lg:px-8 lg:py-6',
+    ]"
   >
     <LayoutBreadcrumbs :pages="breadcrumbs" class="mb-4" />
     <div class="mt-2 flex items-center justify-between">

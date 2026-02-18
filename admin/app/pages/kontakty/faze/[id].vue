@@ -35,6 +35,8 @@ const item = ref({
   id: null as number | null,
   name: '' as string,
   color: '' as string,
+  position: 0 as number,
+  show_in_statistics: true as boolean,
 });
 
 async function loadItem() {
@@ -45,6 +47,8 @@ async function loadItem() {
     id: number | null;
     name: string;
     color: string;
+    position: number;
+    show_in_statistics: boolean;
   }>('/api/admin/contact/phase/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -83,6 +87,8 @@ async function saveItem(redirect = true as boolean) {
     id: number | null;
     name: string;
     color: string;
+    position: number;
+    show_in_statistics: boolean;
   }>(
     route.params.id === 'pridat'
       ? '/api/admin/contact/phase'
@@ -151,8 +157,8 @@ definePageMeta({
       @save="saveItem"
     />
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 gap-x-10">
-        <LayoutContainer class="col-span-full w-full">
+      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
+        <LayoutContainer class="col-span-9 w-full">
           <div class="grid grid-cols-2 gap-x-8 gap-y-4">
             <BaseFormInput
               v-model="item.name"
@@ -168,8 +174,22 @@ definePageMeta({
               name="color"
               class="col-span-1"
             />
+            <BaseFormCheckbox
+              v-model="item.show_in_statistics"
+              :checked="item.show_in_statistics"
+              label="Zobrazovat ve statistikách"
+              name="show_in_statistics"
+            />
           </div>
         </LayoutContainer>
+        <LayoutActionsDetailBlock
+          v-model:position="item.position"
+          :allow-image="false"
+          :allow-sites="false"
+          :allow-position="true"
+          :allow-translations="false"
+          class="col-span-3"
+        />
       </div>
     </Form>
   </div>

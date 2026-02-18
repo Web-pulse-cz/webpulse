@@ -3,7 +3,7 @@ import { defineRule } from 'vee-validate';
 
 const model = defineModel({
   type: String,
-  required: true,
+  required: false,
 });
 const props = defineProps({
   rules: {
@@ -127,7 +127,12 @@ const badgeClass = computed(() => (color: string) => {
 <template>
   <fieldset>
     <div class="space-y-5">
-      <div :class="[reverse ? 'flex-row-reverse justify-between' : 'flex-row', 'flex gap-3']">
+      <div
+        :class="[
+          reverse ? 'flex-row-reverse justify-between' : 'flex-row',
+          'flex items-center gap-3',
+        ]"
+      >
         <div class="flex h-6 shrink-0 items-center">
           <div class="group grid size-4 grid-cols-1">
             <input

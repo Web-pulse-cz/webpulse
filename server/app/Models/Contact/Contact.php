@@ -34,13 +34,15 @@ class Contact extends Model
         'contact_phase_id',
         'next_meeting',
         'next_contact',
-        'last_contacted_at'
+        'last_contacted_at',
+        'interests'
     ];
 
     protected $casts = [
         'next_meeting' => 'datetime',
         'last_contacted_at' => 'datetime',
-        'next_contact' => 'datetime'
+        'next_contact' => 'datetime',
+        'interests' => 'json'
     ];
 
     protected $with = ['phase', 'source'];

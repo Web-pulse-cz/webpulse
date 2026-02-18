@@ -28,6 +28,7 @@ class ContactSimpleResource extends JsonResource
             'contact' => ContactSimpleResource::make($this->contact),
             'occupation' => $this->occupation,
             'goal' => $this->goal,
+            'interests' => $this->interests,
             'note' => $this->note,
             'last_contacted_at' => $this->last_contacted_at,
             'formatted_last_contacted_at' => $this->last_contacted_at?->format('Y-m-d H:i:s'),

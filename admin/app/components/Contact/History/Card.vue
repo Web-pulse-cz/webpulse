@@ -11,6 +11,7 @@ import {
   ComputerDesktopIcon,
   AtSymbolIcon,
   BoltIcon,
+  ClockIcon, // Přidáno pro hezčí zobrazení času
 } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
@@ -31,80 +32,94 @@ function openDeleteDialog() {
   deleteDialog.value.show = true;
   deleteDialog.value.item = props.history;
 }
+
+// Pomocná funkce pro barvy pozadí ikon (volitelné, pro hezčí efekt)
+const getIconBgColor = (type: string) => {
+  switch (type) {
+    case 'meeting':
+      return 'bg-orange-100 text-orange-600';
+    case 'call':
+      return 'bg-emerald-100 text-emerald-600';
+    case 'email':
+      return 'bg-indigo-100 text-indigo-600';
+    case 'activity':
+      return 'bg-sky-100 text-sky-600';
+    default:
+      return 'bg-gray-100 text-gray-500';
+  }
+};
 </script>
 
 <template>
-  <li class="mb-4 ms-6">
+  <li class="relative mb-6 ms-6">
     <div
-      class="absolute -start-3 mt-3 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-gray-200 dark:border-gray-900 dark:bg-gray-700"
+      class="absolute -start-9 mt-4 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-gray-200 ring-4 ring-white"
     >
-      <CogIcon v-if="history.origin === 'system'" class="size-4 shrink-0 lg:size-5" />
-      <UserIcon v-if="history.origin === 'user'" class="size-4 shrink-0 lg:size-5" />
-      <AcademicCapIcon v-if="history.origin === 'mentor'" class="size-4 shrink-0 lg:size-5" />
-      <QuestionMarkCircleIcon v-if="history.origin === 'other'" class="size-4 shrink-0 lg:size-5" />
+      <CogIcon v-if="history.origin === 'system'" class="size-3.5 text-gray-500" />
+      <UserIcon v-if="history.origin === 'user'" class="size-3.5 text-gray-500" />
+      <AcademicCapIcon v-if="history.origin === 'mentor'" class="size-3.5 text-gray-500" />
+      <QuestionMarkCircleIcon v-if="history.origin === 'other'" class="size-3.5 text-gray-500" />
     </div>
-    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
-      <div class="px-4 py-5 sm:px-6">
-        <div class="grid grid-cols-3">
-          <div class="col-span-1">
-            <time
-              class="mb-1 text-xs font-normal leading-none text-gray-400 lg:text-sm dark:text-gray-500"
-              >{{ new Date(history.created_at).toLocaleString() }}</time
-            >
-            <div class="flex items-end">
-              <div class="hidden lg:block">
-                <PropsBadge v-if="history.type === 'other'" color="zinc">
-                  <QuestionMarkCircleIcon class="size-3 shrink-0" />
-                </PropsBadge>
-                <PropsBadge v-else-if="history.type === 'meeting'" color="orange">
-                  <ComputerDesktopIcon class="size-3 shrink-0" />
-                </PropsBadge>
-                <PropsBadge v-else-if="history.type === 'call'" color="emerald">
-                  <PhoneIcon class="size-3 shrink-0" />
-                </PropsBadge>
-                <PropsBadge v-else-if="history.type === 'email'" color="indigo">
-                  <AtSymbolIcon class="size-3 shrink-0" />
-                </PropsBadge>
-                <PropsBadge v-else-if="history.type === 'activity'" color="sky">
-                  <BoltIcon class="size-3 shrink-0" />
-                </PropsBadge>
-              </div>
-              <h3 class="text-sm font-semibold text-grayDark lg:ml-4 lg:text-lg">
+
+    <div
+      class="relative flex flex-col rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+    >
+      <div class="mb-3 flex items-start justify-between gap-4">
+        <div class="flex gap-3">
+          <div
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+            :class="getIconBgColor(history.type)"
+          >
+            <QuestionMarkCircleIcon v-if="history.type === 'other'" class="size-5" />
+            <ComputerDesktopIcon v-else-if="history.type === 'meeting'" class="size-5" />
+            <PhoneIcon v-else-if="history.type === 'call'" class="size-5" />
+            <AtSymbolIcon v-else-if="history.type === 'email'" class="size-5" />
+            <BoltIcon v-else-if="history.type === 'activity'" class="size-5" />
+            <QuestionMarkCircleIcon v-else class="size-5" />
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-semibold text-gray-900 lg:text-base">
                 {{ history.name }}
               </h3>
+              <PropsBadge
+                v-if="history.activity"
+                :color="history.activity.color"
+                class="!px-2 !py-0.5 text-[10px]"
+              >
+                {{ history.activity.name }}
+              </PropsBadge>
+            </div>
+
+            <div class="mt-1 flex items-center gap-2 text-xs text-gray-400 lg:text-sm">
+              <ClockIcon class="size-3.5" />
+              <time>{{ new Date(history.created_at).toLocaleDateString() }}</time>
             </div>
           </div>
-          <div class="col-span-1 flex items-end justify-evenly text-center">
-            <!-- <PropsBadge
-							v-if="history.phase"
-							:color="history.phase.color"
-						>
-							{{ history.phase.name }}
-						</PropsBadge> -->
-            <PropsBadge v-if="history.activity" :color="history.activity.color">
-              {{ history.activity.name }}
-            </PropsBadge>
-          </div>
-          <div class="col-span-1 flex items-end justify-end text-end">
-            <PencilIcon
-              v-if="history.origin === 'user'"
-              class="size-4 shrink-0 cursor-pointer text-primaryCustom hover:text-primaryLight lg:size-5"
-              @click="emit('edit-history', history)"
-            />
-            <TrashIcon
-              v-if="history.origin === 'user'"
-              class="ml-4 size-4 shrink-0 cursor-pointer text-danger hover:text-dangerLight lg:size-5"
-              @click="openDeleteDialog"
-            />
-          </div>
+        </div>
+
+        <div class="flex shrink-0 items-center gap-2">
+          <PencilIcon
+            v-if="history.origin === 'user'"
+            class="size-4 cursor-pointer text-gray-400 transition-colors hover:bg-gray-50 hover:text-primaryCustom lg:size-5"
+            @click="emit('edit-history', history)"
+          />
+          <TrashIcon
+            v-if="history.origin === 'user'"
+            class="size-4 cursor-pointer text-gray-400 transition-colors hover:bg-gray-50 hover:text-danger lg:size-5"
+            @click="openDeleteDialog"
+          />
         </div>
       </div>
-      <div class="divide-x-2 divide-gray-200 px-4 py-5 sm:p-6">
-        <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
+
+      <div class="pl-[3.25rem]">
+        <p class="text-sm font-normal leading-relaxed text-gray-600 lg:text-base">
           {{ history.description }}
         </p>
       </div>
     </div>
+
     <BaseDialogDelete
       v-model:show="deleteDialog.show"
       v-model:item="deleteDialog.item"

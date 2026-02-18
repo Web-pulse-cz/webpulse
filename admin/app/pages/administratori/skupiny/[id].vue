@@ -44,7 +44,6 @@ const allowedPermissions = ref([
   { name: 'Aktivita', value: 'Aktivita', slug: 'users_has_activities' },
   { name: 'Aktivity', value: 'Aktivity', slug: 'activities' },
   { name: 'Administrátoři', value: 'Administrátoři', slug: 'users' },
-  { name: 'Administrátorské skupiny', value: 'Administrátorské skupiny', slug: 'user_groups' },
   { name: 'Blogové články', value: 'Blogové články', slug: 'posts' },
   { name: 'Cashflow', value: 'Cashflow', slug: 'cashflows' },
   { name: 'Cenové nabídky', value: 'Nacenění', slug: 'price_offers' },
@@ -241,7 +240,7 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
-      slug="user_groups"
+      slug="users"
       @save="saveItem"
     />
     <Form @submit="saveItem">
