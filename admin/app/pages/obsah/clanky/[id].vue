@@ -309,7 +309,7 @@ definePageMeta({
             :allow-translations="false"
             :allow-state="true"
             :states="[
-              { value: 'draft', name: 'ass' },
+              { value: 'draft', name: 'Koncept' },
               { value: 'published', name: 'Publikováno' },
               { value: 'archived', name: 'Archivováno' },
             ]"
