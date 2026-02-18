@@ -18,6 +18,14 @@ const month = defineModel('month', {
   type: String,
   default: new Date().getMonth() + 1,
 });
+const from = defineModel('from', {
+  type: String,
+  default: new Date().toDateString(),
+});
+const to = defineModel('to', {
+  type: String,
+  default: new Date().toDateString(),
+});
 const emit = defineEmits(['submit']);
 
 const years = computed(() => {
@@ -113,6 +121,21 @@ const years = computed(() => {
                             { value: '11', name: 'Listopad' },
                             { value: '12', name: 'Prosinec' },
                           ]"
+                          class="col-span-1"
+                        />
+                        <LayoutDivider>Datum vytvoření (pouze pro kontakty)</LayoutDivider>
+                        <BaseFormInput
+                          v-model="from"
+                          name="from"
+                          label="Od"
+                          type="date"
+                          class="col-span-1"
+                        />
+                        <BaseFormInput
+                          v-model="to"
+                          name="to"
+                          label="Do"
+                          type="date"
                           class="col-span-1"
                         />
                       </div>

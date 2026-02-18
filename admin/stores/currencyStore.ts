@@ -25,10 +25,10 @@ export const useCurrencyStore = defineStore({
   getters: {
     currenciesOptions() {
       return this.currencies.map(
-        (country: { name: string; label: string; id: number; code: string }) => ({
-          label: country.name,
-          name: country.name,
-          value: country.id,
+        (currency: { name: string; label: string; id: number; code: string }) => ({
+          label: currency.name,
+          name: currency.name,
+          value: currency.id,
         }),
       );
     },

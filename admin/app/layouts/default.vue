@@ -489,7 +489,11 @@ watchEffect(() => {
 
 function filterNavigationGroups(navigation: any[]): any[] {
   return navigation.filter((group: any) =>
-    group.menu.some((item: any) => !item.slug || (item.slug && canViewBySlug(item.slug))),
+    group.menu.some(
+      (item: any) =>
+        !item.slug ||
+        (item.slug && canViewBySite(item.slug) && item.slug && canViewBySlug(item.slug)),
+    ),
   );
 }
 

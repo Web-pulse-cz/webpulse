@@ -15,6 +15,12 @@ class ContactPhase extends Model
         'name',
         'color',
         'user_id',
+        'position',
+        'show_in_statistics'
+    ];
+
+    protected $casts = [
+        'show_in_statistics' => 'boolean'
     ];
 
     public function contacts()
