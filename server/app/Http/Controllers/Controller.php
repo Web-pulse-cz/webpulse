@@ -6,6 +6,7 @@ use App\Models\Activity\Activity;
 use App\Models\Activity\UserActivity;
 use App\Models\Cashflow\CashflowCategory;
 use App\Models\Contact\Contact;
+use App\Models\Contact\ContactPhase;
 use App\Models\Site\Site;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -89,6 +90,20 @@ class Controller extends BaseController
                 $daysMonths = 12;
             }
         }
+
+        $contactPhasesQuery = ContactPhase::query()
+            ->where('user_id', $request->user()->id)
+            ->where('show_in_statistics', true)
+            ->withCount(['contacts' => function ($query) use ($request) {
+                if ($request->has('from')) {
+                    $query->whereDate('created_at', '>=', Carbon::parse($request->from));
+                }
+                if ($request->has('to')) {
+                    $query->whereDate('created_at', '<=', Carbon::parse($request->to));
+                }
+            }])
+            ->orderBy('position', 'asc')
+            ->get();
 
         $businessActivitiesQuery = UserActivity::with('activity')
             ->where('user_id', $request->user()->id)
@@ -322,7 +337,19 @@ class Controller extends BaseController
             }
         }
 
+        $contactsSeries = [0];
+        $contactsAxis = ['Celkem'];
+        foreach ($contactPhasesQuery as $contactPhase) {
+            $contactsSeries[] = $contactPhase->contacts_count;
+            $contactsAxis[] = $contactPhase->name;
+            $contactsSeries[0] += $contactPhase->contacts_count;
+        }
+
         return Response::json([
+            'contacts' => [
+                'series' => $contactsSeries,
+                'axis' => $contactsAxis
+            ],
             'business' => [
                 'series' => $businessSeries,
                 'axis' => $axis

@@ -19,6 +19,8 @@ class ContactPhaseResource extends JsonResource
             'name' => $this->name,
             'color' => $this->color,
             'contacts_count' => $this->contacts->count(),
+            'position' => $this->position,
+            'show_in_statistics' => $this->show_in_statistics,
             //'tasks' => ContactTaskResource::make($this->tasks),
         ];
     }

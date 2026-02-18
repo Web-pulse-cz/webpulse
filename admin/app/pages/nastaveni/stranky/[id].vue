@@ -288,8 +288,8 @@ useHead({
 function addRemoveEnabledModule(module: string) {
   if (item.value.settings.enabled_modules.includes(module)) {
     item.value.settings.enabled_modules.splice(
-        item.value.settings.enabled_modules.indexOf(module),
-        1,
+      item.value.settings.enabled_modules.indexOf(module),
+      1,
     );
   } else {
     item.value.settings.enabled_modules.push(currency);
