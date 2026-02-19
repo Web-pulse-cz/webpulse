@@ -339,10 +339,13 @@ class Controller extends BaseController
 
         $contactsSeries = [0];
         $contactsAxis = ['Celkem'];
-        foreach ($contactPhasesQuery as $contactPhase) {
+        foreach ($contactPhasesQuery as $i => $contactPhase) {
             $contactsSeries[] = $contactPhase->contacts_count;
             $contactsAxis[] = $contactPhase->name;
             $contactsSeries[0] += $contactPhase->contacts_count;
+            /*if ($i > 1) {
+                $contactsSeries[$i-1] += $contactPhase->contacts_count;
+            }*/
         }
 
         return Response::json([

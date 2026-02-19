@@ -21,8 +21,7 @@ class ContactController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Contact::query()
-            ->with(['contact'])
-            ->where('user_id', $request->user()->id);
+            ->with(['contact']);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -30,16 +29,18 @@ class ContactController extends Controller
                 $searchString = explode(':', $searchString);
                 $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
             } else {
-                $query->where('firstname', 'like', '%' . $searchString . '%')
-                    ->orWhere('lastname', 'like', '%' . $searchString . '%')
-                    ->orWhere('phone', 'like', '%' . $searchString . '%')
-                    ->orWhere('email', 'like', '%' . $searchString . '%')
-                    ->orWhere('company', 'like', '%' . $searchString . '%')
-                    ->orWhere('street', 'like', '%' . $searchString . '%')
-                    ->orWhere('city', 'like', '%' . $searchString . '%')
-                    ->orWhere('zip', 'like', '%' . $searchString . '%')
-                    ->orWhere('occupation', 'like', '%' . $searchString . '%')
-                    ->orWhere('goal', 'like', '%' . $searchString . '%');
+                $query->where(function ($subQuery) use ($searchString) {
+                    $subQuery->where('firstname', 'like', '%' . $searchString . '%')
+                        ->orWhere('lastname', 'like', '%' . $searchString . '%')
+                        ->orWhere('phone', 'like', '%' . $searchString . '%')
+                        ->orWhere('email', 'like', '%' . $searchString . '%')
+                        ->orWhere('company', 'like', '%' . $searchString . '%')
+                        ->orWhere('street', 'like', '%' . $searchString . '%')
+                        ->orWhere('city', 'like', '%' . $searchString . '%')
+                        ->orWhere('zip', 'like', '%' . $searchString . '%')
+                        ->orWhere('occupation', 'like', '%' . $searchString . '%')
+                        ->orWhere('goal', 'like', '%' . $searchString . '%');
+                });
             }
         }
         if ($request->has('filters')) {
@@ -70,6 +71,9 @@ class ContactController extends Controller
         if ($request->has('orderWay') && $request->get('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
         }
+
+
+        $query->where('user_id', '=', $request->user()->id);
 
         if ($request->has('paginate')) {
             $contacts = $query->paginate($request->get('paginate'));

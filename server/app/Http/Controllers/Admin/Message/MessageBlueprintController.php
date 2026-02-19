@@ -26,8 +26,10 @@ class MessageBlueprintController extends Controller
                 $searchString = explode(':', $searchString);
                 $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('type', 'like', '%' . $searchString . '%');
+                $query->where(function ($subQuery) use ($searchString) {
+                    $subQuery->where('name', 'like', '%' . $searchString . '%')
+                        ->orWhere('type', 'like', '%' . $searchString . '%');
+                });
             }
         }
 
@@ -80,7 +82,7 @@ class MessageBlueprintController extends Controller
             $messageBlueprint->save();
 
             DB::commit();
-        } catch (\Throwable | \Exception $e) {
+        } catch (\Throwable|\Exception $e) {
             DB::rollBack();
             return Response::json(['message' => 'An error occurred while updating message blueprint.'], 500);
         }

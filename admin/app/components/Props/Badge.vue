@@ -3,7 +3,7 @@ defineProps({
   color: {
     type: String,
     required: false,
-    default: 'red',
+    default: '',
   },
 });
 
