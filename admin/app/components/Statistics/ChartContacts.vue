@@ -22,13 +22,14 @@ const chartOptions = computed<ApexOptions>(() => ({
     type: 'bar',
     height: 400,
   },
-  // colors: ['#EC4899'],
+  colors: ['#1A56DB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6366F1', '#374151', '#EC4899'],
   plotOptions: {
     bar: {
       borderRadius: 0,
       horizontal: true,
       barHeight: '85%',
       isFunnel: true,
+      distributed: true,
     },
   },
   dataLabels: {

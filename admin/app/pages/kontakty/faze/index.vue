@@ -150,6 +150,22 @@ definePageMeta({
             hidden: true,
             sortable: false,
           },
+          {
+            key: 'position',
+            name: 'Pořadí ve výpisu',
+            type: 'text',
+            width: 80,
+            hidden: true,
+            sortable: true,
+          },
+          {
+            key: 'show_in_statistics',
+            name: 'Zobrazit ve statistikách',
+            type: 'status',
+            width: 80,
+            hidden: true,
+            sortable: true,
+          },
         ]"
         :actions="[{ type: 'edit' }, { type: 'delete' }]"
         :loading="loading"

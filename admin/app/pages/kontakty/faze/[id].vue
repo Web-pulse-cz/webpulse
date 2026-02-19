@@ -21,12 +21,12 @@ const breadcrumbs = ref([
   },
   {
     name: 'Fáze procesu',
-    link: '/faze',
+    link: '/kontakty/faze',
     current: false,
   },
   {
     name: pageTitle.value,
-    link: '/faze/pridat',
+    link: '/kontakty/faze/pridat',
     current: true,
   },
 ]);
