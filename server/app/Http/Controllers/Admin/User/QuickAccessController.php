@@ -25,8 +25,10 @@ class QuickAccessController extends Controller
                 $searchString = explode(':', $searchString);
                 $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('link', 'like', '%' . $searchString . '%');
+                $query->where(function ($subQuery) use ($searchString) {
+                    $subQuery->where('name', 'like', '%' . $searchString . '%')
+                        ->orWhere('link', 'like', '%' . $searchString . '%');
+                });
             }
         }
 
