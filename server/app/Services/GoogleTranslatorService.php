@@ -44,6 +44,7 @@ class GoogleTranslatorService
             return $body['data']['translations'][0]['translatedText'] ?? $text;
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             Log::error('Google Translate HTTP Error: ' . $e->getMessage());
             return $text;
         }
