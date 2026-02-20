@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Service;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Service\ServiceResource;
 use App\Models\Service\Service;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -15,6 +16,12 @@ use Illuminate\Support\Str;
 
 class ServiceController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService();
+    }
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -72,8 +79,7 @@ class ServiceController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
+            'translations' => 'required|array'
         ]);
 
         if ($validator->fails()) {
@@ -86,6 +92,15 @@ class ServiceController extends Controller
 
             foreach ($request->translations as $locale => $translation) {
                 $translation['slug'] = Str::slug($translation['name']);
+                if ($locale != 'cs') {
+                    foreach ($translation as $key => $value) {
+                        if (in_array($value, ['', null])) {
+                            $value = $request->translations['cs'][$key];
+                        }
+                        $value = $this->googleTranslatorService->translate($value, $locale);
+                        $translation[$key] = $value;
+                    }
+                }
                 $service->translateOrNew($locale)->fill($translation);
             }
 
