@@ -5,8 +5,6 @@ import { useAsyncData } from '#app';
 
 const { locale, t } = useI18n();
 
-const isOpen = ref(false);
-
 const pageMeta = ref({
   title: t('general.metaTitle'),
   description: t('general.metaDescription'),
@@ -14,16 +12,19 @@ const pageMeta = ref({
   meta_description: t('general.metaDescription'),
 });
 
-const carouselSlides = Array.from({ length: 3 }, (_, i) => ({
-  title: t(`carousel.data.${i}.title`),
-  titleColor: t(`carousel.data.${i}.titleColor`),
-  description: t(`carousel.data.${i}.description`),
-  img: t(`carousel.data.${i}.img`),
-}));
+const {
+  data: categoriesData,
+  status: categoriesStatus,
+  error: categoriesError,
+  pending: categoriesPending,
+} = useAsyncData('categories', () => useApi().blog.categories(locale.value));
 
-const { data, status, error, pending } = useAsyncData('logos', () =>
-  useApi().logo.logo(locale.value),
-);
+const {
+  data: postsData,
+  status: postsStatus,
+  error: postsError,
+  pending: postsPending,
+} = useAsyncData('posts', () => useApi().blog.posts(locale.value));
 
 useHead({
   title: pageMeta.value.title,
@@ -43,6 +44,8 @@ useHead({
 
 <template>
   <div>
-    <NuxtImg src="/static/img/hero.jpg" class="rounded-2xl" />
+    <HomeHero />
+    <BlogCategoryList :categories="categoriesData || []" />
+    <BlogPostList :posts="postsData || []" />
   </div>
 </template>

@@ -59,106 +59,106 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <footer class="bg-footerGray">
-    <LayoutFooterContainer>
-      <div class="xl:grid xl:grid-cols-4 xl:gap-8">
-        <div class="space-y-4 xl:space-y-8">
-          <NuxtLink :to="locale !== 'cs' ? `/${locale}` : '/'">
-            <img src="/../public/static/img/LOGO-2.svg" alt="Company name" />
-          </NuxtLink>
-          <div>
-            <p class="text-textWhiteFooter text-sm/6">
-              &copy; {{ new Date().getFullYear() }} Webpulse,
-              {{ t('layout.footer.rightsReserved') }}.
-            </p>
-            <p class="text-textWhiteFooter text-sm/6">
-              {{ t('layout.footer.createdBy') }}
-            </p>
-          </div>
-          <div class="flex gap-x-6">
-            <a
-              v-for="item in navigation.social"
-              :key="item.name"
-              :href="item.href"
-              class="text-gray-400 hover:text-gray-300"
+  <footer class="border-t-8 border-primary bg-deep-blue px-6 pb-12 pt-24 text-white lg:px-20">
+    <div class="mx-auto max-w-[1400px]">
+      <div class="mb-20 grid grid-cols-1 gap-16 md:grid-cols-4">
+        <div class="col-span-1 md:col-span-1">
+          <div class="mb-8 flex items-center gap-4">
+            <div
+              class="flex size-12 -rotate-12 items-center justify-center rounded-blob bg-primary"
             >
-              <span class="sr-only">{{ item.name }}</span>
-              <component :is="item.icon" class="mb-4 size-6 xl:mb-0" aria-hidden="true" />
+              <span class="material-symbols-outlined text-[32px]">auto_stories</span>
+            </div>
+            <h2 class="font-display text-4xl font-black italic">Blog.</h2>
+          </div>
+          <p class="text-lg font-medium leading-relaxed text-white/70">
+            A place for thoughtful writing and meaningful ideas. Join our community of curious
+            minds.
+          </p>
+        </div>
+        <div>
+          <h3
+            class="mb-8 font-display text-2xl font-black uppercase italic tracking-widest text-primary"
+          >
+            Discover
+          </h3>
+          <ul class="space-y-4 text-lg font-bold">
+            <li><a class="transition-colors hover:text-turquoise" href="#">Latest Posts</a></li>
+            <li><a class="transition-colors hover:text-turquoise" href="#">Featured Authors</a></li>
+            <li><a class="transition-colors hover:text-turquoise" href="#">Categories</a></li>
+            <li><a class="transition-colors hover:text-turquoise" href="#">Search</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3
+            class="mb-8 font-display text-2xl font-black uppercase italic tracking-widest text-turquoise"
+          >
+            Company
+          </h3>
+          <ul class="space-y-4 text-lg font-bold">
+            <li><a class="transition-colors hover:text-primary" href="#">About Us</a></li>
+            <li><a class="transition-colors hover:text-primary" href="#">Careers</a></li>
+            <li><a class="transition-colors hover:text-primary" href="#">Contact</a></li>
+            <li><a class="transition-colors hover:text-primary" href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3
+            class="mb-8 font-display text-2xl font-black uppercase italic tracking-widest text-sunny"
+          >
+            Connect
+          </h3>
+          <div class="mb-8 flex gap-6">
+            <a
+              class="flex size-12 items-center justify-center rounded-full border-2 border-white/20 transition-all hover:border-primary hover:bg-primary"
+              href="#"
+            >
+              <span class="sr-only">Twitter</span>
+              <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+                ></path>
+              </svg>
+            </a>
+            <a
+              class="flex size-12 items-center justify-center rounded-full border-2 border-white/20 transition-all hover:border-turquoise hover:bg-turquoise"
+              href="#"
+            >
+              <span class="sr-only">GitHub</span>
+              <svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  clip-rule="evenodd"
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
             </a>
           </div>
-        </div>
-        <div class="grid grid-cols-2 gap-8 xl:col-span-2">
-          <div
-            v-if="
-              settingStore.bottomMenu &&
-              settingStore.bottomMenu['value'] &&
-              settingStore.bottomMenu['value']['groups']
-            "
-            class="md:grid md:grid-cols-2 md:gap-8"
-          >
-            <div v-for="(group, index) in settingStore.bottomMenu['value']['groups']" :key="index">
-              <BasePropsHeading type="h6" color="white" margin-bottom="mb-4 xl:mb-8">
-                {{ group.name }}
-              </BasePropsHeading>
-              <ul role="list" class="mb-4 space-y-2 xl:space-y-4">
-                <li v-for="(item, key) in group.submenu" :key="key">
-                  <NuxtLink
-                    :to="
-                      localePath({
-                        name: item.link !== '' && item.link !== null ? item.link : 'index',
-                      })
-                    "
-                    class="text-textWhiteFooter text-sm/6"
-                    >{{ item.name }}</NuxtLink
-                  >
-                </li>
-              </ul>
+          <div class="rounded-2xl border-2 border-white/10 bg-white/10 p-6">
+            <p class="mb-2 text-sm font-black italic text-sunny">Stay in the loop</p>
+            <div class="flex gap-2">
+              <input
+                class="w-full rounded-lg border-none bg-white/10 text-white placeholder:text-white/40 focus:ring-2 focus:ring-turquoise"
+                placeholder="Email"
+                type="text"
+              />
+              <button class="rounded-lg bg-turquoise px-4 font-black text-deep-blue">Go</button>
             </div>
           </div>
         </div>
-        <div>
-          <BasePropsHeading type="h6" color="white" margin-bottom="mb-4 xl:mb-8">
-            {{ t('layout.footer.stayInTouch') }}
-          </BasePropsHeading>
-          <div class="relative rounded-3xl">
-            <form @submit.prevent="handleSubmit">
-              <BaseFormInput
-                v-model="email"
-                name="email"
-                :placeholder="t('layout.footer.email')"
-                type="text"
-                class="col-span-3 h-12 rounded-lg bg-[#707070] pr-12 text-white placeholder:text-white"
-                :variant="variant"
-              />
-              <button
-                class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"
-                type="submit"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-send"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"
-                  />
-                </svg>
-              </button>
-            </form>
-          </div>
-
-          <p class="text-textWhiteFooter mt-2 text-sm/6">
-            {{ t('layout.footer.submitForm') }}
-            <!-- TODO: Add link to privacy policy -->
-            <NuxtLink to="#" class="textWhiteFooter underline">
-              {{ t('layout.footer.personalInformation') }}</NuxtLink
-            >
-          </p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-between gap-8 border-t-2 border-white/10 pt-12 md:flex-row"
+      >
+        <p class="text-sm font-bold italic text-white/50">
+          © 2024 Blog App. Stay Wild. Keep Reading.
+        </p>
+        <div class="flex gap-8 text-sm font-black uppercase tracking-widest text-white/70">
+          <a class="transition-colors hover:text-primary" href="#">Privacy</a>
+          <a class="transition-colors hover:text-primary" href="#">Terms</a>
+          <a class="transition-colors hover:text-primary" href="#">Cookies</a>
         </div>
       </div>
-    </LayoutFooterContainer>
+    </div>
   </footer>
 </template>

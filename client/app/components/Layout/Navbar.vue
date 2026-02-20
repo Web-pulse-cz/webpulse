@@ -26,6 +26,43 @@ const topMenu = ref({});
 
 <template>
   <BaseModalContactForm :open="isOpen" @close="isOpen = false" />
+  <header
+    class="border-turquoise sticky top-0 z-50 flex items-center justify-between border-b-4 bg-white px-6 py-4 lg:px-20"
+  >
+    <div class="flex items-center gap-2">
+      <div
+        class="flex size-10 rotate-12 items-center justify-center rounded-full bg-primary shadow-lg"
+      >
+        <span class="material-symbols-outlined text-[24px] text-white">auto_stories</span>
+      </div>
+      <h2 class="font-display text-deep-blue text-3xl font-black italic tracking-tighter">Blog.</h2>
+    </div>
+    <div class="flex flex-1 items-center justify-end gap-8">
+      <div class="hidden items-center gap-8 md:flex">
+        <a
+          class="text-deep-blue text-sm font-black uppercase tracking-widest transition-colors hover:text-primary"
+          href="#"
+          >Home</a
+        >
+        <a
+          class="text-deep-blue text-sm font-black uppercase tracking-widest transition-colors hover:text-primary"
+          href="#"
+          >Articles</a
+        >
+        <a
+          class="text-deep-blue text-sm font-black uppercase tracking-widest transition-colors hover:text-primary"
+          href="#"
+          >About</a
+        >
+      </div>
+      <button
+        class="border-deep-blue bg-sunny text-deep-blue flex h-10 items-center gap-1 rounded-xl border-2 px-4 text-xs font-black shadow-[4px_4px_0px_0px_rgba(26,83,92,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+      >
+        <span>EN</span>
+        <span class="material-symbols-outlined text-[16px]">expand_more</span>
+      </button>
+    </div>
+  </header>
   <header class="fixed z-10 mt-0 w-full backdrop-blur-md">
     <nav
       class="mx-auto flex items-center justify-between px-8 py-6 lg:px-8 lg:py-0 2xl:px-72"

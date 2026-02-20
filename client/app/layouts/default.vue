@@ -26,12 +26,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="flex min-h-screen flex-col overflow-x-hidden antialiased">
     <LayoutNavbar />
     <main>
       <NuxtPage />
     </main>
-    <LayoutContact />
     <LayoutFooter />
     <LayoutCookiesBar />
 
