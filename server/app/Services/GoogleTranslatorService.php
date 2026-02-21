@@ -59,13 +59,17 @@ class GoogleTranslatorService
             if (in_array($translation['name'], ['', null]) && isset($request->translations['cs']['name'])) {
                 $translation['name'] = $request->translations['cs']['name'];
             }
+            $translation['slug'] = Str::slug($translation['name']);
         }
-        $translation['slug'] = Str::slug($translation['name']);
 
         if ($locale != 'cs') {
             foreach ($translation as $key => $value) {
                 if ((in_array($value, ['', null]) && isset($request->translations['cs'][$key])) || $translateAutomatically) {
                     $value = $request->translations['cs'][$key];
+                    $translation[$key] = $value;
+                }
+
+                if ($translateAutomatically) {
                     $value = $this->translate($value, $locale);
                     $translation[$key] = $value;
                 }

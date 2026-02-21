@@ -27,7 +27,7 @@ const themes = [
   {
     wrapper: 'border-transparent bg-deep-blue/5 hover:border-deep-blue hover:bg-deep-blue/10',
     blob: 'bg-deep-blue text-white group-hover:-rotate-12',
-  }
+  },
 ];
 
 // Vybere téma podle indexu a zajistí zacyklení (0, 1, 2, 3, 0, 1...)
@@ -49,18 +49,18 @@ const categoryIcon = computed(() => iconMap[props.category.slug] || 'category');
 
 <template>
   <NuxtLink
-      :to="
+    :to="
       localePath({
         name: 'blog-category-id-slug',
         params: { id: category.id, slug: category.slug },
       })
     "
-      class="group flex flex-col items-center rounded-3xl border-2 p-8 text-center transition-all"
-      :class="activeTheme.wrapper"
+    class="group flex flex-col items-center rounded-3xl border-2 p-8 text-center transition-all"
+    :class="activeTheme.wrapper"
   >
     <div
-        class="mb-4 flex size-16 items-center justify-center rounded-blob shadow-lg transition-all group-hover:scale-110"
-        :class="activeTheme.blob"
+      class="mb-4 flex size-16 items-center justify-center rounded-blob shadow-lg transition-all group-hover:scale-110"
+      :class="activeTheme.blob"
     >
       <span class="material-symbols-outlined text-3xl">{{ categoryIcon }}</span>
     </div>

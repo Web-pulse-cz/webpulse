@@ -28,7 +28,7 @@ onMounted(() => {
 <template>
   <div class="flex min-h-screen flex-col overflow-x-hidden antialiased">
     <LayoutNavbar />
-    <main>
+    <main class="pt-16">
       <NuxtPage />
     </main>
     <LayoutFooter />

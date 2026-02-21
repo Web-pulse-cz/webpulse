@@ -274,6 +274,7 @@ definePageMeta({
           v-model:sites="item.sites"
           :allow-position="true"
           :allow-is-active="true"
+          image-type="post_category"
           class="col-span-3"
         />
       </div>

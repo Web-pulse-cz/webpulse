@@ -114,7 +114,7 @@ class PostController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating post category.'], 500);
+            return Response::json(['message' => 'An error occurred while updating post.'], 500);
         }
 
         return Response::json(PostResource::make($post));

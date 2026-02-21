@@ -35,6 +35,7 @@ export function useBlogApi(
       perPage: number,
       locale: string,
       categoryId?: number | null,
+      search?: string | null,
     ): Promise<Post | null> => {
       return await client(`/api/blog/post/${locale}`, {
         method: 'GET',
@@ -43,7 +44,7 @@ export function useBlogApi(
           Accept: 'application/json',
           'X-Site-Hash': runtimeConfig.public.siteHash,
         },
-        query: { categoryId: categoryId, page: page, paginate: perPage },
+        query: { categoryId: categoryId, page: page, paginate: perPage, search: search },
       });
     },
   );

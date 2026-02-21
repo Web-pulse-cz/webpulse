@@ -323,6 +323,7 @@ definePageMeta({
           v-model:image="item.image"
           v-model:active="item.active"
           :allow-is-active="true"
+          image-type="service"
           class="col-span-3"
         />
       </div>

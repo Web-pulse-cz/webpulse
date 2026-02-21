@@ -1,62 +1,62 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { ref, computed } from 'vue';
 import { useApi } from '~/../app/composables/useApi';
-import { useAsyncData } from '#app';
+import { useAsyncData, useRoute, useRuntimeConfig, useHead } from '#app';
 
 const { t, locale } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
 const api = useApi();
+
 const tableQuery = ref({
-  paginate: 15 as number,
+  paginate: 12 as number,
   page: 1 as number,
 });
 
-const pageMeta = ref({
-  title: t('blog.title'),
-  description: t('blog.meta_description'),
-  meta_title: t('blog.meta_title'),
-  meta_description: t('blog.meta_description'),
-  id: route.params.id,
-  slug: route.params.slug,
-});
-
-const {
-  data: categoriesData,
-  status: categoriesStatus,
-  error: categoriesError,
-  pending: categoriesPending,
-} = useAsyncData('categories', () => api.blog.categories(locale.value));
-
+// 1. STAŽENÍ DAT KATEGORIE S DYNAMICKÝM KLÍČEM A SLEDOVÁNÍM
 const {
   data: categoryData,
   status: categoryStatus,
   error: categoryError,
   pending: categoryPending,
-} = useAsyncData('category', () =>
-  api.blog
-    .categoryDetail(route.params.id, locale.value)
-    .then()
-    .catch(() => {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Page Not Found',
-      });
-    }),
+} = useAsyncData(
+  () => `category-${route.params.id}`,
+  () =>
+    api.blog
+      .categoryDetail(route.params.id, locale.value)
+      .then()
+      .catch(() => {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Page Not Found',
+        });
+      }),
+  {
+    watch: [() => route.params.id, locale],
+  },
 );
 
+// 2. STAŽENÍ ČLÁNKŮ S DYNAMICKÝM KLÍČEM A SLEDOVÁNÍM
 const getPosts = () =>
   api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id);
+
 const {
   data: postsData,
   status: postsStatus,
   error: postsError,
   pending: postsPending,
-} = useAsyncData('categoriesPosts', () =>
-  api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id),
+} = useAsyncData(
+  () => `categoriesPosts-${route.params.id}`,
+  () =>
+    api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id),
+  {
+    watch: [locale],
+  },
 );
-async function updatePage(page: number) {
-  tableQuery.value.page = page;
+
+async function updatePage(paginate: number) {
+  tableQuery.value.paginate = paginate;
   const newPosts = getPosts();
   postsData.value = await newPosts;
 }
@@ -65,12 +65,36 @@ function canonicalUrl() {
   const appUrl = useRuntimeConfig().public.appUrl;
   let string = locale.value !== 'cs' ? `${appUrl}/${locale.value}` : appUrl;
   string += `/blog/${t('canonical.category')}`;
-  string += categoryData && categoryData.id ? `/${categoryData.id}` : `/${route.params.id}`;
-  string += categoryData && categoryData.slug ? `/${categoryData.slug}` : `/${route.params.slug}`;
+  string +=
+    categoryData.value && categoryData.value.id
+      ? `/${categoryData.value.id}`
+      : `/${route.params.id}`;
+  string +=
+    categoryData.value && categoryData.value.slug
+      ? `/${categoryData.value.slug}`
+      : `/${route.params.slug}`;
 
   return string;
 }
-useHead({
+
+// 3. REAKTIVNÍ METADATA POMOCÍ COMPUTED
+// Pokud ještě nemáme data z API, vložíme výchozí překlady (fallback).
+// Jakmile data dorazí, computed se přepočítá.
+const pageMeta = computed(() => {
+  const defaultTitle = t('blog.title');
+  const defaultDesc = t('blog.meta_description');
+
+  return {
+    title: categoryData.value?.name ? `${categoryData.value.name} | ${defaultTitle}` : defaultTitle,
+    description: categoryData.value?.description || defaultDesc,
+    meta_title: categoryData.value?.meta_title || categoryData.value?.name || defaultTitle,
+    meta_description:
+      categoryData.value?.meta_description || categoryData.value?.description || defaultDesc,
+  };
+});
+
+// 4. REAKTIVNÍ USEHEAD (Zabalené do arrow funkce)
+useHead(() => ({
   title: pageMeta.value.title,
   meta: [
     { name: 'description', content: pageMeta.value.description },
@@ -80,58 +104,26 @@ useHead({
   link: [
     {
       rel: 'canonical',
-      href:
-        useRuntimeConfig().public.appUrl +
-        (locale.value !== 'cs' ? `/${locale.value}` : '') +
-        `/${t('canonical.blog')}/${t('canonical.category')}/${pageMeta.value.id}/${pageMeta.value.slug}`,
+      href: canonicalUrl(), // Tady nyní správně voláme tvou existující funkci!
     },
   ],
-});
+}));
 </script>
 
 <template>
   <div>
-    <LayoutContainerTwoCols :sidebar="true" :links="categoriesData" path="blog-category-id-slug">
-      <!-- Sidebar is handled by the LayoutContainerTwoCols component -->
-
-      <!-- Main content -->
-      <div class="space-y-8">
-        <!-- Featured/Main Blog Post -->
-        <div
-          v-for="(post, index) in postsData.data"
-          v-if="postsData && postsData.data"
-          :key="index"
-          class="mb-8"
-        >
-          <BlogPostMainCard
-            :post="post"
-            class="block overflow-hidden rounded-[32px] bg-white shadow-sm transition hover:shadow-md"
-          />
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div
-            v-for="(post, index) in postsData.data"
-            v-if="postsData && postsData.data"
-            :key="index"
-          >
-            <BlogPostCard
-              :post="post"
-              class="mb-2 block rounded-lg bg-gray-100 p-4 hover:bg-gray-200"
-            >
-              {{ post.name }}
-            </BlogPostCard>
-          </div>
-        </div>
-        <BasePagination
-          v-if="postsData"
-          :page="tableQuery.page"
-          :per-page="postsData.perPage"
-          :last-page="postsData.lastPage"
-          :total="postsData.total"
-          @update-page="updatePage"
-        />
-      </div>
-    </LayoutContainerTwoCols>
+    <LayoutContainer>
+      <BlogCategoryHeading v-if="categoryData" :category="categoryData" class="mb-8 text-center" />
+    </LayoutContainer>
+    <BlogPostList
+      v-if="postsData && postsData.data"
+      :posts="postsData.data"
+      :page="tableQuery.page"
+      :per-page="tableQuery.paginate"
+      :last-page="postsData.lastPage"
+      :total="postsData.total"
+      @update-page="updatePage"
+    />
+    <BlogCategoryList />
   </div>
 </template>

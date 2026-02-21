@@ -90,6 +90,11 @@ defineProps({
     default: () => [],
     required: false,
   },
+  imageType: {
+    type: String,
+    default: 'event',
+    required: false,
+  }
 });
 
 function updateItemImage(files) {
@@ -188,7 +193,7 @@ function addRemoveItemSite(siteId) {
       <BaseFormUploadImage
         v-model="image"
         :multiple="false"
-        type="event"
+        :type="imageType"
         format="medium"
         label="Náhledový obrázek"
         class="col-span-full"

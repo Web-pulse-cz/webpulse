@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import type { PostCategory } from '~~/types/PostCategory';
+import { useI18n } from 'vue-i18n';
+import { useApi } from '~/../app/composables/useApi';
+import { useAsyncData } from '#app';
 
-export interface BlogCategoriesProps {
-  categories: PostCategory[];
-}
-defineProps<BlogCategoriesProps>();
-const { t } = useI18n();
+const { locale, t } = useI18n();
+
+const {
+  data: categoriesData,
+  status: categoriesStatus,
+  error: categoriesError,
+  pending: categoriesPending,
+} = useAsyncData('categories', () => useApi().blog.categories(locale.value), {
+  watch: [locale],
+});
 </script>
 
 <template>
@@ -27,7 +34,7 @@ const { t } = useI18n();
     </div>
     <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
       <BlogCategoryCard
-        v-for="(category, index) in categories"
+        v-for="(category, index) in categoriesData"
         :key="index"
         :category="category"
         :index="index"

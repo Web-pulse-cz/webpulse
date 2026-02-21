@@ -384,6 +384,7 @@ definePageMeta({
               { value: 'open', name: 'Otevřená' },
               { value: 'closed', name: 'Uzavřená' },
             ]"
+            image-type="career"
             class="col-span-3"
           />
         </div>

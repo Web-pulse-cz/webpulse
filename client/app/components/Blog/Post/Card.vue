@@ -57,8 +57,12 @@ const themes = [
   },
 ];
 
-// Zajištění nekonečné rotace šesti témat
-const activeTheme = computed(() => themes[props.index % themes.length]);
+const activeTheme = computed(() => {
+  const safeIndex =
+    typeof props.index === 'number' && !isNaN(props.index) ? Math.max(0, props.index) : 0;
+
+  return themes[safeIndex % themes.length];
+});
 </script>
 
 <template>
@@ -74,34 +78,36 @@ const activeTheme = computed(() => themes[props.index % themes.length]);
         class="block"
       >
         <div class="overflow-hidden" :class="activeTheme.aspect">
-          <img
-            :alt="props.post.title"
+          <BaseImage
+            :alt="props.post.name"
             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-            :src="
-              props.post.imageUrl ||
-              'https://lh3.googleusercontent.com/aida-public/AB6AXuC6eNr-ye-7t0x4BL7QCgVLY10DvXrFfZQDCn_VOtwZ84uCD0g3lNoz7k61oK7h1A-Gp-UXSdaK5hWZurS3nXFkE0HKLUoK2y_ZrzF_IO4sR2Hw7SUEtlMkMSZQvcktu7EiskbiVsiJjMFybdgaS5Gnyx5r38DJRTPQDaPNPCnKSax-qpWbjmtQOTbdvlzNpMZ8f_IGQr2Dxb8vdStvFObywpFfLAARmvgZJw5yKcRfOx2V1mo9vrtVIGeLJYR_QMP4PL794AvkT8I'
-            "
+            :src="`/content/images/post/medium/${props.post.image}`"
           />
         </div>
 
         <div class="p-8">
-          <span
-            class="mb-4 inline-block rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest"
-            :class="activeTheme.tag"
+          <div
+            v-if="post.categories && post.categories.length > 0"
+            class="mb-4 flex flex-wrap items-center gap-2"
           >
-            {{ props.post.category?.name || 'Category' }}
-          </span>
+            <span
+              v-for="(category, index) in post.categories"
+              :key="index"
+              class="mb-4 inline-block rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest"
+              :class="activeTheme.tag"
+            >
+              {{ category?.name || 'Category' }}
+            </span>
+          </div>
 
           <h3
             class="mb-4 font-display text-3xl font-black leading-tight text-deep-blue transition-colors"
             :class="activeTheme.titleHover"
           >
-            {{ props.post.title }}
+            {{ props.post.name }}
           </h3>
 
-          <p class="mb-6 font-medium text-deep-blue/70">
-            {{ props.post.excerpt }}
-          </p>
+          <p class="mb-6 font-medium text-deep-blue/70" v-html="props.post.perex" />
         </div>
       </NuxtLink>
     </div>

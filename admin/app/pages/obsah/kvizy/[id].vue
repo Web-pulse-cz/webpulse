@@ -271,6 +271,7 @@ definePageMeta({
               { value: 'archived', name: 'Archivováno' },
             ]"
             :allow-state="true"
+            image-type="quiz"
             class="col-span-3"
           />
         </div>

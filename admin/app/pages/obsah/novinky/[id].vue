@@ -277,6 +277,7 @@ definePageMeta({
           v-model:image="item.image"
           v-model:sites="item.sites"
           :allow-is-active="true"
+          image-type="novelty"
           class="col-span-3"
         />
       </div>

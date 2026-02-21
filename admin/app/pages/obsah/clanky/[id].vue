@@ -313,6 +313,7 @@ definePageMeta({
               { value: 'published', name: 'Publikováno' },
               { value: 'archived', name: 'Archivováno' },
             ]"
+            image-type="post"
             class="col-span-3"
           />
         </div>

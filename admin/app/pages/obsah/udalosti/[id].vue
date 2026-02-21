@@ -595,6 +595,7 @@ definePageMeta({
             :allow-categories="true"
             :categories="eventCategories"
             :allow-position="true"
+            image-type="event"
             class="col-span-3"
           />
         </div>

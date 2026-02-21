@@ -8,7 +8,7 @@ const route = useRoute();
 const { t, locale } = useI18n();
 const api = useApi();
 const tableQuery = ref({
-  paginate: 15 as number,
+  paginate: 12 as number,
   page: 1 as number,
 });
 
@@ -45,10 +45,13 @@ const {
   () => `posts-${route.params.id}`,
   () =>
     api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id),
+  {
+    watch: [locale],
+  },
 );
 
-async function updatePage(page: number) {
-  tableQuery.value.page = page;
+async function updatePage(paginate: number) {
+  tableQuery.value.paginate = paginate;
   const newPosts = getPosts();
   postsData.value = await newPosts;
 }
@@ -74,46 +77,36 @@ useHead({
 
 <template>
   <div>
-    <LayoutContainerTwoCols :sidebar="true" :links="categoriesData" path="blog-category-id-slug">
-      <BasePropsHeading type="h1">
-        {{ t('blog.title') }}
-      </BasePropsHeading>
-      <div class="space-y-8">
+    <LayoutContainer>
+      <div
+        class="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center py-8 text-center md:py-12"
+      >
         <div
-          v-for="(post, index) in postsData.data"
-          v-if="postsData && postsData.data"
-          :key="index"
-          class="mb-8"
-        >
-          <BlogPostMainCard
-            :post="post"
-            class="block overflow-hidden rounded-[32px] bg-white shadow-sm transition hover:shadow-md"
-          />
-        </div>
+          class="absolute inset-0 -z-10 scale-110 animate-pulse rounded-[30%_70%_70%_30%/30%_30%_70%_70%] bg-turquoise/20 md:scale-125"
+        ></div>
 
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div
-            v-for="(post, index) in postsData.data"
-            v-if="postsData && postsData.data"
-            :key="index"
-          >
-            <BlogPostCard
-              :post="post"
-              class="mb-2 block rounded-lg bg-gray-100 p-4 hover:bg-gray-200"
-            >
-              {{ post.name }}
-            </BlogPostCard>
-          </div>
-        </div>
-        <BasePagination
-          v-if="postsData"
-          :page="tableQuery.page"
-          :per-page="postsData.perPage"
-          :last-page="postsData.lastPage"
-          :total="postsData.total"
-          @update-page="updatePage"
-        />
+        <span
+          class="mb-6 inline-block rounded-full border-4 border-deep-blue bg-primary px-6 py-2 font-black uppercase tracking-[0.2em] text-white shadow-[4px_4px_0px_0px_rgba(26,83,92,1)]"
+        >
+          Naše Články
+        </span>
+
+        <h1
+          class="mb-6 font-display text-6xl font-black italic leading-[0.9] text-deep-blue md:text-8xl"
+        >
+          {{ t('blog.title') }}
+        </h1>
       </div>
-    </LayoutContainerTwoCols>
+    </LayoutContainer>
+    <BlogPostList
+      v-if="postsData && postsData.data"
+      :posts="postsData.data"
+      :page="tableQuery.page"
+      :per-page="tableQuery.paginate"
+      :last-page="postsData.lastPage"
+      :total="postsData.total"
+      @update-page="updatePage"
+    />
+    <BlogCategoryList v-if="categoriesData" :categories="categoriesData" />
   </div>
 </template>

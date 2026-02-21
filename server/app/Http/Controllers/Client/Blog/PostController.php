@@ -38,6 +38,11 @@ class PostController extends Controller
             });
         }
 
+        if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
+            $query->whereTranslation('name', 'like', '%' . $request->get('search') . '%')
+                ->orWhereTranslation('text', 'like', '%' . $request->get('search') . '%');
+        }
+
         if ($request->has('paginate')) {
             $posts = $query->paginate((int)$request->get('paginate'));
 
