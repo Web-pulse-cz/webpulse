@@ -9,6 +9,11 @@ const selectedLocale = defineModel('selectedLocale', {
   default: 'cs',
 });
 
+const translateAutomatically = defineModel('translateAutomatically', {
+  type: Boolean,
+  default: false,
+});
+
 const state = defineModel('state', {
   type: String,
   default: 'draft',
@@ -112,6 +117,14 @@ function addRemoveItemSite(siteId) {
           class="w-full"
           :options="languageStore.languageOptions"
         />
+        <BaseFormCheckbox
+          v-model="translateAutomatically"
+          :checked="translateAutomatically"
+          label="Automaticky přeložit do ostatních jazyků"
+          name="translate_automatically"
+          class="mt-2 flex-row-reverse justify-between"
+          label-color="grayCustom"
+        />
       </div>
       <div v-if="allowState" class="col-span-full">
         <BaseFormSelect
@@ -163,7 +176,6 @@ function addRemoveItemSite(siteId) {
         :key="key"
         :label="site.name"
         :name="site.id"
-        :value="sites.includes(site.id)"
         :checked="sites.includes(site.id)"
         class="col-span-full"
         :reverse="true"

@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class GoogleTranslatorService
 {
@@ -44,9 +46,32 @@ class GoogleTranslatorService
             return $body['data']['translations'][0]['translatedText'] ?? $text;
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             Log::error('Google Translate HTTP Error: ' . $e->getMessage());
             return $text;
         }
+    }
+
+    public function parseTranslation(Request $request, array $translation, string $locale, $allowSlug = true): array
+    {
+        $translateAutomatically = $request->has('translateAutomatically') && $request->get('translateAutomatically') == true;
+
+        if ($allowSlug) {
+            if (in_array($translation['name'], ['', null]) && isset($request->translations['cs']['name'])) {
+                $translation['name'] = $request->translations['cs']['name'];
+            }
+        }
+        $translation['slug'] = Str::slug($translation['name']);
+
+        if ($locale != 'cs') {
+            foreach ($translation as $key => $value) {
+                if ((in_array($value, ['', null]) && isset($request->translations['cs'][$key])) || $translateAutomatically) {
+                    $value = $request->translations['cs'][$key];
+                    $value = $this->translate($value, $locale);
+                    $translation[$key] = $value;
+                }
+            }
+        }
+
+        return $translation;
     }
 }

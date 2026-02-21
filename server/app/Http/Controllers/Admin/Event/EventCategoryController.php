@@ -87,19 +87,7 @@ class EventCategoryController extends Controller
             $eventCategory->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
-                if (in_array($translation['name'], ['', null]) && isset($request->translations['cs']['name'])) {
-                    $translation['name'] = $request->translations['cs']['name'];
-                }
-                $translation['slug'] = Str::slug($translation['name']);
-                if ($locale != 'cs') {
-                    foreach ($translation as $key => $value) {
-                        if (in_array($value, ['', null]) && isset($request->translations['cs'][$key])) {
-                            $value = $request->translations['cs'][$key];
-                        }
-                        $value = $this->googleTranslatorService->translate($value, $locale);
-                        $translation[$key] = $value;
-                    }
-                }
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $eventCategory->translateOrNew($locale)->fill($translation);
             }
 
