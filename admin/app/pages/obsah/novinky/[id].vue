@@ -272,6 +272,7 @@ definePageMeta({
         </LayoutContainer>
         <LayoutActionsDetailBlock
           v-model:selected-locale="selectedLocale"
+          v-model:translate-automatically="item.translateAutomatically"
           v-model:active="item.active"
           v-model:image="item.image"
           v-model:sites="item.sites"

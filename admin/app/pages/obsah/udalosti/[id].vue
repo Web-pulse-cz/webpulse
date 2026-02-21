@@ -585,6 +585,7 @@ definePageMeta({
             v-model:sites="item.sites"
             v-model:image="item.image"
             v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
             :allow-state="true"
             :states="[
               { value: 'draft', name: 'Koncept' },
