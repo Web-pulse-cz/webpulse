@@ -21,9 +21,8 @@ return [
         ],
 
         'post' => [
-            ['format' => 'small', 'width' => 200, 'height' => 200, 'keepAspectRatio' => true, 'path' => 'small'],
-            ['format' => 'medium', 'width' => 400, 'height' => 400, 'keepAspectRatio' => true, 'path' => 'medium'],
-            ['format' => 'large', 'width' => 800, 'height' => 800, 'keepAspectRatio' => true, 'path' => 'large'],
+            ['format' => 'medium', 'width' => 450, 'height' => 310, 'keepAspectRatio' => false, 'path' => 'medium'],
+            ['format' => 'large', 'width' => 700, 'height' => 400, 'keepAspectRatio' => false, 'path' => 'large'],
         ],
 
         'post_category' => [
