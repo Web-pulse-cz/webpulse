@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Event;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Event\EventResource;
 use App\Models\Event\Event;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -16,9 +17,13 @@ use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService();
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -76,8 +81,7 @@ class EventController extends Controller
             'registration_from' => 'nullable|date',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
-            'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
+            'translations' => 'required|array'
         ]);
 
         if ($validator->fails()) {
@@ -110,7 +114,7 @@ class EventController extends Controller
             }
 
             foreach ($request->translations as $locale => $translation) {
-                $translation['slug'] = Str::slug($translation['name']);
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $event->translateOrNew($locale)->fill($translation);
             }
 

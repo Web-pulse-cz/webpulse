@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Logo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Logo\LogoResource;
 use App\Models\Logo\Logo;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,6 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class LogoController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService();
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -67,8 +75,7 @@ class LogoController extends Controller
 
         $validator = Validator::make($request->all(), [
             'image' => 'required|string',
-            'translations' => 'required|array',
-            'translations.*.url' => 'nullable|string',
+            'translations' => 'required|array'
         ]);
 
         if ($validator->fails()) {
@@ -80,6 +87,7 @@ class LogoController extends Controller
             $logo->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale, false);
                 $logo->translateOrNew($locale)->fill($translation);
             }
 

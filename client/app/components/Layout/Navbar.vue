@@ -1,199 +1,91 @@
 <script setup>
 import { ref } from 'vue';
 import {
-  Dialog,
-  DialogPanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem
 } from '@headlessui/vue';
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/vue/20/solid';
 import { useSettingStore } from '~/../stores/settingStore';
 
 const settingStore = useSettingStore();
 
 const localePath = useLocalePath();
 
-const { locale, locales, t } = useI18n();
-const switchLocalePath = useSwitchLocalePath();
+const { locale, locales, t, setLocale } = useI18n();
 
-const mobileMenuOpen = ref(false);
 const isOpen = ref(false);
-const topMenu = ref({});
 </script>
 
 <template>
   <BaseModalContactForm :open="isOpen" @close="isOpen = false" />
-  <header class="fixed z-10 mt-0 w-full backdrop-blur-md">
-    <nav
-      class="mx-auto flex items-center justify-between px-8 py-6 lg:px-8 lg:py-0 2xl:px-72"
-      aria-label="Global"
-    >
-      <div class="flex lg:flex-1">
-        <a class="-m-1.5 p-1.5">
-          <span class="sr-only">CHPP s. r. o.</span>
-          <NuxtLink :to="locale !== 'cs' ? `/${locale}` : '/'">
-            <img class="h-14 w-auto" src="~/../public/static/img/LOGO-CHPP.svg" alt="logo" />
-          </NuxtLink>
-        </a>
-      </div>
-      <div class="flex lg:hidden">
-        <button
-          type="button"
-          class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-primary"
-          @click="mobileMenuOpen = true"
-        >
-          <span class="sr-only">Open main menu</span>
-          <Bars3Icon class="size-6" aria-hidden="true" />
-        </button>
-      </div>
-      <PopoverGroup class="hidden lg:flex lg:gap-x-3">
-        <div
-          v-if="
-            settingStore.topMenu &&
-            settingStore.topMenu['value'] &&
-            settingStore.topMenu['value']['groups']
-          "
-          class="hidden justify-center text-center lg:flex lg:gap-x-3"
-        >
-          <NuxtLink
-            v-for="(group, index) in settingStore.topMenu['value']['groups']"
-            :key="index"
-            :to="
-              localePath({ name: group.link !== '' && group.link !== null ? group.link : 'index' })
-            "
-            class="duration-30 hover:text-brand px-6 py-6 text-base font-semibold text-primary transition-colors"
-          >
-            {{ group.name }}
-          </NuxtLink>
-        </div>
-
-        <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:gap-x-3">
-          <NuxtLink
-            :to="
-              localePath({
-                name: 'info-id-slug',
-                params: { id: 1, slug: 'zasady-zpracovani-osobnich-udaju' },
-              })
-            "
-            class="duration-30 text-brand hover:text-brand px-6 py-6 text-base font-semibold transition-colors"
-            >{{ t('general.aboutUs') }}</NuxtLink
-          >
-
-          <BaseButton variant="primary" size="sm" @click="isOpen = true">{{
-            t('contactForm.button')
-          }}</BaseButton>
-
-          <Popover class="hover:text-dark relative py-6 pl-6">
-            <PopoverButton class="flex items-center gap-x-1 text-sm/6 text-primary">
-              <img
-                :src="'/static/img/flags/' + locale + '.svg'"
-                class="h-6 w-6"
-                alt="Locale Flag"
-              />
-              <ChevronDownIcon class="size-5 flex-none text-primary" aria-hidden="true" />
-            </PopoverButton>
-
-            <transition
-              enter-active-class="transition ease-out duration-200"
-              enter-from-class="opacity-0 translate-y-1"
-              enter-to-class="opacity-100 translate-y-0"
-              leave-active-class="transition ease-in duration-150"
-              leave-from-class="opacity-100 translate-y-0"
-              leave-to-class="opacity-0 translate-y-1"
-            >
-              <PopoverPanel
-                class="absolute left-1 top-full z-10 mt-[1px] flex flex-col rounded p-2 shadow-lg ring-1 ring-zinc-700 backdrop-blur-md"
-              >
-                <NuxtLink
-                  v-for="locale in locales"
-                  :key="locale.code"
-                  class="hover:bg-brand block rounded-lg px-2.5 py-2 text-sm/6 text-primary"
-                  :to="switchLocalePath(locale.code)"
-                >
-                  <img
-                    :src="'/static/img/flags/' + locale.code + '.svg'"
-                    class="h-8 w-8"
-                    alt="Locale Flag"
-                  />
-                </NuxtLink>
-              </PopoverPanel>
-            </transition>
-          </Popover>
-        </div>
-      </PopoverGroup>
-    </nav>
-    <Dialog class="lg:hidden" :open="mobileMenuOpen" @close="mobileMenuOpen = false">
-      <div class="fixed inset-0 z-10" />
-      <DialogPanel
-        class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-6 py-6 backdrop-blur-md sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+  <header
+    class="fixed top-0 z-50 flex w-full items-center justify-between border-b-4 border-turquoise bg-white px-6 py-4 lg:px-20"
+  >
+    <NuxtLink :to="locale !== 'cs' ? `/${locale}` : '/'" class="flex items-center gap-2">
+      <div
+        class="flex size-10 rotate-12 items-center justify-center rounded-full bg-primary shadow-lg"
       >
-        <div class="flex items-center justify-between">
-          <NuxtLink :to="locale !== 'cs' ? `/${locale}` : '/'" class="-m-1.5 p-1.5">
-            <span class="sr-only">Your Company</span>
-            <img class="h-8 w-auto" src="~/../public/static/img/LOGO-CHPP.svg" alt="" />
-          </NuxtLink>
-          <button
-            type="button"
-            class="-m-2.5 rounded-md p-2.5 text-primary"
-            @click="mobileMenuOpen = false"
+        <span class="material-symbols-outlined text-[24px] text-white">auto_stories</span>
+      </div>
+      <h2 class="font-display text-3xl font-black italic tracking-tighter text-deep-blue">Blog.</h2>
+    </NuxtLink>
+    <div class="flex flex-1 items-center justify-end gap-8">
+      <div
+        v-if="
+          settingStore.topMenu &&
+          settingStore.topMenu['value'] &&
+          settingStore.topMenu['value']['groups']
+        "
+        class="hidden items-center gap-8 md:flex"
+      >
+        <NuxtLink
+          v-for="(group, index) in settingStore.topMenu['value']['groups']"
+          :key="index"
+          :to="
+            localePath({ name: group.link !== '' && group.link !== null ? group.link : 'index' })
+          "
+          class="text-sm font-black uppercase tracking-widest text-deep-blue transition-colors hover:text-primary"
+        >
+          {{ group.name }}
+        </NuxtLink>
+      </div>
+      <Menu as="div" class="relative inline-block text-left">
+        <MenuButton
+          class="flex h-10 items-center gap-1 rounded-xl border-2 border-deep-blue bg-sunny px-4 text-xs font-black text-deep-blue shadow-[4px_4px_0px_0px_rgba(26,83,92,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none focus:outline-none"
+        >
+          <span class="uppercase">{{ locale }}</span>
+          <span class="material-symbols-outlined text-[16px]">expand_more</span>
+        </MenuButton>
+
+        <transition
+          enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-in"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <MenuItems
+            class="absolute right-0 mt-3 w-40 origin-top-right overflow-hidden rounded-2xl border-4 border-deep-blue bg-white shadow-[8px_8px_0px_0px_rgba(26,83,92,1)] focus:outline-none"
           >
-            <span class="sr-only">Close menu</span>
-            <XMarkIcon class="size-6" aria-hidden="true" />
-          </button>
-        </div>
-        <div class="mt-6 flow-root">
-          <div class="-my-6 divide-y divide-gray-500/10">
-            <div
-              v-if="
-                settingStore.topMenu &&
-                settingStore.topMenu['value'] &&
-                settingStore.topMenu['value']['groups']
-              "
-              class="space-y-2 py-6"
-            >
-              <NuxtLink
-                v-for="(group, index) in settingStore.topMenu['value']['groups']"
-                :key="index"
-                :to="
-                  localePath({
-                    name: group.link !== '' && group.link !== null ? group.link : 'index',
-                  })
-                "
-                class="hover:text-brand -mx-3 block rounded-lg px-3 py-2 text-base font-medium text-primary"
-              >
-                {{ group.name }}
-              </NuxtLink>
-              <NuxtLink
-                :to="
-                  localePath({
-                    name: 'info-id-slug',
-                    params: { id: 1, slug: 'zasady-zpracovani-osobnich-udaju' },
-                  })
-                "
-                class="hover:text-brand -mx-3 block rounded-lg px-3 py-2 text-base font-medium text-primary"
-                >{{ t('general.aboutUs') }}</NuxtLink
-              >
+            <div class="flex flex-col">
+              <MenuItem v-for="(lang, index) in locales" :key="index" v-slot="{ active }">
+                <span
+                  @click="setLocale(lang.code)"
+                  :class="[
+                    active ? 'bg-primary text-white' : 'text-deep-blue',
+                    lang === locale ? 'bg-turquoise/20' : '',
+                    'block border-b-2 border-deep-blue px-4 py-3 text-sm font-black uppercase tracking-widest transition-colors last:border-b-0',
+                  ]"
+                >
+                  {{ lang.code }}
+                </span>
+              </MenuItem>
             </div>
-            <div class="flex justify-between py-6">
-              <NuxtLink
-                v-for="locale in locales"
-                :key="locale.code"
-                class="hover:text-brand rounded-lg px-2.5 py-2 pr-3 text-sm/7 text-primary"
-                :to="switchLocalePath(locale.code)"
-              >
-                <img
-                  :src="'/static/img/flags/' + locale.code + '.svg'"
-                  class="h-8 w-8"
-                  alt="Locale Flag"
-                />
-              </NuxtLink>
-            </div>
-          </div>
-        </div>
-      </DialogPanel>
-    </Dialog>
+          </MenuItems>
+        </transition>
+      </Menu>
+    </div>
   </header>
 </template>

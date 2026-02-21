@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Setting\SettingResource;
 use App\Models\Setting\Setting;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -15,6 +16,13 @@ use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService();
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -64,8 +72,7 @@ class SettingController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array',
-            'translations.*.value' => 'required',
+            'translations' => 'required|array'
         ]);
 
         if ($validator->fails()) {
@@ -77,6 +84,7 @@ class SettingController extends Controller
             $setting->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale, false);
                 $setting->translateOrNew($locale)->fill($translation);
             }
 

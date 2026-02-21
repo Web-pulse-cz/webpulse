@@ -373,6 +373,7 @@ definePageMeta({
           </LayoutContainer>
           <LayoutActionsDetailBlock
             v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
             v-model:sites="item.sites"
             v-model:image="item.image"
             v-model:position="item.position"
@@ -383,6 +384,7 @@ definePageMeta({
               { value: 'open', name: 'Otevřená' },
               { value: 'closed', name: 'Uzavřená' },
             ]"
+            image-type="career"
             class="col-span-3"
           />
         </div>

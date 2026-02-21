@@ -318,10 +318,12 @@ definePageMeta({
         </LayoutContainer>
         <LayoutActionsDetailBlock
           v-model:selected-locale="selectedLocale"
+          v-model:translate-automatically="item.translateAutomatically"
           v-model:sites="item.sites"
           v-model:image="item.image"
           v-model:active="item.active"
           :allow-is-active="true"
+          image-type="service"
           class="col-span-3"
         />
       </div>

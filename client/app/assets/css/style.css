@@ -4,32 +4,34 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-    @apply bg-[#f9fafb] text-primary font-default;
-    min-height: 100vh;
-    overflow-x: hidden;
-    background: #f9fafb;
-    color: #082f49;
-    padding: 0;
-    margin: 0;
+body {
+    font-family: "Noto Sans", sans-serif;
+    background-color: #F7FFF7;
+    color: #1A535C;
 }
-
-* {
-    box-sizing: border-box;
-    z-index: 1;
+h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: "Newsreader", serif;
 }
-
-.hero_circle {
-    z-index: -1;
+.masonry-grid {
+    column-count: 1;
+    column-gap: 2rem;
 }
-
-footer{
-    ul{
-        list-style: none;
-        padding-left: 0px;
+@media (min-width: 768px) {
+    .masonry-grid {
+        column-count: 2;
     }
 }
-
-body {
-    padding: 12px;
+@media (min-width: 1024px) {
+    .masonry-grid {
+        column-count: 3;
+    }
+}
+.masonry-item {
+    break-inside: avoid;
+    margin-bottom: 2rem;
+    display: inline-block;
+    width: 100%;
+}
+.blob-shape {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
 }

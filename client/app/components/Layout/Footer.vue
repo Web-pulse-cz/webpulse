@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { defineComponent, h } from 'vue';
 import { useSettingStore } from '~/../stores/settingStore.js';
 import { useGlobalApi } from '~/../api/global.js';
@@ -56,109 +56,78 @@ const handleSubmit = () => {
       }),
   );
 };
+
+const textClass = computed(() => (index: number) => {
+  switch (index) {
+    case 0:
+      return 'text-primary';
+    case 1:
+      return 'text-turquoise';
+  }
+});
 </script>
 
 <template>
-  <footer class="bg-footerGray">
-    <LayoutFooterContainer>
-      <div class="xl:grid xl:grid-cols-4 xl:gap-8">
-        <div class="space-y-4 xl:space-y-8">
-          <NuxtLink :to="locale !== 'cs' ? `/${locale}` : '/'">
-            <img src="/../public/static/img/LOGO-2.svg" alt="Company name" />
-          </NuxtLink>
-          <div>
-            <p class="text-textWhiteFooter text-sm/6">
-              &copy; {{ new Date().getFullYear() }} Webpulse,
-              {{ t('layout.footer.rightsReserved') }}.
-            </p>
-            <p class="text-textWhiteFooter text-sm/6">
-              {{ t('layout.footer.createdBy') }}
-            </p>
-          </div>
-          <div class="flex gap-x-6">
-            <a
-              v-for="item in navigation.social"
-              :key="item.name"
-              :href="item.href"
-              class="text-gray-400 hover:text-gray-300"
+  <footer class="border-t-8 border-primary bg-deep-blue px-6 pb-12 pt-24 text-white lg:px-20">
+    <div class="mx-auto max-w-[1400px]">
+      <div class="mb-20 grid grid-cols-1 gap-16 md:grid-cols-3">
+        <div class="col-span-1 md:col-span-1">
+          <div class="mb-8 flex items-center gap-4">
+            <div
+              class="flex size-12 -rotate-12 items-center justify-center rounded-blob bg-primary"
             >
-              <span class="sr-only">{{ item.name }}</span>
-              <component :is="item.icon" class="mb-4 size-6 xl:mb-0" aria-hidden="true" />
-            </a>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-8 xl:col-span-2">
-          <div
-            v-if="
-              settingStore.bottomMenu &&
-              settingStore.bottomMenu['value'] &&
-              settingStore.bottomMenu['value']['groups']
-            "
-            class="md:grid md:grid-cols-2 md:gap-8"
-          >
-            <div v-for="(group, index) in settingStore.bottomMenu['value']['groups']" :key="index">
-              <BasePropsHeading type="h6" color="white" margin-bottom="mb-4 xl:mb-8">
-                {{ group.name }}
-              </BasePropsHeading>
-              <ul role="list" class="mb-4 space-y-2 xl:space-y-4">
-                <li v-for="(item, key) in group.submenu" :key="key">
-                  <NuxtLink
-                    :to="
-                      localePath({
-                        name: item.link !== '' && item.link !== null ? item.link : 'index',
-                      })
-                    "
-                    class="text-textWhiteFooter text-sm/6"
-                    >{{ item.name }}</NuxtLink
-                  >
-                </li>
-              </ul>
+              <span class="material-symbols-outlined text-[32px]">auto_stories</span>
             </div>
+            <h2 class="font-display text-4xl font-black italic">Blog.</h2>
           </div>
-        </div>
-        <div>
-          <BasePropsHeading type="h6" color="white" margin-bottom="mb-4 xl:mb-8">
-            {{ t('layout.footer.stayInTouch') }}
-          </BasePropsHeading>
-          <div class="relative rounded-3xl">
-            <form @submit.prevent="handleSubmit">
-              <BaseFormInput
-                v-model="email"
-                name="email"
-                :placeholder="t('layout.footer.email')"
-                type="text"
-                class="col-span-3 h-12 rounded-lg bg-[#707070] pr-12 text-white placeholder:text-white"
-                :variant="variant"
-              />
-              <button
-                class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"
-                type="submit"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-send"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"
-                  />
-                </svg>
-              </button>
-            </form>
-          </div>
-
-          <p class="text-textWhiteFooter mt-2 text-sm/6">
-            {{ t('layout.footer.submitForm') }}
-            <!-- TODO: Add link to privacy policy -->
-            <NuxtLink to="#" class="textWhiteFooter underline">
-              {{ t('layout.footer.personalInformation') }}</NuxtLink
-            >
+          <p class="text-lg font-medium leading-relaxed text-white/70">
+            A place for thoughtful writing and meaningful ideas. Join our community of curious
+            minds.
           </p>
         </div>
+        <div
+          v-for="(group, index) in settingStore.bottomMenu['value']['groups']"
+          v-if="
+            settingStore.bottomMenu &&
+            settingStore.bottomMenu['value'] &&
+            settingStore.bottomMenu['value']['groups']
+          "
+          :key="index"
+        >
+          <h3
+            :class="
+              'mb-8 font-display text-2xl font-black uppercase italic tracking-widest ' +
+              textClass(index)
+            "
+          >
+            {{ group.name }}
+          </h3>
+          <ul v-if="group.submenu && group.submenu.length" class="space-y-4 text-lg font-bold">
+            <li v-for="(link, key) in group.submenu" :key="key">
+              <NuxtLink
+                :to="
+                  localePath({ name: link.link !== '' && link.link !== null ? link.link : 'index' })
+                "
+                class="transition-colors hover:text-turquoise"
+                href="#"
+                >{{ link.name }}</NuxtLink
+              >
+            </li>
+          </ul>
+        </div>
       </div>
-    </LayoutFooterContainer>
+      <div
+        class="flex flex-col items-center justify-between gap-8 border-t-2 border-white/10 pt-12 md:flex-row"
+      >
+        <p class="text-sm font-bold italic text-white/50">
+          © 2026 Blog App. Stay Wild. Keep Reading.
+        </p>
+        <div class="flex gap-8 text-sm font-black uppercase tracking-widest text-white/70">
+          <a class="transition-colors hover:text-primary" href="#">Privacy</a>
+          <a class="transition-colors hover:text-primary" href="#">Terms</a>
+          <a class="transition-colors hover:text-primary" href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
   </footer>
 </template>

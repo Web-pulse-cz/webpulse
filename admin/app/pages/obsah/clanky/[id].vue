@@ -313,6 +313,7 @@ definePageMeta({
               { value: 'published', name: 'Publikováno' },
               { value: 'archived', name: 'Archivováno' },
             ]"
+            image-type="post"
             class="col-span-3"
           />
         </div>
@@ -388,6 +389,7 @@ definePageMeta({
           </LayoutContainer>
           <LayoutActionsDetailBlock
             v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
             :allow-image="false"
             :allow-sites="false"
             class="col-span-3"

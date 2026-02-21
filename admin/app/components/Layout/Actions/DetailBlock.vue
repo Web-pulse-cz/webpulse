@@ -9,6 +9,11 @@ const selectedLocale = defineModel('selectedLocale', {
   default: 'cs',
 });
 
+const translateAutomatically = defineModel('translateAutomatically', {
+  type: Boolean,
+  default: false,
+});
+
 const state = defineModel('state', {
   type: String,
   default: 'draft',
@@ -85,6 +90,11 @@ defineProps({
     default: () => [],
     required: false,
   },
+  imageType: {
+    type: String,
+    default: 'event',
+    required: false,
+  }
 });
 
 function updateItemImage(files) {
@@ -111,6 +121,14 @@ function addRemoveItemSite(siteId) {
           name="locale"
           class="w-full"
           :options="languageStore.languageOptions"
+        />
+        <BaseFormCheckbox
+          v-model="translateAutomatically"
+          :checked="translateAutomatically"
+          label="Automaticky přeložit do ostatních jazyků"
+          name="translate_automatically"
+          class="mt-2 flex-row-reverse justify-between"
+          label-color="grayCustom"
         />
       </div>
       <div v-if="allowState" class="col-span-full">
@@ -163,7 +181,6 @@ function addRemoveItemSite(siteId) {
         :key="key"
         :label="site.name"
         :name="site.id"
-        :value="sites.includes(site.id)"
         :checked="sites.includes(site.id)"
         class="col-span-full"
         :reverse="true"
@@ -176,7 +193,7 @@ function addRemoveItemSite(siteId) {
       <BaseFormUploadImage
         v-model="image"
         :multiple="false"
-        type="event"
+        :type="imageType"
         format="medium"
         label="Náhledový obrázek"
         class="col-span-full"

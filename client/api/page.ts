@@ -7,7 +7,7 @@ export function usePageApi(
   const runtimeConfig = useRuntimeConfig();
 
   const page = wrap(async (id: number, locale: string): Promise<Page | null> => {
-    return await client(`/api/page/${id}/${locale}}`, {
+    return await client(`/api/page/${id}/${locale}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

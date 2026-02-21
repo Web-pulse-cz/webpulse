@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Career;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Career\CareerResource;
 use App\Models\Career\Career;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -15,6 +16,13 @@ use Illuminate\Support\Str;
 
 class CareerController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService();
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -73,8 +81,7 @@ class CareerController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
+            'translations' => 'required|array'
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +92,7 @@ class CareerController extends Controller
         try {
             $career->fill($request->all());
             foreach ($request->translations as $locale => $translation) {
-                $translation['slug'] = Str::slug($translation['name']);
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $career->translateOrNew($locale)->fill($translation);
             }
             if (!$id) {

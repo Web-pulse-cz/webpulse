@@ -267,12 +267,14 @@ definePageMeta({
         </LayoutContainer>
         <LayoutActionsDetailBlock
           v-model:selected-locale="selectedLocale"
+          v-model:translate-automatically="item.translateAutomatically"
           v-model:position="item.position"
           v-model:image="item.image"
           v-model:is-active="item.active"
           v-model:sites="item.sites"
           :allow-position="true"
           :allow-is-active="true"
+          image-type="post_category"
           class="col-span-3"
         />
       </div>
