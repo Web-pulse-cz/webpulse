@@ -417,10 +417,11 @@ async function saveItem(redirect = true as boolean) {
 }
 
 async function saveHistoryItem(item: { id: number }) {
+  await saveItem();
   const client = useSanctumClient();
   loading.value = true;
 
-  await client<{}>(
+  await client(
     !item.id
       ? '/api/admin/contact/history/' + route.params.id
       : '/api/admin/contact/history/' + route.params.id + '/' + item.id,
