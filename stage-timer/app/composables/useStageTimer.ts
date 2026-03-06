@@ -56,6 +56,28 @@ export const useStageTimer = (isController: boolean = false) => {
         broadcastState()
     }
 
+    // --- NOVÁ FUNKCE: Živá úprava běžícího času ---
+    const adjustLiveTime = (seconds: number) => {
+        if (!isController) return
+
+        const newTime = timeLeft.value + seconds
+
+        if (newTime < 0) {
+            // Pokud by odečtení šlo do mínusu, zarovnáme na 0 a odečteme jen zbytek
+            const diff = timeLeft.value
+            timeLeft.value = 0
+            totalTime.value -= diff
+        } else {
+            timeLeft.value = newTime
+            totalTime.value += seconds
+        }
+
+        // Pojistka, aby celkový čas nebyl nikdy menší než 0
+        if (totalTime.value < 0) totalTime.value = 0
+
+        broadcastState()
+    }
+
     const toggleTimer = () => {
         if (!isController) return
         isRunning.value = !isRunning.value
@@ -106,6 +128,7 @@ export const useStageTimer = (isController: boolean = false) => {
         isRunning,
         isChillOut,
         setTime,
+        adjustLiveTime, // Exportujeme novou funkci
         toggleTimer,
         toggleChillOut
     }
