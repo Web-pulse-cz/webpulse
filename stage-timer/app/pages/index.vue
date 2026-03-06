@@ -29,9 +29,9 @@
 
         <div class="quick-set">
           <h3>Rychlé nastavení</h3>
-          <button @click="setTime(5 * 60)">5 Minut</button>
-          <button @click="setTime(10 * 60)">10 Minut</button>
           <button @click="setTime(15 * 60)">15 Minut</button>
+          <button @click="setTime(25 * 60)">25 Minut</button>
+          <button @click="setTime(40 * 60)">40 Minut</button>
           <button @click="setTime(0)" class="btn-danger">Reset na 0</button>
         </div>
 
