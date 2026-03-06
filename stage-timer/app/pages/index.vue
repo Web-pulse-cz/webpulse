@@ -7,6 +7,12 @@
       <div class="main-controls">
         <div class="status-box">
           <p class="current-time">{{ formatTime(timeLeft) }}</p>
+
+          <div class="live-adjust-buttons">
+            <button @click="adjustLiveTime(-60)" class="btn-adjust minus">-1 Min</button>
+            <button @click="adjustLiveTime(60)" class="btn-adjust plus">+1 Min</button>
+          </div>
+
           <p class="status-text" :class="{ 'text-green': isRunning, 'text-blue': isChillOut }">
             Stav: {{ isChillOut ? 'CHILL OUT MÓD' : (isRunning ? 'BĚŽÍ' : 'PAUZA / PŘIPRAVENO') }}
           </p>
@@ -119,14 +125,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-const { timeLeft, isRunning, isChillOut, setTime, toggleTimer, toggleChillOut } = useStageTimer(true)
+// Importujeme nově i adjustLiveTime
+const { timeLeft, isRunning, isChillOut, setTime, adjustLiveTime, toggleTimer, toggleChillOut } = useStageTimer(true)
 
 // --- Logika Fronty ---
 interface QueueItem {
   id: number;
   name: string;
   seconds: number;
-  deviation: number; // Nové: odchylka v sekundách (+ znamená přetáhl, - nedočerpal)
+  deviation: number;
 }
 
 const queue = ref<QueueItem[]>([])
@@ -144,7 +151,7 @@ const addToQueue = () => {
     id: Date.now(),
     name: newTimerName.value || `Časovač ${queue.value.length + 1}`,
     seconds: totalSeconds,
-    deviation: 0 // Výchozí odchylka je nula
+    deviation: 0
   })
 
   newTimerName.value = ''
@@ -177,13 +184,10 @@ const removeFromQueue = (index: number) => {
 }
 
 // --- Logika Korekcí ---
-
-// Úprava odchylky u konkrétní položky
 const adjustDeviation = (index: number, seconds: number) => {
   queue.value[index].deviation += seconds
 }
 
-// Formátování odchylky pro zobrazení (např. "+01:00" nebo "-02:30")
 const formatDeviation = (sec: number) => {
   const sign = sec > 0 ? '+' : (sec < 0 ? '-' : '')
   const absSec = Math.abs(sec)
@@ -192,23 +196,17 @@ const formatDeviation = (sec: number) => {
   return `${sign}${m}:${s}`
 }
 
-// Výpočet celkové odchylky všech řečníků
 const totalDeviation = computed(() => {
   return queue.value.reduce((sum, item) => sum + item.deviation, 0)
 })
 
-// Přidání finálního speakera
 const finalName = ref('Poslední řečník')
 const finalMin = ref(0)
 const finalSec = ref(0)
 
 const addFinalSpeaker = () => {
   const baseSeconds = (finalMin.value * 60) + finalSec.value
-
-  // Plánovaný čas MINUS nasbíraný skluz (pokud byl skluz kladný, čas se zkrátí)
   let calculatedSeconds = baseSeconds - totalDeviation.value
-
-  // Ochrana, aby poslednímu řečníkovi nezbyl záporný čas
   if (calculatedSeconds < 0) calculatedSeconds = 0
 
   queue.value.push({
@@ -218,7 +216,6 @@ const addFinalSpeaker = () => {
     deviation: 0
   })
 
-  // Reset políček
   finalName.value = 'Poslední řečník'
   finalMin.value = 0
   finalSec.value = 0
@@ -256,6 +253,23 @@ h1 { text-align: center; border-bottom: 1px solid #333; padding-bottom: 20px; ma
 }
 
 .current-time { font-size: 4rem; font-weight: bold; margin: 0; font-family: monospace; }
+
+/* Nové styly pro živou úpravu času */
+.live-adjust-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+.btn-adjust {
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 20px;
+}
+.btn-adjust.minus { background: #ef4444; }
+.btn-adjust.plus { background: #10b981; }
+
 .status-text { font-size: 1.2rem; margin-top: 10px; font-weight: bold; }
 .text-green { color: #4ade80; }
 .text-blue { color: #60a5fa; }
