@@ -16,7 +16,7 @@
 
       <div v-else class="chill-wrapper">
         <h2>CHILL OUT</h2>
-        <p>Pauza / Volný program</p>
+        <p>...and no stress</p>
       </div>
 
       <div v-if="!isChillOut && totalTime > 0" class="progress-container">
