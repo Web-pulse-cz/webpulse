@@ -417,7 +417,7 @@ async function saveItem(redirect = true as boolean) {
 }
 
 async function saveHistoryItem(item: { id: number }) {
-  await saveItem();
+  await saveItem(false);
   const client = useSanctumClient();
   loading.value = true;
 
