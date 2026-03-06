@@ -34,6 +34,12 @@
           <button @click="setTime(15 * 60)">15 Minut</button>
           <button @click="setTime(0)" class="btn-danger">Reset na 0</button>
         </div>
+
+        <div class="quick-set open-display-block">
+          <NuxtLink to="/display" target="_blank" class="open-display">
+            Otevřít okno časomíry (Stage Display) ↗
+          </NuxtLink>
+        </div>
       </div>
 
       <div class="queue-section">
@@ -105,15 +111,7 @@
             </button>
           </div>
         </div>
-
       </div>
-
-    </div>
-
-    <div class="footer">
-      <NuxtLink to="/display" target="_blank" class="open-display">
-        Otevřít okno časomíry (Stage Display) ↗
-      </NuxtLink>
     </div>
   </div>
 </template>
@@ -396,7 +394,7 @@ input[type="number"] { width: 70px; }
   font-weight: bold;
 }
 
-.footer { text-align: center; margin-top: 20px; }
+.open-display-block { text-align: center; margin-top: 20px; }
 .open-display {
   display: inline-block;
   padding: 15px 30px;
