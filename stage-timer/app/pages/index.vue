@@ -41,6 +41,16 @@
           <button @click="setTime(0)" class="btn-danger">Reset na 0</button>
         </div>
 
+        <div class="custom-set">
+          <h3>Vlastní čas</h3>
+          <div class="time-inputs" style="justify-content: center;">
+            <input type="number" v-model="customMinutes" min="0" placeholder="Min" />
+            <span>:</span>
+            <input type="number" v-model="customSeconds" min="0" max="59" placeholder="Sek" />
+            <button @click="applyCustomTime" class="btn-add" style="flex-grow: 0; padding: 10px 20px;">Nastavit</button>
+          </div>
+        </div>
+
         <div class="quick-set open-display-block">
           <NuxtLink to="/display" target="_blank" class="open-display">
             Otevřít okno časomíry (Stage Display) ↗
@@ -125,8 +135,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-// Importujeme nově i adjustLiveTime
 const { timeLeft, isRunning, isChillOut, setTime, adjustLiveTime, toggleTimer, toggleChillOut } = useStageTimer(true)
+
+// --- NOVÉ: Logika Vlastního času ---
+const customMinutes = ref(0)
+const customSeconds = ref(0)
+
+const applyCustomTime = () => {
+  const totalSeconds = (customMinutes.value * 60) + customSeconds.value
+  setTime(totalSeconds)
+  // setTime čas automaticky nepustí, takže zůstane svítit "PAUZA / PŘIPRAVENO" a vy pak jen kliknete na "Spustit"
+}
 
 // --- Logika Fronty ---
 interface QueueItem {
@@ -254,7 +273,6 @@ h1 { text-align: center; border-bottom: 1px solid #333; padding-bottom: 20px; ma
 
 .current-time { font-size: 4rem; font-weight: bold; margin: 0; font-family: monospace; }
 
-/* Nové styly pro živou úpravu času */
 .live-adjust-buttons {
   display: flex;
   justify-content: center;
@@ -275,14 +293,15 @@ h1 { text-align: center; border-bottom: 1px solid #333; padding-bottom: 20px; ma
 .text-blue { color: #60a5fa; }
 .text-red { color: #ef4444; }
 
-.actions, .quick-set, .queue-section {
+/* Přidána i třída .custom-set pro sdílený vzhled bloků */
+.actions, .quick-set, .custom-set, .queue-section {
   background: #2a2a2a;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
 }
 
-h3 { margin-top: 0; margin-bottom: 15px; color: #aaa; }
+h3 { margin-top: 0; margin-bottom: 15px; color: #aaa; text-align: center; }
 
 button {
   background: #3b82f6;
