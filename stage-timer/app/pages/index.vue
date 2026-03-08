@@ -152,19 +152,30 @@
           </div>
 
           <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-            <div class="flex justify-between items-end mb-3">
+            <div class="flex justify-between items-end mb-4">
               <h4 class="text-xs uppercase text-slate-500 font-bold tracking-wider flex items-center gap-2">
-                <Icon name="lucide:calculator" class="w-4 h-4" /> Korekce závěru
+                <Icon name="lucide:calculator" class="w-4 h-4" /> Chytrý přepočet času
               </h4>
               <p class="text-xs">
-                Skluz: <strong class="font-mono" :class="totalDeviation > 0 ? 'text-red-400' : (totalDeviation < 0 ? 'text-emerald-400' : '')">{{ formatDeviation(totalDeviation) }}</strong>
+                Aktuální skluz: <strong class="font-mono text-sm" :class="totalDeviation > 0 ? 'text-red-400' : (totalDeviation < 0 ? 'text-emerald-400' : '')">{{ formatDeviation(totalDeviation) }}</strong>
               </p>
             </div>
-            <div class="flex gap-2">
-              <input type="text" v-model="finalName" placeholder="Závěr" class="input-field flex-1" />
-              <input type="number" v-model="finalMin" placeholder="M" class="input-field w-16 text-center" />
-              <button @click="addFinalSpeaker" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 rounded-lg transition text-sm disabled:opacity-50 flex items-center gap-1" :disabled="finalMin === 0">
-                <Icon name="lucide:check-circle" class="w-4 h-4" /> Přidat
+
+            <div class="flex flex-col gap-3">
+              <div class="flex gap-2">
+                <select v-model="smartTarget" class="input-field flex-1 text-sm py-2 appearance-none bg-slate-800">
+                  <option value="new">+ Přidat jako nového řečníka</option>
+                  <optgroup label="Existující ve frontě" v-if="queue.length > 0">
+                    <option v-for="item in queue" :key="item.id" :value="item.id">Upravit: {{ item.name }}</option>
+                  </optgroup>
+                </select>
+                <input type="number" v-model="smartBaseMin" placeholder="Plán (Min)" class="input-field w-24 text-center" />
+              </div>
+
+              <input v-if="smartTarget === 'new'" type="text" v-model="smartNewName" placeholder="Název nového řečníka" class="input-field w-full" />
+
+              <button @click="applySmartCorrection" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg transition text-sm flex justify-center items-center gap-2 disabled:opacity-50" :disabled="smartBaseMin <= 0">
+                <Icon name="lucide:check-circle" class="w-4 h-4" /> Aplikovat korekci na cíl
               </button>
             </div>
           </div>
@@ -237,15 +248,36 @@ const formatDeviation = (sec: number) => {
 
 const totalDeviation = computed(() => queue.value.reduce((sum, item) => sum + item.deviation, 0))
 
-// Final Speaker
-const finalName = ref('Závěrečný řečník')
-const finalMin = ref(0)
+// Smart Correction Logic (Nové)
+const smartTarget = ref<number | 'new'>('new')
+const smartNewName = ref('Závěrečný řečník')
+const smartBaseMin = ref(0)
 
-const addFinalSpeaker = () => {
-  let calc = (finalMin.value * 60) - totalDeviation.value
-  if (calc < 0) calc = 0
-  queue.value.push({ id: Date.now(), name: finalName.value, seconds: calc, deviation: 0 })
-  finalName.value = 'Závěrečný řečník'; finalMin.value = 0
+const applySmartCorrection = () => {
+  // Původní plánovaný čas MINUS nahromaděný skluz
+  let calculatedSeconds = (smartBaseMin.value * 60) - totalDeviation.value
+  if (calculatedSeconds < 0) calculatedSeconds = 0 // Pojistka proti zápornému času
+
+  if (smartTarget.value === 'new') {
+    // Přidání nového záznamu do fronty
+    queue.value.push({
+      id: Date.now(),
+      name: smartNewName.value || 'Nový řečník',
+      seconds: calculatedSeconds,
+      deviation: 0
+    })
+    smartNewName.value = 'Závěrečný řečník' // Reset
+  } else {
+    // Aktualizace existující položky ve frontě
+    const targetItem = queue.value.find(item => item.id === smartTarget.value)
+    if (targetItem) {
+      targetItem.seconds = calculatedSeconds
+      targetItem.deviation = 0 // Vynulujeme jeho případnou vlastní odchylku, protože jsme mu čas právě nastavili na "čisto"
+    }
+  }
+
+  // Reset základních minut, abychom nenaklikali omylem dvakrát
+  smartBaseMin.value = 0
 }
 </script>
 
