@@ -117,19 +117,33 @@
                     <Icon v-if="index === currentIndex" name="lucide:play-circle" class="w-4 h-4 text-emerald-500" />
                     {{ item.name }}
                   </div>
-                  <div class="font-mono text-sm text-slate-400 flex items-center gap-1">
-                    <Icon name="lucide:timer" class="w-3 h-3 opacity-50" /> {{ formatTime(item.seconds) }}
+
+                  <div class="font-mono text-sm flex items-center gap-2">
+                    <span v-if="item.deviation !== 0" class="text-slate-500 line-through decoration-slate-600 text-xs">
+                      {{ formatTime(item.seconds) }}
+                    </span>
+                    <span class="text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded flex items-center gap-1" :class="{ 'text-emerald-300': item.deviation < 0, 'text-red-300': item.deviation > 0 }">
+                      <Icon name="lucide:timer" class="w-3 h-3 text-slate-400" />
+                      {{ formatTime(Math.max(0, item.seconds + item.deviation)) }}
+                    </span>
                   </div>
                 </div>
 
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center gap-1 bg-slate-900 rounded p-1">
-                    <button @click="adjustDeviation(index, -60)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"><Icon name="lucide:minus" class="w-3 h-3"/></button>
-                    <span class="text-xs font-mono w-12 text-center" :class="item.deviation > 0 ? 'text-red-400' : (item.deviation < 0 ? 'text-emerald-400' : 'text-slate-500')">
-                      {{ formatDeviation(item.deviation) }}
-                    </span>
-                    <button @click="adjustDeviation(index, 60)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"><Icon name="lucide:plus" class="w-3 h-3"/></button>
+                <div class="flex justify-between items-center mt-3">
+                  <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1 bg-slate-900 rounded p-1 border border-slate-800">
+                      <button @click="adjustDeviation(index, -60)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"><Icon name="lucide:minus" class="w-3 h-3"/></button>
+                      <span class="text-xs font-mono w-12 text-center" :class="item.deviation > 0 ? 'text-red-400' : (item.deviation < 0 ? 'text-emerald-400' : 'text-slate-500')">
+                        {{ formatDeviation(item.deviation) }}
+                      </span>
+                      <button @click="adjustDeviation(index, 60)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"><Icon name="lucide:plus" class="w-3 h-3"/></button>
+                    </div>
+
+                    <button @click="absorbDeviation(index)" class="text-[10px] uppercase font-bold tracking-wider bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 px-2 py-1.5 rounded transition flex items-center gap-1" title="Vstřebat celkový skluz do tohoto řečníka">
+                      <Icon name="lucide:shrink" class="w-3 h-3" /> Vstřebat
+                    </button>
                   </div>
+
                   <div class="flex gap-1">
                     <button @click="loadFromQueue(index)" class="btn-secondary px-3 py-1 text-xs flex items-center gap-1">
                       <Icon name="lucide:upload" class="w-3 h-3" /> Načíst
@@ -162,7 +176,7 @@
             </div>
             <div class="flex gap-2">
               <input type="text" v-model="finalName" placeholder="Závěr" class="input-field flex-1" />
-              <input type="number" v-model="finalMin" placeholder="M" class="input-field w-16 text-center" />
+              <input type="number" v-model="finalMin" placeholder="M" class="input-field w-24 text-center" />
               <button @click="addFinalSpeaker" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 rounded-lg transition text-sm disabled:opacity-50 flex items-center gap-1" :disabled="finalMin === 0">
                 <Icon name="lucide:check-circle" class="w-4 h-4" /> Přidat
               </button>
@@ -210,7 +224,11 @@ const addToQueue = () => {
 const loadFromQueue = (index: number) => {
   if (index >= 0 && index < queue.value.length) {
     currentIndex.value = index
-    setTime(queue.value[index].seconds)
+
+    // OPRAVA: Při načtení do časomíry započítáme i aktuálně nastavenou odchylku!
+    const effectiveTime = queue.value[index].seconds + queue.value[index].deviation
+    setTime(Math.max(0, effectiveTime))
+
     toggleTimer()
   }
 }
@@ -227,6 +245,23 @@ const removeFromQueue = (index: number) => {
 
 // Deviation Logic
 const adjustDeviation = (index: number, seconds: number) => queue.value[index].deviation += seconds
+
+// NOVÁ FUNKCE: Vstřebat celkový skluz do konkrétního řečníka
+const absorbDeviation = (index: number) => {
+  const item = queue.value[index]
+  // Zjistíme, jaký je skluz VŠECH OSTATNÍCH (od celkového odečteme odchylku tohoto konkrétního řečníka)
+  const otherDeviations = totalDeviation.value - item.deviation
+
+  // Řečník by měl dostat korekci, která ten skluz vynuluje
+  let newDeviation = -otherDeviations
+
+  // Pojistka: nemůžeme řečníkovi zkrátit čas do mínusu
+  if (item.seconds + newDeviation < 0) {
+    newDeviation = -item.seconds
+  }
+
+  item.deviation = newDeviation
+}
 
 const formatDeviation = (sec: number) => {
   const sign = sec > 0 ? '+' : (sec < 0 ? '-' : '')
