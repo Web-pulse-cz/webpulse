@@ -1,131 +1,174 @@
 <template>
-  <div class="control-panel">
-    <h1>Stage Timer - Ovládací panel</h1>
+  <div class="min-h-screen bg-slate-950 text-slate-300 p-4 font-sans selection:bg-blue-500/30">
+    <div class="max-w-7xl mx-auto">
 
-    <div class="layout-grid">
-
-      <div class="main-controls">
-        <div class="status-box">
-          <p class="current-time">{{ formatTime(timeLeft) }}</p>
-
-          <div class="live-adjust-buttons">
-            <button @click="adjustLiveTime(-60)" class="btn-adjust minus">-1 Min</button>
-            <button @click="adjustLiveTime(60)" class="btn-adjust plus">+1 Min</button>
-          </div>
-
-          <p class="status-text" :class="{ 'text-green': isRunning, 'text-blue': isChillOut }">
-            Stav: {{ isChillOut ? 'CHILL OUT MÓD' : (isRunning ? 'BĚŽÍ' : 'PAUZA / PŘIPRAVENO') }}
-          </p>
-        </div>
-
-        <div class="actions">
-          <button
-              @click="toggleTimer"
-              class="btn-massive"
-              :class="isRunning ? 'btn-warning' : 'btn-success'">
-            {{ isRunning ? '⏸ Pozastavit' : '▶ Spustit' }}
-          </button>
-
-          <button
-              @click="toggleChillOut"
-              class="btn-massive btn-chill">
-            {{ isChillOut ? 'Vypnout Chill Out' : '☕ Chill Out Mód' }}
-          </button>
-        </div>
-
-        <div class="quick-set">
-          <h3>Rychlé nastavení</h3>
-          <button @click="setTime(15 * 60)">15 Minut</button>
-          <button @click="setTime(25 * 60)">25 Minut</button>
-          <button @click="setTime(40 * 60)">40 Minut</button>
-          <button @click="setTime(0)" class="btn-danger">Reset na 0</button>
-        </div>
-
-        <div class="custom-set">
-          <h3>Vlastní čas</h3>
-          <div class="time-inputs" style="justify-content: center;">
-            <input type="number" v-model="customMinutes" min="0" placeholder="Min" />
-            <span>:</span>
-            <input type="number" v-model="customSeconds" min="0" max="59" placeholder="Sek" />
-            <button @click="applyCustomTime" class="btn-add" style="flex-grow: 0; padding: 10px 20px;">Nastavit</button>
-          </div>
-        </div>
-
-        <div class="quick-set open-display-block">
-          <NuxtLink to="/display" target="_blank" class="open-display">
-            Otevřít okno časomíry (Stage Display) ↗
-          </NuxtLink>
-        </div>
+      <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-800">
+        <h1 class="text-2xl font-bold text-white tracking-wide">Stage Timer Control</h1>
+        <NuxtLink to="/display" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-2">
+          Otevřít okno časomíry
+          <Icon name="lucide:external-link" class="w-4 h-4 text-slate-400" />
+        </NuxtLink>
       </div>
 
-      <div class="queue-section">
-        <h3>Fronta časovačů</h3>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <div class="add-to-queue">
-          <input type="text" v-model="newTimerName" placeholder="Název (např. Řečník 1)" class="input-name" />
-          <div class="time-inputs">
-            <input type="number" v-model="newTimerMinutes" min="0" placeholder="Min" />
-            <span>:</span>
-            <input type="number" v-model="newTimerSeconds" min="0" max="59" placeholder="Sek" />
-            <button @click="addToQueue" class="btn-add">Přidat</button>
+        <div class="lg:col-span-7 flex flex-col gap-4">
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center shadow-lg relative overflow-hidden">
+            <div :class="timeLeft < 0 ? 'bg-red-900/20 absolute inset-0' : 'hidden'"></div>
+
+            <p class="relative text-7xl font-mono font-black tracking-tighter" :class="timeLeft < 0 ? 'text-red-500' : 'text-white'">
+              {{ formatTime(timeLeft) }}
+            </p>
+
+            <p class="relative mt-2 text-sm font-bold uppercase tracking-widest" :class="isChillOut ? 'text-blue-400' : (isRunning ? 'text-emerald-400' : 'text-slate-500')">
+              {{ isChillOut ? 'CHILL OUT MÓD' : (isRunning ? 'BĚŽÍ' : 'PAUZA / PŘIPRAVENO') }}
+            </p>
+
+            <div class="relative flex justify-center gap-3 mt-6">
+              <button @click="adjustLiveTime(-60)" class="px-4 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-full text-sm font-bold transition flex items-center gap-1">
+                <Icon name="lucide:minus" class="w-4 h-4" /> 1 Min
+              </button>
+              <button @click="adjustLiveTime(60)" class="px-4 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-full text-sm font-bold transition flex items-center gap-1">
+                <Icon name="lucide:plus" class="w-4 h-4" /> 1 Min
+              </button>
+            </div>
           </div>
-        </div>
 
-        <ul class="queue-list">
-          <li v-for="(item, index) in queue" :key="item.id" :class="{ 'active-item': index === currentIndex }">
-
-            <div class="item-main">
-              <div class="item-info">
-                <span class="item-name">{{ item.name }}</span>
-                <span class="item-time">{{ formatTime(item.seconds) }}</span>
-              </div>
-              <div class="item-actions">
-                <button @click="loadFromQueue(index)" class="btn-small">Načíst</button>
-                <button @click="removeFromQueue(index)" class="btn-small btn-danger">✖</button>
-              </div>
-            </div>
-
-            <div class="item-deviation">
-              <span class="dev-label">Korekce:</span>
-              <button @click="adjustDeviation(index, -60)" class="btn-dev">-1m</button>
-              <span class="dev-value" :class="item.deviation > 0 ? 'text-red' : (item.deviation < 0 ? 'text-green' : '')">
-                {{ formatDeviation(item.deviation) }}
-              </span>
-              <button @click="adjustDeviation(index, 60)" class="btn-dev">+1m</button>
-            </div>
-
-          </li>
-          <li v-if="queue.length === 0" class="empty-queue">
-            Fronta je prázdná
-          </li>
-        </ul>
-
-        <button
-            @click="loadNext"
-            class="btn-next"
-            :disabled="queue.length === 0 || currentIndex >= queue.length - 1">
-          ⏭ Načíst další z fronty
-        </button>
-
-        <div class="final-speaker-section">
-          <h4>Vypočítat čas závěrečného řečníka</h4>
-          <p class="total-deviation">
-            Celkový skluz / ušetřený čas:
-            <strong :class="totalDeviation > 0 ? 'text-red' : (totalDeviation < 0 ? 'text-green' : '')">
-              {{ formatDeviation(totalDeviation) }}
-            </strong>
-          </p>
-          <div class="final-speaker-inputs">
-            <input type="text" v-model="finalName" placeholder="Název" class="input-name" />
-            <div style="display: flex; gap: 5px; align-items: center; margin-top: 5px;">
-              <input type="number" v-model="finalMin" placeholder="Základ Min" />
-              <span>:</span>
-              <input type="number" v-model="finalSec" placeholder="Základ Sek" />
-            </div>
-            <button @click="addFinalSpeaker" class="btn-add-final" :disabled="finalMin === 0 && finalSec === 0">
-              Aplikovat korekci a přidat
+          <div class="flex gap-4">
+            <button @click="toggleTimer" class="flex-1 py-4 text-lg font-bold text-white rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2" :class="isRunning ? 'bg-amber-600 hover:bg-amber-500' : 'bg-emerald-600 hover:bg-emerald-500'">
+              <Icon :name="isRunning ? 'lucide:pause' : 'lucide:play'" class="w-6 h-6" />
+              {{ isRunning ? 'Pozastavit' : 'Spustit' }}
+            </button>
+            <button @click="toggleChillOut" class="flex-1 py-4 text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+              <Icon :name="isChillOut ? 'lucide:coffee' : 'lucide:cup-soda'" class="w-6 h-6" />
+              {{ isChillOut ? 'Vypnout Chill Out' : 'Chill Out Mód' }}
             </button>
           </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <h3 class="text-xs uppercase text-slate-500 font-bold mb-3 tracking-wider flex items-center gap-2">
+                <Icon name="lucide:zap" class="w-4 h-4" /> Rychlá volba
+              </h3>
+              <div class="grid grid-cols-2 gap-2">
+                <button @click="setTime(15 * 60)" class="btn-secondary">15 m</button>
+                <button @click="setTime(25 * 60)" class="btn-secondary">25 m</button>
+                <button @click="setTime(40 * 60)" class="btn-secondary">40 m</button>
+                <button @click="setTime(0)" class="btn-danger flex justify-center items-center gap-1">
+                  <Icon name="lucide:rotate-ccw" class="w-4 h-4" /> Reset
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <h3 class="text-xs uppercase text-slate-500 font-bold mb-3 tracking-wider flex items-center gap-2">
+                <Icon name="lucide:clock-4" class="w-4 h-4" /> Vlastní čas
+              </h3>
+              <div class="flex items-center gap-2 mb-2">
+                <input type="number" v-model="customMinutes" min="0" placeholder="Min" class="input-field w-full text-center" />
+                <span class="font-bold">:</span>
+                <input type="number" v-model="customSeconds" min="0" max="59" placeholder="Sek" class="input-field w-full text-center" />
+              </div>
+              <button @click="applyCustomTime" class="btn-primary w-full mt-1 flex justify-center items-center gap-2">
+                <Icon name="lucide:check" class="w-4 h-4" /> Připravit čas
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 border-l-4 border-l-yellow-500">
+            <h3 class="text-xs uppercase text-slate-500 font-bold mb-3 tracking-wider flex justify-between items-center">
+              <span class="flex items-center gap-2"><Icon name="lucide:message-square-warning" class="w-4 h-4 text-yellow-500" /> Zpráva pro řečníka</span>
+              <span v-if="isFlashVisible" class="text-yellow-500 animate-pulse text-[10px] bg-yellow-500/10 px-2 py-0.5 rounded">AKTIVNÍ</span>
+            </h3>
+            <div class="flex gap-2">
+              <input type="text" v-model="msgInput" placeholder="Např. Konec za 2 minuty!" class="input-field flex-1" @keyup.enter="handleSendFlash" />
+              <button v-if="!isFlashVisible" @click="handleSendFlash" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
+                <Icon name="lucide:send" class="w-4 h-4" /> Zobrazit
+              </button>
+              <button v-else @click="hideFlash" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
+                <Icon name="lucide:eye-off" class="w-4 h-4" /> Skrýt
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col gap-4">
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col h-full">
+            <h3 class="text-xs uppercase text-slate-500 font-bold mb-4 tracking-wider flex items-center gap-2">
+              <Icon name="lucide:list-ordered" class="w-4 h-4" /> Fronta řečníků
+            </h3>
+
+            <div class="flex gap-2 mb-4 pb-4 border-b border-slate-800">
+              <input type="text" v-model="newTimerName" placeholder="Název" class="input-field flex-1" />
+              <input type="number" v-model="newTimerMinutes" placeholder="M" class="input-field w-24 text-center" />
+              <button @click="addToQueue" class="btn-primary px-3 flex justify-center items-center">
+                <Icon name="lucide:plus" class="w-5 h-5" />
+              </button>
+            </div>
+
+            <ul class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar min-h-[200px] max-h-[400px]">
+              <li v-for="(item, index) in queue" :key="item.id" class="p-3 rounded-lg border transition-all" :class="index === currentIndex ? 'bg-slate-800 border-emerald-500' : 'bg-slate-950 border-slate-800'">
+
+                <div class="flex justify-between items-center mb-2">
+                  <div class="font-bold text-white truncate pr-2 flex items-center gap-2">
+                    <Icon v-if="index === currentIndex" name="lucide:play-circle" class="w-4 h-4 text-emerald-500" />
+                    {{ item.name }}
+                  </div>
+                  <div class="font-mono text-sm text-slate-400 flex items-center gap-1">
+                    <Icon name="lucide:timer" class="w-3 h-3 opacity-50" /> {{ formatTime(item.seconds) }}
+                  </div>
+                </div>
+
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center gap-1 bg-slate-900 rounded p-1">
+                    <button @click="adjustDeviation(index, -60)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"><Icon name="lucide:minus" class="w-3 h-3"/></button>
+                    <span class="text-xs font-mono w-12 text-center" :class="item.deviation > 0 ? 'text-red-400' : (item.deviation < 0 ? 'text-emerald-400' : 'text-slate-500')">
+                      {{ formatDeviation(item.deviation) }}
+                    </span>
+                    <button @click="adjustDeviation(index, 60)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"><Icon name="lucide:plus" class="w-3 h-3"/></button>
+                  </div>
+                  <div class="flex gap-1">
+                    <button @click="loadFromQueue(index)" class="btn-secondary px-3 py-1 text-xs flex items-center gap-1">
+                      <Icon name="lucide:upload" class="w-3 h-3" /> Načíst
+                    </button>
+                    <button @click="removeFromQueue(index)" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-2 py-1 rounded transition flex items-center justify-center">
+                      <Icon name="lucide:trash-2" class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li v-if="queue.length === 0" class="flex flex-col items-center justify-center text-slate-600 text-sm py-8 italic gap-2">
+                <Icon name="lucide:inbox" class="w-8 h-8 opacity-50" />
+                Fronta je prázdná
+              </li>
+            </ul>
+
+            <button @click="loadNext" class="mt-4 w-full bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2" :disabled="queue.length === 0 || currentIndex >= queue.length - 1">
+              <Icon name="lucide:skip-forward" class="w-5 h-5" /> Načíst další z fronty
+            </button>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+            <div class="flex justify-between items-end mb-3">
+              <h4 class="text-xs uppercase text-slate-500 font-bold tracking-wider flex items-center gap-2">
+                <Icon name="lucide:calculator" class="w-4 h-4" /> Korekce závěru
+              </h4>
+              <p class="text-xs">
+                Skluz: <strong class="font-mono" :class="totalDeviation > 0 ? 'text-red-400' : (totalDeviation < 0 ? 'text-emerald-400' : '')">{{ formatDeviation(totalDeviation) }}</strong>
+              </p>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" v-model="finalName" placeholder="Závěr" class="input-field flex-1" />
+              <input type="number" v-model="finalMin" placeholder="M" class="input-field w-16 text-center" />
+              <button @click="addFinalSpeaker" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 rounded-lg transition text-sm disabled:opacity-50 flex items-center gap-1" :disabled="finalMin === 0">
+                <Icon name="lucide:check-circle" class="w-4 h-4" /> Přidat
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -135,26 +178,21 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-const { timeLeft, isRunning, isChillOut, setTime, adjustLiveTime, toggleTimer, toggleChillOut } = useStageTimer(true)
+const { timeLeft, isRunning, isChillOut, setTime, adjustLiveTime, toggleTimer, toggleChillOut, sendFlash, hideFlash, isFlashVisible } = useStageTimer(true)
 
-// --- NOVÉ: Logika Vlastního času ---
+// Flash Message local state
+const msgInput = ref('')
+const handleSendFlash = () => {
+  if (msgInput.value.trim()) sendFlash(msgInput.value)
+}
+
+// Custom Time
 const customMinutes = ref(0)
 const customSeconds = ref(0)
+const applyCustomTime = () => setTime((customMinutes.value * 60) + customSeconds.value)
 
-const applyCustomTime = () => {
-  const totalSeconds = (customMinutes.value * 60) + customSeconds.value
-  setTime(totalSeconds)
-  // setTime čas automaticky nepustí, takže zůstane svítit "PAUZA / PŘIPRAVENO" a vy pak jen kliknete na "Spustit"
-}
-
-// --- Logika Fronty ---
-interface QueueItem {
-  id: number;
-  name: string;
-  seconds: number;
-  deviation: number;
-}
-
+// Queue Logic
+interface QueueItem { id: number; name: string; seconds: number; deviation: number; }
 const queue = ref<QueueItem[]>([])
 const currentIndex = ref(-1)
 
@@ -163,19 +201,10 @@ const newTimerMinutes = ref(0)
 const newTimerSeconds = ref(0)
 
 const addToQueue = () => {
-  const totalSeconds = (newTimerMinutes.value * 60) + newTimerSeconds.value
-  if (totalSeconds <= 0) return
-
-  queue.value.push({
-    id: Date.now(),
-    name: newTimerName.value || `Časovač ${queue.value.length + 1}`,
-    seconds: totalSeconds,
-    deviation: 0
-  })
-
-  newTimerName.value = ''
-  newTimerMinutes.value = 0
-  newTimerSeconds.value = 0
+  const t = (newTimerMinutes.value * 60) + newTimerSeconds.value
+  if (t <= 0) return
+  queue.value.push({ id: Date.now(), name: newTimerName.value || `Řečník ${queue.value.length + 1}`, seconds: t, deviation: 0 })
+  newTimerName.value = ''; newTimerMinutes.value = 0; newTimerSeconds.value = 0
 }
 
 const loadFromQueue = (index: number) => {
@@ -187,254 +216,53 @@ const loadFromQueue = (index: number) => {
 }
 
 const loadNext = () => {
-  if (queue.value.length === 0) return
-  if (currentIndex.value < queue.value.length - 1) {
-    loadFromQueue(currentIndex.value + 1)
-  }
+  if (queue.value.length > 0 && currentIndex.value < queue.value.length - 1) loadFromQueue(currentIndex.value + 1)
 }
 
 const removeFromQueue = (index: number) => {
   queue.value.splice(index, 1)
-  if (currentIndex.value === index) {
-    currentIndex.value = -1
-  } else if (currentIndex.value > index) {
-    currentIndex.value--
-  }
+  if (currentIndex.value === index) currentIndex.value = -1
+  else if (currentIndex.value > index) currentIndex.value--
 }
 
-// --- Logika Korekcí ---
-const adjustDeviation = (index: number, seconds: number) => {
-  queue.value[index].deviation += seconds
-}
+// Deviation Logic
+const adjustDeviation = (index: number, seconds: number) => queue.value[index].deviation += seconds
 
 const formatDeviation = (sec: number) => {
   const sign = sec > 0 ? '+' : (sec < 0 ? '-' : '')
-  const absSec = Math.abs(sec)
-  const m = Math.floor(absSec / 60).toString().padStart(2, '0')
-  const s = (absSec % 60).toString().padStart(2, '0')
+  const m = Math.floor(Math.abs(sec) / 60).toString().padStart(2, '0')
+  const s = (Math.abs(sec) % 60).toString().padStart(2, '0')
   return `${sign}${m}:${s}`
 }
 
-const totalDeviation = computed(() => {
-  return queue.value.reduce((sum, item) => sum + item.deviation, 0)
-})
+const totalDeviation = computed(() => queue.value.reduce((sum, item) => sum + item.deviation, 0))
 
-const finalName = ref('Poslední řečník')
+// Final Speaker
+const finalName = ref('Závěrečný řečník')
 const finalMin = ref(0)
-const finalSec = ref(0)
 
 const addFinalSpeaker = () => {
-  const baseSeconds = (finalMin.value * 60) + finalSec.value
-  let calculatedSeconds = baseSeconds - totalDeviation.value
-  if (calculatedSeconds < 0) calculatedSeconds = 0
-
-  queue.value.push({
-    id: Date.now(),
-    name: finalName.value || 'Závěrečný speaker',
-    seconds: calculatedSeconds,
-    deviation: 0
-  })
-
-  finalName.value = 'Poslední řečník'
-  finalMin.value = 0
-  finalSec.value = 0
+  let calc = (finalMin.value * 60) - totalDeviation.value
+  if (calc < 0) calc = 0
+  queue.value.push({ id: Date.now(), name: finalName.value, seconds: calc, deviation: 0 })
+  finalName.value = 'Závěrečný řečník'; finalMin.value = 0
 }
 </script>
 
-<style scoped>
-.control-panel {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #1e1e1e;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+<style>
+.input-field {
+  @apply bg-slate-950 border border-slate-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 transition;
 }
-
-h1 { text-align: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
-
-.layout-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-lg transition;
 }
-
-@media (max-width: 768px) {
-  .layout-grid { grid-template-columns: 1fr; }
+.btn-secondary {
+  @apply bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 rounded-lg transition;
 }
-
-.status-box {
-  text-align: center;
-  background: #000;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+.btn-danger {
+  @apply bg-red-600/80 hover:bg-red-500 text-white font-semibold py-2 rounded-lg transition;
 }
-
-.current-time { font-size: 4rem; font-weight: bold; margin: 0; font-family: monospace; }
-
-.live-adjust-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 10px 0;
-}
-.btn-adjust {
-  padding: 5px 15px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  border-radius: 20px;
-}
-.btn-adjust.minus { background: #ef4444; }
-.btn-adjust.plus { background: #10b981; }
-
-.status-text { font-size: 1.2rem; margin-top: 10px; font-weight: bold; }
-.text-green { color: #4ade80; }
-.text-blue { color: #60a5fa; }
-.text-red { color: #ef4444; }
-
-/* Přidána i třída .custom-set pro sdílený vzhled bloků */
-.actions, .quick-set, .custom-set, .queue-section {
-  background: #2a2a2a;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-h3 { margin-top: 0; margin-bottom: 15px; color: #aaa; text-align: center; }
-
-button {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: 0.2s;
-}
-button:hover:not(:disabled) { filter: brightness(1.2); }
-button:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
-
-.btn-danger { background: #ef4444; }
-.btn-success { background: #10b981; }
-.btn-warning { background: #f59e0b; }
-.btn-chill { background: #8b5cf6; }
-
-.btn-massive {
-  width: calc(50% - 15px);
-  padding: 15px;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-/* Styly pro frontu */
-.add-to-queue {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #444;
-}
-
-.input-name { width: 100%; box-sizing: border-box; }
-
-.time-inputs { display: flex; align-items: center; gap: 10px; }
-
-input {
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #555;
-  background: #111;
-  color: white;
-}
-input[type="number"] { width: 70px; }
-
-.btn-add { flex-grow: 1; margin: 0; background: #2563eb; }
-
-.queue-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 20px 0;
-  max-height: 350px;
-  overflow-y: auto;
-}
-
-.queue-list li {
-  display: flex;
-  flex-direction: column;
-  background: #333;
-  padding: 10px 15px;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  transition: 0.2s;
-}
-
-.queue-list li.active-item {
-  border-left: 5px solid #4ade80;
-  background: #1f2937;
-}
-
-.item-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.item-info { display: flex; flex-direction: column; }
-.item-name { font-weight: bold; font-size: 1.1rem; }
-.item-time { color: #aaa; font-family: monospace; font-size: 1rem; }
-
-.item-actions { display: flex; align-items: center; }
-
-.item-deviation {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #444;
-  font-size: 0.9rem;
-  gap: 10px;
-}
-
-.dev-label { color: #aaa; }
-.dev-value { font-weight: bold; font-family: monospace; font-size: 1rem; width: 60px; text-align: center; }
-.btn-dev { padding: 4px 8px; font-size: 0.8rem; background: #555; margin: 0; }
-
-.btn-small { padding: 6px 10px; font-size: 0.9rem; margin: 0 0 0 5px; }
-.empty-queue { text-align: center; color: #666; font-style: italic; background: transparent !important; }
-
-.btn-next { width: 100%; padding: 15px; font-size: 1.2rem; font-weight: bold; margin: 0 0 20px 0; background: #4f46e5; }
-
-/* Styly pro finálního speakera */
-.final-speaker-section {
-  background: #111;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px dashed #555;
-}
-
-.final-speaker-section h4 { margin: 0 0 10px 0; color: #fff; }
-.total-deviation { margin: 0 0 15px 0; font-size: 0.95rem; color: #aaa; }
-
-.btn-add-final {
-  margin-top: 10px;
-  width: 100%;
-  background: #10b981;
-  font-weight: bold;
-}
-
-.open-display-block { text-align: center; margin-top: 20px; }
-.open-display {
-  display: inline-block;
-  padding: 15px 30px;
-  background: #fff;
-  color: #000;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 8px;
-}
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
 </style>

@@ -1,30 +1,49 @@
 <template>
   <ClientOnly>
     <div
-        class="stage-display"
-        :class="{ 'chill-mode': isChillOut, 'hide-cursor': isFullscreen }"
+        class="h-screen w-screen flex items-center justify-center relative overflow-hidden transition-colors duration-1000 select-none"
+        :class="[
+        isChillOut ? 'bg-slate-950' : 'bg-black',
+        isFullscreen ? 'cursor-none' : 'cursor-auto'
+      ]"
         @click="enterFullscreen"
     >
 
-      <div v-if="!isFullscreen" class="fullscreen-prompt">
+      <div v-if="!isFullscreen" class="absolute top-6 bg-white/20 px-6 py-3 rounded-xl font-sans text-xl text-white animate-pulse pointer-events-none">
         Klikněte kamkoliv pro režim celé obrazovky
       </div>
 
-      <div v-if="!isChillOut" class="timer-wrapper" :class="{ 'time-critical': timeLeft <= 60 && timeLeft > 0, 'time-up': timeLeft === 0 }">
-        {{ formatTime(timeLeft) }}
+      <div v-if="!isChillOut"
+           class="font-mono font-black leading-none transition-colors duration-500 -translate-y-[2vh]"
+           :style="{ fontSize: '35vw' }"
+           :class="[
+             timeLeft <= 0 ? 'text-red-600 animate-pulse' :
+             (timeLeft <= 60 ? 'text-red-500' : 'text-white')
+           ]"
+      >
+        {{ formatTime(Math.max(0, timeLeft)) }}
       </div>
 
-      <div v-else class="chill-wrapper">
-        <h2>CHILL OUT</h2>
-        <p>...and no stress</p>
+      <div v-else class="text-center animate-bounce-slow">
+        <h2 class="text-[15vw] m-0 text-indigo-400 tracking-widest font-black">CHILL OUT</h2>
+        <p class="text-[4vw] text-indigo-500 mt-6 uppercase tracking-[0.2em]">...and no stress</p>
       </div>
 
-      <div v-if="!isChillOut && totalTime > 0" class="progress-container">
+      <div v-if="!isChillOut && totalTime > 0" class="absolute bottom-0 left-0 w-full h-[2vh] bg-neutral-900">
         <div
-            class="progress-bar"
-            :class="{ 'progress-critical': timeLeft <= 60 && timeLeft > 0 }"
+            class="h-full transition-all duration-1000 ease-linear"
+            :class="timeLeft <= 60 ? 'bg-red-500' : 'bg-blue-500'"
             :style="{ width: progressPercentage + '%' }"
         ></div>
+      </div>
+
+      <div
+          v-if="isFlashVisible && flashMessage"
+          class="absolute inset-x-0 bottom-[15%] bg-yellow-500 text-black py-8 px-4 flex items-center justify-center shadow-[0_0_100px_rgba(234,179,8,0.5)] z-50 animate-slide-up"
+      >
+        <span class="text-[8vw] font-black uppercase tracking-wider text-center leading-tight">
+          {{ flashMessage }}
+        </span>
       </div>
 
     </div>
@@ -34,118 +53,50 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-const { timeLeft, totalTime, isChillOut } = useStageTimer(false)
+const { timeLeft, totalTime, isChillOut, flashMessage, isFlashVisible } = useStageTimer(false)
 const isFullscreen = ref(false)
 
 const progressPercentage = computed(() => {
   if (totalTime.value <= 0) return 0
-  return (timeLeft.value / totalTime.value) * 100
+  // Aby progress bar necouval do mínusu
+  return Math.max(0, (timeLeft.value / totalTime.value) * 100)
 })
 
 const enterFullscreen = async () => {
   if (!document.fullscreenElement) {
-    try {
-      await document.documentElement.requestFullscreen()
-    } catch (err) {
-      console.warn("Chyba při pokusu o zobrazení na celou obrazovku:", err)
-    }
+    try { await document.documentElement.requestFullscreen() }
+    catch (err) { console.warn("Fullscreen error:", err) }
   }
 }
 
-const handleFullscreenChange = () => {
-  isFullscreen.value = !!document.fullscreenElement
-}
+const handleFullscreenChange = () => isFullscreen.value = !!document.fullscreenElement
 
 onMounted(() => {
-  if (import.meta.client) {
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-  }
+  if (import.meta.client) document.addEventListener('fullscreenchange', handleFullscreenChange)
 })
 
 onUnmounted(() => {
-  if (import.meta.client) {
-    document.removeEventListener('fullscreenchange', handleFullscreenChange)
-  }
+  if (import.meta.client) document.removeEventListener('fullscreenchange', handleFullscreenChange)
 })
 
 definePageMeta({ layout: false })
 </script>
 
 <style scoped>
-.stage-display {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #000;
-  color: #fff;
-  overflow: hidden;
-  transition: background-color 1s ease;
-  position: relative;
-  user-select: none;
+.animate-bounce-slow {
+  animation: float 4s ease-in-out infinite;
 }
-
-.hide-cursor { cursor: none; }
-
-.fullscreen-prompt {
-  position: absolute;
-  top: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: sans-serif;
-  font-size: 1.2rem;
-  animation: pulse 2s infinite;
-  pointer-events: none;
-}
-
-.timer-wrapper {
-  font-size: 35vw;
-  font-weight: 900;
-  font-family: 'Courier New', Courier, monospace;
-  line-height: 1;
-  transition: color 0.5s ease;
-  transform: translateY(-2vh);
-}
-
-.time-critical { color: #ef4444; }
-.time-up { color: #dc2626; text-decoration: blink; }
-
-.chill-mode { background-color: #0a0a2a; }
-
-.chill-wrapper { text-align: center; animation: float 4s ease-in-out infinite; }
-.chill-wrapper h2 { font-size: 15vw; margin: 0; color: #a78bfa; letter-spacing: 0.1em; }
-.chill-wrapper p { font-size: 4vw; color: #8b5cf6; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.2em; }
-
-.progress-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2vh;
-  background-color: #222;
-}
-
-.progress-bar {
-  height: 100%;
-  background-color: #3b82f6;
-  transition: width 1s linear, background-color 0.5s ease;
-}
-
-.progress-critical {
-  background-color: #ef4444;
-}
-
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-20px); }
   100% { transform: translateY(0px); }
 }
 
-@keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 </style>
