@@ -7,6 +7,10 @@ export const useStageTimer = (isController: boolean = false) => {
     const isRunning = ref(false)
     const isChillOut = ref(false)
 
+    // Nové proměnné pro textové zprávy
+    const flashMessage = ref('')
+    const isFlashVisible = ref(false)
+
     let channel: BroadcastChannel | null = null
     let timerInterval: ReturnType<typeof setInterval> | null = null
 
@@ -16,9 +20,7 @@ export const useStageTimer = (isController: boolean = false) => {
 
             if (isController) {
                 channel.onmessage = (event) => {
-                    if (event.data.type === 'REQUEST_SYNC') {
-                        broadcastState()
-                    }
+                    if (event.data.type === 'REQUEST_SYNC') broadcastState()
                 }
             } else {
                 channel.onmessage = (event) => {
@@ -27,6 +29,8 @@ export const useStageTimer = (isController: boolean = false) => {
                         totalTime.value = event.data.totalTime
                         isRunning.value = event.data.isRunning
                         isChillOut.value = event.data.isChillOut
+                        flashMessage.value = event.data.flashMessage
+                        isFlashVisible.value = event.data.isFlashVisible
                     }
                 }
                 channel.postMessage({ type: 'REQUEST_SYNC' })
@@ -41,7 +45,9 @@ export const useStageTimer = (isController: boolean = false) => {
                 timeLeft: timeLeft.value,
                 totalTime: totalTime.value,
                 isRunning: isRunning.value,
-                isChillOut: isChillOut.value
+                isChillOut: isChillOut.value,
+                flashMessage: flashMessage.value,
+                isFlashVisible: isFlashVisible.value
             })
         }
     }
@@ -56,25 +62,25 @@ export const useStageTimer = (isController: boolean = false) => {
         broadcastState()
     }
 
-    // --- NOVÁ FUNKCE: Živá úprava běžícího času ---
     const adjustLiveTime = (seconds: number) => {
         if (!isController) return
-
-        const newTime = timeLeft.value + seconds
-
-        if (newTime < 0) {
-            // Pokud by odečtení šlo do mínusu, zarovnáme na 0 a odečteme jen zbytek
-            const diff = timeLeft.value
-            timeLeft.value = 0
-            totalTime.value -= diff
-        } else {
-            timeLeft.value = newTime
-            totalTime.value += seconds
-        }
-
-        // Pojistka, aby celkový čas nebyl nikdy menší než 0
+        timeLeft.value += seconds
+        totalTime.value += seconds
         if (totalTime.value < 0) totalTime.value = 0
+        broadcastState()
+    }
 
+    // Funkce pro textové zprávy
+    const sendFlash = (msg: string) => {
+        if (!isController) return
+        flashMessage.value = msg
+        isFlashVisible.value = true
+        broadcastState()
+    }
+
+    const hideFlash = () => {
+        if (!isController) return
+        isFlashVisible.value = false
         broadcastState()
     }
 
@@ -83,11 +89,9 @@ export const useStageTimer = (isController: boolean = false) => {
         isRunning.value = !isRunning.value
         isChillOut.value = false
 
-        if (isRunning.value) {
-            startTicking()
-        } else {
-            stopTicking()
-        }
+        if (isRunning.value) startTicking()
+        else stopTicking()
+
         broadcastState()
     }
 
@@ -102,14 +106,9 @@ export const useStageTimer = (isController: boolean = false) => {
     const startTicking = () => {
         if (timerInterval) clearInterval(timerInterval)
         timerInterval = setInterval(() => {
-            if (timeLeft.value > 0) {
-                timeLeft.value--
-                broadcastState()
-            } else {
-                stopTicking()
-                isRunning.value = false
-                broadcastState()
-            }
+            // Časovač se už na nule nezastaví, jde do mínusu!
+            timeLeft.value--
+            broadcastState()
         }, 1000)
     }
 
@@ -127,9 +126,13 @@ export const useStageTimer = (isController: boolean = false) => {
         totalTime,
         isRunning,
         isChillOut,
+        flashMessage,
+        isFlashVisible,
         setTime,
-        adjustLiveTime, // Exportujeme novou funkci
+        adjustLiveTime,
         toggleTimer,
-        toggleChillOut
+        toggleChillOut,
+        sendFlash,
+        hideFlash
     }
 }
