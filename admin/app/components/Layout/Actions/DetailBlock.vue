@@ -94,7 +94,7 @@ defineProps({
     type: String,
     default: 'event',
     required: false,
-  }
+  },
 });
 
 function updateItemImage(files) {

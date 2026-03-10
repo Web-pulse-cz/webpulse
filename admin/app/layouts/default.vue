@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue';
+import { ref, provide, computed, watch, watchEffect, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import {
   Dialog,
   DialogPanel,
@@ -498,7 +499,7 @@ function filterNavigationGroups(navigation: any[]): any[] {
 }
 
 function canViewBySlug(slug: string): boolean {
-  if (user && user.value && (user.value as any).user_group_id && userGroupStore.userGroups) {
+  if (user?.value && (user.value as any).user_group_id && userGroupStore.userGroups) {
     const userGroup = userGroupStore.userGroups.find(
       (group: any) => group.id === (user.value as any).user_group_id,
     );
@@ -515,10 +516,10 @@ function canViewBySlug(slug: string): boolean {
 }
 
 function canViewBySite(slug: string): boolean {
-  if (user && (!user.value.sites || !user.value.sites.length)) {
+  if (!user?.value?.sites?.length) {
     return true;
   }
-  if (user && user.value && user.value.sites) {
+  if (user?.value?.sites) {
     const currentSite = user.value.sites.find((site: any) => site.hash === selectedSiteHash.value);
     if (
       currentSite &&
@@ -541,16 +542,19 @@ function handleLogout() {
   logout();
   router.push('/login');
 }
+
 function getQuickAccess() {
-  if (user && user.value && user.value.quick_access) {
+  if (user?.value?.quick_access) {
     quickAccess.value = user.value.quick_access;
   }
 }
+
 watchEffect(() => {
   getQuickAccess();
 });
 
 const sitesForSelect = computed(() => {
+  if (!user?.value?.sites) return [];
   return user.value.sites.map((site: any) => ({
     label: site.name,
     name: site.name,
@@ -561,7 +565,10 @@ const sitesForSelect = computed(() => {
 watch(
   () => selectedSiteHash.value,
   (newValue) => {
-    localStorage.setItem('selectedSiteHash', newValue);
+    // SSR safe check
+    if (import.meta.client && newValue) {
+      localStorage.setItem('selectedSiteHash', newValue);
+    }
     refreshIdentity();
   },
 );
@@ -571,14 +578,14 @@ onMounted(() => {
   getQuickAccess();
 
   if (
+    import.meta.client &&
     !localStorage.getItem('selectedSiteHash') &&
-    user.value.sites &&
-    user.value.sites.length > 0
+    user?.value?.sites?.length > 0
   ) {
     localStorage.setItem('selectedSiteHash', user.value.sites[0].hash);
   }
 
-  if (localStorage.getItem('selectedSiteHash')) {
+  if (import.meta.client && localStorage.getItem('selectedSiteHash')) {
     selectedSiteHash.value = localStorage.getItem('selectedSiteHash') || '';
   }
 
@@ -589,12 +596,14 @@ onMounted(() => {
   currencyStore.fetchCurrencies();
   taxRateStore.fetchTaxRates();
   cashflowCategoryStore.fetchCategories();
+
   setTimeout(() => {
     navigation.value = filterNavigationGroups(navigation.value);
   }, 1000);
+
   setInterval(() => {
     refreshIdentity();
-    if (!user) {
+    if (!user?.value) {
       logout();
       router.push('/login');
     }
@@ -645,7 +654,7 @@ onMounted(() => {
                   </button>
                 </div>
               </TransitionChild>
-              <!-- Sidebar component, swap this element with another sidebar if you like -->
+
               <div
                 class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10"
               >
@@ -658,7 +667,7 @@ onMounted(() => {
                     />
                   </NuxtLink>
                 </div>
-                <div v-if="user && user.sites && user.sites.length">
+                <div v-if="user?.sites?.length">
                   <BaseFormSelect
                     v-model="selectedSiteHash"
                     :options="sitesForSelect"
@@ -754,17 +763,14 @@ onMounted(() => {
       </Dialog>
     </TransitionRoot>
 
-    <!-- Static sidebar for desktop -->
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 lg:flex-col">
-      <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
         <div class="flex h-24 shrink-0 items-center justify-center">
           <NuxtLink to="https://web-pulse.cz" target="_blank">
             <img class="h-12 w-auto" src="/static/img/logo-gray-300.png" alt="Your Company" />
           </NuxtLink>
         </div>
-        <!-- site select -->
-        <div v-if="user && user.sites && user.sites.length">
+        <div v-if="user?.sites?.length">
           <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark" />
         </div>
         <nav class="flex flex-1 flex-col">
@@ -855,7 +861,6 @@ onMounted(() => {
           <Bars3Icon class="size-6" aria-hidden="true" />
         </button>
 
-        <!-- Separator -->
         <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
         <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
@@ -876,25 +881,12 @@ onMounted(() => {
             />
           </div>
           <div class="flex items-center gap-x-4 lg:gap-x-6">
-            <!--						<button
-							type="button"
-							class="-m-2.5 p-2.5 text-gray-300 hover:text-gray-500"
-						>
-							<span class="sr-only">View notifications</span>
-							<BellIcon
-								class="size-6"
-								aria-hidden="true"
-							/>
-						</button> -->
-
-            <!-- Separator -->
             <div
               v-if="quickAccess && quickAccess.length"
               class="block lg:h-6 lg:w-px lg:bg-gray-900/10"
               aria-hidden="true"
             />
 
-            <!-- Quick access dropdown -->
             <Menu v-if="quickAccess && quickAccess.length" as="div" class="relative">
               <MenuButton class="-m-1.5 flex items-center p-1.5">
                 <span class="sr-only">Open qick access menu</span>
@@ -942,21 +934,16 @@ onMounted(() => {
                 </MenuItems>
               </transition>
             </Menu>
-            <!-- Separator -->
+
             <div class="h-6 w-px bg-gray-900/10" aria-hidden="true" />
-            <!-- Profile dropdown -->
+
             <Menu as="div" class="relative">
               <MenuButton class="-m-1.5 flex items-center p-1.5">
                 <span class="sr-only">Open user menu</span>
-                <!--                <img
-                  class="size-8 rounded-full bg-gray-50"
-                  :src="'http://api.chpp.cz/content/images/user/icon/' + user.avatar"
-                  alt=""
-                /> -->
                 <span class="hidden lg:flex lg:items-center">
-                  <span class="text-sm/6 font-semibold text-gray-900" aria-hidden="true"
-                    >{{ user.firstname }} {{ user.lastname }}</span
-                  >
+                  <span class="text-sm/6 font-semibold text-gray-900" aria-hidden="true">
+                    {{ user?.firstname }} {{ user?.lastname }}
+                  </span>
                   <ChevronDownIcon class="ml-2 size-5 text-gray-300" aria-hidden="true" />
                 </span>
               </MenuButton>
@@ -979,7 +966,8 @@ onMounted(() => {
                         active ? 'bg-gray-50 outline-none' : '',
                         'block px-3 py-1 text-sm/6 text-gray-900',
                       ]"
-                      >{{ item.name }}
+                    >
+                      {{ item.name }}
                     </NuxtLink>
                     <span
                       v-else
@@ -988,8 +976,9 @@ onMounted(() => {
                         'block cursor-pointer px-3 py-1 text-sm/6 text-gray-900',
                       ]"
                       @click="handleLogout"
-                      >{{ item.name }}</span
                     >
+                      {{ item.name }}
+                    </span>
                   </MenuItem>
                 </MenuItems>
               </transition>
