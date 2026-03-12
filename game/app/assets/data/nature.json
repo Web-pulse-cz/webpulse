@@ -1,0 +1,1578 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-03-12T10:33:08Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/67882",
+        "area:ha": "34499.3427",
+        "boundary": "protected_area",
+        "iucn_level": "V",
+        "leisure": "nature_reserve",
+        "name": "CHKO Brdy",
+        "name:cs": "Chráněná krajinná oblast Brdy",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "short_name:cs": "CHKO Brdy",
+        "start_date": "2016-01-01",
+        "type": "boundary",
+        "website": "https://drusop.nature.cz/ost/chrobjekty/zchru/index.php?frame&SHOW_ONE=1&ID=14526",
+        "wikidata": "Q8465202",
+        "wikipedia": "cs:Chráněná krajinná oblast Brdy",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8292393,
+          49.6776009
+        ]
+      },
+      "id": "relation/67882"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/330701",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Jizerské hory",
+        "name:de": "Landschaftsschutzpark Isergebirge",
+        "name:pl": "Park Krajobrazowy Góry Izerskie",
+        "note": "nature_reserve se nerenderuje úplně dobře, proto jsem zvolil national_park; některé úseky nebyli úplně jasné, nutno doplnit",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "cuzk:km",
+        "type": "boundary",
+        "wikidata": "Q8465303",
+        "wikipedia": "cs:Chráněná krajinná oblast Jizerské hory",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.2243386,
+          50.8127766
+        ]
+      },
+      "id": "relation/330701"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/330761",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Lužické hory",
+        "name:de": "Landschaftsschutzpark Lausitzer Gebirge",
+        "name:hsb": "Krajinowy park Łužiske horiny",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "cuzk:km",
+        "type": "boundary",
+        "wikidata": "Q8465387",
+        "wikipedia": "cs:Chráněná krajinná oblast Lužické hory",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.652343,
+          50.8405929
+        ]
+      },
+      "id": "relation/330761"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/1567260",
+        "boundary": "national_park",
+        "iucn_level": "2",
+        "name": "Park Narodowy Gór Stołowych",
+        "name:de": "Nationalpark Heuscheuergebirge",
+        "name:en": "Table Mountains National Park",
+        "name:pl": "Park Narodowy Gór Stołowych",
+        "protect_class": "2",
+        "type": "boundary",
+        "wikidata": "Q619001",
+        "wikipedia": "pl:Park Narodowy Gór Stołowych",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.3538371,
+          50.4675666
+        ]
+      },
+      "id": "relation/1567260"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/1903863",
+        "boundary": "protected_area",
+        "iucn_level": "V",
+        "name": "CHKO Labské pískovce",
+        "name:de": "Landschaftsschutzpark Elbsandsteingebirge",
+        "name:hsb": "Krajinowy park Połobske pěskowčiny",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "type": "boundary",
+        "wikidata": "Q8465355",
+        "wikipedia": "cs:Chráněná krajinná oblast Labské pískovce",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2331967,
+          50.8724907
+        ]
+      },
+      "id": "relation/1903863"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/1903864",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO České středohoří",
+        "name:de": "Landschaftsschutzpark Böhmisches Mittelgebirge",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "type": "boundary",
+        "wikidata": "Q13221609",
+        "wikipedia": "cs:Chráněná krajinná oblast České středohoří",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.1282201,
+          50.5870689
+        ]
+      },
+      "id": "relation/1903864"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/1903929",
+        "alt_name:es": "Parque nacional de la Suiza checa",
+        "boundary": "national_park",
+        "iucn_level": "II",
+        "name": "Národní park České Švýcarsko",
+        "name:da": "Nationalpark Bøhmisk Schweiz",
+        "name:de": "Nationalpark Böhmische Schweiz",
+        "name:en": "Bohemian Switzerland National Park",
+        "name:es": "Parque nacional de la Suiza bohemia",
+        "name:fr": "Parc national de la Suisse bohémienne",
+        "name:hsb": "Narodny park Čěska Šwica",
+        "name:it": "Parco nazionale della Svizzera boema",
+        "name:pl": "Park Narodowy Czeska Szwajcaria",
+        "name:sk": "Národný park České Švýcarsko",
+        "name:zh": "捷克瑞士國家公園",
+        "protect_class": "2",
+        "short_name": "NP České Švýcarsko",
+        "sorting_name": "České Švýcarsko",
+        "type": "boundary",
+        "wikidata": "Q3491338",
+        "wikipedia": "cs:Národní park České Švýcarsko",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.3477889,
+          50.8852048
+        ]
+      },
+      "id": "relation/1903929"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/1937067",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Broumovsko",
+        "name:cs": "CHKO Broumovsko",
+        "name:de": "Landschaftsschutzpark Braunauer Ländchen",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "type": "boundary",
+        "wikidata": "Q8465235",
+        "wikipedia": "cs:Chráněná krajinná oblast Broumovsko",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.2405584,
+          50.5673628
+        ]
+      },
+      "id": "relation/1937067"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2006951",
+        "alt_name:pl": "Obszar Chronionego Krajobrazu Beskydy",
+        "boundary": "protected_area",
+        "iucn_level": "V",
+        "name": "CHKO Beskydy",
+        "name:cs": "Chráněná krajinná oblast Beskydy",
+        "name:de": "Landschaftsschutzpark Beskiden",
+        "name:en": "Beskydy Protected Landscape Area",
+        "name:es": "Área paisajística protegida de los Beskides",
+        "name:fa": "بسکیدی پروتتستد لاندستساپه ارا",
+        "name:fr": "Zone paysagère protégée des Beskides",
+        "name:pl": "Obszar Chronionego Krajobrazu Beskidy",
+        "name:sk": "Chránená krajinná oblasť Beskydy",
+        "note": "Pokud možno mapováno z cuzk:km, jinak odhad ze ZÚR krajů",
+        "protect_class": "5",
+        "protected": "perpetuity",
+        "protection_title": "Chráněná krajinná oblast",
+        "short_name": "CHKO Beskydy",
+        "source": "cuzk:km",
+        "type": "boundary",
+        "website": "https://beskydy.nature.cz/",
+        "wikidata": "Q3491363",
+        "wikipedia": "cs:Chráněná krajinná oblast Beskydy",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.3675487,
+          49.4186973
+        ]
+      },
+      "id": "relation/2006951"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2018991",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "leisure": "nature_reserve",
+        "name": "CHKO Orlické hory",
+        "name:de": "Landschaftsschutzpark Adlergebirge",
+        "name:pl": "Chráněná krajinná oblast Orlické hory",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465509",
+        "wikipedia": "cs:Chráněná krajinná oblast Orlické hory",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.4431062,
+          50.2538568
+        ]
+      },
+      "id": "relation/2018991"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2019117",
+        "alt_name": "CHKO Jeseníky",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Jeseníky",
+        "name:de": "Landschaftsschutzpark Gesenke",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465284",
+        "wikipedia": "cs:Chráněná krajinná oblast Jeseníky",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.2181105,
+          50.104185
+        ]
+      },
+      "id": "relation/2019117"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2019740",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Křivoklátsko",
+        "name:de": "Landschaftsschutzpark Pürglitzer Wald",
+        "name:en": "Křivoklátsko Protected Landscape Area",
+        "note": "Křivoklátsko je krajina bohatých listnatých lesů uprostřed Čech. Řeku Berounku a její přítoky v hlubokém údolí lemují skalnaté svahy se suťovými lesy a vzácné stromy tisu červeného. Bezlesé vrcholky kopců zvané pleše hostí teplomilnou stepní květenu i zví",
+        "operator": "cz:AOPK",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "website": "https://krivoklatsko.aopk.gov.cz/homepage",
+        "wikidata": "Q1429234",
+        "wikipedia": "cs:Chráněná krajinná oblast Křivoklátsko",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8461978,
+          50.0025891
+        ]
+      },
+      "id": "relation/2019740"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2019742",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Poodří",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "zúr_msk",
+        "type": "boundary",
+        "website": "http://www.poodri.ochranaprirody.cz/",
+        "wikidata": "Q3505114",
+        "wikipedia": "cs:Chráněná krajinná oblast Poodří",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.041436,
+          49.6977063
+        ]
+      },
+      "id": "relation/2019742"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2019867",
+        "area:ha": "41037.14",
+        "boundary": "protected_area",
+        "designation": "CHKO",
+        "iucn_level": "5",
+        "leisure": "nature_reserve",
+        "name": "CHKO Kokořínsko - Máchův kraj",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "website": "https://wiki.openstreetmap.org/wiki/EEA:Nationally_designated_areas",
+        "wikidata": "Q1172766",
+        "wikipedia": "cs:Chráněná krajinná oblast Kokořínsko – Máchův kraj",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.5438279,
+          50.5056651
+        ]
+      },
+      "id": "relation/2019867"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2019868",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Český kras",
+        "name:de": "Landschaftsschutzpark Böhmischer Karst",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "start_date": "1972-04-12",
+        "type": "boundary",
+        "website": "https://ceskykras.nature.cz/",
+        "wikidata": "Q8465650",
+        "wikipedia": "cs:Chráněná krajinná oblast Český kras",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2000157,
+          49.9403241
+        ]
+      },
+      "id": "relation/2019868"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2021030",
+        "alt_name:de": "Landschaftsschutzpark Plansker Wald",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Blanský les",
+        "name:cs": "Chráněná krajinná oblast Blanský les",
+        "name:de": "Landschaftsschutzpark Blansker Wald",
+        "name:sk": "Chránená krajinná oblasť Blanský les",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "protection_title:en": "Landscape park",
+        "source": "EEA:CDDA2009",
+        "start_date": "1990",
+        "type": "boundary",
+        "wikidata": "Q8465163",
+        "wikipedia": "cs:Chráněná krajinná oblast Blanský les",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2616751,
+          48.9093263
+        ]
+      },
+      "id": "relation/2021030"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2021031",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Třeboňsko",
+        "name:de": "Landschaftsschutzpark Wittingauer Becken",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465595",
+        "wikipedia": "cs:Chráněná krajinná oblast Třeboňsko",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.817637,
+          48.9931223
+        ]
+      },
+      "id": "relation/2021031"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2021032",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Železné hory",
+        "name:de": "Landschaftsschutzpark Eisengebirge",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465728",
+        "wikipedia": "cs:Chráněná krajinná oblast Železné hory",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.7054263,
+          49.8173263
+        ]
+      },
+      "id": "relation/2021032"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2021033",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Žďárské vrchy",
+        "name:de": "Landschaftsschutzpark Saarer Berge",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465757",
+        "wikimedia_commons": "Category:CHKO Žďárské vrchy",
+        "wikipedia": "cs:Chráněná krajinná oblast Žďárské vrchy",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.9988321,
+          49.6503953
+        ]
+      },
+      "id": "relation/2021033"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022064",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Blaník",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465184",
+        "wikipedia": "cs:Chráněná krajinná oblast Blaník",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.8689047,
+          49.6372523
+        ]
+      },
+      "id": "relation/2022064"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022066",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Bílé Karpaty",
+        "name:cs": "CHKO Bílé Karpaty",
+        "name:de": "Landschaftsschutzpark Weiße Karpaten",
+        "name:pl": "Obszar Chronionego Krajobrazu Białe Karpaty",
+        "name:sk": "CHKO Biele Karpaty",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465260",
+        "wikipedia": "cs:Chráněná krajinná oblast Bílé Karpaty",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.6873371,
+          48.9906944
+        ]
+      },
+      "id": "relation/2022066"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022068",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Moravský kras",
+        "name:de": "Landschaftsschutzgebiet Mährischer Karst",
+        "name:en": "Moravian Karst",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465457",
+        "wikipedia": "cs:Chráněná krajinná oblast Moravský kras",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7162079,
+          49.3207044
+        ]
+      },
+      "id": "relation/2022068"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022069",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "leisure": "nature_reserve",
+        "name": "CHKO Pálava",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q1815090",
+        "wikipedia": "cs:Chráněná krajinná oblast Pálava",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.6741875,
+          48.8314314
+        ]
+      },
+      "id": "relation/2022069"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022070",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Český les",
+        "name:de": "Landschaftsschutzpark Böhmischer Wald",
+        "name:en": "Český les Protected Landscape Area",
+        "name:sk": "Chránená krajinná oblasť Český les",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q3562810",
+        "wikipedia": "cs:Chráněná krajinná oblast Český les",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6255336,
+          49.6199849
+        ]
+      },
+      "id": "relation/2022070"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022071",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "leisure": "nature_reserve",
+        "name": "CHKO Český ráj",
+        "name:de": "Landschaftsschutzpark Böhmisches Paradies",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "wikidata": "Q8465664",
+        "wikipedia": "cs:Chráněná krajinná oblast Český ráj",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.181069,
+          50.5513685
+        ]
+      },
+      "id": "relation/2022071"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2022072",
+        "area:ha": "99624",
+        "boundary": "protected_area",
+        "designation": "CHKO",
+        "iucn_level": "5",
+        "leisure": "nature_reserve",
+        "long_name": "Chráněná krajinná oblast Šumava",
+        "name": "CHKO Šumava",
+        "name:cs": "CHKO Šumava",
+        "name:de": "Landschaftsschutzgebiet Böhmerwald",
+        "name:sk": "Chránená krajinná oblasť Šumava",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "protection_title:en": "Landscape park",
+        "short_name": "CHKO Šumava",
+        "sorting_name": "Šumava",
+        "source": "EEA:CDDA2009",
+        "start_date": "1963-12-27",
+        "type": "boundary",
+        "wikidata": "Q8465690",
+        "wikipedia": "cs:Chráněná krajinná oblast Šumava",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6120998,
+          48.9393812
+        ]
+      },
+      "id": "relation/2022072"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2029367",
+        "boundary": "national_park",
+        "iucn_level": "2",
+        "name": "Národní park Šumava",
+        "name:an": "Parque Nacional d'a Selva de Bohemia",
+        "name:az": "Şumava Milli Parkı",
+        "name:cs": "Národní park Šumava",
+        "name:de": "Nationalpark Böhmerwald",
+        "name:en": "Šumava National Park",
+        "name:eo": "Nacia Parko Šumava",
+        "name:es": "Parque nacional Šumava",
+        "name:fr": "Parc national de Šumava",
+        "name:gl": "Parque Nacional Šumava",
+        "name:hr": "Nacionalni park Šumava",
+        "name:it": "Parco nazionale della Selva boema",
+        "name:ka": "შუმავის ეროვნული პარკი",
+        "name:lt": "Šumavos nacionalinis parkas",
+        "name:nl": "Nationaal park Šumava",
+        "name:pl": "Park Narodowy Szumawa",
+        "name:sk": "Národný park Šumava",
+        "name:vi": "Vườn quốc gia Šumava",
+        "name:zh": "舒馬瓦國家公園",
+        "protect_class": "2",
+        "protection_title": "národní park",
+        "short_name": "NP Šumava",
+        "source": "EEA Nationally designated areas - CDDA_v9_polygons",
+        "type": "boundary",
+        "website": "https://www.eea.europa.eu/data-and-maps/data/nationally-designated-areas-national-cdda-5",
+        "wikidata": "Q864799",
+        "wikipedia": "cs:Národní park Šumava",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6068954,
+          48.952393
+        ]
+      },
+      "id": "relation/2029367"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2196323",
+        "boundary": "national_park",
+        "name": "Nationalpark Thayatal",
+        "protect_class": "2",
+        "protection_title": "Nationalpark Thayatal",
+        "type": "boundary",
+        "website": "https://www.np-thayatal.at/",
+        "wikidata": "Q612901",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.8919248,
+          48.8444824
+        ]
+      },
+      "id": "relation/2196323"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/2327566",
+        "area:ha": "36300",
+        "boundary": "national_park",
+        "eea:cdda:parentiso": "CZE",
+        "eea:cdda:sitecode": "344524",
+        "iucn_level": "V",
+        "name": "Krkonošský národní park",
+        "name:cs": "Krkonošský národní park",
+        "name:de": "Nationalpark Riesengebirge",
+        "name:en": "Krkonoše national park",
+        "name:fr": "Parc national des Monts des Géants",
+        "name:pl": "Krakonoski park narodowy",
+        "protect_class": "2",
+        "protection_title": "Národní park",
+        "protection_title:en": "National Park",
+        "short_name": "Krkonošský NP",
+        "source": "EEA:CDDA2009",
+        "start_date": "1963",
+        "type": "boundary",
+        "wikidata": "Q2043817",
+        "wikipedia": "cs:Krkonošský národní park",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.6333468,
+          50.6937877
+        ]
+      },
+      "id": "relation/2327566"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/3890254",
+        "SGD-ID:ref": "NP-00011",
+        "boundary": "protected_area",
+        "communication:amateur_radio:pota": "DE-0031",
+        "name": "Naturpark Fichtelgebirge",
+        "protect_class": "5",
+        "protection_title": "Naturpark",
+        "ref:WDPA": "6989",
+        "type": "boundary",
+        "wikidata": "Q459591",
+        "wikipedia": "de:Naturpark Fichtelgebirge",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.9421323,
+          50.0738767
+        ]
+      },
+      "id": "relation/3890254"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/3921574",
+        "SGD-ID:ref": "NP-00007",
+        "boundary": "protected_area",
+        "communication:amateur_radio:pota": "DE-0015",
+        "name": "Naturpark Oberer Bayerischer Wald",
+        "name:cs": "Přírodní park Bavorský horní les",
+        "name:de": "Naturpark Oberer Bayerischer Wald",
+        "name:fr": "Parc Naturel de la Haute Forêt de Bavière",
+        "operator": "Naturpark Oberer Bayerischer Wald e.V.",
+        "protect_class": "5",
+        "protection_title": "Naturpark",
+        "source": "http://www.lfu.bayern.de/natur/schutzgebiete/schutzgebietsabgrenzungen/index.htm",
+        "type": "boundary",
+        "website": "https://www.bayerischer-wald.org/naturpark",
+        "wikidata": "Q884758",
+        "wikipedia": "de:Naturpark Oberer Bayerischer Wald",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6541951,
+          49.2653874
+        ]
+      },
+      "id": "relation/3921574"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/5370187",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "CHKO Slavkovský les",
+        "name:de": "Landschaftsschutzpark Kaiserwald",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2012",
+        "type": "boundary",
+        "wikidata": "Q8465558",
+        "wikipedia": "cs:Chráněná krajinná oblast Slavkovský les",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7559147,
+          50.0658636
+        ]
+      },
+      "id": "relation/5370187"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/6720726",
+        "boundary": "protected_area",
+        "import_ref": "sk_sopsr_2022",
+        "name": "CHKO Biele Karpaty",
+        "name:de": "Landschaftsschutzpark Weiße Karpaten",
+        "name:en": "Biele Karpaty Protected Landscape Area",
+        "name:pl": "Obszar Obrazu Chronionego Białe Karpaty",
+        "name:sk": "CHKO Biele Karpaty",
+        "name:skr": "CHKO Biele Karpaty",
+        "operator": "S-CHKO Biele Karpaty",
+        "protect_class": "5",
+        "protection_title": "Chránená krajinná oblasť",
+        "short_name": "CHKO Biele Karpaty",
+        "sopsr:zone": "Zóna D - II. stupeň ochrany",
+        "source": "sk:sopsr2022",
+        "type": "boundary",
+        "wikidata": "Q766231",
+        "wikipedia": "cs:Chráněná krajinná oblast Biele Karpaty",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.7440056,
+          48.9362898
+        ]
+      },
+      "id": "relation/6720726"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/6985996",
+        "boundary": "protected_area",
+        "name": "Sedmihoří",
+        "protected": "yes",
+        "protected_area": "landscape",
+        "protection_title": "Přírodní park",
+        "type": "boundary",
+        "website": "https://lokality.geology.cz/388",
+        "wikidata": "Q12048267",
+        "wikipedia": "cs:Přírodní park Sedmihoří",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.8778819,
+          49.6184891
+        ]
+      },
+      "id": "relation/6985996"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/9316264",
+        "boundary": "national_park",
+        "name": "Národní park Podyjí",
+        "name:an": "Parque Nacional d'a Podyji",
+        "name:de": "Nationalpark Thayatal",
+        "name:es": "Parque nacional Podyji",
+        "name:hr": "Nacionalni park Podyji",
+        "name:it": "Parco nazionale Podyji",
+        "name:nl": "Nationaal park Podyji",
+        "name:pl": "Park Narodowy Podyji",
+        "protect_class": "2",
+        "protection_title": "národní park",
+        "ref": "78",
+        "short_name": "NP Podyjí",
+        "start_date": "1991-05-10",
+        "type": "boundary",
+        "website": "https://www.nppodyji.cz/",
+        "wikidata": "Q2006345",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.9168553,
+          48.8526664
+        ]
+      },
+      "id": "relation/9316264"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/10724037",
+        "area:ha": "4400",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Přírodní park Budětice",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "start_date": "1994",
+        "type": "boundary",
+        "wikidata": "Q12048230",
+        "wikipedia": "cs:Přírodní park Buděticko",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5724296,
+          49.2806593
+        ]
+      },
+      "id": "relation/10724037"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/11100757",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Vyšebrodsko",
+        "name:de": "Naturpark Hohenfurth",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source": "Jihočeský kraj (nařízení č. 2/2004)",
+        "type": "boundary",
+        "website": "https://wiki.openstreetmap.org/wiki/Cs:P%C5%99%C3%ADrodn%C3%AD_parky_v_%C4%8Cesku",
+        "wikidata": "Q12048276",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2838623,
+          48.592334
+        ]
+      },
+      "id": "relation/11100757"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/11101789",
+        "alt_name:sk": "Novohradské hory",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Novohradské hory",
+        "name:de": "Naturpark Gratzener Bergland",
+        "name:sk": "Novohradské vrchy",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source": "Jihočeský kraj (nařízení č. 2/2003)",
+        "type": "boundary",
+        "website": "https://wiki.openstreetmap.org/wiki/Cs:P%C5%99%C3%ADrodn%C3%AD_parky_v_%C4%8Cesku",
+        "wikidata": "Q1543660",
+        "wikipedia": "cs:Novohradské hory",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.6785914,
+          48.6944306
+        ]
+      },
+      "id": "relation/11101789"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/11106505",
+        "_SITE_CODE_": "177260",
+        "boundary": "protected_area",
+        "established": "1998",
+        "leisure": "nature_reserve",
+        "name": "Park Krajobrazowy Sudetów Wałbrzyskich",
+        "name:de": "Landschaftsschutzpark Waldenburger Sudeten",
+        "name:pl": "Park Krajobrazowy Sudetów Wałbrzyskich",
+        "operator": "Dolnośląski Zespół Parków Krajobrazowych",
+        "protect_class": "5",
+        "protection_title": "Protected Landscape Park",
+        "protection_title:pl": "Park Krajobrazowy",
+        "source": "European Environment Agency",
+        "start_date": "1998",
+        "type": "boundary",
+        "wikidata": "Q7633735",
+        "wikipedia": "pl:Park Krajobrazowy Sudetów Wałbrzyskich",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.2532245,
+          50.7072041
+        ]
+      },
+      "id": "relation/11106505"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/11911166",
+        "boundary": "protected_area",
+        "name": "Přírodní park Valcha",
+        "produce": "wood;live_animal",
+        "protect_class": "5",
+        "type": "boundary",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7989216,
+          49.6496293
+        ]
+      },
+      "id": "relation/11911166"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/13004291",
+        "area:ha": "889,36",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Přírodní park Baba",
+        "protect_class": "7",
+        "protection_title": "Přírodní park",
+        "short_name": "PřP Baba",
+        "source": "GIS-JMK",
+        "start_date": "1991",
+        "type": "boundary",
+        "wikipedia": "cs:Přírodní park Baba",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.5442291,
+          49.2685531
+        ]
+      },
+      "id": "relation/13004291"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/13006626",
+        "area:ha": "3100",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Přírodní park Podkomorské lesy",
+        "protect_class": "7",
+        "protection_title": "Přírodní park",
+        "short_name": "PřP Podkomorské lesy",
+        "source": "GIS-JMK",
+        "start_date": "1989",
+        "type": "boundary",
+        "wikidata": "Q12048259",
+        "wikipedia": "cs:Přírodní park Podkomorské lesy",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.472918,
+          49.2496124
+        ]
+      },
+      "id": "relation/13006626"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/13167971",
+        "area:ha": "2700",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Přírodní park Rokytná",
+        "protect_class": "7",
+        "protection_title": "Přírodní park",
+        "short_name": "PřP Rokytná",
+        "source": "GIS-JMK",
+        "start_date": "1978",
+        "type": "boundary",
+        "wikidata": "Q12048265",
+        "wikipedia": "cs:Přírodní park Rokytná",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.08412,
+          49.0480861
+        ]
+      },
+      "id": "relation/13167971"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/13639956",
+        "area:ha": "6424.76",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Přírodní park Suchý vrch - Buková hora",
+        "protect_class": "7",
+        "protection_title": "Přírodní park",
+        "source": "KrÚ Pk, OŽPaZ",
+        "start_date": "1987",
+        "type": "boundary",
+        "wikipedia": "cs:Přírodní park Suchý vrch – Buková hora",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.671562,
+          50.0419024
+        ]
+      },
+      "id": "relation/13639956"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/15775245",
+        "access:offroad": "no",
+        "boundary": "protected_area",
+        "camping:tents": "designated",
+        "climbing:rock": "designated",
+        "description": "Das LSG Sächsische Schweiz hat eine Größe von rund 28.750 ha. Es ist vollständig im Landkreis Sächsische Schweiz-Osterzgebirge gelegen.",
+        "drones": "no",
+        "motor_vehicle": "designated",
+        "name": "Sächsische Schweiz",
+        "name:cs": "Saské Švýcarsko",
+        "protect_class": "5",
+        "protection_title": "Landschaftsschutzgebiet",
+        "short_protection_title": "LSG",
+        "sport:free_flying": "no",
+        "type": "boundary",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.1639824,
+          50.9142602
+        ]
+      },
+      "id": "relation/15775245"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/16887937",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Berounka",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "website": "https://www.prirodniparkberounka.cz/",
+        "wikidata": "Q110111117",
+        "wikipedia": "cs:Přírodní park Berounka",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5537705,
+          49.8675621
+        ]
+      },
+      "id": "relation/16887937"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/16891637",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Rohatiny",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "wikidata": "Q12048264",
+        "wikipedia": "cs:Přírodní park Rohatiny",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.503371,
+          49.9275887
+        ]
+      },
+      "id": "relation/16891637"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/16901316",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Horní Střela",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "wikidata": "Q12048240",
+        "wikipedia": "cs:Přírodní park Horní Střela",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.2814456,
+          50.0533098
+        ]
+      },
+      "id": "relation/16901316"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/16907413",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Český les",
+        "name:cs": "Přírodní park Český les",
+        "name:de": "Naturpark Böhmischer Wald",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "website": "http://ceskyles.dakam.cz/",
+        "wikidata": "Q91017931",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6921567,
+          49.6981686
+        ]
+      },
+      "id": "relation/16907413"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/16908297",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Jesenicko",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "wikidata": "Q91021258",
+        "wikipedia": "cs:Přírodní park Jesenicko",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.493374,
+          50.072371
+        ]
+      },
+      "id": "relation/16908297"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/16928078",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Manětínská",
+        "name:cs": "Přírodní park Manětínská",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "start_date": "1978",
+        "type": "boundary",
+        "wikidata": "Q12048253",
+        "wikipedia": "cs:Přírodní park Manětínská",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1749265,
+          49.9366802
+        ]
+      },
+      "id": "relation/16928078"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/17151326",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Park Krajobrazowy Beskidu Śląskiego",
+        "name:de": "Landschaftsschutzpark Schlesische Beskiden",
+        "name:en": "Silesian Beskids Landscape Park",
+        "name:pl": "Park Krajobrazowy Beskidu Śląskiego",
+        "protect_class": "5",
+        "type": "boundary",
+        "wikidata": "Q4419160",
+        "wikipedia": "pl:Park Krajobrazowy Beskidu Śląskiego",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.9277049,
+          49.6721926
+        ]
+      },
+      "id": "relation/17151326"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/17319137",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Trhoň",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "wikidata": "Q12048272",
+        "wikipedia": "cs:Přírodní park Trhoň",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7081829,
+          49.7512013
+        ]
+      },
+      "id": "relation/17319137"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/17324139",
+        "boundary": "protected_area",
+        "iucn_level": "5",
+        "name": "Přírodní park Radeč",
+        "protect_class": "5",
+        "protection_title": "Přírodní park",
+        "source:protect_class": "https://wiki.openstreetmap.org/wiki/Czech_nature_parks_import",
+        "type": "boundary",
+        "wikidata": "Q12048263",
+        "wikipedia": "cs:Přírodní park Radeč",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6624851,
+          49.8174706
+        ]
+      },
+      "id": "relation/17324139"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/17389611",
+        "boundary": "protected_area",
+        "import": "http://wiki.openstreetmap.org/wiki/EEA:Nationally_designated_areas_import",
+        "iucn_level": "5",
+        "name": "CHKO Litovelské Pomoraví",
+        "protect_class": "5",
+        "protection_title": "Chráněná krajinná oblast",
+        "source": "EEA:CDDA2009",
+        "type": "boundary",
+        "website": "https://litovelskepomoravi.ochranaprirody.cz/en/",
+        "wikidata": "Q916910",
+        "wikipedia": "cs:Chráněná krajinná oblast Litovelské Pomoraví",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.1048204,
+          49.6979501
+        ]
+      },
+      "id": "relation/17389611"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/17881064",
+        "boundary": "protected_area",
+        "leisure": "nature_reserve",
+        "name": "Přírodní park Bobrava",
+        "protect_class": "7",
+        "protection_title": "Přírodní park",
+        "type": "boundary",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.4627485,
+          49.1384341
+        ]
+      },
+      "id": "relation/17881064"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/19194259",
+        "access": "yes",
+        "boundary": "protected_area",
+        "dark_sky": "yes",
+        "leisure": "star_gazing",
+        "name": "Manětínská oblast tmavé oblohy",
+        "note": "nerozpojovat a nepřesouvat od hranic obcí. Tato oblast je definovaná pomocí obcí a katastrálních území v nich umístěných",
+        "protect_class": "5",
+        "start_date": "2014-09-15",
+        "type": "boundary",
+        "website": "http://manetinskatma.cz",
+        "wikidata": "Q18061278",
+        "wikipedia": "cs:Manětínská oblast tmavé oblohy",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1642047,
+          49.9987802
+        ]
+      },
+      "id": "relation/19194259"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1270057133",
+        "boundary": "protected_area",
+        "description": "Beschluss des Rates des Bezirkes Karl-Marx-Stadt vom 9.4.1962",
+        "name": "LSG Fichtelberg",
+        "protect_class": "5",
+        "protection_title": "Landschaftsschutzgebiet",
+        "ref": "c 22",
+        "ref:WDPA": "320795",
+        "short_protection_title": "LSG",
+        "source": "https://geoportal.sachsen.de/",
+        "start_date": "1962-04-09",
+        "type": "boundary",
+        "url": "https://www.protectedplanet.net/320795",
+        "wikidata": "Q61608473",
+        "wikimedia_commons": "Category:Landschaftsschutzgebiet Fichtelberg",
+        "wikipedia": "de:Fichtelberg (Erzgebirge)",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9444934,
+          50.421927
+        ]
+      },
+      "id": "way/1270057133"
+    }
+  ]
+}
