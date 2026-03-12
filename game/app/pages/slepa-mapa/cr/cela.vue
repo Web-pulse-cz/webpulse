@@ -8,7 +8,7 @@ import rawPeaksData from '~/assets/data/peaks.json';
 import rawNatureData from '~/assets/data/nature.json';
 
 const categories = [
-  { id: 'cities', name: 'Města (>10tis.)', icon: '🏙️' },
+  { id: 'cities', name: 'Města', icon: '🏙️' },
   { id: 'monuments', name: 'Hrady a zámky', icon: '🏰' },
   { id: 'peaks', name: 'Vrcholy hor', icon: '⛰️' },
   { id: 'nature', name: 'Chráněná příroda', icon: '🌲' },
