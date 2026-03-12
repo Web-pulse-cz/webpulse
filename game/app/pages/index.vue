@@ -39,7 +39,7 @@ const games = ref([
   {
     name: 'Slepá mapa',
     imageUrl: '/static/img/cards/mapa.png',
-    linkUrl: '/slepa-mapa',
+    linkUrl: '/slepa-mapa/cr/cela',
   },
   {
     name: 'Aréna',
