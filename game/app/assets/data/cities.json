@@ -1,0 +1,3871 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-03-12T08:53:48Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/438432",
+        "admin_level": "8",
+        "boundary": "administrative",
+        "name": "Uničov",
+        "name:cs": "Uničov",
+        "name:de": "Mährisch-Neustadt",
+        "name:prefix": "město",
+        "place": "town",
+        "population": "11801",
+        "ref": "CZ0712505587",
+        "source": "cuzk:ruian",
+        "source:population": "csu:rso",
+        "type": "boundary",
+        "wikidata": "Q682361",
+        "wikipedia": "cs:Uničov",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.1013032,
+          49.7649941
+        ]
+      },
+      "id": "relation/438432"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/21562694",
+        "capital": "4",
+        "name": "Jihlava",
+        "name:ar": "يهلافا",
+        "name:be": "Іглава",
+        "name:bg": "Ихлава",
+        "name:ce": "Йиглава",
+        "name:cs": "Jihlava",
+        "name:de": "Iglau",
+        "name:el": "Γίχλαβα",
+        "name:fa": "ییهلاوا",
+        "name:he": "ייהלבה",
+        "name:hu": "Jihlava",
+        "name:ja": "イフラヴァ",
+        "name:ka": "იჰლავა",
+        "name:ko": "이흘라바",
+        "name:la": "Iglavia",
+        "name:mk": "Јихлава",
+        "name:os": "Йиглавæ",
+        "name:pl": "Igława",
+        "name:ru": "Йиглава",
+        "name:sk": "Jihlava (mesto)",
+        "name:sr": "Јихлава",
+        "name:tg": "Йиглава",
+        "name:th": "ยิฮลาวา",
+        "name:tt": "Йиһлава",
+        "name:uk": "Їглава",
+        "name:ur": "ییہلاوا",
+        "name:zh": "伊赫拉瓦",
+        "place": "city",
+        "population": "50108",
+        "ref:cobe": "412317",
+        "source": "csu:uir-zsj",
+        "website:cs": "http://cs.wikipedia.org/wiki/Jihlava",
+        "wikidata": "Q183111",
+        "wikipedia": "cs:Jihlava"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.5903065,
+          49.396064
+        ]
+      },
+      "id": "node/21562694"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/32666229",
+        "alt_name:la": "Pilsenum;Pilsena",
+        "ele": "308",
+        "int_name": "Pilsen",
+        "name": "Plzeň",
+        "name:af": "Pilsen",
+        "name:ar": "بلزن",
+        "name:az": "Plzen",
+        "name:ba": "Пльзень",
+        "name:be": "Пльзень",
+        "name:bg": "Пилзен",
+        "name:ce": "Пльзень",
+        "name:cs": "Plzeň",
+        "name:cy": "Pilsen",
+        "name:de": "Pilsen",
+        "name:el": "Πίλζεν",
+        "name:en": "Pilsen",
+        "name:eo": "Pilzeno",
+        "name:es": "Pilsen",
+        "name:eu": "Pilsen",
+        "name:fa": "پلزن",
+        "name:fr": "Pilsen",
+        "name:fy": "Pilsen",
+        "name:he": "פלזן",
+        "name:hsb": "Pilzeń",
+        "name:hu": "Pilzen",
+        "name:hy": "Պլզեն",
+        "name:ja": "プルゼニ",
+        "name:jv": "Pilzno",
+        "name:ka": "პლზენი",
+        "name:kk": "Пльзен",
+        "name:kn": "ಪಿಲ್ಸೇನ್",
+        "name:ko": "플젠",
+        "name:ky": "Пльзень",
+        "name:la": "Pilsna",
+        "name:lt": "Pilzenas",
+        "name:lv": "Plzeņa",
+        "name:mk": "П’лзењ",
+        "name:mr": "पेलजाईन",
+        "name:nl": "Pilsen",
+        "name:os": "Пльзень",
+        "name:pl": "Pilzno",
+        "name:ps": "پلزېن",
+        "name:ru": "Пльзень",
+        "name:sl": "Plzen",
+        "name:sr": "Плзењ",
+        "name:tg": "Плзен",
+        "name:th": "เปิลแซ็ญ",
+        "name:tr": "Pilsen",
+        "name:tt": "Пльзень",
+        "name:uk": "Пльзень",
+        "name:ur": "پلزین",
+        "name:yi": "פילזען",
+        "name:zh": "比尔森",
+        "nat_name": "Plzeň",
+        "place": "city",
+        "population": "185599",
+        "population:date": "2024",
+        "postal_code": "30100",
+        "source": "csu:uir-zsj",
+        "source:population": "wikipedia",
+        "website": "https://www.plzen.eu/",
+        "wikidata": "Q43453",
+        "wikimedia_commons": "Category:Plzeň",
+        "wikipedia": "cs:Plzeň"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.3775249,
+          49.7477415
+        ]
+      },
+      "id": "node/32666229"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/314657716",
+        "name": "Otrokovice",
+        "name:cs": "Otrokovice",
+        "name:de": "Otrokowitz",
+        "name:uk": "Отроковиці",
+        "place": "town",
+        "population": "19261",
+        "ref:cobe": "412180",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q1009095",
+        "wikipedia": "cs:Otrokovice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.5353865,
+          49.2088284
+        ]
+      },
+      "id": "node/314657716"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/430817440",
+        "name": "Třinec",
+        "name:cs": "Třinec",
+        "name:de": "Trzynietz",
+        "name:pl": "Trzyniec",
+        "name:ru": "Тршинец",
+        "name:uk": "Тржинець",
+        "place": "town",
+        "population": "34222",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q986102",
+        "wikipedia": "cs:Třinec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.6711993,
+          49.6779212
+        ]
+      },
+      "id": "node/430817440"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/623726010",
+        "name": "Klášterec nad Ohří",
+        "name:cs": "Klášterec nad Ohří",
+        "name:de": "Klösterle an der Eger",
+        "place": "town",
+        "population": "15398",
+        "postal_code": "43151",
+        "ref:cobe": "407968",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q158268",
+        "wikipedia": "cs:Klášterec nad Ohří"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1710191,
+          50.3843054
+        ]
+      },
+      "id": "node/623726010"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/672030783",
+        "loc_name": "Pejr",
+        "name": "Pelhřimov",
+        "name:cs": "Pelhřimov",
+        "name:de": "Pilgrams",
+        "name:ru": "Пельгржимов",
+        "place": "town",
+        "population": "16105",
+        "ref:cobe": "404292",
+        "source": "csu:uir-zsj",
+        "start_date": "1295",
+        "wikidata": "Q1000073"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.2232341,
+          49.4308737
+        ]
+      },
+      "id": "node/672030783"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1584552987",
+        "ele": "240",
+        "name": "Chrudim",
+        "name:cs": "Chrudim",
+        "name:uk": "Хрудім",
+        "place": "town",
+        "population": "23002",
+        "website": "https://www.chrudim-city.cz/",
+        "wikidata": "Q986070",
+        "wikipedia": "cs:Chrudim"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.7947559,
+          49.9511458
+        ]
+      },
+      "id": "node/1584552987"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1585113445",
+        "check_date:website": "2024-09-15",
+        "name": "Pardubice",
+        "name:ar": "باردوبيتسه",
+        "name:cs": "Pardubice",
+        "name:de": "Pardubitz",
+        "name:el": "Παρντουμπίτσε",
+        "name:fa": "پاردوبیتسه",
+        "name:he": "פרדוביצה",
+        "name:kn": "ಪರ್ದುಬಿಟ್ಸೆ",
+        "name:ko": "파르두비체",
+        "name:la": "Pardibus",
+        "name:lt": "Pardubicės",
+        "name:ru": "Пардубице",
+        "name:sr": "Пардубице",
+        "name:uk": "Пардубіце",
+        "name:ur": "پاردوبیتسے",
+        "place": "city",
+        "population": "88520",
+        "source": "csu:uir-zsj",
+        "website": "https://www.pardubice.eu",
+        "wikidata": "Q36989",
+        "wikipedia": "cs:Pardubice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.7791356,
+          50.0385812
+        ]
+      },
+      "id": "node/1585113445"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586377542",
+        "alt_name:hu": "Királyvárad",
+        "name": "Hradec Králové",
+        "name:ar": "هرادتس كرالوفه",
+        "name:cs": "Hradec Králové",
+        "name:de": "Königgrätz",
+        "name:el": "Χράντεκ Κράλοβε",
+        "name:fa": "هرادتس کرالووه",
+        "name:fr": "Hradec Králové",
+        "name:hr": "Hradec Králové",
+        "name:hu": "Hradec Králové",
+        "name:it": "Hradec Kralovė",
+        "name:ja": "フラデツ・クラーロヴェー",
+        "name:ko": "흐라데츠크랄로베",
+        "name:la": "Reginogradecium",
+        "name:lt": "Hradec Kralovė",
+        "name:pl": "Hradec Králové",
+        "name:ru": "Градец-Кралове",
+        "name:sk": "Hradec Kralové",
+        "name:sr": "Храдец Кралове",
+        "name:uk": "Градець-Кралове",
+        "name:ur": "ہرادیتس کرالوے",
+        "name:zh": "赫拉德茨-克拉洛韦",
+        "old_name:hr": "Kraljičin Gradac",
+        "place": "city",
+        "population": "90596",
+        "ref:cobe": "409804",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q180139",
+        "wikipedia": "cs:Hradec Králové"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.8327512,
+          50.2092113
+        ]
+      },
+      "id": "node/1586377542"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586392563",
+        "name": "Havlíčkův Brod",
+        "name:cs": "Havlíčkův Brod",
+        "name:de": "Deutschbrod",
+        "name:ru": "Гавличкув-Брод",
+        "name:uk": "Гавличкув Брод",
+        "old_name": "Německý Brod",
+        "place": "town",
+        "population": "23101",
+        "ref:cobe": "409472",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q954596",
+        "wikipedia": "cs:Havlíčkův Brod"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.5795748,
+          49.606942
+        ]
+      },
+      "id": "node/1586392563"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586412044",
+        "name": "Žďár nad Sázavou",
+        "name:cs": "Žďár nad Sázavou",
+        "name:de": "Saar",
+        "name:la": "Sar",
+        "name:pl": "Zdziar nad Sazawą",
+        "name:ru": "Ждяр-над-Сазавоу",
+        "name:sr": "Ждар на Сазави",
+        "name:uk": "Ждяр-над-Сазавою",
+        "place": "town",
+        "population": "20994",
+        "short_name": "Žďár n.Sáz.",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q394453",
+        "wikipedia": "cs:Žďár nad Sázavou"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.9391924,
+          49.5629014
+        ]
+      },
+      "id": "node/1586412044"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586412254",
+        "name": "Velké Meziříčí",
+        "name:cs": "Velké Meziříčí",
+        "name:de": "Groß Meseritsch",
+        "place": "town",
+        "population": "11536",
+        "ref:cobe": "413038",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q703158",
+        "wikipedia": "cs:Velké Meziříčí"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.0121507,
+          49.3554996
+        ]
+      },
+      "id": "node/1586412254"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586412751",
+        "name": "Nové Město na Moravě",
+        "name:cs": "Nové Město na Moravě",
+        "name:de": "Neustadtl in Mähren",
+        "place": "town",
+        "population": "10063",
+        "ref:cobe": "412996",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q986075",
+        "wikipedia": "cs:Nové Město na Moravě"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.0744185,
+          49.5616916
+        ]
+      },
+      "id": "node/1586412751"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586596855",
+        "name": "Svitavy",
+        "name:cs": "Svitavy",
+        "name:de": "Zwittau",
+        "name:ru": "Свитави",
+        "name:sr": "Свитави",
+        "place": "town",
+        "population": "16610",
+        "source": "csu:uir-zsj",
+        "website": "https://www.svitavy.cz/",
+        "wikidata": "Q755698",
+        "wikipedia": "cs:Svitavy"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.4688995,
+          49.7562053
+        ]
+      },
+      "id": "node/1586596855"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586597205",
+        "name": "Moravská Třebová",
+        "name:cs": "Moravská Třebová",
+        "name:de": "Mährisch Trübau",
+        "name:ru": "Моравска-Тршебова",
+        "name:sr": "Моравска Требова",
+        "place": "town",
+        "population": "10196",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mtrebova-city.cz",
+        "wikidata": "Q1000078",
+        "wikipedia": "cs:Moravská Třebová"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.6641472,
+          49.7581546
+        ]
+      },
+      "id": "node/1586597205"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586645572",
+        "name": "Česká Třebová",
+        "name:cs": "Česká Třebová",
+        "name:de": "Böhmisch Trübau",
+        "name:pl": "Czeska Trzebowa",
+        "name:ru": "Ческа-Тршебова",
+        "name:sr": "Чешка Требова",
+        "place": "town",
+        "population": "14464",
+        "ref:cobe": "411370",
+        "source": "csu:uir-zsj",
+        "website": "http://www.ceska-trebova.cz",
+        "wikidata": "Q341056",
+        "wikipedia": "cs:Česká Třebová"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.4472039,
+          49.9021593
+        ]
+      },
+      "id": "node/1586645572"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586645646",
+        "name": "Ústí nad Orlicí",
+        "name:cs": "Ústí nad Orlicí",
+        "name:de": "Wildenschwert",
+        "name:pl": "Uście nad Orlicą",
+        "name:ru": "Усти-над-Орлици",
+        "name:sr": "Усти на Орлици",
+        "place": "town",
+        "population": "11081",
+        "ref:cobe": "411361",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q330409",
+        "wikipedia": "cs:Ústí nad Orlicí"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.3941695,
+          49.9737603
+        ]
+      },
+      "id": "node/1586645646"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586645785",
+        "name": "Vysoké Mýto",
+        "name:cs": "Vysoké Mýto",
+        "name:de": "Hohenmauth",
+        "name:la": "Alta Muta",
+        "name:ru": "Високе-Мито",
+        "name:sr": "Високо Мито",
+        "name:uk": "Високе Мито",
+        "place": "town",
+        "population": "11711",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q999916",
+        "wikipedia": "cs:Vysoké Mýto"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.1616455,
+          49.9534727
+        ]
+      },
+      "id": "node/1586645785"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586656598",
+        "name": "Humpolec",
+        "name:cs": "Humpolec",
+        "name:de": "Humpoletz",
+        "place": "town",
+        "population": "11522",
+        "population:date": "2025-01-01",
+        "ref:cobe": "404349",
+        "source": "csu:uir-zsj",
+        "source:population": "wikipedia",
+        "website": "https://humpolec.cz",
+        "wikidata": "Q1000060",
+        "wikipedia": "cs:Humpolec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.3586709,
+          49.5418861
+        ]
+      },
+      "id": "node/1586656598"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586662518",
+        "name": "Třebíč",
+        "name:cs": "Třebíč",
+        "name:de": "Trebitsch",
+        "name:lt": "Tršebyčius",
+        "name:ru": "Тршебич",
+        "name:sr": "Требич",
+        "name:uk": "Тршебич",
+        "place": "town",
+        "population": "34415",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q270704",
+        "wikipedia": "cs:Třebíč"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.8816091,
+          49.2151907
+        ]
+      },
+      "id": "node/1586662518"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586673871",
+        "name": "Náchod",
+        "name:cs": "Náchod",
+        "name:de": "Nachod",
+        "name:lt": "Nachodas",
+        "name:ru": "Наход",
+        "name:uk": "Наход",
+        "place": "town",
+        "population": "20011",
+        "ref:cobe": "410373",
+        "source": "csu:uir-zsj",
+        "start_date": "before 1254",
+        "wikidata": "Q591823"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.1622871,
+          50.4167025
+        ]
+      },
+      "id": "node/1586673871"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1586676512",
+        "name": "Jičín",
+        "name:cs": "Jičín",
+        "name:de": "Jitschin",
+        "name:pl": "Jiczyn",
+        "name:ru": "Йичин",
+        "place": "town",
+        "population": "15485",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q656603",
+        "wikipedia": "cs:Jičín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.3516528,
+          50.4370452
+        ]
+      },
+      "id": "node/1586676512"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587265875",
+        "name": "Vrchlabí",
+        "name:cs": "Vrchlabí",
+        "name:de": "Hohenelbe",
+        "place": "town",
+        "population": "12599",
+        "ref:cobe": "411345",
+        "source": "csu:uir-zsj;https://www.czso.cz/documents/10180/20556287/1300721503.pdf",
+        "wikidata": "Q1008595",
+        "wikipedia": "cs:Vrchlabí"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.6095779,
+          50.6271452
+        ]
+      },
+      "id": "node/1587265875"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587266044",
+        "name": "Trutnov",
+        "name:ar": "ترُتنوف",
+        "name:cs": "Trutnov",
+        "name:de": "Trautenau",
+        "name:ru": "Трутнов",
+        "name:uk": "Трутнов",
+        "place": "town",
+        "population": "18588",
+        "source": "csu:uir-zsj",
+        "start_date": "before 1260",
+        "wikidata": "Q320950",
+        "wikipedia": "cs:Trutnov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.912897,
+          50.5608165
+        ]
+      },
+      "id": "node/1587266044"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587266362",
+        "name": "Dvůr Králové nad Labem",
+        "name:cs": "Dvůr Králové nad Labem",
+        "name:de": "Königinhof an der Elbe",
+        "name:ru": "Двур-Кралове-над-Лабем",
+        "place": "town",
+        "population": "14938",
+        "ref:cobe": "411248",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q143664",
+        "wikipedia": "cs:Dvůr Králové nad Labem"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.8139947,
+          50.4319053
+        ]
+      },
+      "id": "node/1587266362"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587267592",
+        "name": "Rychnov nad Kněžnou",
+        "name:cs": "Rychnov nad Kněžnou",
+        "name:de": "Reichenau an der Knie",
+        "name:ru": "Рихнов-над-Кнежноу",
+        "place": "town",
+        "population": "10393",
+        "ref:cobe": "410667",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q1000091",
+        "wikipedia": "cs:Rychnov nad Kněžnou"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.2748393,
+          50.1632537
+        ]
+      },
+      "id": "node/1587267592"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587332582",
+        "name": "Turnov",
+        "name:cs": "Turnov",
+        "name:de": "Turnau",
+        "name:lt": "Turnovas",
+        "name:ru": "Турнов",
+        "name:uk": "Турнов",
+        "old_name": "Tornaw;Turnaw;Tornow",
+        "place": "town",
+        "population": "14334",
+        "population:source": "csu",
+        "ref:cobe": "411019",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q851419",
+        "wikipedia": "cs:Turnov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.1574182,
+          50.5874068
+        ]
+      },
+      "id": "node/1587332582"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587363366",
+        "name": "Liberec",
+        "name:ar": "ليبيريتس",
+        "name:cs": "Liberec",
+        "name:de": "Reichenberg",
+        "name:el": "Λίμπερετς",
+        "name:fa": "لیبرتس",
+        "name:he": "ליברץ",
+        "name:hsb": "Liberec",
+        "name:kn": "ಲಿಬೆರೆಟ್ಸ್",
+        "name:ko": "리베레츠",
+        "name:la": "Libercum",
+        "name:lt": "Liberecas",
+        "name:ru": "Либерец",
+        "name:sr": "Либерец",
+        "name:uk": "Ліберець",
+        "name:ur": "لیبرتس",
+        "old_name:la": "Reichenberga",
+        "place": "city",
+        "population": "102951",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q146351",
+        "wikipedia": "cs:Liberec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.0583947,
+          50.7702648
+        ]
+      },
+      "id": "node/1587363366"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587389785",
+        "name": "Jablonec nad Nisou",
+        "name:cs": "Jablonec nad Nisou",
+        "name:de": "Gablonz an der Neiße",
+        "name:lt": "Jablonecas prie Nisos",
+        "name:pl": "Jablonec nad Nysą",
+        "name:ru": "Яблонец-над-Нисоу",
+        "name:uk": "Яблонець-над-Нисою",
+        "place": "town",
+        "population": "44588",
+        "ref:cobe": "408085",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q147607",
+        "wikipedia": "cs:Jablonec nad Nisou"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.1710958,
+          50.7240899
+        ]
+      },
+      "id": "node/1587389785"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587521408",
+        "name": "Česká Lípa",
+        "name:cs": "Česká Lípa",
+        "name:de": "Böhmisch Leipa",
+        "name:hsb": "Čěska Lipa",
+        "name:pl": "Czeska Lipa",
+        "name:ru": "Ческа-Липа",
+        "name:uk": "Чеська Липа",
+        "old_name": "Böhmisch Leipa",
+        "place": "town",
+        "population": "36740",
+        "ref:cobe": "406899",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q740863",
+        "wikipedia": "cs:Česká Lípa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.5372974,
+          50.6865452
+        ]
+      },
+      "id": "node/1587521408"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1587521624",
+        "name": "Nový Bor",
+        "name:cs": "Nový Bor",
+        "name:de": "Haida",
+        "old_name": "Haida",
+        "place": "town",
+        "population": "11693",
+        "ref:cobe": "407071",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q1000086",
+        "wikipedia": "cs:Nový Bor"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.5554953,
+          50.757878
+        ]
+      },
+      "id": "node/1587521624"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598391587",
+        "capital": "4",
+        "name": "Ústí nad Labem",
+        "name:ar": "أوستي ناد لابم",
+        "name:cs": "Ústí nad Labem",
+        "name:de": "Aussig",
+        "name:el": "Ούστι ναντ Λάμπεμ",
+        "name:fa": "اوستی ناد لابم",
+        "name:hr": "Ústí na Labi",
+        "name:hsb": "Wusće nad Łobjom",
+        "name:ko": "우스티나트라벰",
+        "name:la": "Ustia apud Albim",
+        "name:mk": "Усти на Лаба",
+        "name:pl": "Uście nad Łabą",
+        "name:ru": "Усти-над-Лабем",
+        "name:sr": "Усти над Лабом",
+        "name:uk": "Усті-над-Лабем",
+        "name:ur": "اوستی ناد لاہم",
+        "name:zh-Hans": "拉贝河畔乌斯季",
+        "name:zh-Hant": "拉貝河畔烏斯季",
+        "place": "city",
+        "population": "90378",
+        "source": "csu:uir-zsj",
+        "website": "http://www.usti-nl.cz/",
+        "wikidata": "Q156974",
+        "wikipedia": "cs:Ústí nad Labem"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0381357,
+          50.6603327
+        ]
+      },
+      "id": "node/1598391587"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598413721",
+        "name": "Teplice",
+        "name:cs": "Teplice",
+        "name:de": "Teplitz",
+        "name:he": "טפליצה",
+        "name:lt": "Teplicė",
+        "name:pl": "Cieplice",
+        "name:ru": "Теплице",
+        "name:sr": "Теплице",
+        "name:uk": "Тепліце",
+        "old_name:de": "Töplitz",
+        "place": "town",
+        "population": "48766",
+        "ref:cobe": "409243",
+        "source": "csu:uir-zsj",
+        "website": "http://www.teplice.cz",
+        "wikidata": "Q146342",
+        "wikipedia": "cs:Teplice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8244461,
+          50.6406644
+        ]
+      },
+      "id": "node/1598413721"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598413771",
+        "name": "Bílina",
+        "name:cs": "Bílina",
+        "name:de": "Bilin",
+        "place": "town",
+        "population": "15886",
+        "ref:cobe": "409251",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q518360",
+        "wikipedia": "cs:Bílina (město)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7746622,
+          50.5486059
+        ]
+      },
+      "id": "node/1598413771"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598415164",
+        "name": "Most",
+        "name:cs": "Most",
+        "name:de": "Brüx",
+        "name:lt": "Mostas",
+        "name:ru": "Мост",
+        "name:sr": "Мост",
+        "name:uk": "Мост",
+        "place": "town",
+        "population": "62866",
+        "ref:cobe": "409162",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mesto-most.cz",
+        "wikidata": "Q146363",
+        "wikipedia": "cs:Most (město)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.636112,
+          50.5032737
+        ]
+      },
+      "id": "node/1598415164"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598415233",
+        "name": "Litvínov",
+        "name:cs": "Litvínov",
+        "name:de": "Leutensdorf",
+        "name:lt": "Litvynovas",
+        "name:ru": "Литвинов",
+        "name:sr": "Литвинов",
+        "place": "town",
+        "population": "18224",
+        "source": "csu:uir-zsj",
+        "website": "http://www.litvinov.cz",
+        "wikidata": "Q986082",
+        "wikipedia": "cs:Litvínov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.6110485,
+          50.6009532
+        ]
+      },
+      "id": "node/1598415233"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598419317",
+        "name": "Žatec",
+        "name:cs": "Žatec",
+        "name:de": "Saaz",
+        "name:la": "Sacz",
+        "name:ru": "Жатец",
+        "name:sr": "Жатец",
+        "name:uk": "Жатець",
+        "place": "town",
+        "population": "19266",
+        "ref:cobe": "409146",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mesto-zatec.cz/",
+        "wikidata": "Q393426",
+        "wikipedia": "cs:Žatec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.545952,
+          50.3274423
+        ]
+      },
+      "id": "node/1598419317"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598419498",
+        "name": "Louny",
+        "name:cs": "Louny",
+        "name:de": "Laun",
+        "name:ru": "Лоуни",
+        "name:sr": "Лоуни",
+        "name:uk": "Лоуни",
+        "place": "town",
+        "population": "19453",
+        "ref:cobe": "409111",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mulouny.cz/",
+        "wikidata": "Q616877",
+        "wikipedia": "cs:Louny"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7969195,
+          50.3572914
+        ]
+      },
+      "id": "node/1598419498"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598422369",
+        "name": "Kadaň",
+        "name:cs": "Kadaň",
+        "name:de": "Kaaden",
+        "name:ru": "Кадань",
+        "name:sr": "Кадањ",
+        "old_name": "Kadaň město",
+        "place": "town",
+        "population": "16975",
+        "ref:cobe": "407925",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mesto-kadan.cz/",
+        "wikidata": "Q158274",
+        "wikipedia": "cs:Kadaň"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.2710364,
+          50.3761991
+        ]
+      },
+      "id": "node/1598422369"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598422393",
+        "name": "Jirkov",
+        "name:cs": "Jirkov",
+        "name:de": "Görkau",
+        "name:uk": "Їрков",
+        "place": "town",
+        "population": "20239",
+        "ref:cobe": "407909",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q149097",
+        "wikipedia": "cs:Jirkov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4476266,
+          50.5000597
+        ]
+      },
+      "id": "node/1598422393"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598422439",
+        "name": "Chomutov",
+        "name:cs": "Chomutov",
+        "name:de": "Komotau",
+        "name:lt": "Chomutovas",
+        "name:ru": "Хомутов",
+        "name:sr": "Хомутов",
+        "name:uk": "Хомутов",
+        "place": "town",
+        "population": "46263",
+        "ref:cobe": "407887",
+        "source": "csu:uir-zsj",
+        "website": "http://www.chomutov-mesto.cz",
+        "wikidata": "Q146356",
+        "wikipedia": "cs:Chomutov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.4178324,
+          50.4606456
+        ]
+      },
+      "id": "node/1598422439"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598882966",
+        "name": "Varnsdorf",
+        "name:ar": "وارنسدورف",
+        "name:cs": "Varnsdorf",
+        "name:de": "Warnsdorf",
+        "name:hsb": "Warnoćicy",
+        "name:ru": "Варнсдорф",
+        "name:sr": "Варнсдорф",
+        "place": "town",
+        "population": "15808",
+        "ref:cobe": "407828",
+        "source": "csu:uir-zsj",
+        "website": "https://www.varnsdorf.cz",
+        "wikidata": "Q158275",
+        "wikipedia": "cs:Varnsdorf"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.6194058,
+          50.9124244
+        ]
+      },
+      "id": "node/1598882966"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598883061",
+        "name": "Rumburk",
+        "name:ar": "رومبورغ",
+        "name:cs": "Rumburk",
+        "name:de": "Rumburg",
+        "name:hsb": "Rumburk",
+        "name:ru": "Румбурк",
+        "name:sr": "Румбурк",
+        "place": "town",
+        "population": "10193",
+        "source": "csu:uir-zsj",
+        "website": "https://www.rumburk.cz/",
+        "wikidata": "Q149103",
+        "wikipedia": "cs:Rumburk"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.5569317,
+          50.9517739
+        ]
+      },
+      "id": "node/1598883061"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598883617",
+        "name": "Děčín",
+        "name:cs": "Děčín",
+        "name:de": "Tetschen",
+        "name:hsb": "Dźěćin",
+        "name:lt": "Dečynas",
+        "name:ru": "Дечин",
+        "name:uk": "Дечин",
+        "place": "town",
+        "population": "47029",
+        "ref:cobe": "407224",
+        "ref:zsj": "024929",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mmdecin.cz/",
+        "wikidata": "Q146307",
+        "wikipedia": "cs:Děčín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2147221,
+          50.7824196
+        ]
+      },
+      "id": "node/1598883617"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598884196",
+        "name": "Roudnice nad Labem",
+        "name:cs": "Roudnice nad Labem",
+        "name:de": "Raudnitz an der Elbe",
+        "name:pl": "Rudnice nad Łabą",
+        "name:ru": "Роуднице-над-Лабем",
+        "name:sr": "Роуднице над Лабем",
+        "place": "town",
+        "population": "12253",
+        "ref:cobe": "409022",
+        "short_name": "Roudnice n. Lab.",
+        "source": "csu:uir-zsj",
+        "website": "https://www.roudnicenl.cz/",
+        "wikidata": "Q63855",
+        "wikipedia": "cs:Roudnice nad Labem"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.2603824,
+          50.4244462
+        ]
+      },
+      "id": "node/1598884196"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598884274",
+        "name": "Litoměřice",
+        "name:cs": "Litoměřice",
+        "name:de": "Leitmeritz",
+        "name:pl": "Litomierzyce",
+        "name:ru": "Литомержице",
+        "name:sr": "Литомерице",
+        "name:uk": "Літомержіце",
+        "place": "town",
+        "population": "24879",
+        "source": "csu:uir-zsj",
+        "website": "https://www.litomerice.cz/",
+        "wikidata": "Q384403",
+        "wikipedia": "cs:Litoměřice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.1317985,
+          50.5340795
+        ]
+      },
+      "id": "node/1598884274"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598911116",
+        "name": "Kroměříž",
+        "name:cs": "Kroměříž",
+        "name:de": "Kremsier",
+        "name:lt": "Kromeržyžas",
+        "name:pl": "Kromieryż",
+        "name:ru": "Кромержиж",
+        "name:sr": "Кромјержиж",
+        "name:uk": "Кромержиж",
+        "place": "town",
+        "population": "26954",
+        "ref:cobe": "412422",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q158239",
+        "wikipedia": "cs:Kroměříž"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.3929804,
+          49.2984191
+        ]
+      },
+      "id": "node/1598911116"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598911131",
+        "name": "Holešov",
+        "name:cs": "Holešov",
+        "name:de": "Holleschau",
+        "name:he": "העלשויא",
+        "name:la": "Holesow",
+        "place": "town",
+        "population": "10669",
+        "ref:cobe": "412449",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q961325",
+        "wikipedia": "cs:Holešov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.5786751,
+          49.333718
+        ]
+      },
+      "id": "node/1598911131"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598944808",
+        "name": "Uherský Brod",
+        "name:cs": "Uherský Brod",
+        "name:de": "Ungarisch Brod",
+        "place": "town",
+        "population": "14597",
+        "ref:cobe": "412643",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q664895",
+        "wikipedia": "cs:Uherský Brod"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.6464437,
+          49.0253139
+        ]
+      },
+      "id": "node/1598944808"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598960900",
+        "name": "Vsetín",
+        "name:cs": "Vsetín",
+        "name:de": "Wsetin",
+        "name:ru": "Всетин",
+        "name:sr": "Всетин",
+        "name:uk": "Всетін",
+        "place": "town",
+        "population": "28785",
+        "ref:cobe": "414786",
+        "source": "csu:uir-zsj",
+        "website": "http://www.vsetin.cz",
+        "wikidata": "Q513417",
+        "wikipedia": "cs:Vsetín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.9961534,
+          49.3389775
+        ]
+      },
+      "id": "node/1598960900"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598960928",
+        "loc_name": "Valmez",
+        "name": "Valašské Meziříčí",
+        "name:cs": "Valašské Meziříčí",
+        "name:de": "Walachisch Meseritsch",
+        "name:uk": "Валашске Мезиржичі",
+        "place": "town",
+        "population": "25413",
+        "ref:cobe": "414816",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q375651",
+        "wikipedia": "cs:Valašské Meziříčí"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.971593,
+          49.4716056
+        ]
+      },
+      "id": "node/1598960928"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598960952",
+        "name": "Rožnov pod Radhoštěm",
+        "name:cs": "Rožnov pod Radhoštěm",
+        "name:de": "Rosenau",
+        "name:sr": "Рожнов под Радхоштјем",
+        "place": "town",
+        "population": "17845",
+        "ref:cobe": "414808",
+        "source": "csu:uir-zsj",
+        "website": "https://www.roznov.cz/",
+        "wikidata": "Q1008696",
+        "wikipedia": "cs:Rožnov pod Radhoštěm"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.1429843,
+          49.4587958
+        ]
+      },
+      "id": "node/1598960952"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1598988152",
+        "name": "Zlín",
+        "name:ar": "زلين",
+        "name:be": "Злін",
+        "name:cs": "Zlín",
+        "name:de": "Zlin",
+        "name:el": "Ζλιν",
+        "name:fa": "زلین",
+        "name:ja": "ズリーン",
+        "name:ko": "즐린",
+        "name:la": "Zlín",
+        "name:ru": "Злин",
+        "name:uk": "Злін",
+        "name:ur": "زلین",
+        "old_name": "Gottwaldov",
+        "place": "city",
+        "population": "72973",
+        "ref:cobe": "412244",
+        "source": "csu:uir-zsj",
+        "source:name:la": "wikipedia but without valid source",
+        "website": "https://www.zlin.eu/",
+        "wikidata": "Q171018",
+        "wikipedia": "cs:Zlín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.6667415,
+          49.226766
+        ]
+      },
+      "id": "node/1598988152"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599034437",
+        "heritage": "1",
+        "heritage:operator": "whc",
+        "heritage:ref": "1613",
+        "heritage:website": "https://whc.unesco.org/en/list/1613/",
+        "name": "Mariánské Lázně",
+        "name:cs": "Mariánské Lázně",
+        "name:de": "Marienbad",
+        "name:fr": "Marienbad",
+        "name:he": "מריאנסקה לאזנה",
+        "name:pl": "Mariańskie Łaźnie",
+        "name:ru": "Марианске-Лазне",
+        "name:sr": "Маријанске Лазње",
+        "name:sr-Latn": "Marijanske Laznje",
+        "name:uk": "Маріанські Лазні",
+        "place": "town",
+        "population": "14527",
+        "ref:cobe": "405531",
+        "ref:whc": "1613-005",
+        "source": "csu:uir-zsj",
+        "website": "https://www.marianskelazne.cz/",
+        "whc:criteria": "(ii)(iii)",
+        "whc:inscription_date": "2021",
+        "wikidata": "Q523469",
+        "wikipedia": "cs:Mariánské Lázně"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.703319,
+          49.9739518
+        ]
+      },
+      "id": "node/1599034437"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599034593",
+        "name": "Cheb",
+        "name:cs": "Cheb",
+        "name:de": "Eger",
+        "name:fr": "Egra",
+        "name:lt": "Chebas",
+        "name:ru": "Хеб",
+        "name:sr": "Хеб",
+        "name:uk": "Хеб",
+        "place": "town",
+        "population": "30420",
+        "ref:cobe": "405493",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mestocheb.cz",
+        "wikidata": "Q193719",
+        "wikipedia": "cs:Cheb"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.370353,
+          50.0793562
+        ]
+      },
+      "id": "node/1599034593"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599034594",
+        "name": "Aš",
+        "name:cs": "Aš",
+        "name:de": "Asch",
+        "name:ru": "Аш",
+        "name:sr": "Аш",
+        "place": "town",
+        "population": "11632",
+        "ref:cobe": "405507",
+        "source": "csu:uir-zsj",
+        "website": "http://www.muas.cz",
+        "wikidata": "Q583910",
+        "wikipedia": "cs:Aš"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.1895886,
+          50.2216257
+        ]
+      },
+      "id": "node/1599034594"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599050063",
+        "alt_name": "Ostrov nad Ohří",
+        "name": "Ostrov",
+        "name:cs": "Ostrov",
+        "name:de": "Schlackenwerth",
+        "name:ru": "Остров",
+        "name:sr": "Остров",
+        "place": "town",
+        "population": "16885",
+        "ref:cobe": "405639",
+        "source": "csu:uir-zsj",
+        "website": "http://www.ostrov.cz",
+        "wikidata": "Q987487"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.9390017,
+          50.3061911
+        ]
+      },
+      "id": "node/1599050063"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599050315",
+        "alt_name": "Carlsbad",
+        "alt_name:he": "קרלסבאד",
+        "ele": "447",
+        "heritage": "1",
+        "heritage:operator": "whc",
+        "heritage:ref": "1613",
+        "heritage:website": "https://whc.unesco.org/en/list/1613/",
+        "int_name": "Karlovy Vary",
+        "name": "Karlovy Vary",
+        "name:ar": "كارلوفي فاري",
+        "name:az": "Karlovı Varı",
+        "name:ba": "Карловы Вары",
+        "name:be": "Карлавы Вары",
+        "name:bg": "Карлови Вари",
+        "name:ce": "Карловы Вары",
+        "name:cs": "Karlovy Vary",
+        "name:de": "Karlsbad",
+        "name:el": "Κάρλοβυ Βάρυ",
+        "name:en": "Karlovy Vary",
+        "name:fa": "کارلووی واری",
+        "name:fr": "Carlsbad",
+        "name:he": "קרלובי וארי",
+        "name:hy": "Կառլովի Վարի",
+        "name:ja": "カルロヴィ・ヴァリ",
+        "name:ka": "კარლოვი-ვარი",
+        "name:ko": "카를로비바리",
+        "name:la": "Thermae Carolinae",
+        "name:lt": "Karlovi Varai",
+        "name:lv": "Karlovi Vari",
+        "name:mk": "Карлови Вари",
+        "name:nl": "Karlsbad",
+        "name:os": "Карловы Вары",
+        "name:pl": "Karlowe Wary",
+        "name:ps": "کارلوی واری",
+        "name:ru": "Карловы Вары",
+        "name:sk": "Karlove Vary",
+        "name:sl": "Karlovi Vari",
+        "name:sr": "Карлове Вари",
+        "name:tg": "Карлови Вари",
+        "name:th": "การ์โลวีวารี",
+        "name:tt": "Карловы-Вары",
+        "name:uk": "Карлові Вари",
+        "name:ur": "کارلووی واری",
+        "name:zh": "卡罗维发利",
+        "place": "city",
+        "population": "49353",
+        "population:date": "2ß24-01-01",
+        "ref:cobe": "405761",
+        "ref:whc": "1613-004",
+        "source": "csu:uir-zsj",
+        "source:population": "wikipedia",
+        "website": "https://www.karlovyvary.cz/",
+        "whc:criteria": "(ii)(iii)",
+        "whc:inscription_date": "2021",
+        "wikidata": "Q384544",
+        "wikipedia": "cs:Karlovy Vary"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.8701437,
+          50.2306216
+        ]
+      },
+      "id": "node/1599050315"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599059049",
+        "name": "Sokolov",
+        "name:cs": "Sokolov",
+        "name:ru": "Соколов",
+        "name:sr": "Соколов",
+        "name:uk": "Соколов",
+        "old_name": "Falknov nad Ohří",
+        "old_name:de": "Falkenau an der Eger",
+        "place": "town",
+        "population": "24916",
+        "ref:cobe": "406635",
+        "source": "csu:uir-zsj",
+        "website": "https://www.sokolov.cz/",
+        "wikidata": "Q727383",
+        "wikipedia": "cs:Sokolov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6394986,
+          50.1809097
+        ]
+      },
+      "id": "node/1599059049"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599059251",
+        "name": "Chodov",
+        "name:cs": "Chodov",
+        "name:de": "Chodau",
+        "name:ru": "Ходов",
+        "name:sr": "Ходов",
+        "place": "town",
+        "population": "14485",
+        "ref:cobe": "406651",
+        "source": "csu:uir-zsj",
+        "start_date": "before 1195",
+        "website": "https://www.mestochodov.cz/",
+        "wikidata": "Q999937",
+        "wikipedia": "cs:Chodov (okres Sokolov)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.7489079,
+          50.2390665
+        ]
+      },
+      "id": "node/1599059251"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599120629",
+        "alt_name:de": "Böhmisch Budweis",
+        "capital": "4",
+        "ele": "381",
+        "name": "České Budějovice",
+        "name:ar": "تشيسكي بوديوفيتسه",
+        "name:ba": "Ческе-Будеёвице",
+        "name:be": "Чэске-Будзеёвіцы",
+        "name:bg": "Ческе Будейовице",
+        "name:bn": "চেস্কে বুদেজোভিসে",
+        "name:ce": "Ческе-Будеёвице",
+        "name:cs": "České Budějovice",
+        "name:de": "Budweis",
+        "name:el": "Τσέσκε Μπουντεγιόβιτσε",
+        "name:en": "České Budějovice",
+        "name:es": "České Budějovice",
+        "name:fa": "چسکه بودیوویتسه",
+        "name:fr": "České Budějovice",
+        "name:he": "צ'סקה בודייוביצה",
+        "name:hr": "České Budějovice",
+        "name:hu": "České Budějovice",
+        "name:hy": "Չեսկե Բուդեյովիցե",
+        "name:ja": "チェスケー・ブジェヨヴィツェ",
+        "name:ka": "ჩესკე-ბუდეიოვიცე",
+        "name:kk": "Ческе-Будеёвице",
+        "name:ko": "체스케부데요비체",
+        "name:la": "Budovicium",
+        "name:lt": "Česke Budejovicai",
+        "name:lv": "Česke Budejovice",
+        "name:mk": "Ческе Будјејовице",
+        "name:os": "Ческе-Будеёвице",
+        "name:pl": "Czeskie Budziejowice",
+        "name:ru": "Ческе-Будеёвице",
+        "name:sk": "České Budějovice",
+        "name:sl": "Češke Budejovice",
+        "name:sr": "Чешке Будјејовице",
+        "name:tg": "Ческе-Будейовитсе",
+        "name:th": "แช็สแกบูแยโยวิตแซ",
+        "name:tt": "Ческе-Будеёвице",
+        "name:uk": "Чеські Будейовиці",
+        "name:ur": "چسکے بودییوویتسے",
+        "name:uz": "Cheskebudeyovitse",
+        "name:zh": "捷克布杰约维采",
+        "place": "city",
+        "population": "93426",
+        "postal_code": "37001",
+        "short_name": "Č. Budějovice",
+        "source": "csu:uir-zsj",
+        "website": "https://www.c-budejovice.cz/",
+        "wikidata": "Q16506",
+        "wikipedia": "cs:České Budějovice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.474285,
+          48.9747357
+        ]
+      },
+      "id": "node/1599120629"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599136536",
+        "alt_name:de": "Böhmisch Krumau;Krumau an der Moldau;Krummau",
+        "heritage": "1",
+        "heritage:operator": "whc",
+        "name": "Český Krumlov",
+        "name:cs": "Český Krumlov",
+        "name:de": "Krumau",
+        "name:pl": "Czeski Krumlov",
+        "name:ru": "Чески-Крумлов",
+        "name:sr": "Чешки Крумлов",
+        "place": "town",
+        "population": "13028",
+        "ref:whc": "617",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mu.ckrumlov.cz",
+        "wikidata": "Q188082",
+        "wikipedia": "cs:Český Krumlov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.3150586,
+          48.8106526
+        ]
+      },
+      "id": "node/1599136536"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599164680",
+        "name": "Jindřichův Hradec",
+        "name:cs": "Jindřichův Hradec",
+        "name:de": "Neuhaus",
+        "name:la": "Nova Domus",
+        "name:pl": "Jindrzychów Gródek",
+        "name:ru": "Йиндржихув-Градец",
+        "name:sr": "Јиндрихув Храдец",
+        "name:uk": "Їндржихув Градець",
+        "place": "town",
+        "population": "21460",
+        "short_name": "J. Hradec",
+        "source": "csu:uir-zsj",
+        "website": "https://www.jh.cz/",
+        "wikidata": "Q368929",
+        "wikipedia": "cs:Jindřichův Hradec"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.003354,
+          49.1443265
+        ]
+      },
+      "id": "node/1599164680"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599176364",
+        "name": "Písek",
+        "name:cs": "Písek",
+        "name:de": "Pisek",
+        "name:lt": "Pysekas",
+        "name:ru": "Писек",
+        "name:sr": "Писек",
+        "name:uk": "Пісек",
+        "place": "town",
+        "population": "29814",
+        "source": "csu:uir-zsj",
+        "website": "http://www.icpisek.cz",
+        "wikidata": "Q158245",
+        "wikipedia": "cs:Písek (město)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.147769,
+          49.3089887
+        ]
+      },
+      "id": "node/1599176364"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599209722",
+        "name": "Prachatice",
+        "name:cs": "Prachatice",
+        "name:de": "Prachatitz",
+        "name:ru": "Прахатице",
+        "name:sr": "Прахатице",
+        "name:sr-Latn": "Prahatice",
+        "place": "town",
+        "population": "10917",
+        "source": "csu:uir-zsj",
+        "website": "http://www.prachatice.cz",
+        "wikidata": "Q327764",
+        "wikipedia": "cs:Prachatice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.997772,
+          49.0129091
+        ]
+      },
+      "id": "node/1599209722"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599235656",
+        "name": "Strakonice",
+        "name:cs": "Strakonice",
+        "name:de": "Strakonitz",
+        "name:ru": "Страконице",
+        "name:sr": "Страконице",
+        "name:sr-Latn": "Strakonice",
+        "name:uk": "Страконице",
+        "place": "town",
+        "population": "22888",
+        "source": "csu:uir-zsj",
+        "website": "https://www.strakonice.eu/",
+        "wikidata": "Q750224",
+        "wikipedia": "cs:Strakonice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.9025043,
+          49.261277
+        ]
+      },
+      "id": "node/1599235656"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599258006",
+        "name": "Tábor",
+        "name:cs": "Tábor",
+        "name:de": "Tabor",
+        "name:etymology": "Har Tavor, Galilee, Israel",
+        "name:etymology:wikidata": "Q193785",
+        "name:lt": "Taboras",
+        "name:pl": "Tabor",
+        "name:ru": "Табор",
+        "name:sr": "Табор",
+        "name:uk": "Табор",
+        "place": "town",
+        "population": "33410",
+        "ref:cobe": "405060",
+        "source": "csu:uir-zsj",
+        "start_date": "1420",
+        "website": "http://www.taborcz.eu",
+        "wikidata": "Q193721"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.6587234,
+          49.4141533
+        ]
+      },
+      "id": "node/1599258006"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599276425",
+        "name": "Jeseník",
+        "name:cs": "Jeseník",
+        "name:lt": "Jesenykas",
+        "name:pl": "Jesionik",
+        "name:ru": "Есеник",
+        "name:sr": "Јесеник",
+        "name:uk": "Єсенік",
+        "old_name": "Frývaldov",
+        "old_name:de": "Freiwaldau",
+        "old_name:pl": "Frywałdów",
+        "old_name:pl_1": "Frywałd",
+        "place": "town",
+        "population": "10838",
+        "ref:cobe": "414654",
+        "source": "csu:uir-zsj",
+        "website": "https://www.jesenik.org/",
+        "wikidata": "Q954611",
+        "wikipedia": "cs:Jeseník"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.2046012,
+          50.2296385
+        ]
+      },
+      "id": "node/1599276425"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599305387",
+        "alt_name:de": "Mährisch-Sternberg",
+        "name": "Šternberk",
+        "name:cs": "Šternberk",
+        "name:de": "Sternberg",
+        "name:pl": "Szternberk",
+        "name:sr": "Штернберк",
+        "place": "town",
+        "population": "13579",
+        "ref:cobe": "413747",
+        "source": "csu:uir-zsj",
+        "website": "https://www.sternberk.eu/",
+        "wikidata": "Q392429",
+        "wikipedia": "cs:Šternberk"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.2988474,
+          49.730712
+        ]
+      },
+      "id": "node/1599305387"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599305492",
+        "name": "Uničov",
+        "name:cs": "Uničov",
+        "name:de": "Mährisch-Neustadt",
+        "place": "town",
+        "population": "11077",
+        "ref:cobe": "413755",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q682361",
+        "wikipedia": "cs:Uničov",
+        "@relations": [
+          {
+            "role": "admin_centre",
+            "rel": 438432,
+            "reltags": {
+              "admin_level": "8",
+              "boundary": "administrative",
+              "name": "Uničov",
+              "name:cs": "Uničov",
+              "name:de": "Mährisch-Neustadt",
+              "name:prefix": "město",
+              "place": "town",
+              "population": "11801",
+              "ref": "CZ0712505587",
+              "source": "cuzk:ruian",
+              "source:population": "csu:rso",
+              "type": "boundary",
+              "wikidata": "Q682361",
+              "wikipedia": "cs:Uničov"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.1213944,
+          49.7711837
+        ]
+      },
+      "id": "node/1599305492"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599305717",
+        "alt_name:hr": "Olmic",
+        "alt_name:sr": "Олмиц",
+        "name": "Olomouc",
+        "name:ar": "أولوموتس",
+        "name:az": "Olomouts",
+        "name:be": "Оламаўц",
+        "name:bg": "Оломоуц",
+        "name:ce": "Оломоуц",
+        "name:cs": "Olomouc",
+        "name:de": "Olmütz",
+        "name:el": "Όλομουτς",
+        "name:fa": "اولوموتس",
+        "name:he": "אולומואוץ",
+        "name:hi": "ओलोमौक",
+        "name:hu": "Alamóc",
+        "name:hy": "Օլոմոուց",
+        "name:ja": "オロモウツ",
+        "name:ka": "ოლომოუცი",
+        "name:ko": "올로모우츠",
+        "name:la": "Olomucium",
+        "name:lt": "Olomoucas",
+        "name:lv": "Olomouca",
+        "name:mk": "Оломоуц",
+        "name:ml": "ഒലോമുട്ട്സ്",
+        "name:mn": "Оломоуц",
+        "name:os": "Оломоуц",
+        "name:pl": "Ołomuniec",
+        "name:ps": "اولوموڅ",
+        "name:ru": "Оломоуц",
+        "name:sl": "Olomuc",
+        "name:sr": "Оломоуц",
+        "name:tg": "Оломоутс",
+        "name:th": "โอโลโมตส์",
+        "name:tt": "Оломоуц",
+        "name:uk": "Оломоуц",
+        "name:ur": "اولوموتس",
+        "name:uz": "Olomouts",
+        "name:zh": "奧洛穆茨",
+        "place": "city",
+        "population": "99496",
+        "ref:cobe": "413836",
+        "source": "csu:uir-zsj",
+        "website": "https://www.olomouc.eu/",
+        "wikidata": "Q81137",
+        "wikipedia": "cs:Olomouc"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.251143,
+          49.5940567
+        ]
+      },
+      "id": "node/1599305717"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599347527",
+        "name": "Prostějov",
+        "name:cs": "Prostějov",
+        "name:de": "Proßnitz in Mähren",
+        "name:he": "פרוסטיוב",
+        "name:lt": "Prostejovas",
+        "name:pl": "Prościejów",
+        "name:ru": "Простеёв",
+        "name:sr": "Простјејов",
+        "name:uk": "Простейов",
+        "place": "town",
+        "population": "43055",
+        "ref:cobe": "412473",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mestopv.cz/",
+        "wikidata": "Q470445",
+        "wikipedia": "cs:Prostějov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.1117979,
+          49.4721467
+        ]
+      },
+      "id": "node/1599347527"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599377065",
+        "name": "Přerov",
+        "name:cs": "Přerov",
+        "name:de": "Prerau",
+        "name:pl": "Przerów",
+        "name:ru": "Пршеров",
+        "name:sr": "Преров",
+        "name:uk": "Пршеров",
+        "place": "town",
+        "population": "41404",
+        "ref:cobe": "414255",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mu-prerov.cz",
+        "wikidata": "Q470380",
+        "wikipedia": "cs:Přerov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.4508621,
+          49.4553775
+        ]
+      },
+      "id": "node/1599377065"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599377381",
+        "name": "Hranice",
+        "name:cs": "Hranice",
+        "name:de": "Mährisch Weißkirchen",
+        "place": "town",
+        "population": "17125",
+        "ref:cobe": "414352",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q638306",
+        "wikipedia": "cs:Hranice (okres Přerov)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.7347407,
+          49.5481764
+        ]
+      },
+      "id": "node/1599377381"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599401190",
+        "name": "Šumperk",
+        "name:cs": "Šumperk",
+        "name:de": "Mährisch Schönberg",
+        "name:pl": "Szumperk",
+        "name:ru": "Шумперк",
+        "name:sr": "Шумперк",
+        "name:uk": "Шумперк",
+        "place": "town",
+        "population": "29490",
+        "ref:cobe": "414603",
+        "source": "csu:uir-zsj",
+        "website": "https://www.sumperk.cz/",
+        "wikidata": "Q392692",
+        "wikipedia": "cs:Šumperk"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.9705651,
+          49.9655521
+        ]
+      },
+      "id": "node/1599401190"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599401227",
+        "name": "Zábřeh",
+        "name:cs": "Zábřeh",
+        "name:de": "Hohenstadt an der March",
+        "name:sr": "Забрех",
+        "place": "town",
+        "population": "14043",
+        "ref:cobe": "414701",
+        "source": "csu:uir-zsj",
+        "website": "http://www.muzabreh.cz",
+        "wikidata": "Q246634",
+        "wikipedia": "cs:Zábřeh"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.8725044,
+          49.8829089
+        ]
+      },
+      "id": "node/1599401227"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599437736",
+        "name": "Domažlice",
+        "name:cs": "Domažlice",
+        "name:de": "Taus",
+        "name:ru": "Домажлице",
+        "name:sr": "Домажлице",
+        "place": "town",
+        "population": "10897",
+        "source": "csu:uir-zsj",
+        "website": "http://www.domazlice.info",
+        "wikidata": "Q986068",
+        "wikipedia": "cs:Domažlice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.929748,
+          49.4403546
+        ]
+      },
+      "id": "node/1599437736"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599445975",
+        "name": "Sušice",
+        "name:cs": "Sušice",
+        "name:de": "Schüttenhofen",
+        "name:pl": "Suszyca",
+        "name:ru": "Сушице",
+        "name:sr": "Сушице",
+        "place": "town",
+        "population": "11146",
+        "source": "csu:uir-zsj",
+        "website": "https://www.sumavanet.cz/susice",
+        "wikidata": "Q1000056",
+        "wikipedia": "cs:Sušice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.5204076,
+          49.2313907
+        ]
+      },
+      "id": "node/1599445975"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599446262",
+        "name": "Klatovy",
+        "name:cs": "Klatovy",
+        "name:de": "Klattau",
+        "name:la": "Clattovia",
+        "name:ru": "Клатови",
+        "name:sr": "Клатови",
+        "name:uk": "Клатови",
+        "place": "town",
+        "population": "22288",
+        "source": "csu:uir-zsj",
+        "website": "https://www.klatovy.cz",
+        "wikidata": "Q602976",
+        "wikipedia": "cs:Klatovy"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.2935954,
+          49.3951183
+        ]
+      },
+      "id": "node/1599446262"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599471414",
+        "alt_name:de": "Rokytzan",
+        "name": "Rokycany",
+        "name:cs": "Rokycany",
+        "name:de": "Rokitzan",
+        "name:ru": "Рокицани",
+        "place": "town",
+        "population": "14074",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q986072",
+        "wikipedia": "cs:Rokycany"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.594778,
+          49.7428813
+        ]
+      },
+      "id": "node/1599471414"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1599474217",
+        "name": "Tachov",
+        "name:cs": "Tachov",
+        "name:de": "Tachau",
+        "name:el": "Τάχοφ",
+        "name:lt": "Tachovas",
+        "name:ru": "Тахов",
+        "name:sr": "Тахов",
+        "name:sr-Latn": "Tahov",
+        "name:uk": "Тахов",
+        "place": "town",
+        "population": "12156",
+        "ref:cobe": "406741",
+        "source": "csu:uir-zsj",
+        "website": "https://www.tachov-mesto.cz/",
+        "wikidata": "Q191097",
+        "wikipedia": "cs:Tachov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6329861,
+          49.7955449
+        ]
+      },
+      "id": "node/1599474217"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600656034",
+        "name": "Vlašim",
+        "name:cs": "Vlašim",
+        "name:de": "Wlaschim",
+        "name:ru": "Влашим",
+        "name:sr": "Влашим",
+        "place": "town",
+        "population": "11594",
+        "ref:cobe": "401633",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mesto-vlasim.cz/",
+        "wikidata": "Q1000101",
+        "wikipedia": "cs:Vlašim"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.8987513,
+          49.7065924
+        ]
+      },
+      "id": "node/1600656034"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600657508",
+        "name": "Benešov",
+        "name:cs": "Benešov",
+        "name:de": "Beneschau",
+        "name:lt": "Benešovas",
+        "name:ru": "Бенешов",
+        "name:sr": "Бенешов",
+        "name:uk": "Бенешов",
+        "place": "town",
+        "population": "16522",
+        "ref:cobe": "400947",
+        "source": "csu:uir-zsj",
+        "website": "http://www.benesov-city.cz",
+        "wikidata": "Q470394",
+        "wikipedia": "cs:Benešov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.6875926,
+          49.7828898
+        ]
+      },
+      "id": "node/1600657508"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600666022",
+        "name": "Beroun",
+        "name:cs": "Beroun",
+        "name:de": "Beraun",
+        "name:la": "Verona",
+        "name:ru": "Бероун",
+        "name:sr": "Бероун",
+        "name:uk": "Бероун",
+        "place": "town",
+        "population": "19439",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mesto-beroun.cz/",
+        "wikidata": "Q827041",
+        "wikipedia": "cs:Beroun"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0733907,
+          49.9640292
+        ]
+      },
+      "id": "node/1600666022"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600669255",
+        "name": "Slaný",
+        "name:cs": "Slaný",
+        "name:de": "Schlan",
+        "place": "town",
+        "population": "15613",
+        "ref:cobe": "402079",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q1013909",
+        "wikipedia": "cs:Slaný"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0868501,
+          50.2306933
+        ]
+      },
+      "id": "node/1600669255"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600669349",
+        "name": "Kladno",
+        "name:cs": "Kladno",
+        "name:de": "Kladen",
+        "name:lt": "Kladnas",
+        "name:ru": "Кладно",
+        "name:sr": "Кладно",
+        "name:uk": "Кладно",
+        "place": "town",
+        "population": "66903",
+        "ref:cobe": "401994",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mestokladno.cz",
+        "wikidata": "Q155993",
+        "wikipedia": "cs:Kladno"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.1026398,
+          50.1466053
+        ]
+      },
+      "id": "node/1600669349"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600675617",
+        "name": "Kolín",
+        "name:ar": "كولين",
+        "name:cs": "Kolín",
+        "name:de": "Kolin",
+        "name:lt": "Kolynas",
+        "name:ru": "Колин",
+        "name:sr": "Колин",
+        "name:uk": "Колін",
+        "place": "town",
+        "population": "32046",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mukolin.cz",
+        "wikidata": "Q470369",
+        "wikipedia": "cs:Kolín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.2011571,
+          50.0288894
+        ]
+      },
+      "id": "node/1600675617"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600680539",
+        "alt_name:de": "Czaslau",
+        "name": "Čáslav",
+        "name:cs": "Čáslav",
+        "name:de": "Tschaslau",
+        "place": "town",
+        "population": "10397",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q341777",
+        "wikipedia": "cs:Čáslav"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.3913205,
+          49.9109171
+        ]
+      },
+      "id": "node/1600680539"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600680841",
+        "name": "Kutná Hora",
+        "name:cs": "Kutná Hora",
+        "name:de": "Kuttenberg",
+        "name:he": "קוטנה הורה",
+        "name:lt": "Kutna Hora",
+        "name:ru": "Кутна-Гора",
+        "name:sr": "Кутна Хора",
+        "name:uk": "Кутна Гора",
+        "place": "town",
+        "population": "20536",
+        "source": "csu:uir-zsj",
+        "website": "https://www.kutnahora.cz/",
+        "wikidata": "Q155975",
+        "wikipedia": "cs:Kutná Hora"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.2681123,
+          49.9486561
+        ]
+      },
+      "id": "node/1600680841"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600879737",
+        "name": "Mělník",
+        "name:cs": "Mělník",
+        "name:de": "Melnik",
+        "name:pl": "Mielnik",
+        "name:ru": "Мельник",
+        "name:sr": "Мелник",
+        "name:uk": "Мельник",
+        "place": "town",
+        "population": "20350",
+        "population:date": "2024",
+        "ref:cobe": "402401",
+        "source": "csu:uir-zsj",
+        "source:population": "wikipedia",
+        "website": "http://www.melnik.info",
+        "wikidata": "Q320939",
+        "wikimedia_commons": "Category:Mělník",
+        "wikipedia": "cs:Mělník"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.4748281,
+          50.3520785
+        ]
+      },
+      "id": "node/1600879737"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1600879849",
+        "name": "Kralupy nad Vltavou",
+        "name:cs": "Kralupy nad Vltavou",
+        "name:de": "Kralup an der Moldau",
+        "name:pl": "Kralupy nad Wełtawą",
+        "name:ru": "Кралупи-над-Влтавой",
+        "name:sr": "Кралупи на Влтави",
+        "name:uk": "Кралупи-на-Влтаві",
+        "place": "town",
+        "population": "18100",
+        "ref:cobe": "402419",
+        "short_name": "Kralupy n. Vlt.",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mestokralupy.cz/",
+        "wikidata": "Q987496",
+        "wikipedia": "cs:Kralupy nad Vltavou"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.3106491,
+          50.2415548
+        ]
+      },
+      "id": "node/1600879849"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601122321",
+        "name": "Mladá Boleslav",
+        "name:cs": "Mladá Boleslav",
+        "name:de": "Jungbunzlau",
+        "name:lt": "Mlada Boleslavas",
+        "name:ru": "Млада-Болеслав",
+        "name:sr": "Млада Болеслав",
+        "name:uk": "Млада-Болеслав",
+        "place": "town",
+        "population": "41868",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mb-net.cz",
+        "wikidata": "Q191805",
+        "wikipedia": "cs:Mladá Boleslav"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.9031301,
+          50.4116187
+        ]
+      },
+      "id": "node/1601122321"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601148511",
+        "name": "Poděbrady",
+        "name:cs": "Poděbrady",
+        "name:de": "Podiebrad",
+        "name:lt": "Podebradai",
+        "name:pl": "Podiebrady",
+        "name:ru": "Подебрады",
+        "name:sr": "Подјебради",
+        "name:uk": "Подєбради",
+        "place": "town",
+        "population": "14142",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mesto-podebrady.cz",
+        "wikidata": "Q683165",
+        "wikipedia": "cs:Poděbrady"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.1191453,
+          50.1430072
+        ]
+      },
+      "id": "node/1601148511"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601148540",
+        "alt_name:de": "Neuenburg an der Elbe",
+        "name": "Nymburk",
+        "name:cs": "Nymburk",
+        "name:de": "Nimburg",
+        "name:ru": "Нимбурк",
+        "name:sr": "Нимбурк",
+        "place": "town",
+        "population": "13965",
+        "ref:cobe": "402907",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mesto-nymburk.cz",
+        "wikidata": "Q430864",
+        "wikipedia": "cs:Nymburk"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.0414543,
+          50.1852696
+        ]
+      },
+      "id": "node/1601148540"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601194895",
+        "alt_name:de": "Tschelakowitz",
+        "name": "Čelákovice",
+        "name:cs": "Čelákovice",
+        "name:de": "Czelakowitz",
+        "name:ru": "Челаковице",
+        "name:sr": "Челаковице",
+        "place": "town",
+        "population": "12273",
+        "ref:cobe": "403041",
+        "source": "csu:uir-zsj",
+        "website": "https://www.celakovice.cz/",
+        "wikidata": "Q338616",
+        "wikipedia": "cs:Čelákovice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.7500022,
+          50.1607829
+        ]
+      },
+      "id": "node/1601194895"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601196683",
+        "name": "Brandýs nad Labem-Stará Boleslav",
+        "name:cs": "Brandýs nad Labem-Stará Boleslav",
+        "name:de": "Brandeis an der Elbe-Altbunzlau",
+        "name:ru": "Брандис-над-Лабем-Стара-Болеслав",
+        "name:sr": "Брандис на Лаби-Стара Болеслав",
+        "name:uk": "Брандіс-над-Лабем-Стара-Болеслав",
+        "place": "town",
+        "population": "20313",
+        "population:date": "2025-01-01",
+        "short_name": "Brandýs n.L. - M. Boleslav",
+        "source": "csu:uir-zsj",
+        "source:population": "wikipedia",
+        "website": "http://www.brandysko.cz/",
+        "wikidata": "Q898468",
+        "wikimedia_commons": "Category:Brandýs nad Labem-Stará Boleslav",
+        "wikipedia": "cs:Brandýs nad Labem-Stará Boleslav"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.6649786,
+          50.1912412
+        ]
+      },
+      "id": "node/1601196683"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601287903",
+        "name": "Příbram",
+        "name:cs": "Příbram",
+        "name:de": "Pribram",
+        "name:lt": "Pršybramas",
+        "name:pl": "Przybram",
+        "name:ru": "Пршибрам",
+        "name:sr": "Прибрам",
+        "name:uk": "Пршибрам",
+        "place": "town",
+        "population": "31651",
+        "source": "csu:uir-zsj",
+        "website": "http://www.pribram-city.cz",
+        "wikidata": "Q841296",
+        "wikipedia": "cs:Příbram"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.0103663,
+          49.6901444
+        ]
+      },
+      "id": "node/1601287903"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601330967",
+        "name": "Rakovník",
+        "name:cs": "Rakovník",
+        "name:de": "Rakonitz",
+        "name:lt": "Rakovnykas",
+        "name:ru": "Раковник",
+        "name:sr": "Раковник",
+        "place": "town",
+        "population": "16695",
+        "source": "csu:uir-zsj",
+        "start_date": "before 1252",
+        "website": "https://www.mesto-rakovnik.cz/",
+        "wikidata": "Q985465",
+        "wikipedia": "cs:Rakovník"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7310462,
+          50.1041136
+        ]
+      },
+      "id": "node/1601330967"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601394207",
+        "name": "Krnov",
+        "name:cs": "Krnov",
+        "name:de": "Jägerndorf",
+        "name:pl": "Karniów",
+        "name:ru": "Крнов",
+        "name:sr": "Крнов",
+        "name:szl": "Karńůw",
+        "name:uk": "Крнов",
+        "place": "town",
+        "population": "25211",
+        "source": "csu:uir-zsj",
+        "website": "http://www.krnov.cz",
+        "wikidata": "Q1789604",
+        "wikipedia": "cs:Krnov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.7040842,
+          50.089894
+        ]
+      },
+      "id": "node/1601394207"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601394326",
+        "name": "Bruntál",
+        "name:cs": "Bruntál",
+        "name:la": "Vallis Gaudiorum",
+        "name:pl": "Bruntal",
+        "name:ru": "Брунталь",
+        "name:sr": "Брунтал",
+        "old_name:de": "Freudenthal",
+        "place": "town",
+        "population": "17453",
+        "ref:cobe": "413046",
+        "source": "csu:uir-zsj",
+        "website": "http://www.mubruntal.cz",
+        "wikidata": "Q994280",
+        "wikipedia": "cs:Bruntál"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.4652901,
+          49.9885113
+        ]
+      },
+      "id": "node/1601394326"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601416166",
+        "alt_name:de": "Friedek-Mistek",
+        "name": "Frýdek-Místek",
+        "name:cs": "Frýdek-Místek",
+        "name:de": "Friedeck-Mistek",
+        "name:lt": "Frydek Mystekas",
+        "name:pl": "Frydek-Mistek",
+        "name:ru": "Фридек-Мистек",
+        "name:sr": "Фридек-Мистек",
+        "name:uk": "Фрідек-Містек",
+        "place": "town",
+        "population": "53899",
+        "source": "csu:uir-zsj",
+        "website": "http://www.frydek-mistek.cz",
+        "wikidata": "Q48194",
+        "wikipedia": "cs:Frýdek-Místek"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.3483416,
+          49.685635
+        ]
+      },
+      "id": "node/1601416166"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601422775",
+        "name": "Český Těšín",
+        "name:cs": "Český Těšín",
+        "name:de": "Tschechisch Teschen",
+        "name:pl": "Czeski Cieszyn",
+        "name:ru": "Чески-Тешин",
+        "name:sk": "Český Tešín",
+        "name:sr": "Чешки Тјешин",
+        "name:uk": "Чеський Тешин",
+        "place": "town",
+        "population": "22347",
+        "ref:cobe": "413437",
+        "source": "csu:uir-zsj",
+        "website": "http://www.tesin.cz/",
+        "wikidata": "Q278877",
+        "wikipedia": "cs:Český Těšín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.6260976,
+          49.7464018
+        ]
+      },
+      "id": "node/1601422775"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601422844",
+        "name": "Orlová",
+        "name:cs": "Orlová",
+        "name:de": "Orlau",
+        "name:pl": "Orłowa",
+        "name:uk": "Орлова",
+        "place": "town",
+        "population": "28206",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q386026",
+        "wikipedia": "cs:Orlová"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.4309274,
+          49.8459427
+        ]
+      },
+      "id": "node/1601422844"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601422907",
+        "name": "Karviná",
+        "name:cs": "Karviná",
+        "name:de": "Karwin",
+        "name:lt": "Karvina",
+        "name:pl": "Karwina",
+        "name:ru": "Карвина",
+        "name:sr": "Карвина",
+        "name:uk": "Карвіна",
+        "place": "town",
+        "population": "49881",
+        "source": "csu:uir-zsj",
+        "website": "http://www.karvina.cz",
+        "wikidata": "Q191793",
+        "wikipedia": "cs:Karviná"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.5416556,
+          49.8542719
+        ]
+      },
+      "id": "node/1601422907"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601422954",
+        "name": "Havířov",
+        "name:cs": "Havířov",
+        "name:de": "Hawirzow",
+        "name:lt": "Haviržovas",
+        "name:pl": "Hawierzów",
+        "name:ru": "Гавиржов",
+        "name:sr": "Хавиржов",
+        "name:uk": "Гавіржов",
+        "old_name": "Šumbark",
+        "place": "town",
+        "population": "69084",
+        "source": "csu:uir-zsj",
+        "website": "https://www.havirov-city.cz/",
+        "wikidata": "Q192904",
+        "wikipedia": "cs:Havířov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.4368451,
+          49.7801136
+        ]
+      },
+      "id": "node/1601422954"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601423016",
+        "name": "Bohumín",
+        "name:cs": "Bohumín",
+        "name:de": "Oderberg",
+        "name:pl": "Bogumin",
+        "name:ru": "Богумин",
+        "name:sr": "Бохумин",
+        "place": "town",
+        "population": "18914",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mesto-bohumin.cz/",
+        "wikidata": "Q890949",
+        "wikipedia": "cs:Bohumín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.3574288,
+          49.9041537
+        ]
+      },
+      "id": "node/1601423016"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601461194",
+        "name": "Nový Jičín",
+        "name:cs": "Nový Jičín",
+        "name:de": "Neutitschein",
+        "name:pl": "Nowy Jiczyn",
+        "name:ru": "Нови-Йичин",
+        "name:sr": "Нови Јичин",
+        "name:uk": "Новий Їчин",
+        "old_name:de": "Neutitschein",
+        "place": "town",
+        "population": "20644",
+        "ref:cobe": "413500",
+        "source": "csu:uir-zsj",
+        "website": "http://www.novy-jicin.cz/",
+        "wikidata": "Q3584",
+        "wikipedia": "cs:Nový Jičín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.0102584,
+          49.594881
+        ]
+      },
+      "id": "node/1601461194"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601461325",
+        "name": "Kopřivnice",
+        "name:cs": "Kopřivnice",
+        "name:de": "Nesselsdorf",
+        "name:en": "Koprivnice",
+        "name:pl": "Koprzywnica",
+        "name:ru": "Копршивнице",
+        "name:sr": "Копривнице",
+        "name:uk": "Копрівніце",
+        "note:name:en": "english without chech charachters - otherwise no correct display on most systems worldwide and if you dont have czech keyboard it can not be found in any navigation system searc",
+        "place": "town",
+        "population": "21160",
+        "ref:cobe": "413577",
+        "ref:zsj": "413577",
+        "source": "csu:uir-zsj",
+        "website": "http://www.koprivnice.cz/",
+        "wikidata": "Q849439",
+        "wikipedia": "cs:Kopřivnice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.1452134,
+          49.598913
+        ]
+      },
+      "id": "node/1601461325"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601461460",
+        "name": "Frenštát pod Radhoštěm",
+        "name:cs": "Frenštát pod Radhoštěm",
+        "name:de": "Frankstadt unter dem Radhoscht",
+        "name:en": "Frenstat pod Radhostem",
+        "name:pl": "Frensztat pod Radhoszczem",
+        "name:sr": "Френштат под Радхоштјем",
+        "note:name:en": "english without chech charachters - otherwise no correct display on most systems worldwide and if you dont have czech keyboard it can not be found in any navigation system searc",
+        "place": "town",
+        "population": "10850",
+        "ref:cobe": "413542",
+        "source": "csu:uir-zsj",
+        "website": "https://www.frenstat.info/",
+        "wikidata": "Q668695",
+        "wikipedia": "cs:Frenštát pod Radhoštěm"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.2117067,
+          49.5474224
+        ]
+      },
+      "id": "node/1601461460"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601511326",
+        "name": "Opava",
+        "name:cs": "Opava",
+        "name:de": "Troppau",
+        "name:lt": "Opava",
+        "name:pl": "Opawa",
+        "name:ru": "Опава",
+        "name:sr": "Опава",
+        "name:szl": "Ôpawa",
+        "name:uk": "Опава",
+        "place": "town",
+        "population": "54840",
+        "source": "csu:uir-zsj",
+        "website": "https://www.opava-city.cz/",
+        "wikidata": "Q156080",
+        "wikipedia": "cs:Opava"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.9024174,
+          49.9389004
+        ]
+      },
+      "id": "node/1601511326"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601511476",
+        "name": "Hlučín",
+        "name:cs": "Hlučín",
+        "name:de": "Hultschin",
+        "name:pl": "Hulczyn",
+        "name:ru": "Глучин",
+        "name:sr": "Хлучин",
+        "place": "town",
+        "population": "13988",
+        "ref:cobe": "413887",
+        "source": "csu:uir-zsj",
+        "website": "https://www.hlucin.cz/",
+        "wikidata": "Q158257",
+        "wikipedia": "cs:Hlučín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.1870424,
+          49.896755
+        ]
+      },
+      "id": "node/1601511476"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601523251",
+        "name": "Ostrava",
+        "name:ar": "أوسترافا",
+        "name:cs": "Ostrava",
+        "name:de": "Ostrau",
+        "name:el": "Οστράβα",
+        "name:fa": "استراوا",
+        "name:kn": "ಒಸ್ಟ್ರಾವ",
+        "name:la": "Ostravia",
+        "name:ml": "ഒസ്ട്രാവ",
+        "name:pl": "Ostrawa",
+        "name:ru": "Острава",
+        "name:sr": "Острава",
+        "name:uk": "Острава",
+        "name:ur": "اوستراوا",
+        "place": "city",
+        "population": "279791",
+        "source": "csu:uir-zsj",
+        "website": "http://www.ostrava.cz",
+        "wikidata": "Q8385",
+        "wikipedia": "cs:Ostrava"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.2820084,
+          49.8349139
+        ]
+      },
+      "id": "node/1601523251"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601563355",
+        "name": "Boskovice",
+        "name:cs": "Boskovice",
+        "name:de": "Boskowitz",
+        "name:ru": "Босковице",
+        "name:sr": "Босковице",
+        "name:yi": "בוסקוויצ",
+        "place": "town",
+        "population": "10679",
+        "ref:cobe": "411558",
+        "source": "csu:uir-zsj",
+        "website": "https://www.boskovice.cz/",
+        "wikidata": "Q894440",
+        "wikipedia": "cs:Boskovice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.66016,
+          49.4877983
+        ]
+      },
+      "id": "node/1601563355"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601563389",
+        "email": "epodatelna@blansko.cz",
+        "name": "Blansko",
+        "name:cs": "Blansko",
+        "name:de": "Blanz",
+        "name:ru": "Бланско",
+        "name:sr": "Бланско",
+        "phone": "+420 516 775 111",
+        "place": "town",
+        "population": "17920",
+        "ref:cobe": "411531",
+        "source": "csu:uir-zsj",
+        "website": "https://www.blansko.cz/",
+        "wikidata": "Q850676",
+        "wikipedia": "cs:Blansko"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.6442394,
+          49.3636494
+        ]
+      },
+      "id": "node/1601563389"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601566699",
+        "capital": "4",
+        "name": "Brno",
+        "name:am": "ብርኖ",
+        "name:ar": "برنو",
+        "name:be": "Брно",
+        "name:bg": "Бърно",
+        "name:ce": "Брно",
+        "name:cs": "Brno",
+        "name:de": "Brünn",
+        "name:el": "Μπρνο",
+        "name:fa": "برنو",
+        "name:he": "ברנו",
+        "name:hi": "ब्र्नो",
+        "name:hu": "Brno",
+        "name:hy": "Բռնո",
+        "name:ja": "ブルノ",
+        "name:ka": "ბრნო",
+        "name:kk": "Брно",
+        "name:kn": "ಬೃನೋ",
+        "name:ko": "브르노",
+        "name:kv": "Брно",
+        "name:ky": "Брно",
+        "name:la": "Bruna",
+        "name:lt": "Brno",
+        "name:mk": "Брно",
+        "name:mn": "Брно",
+        "name:mr": "ब्रनो",
+        "name:os": "Брно",
+        "name:ps": "برنو",
+        "name:ru": "Брно",
+        "name:sk": "Brno",
+        "name:sq": "Bërno",
+        "name:sr": "Брно",
+        "name:ta": "பிர்னோ",
+        "name:tg": "Брно",
+        "name:th": "เบอร์โน",
+        "name:tt": "Брно",
+        "name:uk": "Брно",
+        "name:ur": "برنو",
+        "name:yi": "ברין",
+        "name:zh": "布爾諾",
+        "old_name:hu": "Berén",
+        "place": "city",
+        "population": "379466",
+        "ref:cobe": "411582",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q14960",
+        "wikipedia": "cs:Brno"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.6113382,
+          49.1922443
+        ]
+      },
+      "id": "node/1601566699"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601617325",
+        "name": "Kuřim",
+        "name:cs": "Kuřim",
+        "name:de": "Gurein",
+        "name:ru": "Куржим",
+        "place": "town",
+        "population": "10981",
+        "ref:cobe": "412015",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q1000046",
+        "wikipedia": "cs:Kuřim"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.531396,
+          49.2987857
+        ]
+      },
+      "id": "node/1601617325"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601662907",
+        "name": "Břeclav",
+        "name:cs": "Břeclav",
+        "name:de": "Lundenburg",
+        "name:pl": "Brzecław",
+        "name:ru": "Бржецлав",
+        "name:sr": "Брецлав",
+        "name:uk": "Бржецлав",
+        "place": "town",
+        "population": "19502",
+        "ref:cobe": "412112",
+        "source": "csu:uir-zsj",
+        "website": "http://www.breclav.org",
+        "wikidata": "Q581478",
+        "wikipedia": "cs:Břeclav"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.8813137,
+          48.7594008
+        ]
+      },
+      "id": "node/1601662907"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601694597",
+        "alt_name:de": "Wesseli an der March",
+        "name": "Veselí nad Moravou",
+        "name:cs": "Veselí nad Moravou",
+        "name:de": "Wessely an der March",
+        "place": "town",
+        "population": "10410",
+        "ref:cobe": "412309",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q105198",
+        "wikipedia": "cs:Veselí nad Moravou"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.379034,
+          48.9540796
+        ]
+      },
+      "id": "node/1601694597"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601694787",
+        "name": "Kyjov",
+        "name:cs": "Kyjov",
+        "name:de": "Gaya",
+        "name:sr": "Кијов",
+        "name:uk": "Кийов",
+        "place": "town",
+        "population": "11774",
+        "ref:cobe": "412287",
+        "source": "csu:uir-zsj",
+        "website": "https://www.mestokyjov.cz/",
+        "wikidata": "Q104587",
+        "wikipedia": "cs:Kyjov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.1224867,
+          49.0104456
+        ]
+      },
+      "id": "node/1601694787"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601724221",
+        "man_made": "surveillance",
+        "name": "Vyškov",
+        "name:cs": "Vyškov",
+        "name:de": "Wischau",
+        "name:ru": "Вишков",
+        "name:sr": "Вишков",
+        "operator": "Městská policie Vyškov",
+        "operator:wikidata": "Q131378377",
+        "place": "town",
+        "population": "13758",
+        "source": "csu:uir-zsj",
+        "surveillance": "public",
+        "surveillance:type": "camera",
+        "surveillance:zone": "town",
+        "website": "http://www.vyskov-mesto.cz",
+        "wikidata": "Q954569",
+        "wikipedia": "cs:Vyškov"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.9994446,
+          49.2778194
+        ]
+      },
+      "id": "node/1601724221"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601754750",
+        "ele": "290",
+        "name": "Znojmo",
+        "name:cs": "Znojmo",
+        "name:de": "Znaim",
+        "name:ru": "Зноймо",
+        "name:uk": "Зноймо",
+        "place": "town",
+        "population": "33370",
+        "postal_code": "66902",
+        "ref:cobe": "412741",
+        "source": "csu:uir-zsj",
+        "website": "http://www.znojmocity.cz/",
+        "wikidata": "Q214956",
+        "wikipedia": "cs:Znojmo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.0489457,
+          48.8554341
+        ]
+      },
+      "id": "node/1601754750"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1601837931",
+        "admin_level": "2",
+        "capital": "yes",
+        "capital_ISO3166-1": "yes",
+        "ele": "192",
+        "name": "Praha",
+        "name:af": "Praag",
+        "name:ak": "Prague",
+        "name:am": "ፕራግ",
+        "name:an": "Praga",
+        "name:ar": "براغ",
+        "name:arc": "ܦܪܐܓ",
+        "name:arz": "براج",
+        "name:as": "প্ৰাগ",
+        "name:ast": "Praga",
+        "name:av": "Прага",
+        "name:az": "Praqa",
+        "name:ba": "Прага",
+        "name:bat-smg": "Praha",
+        "name:be": "Прага",
+        "name:be-tarask": "Прага",
+        "name:bg": "Прага",
+        "name:bi": "Prague",
+        "name:bn": "প্রাগ",
+        "name:bo": "པུ་ལ་ཁེ།",
+        "name:br": "Praha",
+        "name:bs": "Prag",
+        "name:ca": "Praga",
+        "name:ce": "Прага",
+        "name:ch": "Praga",
+        "name:ckb": "پراگ",
+        "name:co": "Praga",
+        "name:cs": "Praha",
+        "name:csb": "Praga",
+        "name:cu": "Прага",
+        "name:cv": "Прага",
+        "name:cy": "Prag",
+        "name:da": "Prag",
+        "name:de": "Prag",
+        "name:dsb": "Praha",
+        "name:ee": "Prague",
+        "name:el": "Πράγα",
+        "name:en": "Prague",
+        "name:eo": "Prago",
+        "name:es": "Praga",
+        "name:et": "Praha",
+        "name:eu": "Praga",
+        "name:ext": "Praga",
+        "name:fa": "پراگ",
+        "name:ff": "Prague",
+        "name:fi": "Praha",
+        "name:fo": "Prag",
+        "name:fr": "Prague",
+        "name:fur": "Praghe",
+        "name:fy": "Praach",
+        "name:ga": "Prág",
+        "name:gag": "Praga",
+        "name:gd": "Pràg",
+        "name:gl": "Praga",
+        "name:gn": "Praga",
+        "name:gv": "Praag",
+        "name:ha": "Prag",
+        "name:he": "פראג",
+        "name:hi": "प्राग",
+        "name:hif": "Prague",
+        "name:hr": "Prag",
+        "name:hsb": "Praha",
+        "name:ht": "Prag",
+        "name:hu": "Prága",
+        "name:hy": "Պրահա",
+        "name:ia": "Praga",
+        "name:id": "Praha",
+        "name:ie": "Praha",
+        "name:io": "Praha",
+        "name:is": "Prag",
+        "name:it": "Praga",
+        "name:ja": "プラハ",
+        "name:jbo": "pragas",
+        "name:jv": "Praha",
+        "name:ka": "პრაღა",
+        "name:kab": "Prag",
+        "name:kg": "Prague",
+        "name:ki": "Prague",
+        "name:kk": "Прага",
+        "name:kl": "Praha",
+        "name:km": "ទីក្រុងប្រាក",
+        "name:kn": "ಪ್ರಾಗ",
+        "name:ko": "프라하",
+        "name:krc": "Прага",
+        "name:ku": "Prag",
+        "name:kv": "Прага",
+        "name:kw": "Praha",
+        "name:ky": "Прага",
+        "name:la": "Praga",
+        "name:lad": "Praga",
+        "name:lb": "Prag",
+        "name:li": "Praag",
+        "name:lij": "Praga",
+        "name:lmo": "Praga",
+        "name:ln": "Prag",
+        "name:lo": "ປຣາກ",
+        "name:lt": "Praha",
+        "name:lv": "Prāga",
+        "name:mdf": "Прага",
+        "name:mg": "Prague",
+        "name:mhr": "Прага",
+        "name:mi": "Prague",
+        "name:mk": "Прага",
+        "name:ml": "പ്രാഗ്",
+        "name:mn": "Прага",
+        "name:mr": "प्राग",
+        "name:ms": "Praha",
+        "name:mt": "Praga",
+        "name:my": "ပရက်ဂ်မြို့",
+        "name:mzn": "پراگ",
+        "name:na": "Praha",
+        "name:nah": "Praha",
+        "name:nan": "Praha",
+        "name:nap": "Praga",
+        "name:nds": "Prag",
+        "name:nds-nl": "Praag",
+        "name:ne": "प्राग",
+        "name:nl": "Praag",
+        "name:nn": "Praha",
+        "name:no": "Praha",
+        "name:nov": "Praha",
+        "name:nrm": "Prague",
+        "name:nv": "Tóʼnaa Habitiin",
+        "name:oc": "Praga",
+        "name:os": "Прагæ",
+        "name:pa": "ਪਰਾਗ",
+        "name:pam": "Prague",
+        "name:pcd": "Prague",
+        "name:pl": "Praga",
+        "name:pms": "Praga",
+        "name:pnb": "پراگ",
+        "name:ps": "پراګ",
+        "name:pt": "Praga",
+        "name:qu": "Praha",
+        "name:rm": "Prag",
+        "name:rmy": "Praga",
+        "name:ro": "Praga",
+        "name:roa-rup": "Praga",
+        "name:roa-tara": "Praghe",
+        "name:ru": "Прага",
+        "name:sah": "Прага",
+        "name:sc": "Praga",
+        "name:sco": "Prague",
+        "name:sd": "پراگ",
+        "name:se": "Praha",
+        "name:sh": "Prag",
+        "name:sk": "Praha",
+        "name:sl": "Praga",
+        "name:sn": "Prague",
+        "name:sq": "Praga",
+        "name:sr": "Праг",
+        "name:sr-Latn": "Prag",
+        "name:stq": "Praag",
+        "name:sv": "Prag",
+        "name:sw": "Praha",
+        "name:szl": "Praga",
+        "name:ta": "பிராகா",
+        "name:te": "ప్రాగ్",
+        "name:tg": "Прага",
+        "name:th": "ปราก",
+        "name:tl": "Praga",
+        "name:tr": "Prag",
+        "name:tt": "Праһа",
+        "name:tzl": "Praha",
+        "name:udm": "Прага",
+        "name:ug": "پراگا",
+        "name:uk": "Прага",
+        "name:ur": "پراگ",
+        "name:uz": "Praga",
+        "name:vec": "Praga",
+        "name:vi": "Praha",
+        "name:vro": "Praha",
+        "name:war": "Praga",
+        "name:wo": "Prag",
+        "name:yi": "פראג",
+        "name:yo": "Prague",
+        "name:yue": "布拉格",
+        "name:zh": "布拉格",
+        "name:zu": "IPraha",
+        "place": "city",
+        "population": "1275406",
+        "source": "csu:uir-zsj",
+        "website": "https://www.praha.eu/",
+        "wikidata": "Q1085",
+        "wikipedia": "cs:Praha"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.4212535,
+          50.0874654
+        ]
+      },
+      "id": "node/1601837931"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2343424942",
+        "name": "Uherské Hradiště",
+        "name:cs": "Uherské Hradiště",
+        "name:de": "Ungarisch Hradisch",
+        "name:hu": "Magyarhradis",
+        "name:uk": "Угерске Градіште",
+        "place": "town",
+        "population": "21737",
+        "ref:cobe": "412619",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q502993",
+        "wikipedia": "cs:Uherské Hradiště"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.4663899,
+          49.0681018
+        ]
+      },
+      "id": "node/2343424942"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4000441657",
+        "name": "Neratovice",
+        "name:cs": "Neratovice",
+        "name:de": "Neratowitz",
+        "place": "town",
+        "population": "15865",
+        "ref:cobe": "402451",
+        "source": "csu:uir-zsj",
+        "wikidata": "Q239597",
+        "wikipedia": "cs:Neratovice"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.5175086,
+          50.2598479
+        ]
+      },
+      "id": "node/4000441657"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8929081105",
+        "name": "Hodonín",
+        "name:cs": "Hodonín",
+        "name:de": "Göding",
+        "name:ru": "Годонин",
+        "name:sr": "Ходоњин",
+        "name:uk": "Годонін",
+        "place": "town",
+        "population": "27361",
+        "ref:cobe": "412252",
+        "source": "csu:uir-zsj",
+        "website": "http://www.hodonin.eu",
+        "wikidata": "Q321778",
+        "wikipedia": "cs:Hodonín"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.1234655,
+          48.8563914
+        ]
+      },
+      "id": "node/8929081105"
+    }
+  ]
+}
