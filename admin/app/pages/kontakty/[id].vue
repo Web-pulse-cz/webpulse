@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Form } from 'vee-validate';
 import { useActivityStore } from '~~/stores/activityStore';
 
 const activityStore = useActivityStore();
-
-import { Form } from 'vee-validate';
 
 const { $toast } = useNuxtApp();
 
