@@ -34,6 +34,8 @@ const item = ref({
   name: '' as string,
   color: '' as string | null,
   description: '' as string,
+  is_business: false as boolean,
+  is_personal: false as boolean,
 });
 
 async function loadItem() {
@@ -45,6 +47,8 @@ async function loadItem() {
     name: string;
     color: string | null;
     description: string | null;
+    is_business: boolean;
+    is_personal: boolean;
   }>('/api/admin/activity/' + route.params.id, {
     method: 'GET',
     headers: {
@@ -84,6 +88,8 @@ async function saveItem(redirect = true as boolean) {
     name: string;
     color: string | null;
     description: string | null;
+    is_business: boolean;
+    is_personal: boolean;
   }>(
     route.params.id === 'pridat' ? '/api/admin/activity' : '/api/admin/activity/' + route.params.id,
     {
@@ -173,6 +179,20 @@ definePageMeta({
             name="description"
             rules="min:3"
             class="col-span-full"
+          />
+          <BaseFormCheckbox
+            v-model="item.is_business"
+            :checked="item.is_business"
+            label="Byznys aktivita"
+            name="is_business"
+            class="col-span-1"
+          />
+          <BaseFormCheckbox
+            v-model="item.is_personal"
+            :checked="item.is_personal"
+            label="Osobní aktivita"
+            name="is_personal"
+            class="col-span-1"
           />
         </div>
       </LayoutContainer>
