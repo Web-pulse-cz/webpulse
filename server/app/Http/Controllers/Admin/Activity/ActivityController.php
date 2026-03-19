@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Activity;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Activity\ActivityResource;
 use App\Models\Activity\Activity;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -28,6 +29,16 @@ class ActivityController extends Controller
                 $query->where('name', 'like', '%' . $searchString . '%');
             }
         }
+
+        // determine business and personal acitivities
+        $query->where(function (Builder $query) use ($request) {
+            if ($request->has('is_business') && ($request->get('is_business') == 'true' || $request->get('is_business') == true)) {
+                $query->orWhere('is_business', true);
+            }
+            if ($request->has('is_personal') && ($request->get('is_personal') == 'true' || $request->get('is_personal') == true)) {
+                $query->orWhere('is_personal', true);
+            }
+        });
 
         if ($request->has('orderWay') && $request->get('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
