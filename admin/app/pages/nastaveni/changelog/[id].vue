@@ -2,9 +2,6 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { useActivityStore } from '~~/stores/activityStore';
-
-const activityStore = useActivityStore();
 
 const { $toast } = useNuxtApp();
 
@@ -133,7 +130,6 @@ async function saveItem(redirect = true as boolean) {
     })
     .finally(() => {
       loading.value = false;
-      activityStore.fetchActivities();
     });
 }
 

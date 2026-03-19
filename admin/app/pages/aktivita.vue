@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useActivityStore } from "~~/stores/activityStore";
+
+const activityStore = useActivityStore();
 
 import { definePageMeta } from '#imports';
 
@@ -153,6 +156,7 @@ useHead({
 });
 
 onMounted(() => {
+  activityStore.fetchActivities(true, true);
   loadItems(currentMonth.value, currentYear.value);
 });
 definePageMeta({

@@ -479,11 +479,30 @@ const userNavigation = [
 
 const quickAccess = ref([{ name: '', link: '/', target: null }]);
 
+function isRouteActive(link: string | undefined | null, currentPath: string): boolean {
+  if (!link) return false;
+  if (link === '/') return currentPath === '/';
+
+  return currentPath === link || currentPath.startsWith(link + '/');
+}
+
 watchEffect(() => {
   const currentPath = route.path;
+
   navigation.value.forEach((group) => {
     group.menu.forEach((item) => {
-      item.current = currentPath === item.link;
+      let hasActiveSubmenu = false;
+
+      if (item.submenu) {
+        item.submenu.forEach((subItem) => {
+          subItem.current = isRouteActive(subItem.link, currentPath);
+          if (subItem.current) {
+            hasActiveSubmenu = true;
+          }
+        });
+      }
+
+      item.current = hasActiveSubmenu || isRouteActive(item.link, currentPath);
     });
   });
 });
@@ -742,11 +761,17 @@ onMounted(() => {
                               <li v-for="subItem in item.submenu" :key="subItem.name">
                                 <DisclosureButton as="div" class="w-full">
                                   <NuxtLink
-                                    v-if="subItem.link"
-                                    :to="subItem.link"
-                                    class="group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold text-gray-600 hover:bg-gray-800 hover:text-white"
-                                    >{{ subItem.name }}</NuxtLink
+                                      v-if="subItem.link"
+                                      :to="subItem.link"
+                                      :class="[
+    subItem.current
+      ? 'bg-gray-800 text-white'
+      : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+    'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold'
+  ]"
                                   >
+                                    {{ subItem.name }}
+                                  </NuxtLink>
                                 </DisclosureButton>
                               </li>
                             </DisclosurePanel>
@@ -831,11 +856,17 @@ onMounted(() => {
                       <li v-for="subItem in item.submenu" :key="subItem.name">
                         <DisclosureButton as="div" class="w-full">
                           <NuxtLink
-                            v-if="subItem.link"
-                            :to="subItem.link"
-                            class="group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold text-gray-600 hover:bg-gray-800 hover:text-white"
-                            >{{ subItem.name }}</NuxtLink
+                              v-if="subItem.link"
+                              :to="subItem.link"
+                              :class="[
+    subItem.current
+      ? 'bg-gray-800 text-white'
+      : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+    'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold'
+  ]"
                           >
+                            {{ subItem.name }}
+                          </NuxtLink>
                         </DisclosureButton>
                       </li>
                     </DisclosurePanel>

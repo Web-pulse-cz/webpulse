@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useActivityStore } from '~~/stores/activityStore';
+
+const activityStore = useActivityStore();
 
 import { Form } from 'vee-validate';
 
@@ -537,6 +540,7 @@ onMounted(() => {
     tabs.value.pop();
     item.value.interests = intrests.value;
   }
+  activityStore.fetchActivities(true);
   loadPhases();
   loadSources();
   loadTasks();

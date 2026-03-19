@@ -17,6 +17,8 @@ class Activity extends Model
         'name',
         'description',
         'color',
+        'is_business',
+        'is_personal',
     ];
 
     public function users()
