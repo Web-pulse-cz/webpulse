@@ -6,18 +6,15 @@ export const useActivityStore = defineStore({
     activities: [],
   }),
   actions: {
-    async fetchActivities(
-      only_business_activities: boolean = false,
-      only_personal_activities: boolean = false,
-    ) {
+    async fetchActivities(is_business: boolean = false, is_personal: boolean = false) {
       const client = useSanctumClient();
       await client<{
         id: number;
       }>('/api/admin/activity', {
         method: 'GET',
         query: {
-          only_business_activities: only_business_activities,
-          only_personal_activities: only_personal_activities,
+          is_business: is_business,
+          is_personal: is_personal,
         },
         headers: {
           Accept: 'application/json',

@@ -155,8 +155,11 @@ useHead({
   title: pageTitle.value,
 });
 
-onMounted(() => {
+onBeforeMount(() => {
   activityStore.fetchActivities(true, true);
+});
+
+onMounted(() => {
   loadItems(currentMonth.value, currentYear.value);
 });
 definePageMeta({

@@ -21,6 +21,11 @@ class Activity extends Model
         'is_personal',
     ];
 
+    protected $casts = [
+        'is_business' => 'boolean',
+        'is_personal' => 'boolean',
+    ];
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'users_has_activities');

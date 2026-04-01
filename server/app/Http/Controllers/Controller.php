@@ -79,8 +79,15 @@ class Controller extends BaseController
 
     public function statistics(Request $request): JsonResponse
     {
-        $businessGrowthActivityIds = [1, 6, 7, 8, 9, 10, 11, 12, 21, 22, 24];
-        $personalGrowthActivityIds = [2, 3, 4, 5, 16, 17, 18, 27, 28, 29, 30];
+        $bActivityIds = Activity::query()
+            ->where('is_business', true)
+            ->pluck('id')
+            ->toArray();
+
+        $pActivityIds = Activity::query()
+            ->where('is_personal', true)
+            ->pluck('id')
+            ->toArray();
 
         $daysMonths = now()->daysInMonth;
         if ($request->has('filter')) {
@@ -107,12 +114,12 @@ class Controller extends BaseController
 
         $businessActivitiesQuery = UserActivity::with('activity')
             ->where('user_id', $request->user()->id)
-            ->whereIn('activity_id', $businessGrowthActivityIds)
+            ->whereIn('activity_id', $bActivityIds)
             ->groupBy('activity_id', 'day');
 
         $personalActivitiesQuery = UserActivity::with('activity')
             ->where('user_id', $request->user()->id)
-            ->whereIn('activity_id', $personalGrowthActivityIds)
+            ->whereIn('activity_id', $pActivityIds)
             ->groupBy('activity_id', 'day');
 
         $cashflowQuery = CashflowCategory::with([
@@ -208,10 +215,10 @@ class Controller extends BaseController
         $rawBusinessActivitiesArr = [];
         $rawPersonalActivitiesArr = [];
         $businessActivitiesRaw = Activity::query()
-            ->whereIn('id', $businessGrowthActivityIds)
+            ->whereIn('id', $bActivityIds)
             ->get();
         $personalActivitiesRaw = Activity::query()
-            ->whereIn('id', $personalGrowthActivityIds)
+            ->whereIn('id', $pActivityIds)
             ->get();
 
         $businessColors = [];
@@ -287,7 +294,7 @@ class Controller extends BaseController
             $budget = round($cashflowCategory->budgets->sum('amount'), 2);
             $name = $cashflowCategory->name;
 
-            $percentageLeft = (($budget - $spent) / $budget) * 100;
+            $percentageLeft = $budget > 0 ?(($budget - $spent) / $budget) * 100 : 100;
 
             if ($percentageLeft <= 0) {
                 $stroke = [
