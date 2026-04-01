@@ -30,12 +30,15 @@ class ActivityController extends Controller
             }
         }
 
-        // determine business and personal acitivities
-        if ($request->has('is_business') && ($request->get('is_business') == 'true' || $request->get('is_business'))) {
-            $query->where('is_business', true);
-        }
-        if ($request->has('is_personal') && ($request->get('is_personal') == 'true' || $request->get('is_personal'))) {
-            $query->where('is_personal', true);
+        if ($request->has('is_business') || $request->has('is_personal')) {
+            $query->where(function (Builder $query) use ($request) {
+                if ($request->has('is_business') && $request->get('is_business') == 'true') {
+                    $query->orWhere('is_business', true);
+                }
+                if ($request->has('is_personal') && $request->get('is_personal') == 'true') {
+                    $query->orWhere('is_personal', true);
+                }
+            });
         }
 
         if ($request->has('orderWay') && $request->get('orderBy')) {
