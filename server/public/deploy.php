@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $gitCommands = [
         "git fetch origin 2>&1",
-        "git reset --hard origin/master 2>&1",
+        "git reset --hard origin/deploy_production 2>&1",
     ];
 
     foreach ($gitCommands as $command) {
