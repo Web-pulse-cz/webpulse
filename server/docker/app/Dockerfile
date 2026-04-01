@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 RUN apt-get update
 RUN apt-get update --fix-missing
@@ -18,8 +18,8 @@ ENV ACCEPT_EULA=Y
 RUN apt-get update && apt-get install -y gnupg2
 RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get -y --no-install-recommends install unixodbc-dev
-RUN pecl install sqlsrv
-RUN pecl install pdo_sqlsrv
+RUN pecl install sqlsrv-5.12.0
+RUN pecl install pdo_sqlsrv-5.12.0
 RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 RUN docker-php-ext-install soap
