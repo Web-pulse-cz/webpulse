@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useActivityStore } from "~~/stores/activityStore";
-
-const activityStore = useActivityStore();
+import { useActivityStore } from '~~/stores/activityStore';
 
 import { definePageMeta } from '#imports';
+
+const activityStore = useActivityStore();
 
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Aktivita');
