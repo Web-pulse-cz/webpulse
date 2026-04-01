@@ -21,9 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Příkazy k provedení
     $commands = [
         "cd {$projectPath}",
-        "git fetch origin 2>&1",
+        "git fetch 2>&1",
         // Používáme reset --hard místo pull, aby nevznikaly merge konflikty, pokud by se na serveru náhodou změnil nějaký soubor
-        "git reset --hard origin/main 2>&1", // Změň 'main' na 'master', pokud používáš starší pojmenování větve
+        "git reset --hard /main 2>&1", // Změň 'main' na 'master', pokud používáš starší pojmenování větve
+        "cd server",
         "composer install --no-interaction --prefer-dist --optimize-autoloader 2>&1",
         "php artisan migrate --force 2>&1",
         "php artisan optimize:clear 2>&1",
