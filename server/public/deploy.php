@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $gitCommands = [
         "git fetch origin 2>&1",
-        "git reset --hard origin/main 2>&1",
+        "git reset --hard origin/master 2>&1",
     ];
 
     foreach ($gitCommands as $command) {
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $laravelCommands = [
         // Přidán COMPOSER_HOME=/tmp
-        "COMPOSER_HOME=/tmp composer install --no-interaction --prefer-dist --optimize-autoloader 2>&1",
+        "COMPOSER_HOME=/tmp composer install --no-interaction --no-ansi --prefer-dist --optimize-autoloader 2>&1",
         "php artisan migrate --force 2>&1",
         "php artisan optimize:clear 2>&1",
         "php artisan config:cache 2>&1",
