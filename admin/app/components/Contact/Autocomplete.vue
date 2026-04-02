@@ -99,13 +99,14 @@ const selectedContact = computed(() => {
 <template>
   <div class="w-full">
     <Combobox v-model="model">
-      <div class="relative mt-1">
-        <div class="w-full cursor-default overflow-hidden">
-          <label :for="name" class="block text-xs font-medium text-grayCustom lg:text-sm/6">{{
-            label
-          }}</label>
+      <div class="relative">
+        <label :for="name" class="mb-1.5 block text-sm font-medium text-slate-700">
+          {{ label }}
+        </label>
+
+        <div class="relative w-full">
           <ComboboxInput
-            class="mt-1.5 block w-full rounded-md border-0 py-1.5 text-xs text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6"
+            class="block w-full rounded-xl border-0 bg-white py-2.5 pl-4 pr-10 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 transition-all duration-200 placeholder:text-slate-400 hover:ring-slate-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
             :name="name"
             :display-value="
               () =>
@@ -113,21 +114,24 @@ const selectedContact = computed(() => {
             "
             @change="query = $event.target.value"
           />
-          <ComboboxButton class="absolute inset-y-0 right-0 top-8 flex items-center pr-2">
-            <ChevronUpDownIcon class="h-3 w-3 text-grayLight lg:h-5 lg:w-5" aria-hidden="true" />
+          <ComboboxButton
+            class="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none"
+          >
+            <ChevronUpDownIcon class="size-5 text-slate-400" aria-hidden="true" />
           </ComboboxButton>
         </div>
+
         <TransitionRoot
           leave="transition ease-in duration-100"
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
           <ComboboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black/5 focus:outline-none lg:text-sm"
+            class="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-2xl bg-white p-1.5 text-base shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none sm:text-sm"
           >
             <div
               v-if="contacts.length === 0"
-              class="relative cursor-default select-none px-2 py-1.5 text-gray-700 lg:px-4 lg:py-2"
+              class="relative cursor-default select-none px-4 py-3 text-center text-sm font-medium text-slate-500"
             >
               Žádné kontakty.
             </div>
@@ -140,15 +144,16 @@ const selectedContact = computed(() => {
               :value="contact.id"
             >
               <li
-                class="relative cursor-default select-none py-1.5 pl-5 pr-4 lg:py-2 lg:pl-10"
-                :class="{
-                  'bg-secondary text-grayDark': active,
-                  'text-grayDark': !active,
-                }"
+                :class="[
+                  active ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700',
+                  'relative cursor-pointer select-none rounded-xl py-2.5 pl-4 pr-4 transition-colors duration-150',
+                ]"
               >
                 <span
-                  class="block truncate"
-                  :class="{ 'font-medium': selected, 'font-normal': !selected }"
+                  :class="[
+                    selected ? 'font-bold text-indigo-700' : 'font-medium',
+                    'block truncate',
+                  ]"
                 >
                   {{ `${contact.firstname} ${contact.lastname}` }}
                 </span>

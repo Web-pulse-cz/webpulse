@@ -133,41 +133,39 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 100, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 210, hidden: false, sortable: true },
-          {
-            key: 'link',
-            name: 'Odkaz',
-            type: 'link',
-            width: 150,
-            hidden: true,
-            sortable: true,
-            target: 'target',
-          },
-          { key: 'target', name: 'Cíl', type: 'enum', width: 150, hidden: true, sortable: true },
-        ]"
-        :enums="{
-          target: {
-            _blank: 'Nové okno',
-            _self: 'Stejné okno',
-          },
-        }"
-        :actions="[{ type: 'edit-dialog' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Položka rychlého přístupu"
-        plural="Položky rychlého přístupu"
-        :query="tableQuery"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-        @open-dialog="openQuickAccessDialog"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 100, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 210, hidden: false, sortable: true },
+        {
+          key: 'link',
+          name: 'Odkaz',
+          type: 'link',
+          width: 150,
+          hidden: true,
+          sortable: true,
+          target: 'target',
+        },
+        { key: 'target', name: 'Cíl', type: 'enum', width: 150, hidden: true, sortable: true },
+      ]"
+      :enums="{
+        target: {
+          _blank: 'Nové okno',
+          _self: 'Stejné okno',
+        },
+      }"
+      :actions="[{ type: 'edit-dialog' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Položka rychlého přístupu"
+      plural="Položky rychlého přístupu"
+      :query="tableQuery"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+      @open-dialog="openQuickAccessDialog"
+    />
     <QuickAccessDialog v-model:show="quickAccessDialogShow" v-model:form="quickAccessDialogForm" />
   </div>
 </template>

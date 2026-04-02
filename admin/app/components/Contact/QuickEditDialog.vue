@@ -17,7 +17,7 @@ const emit = defineEmits(['save-item']);
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -27,7 +27,7 @@ const emit = defineEmits(['save-item']);
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -44,72 +44,76 @@ const emit = defineEmits(['save-item']);
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-8"
               >
                 <Form @submit="emit('save-item', item)">
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <DialogTitle
-                        as="h3"
-                        class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
-                      >
-                        {{ item.firstname + ' ' + item.lastname }}
-                      </DialogTitle>
-                      <div class="mt-8 grid grid-cols-2 gap-x-8">
-                        <div class="col-span-1 grid grid-cols-1 gap-y-4 text-wrap">
-                          <p class="col-span-full text-sm font-medium text-grayDark">
-                            <span class="font-semibold">Fáze:</span>
-                            <PropsBadge :color="item.phase_color">
-                              {{ item.phase }}
-                            </PropsBadge>
-                          </p>
-                          <p class="col-span-full text-sm font-medium text-grayDark">
-                            <span class="font-semibold">Zdroj:</span>
-                            <PropsBadge :color="item.source_color">
-                              {{ item.source }}
-                            </PropsBadge>
-                          </p>
-                          <p class="col-span-full text-sm font-medium text-grayDark">
-                            <span class="font-semibold">E-mail:</span> {{ item.email ?? '-' }}
-                          </p>
-                          <p class="col-span-full text-sm font-medium text-grayDark">
-                            <span class="font-semibold">Telefon:</span> {{ item.phone ?? '-' }}
-                          </p>
-                          <p class="col-span-full text-sm font-medium text-grayDark">
-                            <span class="font-semibold">Práce/obor/studium:</span>
-                            {{ item.occupation ?? '-' }}
-                          </p>
-                          <p class="col-span-full text-sm font-medium text-grayDark">
-                            <span class="font-semibold">Sen/cíl:</span> {{ item.goal ?? '-' }}
+                  <div class="w-full text-left">
+                    <DialogTitle
+                      as="h3"
+                      class="mb-6 text-xl font-bold tracking-tight text-slate-900 lg:text-2xl"
+                    >
+                      {{ item.firstname + ' ' + item.lastname }}
+                    </DialogTitle>
+
+                    <div class="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:gap-12">
+                      <div class="space-y-4">
+                        <div
+                          v-for="(val, label) in {
+                            Fáze: 'phase',
+                            Zdroj: 'source',
+                            'E-mail': 'email',
+                            Telefon: 'phone',
+                            'Obor/Studium': 'occupation',
+                            'Sen/cíl': 'goal',
+                          }"
+                          :key="label"
+                          class="flex flex-col border-b border-slate-50 pb-2 last:border-0"
+                        >
+                          <span
+                            class="mb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                            >{{ label }}</span
+                          >
+
+                          <div v-if="val === 'phase'" class="mt-0.5">
+                            <PropsBadge :color="item.phase_color">{{ item.phase }}</PropsBadge>
+                          </div>
+                          <div v-else-if="val === 'source'" class="mt-0.5">
+                            <PropsBadge :color="item.source_color">{{ item.source }}</PropsBadge>
+                          </div>
+                          <p v-else class="text-sm font-semibold text-slate-700">
+                            {{ item[val] ?? '-' }}
                           </p>
                         </div>
-                        <div class="col-span-1 grid grid-cols-1 gap-y-4 text-wrap">
-                          <BaseFormTextarea
-                            v-model="item.note"
-                            class="col-span-full text-sm font-medium text-grayDark"
-                            label="Poznámka"
-                            rules="required"
-                          />
-                          <BaseFormInput
-                            v-model="item.formatted_last_contacted_at"
-                            type="datetime-local"
-                            label="Poslední kontakt/pokus o kontakt"
-                            name="last_contacted_at"
-                            class="col-span-full text-sm font-medium text-grayDark"
-                          />
-                        </div>
+                      </div>
+
+                      <div class="flex flex-col gap-6">
+                        <BaseFormTextarea
+                          v-model="item.note"
+                          label="Poznámka"
+                          name="note"
+                          rules="required"
+                          rows="4"
+                        />
+                        <BaseFormInput
+                          v-model="item.formatted_last_contacted_at"
+                          type="datetime-local"
+                          label="Poslední kontakt"
+                          name="last_contacted_at"
+                        />
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
-                  >
-                    <BaseButton type="submit" variant="success" size="lg"> Uložit </BaseButton>
+
+                  <div class="mt-10 flex flex-col gap-3 sm:flex-row-reverse sm:justify-start">
+                    <BaseButton type="submit" variant="success" size="lg" class="w-full sm:w-auto">
+                      Uložit změny
+                    </BaseButton>
                     <BaseButton
                       ref="cancelButtonRef"
                       type="button"
                       variant="secondary"
                       size="lg"
+                      class="w-full sm:w-auto"
                       @click="show = false"
                     >
                       Zavřít

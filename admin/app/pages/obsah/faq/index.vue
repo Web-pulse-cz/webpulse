@@ -128,54 +128,52 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat dotaz' }]"
       slug="faqs"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'question',
-            name: 'Dotaz',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'position',
-            name: 'Pořadí ve výpisu',
-            type: 'number',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'active',
-            name: 'Aktivní',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Dotaz"
-        plural="Dotazy"
-        :query="tableQuery"
-        slug="faqs"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'question',
+          name: 'Dotaz',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'position',
+          name: 'Pořadí ve výpisu',
+          type: 'number',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Dotaz"
+      plural="Dotazy"
+      :query="tableQuery"
+      slug="faqs"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

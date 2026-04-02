@@ -39,34 +39,49 @@ function onMouseLeave() {
 
 <template>
   <div
-    class="pointer-events-auto w-96 overflow-hidden rounded-xl shadow-lg ring-1"
+    class="pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl shadow-slate-200/60 ring-1 transition-all duration-300 sm:w-96"
     :class="[cls.base, 'ring-1', cls.ring]"
+    role="alert"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
   >
-    <div class="p-3">
-      <div class="flex items-start gap-3">
+    <div class="p-4 sm:p-5">
+      <div class="flex items-start gap-4">
         <div class="min-w-0 flex-1">
-          <p class="font-semibold leading-tight" :class="cls.text">{{ toast.summary }}</p>
-          <p v-if="toast.detail" class="mt-0.5 text-sm opacity-90" :class="cls.text">
+          <p class="text-sm font-bold tracking-tight sm:text-base" :class="cls.text">
+            {{ toast.summary }}
+          </p>
+          <p
+            v-if="toast.detail"
+            class="mt-1 text-xs leading-relaxed opacity-80 sm:text-sm"
+            :class="cls.text"
+          >
             {{ toast.detail }}
           </p>
         </div>
+
         <button
-          class="rounded-md p-1 opacity-90 transition hover:opacity-100"
+          type="button"
+          class="shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-inset"
           :class="cls.text"
-          aria-label="Close"
+          aria-label="Zavřít"
           @click="remove(toast.id)"
         >
-          ✕
+          <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+            />
+          </svg>
         </button>
       </div>
     </div>
 
-    <!-- track -->
-    <div class="h-1 w-full bg-black/20">
-      <!-- progress -->
-      <div class="h-1 bg-white/70" :style="{ width: progress + '%' }"></div>
+    <div class="absolute bottom-0 left-0 h-1 w-full bg-black/5">
+      <div
+        class="h-full bg-current transition-all duration-100 ease-linear"
+        :class="cls.text"
+        :style="{ width: progress + '%' }"
+      ></div>
     </div>
   </div>
 </template>

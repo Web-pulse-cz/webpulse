@@ -631,9 +631,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="min-h-screen bg-slate-50 font-sans">
     <TransitionRoot as="template" :show="sidebarOpen">
-      <Dialog class="relative z-10 lg:hidden" @close="sidebarOpen = false">
+      <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
         <TransitionChild
           as="template"
           enter="transition-opacity ease-linear duration-300"
@@ -643,7 +643,7 @@ onMounted(() => {
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-gray-900/80" />
+          <div class="fixed inset-0 bg-zinc-900/80 backdrop-blur-sm" />
         </TransitionChild>
 
         <div class="fixed inset-0 flex">
@@ -667,26 +667,34 @@ onMounted(() => {
                 leave-to="opacity-0"
               >
                 <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
-                  <button type="button" class="-m-2.5 p-2.5" @click="sidebarOpen = false">
-                    <span class="sr-only">Close sidebar</span>
+                  <button
+                    type="button"
+                    class="-m-2.5 rounded-full p-2.5 transition-colors hover:bg-white/10"
+                    @click="sidebarOpen = false"
+                  >
+                    <span class="sr-only">Zavřít menu</span>
                     <XMarkIcon class="size-6 text-white" aria-hidden="true" />
                   </button>
                 </div>
               </TransitionChild>
 
               <div
-                class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10"
+                class="flex grow flex-col gap-y-6 overflow-y-auto bg-zinc-950 px-6 pb-6 shadow-2xl"
               >
-                <div class="flex h-24 shrink-0 items-center justify-center">
-                  <NuxtLink to="https://web-pulse.cz" target="_blank">
+                <div class="flex h-24 shrink-0 items-center justify-center border-b border-white/5">
+                  <NuxtLink
+                    to="https://web-pulse.cz"
+                    target="_blank"
+                    class="transition-transform hover:scale-105"
+                  >
                     <img
-                      class="h-8 w-auto"
+                      class="h-10 w-auto"
                       src="/static/img/logo-gray-300.png"
                       alt="Your Company"
                     />
                   </NuxtLink>
                 </div>
-                <div v-if="user?.sites?.length">
+                <div v-if="user?.sites?.length" class="mt-2">
                   <BaseFormSelect
                     v-model="selectedSiteHash"
                     :options="sitesForSelect"
@@ -694,12 +702,14 @@ onMounted(() => {
                   />
                 </div>
                 <nav class="flex flex-1 flex-col">
-                  <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                  <ul role="list" class="flex flex-1 flex-col gap-y-8">
                     <li v-for="(group, index) in navigation" :key="index">
-                      <div class="text-xs/6 font-semibold text-gray-300">
+                      <div
+                        class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500"
+                      >
                         {{ group.title }}
                       </div>
-                      <ul role="list" class="-mx-2 mt-2 space-y-1">
+                      <ul role="list" class="-mx-2 space-y-1.5">
                         <li
                           v-for="(item, key) in group.menu"
                           :key="key"
@@ -716,14 +726,24 @@ onMounted(() => {
                             :to="item.link"
                             :class="[
                               item.current
-                                ? 'bg-gray-800 text-white'
-                                : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                              'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                                ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
+                                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
+                              'group flex gap-x-3 rounded-xl p-2.5 text-sm font-medium transition-all duration-200',
                             ]"
                           >
-                            <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                            <component
+                              :is="item.icon"
+                              :class="[
+                                item.current
+                                  ? 'text-white'
+                                  : 'text-zinc-500 group-hover:text-zinc-300',
+                                'size-5 shrink-0 transition-colors',
+                              ]"
+                              aria-hidden="true"
+                            />
                             <span class="truncate">{{ item.name }}</span>
                           </NuxtLink>
+
                           <Disclosure
                             v-else-if="
                               !item.slug ||
@@ -736,45 +756,71 @@ onMounted(() => {
                             <DisclosureButton
                               :class="[
                                 item.current
-                                  ? 'bg-gray-800 text-white'
-                                  : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                                'group flex w-full justify-between gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                                  ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
+                                  : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
+                                'group flex w-full items-center justify-between gap-x-3 rounded-xl p-2.5 text-sm font-medium transition-all duration-200',
                               ]"
                             >
-                              <div class="flex gap-x-3">
+                              <div class="flex items-center gap-x-3">
                                 <component
                                   :is="item.icon"
-                                  class="size-6 shrink-0"
+                                  :class="[
+                                    item.current
+                                      ? 'text-white'
+                                      : 'text-zinc-500 group-hover:text-zinc-300',
+                                    'size-5 shrink-0 transition-colors',
+                                  ]"
                                   aria-hidden="true"
                                 />
                                 {{ item.name }}
                               </div>
                               <ChevronRightIcon
                                 :class="[
-                                  open ? 'rotate-90 text-gray-600' : 'text-gray-600',
-                                  'size-6 shrink-0',
+                                  open
+                                    ? 'rotate-90 text-white'
+                                    : 'text-zinc-500 group-hover:text-zinc-300',
+                                  'size-4 shrink-0 transition-transform duration-200',
                                 ]"
                                 aria-hidden="true"
                               />
                             </DisclosureButton>
-                            <DisclosurePanel as="ul" class="mt-1 px-2">
-                              <li v-for="subItem in item.submenu" :key="subItem.name">
-                                <DisclosureButton as="div" class="w-full">
-                                  <NuxtLink
-                                    v-if="subItem.link"
-                                    :to="subItem.link"
-                                    :class="[
-                                      subItem.current
-                                        ? 'bg-gray-800 text-white'
-                                        : 'text-gray-400 hover:bg-gray-800 hover:text-white',
-                                      'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold',
-                                    ]"
-                                  >
-                                    {{ subItem.name }}
-                                  </NuxtLink>
-                                </DisclosureButton>
-                              </li>
-                            </DisclosurePanel>
+                            <Transition
+                              enter-active-class="transition duration-200 ease-out"
+                              enter-from-class="transform scale-95 opacity-0"
+                              enter-to-class="transform scale-100 opacity-100"
+                              leave-active-class="transition duration-75 ease-out"
+                              leave-from-class="transform scale-100 opacity-100"
+                              leave-to-class="transform scale-95 opacity-0"
+                            >
+                              <DisclosurePanel as="ul" class="mt-1 px-2">
+                                <li
+                                  v-for="subItem in item.submenu"
+                                  :key="subItem.name"
+                                  class="mt-1"
+                                >
+                                  <DisclosureButton as="div" class="w-full">
+                                    <NuxtLink
+                                      v-if="subItem.link"
+                                      :to="subItem.link"
+                                      :class="[
+                                        subItem.current
+                                          ? 'bg-zinc-800/80 text-white'
+                                          : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
+                                        'group flex w-full cursor-pointer items-center gap-x-3 rounded-lg p-2 pl-10 text-sm font-medium transition-all duration-200',
+                                      ]"
+                                    >
+                                      <div
+                                        :class="[
+                                          subItem.current ? 'bg-indigo-500' : 'bg-zinc-700',
+                                          'h-1.5 w-1.5 rounded-full',
+                                        ]"
+                                      ></div>
+                                      {{ subItem.name }}
+                                    </NuxtLink>
+                                  </DisclosureButton>
+                                </li>
+                              </DisclosurePanel>
+                            </Transition>
                           </Disclosure>
                         </li>
                       </ul>
@@ -788,23 +834,31 @@ onMounted(() => {
       </Dialog>
     </TransitionRoot>
 
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-64 lg:flex-col">
-      <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
-        <div class="flex h-24 shrink-0 items-center justify-center">
-          <NuxtLink to="https://web-pulse.cz" target="_blank">
-            <img class="h-12 w-auto" src="/static/img/logo-gray-300.png" alt="Your Company" />
+    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+      <div
+        class="flex grow flex-col gap-y-6 overflow-y-auto bg-zinc-950 px-6 pb-6 shadow-2xl ring-1 ring-white/5"
+      >
+        <div class="flex h-24 shrink-0 items-center justify-center border-b border-white/5">
+          <NuxtLink
+            to="https://web-pulse.cz"
+            target="_blank"
+            class="transition-transform hover:scale-105"
+          >
+            <img class="h-10 w-auto" src="/static/img/logo-gray-300.png" alt="Your Company" />
           </NuxtLink>
         </div>
-        <div v-if="user?.sites?.length">
+
+        <div v-if="user?.sites?.length" class="mt-2">
           <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark" />
         </div>
+
         <nav class="flex flex-1 flex-col">
-          <ul role="list" class="flex flex-1 flex-col gap-y-7">
+          <ul role="list" class="flex flex-1 flex-col gap-y-8">
             <li v-for="(group, index) in navigation" :key="index">
-              <div class="text-xs/6 font-semibold text-gray-300">
+              <div class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500">
                 {{ group.title }}
               </div>
-              <ul role="list" class="-mx-2 mt-2 space-y-1">
+              <ul role="list" class="-mx-2 space-y-1.5">
                 <li v-for="(item, key) in group.menu" :key="key">
                   <NuxtLink
                     v-if="
@@ -815,14 +869,22 @@ onMounted(() => {
                     :to="item.link"
                     :class="[
                       item.current
-                        ? 'bg-gray-800 text-white'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                      'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                        ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
+                        : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
+                      'group flex items-center gap-x-3 rounded-xl p-2.5 text-sm font-medium transition-all duration-200',
                     ]"
                   >
-                    <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                    <component
+                      :is="item.icon"
+                      :class="[
+                        item.current ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300',
+                        'size-5 shrink-0 transition-colors',
+                      ]"
+                      aria-hidden="true"
+                    />
                     <span class="truncate">{{ item.name }}</span>
                   </NuxtLink>
+
                   <Disclosure
                     v-else-if="
                       !item.slug ||
@@ -835,41 +897,61 @@ onMounted(() => {
                     <DisclosureButton
                       :class="[
                         item.current
-                          ? 'bg-gray-800 text-white'
-                          : 'text-gray-300 hover:bg-gray-800 hover:text-white',
-                        'group flex w-full justify-between gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                          ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
+                          : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
+                        'group flex w-full items-center justify-between gap-x-3 rounded-xl p-2.5 text-sm font-medium transition-all duration-200',
                       ]"
                     >
-                      <div class="flex gap-x-3">
-                        <component :is="item.icon" class="size-6 shrink-0" aria-hidden="true" />
+                      <div class="flex items-center gap-x-3">
+                        <component
+                          :is="item.icon"
+                          :class="[
+                            item.current ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300',
+                            'size-5 shrink-0 transition-colors',
+                          ]"
+                          aria-hidden="true"
+                        />
                         {{ item.name }}
                       </div>
                       <ChevronRightIcon
                         :class="[
-                          open ? 'rotate-90 text-gray-600' : 'text-gray-600',
-                          'size-6 shrink-0',
+                          open ? 'rotate-90 text-white' : 'text-zinc-500 group-hover:text-zinc-300',
+                          'size-4 shrink-0 transition-transform duration-200',
                         ]"
                         aria-hidden="true"
                       />
                     </DisclosureButton>
-                    <DisclosurePanel as="ul" class="mt-1 px-2">
-                      <li v-for="subItem in item.submenu" :key="subItem.name">
-                        <DisclosureButton as="div" class="w-full">
+                    <Transition
+                      enter-active-class="transition duration-200 ease-out"
+                      enter-from-class="transform scale-95 opacity-0"
+                      enter-to-class="transform scale-100 opacity-100"
+                      leave-active-class="transition duration-75 ease-out"
+                      leave-from-class="transform scale-100 opacity-100"
+                      leave-to-class="transform scale-95 opacity-0"
+                    >
+                      <DisclosurePanel as="ul" class="mt-1 px-2">
+                        <li v-for="subItem in item.submenu" :key="subItem.name" class="mt-1">
                           <NuxtLink
                             v-if="subItem.link"
                             :to="subItem.link"
                             :class="[
                               subItem.current
-                                ? 'bg-gray-800 text-white'
-                                : 'text-gray-400 hover:bg-gray-800 hover:text-white',
-                              'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold',
+                                ? 'bg-zinc-800/80 text-white'
+                                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
+                              'group flex w-full items-center gap-x-3 rounded-lg p-2 pl-10 text-sm font-medium transition-all duration-200',
                             ]"
                           >
+                            <div
+                              :class="[
+                                subItem.current ? 'bg-indigo-500' : 'bg-zinc-700',
+                                'h-1.5 w-1.5 rounded-full',
+                              ]"
+                            ></div>
                             {{ subItem.name }}
                           </NuxtLink>
-                        </DisclosureButton>
-                      </li>
-                    </DisclosurePanel>
+                        </li>
+                      </DisclosurePanel>
+                    </Transition>
                   </Disclosure>
                 </li>
               </ul>
@@ -879,85 +961,87 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="lg:pl-64">
-      <div
-        class="no-print sticky top-0 z-10 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8"
+    <div class="flex min-h-screen flex-col lg:pl-72">
+      <header
+        class="no-print sticky top-0 z-40 flex h-20 shrink-0 items-center gap-x-4 border-b border-slate-200 bg-white/80 px-4 shadow-sm backdrop-blur-md transition-all sm:gap-x-6 sm:px-6 lg:px-8"
       >
         <button
           type="button"
-          class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+          class="-m-2.5 p-2.5 text-slate-700 hover:text-slate-900 lg:hidden"
           @click="sidebarOpen = true"
         >
-          <span class="sr-only">Menu</span>
+          <span class="sr-only">Otevřít menu</span>
           <Bars3Icon class="size-6" aria-hidden="true" />
         </button>
 
-        <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+        <div class="h-6 w-px bg-slate-200 lg:hidden" aria-hidden="true" />
 
         <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-          <div class="relative flex flex-1">
-            <label for="search-field" class="sr-only">Hledat</label>
-            <MagnifyingGlassIcon
-              class="pointer-events-none absolute inset-y-0 left-0 h-full w-3 text-grayCustom lg:w-5"
-              aria-hidden="true"
-            />
-            <input
-              id="search-field"
-              v-model="searchString"
-              class="block size-full border-0 py-0 pl-6 pr-0 text-xs text-grayDark placeholder:text-grayCustom focus:ring-0 lg:pl-8 lg:text-sm"
-              placeholder="Hledat..."
-              type="search"
-              name="search"
-              autocomplete="none"
-            />
+          <div class="relative flex flex-1 items-center">
+            <div class="relative w-full max-w-md">
+              <label for="search-field" class="sr-only">Hledat</label>
+              <MagnifyingGlassIcon
+                class="pointer-events-none absolute inset-y-0 left-3 h-full w-4 text-slate-400"
+                aria-hidden="true"
+              />
+              <input
+                id="search-field"
+                v-model="searchString"
+                class="block w-full rounded-full border-0 bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 shadow-inner transition-all placeholder:text-slate-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Hledat cokoliv..."
+                type="search"
+                name="search"
+                autocomplete="off"
+              />
+            </div>
           </div>
-          <div class="flex items-center gap-x-4 lg:gap-x-6">
-            <div
-              v-if="quickAccess && quickAccess.length"
-              class="block lg:h-6 lg:w-px lg:bg-gray-900/10"
-              aria-hidden="true"
-            />
 
+          <div class="flex items-center gap-x-4 lg:gap-x-6">
             <Menu v-if="quickAccess && quickAccess.length" as="div" class="relative">
-              <MenuButton class="-m-1.5 flex items-center p-1.5">
-                <span class="sr-only">Open qick access menu</span>
-                <span class="flex lg:items-center">
+              <MenuButton
+                class="-m-1.5 flex items-center rounded-full p-1.5 transition-colors hover:bg-slate-100"
+              >
+                <span class="sr-only">Otevřít rychlý přístup</span>
+                <span class="flex items-center px-2">
                   <span
-                    class="hidden text-sm/6 font-semibold text-gray-900 lg:block"
+                    class="hidden text-sm font-semibold text-slate-700 lg:block"
                     aria-hidden="true"
                     >Rychlý přístup</span
                   >
                   <ChevronDownIcon
-                    class="ml-2 hidden size-5 text-gray-300 lg:block"
+                    class="ml-2 hidden size-4 text-slate-400 lg:block"
                     aria-hidden="true"
                   />
-                  <StarIcon class="ml-2 size-5 text-yellow-600 lg:hidden" aria-hidden="true" />
+                  <StarIcon
+                    class="size-5 text-amber-400 drop-shadow-sm lg:hidden"
+                    aria-hidden="true"
+                  />
                 </span>
               </MenuButton>
               <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
+                enter-active-class="transition ease-out duration-150"
+                enter-from-class="transform opacity-0 scale-95 translate-y-1"
+                enter-to-class="transform opacity-100 scale-100 translate-y-0"
+                leave-active-class="transition ease-in duration-100"
+                leave-from-class="transform opacity-100 scale-100 translate-y-0"
+                leave-to-class="transform opacity-0 scale-95 translate-y-1"
               >
                 <MenuItems
-                  class="absolute right-0 z-10 mt-2.5 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+                  class="absolute right-0 z-10 mt-3 w-56 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
                 >
                   <MenuItem v-for="item in quickAccess" :key="item.name" v-slot="{ active }">
                     <NuxtLink
                       :to="item.link"
                       :target="item.target"
                       :class="[
-                        active ? 'bg-gray-50 outline-none' : '',
-                        'block flex flex-grow items-center justify-between px-3 py-1 text-sm/6 text-gray-900',
+                        active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
+                        'group flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-medium transition-colors',
                       ]"
                     >
                       <span>{{ item.name }}</span>
                       <ArrowTopRightOnSquareIcon
                         v-if="item.target === '_blank'"
-                        class="ml-4 size-4 text-warning"
+                        class="ml-4 size-4 text-amber-500"
                         aria-hidden="true"
                       />
                     </NuxtLink>
@@ -966,60 +1050,72 @@ onMounted(() => {
               </transition>
             </Menu>
 
-            <div class="h-6 w-px bg-gray-900/10" aria-hidden="true" />
+            <div class="h-6 w-px bg-slate-200" aria-hidden="true" />
 
             <Menu as="div" class="relative">
-              <MenuButton class="-m-1.5 flex items-center p-1.5">
-                <span class="sr-only">Open user menu</span>
-                <span class="hidden lg:flex lg:items-center">
-                  <span class="text-sm/6 font-semibold text-gray-900" aria-hidden="true">
+              <MenuButton
+                class="-m-1.5 flex items-center rounded-full p-1.5 transition-colors hover:bg-slate-100"
+              >
+                <span class="sr-only">Otevřít uživatelské menu</span>
+                <span class="hidden px-2 lg:flex lg:items-center">
+                  <div
+                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-full border border-indigo-200 bg-indigo-100 text-xs font-bold text-indigo-600"
+                  >
+                    {{ user?.firstname?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
+                  </div>
+                  <span class="text-sm font-semibold text-slate-700" aria-hidden="true">
                     {{ user?.firstname }} {{ user?.lastname }}
                   </span>
-                  <ChevronDownIcon class="ml-2 size-5 text-gray-300" aria-hidden="true" />
+                  <ChevronDownIcon class="ml-2 size-4 text-slate-400" aria-hidden="true" />
                 </span>
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-full border border-indigo-200 bg-indigo-100 text-xs font-bold text-indigo-600 lg:hidden"
+                >
+                  {{ user?.firstname?.charAt(0) || 'U' }}
+                </div>
               </MenuButton>
               <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
+                enter-active-class="transition ease-out duration-150"
+                enter-from-class="transform opacity-0 scale-95 translate-y-1"
+                enter-to-class="transform opacity-100 scale-100 translate-y-0"
+                leave-active-class="transition ease-in duration-100"
+                leave-from-class="transform opacity-100 scale-100 translate-y-0"
+                leave-to-class="transform opacity-0 scale-95 translate-y-1"
               >
                 <MenuItems
-                  class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+                  class="absolute right-0 z-10 mt-3 w-48 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
                 >
                   <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
                     <NuxtLink
                       v-if="item.link != null"
                       :to="item.link"
                       :class="[
-                        active ? 'bg-gray-50 outline-none' : '',
-                        'block px-3 py-1 text-sm/6 text-gray-900',
+                        active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
+                        'block rounded-xl px-3 py-2 text-sm font-medium transition-colors',
                       ]"
                     >
                       {{ item.name }}
                     </NuxtLink>
-                    <span
+                    <button
                       v-else
                       :class="[
-                        active ? 'bg-gray-50 outline-none' : '',
-                        'block cursor-pointer px-3 py-1 text-sm/6 text-gray-900',
+                        active ? 'bg-red-50 text-red-600' : 'text-slate-700',
+                        'block w-full rounded-xl px-3 py-2 text-left text-sm font-medium transition-colors',
                       ]"
                       @click="handleLogout"
                     >
                       {{ item.name }}
-                    </span>
+                    </button>
                   </MenuItem>
                 </MenuItems>
               </transition>
             </Menu>
           </div>
         </div>
-      </div>
+      </header>
 
-      <main class="py-10">
-        <div class="px-4 sm:px-6 lg:px-8">
+      <main class="flex-1 py-8">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
           <UiToastContainer />
           <slot />
         </div>

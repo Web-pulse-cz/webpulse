@@ -235,7 +235,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -243,74 +243,172 @@ definePageMeta({
       slug="users"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <LayoutContainer>
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-          <BaseFormInput
-            v-model="item.name"
-            label="Název"
-            type="text"
-            name="name"
-            rules="required|min:3"
-            class="col-span-1"
-          />
-        </div>
-      </LayoutContainer>
-      <LayoutContainer>
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-          <div
-            v-for="(permission, key) in item.permissions"
-            :key="key"
-            class="col-span-full grid grid-cols-6 gap-x-8 gap-y-4"
-          >
-            <BaseFormSelect
-              v-model="permission.name"
-              label="Název"
-              :name="key + '_name'"
-              rules="required|min:3"
-              class="col-span-2"
-              :options="availablePermissions(key)"
-            />
-            <BaseFormCheckbox
-              v-model="permission.permissions.view"
-              label="Zobrazit"
-              type="checkbox"
-              :name="key + '_view'"
-              class="col-span-1 flex items-end"
-            />
-            <BaseFormCheckbox
-              v-model="permission.permissions.edit"
-              label="Editovat"
-              type="checkbox"
-              :name="key + '_edit'"
-              class="col-span-1 flex items-end"
-            />
-            <BaseFormCheckbox
-              v-model="permission.permissions.delete"
-              label="Mazat"
-              type="checkbox"
-              :name="key + '_delete'"
-              class="col-span-1 flex items-end"
-            />
-            <div class="col-span-1 flex items-end justify-end">
-              <BaseButton variant="danger" size="lg" @click="removePermission(key)">
-                Odebrat
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg"
+              >
+                <ShieldCheckIcon class="size-6" />
+              </div>
+              <LayoutTitle class="!mb-0">Identita uživatelské skupiny</LayoutTitle>
+            </div>
+
+            <div class="max-w-xl">
+              <BaseFormInput
+                v-model="item.name"
+                label="Název role"
+                type="text"
+                name="name"
+                rules="required|min:3"
+                placeholder="Např. Manažer pobočky, Editor obsahu..."
+              />
+              <p class="mt-2 text-sm italic text-slate-400">
+                Tento název uvidíte přiřazený u detailu uživatele.
+              </p>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <KeyIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Přístupy k modulům systému</LayoutTitle>
+              </div>
+
+              <BaseButton type="button" variant="secondary" size="md" @click="addPermission">
+                <PlusIcon class="mr-2 size-4" />
+                Přidat modul
               </BaseButton>
             </div>
-          </div>
-          <div class="col-span-full text-center">
-            <BaseButton
-              type="button"
-              variant="secondary"
-              size="lg"
-              class="mt-8"
-              @click="addPermission"
-            >
-              Přidat oprávnění
-            </BaseButton>
-          </div>
+
+            <div class="space-y-4">
+              <div
+                class="hidden grid-cols-12 gap-4 px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 lg:grid"
+              >
+                <div class="col-span-4">Modul / Sekce</div>
+                <div class="col-span-2 text-center">Zobrazit</div>
+                <div class="col-span-2 text-center">Editovat</div>
+                <div class="col-span-2 text-center">Mazat</div>
+                <div class="col-span-2"></div>
+              </div>
+
+              <div
+                v-for="(permission, key) in item.permissions"
+                :key="key"
+                class="group relative grid grid-cols-1 gap-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200 transition-all hover:bg-white hover:shadow-md lg:grid-cols-12 lg:items-center lg:px-6"
+              >
+                <div class="col-span-1 lg:col-span-4">
+                  <BaseFormSelect
+                    v-model="permission.name"
+                    label=""
+                    :name="key + '_name'"
+                    rules="required"
+                    :options="availablePermissions(key)"
+                    class="!mb-0"
+                  />
+                </div>
+
+                <div
+                  class="col-span-1 flex items-center justify-between rounded-xl bg-white p-2 px-4 ring-1 ring-slate-100 lg:col-span-2 lg:justify-center lg:bg-transparent lg:ring-0"
+                >
+                  <span class="text-xs font-bold text-slate-500 lg:hidden">Zobrazit</span>
+                  <BaseFormCheckbox
+                    v-model="permission.permissions.view"
+                    label=""
+                    :name="key + '_view'"
+                    class="!mb-0"
+                  />
+                </div>
+
+                <div
+                  class="col-span-1 flex items-center justify-between rounded-xl bg-white p-2 px-4 ring-1 ring-slate-100 lg:col-span-2 lg:justify-center lg:bg-transparent lg:ring-0"
+                >
+                  <span class="text-xs font-bold text-slate-500 lg:hidden">Editovat</span>
+                  <BaseFormCheckbox
+                    v-model="permission.permissions.edit"
+                    label=""
+                    :name="key + '_edit'"
+                    class="!mb-0"
+                  />
+                </div>
+
+                <div
+                  class="col-span-1 flex items-center justify-between rounded-xl bg-white p-2 px-4 ring-1 ring-slate-100 lg:col-span-2 lg:justify-center lg:bg-transparent lg:ring-0"
+                >
+                  <span class="text-xs font-bold text-slate-500 lg:hidden">Mazat</span>
+                  <BaseFormCheckbox
+                    v-model="permission.permissions.delete"
+                    label=""
+                    :name="key + '_delete'"
+                    class="!mb-0"
+                  />
+                </div>
+
+                <div class="col-span-1 flex justify-end lg:col-span-2">
+                  <button
+                    type="button"
+                    class="flex size-9 items-center justify-center rounded-full text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500"
+                    @click="removePermission(key)"
+                  >
+                    <TrashIcon class="size-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div
+                v-if="!item.permissions || Object.keys(item.permissions).length === 0"
+                class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 py-12 text-center"
+              >
+                <ShieldExclamationIcon class="mb-4 size-10 text-slate-300" />
+                <p class="text-sm font-medium text-slate-500">
+                  Tato role nemá definována žádná specifická oprávnění.
+                </p>
+                <BaseButton
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  class="mt-4"
+                  @click="addPermission"
+                >
+                  Vytvořit první přístup
+                </BaseButton>
+              </div>
+            </div>
+          </LayoutContainer>
         </div>
-      </LayoutContainer>
+
+        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
+            <div class="mb-4 flex items-center gap-2">
+              <InformationCircleIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold uppercase tracking-wider">Bezpečnostní tip</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-80">
+              Při nastavování rolí postupujte podle principu <strong>"Nejméně privilegií"</strong>.
+              Uživatel by měl mít přístup pouze k těm modulům, které nezbytně potřebuje ke své
+              práci.
+            </p>
+          </div>
+
+          <div class="rounded-3xl border border-dashed border-slate-300 p-6">
+            <h5 class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              Dědičnost
+            </h5>
+            <p class="mt-2 text-xs leading-relaxed text-slate-500">
+              Admin skupina má automaticky přístup ke všem modulům bez nutnosti explicitního
+              definování v této matici.
+            </p>
+          </div>
+        </aside>
+      </div>
     </Form>
   </div>
 </template>

@@ -124,58 +124,56 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat uživatele' }]"
       slug="users"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'firstname',
-            name: 'Jméno',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'lastname',
-            name: 'Příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-            target: 'target',
-          },
-          {
-            key: 'phone',
-            name: 'Telefon',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: true,
-            target: 'target',
-          },
-          {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: true,
-            target: 'target',
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Uživatel"
-        plural="Uživatelé"
-        :query="tableQuery"
-        slug="users"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'firstname',
+          name: 'Jméno',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'lastname',
+          name: 'Příjmení',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          target: 'target',
+        },
+        {
+          key: 'phone',
+          name: 'Telefon',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: true,
+          target: 'target',
+        },
+        {
+          key: 'email',
+          name: 'E-mail',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: true,
+          target: 'target',
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Uživatel"
+      plural="Uživatelé"
+      :query="tableQuery"
+      slug="users"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

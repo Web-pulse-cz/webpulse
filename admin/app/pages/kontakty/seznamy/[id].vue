@@ -174,65 +174,112 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="route.params.id === 'pridat' ? [{ type: 'save' }, { type: 'save-and-stay' }] : []"
       slug="contacts"
       @save="saveItem"
     />
+
     <Form v-if="route.params.id === 'pridat'" @submit="saveItem">
-      <div class="grid grid-cols-1 gap-x-10">
-        <LayoutContainer class="col-span-full w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <ListBulletIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Definice nového seznamu</LayoutTitle>
+            </div>
+
+            <div class="max-w-xl">
+              <BaseFormInput
+                v-model="item.name"
+                label="Název seznamu"
+                type="text"
+                name="name"
+                rules="required|min:3"
+                placeholder="Např. VIP klienti 2026"
+              />
+              <p class="mt-2 text-sm italic text-slate-400">
+                Název by měl být stručný a výstižný pro snadnou orientaci v CRM.
+              </p>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutContainer class="!py-6">
+            <div class="mb-6 flex items-center gap-2 text-slate-400">
+              <SwatchIcon class="size-4" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest"
+                >Barevné odlišení</LayoutTitle
+              >
+            </div>
+
             <BaseFormColorPicker
               v-model="item.color"
-              label="Barva"
+              label="Barva štítku"
               name="color"
-              class="col-span-1"
+              class="w-full"
             />
-          </div>
-        </LayoutContainer>
+
+            <div
+              class="mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200"
+            >
+              <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                >Náhled segmentu</span
+              >
+              <div
+                class="rounded-full px-4 py-1 text-xs font-bold shadow-sm transition-all"
+                :style="{
+                  backgroundColor: item.color + '20',
+                  color: item.color,
+                  border: `1px solid ${item.color}40`,
+                }"
+              >
+                {{ item.name || 'Ukázka názvu' }}
+              </div>
+            </div>
+          </LayoutContainer>
+        </aside>
       </div>
     </Form>
+
     <LayoutContainer v-else>
+      <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-6">
+        <div class="flex items-center gap-3">
+          <div
+            class="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg"
+          >
+            <UserGroupIcon class="size-6" />
+          </div>
+          <div>
+            <LayoutTitle class="!mb-0">Uživatelé v tomto seznamu</LayoutTitle>
+            <p class="text-sm text-slate-500">
+              Celkový počet kontaktů:
+              <span class="font-bold text-indigo-600">{{ contacts.data?.length || 0 }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
       <BaseTable
         :items="contacts"
         :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'firstname',
-            name: 'Jméno',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'lastname',
-            name: 'Příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          { key: 'phone', name: 'Telefon', type: 'text', width: 80, hidden: true, sortable: true },
-          { key: 'email', name: 'E-mail', type: 'text', width: 80, hidden: true, sortable: true },
+          { key: 'id', name: 'ID', type: 'text', width: 60, sortable: true },
+          { key: 'firstname', name: 'Jméno', type: 'text', sortable: false },
+          { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
+          { key: 'phone', name: 'Telefon', type: 'text', hidden: true, sortable: true },
+          { key: 'email', name: 'E-mail', type: 'text', hidden: true, sortable: true },
           {
             key: 'phase',
-            name: 'Fáze',
+            name: 'Fáze CRM',
             type: 'badge',
-            width: 80,
-            hidden: true,
             sortable: false,
             colorKey: 'phase_color',
           },
@@ -240,8 +287,6 @@ definePageMeta({
             key: 'source',
             name: 'Zdroj',
             type: 'badge',
-            width: 80,
-            hidden: true,
             sortable: false,
             colorKey: 'source_color',
           },
@@ -252,6 +297,7 @@ definePageMeta({
         singular="Kontakt"
         plural="Kontakty"
         slug="contacts"
+        class="pb-4"
       />
     </LayoutContainer>
   </div>

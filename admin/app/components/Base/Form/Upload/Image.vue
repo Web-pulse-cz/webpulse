@@ -258,49 +258,74 @@ async function uploadFromRemoteUrl() {
   <div class="col-span-full w-full">
     <div
       :class="[
-        multiple ? 'grid-cols-4' : 'grid-cols-1',
-        'mt-4 grid w-full gap-4 rounded border-2 border-dashed border-gray-300 bg-gray-50 p-4',
+        multiple ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4' : 'grid-cols-1',
+        'mt-4 grid w-full gap-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 transition-colors hover:bg-slate-100/50',
       ]"
     >
       <div
         v-if="files.length === 0"
-        class="col-span-1 flex cursor-pointer flex-col items-center gap-y-2"
+        :class="[
+          !multiple ? 'col-span-full py-12' : 'col-span-1 aspect-square',
+          'flex cursor-pointer flex-col items-center justify-center gap-y-3 rounded-xl border border-dashed border-slate-300 bg-white shadow-sm transition-all hover:border-indigo-400 hover:bg-indigo-50',
+        ]"
         @click="isUploadDialogVisible = true"
       >
-        <PlusIcon class="h-4 w-4 text-gray-600 md:h-8 md:w-8" />
-        <p class="text-xs text-gray-600 md:text-base">
+        <div
+          class="flex size-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 transition-transform hover:scale-105 md:size-12"
+        >
+          <PlusIcon class="h-5 w-5 md:h-6 md:w-6" />
+        </div>
+        <p class="px-2 text-center text-sm font-medium text-slate-600">
           Nahrát {{ multiple ? 'obrázky' : 'obrázek' }}
         </p>
       </div>
-      <draggable v-model="files" item-key="name" style="display: contents" class="cursor-grab">
+
+      <draggable
+        v-model="files"
+        item-key="name"
+        style="display: contents"
+        class="cursor-grab active:cursor-grabbing"
+      >
         <template #item="{ element, index }">
-          <div :class="[!multiple ? 'col-span-1' : 'w-1/2', 'relative overflow-hidden']">
-            <div class="absolute left-4 top-4 flex gap-x-2">
-              <div
-                class="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
+          <div
+            :class="[
+              !multiple ? 'col-span-1 max-w-sm' : 'col-span-1',
+              'group relative aspect-square w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md',
+            ]"
+          >
+            <div
+              class="absolute left-2 top-2 z-10 flex gap-x-2 opacity-100 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100"
+            >
+              <button
+                type="button"
+                class="flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow-sm ring-1 ring-red-600 transition-colors hover:bg-red-600"
+                title="Smazat"
                 @click="removeFile(index)"
               >
-                <TrashIcon class="h-3 w-3 text-white" />
-              </div>
-              <div
-                class="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-warningLight ring-1 ring-warning"
+                <TrashIcon class="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm ring-1 ring-amber-600 transition-colors hover:bg-amber-600"
+                title="Nahradit"
                 @click="isUploadDialogVisible = true"
               >
-                <ArrowPathIcon class="h-3 w-3 text-white" />
-              </div>
+                <ArrowPathIcon class="h-3.5 w-3.5" />
+              </button>
             </div>
 
             <img
               v-if="element.preview"
               :src="element.preview"
               alt="náhled"
-              class="max-h-72 w-auto object-cover"
+              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
+
             <div
               v-else
-              class="flex h-40 items-center justify-center bg-white text-sm text-gray-500"
+              class="flex h-full w-full items-center justify-center bg-slate-100 p-4 text-center text-xs font-medium text-slate-500"
             >
-              {{ element.name }}
+              <span class="truncate">{{ element.name }}</span>
             </div>
           </div>
         </template>

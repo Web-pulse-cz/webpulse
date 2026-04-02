@@ -164,105 +164,114 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-8">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'add-cashflow', text: 'Přidat útratu' }]"
       @open-cashflow-dialog="openCashflowDialog"
     />
-    <div
-      class="grid grid-cols-1 items-start justify-between gap-x-8 gap-y-2 lg:grid-cols-2 lg:gap-y-4"
-    >
-      <div class="col-span-full lg:col-span-1">
-        <LayoutContainer>
-          <LayoutTitle>Dnes máš zavolat těmto kontaktům</LayoutTitle>
-          <BaseTable
-            :items="dashboard.contactsToCall"
-            :columns="[
-              {
-                key: 'firstname',
-                name: 'Jméno',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'lastname',
-                name: 'Příjmení',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'phone',
-                name: 'Telefon',
-                type: 'text',
-                width: 80,
-                hidden: true,
-                sortable: false,
-              },
-            ]"
-            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-            :loading="loading"
-            :error="error"
-            singular="Poseldní přidaný kontakt"
-            plural="Poslední přidané kontakty"
+
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+      <div class="flex flex-col gap-8">
+        <div class="mb-6 flex items-center justify-between">
+          <LayoutTitle class="!mb-0">Dnes máš zavolat těmto kontaktům</LayoutTitle>
+          <div
+            class="flex h-2 w-2 animate-pulse rounded-full bg-amber-400"
+            title="Prioritní úkoly"
           />
-        </LayoutContainer>
-        <LayoutContainer>
-          <LayoutTitle>Nadcházející schůzky</LayoutTitle>
-          <BaseTable
-            :items="dashboard.comingEvents"
-            :columns="[
-              {
-                key: 'firstname',
-                name: 'Jméno',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'lastname',
-                name: 'Příjmení',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'next_meeting',
-                name: 'Datum a čas',
-                type: 'datetime',
-                width: 80,
-                hidden: true,
-                sortable: false,
-              },
-            ]"
-            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-            :loading="loading"
-            :error="error"
-            singular="Nadcházející schůzka"
-            plural="Nadházející schůzky"
-          />
-        </LayoutContainer>
+        </div>
+
+        <BaseTable
+          :items="dashboard.contactsToCall"
+          :columns="[
+            {
+              key: 'firstname',
+              name: 'Jméno',
+              type: 'text',
+              width: 80,
+              hidden: false,
+              sortable: false,
+            },
+            {
+              key: 'lastname',
+              name: 'Příjmení',
+              type: 'text',
+              width: 80,
+              hidden: false,
+              sortable: false,
+            },
+            {
+              key: 'phone',
+              name: 'Telefon',
+              type: 'text',
+              width: 80,
+              hidden: true,
+              sortable: false,
+            },
+          ]"
+          :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
+          :loading="loading"
+          :error="error"
+          singular="Poslední přidaný kontakt"
+          plural="Poslední přidané kontakty"
+        />
+
+        <LayoutTitle>Nadcházející schůzky</LayoutTitle>
+        <BaseTable
+          :items="dashboard.comingEvents"
+          :columns="[
+            {
+              key: 'firstname',
+              name: 'Jméno',
+              type: 'text',
+              width: 80,
+              hidden: false,
+              sortable: false,
+            },
+            {
+              key: 'lastname',
+              name: 'Příjmení',
+              type: 'text',
+              width: 80,
+              hidden: false,
+              sortable: false,
+            },
+            {
+              key: 'next_meeting',
+              name: 'Datum a čas',
+              type: 'datetime',
+              width: 80,
+              hidden: true,
+              sortable: false,
+            },
+          ]"
+          :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
+          :loading="loading"
+          :error="error"
+          singular="Nadcházející schůzka"
+          plural="Nadcházející schůzky"
+        />
       </div>
-      <div>
-        <LayoutContainer
-          class="col-span-full max-h-[512px] space-y-4 overflow-y-auto lg:col-span-1"
-        >
-          <LayoutTitle>Changelog</LayoutTitle>
+
+      <div class="lg:sticky lg:top-8">
+        <div class="mb-6 flex items-center justify-between">
+          <LayoutTitle class="!mb-0">Changelog</LayoutTitle>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >Aktualizace</span
+          >
+        </div>
+
+        <div class="custom-scrollbar flex max-h-[600px] flex-col gap-6 overflow-y-auto pr-2">
           <ChangelogCard
             v-for="(changelogItem, index) in changelog"
             :key="index"
             :changelog="changelogItem"
           />
-        </LayoutContainer>
+        </div>
       </div>
     </div>
+
     <CashflowDialogExtendedAction
       v-model:show="cashflowActionDialog.show"
       :categories="cashflowCategoryStore.categoriesOptions"
@@ -273,3 +282,20 @@ definePageMeta({
     />
   </div>
 </template>
+
+<style scoped>
+/* Jemný scrollbar pro Changelog sloupec, aby nerušil design */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0; /* slate-200 */
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1; /* slate-300 */
+}
+</style>

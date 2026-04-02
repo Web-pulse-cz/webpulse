@@ -170,10 +170,21 @@ onMounted(() => {
 definePageMeta({
   middleware: 'sanctum:auth',
 });
+
+const addGroup = () => {
+  if (!props.item.translations[props.selectedLocale].value) {
+    props.item.translations[props.selectedLocale].value = { groups: [] };
+  }
+  props.item.translations[props.selectedLocale].value.groups.push({
+    name: '',
+    link: '',
+    submenu: [],
+  });
+};
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -181,111 +192,186 @@ definePageMeta({
       slug="settings"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-        <div class="col-span-9 w-full">
-          <LayoutContainer class="col-span-5 w-full">
-            <div class="grid grid-cols-2 gap-x-8">
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-6 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-slate-900 text-white"
+              >
+                <Cog6ToothIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Konfigurace menu</LayoutTitle>
+            </div>
+
+            <div class="max-w-md">
               <BaseFormSelect
                 v-model="item.type"
-                label="Typ nastavení"
+                label="Umístění v šabloně"
                 name="type"
-                class="col-span-1 w-full"
                 :options="[
-                  { value: 'topMenu', name: 'Horní menu' },
-                  { value: 'bottomMenu', name: 'Spodní menu' },
+                  { value: 'topMenu', name: 'Horní navigace (Header)' },
+                  { value: 'bottomMenu', name: 'Spodní navigace (Footer)' },
                 ]"
                 :disabled="route.params.id !== 'pridat'"
               />
+              <p class="mt-2 text-xs text-slate-400">
+                Typ menu definuje, kde se tyto odkazy na webu vykreslí.
+              </p>
             </div>
           </LayoutContainer>
-          <LayoutContainer
-            v-if="item.type === 'topMenu' || item.type === 'bottomMenu'"
-            class="col-span-full mt-0 w-full"
-          >
-            <div class="grid grid-cols-2 gap-x-8 gap-y-10">
+
+          <LayoutContainer v-if="item.type === 'topMenu' || item.type === 'bottomMenu'">
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <Bars3Icon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0"
+                  >Struktura odkazů ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+                >
+              </div>
+              <BaseButton type="button" variant="primary" size="md" @click="addGroup">
+                <PlusIcon class="mr-2 size-4" />
+                Přidat skupinu
+              </BaseButton>
+            </div>
+
+            <div class="space-y-8">
               <div
-                v-for="(group, index) in item.translations[selectedLocale].value.groups"
-                v-if="item.translations[selectedLocale] && item.translations[selectedLocale].value"
+                v-for="(group, index) in item.translations[selectedLocale]?.value?.groups"
                 :key="index"
-                class="col-span-2 grid grid-cols-12 gap-x-4 gap-y-2"
+                class="group relative rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200 transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-200/50"
               >
-                <BaseFormInput
-                  v-model="group.name"
-                  label="Název skupiny"
-                  :name="'groupName_' + index"
-                  class="col-span-5"
-                /><BaseFormInput
-                  v-model="group.link"
-                  label="Odkaz"
-                  :name="'groupLink_' + index"
-                  class="col-span-5"
-                />
-                <div class="col-span-2 flex items-end justify-end gap-x-6">
-                  <div
-                    class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
-                    @click="item.translations[selectedLocale].value.groups.splice(index, 1)"
-                  >
-                    <TrashIcon class="h-4 w-4 text-white" />
+                <div class="grid grid-cols-12 items-end gap-4">
+                  <div class="col-span-12 mb-2 flex items-center gap-2 lg:col-span-full">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400"
+                      >Hlavní úroveň #{{ index + 1 }}</span
+                    >
                   </div>
-                  <div
-                    class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-successLight ring-1 ring-success"
-                    @click="addSubmenu(item.translations[selectedLocale].value.groups, index)"
-                  >
-                    <PlusIcon class="h-4 w-4 text-white" />
+
+                  <BaseFormInput
+                    v-model="group.name"
+                    label="Název v menu"
+                    :name="'groupName_' + index"
+                    class="col-span-12 lg:col-span-5"
+                    placeholder="Např. Služby"
+                  />
+                  <BaseFormInput
+                    v-model="group.link"
+                    label="Cílová URL"
+                    :name="'groupLink_' + index"
+                    class="col-span-12 lg:col-span-5"
+                    placeholder="/nase-sluzby"
+                  />
+
+                  <div class="col-span-12 flex items-center justify-end gap-2 lg:col-span-2">
+                    <BaseButton
+                      type="button"
+                      variant="secondary"
+                      size="md"
+                      class="bg-white shadow-none ring-slate-200 hover:ring-indigo-500"
+                      title="Přidat podmenu"
+                      @click="addSubmenu(item.translations[selectedLocale].value.groups, index)"
+                    >
+                      <PlusIcon class="size-4 text-indigo-600" />
+                    </BaseButton>
+                    <BaseButton
+                      type="button"
+                      variant="danger"
+                      size="md"
+                      class="bg-white shadow-none ring-slate-200 hover:bg-red-50"
+                      title="Smazat skupinu"
+                      @click="item.translations[selectedLocale].value.groups.splice(index, 1)"
+                    >
+                      <TrashIcon class="size-4 text-red-500" />
+                    </BaseButton>
                   </div>
                 </div>
+
                 <div
-                  v-for="(submenu, key) in group.submenu"
-                  v-if="group.submenu"
-                  :key="key"
-                  class="col-span-full grid grid-cols-12 gap-x-4 gap-y-2"
+                  v-if="group.submenu && group.submenu.length > 0"
+                  class="ml-4 mt-6 space-y-4 border-l-2 border-indigo-100 pl-8 lg:ml-8"
                 >
-                  <div class="col-span-1">&nbsp;</div>
-                  <BaseFormInput
-                    v-model="submenu.name"
-                    label="Název odkazu"
-                    :name="'submenuName_' + index + '_' + key"
-                    class="col-span-5"
-                  />
-                  <BaseFormInput
-                    v-model="submenu.link"
-                    label="Odkaz"
-                    :name="'submenuLink_' + index + '_' + key"
-                    class="col-span-5"
-                  />
-                  <div class="col-span-1 flex items-end justify-end gap-x-6">
-                    <div
-                      class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-dangerLight ring-1 ring-danger"
-                      @click="group.submenu.splice(key, 1)"
-                    >
-                      <TrashIcon class="h-4 w-4 text-white" />
+                  <div
+                    v-for="(submenu, key) in group.submenu"
+                    :key="key"
+                    class="relative grid grid-cols-12 items-end gap-4 rounded-2xl bg-white p-4 ring-1 ring-slate-100"
+                  >
+                    <div class="absolute -left-[34px] top-1/2 h-0.5 w-8 bg-indigo-100" />
+
+                    <BaseFormInput
+                      v-model="submenu.name"
+                      label="Název pododkazu"
+                      :name="'submenuName_' + index + '_' + key"
+                      class="col-span-12 lg:col-span-5"
+                    />
+                    <BaseFormInput
+                      v-model="submenu.link"
+                      label="URL pododkazu"
+                      :name="'submenuLink_' + index + '_' + key"
+                      class="col-span-12 lg:col-span-6"
+                    />
+                    <div class="col-span-12 flex justify-end lg:col-span-1">
+                      <button
+                        type="button"
+                        class="mb-2.5 flex size-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                        @click="group.submenu.splice(key, 1)"
+                      >
+                        <TrashIcon class="size-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-span-full text-center">
-                <BaseButton
-                  type="button"
-                  color="primary"
-                  size="lg"
-                  @click="
-                    item.translations[selectedLocale].value.groups.push({ name: '', link: '' })
-                  "
-                >
-                  Přidat skupinu odkazů</BaseButton
-                >
+            </div>
+
+            <div
+              v-if="!item.translations[selectedLocale]?.value?.groups?.length"
+              class="mt-8 flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 py-12 text-center"
+            >
+              <div class="mb-4 rounded-full bg-slate-50 p-4">
+                <LinkIcon class="size-8 text-slate-300" />
               </div>
+              <p class="text-sm font-medium text-slate-500">Zatím jste nepřidali žádné odkazy.</p>
+              <BaseButton
+                type="button"
+                variant="secondary"
+                size="sm"
+                class="mt-4"
+                @click="addGroup"
+              >
+                Vytvořit první odkaz
+              </BaseButton>
             </div>
           </LayoutContainer>
         </div>
-        <LayoutActionsDetailBlock
-          v-model:selected-locale="selectedLocale"
-          v-model:translate-automatically="item.translateAutomatically"
-          v-model:sites="item.sites"
-          :allow-image="false"
-          class="col-span-3 w-full"
-        />
+
+        <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
+            v-model:sites="item.sites"
+            :allow-image="false"
+            class="shadow-sm"
+          />
+
+          <div class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold">Tip pro navigaci</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+              Pro lepší SEO doporučujeme v menu používat jasné názvy (např. "Ceník služeb" místo jen
+              "Ceny"). U horního menu se snažte nepřekročit 5–7 hlavních skupin, aby zůstalo
+              přehledné i na tabletech.
+            </p>
+          </div>
+        </aside>
       </div>
     </Form>
   </div>

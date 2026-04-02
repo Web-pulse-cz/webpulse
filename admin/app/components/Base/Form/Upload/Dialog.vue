@@ -58,7 +58,7 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -68,7 +68,7 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto" @click="show = false">
@@ -85,82 +85,101 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-3xl bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:p-8"
+                @click.stop
               >
                 <Form @submit="emit('save-item', $event)">
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
+                  <div class="w-full sm:flex sm:items-start">
+                    <div class="w-full text-center sm:text-left">
                       <DialogTitle
                         as="h3"
-                        class="mb-4 text-center text-sm font-semibold text-grayDark lg:mb-6 lg:text-lg"
+                        class="mb-2 text-center text-lg font-bold text-slate-900 lg:text-xl"
                       >
                         Nahrávání obrázků
                       </DialogTitle>
-                      <p class="text-md text-center text-grayCustom">{{ message }}</p>
+
+                      <p v-if="message" class="mb-6 text-center text-sm text-slate-500">
+                        {{ message }}
+                      </p>
+
                       <div
                         :class="[
-                          allowRemoteUrl ? 'grid-cols-2' : 'grid-cols-1',
-                          'mt-8 grid gap-x-16 p-4',
+                          allowRemoteUrl
+                            ? 'lg:grid-cols-2 lg:divide-x lg:divide-slate-200'
+                            : 'grid-cols-1',
+                          'mt-6 grid gap-8 lg:gap-12',
                         ]"
                       >
-                        <div class="col-span-1">
-                          <p class="mb-6 text-center font-semibold">Nahrát ze zařízení</p>
+                        <div class="flex h-full w-full flex-col">
+                          <p
+                            class="mb-5 text-center text-xs font-bold uppercase tracking-wider text-slate-400"
+                          >
+                            Nahrát ze zařízení
+                          </p>
+
                           <input
                             ref="fileInput"
                             type="file"
-                            class="block hidden bg-indigo-400 text-left text-xs font-medium text-grayCustom lg:text-sm/6"
+                            class="hidden"
                             :multiple="multiple"
                             :accept="acceptTypes"
                             @change="emit('handle-file-change', $event)"
                           />
+
                           <div
                             v-if="files && files.length"
                             :class="[
-                              multiple ? 'grid-cols-4' : 'grid-cols-1',
-                              'my-4 grid w-full gap-4 rounded border-2 border-dashed border-gray-300 bg-gray-50 p-2',
+                              multiple ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-1',
+                              'mb-6 grid w-full gap-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4',
                             ]"
                           >
                             <draggable
                               v-model="files"
                               item-key="name"
                               style="display: contents"
-                              class="cursor-grab"
+                              class="cursor-grab active:cursor-grabbing"
                             >
                               <template #item="{ element }">
                                 <div
                                   :class="[
-                                    multiple ? 'col-span-1' : 'col-span-full',
-                                    'relative col-span-full overflow-hidden rounded-md border border-gray-300',
+                                    multiple ? 'col-span-1' : 'col-span-full mx-auto max-w-sm',
+                                    'group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md',
                                   ]"
                                 >
                                   <UTooltip
                                     text="Odstranit soubor"
                                     placement="top"
-                                    class="absolute right-1 top-1"
+                                    class="absolute right-2 top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100"
                                   >
                                   </UTooltip>
 
-                                  <img
-                                    v-if="element.preview"
-                                    :src="element.preview"
-                                    alt="náhled"
-                                    class="h-full w-full object-cover"
-                                  />
-                                  <div
-                                    v-else
-                                    class="flex h-40 items-center justify-center bg-white text-sm text-gray-500"
-                                  >
-                                    {{ element.name }}
+                                  <div class="aspect-square w-full">
+                                    <img
+                                      v-if="element.preview"
+                                      :src="element.preview"
+                                      alt="náhled"
+                                      class="h-full w-full object-cover"
+                                    />
+                                    <div
+                                      v-else
+                                      class="flex h-full w-full items-center justify-center p-4 text-center text-xs font-medium text-slate-500"
+                                    >
+                                      <span class="truncate">{{ element.name }}</span>
+                                    </div>
                                   </div>
                                 </div>
                               </template>
                             </draggable>
                           </div>
-                          <div class="flex w-full flex-wrap justify-center gap-x-4">
+
+                          <div
+                            class="mt-auto flex w-full flex-col justify-center gap-3 sm:flex-row"
+                          >
                             <BaseButton
                               type="button"
                               variant="secondary"
                               size="lg"
+                              class="w-full sm:w-auto"
                               @click="$refs.fileInput.click()"
                             >
                               {{ multiple ? 'Vybrat soubory' : 'Vybrat soubor' }}
@@ -171,28 +190,39 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
                               type="button"
                               variant="primary"
                               size="lg"
+                              class="w-full sm:w-auto"
                               @click="emit('upload-files')"
                             >
                               {{ multiple ? 'Nahrát soubory' : 'Nahrát soubor' }}
                             </BaseButton>
                           </div>
                         </div>
-                        <div v-if="allowRemoteUrl" class="col-span-1">
-                          <p class="mb-6 text-center font-semibold">Nahrát z URL</p>
-                          <BaseFormInput
-                            v-model="remoteUrl"
-                            label=""
-                            type="text"
-                            name="remote_url"
-                            placeholder="https://example.com/image.jpg"
-                            class="mb-4"
-                          />
-                          <div class="w-full text-center">
+
+                        <div v-if="allowRemoteUrl" class="flex h-full w-full flex-col lg:pl-12">
+                          <p
+                            class="mb-5 text-center text-xs font-bold uppercase tracking-wider text-slate-400"
+                          >
+                            Nahrát z URL
+                          </p>
+
+                          <div class="flex-1">
+                            <BaseFormInput
+                              v-model="remoteUrl"
+                              label=""
+                              type="text"
+                              name="remote_url"
+                              placeholder="https://example.com/obrazek.jpg"
+                              class="mb-6"
+                            />
+                          </div>
+
+                          <div class="mt-auto text-center">
                             <BaseButton
                               v-if="remoteUrl"
                               type="button"
                               variant="secondary"
                               size="lg"
+                              class="w-full sm:w-auto"
                               :loading="remoteLoading"
                               :disabled="remoteLoading || !remoteUrl"
                               @click="emit('upload-remote-url', remoteUrl)"
@@ -204,6 +234,7 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
                       </div>
                     </div>
                   </div>
+
                   <div
                     class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
                   ></div>

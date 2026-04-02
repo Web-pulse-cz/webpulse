@@ -149,7 +149,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -157,36 +157,100 @@ definePageMeta({
       slug="message_blueprints"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 gap-x-10">
-        <LayoutContainer class="col-span-full w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormSelect
-              v-model="item.type"
-              label="Typ"
-              name="type"
-              :options="allowedTypes"
-              rules="required"
-              class="col-span-1"
-            />
-            <BaseFormTextarea
-              v-model="item.message"
-              label="Zpráva"
-              name="message"
-              rules="required"
-              rows="10"
-              class="col-span-full"
-            />
+      <div class="grid grid-cols-1 gap-8">
+        <LayoutContainer class="w-full">
+          <div class="mb-8 flex items-center justify-between">
+            <LayoutTitle class="!mb-0">Nastavení šablony</LayoutTitle>
+            <div class="flex items-center gap-2">
+              <span class="flex size-2 rounded-full bg-indigo-500"></span>
+              <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400"
+                >Editor zpráv</span
+              >
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+            <div class="col-span-1">
+              <BaseFormInput
+                v-model="item.name"
+                label="Název šablony"
+                placeholder="Např. Poděkování za návštěvu"
+                type="text"
+                name="name"
+                rules="required|min:3"
+              />
+              <p class="mt-1.5 text-xs text-slate-400">
+                Interní název pro vaši orientaci v seznamu.
+              </p>
+            </div>
+
+            <div class="col-span-1">
+              <BaseFormSelect
+                v-model="item.type"
+                label="Typ kanálu"
+                name="type"
+                :options="allowedTypes"
+                rules="required"
+              />
+              <p class="mt-1.5 text-xs text-slate-400">
+                Určuje, pro jaký druh komunikace je šablona určena.
+              </p>
+            </div>
+
+            <div class="col-span-full pt-4">
+              <div class="rounded-2xl bg-slate-50 p-1 ring-1 ring-inset ring-slate-200">
+                <BaseFormTextarea
+                  v-model="item.message"
+                  label="Text zprávy"
+                  name="message"
+                  rules="required"
+                  placeholder="Zde napište text vaší šablony..."
+                  :rows="12"
+                  class="col-span-full border-none bg-white !shadow-none focus:ring-0"
+                />
+              </div>
+
+              <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
+                <span class="text-xs font-semibold text-slate-500">Dostupné tagy:</span>
+                <span
+                  class="rounded-md bg-white px-2 py-1 text-[10px] font-bold uppercase text-indigo-600 ring-1 ring-inset ring-indigo-200"
+                >
+                  {jmeno}
+                </span>
+                <span
+                  class="rounded-md bg-white px-2 py-1 text-[10px] font-bold uppercase text-indigo-600 ring-1 ring-inset ring-indigo-200"
+                >
+                  {datum}
+                </span>
+                <span
+                  class="rounded-md bg-white px-2 py-1 text-[10px] font-bold uppercase text-indigo-600 ring-1 ring-inset ring-indigo-200"
+                >
+                  {cas}
+                </span>
+              </div>
+            </div>
           </div>
         </LayoutContainer>
+
+        <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100 lg:p-8">
+          <div class="flex items-start gap-4">
+            <div
+              class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-indigo-600 shadow-sm"
+            >
+              <InformationCircleIcon class="size-6" />
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-indigo-900">Jak pracovat se šablonami?</h4>
+              <p class="mt-1 text-sm leading-relaxed text-indigo-700/80">
+                Šablony zpráv slouží k rychlému odesílání odpovědí klientům. Při psaní zprávy v
+                detailu kontaktu jednoduše vyberete tuto šablonu a systém automaticky vyplní text,
+                který jste si zde připravili.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </Form>
   </div>

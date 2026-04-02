@@ -125,54 +125,123 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       slug="emails"
       :modify-bottom="false"
     />
-    <LayoutTabs :tabs="tabs" />
-    <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <LayoutContainer class="col-span-full grid w-full grid-cols-12 gap-4">
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Příjemce:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.to }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Kopie:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.cc }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Skrytá kopie:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.bcc }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Priorita:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.priority }}</p>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Stav:</p>
-            <div class="col-span-9 text-grayCustom">
-              <PropsBadge v-if="item.status === 'sent'" color="green">Odesláno</PropsBadge>
-              <PropsBadge v-if="item.status === 'pending'" color="yellow"
-                >Čeká na odeslání</PropsBadge
+
+    <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
+
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+      <div class="col-span-1 space-y-8 lg:col-span-9">
+        <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
               >
+                <EnvelopeIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Detail doručení</LayoutTitle>
+            </div>
+
+            <div class="space-y-6">
+              <div class="flex flex-col gap-1 border-b border-slate-50 pb-4">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                  >Hlavní příjemce (To)</span
+                >
+                <p class="text-base font-bold text-indigo-600">{{ item.to }}</p>
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div class="flex flex-col gap-1">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                    >Kopie (CC)</span
+                  >
+                  <p class="text-sm text-slate-600">{{ item.cc || '---' }}</p>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                    >Skrytá kopie (BCC)</span
+                  >
+                  <p class="text-sm text-slate-600">{{ item.bcc || '---' }}</p>
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
+        </template>
+
+        <template v-if="tabs.find((tab) => tab.current && tab.link === '#sablona')">
+          <LayoutContainer class="overflow-hidden !p-0 shadow-inner ring-1 ring-slate-200">
+            <div
+              class="flex items-center justify-between border-b border-slate-200 bg-slate-100 px-4 py-2"
+            >
+              <div class="flex gap-1.5">
+                <div class="size-2.5 rounded-full bg-slate-300" />
+                <div class="size-2.5 rounded-full bg-slate-300" />
+                <div class="size-2.5 rounded-full bg-slate-300" />
+              </div>
+              <span class="text-[10px] font-bold uppercase italic tracking-widest text-slate-400"
+                >Náhled odeslaného HTML</span
+              >
+              <div class="w-12" />
+            </div>
+
+            <div class="flex min-h-[600px] justify-center bg-slate-50 p-4 md:p-8">
+              <div class="w-full max-w-3xl rounded-sm bg-white p-2 shadow-2xl ring-1 ring-black/5">
+                <div class="prose prose-sm max-w-none" v-html="item.html" />
+              </div>
+            </div>
+          </LayoutContainer>
+        </template>
+      </div>
+
+      <aside class="col-span-1 space-y-6 lg:sticky lg:top-24 lg:col-span-3">
+        <LayoutContainer class="!py-6">
+          <LayoutTitle class="text-xs uppercase tracking-widest text-slate-400"
+            >Status zprávy</LayoutTitle
+          >
+
+          <div class="mt-6 space-y-6">
+            <div
+              class="flex items-center justify-between rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200"
+            >
+              <span class="text-xs font-semibold text-slate-500">Aktuální stav</span>
+              <PropsBadge v-if="item.status === 'sent'" color="green">Odesláno</PropsBadge>
+              <PropsBadge v-if="item.status === 'pending'" color="yellow">Čeká</PropsBadge>
               <PropsBadge v-if="item.status === 'failed'" color="red">Chyba</PropsBadge>
             </div>
-          </div>
-          <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-            <p class="col-span-3 font-semibold text-grayDark">Počet pokusů:</p>
-            <p class="col-span-9 text-grayCustom">{{ item.attempts }}</p>
+
+            <div class="grid grid-cols-2 gap-4 text-center">
+              <div class="rounded-xl border border-slate-100 p-3">
+                <span class="block text-[10px] font-bold uppercase text-slate-400">Priorita</span>
+                <span class="text-sm font-black text-slate-700">{{ item.priority }}</span>
+              </div>
+              <div class="rounded-xl border border-slate-100 p-3">
+                <span class="block text-[10px] font-bold uppercase text-slate-400">Pokusy</span>
+                <span class="text-sm font-black text-slate-700">{{ item.attempts }}x</span>
+              </div>
+            </div>
           </div>
         </LayoutContainer>
-      </template>
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#sablona')">
-        <LayoutContainer class="col-span-full grid w-full grid-cols-12 gap-4">
-          <div class="col-span-full" v-html="item.html" />
-        </LayoutContainer>
-      </template>
+
+        <div
+          v-if="item.status === 'failed'"
+          class="rounded-3xl bg-rose-50 p-6 ring-1 ring-inset ring-rose-100"
+        >
+          <div class="mb-3 flex items-center gap-2">
+            <ExclamationCircleIcon class="size-5 text-rose-600" />
+            <h4 class="text-sm font-bold text-rose-900">Chyba při odesílání</h4>
+          </div>
+          <p class="text-xs leading-relaxed text-rose-700/80">
+            E-mail se nepodařilo doručit. Systém se pokusí odeslání zopakovat celkem 3x, než zprávu
+            trvale označí za chybnou.
+          </p>
+        </div>
+      </aside>
     </div>
   </div>
 </template>

@@ -133,188 +133,141 @@ const emitUpdateFilters = () => {
 <template>
   <div
     :class="[
-      modifyBottom ? 'rounded-lg' : 'rounded-t-lg',
-      'no-print bg-white py-4 pl-5 pr-5 shadow lg:px-8 lg:py-6',
+      modifyBottom ? 'rounded-2xl' : 'rounded-t-2xl',
+      'no-print bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all duration-300 sm:p-8',
     ]"
   >
-    <LayoutBreadcrumbs :pages="breadcrumbs" class="mb-4" />
-    <div class="mt-2 flex items-center justify-between">
+    <LayoutBreadcrumbs :pages="breadcrumbs" class="mb-6" />
+
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
       <div class="min-w-0 flex-1">
-        <h2 class="text-xl font-bold text-grayDark sm:truncate sm:tracking-tight lg:text-3xl/7">
+        <h2 class="text-2xl font-extrabold tracking-tight text-slate-900 lg:text-3xl">
           {{ title }}
         </h2>
       </div>
-      <div class="flex shrink-0 md:ml-4 md:mt-0">
+
+      <div class="flex items-center gap-3">
         <button
-          v-if="isInQuickAccess"
           type="button"
-          class="rounded-full px-1.5 py-1.5 text-sm shadow-sm ring-1 ring-slate-200 hover:shadow-md lg:px-2.5 lg:py-2.5"
-          @click="openQuickAccessDialog(true)"
+          :class="[
+            isInQuickAccess
+              ? 'bg-amber-50 ring-amber-200'
+              : 'bg-white ring-slate-200 hover:bg-slate-50',
+            'inline-flex items-center justify-center rounded-full p-2.5 shadow-sm ring-1 ring-inset transition-all duration-200',
+          ]"
+          @click="openQuickAccessDialog(isInQuickAccess)"
         >
-          <StarIcon class="size-4 fill-yellow-600 text-yellow-600 lg:size-5" aria-hidden="true" />
+          <StarIcon
+            :class="[
+              isInQuickAccess ? 'fill-amber-400 text-amber-400' : 'text-slate-400',
+              'size-5 lg:size-6',
+            ]"
+            aria-hidden="true"
+          />
         </button>
-        <button
-          v-else
-          type="button"
-          class="rounded-full px-1.5 py-1.5 text-sm shadow-sm ring-1 ring-slate-200 hover:shadow-md lg:px-2.5 lg:py-2.5"
-          @click="openQuickAccessDialog(false)"
-        >
-          <StarIcon class="size-4 text-yellow-600 lg:size-5" aria-hidden="true" />
-        </button>
-        <div
-          v-for="(action, key) in actions"
-          v-if="actions && actions.length"
-          :key="key"
-          class="hidden lg:block"
-        >
-          <BaseButton
-            v-if="
-              (action.type === 'save-and-stay' && canEditBySite(slug) && canEdit(slug)) ||
-              (action.type === 'save-and-stay' && slug === '')
-            "
-            variant="secondary"
-            size="xl"
-            class="ml-4"
-            @click="emit('save', true)"
-          >
-            Uložit a odejít
-          </BaseButton>
-          <BaseButton
-            v-if="
-              (action.type === 'save' && canEditBySite(slug) && canEdit(slug)) ||
-              (action.type === 'save' && slug === '')
-            "
-            variant="primary"
-            size="xl"
-            class="ml-4"
-            @click="emit('save', false)"
-          >
-            Uložit
-          </BaseButton>
-          <BaseButton
-            v-if="action.type === 'add' && canEditBySite(slug) && canEdit(slug)"
-            variant="primary"
-            size="xl"
-            class="ml-4"
-            @click="router.push(route.fullPath + '/pridat')"
-          >
-            {{ action.text }}
-          </BaseButton>
-          <BaseButton
-            v-if="action.type === 'add-dialog' && canEditBySite(slug) && canEdit(slug)"
-            variant="primary"
-            size="xl"
-            class="ml-4"
-            @click="emit('add-dialog')"
-          >
-            {{ action.text }}
-          </BaseButton>
-          <BaseButton
-            v-if="action.type === 'add-cashflow'"
-            variant="primary"
-            size="xl"
-            class="ml-4"
-            @click="emit('open-cashflow-dialog')"
-          >
-            {{ action.text }}
-          </BaseButton>
-          <BaseButton
-            v-if="action.type === 'filter-dialog'"
-            variant="primary"
-            size="xl"
-            class="ml-4"
-            @click="emit('filter-dialog')"
-          >
-            {{ action.text }}
-          </BaseButton>
-          <BaseButton
-            v-if="action.type === 'print'"
-            variant="secondary"
-            size="xl"
-            class="ml-4 hidden lg:block"
-            @click="print"
-          >
-            <PrinterIcon class="size-5 text-primaryLight" />
-          </BaseButton>
+
+        <div class="hidden lg:flex lg:items-center lg:gap-3">
+          <template v-for="(action, key) in actions" :key="key">
+            <BaseButton
+              v-if="action.type === 'save-and-stay' && (canEditBySite(slug) || slug === '')"
+              variant="secondary"
+              size="lg"
+              @click="emit('save', true)"
+            >
+              Uložit a odejít
+            </BaseButton>
+
+            <BaseButton
+              v-if="action.type === 'save' && (canEditBySite(slug) || slug === '')"
+              variant="primary"
+              size="lg"
+              @click="emit('save', false)"
+            >
+              Uložit
+            </BaseButton>
+
+            <BaseButton
+              v-if="action.type === 'add' && canEditBySite(slug)"
+              variant="primary"
+              size="lg"
+              @click="router.push(route.fullPath + '/pridat')"
+            >
+              {{ action.text }}
+            </BaseButton>
+
+            <BaseButton
+              v-if="action.type === 'add-dialog' && canEditBySite(slug)"
+              variant="primary"
+              size="lg"
+              @click="emit('add-dialog')"
+            >
+              {{ action.text }}
+            </BaseButton>
+
+            <BaseButton
+              v-if="action.type === 'add-cashflow'"
+              variant="primary"
+              size="lg"
+              @click="emit('open-cashflow-dialog')"
+            >
+              {{ action.text }}
+            </BaseButton>
+
+            <BaseButton
+              v-if="action.type === 'filter-dialog'"
+              variant="primary"
+              size="lg"
+              @click="emit('filter-dialog')"
+            >
+              {{ action.text }}
+            </BaseButton>
+
+            <BaseButton v-if="action.type === 'print'" variant="secondary" size="lg" @click="print">
+              <PrinterIcon class="size-5 text-indigo-600" />
+            </BaseButton>
+          </template>
         </div>
       </div>
     </div>
-    <div
-      v-for="(action, key) in actions"
-      v-if="actions && actions.length"
-      :key="key"
-      class="mt-4 flex gap-x-4 lg:hidden"
-    >
-      <BaseButton
-        v-if="
-          (action.type === 'save' && canEditBySite(slug) && canEdit(slug)) ||
-          (action.type === 'save' && slug === '')
-        "
-        variant="secondary"
-        size="md"
-        @click="emit('save', true)"
-      >
-        Uložit a odejít
-      </BaseButton>
-      <BaseButton
-        v-if="
-          (action.type === 'save' && canEditBySite(slug) && canEdit(slug)) ||
-          (action.type === 'save' && slug === '')
-        "
-        variant="primary"
-        size="md"
-        @click="emit('save', false)"
-      >
-        Uložit
-      </BaseButton>
-      <BaseButton
-        v-if="action.type === 'add' && canEditBySite(slug) && canEdit(slug)"
-        variant="primary"
-        size="md"
-        @click="router.push(route.fullPath + '/pridat')"
-      >
-        {{ action.text }}
-      </BaseButton>
-      <BaseButton
-        v-if="action.type === 'add-dialog' && canEditBySite(slug) && canEdit(slug)"
-        variant="primary"
-        size="md"
-        @click="emit('add-dialog')"
-      >
-        {{ action.text }}
-      </BaseButton>
-      <BaseButton
-        v-if="action.type === 'add-cashflow'"
-        variant="primary"
-        size="md"
-        @click="emit('open-cashflow-dialog')"
-      >
-        {{ action.text }}
-      </BaseButton>
-      <BaseButton
-        v-if="action.type === 'filter-dialog'"
-        variant="primary"
-        size="md"
-        @click="emit('filter-dialog')"
-      >
-        {{ action.text }}
-      </BaseButton>
+
+    <div v-if="actions && actions.length" class="mt-6 flex flex-wrap gap-3 lg:hidden">
+      <template v-for="(action, key) in actions" :key="key">
+        <BaseButton
+          v-if="action.type === 'save' && (canEditBySite(slug) || slug === '')"
+          variant="secondary"
+          size="md"
+          @click="emit('save', true)"
+        >
+          Uložit a odejít
+        </BaseButton>
+        <BaseButton
+          v-if="action.type === 'add' && canEditBySite(slug)"
+          variant="primary"
+          size="md"
+          @click="router.push(route.fullPath + '/pridat')"
+        >
+          {{ action.text }}
+        </BaseButton>
+      </template>
     </div>
-    <div v-if="filters && filters.length" class="grid grid-cols-12 gap-4">
-      <div class="col-span-full mt-4 border-b border-grayLight" />
-      <ContactFilterDropdown
-        v-for="(filter, key) in filters"
-        :key="key"
-        class="col-span-4 lg:col-span-2"
-        :title="filter.title"
-        :data="filter.data"
-        :multiple="filter.multiple"
-        :type="filter.type"
-        :slug="filter.slug"
-        :filters-query="filtersQuery"
-        @update-filters="emitUpdateFilters"
-      />
+
+    <div v-if="filters && filters.length" class="mt-8">
+      <div class="h-px w-full bg-slate-100" />
+      <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+        <ContactFilterDropdown
+          v-for="(filter, key) in filters"
+          :key="key"
+          :title="filter.title"
+          :data="filter.data"
+          :multiple="filter.multiple"
+          :type="filter.type"
+          :slug="filter.slug"
+          :filters-query="filtersQuery"
+          @update-filters="emitUpdateFilters"
+        />
+      </div>
     </div>
+
     <QuickAccessDialog v-model:show="quickAccessDialogShow" v-model:form="quickAccessItem" />
   </div>
 </template>

@@ -123,102 +123,100 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="careers" />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'firstname',
-            name: 'Jméno',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'lastname',
-            name: 'Příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'phone',
-            name: 'Telefon',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'availability',
-            name: 'Nástup možný od',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'salary_expectation',
-            name: 'Očekáváná mzda',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'status',
-            name: 'Stav přihlášky',
-            type: 'enum',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-        ]"
-        :enums="{
-          availability: {
-            immediate: 'Ihned',
-            '1-week': 'Za týden',
-            '2-weeks': 'Za 2 týdny',
-            '1-month': 'Za měsíc',
-            '2-month': 'Za dva a více měsíců',
-            negotiable: 'Dohodou',
-          },
-          status: {
-            pending: 'Čeká',
-            reviewed: 'Zobrazeno',
-            accepted: 'Přijato',
-            rejected: 'Zamítnuto',
-          },
-        }"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Pracovní pozici"
-        plural="Pracovní pozice"
-        :query="tableQuery"
-        slug="careers"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'firstname',
+          name: 'Jméno',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'lastname',
+          name: 'Příjmení',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'email',
+          name: 'E-mail',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'phone',
+          name: 'Telefon',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'availability',
+          name: 'Nástup možný od',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'salary_expectation',
+          name: 'Očekáváná mzda',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'status',
+          name: 'Stav přihlášky',
+          type: 'enum',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+      ]"
+      :enums="{
+        availability: {
+          immediate: 'Ihned',
+          '1-week': 'Za týden',
+          '2-weeks': 'Za 2 týdny',
+          '1-month': 'Za měsíc',
+          '2-month': 'Za dva a více měsíců',
+          negotiable: 'Dohodou',
+        },
+        status: {
+          pending: 'Čeká',
+          reviewed: 'Zobrazeno',
+          accepted: 'Přijato',
+          rejected: 'Zamítnuto',
+        },
+      }"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Pracovní pozici"
+      plural="Pracovní pozice"
+      :query="tableQuery"
+      slug="careers"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

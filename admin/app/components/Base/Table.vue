@@ -183,214 +183,286 @@ const emit = defineEmits([
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8">
+  <div class="w-full px-4 sm:px-0">
     <div class="flow-root">
       <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 pb-0 align-middle">
-          <table class="min-w-full divide-y divide-grayLight">
-            <thead>
-              <tr>
-                <th
-                  v-for="(column, key) in columns"
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+            <table class="min-w-full divide-y divide-slate-200">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th
+                    v-for="(column, key) in columns"
+                    :key="key"
+                    scope="col"
+                    :class="[
+                      column.hidden ? 'hidden md:table-cell' : '',
+                      column.sortable ? 'cursor-pointer transition-colors hover:bg-slate-100' : '',
+                      column.width ? `w-[${column.width}px]` : '',
+                      'py-3.5 pl-4 pr-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 sm:pl-6',
+                    ]"
+                    @click="column.sortable ? $emit('update-sort', column.key) : null"
+                  >
+                    <div class="group flex items-center">
+                      <span>{{ column.name }}</span>
+                      <span
+                        v-if="column.sortable"
+                        class="ml-2 flex-none rounded text-slate-400 group-hover:bg-slate-200"
+                      >
+                        <ChevronDownIcon
+                          v-if="query && query.orderBy === column.key && query.orderWay === 'asc'"
+                          class="size-4 text-indigo-600"
+                        />
+                        <ChevronUpIcon
+                          v-else-if="
+                            query && query.orderBy === column.key && query.orderWay === 'desc'
+                          "
+                          class="size-4 text-indigo-600"
+                        />
+                        <ChevronUpDownIcon
+                          v-else-if="!query || query.orderBy !== column.key"
+                          class="size-4 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100"
+                        />
+                      </span>
+                    </div>
+                  </th>
+                  <th scope="col" class="relative w-[150px] py-3.5 pl-3 pr-4 sm:pr-6" />
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-slate-100 bg-white">
+                <tr
+                  v-for="(item, key) in items.data"
+                  v-if="!loading && !error && items.data && items.data.length"
                   :key="key"
-                  scope="col"
-                  :class="{
-                    'hidden md:table-cell': column.hidden,
-                    'py-2.5 pl-2 pr-1.5 text-left text-xs font-semibold text-grayDark lg:py-3.5 lg:pl-8 lg:pr-3 lg:text-sm': true,
-                    'cursor-pointer': column.sortable,
-                    [`w-[${column.width}px]`]: column.width,
-                  }"
-                  @click="column.sortable ? $emit('update-sort', column.key) : null"
+                  class="transition-colors hover:bg-slate-50/50"
                 >
-                  <div class="flex items-center">
-                    <span>{{ column.name }}</span>
-                    <ChevronDownIcon
-                      v-if="
-                        query &&
-                        column.sortable &&
-                        query.orderBy === column.key &&
-                        query.orderWay === 'asc'
-                      "
-                      class="ml-2 size-3 text-primaryCustom lg:size-4"
-                    />
-                    <ChevronUpIcon
-                      v-if="
-                        query &&
-                        column.sortable &&
-                        query.orderBy === column.key &&
-                        query.orderWay === 'desc'
-                      "
-                      class="ml-2 size-3 text-primaryCustom lg:size-4"
-                    />
-                  </div>
-                </th>
-                <th scope="col" class="relative w-[150px] py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8" />
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr
-                v-for="(item, key) in items.data"
-                v-if="!loading && !error && items.data && items.data.length"
-                :key="key"
-              >
-                <td
-                  v-for="(column, index) in columns"
-                  :key="index"
-                  scope="col"
-                  :class="[
-                    column.hidden ? 'hidden md:table-cell' : '',
-                    `w-[${column.width}px] whitespace-nowrap py-2 pl-2 pr-1.5 text-xs font-medium text-grayCustom lg:py-4 lg:pl-8 lg:pr-3 lg:text-sm`,
-                  ]"
-                >
-                  <span v-if="column.type === 'text' || column.type === 'number'">
-                    {{ item[column.key] ?? '-' }}
-                  </span>
-                  <span v-if="column.type === 'percent'"> {{ item[column.key] ?? '-' }}% </span>
-                  <PropsBadge v-else-if="column.type === 'badge'" :color="item[column.colorKey]">
-                    {{ item[column.key] }}
-                  </PropsBadge>
-                  <span v-else-if="column.type === 'enum'">
-                    {{ enums[column.key][item[column.key]] }}
-                  </span>
-                  <span v-else-if="column.type === 'date'">
-                    {{
-                      item[column.key] !== null
-                        ? new Date(item[column.key]).toLocaleDateString()
-                        : '-'
-                    }}
-                  </span>
-                  <span v-else-if="column.type === 'datetime'">
-                    {{
-                      item[column.key] !== null ? new Date(item[column.key]).toLocaleString() : '-'
-                    }}
-                  </span>
-                  <img
-                    v-if="column.type === 'image'"
-                    class="size-24 bg-gray-50"
-                    :src="`/content/images/${column.path}/${item[column.key]}`"
-                    alt=""
-                  />
-                  <span v-else-if="column.type === 'stars'" class="flex gap-x-1.5">
-                    <StarIcon
-                      v-for="star in 5"
-                      :key="star"
-                      :class="`h-4 w-4 ${
-                        star <= item[column.key] ? 'text-yellow-400' : 'text-grayLight'
-                      }`"
-                    />
-                  </span>
-                  <span v-else-if="column.type === 'status'">
-                    <CheckIcon
-                      v-if="item[column.key]"
-                      class="size-3 cursor-pointer text-success lg:size-5"
-                    />
-                    <XMarkIcon v-else class="size-3 cursor-pointer text-danger lg:size-5" />
-                  </span>
-                  <NuxtLink
-                    v-else-if="column.type === 'link'"
-                    :to="item[column.key]"
-                    :target="column.target"
-                    class="text-primaryLight"
+                  <td
+                    v-for="(column, index) in columns"
+                    :key="index"
+                    :class="[
+                      column.hidden ? 'hidden md:table-cell' : '',
+                      column.width ? `w-[${column.width}px]` : '',
+                      'whitespace-nowrap py-3.5 pl-4 pr-3 text-sm font-medium text-slate-600 sm:pl-6',
+                    ]"
                   >
-                    {{ item[column.key] }}
-                  </NuxtLink>
-                  <a
-                    v-else-if="column.type === 'external_link'"
-                    :href="item[column.key]"
-                    target="_blank"
-                    class="text-primaryLight"
+                    <span
+                      v-if="column.type === 'text' || column.type === 'number'"
+                      class="text-slate-900"
+                    >
+                      {{ item[column.key] ?? '-' }}
+                    </span>
+                    <span v-else-if="column.type === 'percent'">
+                      {{ item[column.key] ?? '-' }}%
+                    </span>
+                    <PropsBadge v-else-if="column.type === 'badge'" :color="item[column.colorKey]">
+                      {{ item[column.key] }}
+                    </PropsBadge>
+                    <span v-else-if="column.type === 'enum'">
+                      {{ enums[column.key][item[column.key]] }}
+                    </span>
+                    <span v-else-if="column.type === 'date'">
+                      {{
+                        item[column.key] !== null
+                          ? new Date(item[column.key]).toLocaleDateString()
+                          : '-'
+                      }}
+                    </span>
+                    <span v-else-if="column.type === 'datetime'">
+                      {{
+                        item[column.key] !== null
+                          ? new Date(item[column.key]).toLocaleString()
+                          : '-'
+                      }}
+                    </span>
+
+                    <img
+                      v-if="column.type === 'image'"
+                      class="size-12 rounded-lg bg-slate-50 object-cover shadow-sm ring-1 ring-slate-200"
+                      :src="`/content/images/${column.path}/${item[column.key]}`"
+                      alt=""
+                    />
+
+                    <span v-else-if="column.type === 'stars'" class="flex items-center gap-x-1">
+                      <StarIcon
+                        v-for="star in 5"
+                        :key="star"
+                        :class="`size-4 ${star <= item[column.key] ? 'text-amber-400' : 'text-slate-200'}`"
+                      />
+                    </span>
+
+                    <span v-else-if="column.type === 'status'" class="flex items-center">
+                      <CheckIcon v-if="item[column.key]" class="size-5 text-emerald-500" />
+                      <XMarkIcon v-else class="size-5 text-red-500" />
+                    </span>
+
+                    <NuxtLink
+                      v-else-if="column.type === 'link'"
+                      :to="item[column.key]"
+                      :target="column.target"
+                      class="text-indigo-600 transition-colors hover:text-indigo-500 hover:underline"
+                    >
+                      {{ item[column.key] }}
+                    </NuxtLink>
+                    <a
+                      v-else-if="column.type === 'external_link'"
+                      :href="item[column.key]"
+                      target="_blank"
+                      class="text-indigo-600 transition-colors hover:text-indigo-500 hover:underline"
+                    >
+                      {{ item[column.key] }}
+                    </a>
+                  </td>
+
+                  <td
+                    class="relative w-[150px] whitespace-nowrap py-3.5 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                   >
-                    {{ item[column.key] }}
-                  </a>
-                </td>
-                <td
-                  class="relative flex w-[150px] items-center justify-end whitespace-nowrap py-2 pl-1.5 pr-2 text-right text-xs font-medium sm:pr-6 lg:py-4 lg:pl-3 lg:pr-8 lg:text-sm"
-                >
-                  <span v-for="(action, index) in actions" :key="index">
-                    <MagnifyingGlassIcon
-                      v-if="
-                        (action.type === 'edit' && canEditOrDeleteBySite(slug) && canEdit(slug)) ||
-                        (action.type === 'edit' && slug === '')
-                      "
-                      class="ml-2 size-3 cursor-pointer text-primaryCustom hover:text-primaryLight lg:ml-4 lg:size-5"
-                      @click="redirect(item.id, action)"
-                    />
-                    <ArrowDownTrayIcon
-                      v-if="action.type === 'download'"
-                      class="ml-2 size-4 cursor-pointer text-success hover:text-successLight lg:ml-4 lg:size-5"
-                      @click="emit('download', item.id)"
-                    />
-                    <ClipboardDocumentIcon
-                      v-if="action.type === 'copy'"
-                      class="ml-2 size-4 cursor-pointer text-secondary hover:text-secondaryLight lg:ml-4 lg:size-5"
-                      @click="copyToClipboard(item, action.key)"
-                    />
-                    <ClipboardDocumentIcon
-                      v-if="action.type === 'replicate'"
-                      class="ml-2 size-4 cursor-pointer text-secondary hover:text-secondaryLight lg:ml-4 lg:size-5"
-                      @click="emit('replicate', item.id)"
-                    />
-                    <BoltIcon
-                      v-if="
-                        (action.type === 'edit-dialog' &&
-                          canEditOrDeleteBySite(slug) &&
-                          canEdit(slug)) ||
-                        (action.type === 'edit-dialog' && slug === '')
-                      "
-                      class="ml-2 size-4 cursor-pointer text-warning hover:text-warningLight lg:ml-4 lg:size-5"
-                      @click="emit('open-dialog', item)"
-                    />
-                    <TrashIcon
-                      v-if="
-                        (action.type === 'delete' &&
-                          canEditOrDeleteBySite(slug) &&
-                          canDelete(slug)) ||
-                        (action.type === 'delete' && slug === '')
-                      "
-                      class="ml-2 size-4 cursor-pointer text-danger hover:text-dangerLight lg:ml-4 lg:size-5"
-                      @click="
-                        showDeleteDialog = true;
-                        deleteDialogItem = item;
-                      "
-                    />
-                  </span>
-                </td>
-              </tr>
-              <tr v-else-if="!loading && error">
-                <td
-                  :colspan="columns.length + 1"
-                  class="relative whitespace-nowrap py-8 pl-3 pr-4 text-center text-xs font-semibold text-grayCustom sm:pr-6 lg:pr-8 lg:text-sm"
-                >
-                  {{ `${plural} se nepodařilo načíst` }}
-                </td>
-              </tr>
-              <tr v-else-if="!loading && !error && items.data && items.data.length === 0">
-                <td
-                  :colspan="columns.length + 1"
-                  class="relative whitespace-nowrap py-8 pl-3 pr-4 text-center text-xs font-semibold text-grayCustom sm:pr-6 lg:pr-8 lg:text-sm"
-                >
-                  {{ `Nemáte žádné ${plural.toLowerCase()}` }}
-                </td>
-              </tr>
-              <tr v-else-if="loading">
-                <td
-                  :colspan="columns.length + 1"
-                  class="relative whitespace-nowrap py-8 pl-3 pr-4 text-center text-xs font-semibold text-grayCustom sm:pr-6 lg:pr-8 lg:text-sm"
-                >
-                  {{ `${plural} se načítají` }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <div class="flex items-center justify-end gap-x-3">
+                      <template v-for="(action, index) in actions" :key="index">
+                        <button
+                          v-if="
+                            (action.type === 'edit' &&
+                              canEditOrDeleteBySite(slug) &&
+                              canEdit(slug)) ||
+                            (action.type === 'edit' && slug === '')
+                          "
+                          type="button"
+                          class="text-slate-400 transition-colors hover:text-indigo-600"
+                          title="Upravit"
+                          @click="redirect(item.id, action)"
+                        >
+                          <MagnifyingGlassIcon class="size-5" />
+                        </button>
+
+                        <button
+                          v-if="action.type === 'download'"
+                          type="button"
+                          class="text-slate-400 transition-colors hover:text-emerald-600"
+                          title="Stáhnout"
+                          @click="emit('download', item.id)"
+                        >
+                          <ArrowDownTrayIcon class="size-5" />
+                        </button>
+
+                        <button
+                          v-if="action.type === 'copy'"
+                          type="button"
+                          class="text-slate-400 transition-colors hover:text-indigo-600"
+                          title="Kopírovat"
+                          @click="copyToClipboard(item, action.key)"
+                        >
+                          <ClipboardDocumentIcon class="size-5" />
+                        </button>
+
+                        <button
+                          v-if="action.type === 'replicate'"
+                          type="button"
+                          class="text-slate-400 transition-colors hover:text-indigo-600"
+                          title="Duplikovat"
+                          @click="emit('replicate', item.id)"
+                        >
+                          <ClipboardDocumentIcon class="size-5" />
+                        </button>
+
+                        <button
+                          v-if="
+                            (action.type === 'edit-dialog' &&
+                              canEditOrDeleteBySite(slug) &&
+                              canEdit(slug)) ||
+                            (action.type === 'edit-dialog' && slug === '')
+                          "
+                          type="button"
+                          class="text-slate-400 transition-colors hover:text-amber-500"
+                          title="Rychlá úprava"
+                          @click="emit('open-dialog', item)"
+                        >
+                          <BoltIcon class="size-5" />
+                        </button>
+
+                        <button
+                          v-if="
+                            (action.type === 'delete' &&
+                              canEditOrDeleteBySite(slug) &&
+                              canDelete(slug)) ||
+                            (action.type === 'delete' && slug === '')
+                          "
+                          type="button"
+                          class="text-slate-400 transition-colors hover:text-red-500"
+                          title="Smazat"
+                          @click="
+                            showDeleteDialog = true;
+                            deleteDialogItem = item;
+                          "
+                        >
+                          <TrashIcon class="size-5" />
+                        </button>
+                      </template>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr v-else-if="!loading && error">
+                  <td
+                    :colspan="columns.length + 1"
+                    class="whitespace-nowrap py-12 text-center text-sm text-slate-500"
+                  >
+                    {{ `${plural} se nepodařilo načíst.` }}
+                  </td>
+                </tr>
+                <tr v-else-if="!loading && !error && items.data && items.data.length === 0">
+                  <td
+                    :colspan="columns.length + 1"
+                    class="whitespace-nowrap py-12 text-center text-sm text-slate-500"
+                  >
+                    {{ `Zatím nemáte žádné ${plural.toLowerCase()}.` }}
+                  </td>
+                </tr>
+                <tr v-else-if="loading">
+                  <td
+                    :colspan="columns.length + 1"
+                    class="whitespace-nowrap py-12 text-center text-sm text-slate-500"
+                  >
+                    <div class="flex items-center justify-center gap-x-2">
+                      <svg
+                        class="h-5 w-5 animate-spin text-indigo-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          class="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          class="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span>{{ `${plural} se načítají...` }}</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="border-t border-slate-200 bg-slate-50">
+              <BasePagination
+                v-if="!loading && !error && items.data && items.data.length && query"
+                :page="items.currentPage"
+                :per-page="items.perPage"
+                :total="items.total"
+                :last-page="items.lastPage"
+                @update-page="emit('update-page', $event)"
+              />
+            </div>
+          </div>
         </div>
-        <BasePagination
-          v-if="!loading && !error && items.data && items.data.length && query"
-          :page="items.currentPage"
-          :per-page="items.perPage"
-          :total="items.total"
-          :last-page="items.lastPage"
-          @update-page="emit('update-page', $event)"
-        />
+
         <BaseDialogDelete
           v-model:show="showDeleteDialog"
           v-model:item="deleteDialogItem"

@@ -243,7 +243,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -251,36 +251,55 @@ definePageMeta({
       :actions="[
         {
           type: 'filter-dialog',
-          text: 'Filtrovat',
+          text: 'Filtrovat přehled',
         },
       ]"
       @filter-dialog="filterDialogIsOpen = true"
     />
-    <div class="mt-5 flex items-center justify-between">
-      <BaseButton v-if="tableQuery.year >= 2025" size="lg" @click="previousMonth"
-        >Předchozí měsíc</BaseButton
+
+    <div class="flex items-center justify-between gap-4">
+      <BaseButton
+        v-if="tableQuery.year >= 2025"
+        variant="secondary"
+        size="lg"
+        @click="previousMonth"
       >
-      <BaseButton size="lg" @click="nextMonth">Následující měsíc</BaseButton>
+        <ChevronLeftIcon class="mr-2 size-5" />
+        Předchozí měsíc
+      </BaseButton>
+
+      <div v-else aria-hidden="true" />
+
+      <BaseButton variant="secondary" size="lg" @click="nextMonth">
+        Následující měsíc
+        <ChevronRightIcon class="ml-2 size-5" />
+      </BaseButton>
     </div>
-    <div class="w-full overflow-x-scroll lg:overflow-hidden">
-      <CashflowTable
-        v-if="!loading && !error"
-        :categories="items.categories"
-        :income="items.income"
-        :year="tableQuery.year"
-        :month="tableQuery.month"
-        class="min-w-full"
-        @create-category="categoryDialog.show = true"
-        @load-items="loadItems"
-        @save-day-records="saveDayRecords"
-        @save-budget="saveBudget"
-      />
-    </div>
+
+    <LayoutContainer class="!mt-4 overflow-hidden">
+      <div class="custom-scrollbar w-full overflow-x-auto">
+        <div class="min-w-[1000px] pb-4">
+          <CashflowTable
+            v-if="!loading && !error"
+            :categories="items.categories"
+            :income="items.income"
+            :year="tableQuery.year"
+            :month="tableQuery.month"
+            @create-category="categoryDialog.show = true"
+            @load-items="loadItems"
+            @save-day-records="saveDayRecords"
+            @save-budget="saveBudget"
+          />
+        </div>
+      </div>
+    </LayoutContainer>
+
     <CashflowCategoryDialog
       v-model:show="categoryDialog.show"
       v-model:category="categoryDialog.category"
       @submit="saveCategory"
     />
+
     <CashflowDialogFilter
       v-model:show="filterDialogIsOpen"
       v-model:year="tableQuery.year"
@@ -291,3 +310,21 @@ definePageMeta({
     />
   </div>
 </template>
+
+<style scoped>
+/* Horizontální scrollbar pro finance tabulku */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f8fafc; /* slate-50 */
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0; /* slate-200 */
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1; /* slate-300 */
+}
+</style>

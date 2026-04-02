@@ -49,7 +49,7 @@ function addDayRecord() {
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -59,7 +59,7 @@ function addDayRecord() {
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -76,7 +76,7 @@ function addDayRecord() {
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-8"
               >
                 <Form
                   @submit="
@@ -84,52 +84,59 @@ function addDayRecord() {
                     show = false;
                   "
                 >
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <DialogTitle
-                        as="h3"
-                        class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
-                      >
-                        Upravit záznamy - den {{ day }}. -
-                        <span class="text-primaryLight">kategorie {{ category }}</span>
-                      </DialogTitle>
+                  <div class="w-full text-left">
+                    <DialogTitle as="h3" class="mb-6 text-lg font-bold text-slate-900">
+                      Upravit záznamy - den {{ day }}. -
+                      <span class="text-indigo-600">kategorie {{ category }}</span>
+                    </DialogTitle>
+
+                    <div class="max-h-[60vh] space-y-4 overflow-y-auto overflow-x-hidden pr-2">
                       <div
                         v-for="(data, index) in dayRecords"
                         :key="index"
-                        class="mt-6 grid w-full grid-cols-5 gap-x-4 gap-y-1"
+                        class="relative rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:border-slate-300"
                       >
-                        <BaseFormInput
-                          v-model="data.amount"
-                          label="Částka"
-                          :min="0"
-                          step="0.01"
-                          type="number"
-                          :name="'dayRecords[' + index + '][amount]'"
-                          class="col-span-2"
-                        />
-                        <BaseFormInput
-                          v-model="data.description"
-                          label="Popis"
-                          type="text"
-                          :name="'dayRecords[' + index + '][description]'"
-                          class="col-span-3"
-                        />
-                        <BaseFormCheckbox
-                          v-model="data.is_repeated"
-                          :name="'dayRecords[' + index + '][is_repeated]'"
-                          label="Opakovaně"
-                          class="col-span-1"
-                          :checked="data.is_repeated"
-                          label-color="grayCustom"
-                        />
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-5">
+                          <BaseFormInput
+                            v-model="data.amount"
+                            label="Částka"
+                            :min="0"
+                            step="0.01"
+                            type="number"
+                            :name="'dayRecords[' + index + '][amount]'"
+                            class="sm:col-span-2"
+                          />
+                          <BaseFormInput
+                            v-model="data.description"
+                            label="Popis"
+                            type="text"
+                            :name="'dayRecords[' + index + '][description]'"
+                            class="sm:col-span-3"
+                          />
+                          <BaseFormCheckbox
+                            v-model="data.is_repeated"
+                            :name="'dayRecords[' + index + '][is_repeated]'"
+                            label="Opakovaně"
+                            class="pt-1 sm:col-span-5"
+                            :checked="data.is_repeated"
+                            label-color="slate-700"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
-                  >
-                    <BaseButton type="submit" variant="success" size="lg"> Uložit </BaseButton>
-                    <BaseButton type="button" variant="warning" size="lg" @click="addDayRecord">
+
+                  <div class="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-start">
+                    <BaseButton type="submit" variant="success" size="lg" class="w-full sm:w-auto">
+                      Uložit
+                    </BaseButton>
+                    <BaseButton
+                      type="button"
+                      variant="warning"
+                      size="lg"
+                      class="w-full sm:w-auto"
+                      @click="addDayRecord"
+                    >
                       Přidat záznam
                     </BaseButton>
                     <BaseButton
@@ -137,6 +144,7 @@ function addDayRecord() {
                       type="button"
                       variant="secondary"
                       size="lg"
+                      class="w-full sm:w-auto"
                       @click="show = false"
                     >
                       Zavřít

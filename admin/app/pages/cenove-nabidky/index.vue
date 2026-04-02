@@ -123,49 +123,47 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat nabídku' }]"
       slug="price_offers"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'expected_price_vat',
-            name: 'Očekávaná cena (vč. DPH)',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'total_price_vat',
-            name: 'Konečená cena (vč. DPH)',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'status_name',
-            name: 'Stav projektu',
-            type: 'badge',
-            width: 80,
-            hidden: false,
-            sortable: false,
-            colorKey: 'status_color',
-          },
-        ]"
-        :actions="[{ type: 'edit', hash: '#info' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Cenová nabídka"
-        plural="Cenové nabídky"
-        :query="tableQuery"
-        slug="price_offers"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'expected_price_vat',
+          name: 'Očekávaná cena (vč. DPH)',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'total_price_vat',
+          name: 'Konečená cena (vč. DPH)',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'status_name',
+          name: 'Stav projektu',
+          type: 'badge',
+          width: 80,
+          hidden: false,
+          sortable: false,
+          colorKey: 'status_color',
+        },
+      ]"
+      :actions="[{ type: 'edit', hash: '#info' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Cenová nabídka"
+      plural="Cenové nabídky"
+      :query="tableQuery"
+      slug="price_offers"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

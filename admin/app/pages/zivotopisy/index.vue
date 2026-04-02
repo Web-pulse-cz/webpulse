@@ -208,47 +208,40 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat životopis' }]"
       slug="biographies"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'job_title',
-            name: 'Pozice',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'updated_at',
-            name: 'Poslední úprava',
-            type: 'date',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :actions="[
-          { type: 'download' },
-          { type: 'replicate' },
-          { type: 'edit' },
-          { type: 'delete' },
-        ]"
-        :loading="loading"
-        :error="error"
-        singular="Životopis"
-        :plural="pageTitle"
-        :query="tableQuery"
-        slug="biographies"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-        @download="downloadFile($event)"
-        @replicate="replicateItem($event)"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'job_title',
+          name: 'Pozice',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'updated_at',
+          name: 'Poslední úprava',
+          type: 'date',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'download' }, { type: 'replicate' }, { type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Životopis"
+      :plural="pageTitle"
+      :query="tableQuery"
+      slug="biographies"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+      @download="downloadFile($event)"
+      @replicate="replicateItem($event)"
+    />
   </div>
 </template>

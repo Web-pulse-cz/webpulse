@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
+import { CurrencyDollarIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -98,52 +99,132 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6">
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="demands" />
-    <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-      <LayoutContainer class="col-span-full grid w-full grid-cols-12 gap-4">
-        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Celé jmeno:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.fullname }}</p>
+
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
+      <div class="space-y-6 lg:col-span-1">
+        <LayoutContainer>
+          <LayoutTitle>Kontakt</LayoutTitle>
+          <div class="mt-4 space-y-6">
+            <div class="flex flex-col gap-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                >Celé jméno</span
+              >
+              <p class="text-base font-semibold text-slate-900">{{ item.fullname }}</p>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                >E-mail</span
+              >
+              <a
+                :href="`mailto:${item.email}`"
+                class="group flex items-center gap-2 text-indigo-600 transition-colors hover:text-indigo-500"
+              >
+                <EnvelopeIcon class="size-4" />
+                <span class="font-medium">{{ item.email }}</span>
+              </a>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                >Telefon</span
+              >
+              <a
+                :href="`tel:${item.phone}`"
+                class="group flex items-center gap-2 text-slate-700 transition-colors hover:text-indigo-600"
+              >
+                <PhoneIcon class="size-4 text-slate-400 group-hover:text-indigo-600" />
+                <span class="font-medium">{{ item.phone }}</span>
+              </a>
+            </div>
+
+            <div v-if="item.url" class="flex flex-col gap-1 border-t border-slate-100 pt-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                >URL projektu</span
+              >
+              <a
+                :href="item.url"
+                target="_blank"
+                class="group flex items-center gap-2 text-slate-600 transition-colors hover:text-indigo-600"
+              >
+                <LinkIcon class="size-4 text-slate-400 group-hover:text-indigo-600" />
+                <span class="truncate font-medium">{{ item.url }}</span>
+              </a>
+            </div>
+          </div>
+        </LayoutContainer>
+
+        <div
+          v-if="item.offer_price"
+          class="rounded-3xl bg-indigo-600 p-6 text-white shadow-lg shadow-indigo-200"
+        >
+          <div class="flex items-center gap-3 opacity-80">
+            <BanknotesIcon class="size-5" />
+            <span class="text-xs font-bold uppercase tracking-widest">Navrhovaná cena</span>
+          </div>
+          <p class="mt-2 text-3xl font-black">{{ item.offer_price }}</p>
         </div>
-        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">E-mail:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.email }}</p>
-        </div>
-        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Telefon:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.phone }}</p>
-        </div>
-        <div class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Zpráva:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.text }}</p>
-        </div>
-        <div v-if="item.url" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">URL projektu:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.url }}</p>
-        </div>
-        <div v-if="item.offer_price" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Navrhovaná cena:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.offer_price }}</p>
-        </div>
-        <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Název služby:</p>
-          <p class="col-span-9 text-grayCustom">{{ item.service.name }}</p>
-        </div>
-        <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Typ služby:</p>
-          <p class="col-span-9 text-grayCustom">
-            {{ item.service.type === 'product' ? 'Produkt' : 'Služba' }}
-          </p>
-        </div>
-        <div v-if="item.service" class="col-span-full grid grid-cols-12 gap-x-8 gap-y-4">
-          <p class="col-span-3 font-semibold text-grayDark">Naše cena:</p>
-          <p class="col-span-9 text-grayCustom">
-            {{ item.service.price }} (cena za
-            {{ item.service.price_type === 'total' ? 'službu' : 'hodinu' }})
-          </p>
-        </div>
-      </LayoutContainer>
+      </div>
+
+      <div class="space-y-6 lg:col-span-2">
+        <LayoutContainer>
+          <div class="mb-4 flex items-center justify-between">
+            <LayoutTitle class="!mb-0">Zpráva</LayoutTitle>
+            <ChatBubbleLeftRightIcon class="size-5 text-slate-300" />
+          </div>
+          <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-100">
+            <p class="whitespace-pre-wrap text-base leading-relaxed text-slate-700">
+              {{ item.text }}
+            </p>
+          </div>
+        </LayoutContainer>
+
+        <LayoutContainer v-if="item.service">
+          <LayoutTitle>Poptávaná služba</LayoutTitle>
+          <div class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div
+              class="flex items-start gap-4 rounded-2xl border border-slate-100 p-4 transition-colors hover:bg-slate-50"
+            >
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-lg font-bold text-indigo-600"
+              >
+                {{ item.service.name.charAt(0) }}
+              </div>
+              <div>
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Název služby
+                </p>
+                <p class="font-bold text-slate-900">{{ item.service.name }}</p>
+                <p class="mt-0.5 text-xs text-slate-500">
+                  {{ item.service.type === 'product' ? 'Produkt' : 'Služba' }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="flex items-start gap-4 rounded-2xl border border-slate-100 p-4 transition-colors hover:bg-slate-50"
+            >
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 font-bold text-emerald-600"
+              >
+                <CurrencyDollarIcon class="size-6" />
+              </div>
+              <div>
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Naše ceníková cena
+                </p>
+                <p class="font-bold text-slate-900">{{ item.service.price }}</p>
+                <p class="mt-0.5 text-xs text-slate-500">
+                  Cena za
+                  {{ item.service.price_type === 'total' ? 'jednotku/službu' : 'hodinu práce' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </LayoutContainer>
+      </div>
     </div>
   </div>
 </template>

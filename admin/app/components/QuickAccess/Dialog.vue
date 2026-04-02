@@ -108,7 +108,7 @@ async function deleteItem() {
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -118,7 +118,7 @@ async function deleteItem() {
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -135,66 +135,62 @@ async function deleteItem() {
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-8"
               >
                 <Form @submit="submitForm">
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <DialogTitle
-                        as="h3"
-                        class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
-                      >
-                        {{
-                          form.id == null
-                            ? 'Přidat položku rychlého přístupu'
-                            : 'Upravit položku rychlého přístupu'
-                        }}
-                      </DialogTitle>
-                      <div class="mt-6 grid w-full grid-cols-1 gap-y-4">
-                        <div class="col-span-full">
-                          <BaseFormInput
-                            v-model="form.name"
-                            name="name"
-                            rules="required"
-                            label="Název"
-                            type="text"
-                          />
-                        </div>
-                        <div class="col-span-full">
-                          <BaseFormInput
-                            v-model="form.link"
-                            name="link"
-                            rules="required"
-                            label="Odkaz"
-                            type="text"
-                          />
-                        </div>
-                        <div class="col-span-full">
-                          <BaseFormSelect
-                            v-model="form.target"
-                            name="target"
-                            rules="required"
-                            label="Odkaz otveřít"
-                            :options="[
-                              { value: '_self', name: 'Ve stejném okně' },
-                              { value: '_blank', name: 'V novém okně' },
-                            ]"
-                          />
-                        </div>
-                      </div>
+                  <div class="w-full text-left">
+                    <DialogTitle
+                      as="h3"
+                      class="mb-6 text-lg font-bold tracking-tight text-slate-900"
+                    >
+                      {{
+                        form.id == null
+                          ? 'Přidat položku rychlého přístupu'
+                          : 'Upravit položku rychlého přístupu'
+                      }}
+                    </DialogTitle>
+
+                    <div class="mt-2 grid w-full grid-cols-1 gap-y-5">
+                      <BaseFormInput
+                        v-model="form.name"
+                        name="name"
+                        rules="required"
+                        label="Název"
+                        type="text"
+                      />
+
+                      <BaseFormInput
+                        v-model="form.link"
+                        name="link"
+                        rules="required"
+                        label="Odkaz"
+                        type="text"
+                      />
+
+                      <BaseFormSelect
+                        v-model="form.target"
+                        name="target"
+                        rules="required"
+                        label="Otevřít odkaz"
+                        :options="[
+                          { value: '_self', name: 'Ve stejném okně' },
+                          { value: '_blank', name: 'V novém okně' },
+                        ]"
+                      />
                     </div>
                   </div>
-                  <div
-                    class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
-                  >
-                    <BaseButton type="submit" variant="success" size="lg">
+
+                  <div class="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-start">
+                    <BaseButton type="submit" variant="success" size="lg" class="w-full sm:w-auto">
                       {{ form.id == null ? 'Přidat' : 'Uložit' }}
                     </BaseButton>
+
                     <BaseButton
                       v-if="form.id !== null"
                       type="button"
                       variant="danger"
                       size="lg"
+                      class="w-full sm:w-auto"
                       @click="
                         showDeleteDialog = true;
                         deleteDialogItem = form;
@@ -202,12 +198,13 @@ async function deleteItem() {
                     >
                       Odstranit
                     </BaseButton>
+
                     <BaseButton
                       ref="cancelButtonRef"
                       type="button"
                       variant="secondary"
                       size="lg"
-                      class="ml-4"
+                      class="w-full sm:w-auto"
                       @click="show = false"
                     >
                       Zavřít
@@ -220,6 +217,7 @@ async function deleteItem() {
         </div>
       </Dialog>
     </TransitionRoot>
+
     <BaseDialogDelete
       v-model:show="showDeleteDialog"
       v-model:item="deleteDialogItem"

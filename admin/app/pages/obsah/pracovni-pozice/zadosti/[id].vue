@@ -163,7 +163,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -171,96 +171,141 @@ definePageMeta({
       slug="careers"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-        <LayoutContainer class="col-span-5 w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.firstname"
-              name="firstname"
-              label="Jméno"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.lastname"
-              name="lastname"
-              label="Příjmení"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.email"
-              name="email"
-              label="E-mail"
-              type="email"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.phone"
-              name="phone"
-              label="Telefon"
-              type="text"
-              class="col-span-1"
-            />
-            <BaseFormTextarea
-              v-model="item.cover_letter"
-              name="cover_letter"
-              label="Motivační dopis"
-              class="col-span-2"
-            />
-            <BaseFormInput
-              v-model="item.salary_expectation"
-              name="salary_expectation"
-              label="Očekávaný plat"
-              type="number"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.availability"
-              name="availability"
-              label="Dostupnost"
-              type="text"
-              disabled
-              class="col-span-1"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <UserIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Profil a kontaktní údaje</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              <BaseFormInput
+                v-model="item.firstname"
+                name="firstname"
+                label="Jméno"
+                placeholder="Např. Petr"
+              />
+              <BaseFormInput
+                v-model="item.lastname"
+                name="lastname"
+                label="Příjmení"
+                placeholder="Např. Svoboda"
+              />
+              <BaseFormInput
+                v-model="item.email"
+                name="email"
+                label="E-mail"
+                type="email"
+                placeholder="petr.svoboda@email.cz"
+              />
+              <BaseFormInput
+                v-model="item.phone"
+                name="phone"
+                label="Telefon"
+                type="text"
+                placeholder="+420 777 888 999"
+              />
+
+              <div class="col-span-full pt-4">
+                <LayoutDivider>Podrobnosti žádosti</LayoutDivider>
+              </div>
+
+              <div class="col-span-full">
+                <BaseFormTextarea
+                  v-model="item.cover_letter"
+                  name="cover_letter"
+                  label="Motivační dopis / Zpráva uchazeče"
+                  rows="10"
+                  placeholder="Zde se zobrazí text, který uchazeč zaslal..."
+                  class="!bg-slate-50 transition-colors focus:!bg-white"
+                />
+              </div>
+
+              <BaseFormInput
+                v-model="item.salary_expectation"
+                name="salary_expectation"
+                label="Očekávaný plat (představa)"
+                type="number"
+                class="col-span-1"
+              />
+              <BaseFormInput
+                v-model="item.availability"
+                name="availability"
+                label="Možný termín nástupu"
+                type="text"
+                disabled
+                class="col-span-1 opacity-70"
+              />
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutContainer class="!py-6">
+            <div class="mb-6 flex items-center gap-2">
+              <ClipboardDocumentCheckIcon class="size-4 text-slate-400" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
+                >Správa stavu</LayoutTitle
+              >
+            </div>
+
+            <div class="space-y-5">
+              <BaseFormSelect
+                v-model="item.status"
+                name="status"
+                label="Aktuální fáze"
+                :options="[
+                  { value: 'pending', name: 'Čeká na vyřízení' },
+                  { value: 'reviewed', name: 'Zobrazeno / Posouzení' },
+                  { value: 'accepted', name: 'Přijato k pohovoru' },
+                  { value: 'rejected', name: 'Odmítnuto' },
+                ]"
+              />
+
+              <BaseFormSelect
+                v-model="item.source"
+                name="source"
+                label="Zdroj kandidáta"
+                :options="[
+                  { value: 'website', name: 'Webová stránka' },
+                  { value: 'referral', name: 'Osobní doporučení' },
+                  { value: 'social_media', name: 'Sociální sítě' },
+                  { value: 'job_board', name: 'Pracovní portál' },
+                  { value: 'other', name: 'Jiné' },
+                ]"
+              />
+
+              <div class="border-t border-slate-100 pt-4">
+                <BaseFormInput
+                  v-model="item.locale"
+                  name="locale"
+                  label="Jazyk rozhraní uchazeče"
+                  type="text"
+                  :disabled="true"
+                  class="opacity-60"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-4 text-amber-600" />
+              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">HR Tip</h4>
+            </div>
+            <p class="text-sm leading-relaxed text-amber-800/80">
+              Před změnou stavu na <strong>"Odmítnuto"</strong> doporučujeme uchazeči zaslat osobní
+              e-mail s poděkováním.
+            </p>
           </div>
-        </LayoutContainer>
-        <LayoutContainer class="col-span-2 w-full">
-          <div class="grid grid-cols-1 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.locale"
-              name="locale"
-              label="Jazyk"
-              type="text"
-              :disabled="true"
-              class="col-span-1"
-            />
-            <BaseFormSelect
-              v-model="item.status"
-              name="status"
-              label="Stav žádosti"
-              :options="[
-                { value: 'pending', name: 'Čeká na vyřízení' },
-                { value: 'reviewed', name: 'Zobrazeno' },
-                { value: 'accepted', name: 'Přijato' },
-                { value: 'rejected', name: 'Odmítnuto' },
-              ]"
-              class="col-span-1"
-            />
-            <BaseFormSelect
-              v-model="item.source"
-              name="source"
-              label="Zdroj"
-              :options="[
-                { value: 'website', name: 'Webová stránka' },
-                { value: 'referral', name: 'Odkaz' },
-                { value: 'social_media', name: 'Sociální sítě' },
-                { value: 'job_board', name: 'Portál nabídek' },
-                { value: 'other', name: 'Jiné' },
-              ]"
-              class="col-span-1"
-            />
-          </div>
-        </LayoutContainer>
+        </aside>
       </div>
     </Form>
   </div>

@@ -113,8 +113,8 @@ function addRemoveItemSite(siteId) {
 
 <template>
   <LayoutContainer class="w-full">
-    <div class="grid grid-cols-1 gap-y-4">
-      <div v-if="allowTranslations" class="col-span-full">
+    <div class="grid grid-cols-1 gap-y-6">
+      <div v-if="allowTranslations" class="space-y-3">
         <BaseFormSelect
           v-model="selectedLocale"
           label="Jazyk"
@@ -122,83 +122,98 @@ function addRemoveItemSite(siteId) {
           class="w-full"
           :options="languageStore.languageOptions"
         />
-        <BaseFormCheckbox
-          v-model="translateAutomatically"
-          :checked="translateAutomatically"
-          label="Automaticky přeložit do ostatních jazyků"
-          name="translate_automatically"
-          class="mt-2 flex-row-reverse justify-between"
-          label-color="grayCustom"
-        />
+        <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-inset ring-slate-200">
+          <BaseFormCheckbox
+            v-model="translateAutomatically"
+            :checked="translateAutomatically"
+            label="Automatický překlad"
+            name="translate_automatically"
+            class="flex-row-reverse justify-between"
+            label-color="slate-600"
+          />
+        </div>
       </div>
-      <div v-if="allowState" class="col-span-full">
-        <BaseFormSelect
-          v-model="state"
-          label="Stav"
-          name="status"
-          class="col-span-full"
-          :options="states"
-        />
+
+      <div v-if="allowState">
+        <BaseFormSelect v-model="state" label="Stav" name="status" :options="states" />
       </div>
-      <div v-if="allowPosition" class="col-span-full">
+
+      <div v-if="allowPosition">
         <BaseFormInput
           v-model="position"
           label="Pořadí ve výpisu"
           name="position"
-          class="col-span-full"
           :min="0"
           type="number"
         />
       </div>
-      <div v-if="allowCategories" class="col-span-full">
+
+      <div v-if="allowCategories">
         <BaseFormSelect
           v-model="categoryId"
           label="Kategorie"
           name="event_category_id"
-          class="col-span-full"
           :options="categories"
         />
       </div>
-      <div v-if="allowIsActive" class="col-span-full">
-        <BaseFormCheckbox
-          v-model="active"
-          name="active"
-          label="Aktivní"
-          class="col-span-full flex-row-reverse justify-between"
-          :checked="active"
-          label-color="grayCustom"
-          :reverse="true"
-        />
+
+      <div v-if="allowIsActive" class="pt-2">
+        <div
+          class="flex items-center justify-between rounded-xl border border-slate-200 p-4 transition-colors hover:bg-slate-50"
+        >
+          <BaseFormCheckbox
+            v-model="active"
+            name="active"
+            label="Aktivní záznam"
+            class="w-full flex-row-reverse justify-between"
+            :checked="active"
+            label-color="slate-700 font-bold"
+            :reverse="true"
+          />
+        </div>
       </div>
-    </div>
-    <div v-if="allowSites" class="grid grid-cols-1 gap-y-0">
-      <LayoutDivider v-if="user && user.sites" class="col-span-full"
-        >Zařazení do stránek</LayoutDivider
-      >
-      <BaseFormCheckbox
-        v-for="(site, key) in user.sites"
-        v-if="sites && user.sites"
-        :key="key"
-        :label="site.name"
-        :name="site.id"
-        :checked="sites.includes(site.id)"
-        class="col-span-full"
-        :reverse="true"
-        label-color="grayCustom"
-        @change="addRemoveItemSite(site.id)"
-      />
-    </div>
-    <div v-if="allowImage" class="grid grid-cols-1 gap-y-0">
-      <LayoutDivider class="col-span-full">Náhledový obrázek</LayoutDivider>
-      <BaseFormUploadImage
-        v-model="image"
-        :multiple="false"
-        :type="imageType"
-        format="medium"
-        label="Náhledový obrázek"
-        class="col-span-full"
-        @update-files="updateItemImage"
-      />
+
+      <div v-if="allowSites && user?.sites" class="space-y-4 pt-4">
+        <LayoutDivider class="text-xs font-bold uppercase tracking-widest text-slate-400">
+          Zařazení do stránek
+        </LayoutDivider>
+
+        <div class="grid grid-cols-1 gap-y-1">
+          <div
+            v-for="(site, key) in user.sites"
+            :key="key"
+            class="group flex items-center rounded-lg px-2 py-1 transition-colors hover:bg-slate-50"
+          >
+            <BaseFormCheckbox
+              v-if="sites"
+              :label="site.name"
+              :name="site.id"
+              :checked="sites.includes(site.id)"
+              class="w-full flex-row-reverse justify-between"
+              :reverse="true"
+              label-color="slate-600 group-hover:text-slate-900"
+              @change="addRemoveItemSite(site.id)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div v-if="allowImage" class="space-y-4 pt-4">
+        <LayoutDivider class="text-xs font-bold uppercase tracking-widest text-slate-400">
+          Náhledový obrázek
+        </LayoutDivider>
+        <div class="overflow-hidden rounded-2xl bg-slate-50 p-1 ring-1 ring-slate-200">
+          <BaseFormUploadImage
+            v-model="image"
+            :multiple="false"
+            :type="imageType"
+            format="medium"
+            label=""
+            class="w-full"
+            @update-files="updateItemImage"
+          />
+        </div>
+      </div>
     </div>
   </LayoutContainer>
 </template>

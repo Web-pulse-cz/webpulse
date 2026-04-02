@@ -128,70 +128,68 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat kvíz' }]"
       slug="quizzes"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'status',
-            name: 'Stav',
-            type: 'enum',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'accuracy',
-            name: 'Úspěšnost',
-            type: 'percent',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'attempts',
-            name: 'Počet pokusů',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :enums="{
-          status: {
-            draft: 'Koncept',
-            public: 'Veřejný',
-            private: 'Soukromý',
-            archived: 'Archivovaný',
-          },
-        }"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Kvíz"
-        plural="Kvízy"
-        :query="tableQuery"
-        slug="quizzes"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'status',
+          name: 'Stav',
+          type: 'enum',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'accuracy',
+          name: 'Úspěšnost',
+          type: 'percent',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'attempts',
+          name: 'Počet pokusů',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :enums="{
+        status: {
+          draft: 'Koncept',
+          public: 'Veřejný',
+          private: 'Soukromý',
+          archived: 'Archivovaný',
+        },
+      }"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Kvíz"
+      plural="Kvízy"
+      :query="tableQuery"
+      slug="quizzes"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>
