@@ -761,14 +761,14 @@ onMounted(() => {
                               <li v-for="subItem in item.submenu" :key="subItem.name">
                                 <DisclosureButton as="div" class="w-full">
                                   <NuxtLink
-                                      v-if="subItem.link"
-                                      :to="subItem.link"
-                                      :class="[
-    subItem.current
-      ? 'bg-gray-800 text-white'
-      : 'text-gray-400 hover:bg-gray-800 hover:text-white',
-    'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold'
-  ]"
+                                    v-if="subItem.link"
+                                    :to="subItem.link"
+                                    :class="[
+                                      subItem.current
+                                        ? 'bg-gray-800 text-white'
+                                        : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                                      'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold',
+                                    ]"
                                   >
                                     {{ subItem.name }}
                                   </NuxtLink>
@@ -856,14 +856,14 @@ onMounted(() => {
                       <li v-for="subItem in item.submenu" :key="subItem.name">
                         <DisclosureButton as="div" class="w-full">
                           <NuxtLink
-                              v-if="subItem.link"
-                              :to="subItem.link"
-                              :class="[
-    subItem.current
-      ? 'bg-gray-800 text-white'
-      : 'text-gray-400 hover:bg-gray-800 hover:text-white',
-    'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold'
-  ]"
+                            v-if="subItem.link"
+                            :to="subItem.link"
+                            :class="[
+                              subItem.current
+                                ? 'bg-gray-800 text-white'
+                                : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                              'group flex w-full cursor-pointer gap-x-3 rounded-md p-2 pl-9 text-sm/6 font-semibold',
+                            ]"
                           >
                             {{ subItem.name }}
                           </NuxtLink>
