@@ -166,106 +166,121 @@ definePageMeta({
 <template>
   <div class="space-y-6 pb-20">
     <LayoutHeader
-        :title="pageTitle"
-        :breadcrumbs="breadcrumbs"
-        :actions="[{ type: 'add-cashflow', text: 'Zaznamenat výdaj' }]"
-        @open-cashflow-dialog="openCashflowDialog"
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="[{ type: 'add-cashflow', text: 'Zaznamenat výdaj' }]"
+      @open-cashflow-dialog="openCashflowDialog"
     />
 
     <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
-
       <div class="col-span-1 space-y-8 lg:col-span-8">
-
         <LayoutContainer>
           <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
             <div class="flex items-center gap-3">
-              <div class="relative flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+              <div
+                class="relative flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+              >
                 <PhoneIcon class="size-5" />
-                <div class="absolute -top-1 -right-1 flex h-2.5 w-2.5 animate-pulse rounded-full bg-amber-400 ring-2 ring-white" />
+                <div
+                  class="absolute -right-1 -top-1 flex h-2.5 w-2.5 animate-pulse rounded-full bg-amber-400 ring-2 ring-white"
+                />
               </div>
               <LayoutTitle class="!mb-0">Dnes kontaktovat (Hovory)</LayoutTitle>
             </div>
-            <div class="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <div
+              class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
               Celkem:
-              <span class="font-black text-indigo-600 text-sm/none">{{ dashboard.contactsToCall?.length || 0 }}</span>
+              <span class="text-sm/none font-black text-indigo-600">{{
+                dashboard.contactsToCall?.length || 0
+              }}</span>
             </div>
           </div>
 
           <BaseTable
-              :items="dashboard.contactsToCall"
-              :columns="[
+            :items="dashboard.contactsToCall"
+            :columns="[
               { key: 'firstname', name: 'Jméno', type: 'text', sortable: false },
               { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
               { key: 'phone', name: 'Telefonní číslo', type: 'text', sortable: false },
             ]"
-              :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-              :loading="loading"
-              :error="error"
-              singular="Hovor na dnes"
-              plural="Hovory na dnes"
+            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
+            :loading="loading"
+            :error="error"
+            singular="Hovor na dnes"
+            plural="Hovory na dnes"
           />
         </LayoutContainer>
 
         <LayoutContainer>
           <div class="mb-8 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+            >
               <CalendarDaysIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Nadcházející schůzky</LayoutTitle>
           </div>
 
           <BaseTable
-              :items="dashboard.comingEvents"
-              :columns="[
+            :items="dashboard.comingEvents"
+            :columns="[
               { key: 'firstname', name: 'Jméno klienta', type: 'text', sortable: false },
               { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
               { key: 'next_meeting', name: 'Termín schůzky', type: 'datetime', sortable: false },
             ]"
-              :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-              :loading="loading"
-              :error="error"
-              singular="Naplánovaná schůzka"
-              plural="Naplánované schůzky"
+            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
+            :loading="loading"
+            :error="error"
+            singular="Naplánovaná schůzka"
+            plural="Naplánované schůzky"
           />
         </LayoutContainer>
       </div>
 
-      <aside class="col-span-1 lg:col-span-4 lg:sticky lg:top-8">
+      <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-4">
         <LayoutContainer class="!py-6">
           <div class="mb-6 flex items-center justify-between">
             <div class="flex items-center gap-2">
               <RocketLaunchIcon class="size-4 text-slate-400" />
-              <LayoutTitle class="text-xs uppercase tracking-widest text-slate-400 !mb-0">Changelog</LayoutTitle>
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
+                >Changelog</LayoutTitle
+              >
             </div>
-            <span class="rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-black uppercase text-white tracking-widest">
+            <span
+              class="rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"
+            >
               v1.0.6
             </span>
           </div>
 
-          <div class="custom-scrollbar space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2 pb-2">
+          <div
+            class="custom-scrollbar max-h-[calc(100vh-200px)] space-y-6 overflow-y-auto pb-2 pr-2"
+          >
             <ChangelogCard
-                v-for="(changelogItem, index) in changelog"
-                :key="index"
-                :changelog="changelogItem"
+              v-for="(changelogItem, index) in changelog"
+              :key="index"
+              :changelog="changelogItem"
             />
           </div>
         </LayoutContainer>
 
         <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100/50">
           <p class="text-sm leading-relaxed text-indigo-800/80">
-            <strong>Tip:</strong> Zaznamenávejte schůzky a hovory ihned po jejich skončení. Udržíte tak histori kontaktu v CRM aktuální a nezapomenete na důležité detaily.
+            <strong>Tip:</strong> Zaznamenávejte schůzky a hovory ihned po jejich skončení. Udržíte
+            tak histori kontaktu v CRM aktuální a nezapomenete na důležité detaily.
           </p>
         </div>
       </aside>
     </div>
 
     <CashflowDialogExtendedAction
-        v-model:show="cashflowActionDialog.show"
-        :categories="cashflowCategoryStore.categoriesOptions"
-        :currencies="currencyStore.currenciesOptions"
-        :day="cashflowActionDialog.day"
-        :type="cashflowActionDialog.type"
-        @save-day-records="saveDayRecords($event)"
+      v-model:show="cashflowActionDialog.show"
+      :categories="cashflowCategoryStore.categoriesOptions"
+      :currencies="currencyStore.currenciesOptions"
+      :day="cashflowActionDialog.day"
+      :type="cashflowActionDialog.type"
+      @save-day-records="saveDayRecords($event)"
     />
   </div>
 </template>

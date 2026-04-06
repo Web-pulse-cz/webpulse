@@ -749,11 +749,10 @@ definePageMeta({
                     name="next_contact"
                   />
                   <BaseFormInput
-                      v-model="item.formatted_last_contacted_at"
-                      type="datetime-local"
-                      label="Naposledy kontaktováno"
-                      name="last_contacted_at"
-                      class="opacity-60"
+                    v-model="item.formatted_last_contacted_at"
+                    type="datetime-local"
+                    label="Naposledy kontaktováno"
+                    name="last_contacted_at"
                   />
                 </div>
               </div>
