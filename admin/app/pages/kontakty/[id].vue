@@ -748,15 +748,14 @@ definePageMeta({
                     label="Příští kontakt (Follow-up)"
                     name="next_contact"
                   />
+                  <BaseFormInput
+                      v-model="item.formatted_last_contacted_at"
+                      type="datetime-local"
+                      label="Naposledy kontaktováno"
+                      name="last_contacted_at"
+                      class="opacity-60"
+                  />
                 </div>
-                <BaseFormInput
-                  v-model="item.formatted_last_contacted_at"
-                  type="datetime-local"
-                  label="Naposledy kontaktováno"
-                  name="last_contacted_at"
-                  disabled
-                  class="opacity-60"
-                />
               </div>
             </LayoutContainer>
           </div>

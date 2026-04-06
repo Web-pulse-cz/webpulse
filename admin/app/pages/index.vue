@@ -164,121 +164,108 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div class="space-y-6 pb-20">
     <LayoutHeader
-      :title="pageTitle"
-      :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'add-cashflow', text: 'Přidat útratu' }]"
-      @open-cashflow-dialog="openCashflowDialog"
+        :title="pageTitle"
+        :breadcrumbs="breadcrumbs"
+        :actions="[{ type: 'add-cashflow', text: 'Zaznamenat výdaj' }]"
+        @open-cashflow-dialog="openCashflowDialog"
     />
 
-    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
-      <div class="flex flex-col gap-8">
-        <div class="mb-6 flex items-center justify-between">
-          <LayoutTitle class="!mb-0">Dnes máš zavolat těmto kontaktům</LayoutTitle>
-          <div
-            class="flex h-2 w-2 animate-pulse rounded-full bg-amber-400"
-            title="Prioritní úkoly"
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+
+      <div class="col-span-1 space-y-8 lg:col-span-8">
+
+        <LayoutContainer>
+          <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+            <div class="flex items-center gap-3">
+              <div class="relative flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                <PhoneIcon class="size-5" />
+                <div class="absolute -top-1 -right-1 flex h-2.5 w-2.5 animate-pulse rounded-full bg-amber-400 ring-2 ring-white" />
+              </div>
+              <LayoutTitle class="!mb-0">Dnes kontaktovat (Hovory)</LayoutTitle>
+            </div>
+            <div class="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Celkem:
+              <span class="font-black text-indigo-600 text-sm/none">{{ dashboard.contactsToCall?.length || 0 }}</span>
+            </div>
+          </div>
+
+          <BaseTable
+              :items="dashboard.contactsToCall"
+              :columns="[
+              { key: 'firstname', name: 'Jméno', type: 'text', sortable: false },
+              { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
+              { key: 'phone', name: 'Telefonní číslo', type: 'text', sortable: false },
+            ]"
+              :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
+              :loading="loading"
+              :error="error"
+              singular="Hovor na dnes"
+              plural="Hovory na dnes"
           />
-        </div>
+        </LayoutContainer>
 
-        <BaseTable
-          :items="dashboard.contactsToCall"
-          :columns="[
-            {
-              key: 'firstname',
-              name: 'Jméno',
-              type: 'text',
-              width: 80,
-              hidden: false,
-              sortable: false,
-            },
-            {
-              key: 'lastname',
-              name: 'Příjmení',
-              type: 'text',
-              width: 80,
-              hidden: false,
-              sortable: false,
-            },
-            {
-              key: 'phone',
-              name: 'Telefon',
-              type: 'text',
-              width: 80,
-              hidden: true,
-              sortable: false,
-            },
-          ]"
-          :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-          :loading="loading"
-          :error="error"
-          singular="Poslední přidaný kontakt"
-          plural="Poslední přidané kontakty"
-        />
+        <LayoutContainer>
+          <div class="mb-8 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <CalendarDaysIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Nadcházející schůzky</LayoutTitle>
+          </div>
 
-        <LayoutTitle>Nadcházející schůzky</LayoutTitle>
-        <BaseTable
-          :items="dashboard.comingEvents"
-          :columns="[
-            {
-              key: 'firstname',
-              name: 'Jméno',
-              type: 'text',
-              width: 80,
-              hidden: false,
-              sortable: false,
-            },
-            {
-              key: 'lastname',
-              name: 'Příjmení',
-              type: 'text',
-              width: 80,
-              hidden: false,
-              sortable: false,
-            },
-            {
-              key: 'next_meeting',
-              name: 'Datum a čas',
-              type: 'datetime',
-              width: 80,
-              hidden: true,
-              sortable: false,
-            },
-          ]"
-          :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-          :loading="loading"
-          :error="error"
-          singular="Nadcházející schůzka"
-          plural="Nadcházející schůzky"
-        />
+          <BaseTable
+              :items="dashboard.comingEvents"
+              :columns="[
+              { key: 'firstname', name: 'Jméno klienta', type: 'text', sortable: false },
+              { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
+              { key: 'next_meeting', name: 'Termín schůzky', type: 'datetime', sortable: false },
+            ]"
+              :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
+              :loading="loading"
+              :error="error"
+              singular="Naplánovaná schůzka"
+              plural="Naplánované schůzky"
+          />
+        </LayoutContainer>
       </div>
 
-      <div class="lg:sticky lg:top-8">
-        <div class="mb-6 flex items-center justify-between">
-          <LayoutTitle class="!mb-0">Changelog</LayoutTitle>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
-            >Aktualizace</span
-          >
-        </div>
+      <aside class="col-span-1 lg:col-span-4 lg:sticky lg:top-8">
+        <LayoutContainer class="!py-6">
+          <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <RocketLaunchIcon class="size-4 text-slate-400" />
+              <LayoutTitle class="text-xs uppercase tracking-widest text-slate-400 !mb-0">Changelog</LayoutTitle>
+            </div>
+            <span class="rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-black uppercase text-white tracking-widest">
+              v1.0.6
+            </span>
+          </div>
 
-        <div class="custom-scrollbar flex max-h-[600px] flex-col gap-6 overflow-y-auto pr-2">
-          <ChangelogCard
-            v-for="(changelogItem, index) in changelog"
-            :key="index"
-            :changelog="changelogItem"
-          />
+          <div class="custom-scrollbar space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2 pb-2">
+            <ChangelogCard
+                v-for="(changelogItem, index) in changelog"
+                :key="index"
+                :changelog="changelogItem"
+            />
+          </div>
+        </LayoutContainer>
+
+        <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100/50">
+          <p class="text-sm leading-relaxed text-indigo-800/80">
+            <strong>Tip:</strong> Zaznamenávejte schůzky a hovory ihned po jejich skončení. Udržíte tak histori kontaktu v CRM aktuální a nezapomenete na důležité detaily.
+          </p>
         </div>
-      </div>
+      </aside>
     </div>
 
     <CashflowDialogExtendedAction
-      v-model:show="cashflowActionDialog.show"
-      :categories="cashflowCategoryStore.categoriesOptions"
-      :currencies="currencyStore.currenciesOptions"
-      :day="cashflowActionDialog.day"
-      :type="cashflowActionDialog.type"
-      @save-day-records="saveDayRecords($event)"
+        v-model:show="cashflowActionDialog.show"
+        :categories="cashflowCategoryStore.categoriesOptions"
+        :currencies="currencyStore.currenciesOptions"
+        :day="cashflowActionDialog.day"
+        :type="cashflowActionDialog.type"
+        @save-day-records="saveDayRecords($event)"
     />
   </div>
 </template>
@@ -292,10 +279,10 @@ definePageMeta({
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e2e8f0; /* slate-200 */
+  background: #cbd5e1; /* slate-300 */
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1; /* slate-300 */
+  background: #94a3b8; /* slate-400 */
 }
 </style>
