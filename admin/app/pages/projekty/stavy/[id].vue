@@ -35,6 +35,8 @@ const item = ref({
   id: null as number | null,
   name: '' as string,
   color: '' as string,
+  position: 0 as number,
+  is_closed: false as boolean,
 });
 
 async function loadItem() {
@@ -183,6 +185,23 @@ definePageMeta({
               <p class="mt-1.5 text-xs text-slate-400">
                 Tato barva se použije pro odlišení projektu v kalendáři a grafech.
               </p>
+            </div>
+
+            <div class="col-span-1">
+              <BaseFormInput
+                v-model="item.position"
+                label="Pořadí"
+                type="number"
+                name="position"
+              />
+            </div>
+
+            <div class="col-span-1">
+              <BaseFormCheckbox
+                v-model="item.is_closed"
+                label="Uzavřený stav (projekt je ukončen)"
+                name="is_closed"
+              />
             </div>
           </div>
         </LayoutContainer>

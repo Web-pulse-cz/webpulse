@@ -11,159 +11,139 @@ const loading = ref(false);
 const error = ref(false);
 
 const breadcrumbs = ref([
-  {
-    name: pageTitle.value,
-    link: '/projekty',
-    current: true,
-  },
+	{
+		name: pageTitle.value,
+		link: '/projekty',
+		current: true,
+	},
 ]);
 
 const searchString = ref(inject('searchString', ''));
 const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12 as number,
-  page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'desc' as string,
+	search: null as string | null,
+	paginate: 12 as number,
+	page: 1 as number,
+	orderBy: 'id' as string,
+	orderWay: 'desc' as string,
 });
 
 const items = ref([]);
 
 async function loadItems() {
-  loading.value = true;
-  const client = useSanctumClient();
+	loading.value = true;
+	const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/project', {
-    method: 'GET',
-    query: tableQuery.value,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      items.value = response;
-      tableQuery.value.page = response.page;
-    })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se načíst projekty. Zkuste to prosím později.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+	await client<{ id: number }>('/api/admin/project', {
+		method: 'GET',
+		query: tableQuery.value,
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+	})
+		.then((response) => {
+			items.value = response;
+			tableQuery.value.page = response.page;
+		})
+		.catch(() => {
+			error.value = true;
+			$toast.show({
+				summary: 'Chyba',
+				detail: 'Nepodařilo se načíst projekty. Zkuste to prosím později.',
+				severity: 'error',
+			});
+		})
+		.finally(() => {
+			loading.value = false;
+		});
 }
 
 async function deleteItem(id: number) {
-  loading.value = true;
-  const client = useSanctumClient();
+	loading.value = true;
+	const client = useSanctumClient();
 
-  await client<{ id: number }>('/api/admin/project/' + id, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se smazat položku projektu.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-      loadItems();
-    });
+	await client<{ id: number }>('/api/admin/project/' + id, {
+		method: 'DELETE',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+	})
+		.catch(() => {
+			error.value = true;
+			$toast.show({
+				summary: 'Chyba',
+				detail: 'Nepodařilo se smazat projekt.',
+				severity: 'error',
+			});
+		})
+		.finally(() => {
+			loading.value = false;
+			loadItems();
+		});
 }
 
 function updateSort(column: string) {
-  if (tableQuery.value.orderBy === column) {
-    tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
-  } else {
-    tableQuery.value.orderBy = column;
-    tableQuery.value.orderWay = 'asc';
-  }
-  loadItems();
+	if (tableQuery.value.orderBy === column) {
+		tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
+	} else {
+		tableQuery.value.orderBy = column;
+		tableQuery.value.orderWay = 'asc';
+	}
+	loadItems();
 }
 function updatePage(page: number) {
-  tableQuery.value.page = page;
-  loadItems();
+	tableQuery.value.page = page;
+	loadItems();
 }
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
-  tableQuery.value.search = searchString.value;
-  debouncedLoadItems();
+	tableQuery.value.search = searchString.value;
+	debouncedLoadItems();
 });
 
 useHead({
-  title: pageTitle.value,
+	title: pageTitle.value,
 });
 
 onMounted(() => {
-  loadItems();
+	loadItems();
 });
 definePageMeta({
-  middleware: 'sanctum:auth',
+	middleware: 'sanctum:auth',
 });
 </script>
 
 <template>
-  <div>
-    <LayoutHeader
-      :title="pageTitle"
-      :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'add', text: 'Přidat projekt' }]"
-      slug="projects"
-    />
-    <BaseTable
-      :items="items"
-      :columns="[
-        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-        { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-        {
-          key: 'expected_price_vat',
-          name: 'Očekávaná cena (vč. DPH)',
-          type: 'number',
-          width: 80,
-          hidden: true,
-          sortable: true,
-        },
-        {
-          key: 'total_price_vat',
-          name: 'Konečená cena (vč. DPH)',
-          type: 'number',
-          width: 80,
-          hidden: true,
-          sortable: true,
-        },
-        {
-          key: 'status_name',
-          name: 'Stav projektu',
-          type: 'badge',
-          width: 80,
-          hidden: false,
-          sortable: false,
-          colorKey: 'status_color',
-        },
-      ]"
-      :actions="[{ type: 'edit', hash: '#info' }, { type: 'delete' }]"
-      :loading="loading"
-      :error="error"
-      singular="Projekt"
-      plural="Projekty"
-      :query="tableQuery"
-      slug="projects"
-      @delete-item="deleteItem"
-      @update-sort="updateSort"
-      @update-page="updatePage"
-    />
-  </div>
+	<div>
+		<LayoutHeader
+			:title="pageTitle"
+			:breadcrumbs="breadcrumbs"
+			:actions="[{ type: 'add', text: 'Přidat projekt' }]"
+			slug="projects"
+		/>
+		<BaseTable
+			:items="items"
+			:columns="[
+				{ key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
+				{ key: 'name', name: 'Název', type: 'text', width: 200, hidden: false, sortable: true },
+				{ key: 'client.name', name: 'Klient', type: 'text', width: 150, hidden: true, sortable: false },
+				{ key: 'status.name', name: 'Stav', type: 'badge', width: 100, hidden: false, sortable: false, colorKey: 'status.color' },
+				{ key: 'total_tracked_hours', name: 'Hodiny', type: 'number', width: 80, hidden: true, sortable: true },
+				{ key: 'total_revenue', name: 'Příjmy', type: 'number', width: 100, hidden: true, sortable: true },
+				{ key: 'profit', name: 'Zisk', type: 'number', width: 100, hidden: true, sortable: true },
+			]"
+			:actions="[{ type: 'edit', hash: '#prehled' }, { type: 'delete' }]"
+			:loading="loading"
+			:error="error"
+			singular="Projekt"
+			plural="Projekty"
+			:query="tableQuery"
+			slug="projects"
+			@delete-item="deleteItem"
+			@update-sort="updateSort"
+			@update-page="updatePage"
+		/>
+	</div>
 </template>

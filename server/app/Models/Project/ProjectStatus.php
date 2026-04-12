@@ -2,25 +2,25 @@
 
 namespace App\Models\Project;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectStatus extends Model
 {
-    use HasFactory;
+	protected $table = 'project_statuses';
 
-    protected $fillable = [
-        'name',
-        'color',
-    ];
+	protected $fillable = [
+		'name',
+		'color',
+		'position',
+		'is_closed',
+	];
 
-    public function projects()
-    {
-        return $this->hasMany(Project::class, 'status_id', 'id');
-    }
+	protected $casts = [
+		'is_closed' => 'boolean',
+	];
 
-    public function events()
-    {
-        return $this->hasMany(ProjectEvent::class, 'status_id', 'id');
-    }
+	public function projects()
+	{
+		return $this->hasMany(Project::class, 'status_id', 'id');
+	}
 }

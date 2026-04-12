@@ -247,8 +247,44 @@ const navigation = ref([
         ],
       },
       {
-        name: 'Jídelní lístky',
-        link: '/restaurace/jidelni-listky',
+        name: 'Jídla',
+        icon: DocumentTextIcon,
+        current: false,
+        slug: 'meals',
+        submenu: [
+          {
+            name: 'Jídla',
+            link: '/restaurace/jidla',
+            current: false,
+          },
+          {
+            name: 'Kategorie jídel',
+            link: '/restaurace/jidla/kategorie',
+            current: false,
+          },
+        ],
+      },
+      {
+        name: 'Recepty',
+        icon: DocumentTextIcon,
+        current: false,
+        slug: 'recipes',
+        submenu: [
+          {
+            name: 'Recepty',
+            link: '/restaurace/recepty',
+            current: false,
+          },
+          {
+            name: 'Kategorie receptů',
+            link: '/restaurace/recepty/kategorie',
+            current: false,
+          },
+        ],
+      },
+      {
+        name: 'Menu',
+        link: '/restaurace/menu',
         icon: DocumentTextIcon,
         current: false,
         slug: 'menus',
@@ -359,7 +395,7 @@ const navigation = ref([
     menu: [
       {
         name: 'Klienti',
-        link: '/demo',
+        link: '/klienti',
         icon: BuildingOfficeIcon,
         current: false,
         slug: 'clients',
@@ -373,10 +409,21 @@ const navigation = ref([
       },
       {
         name: 'Projekty',
-        link: '/projekty',
         icon: BuildingOfficeIcon,
         current: false,
         slug: 'projects',
+        submenu: [
+          {
+            name: 'Projekty',
+            link: '/projekty',
+            current: false,
+          },
+          {
+            name: 'Stavy projektů',
+            link: '/projekty/stavy',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Cenové nabídky',
@@ -386,15 +433,8 @@ const navigation = ref([
         slug: 'price_offers',
       },
       {
-        name: 'Trackování',
-        link: '/demo',
-        icon: ClockIcon,
-        current: false,
-        slug: 'trackings',
-      },
-      {
         name: 'Faktury',
-        link: '/demo',
+        link: '/faktury',
         icon: WalletIcon,
         current: false,
         slug: 'invoices',

@@ -4,25 +4,35 @@ namespace App\Console\Commands;
 
 use App\Services\FakturoidService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class SyncFakturoid extends Command
 {
-    protected $signature = 'fakturoid:sync';
+	protected $signature = 'fakturoid:sync {--full : Run full sync instead of incremental}';
 
-    protected $description = 'Sync data with fakturoid';
+	protected $description = 'Sync clients and invoices with Fakturoid';
 
-    protected FakturoidService $fakturoidService;
+	public function handle(): int
+	{
+		try {
+			$service = new FakturoidService();
+		} catch (\Throwable $e) {
+			$this->error('Failed to connect to Fakturoid: ' . $e->getMessage());
+			Log::error('Fakturoid sync connection failed: ' . $e->getMessage());
+			return 1;
+		}
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->fakturoidService = new FakturoidService();
-    }
+		$since = $this->option('full') ? null : now()->subMinutes(20);
 
-    public function exportSubjects(): void
-    {
-        $this->output->title('Exporting subjects to fakturoid');
+		$this->info('Syncing clients from Fakturoid...');
+		$clientCount = $service->pullSubjectsFromFakturoid($since);
+		$this->info("Synced {$clientCount} clients.");
 
+		$this->info('Syncing invoices from Fakturoid...');
+		$invoiceCount = $service->pullInvoicesFromFakturoid($since);
+		$this->info("Synced {$invoiceCount} invoices.");
 
-    }
+		return 0;
+	}
 }

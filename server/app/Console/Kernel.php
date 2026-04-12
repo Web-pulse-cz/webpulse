@@ -52,6 +52,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 Log::error('Contacts next call update command failed');
             });
+
+        $schedule->command('fakturoid:sync')
+            ->everyFifteenMinutes()
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->onFailure(function () {
+                Log::error('Fakturoid sync command failed');
+            });
     }
 
     /**

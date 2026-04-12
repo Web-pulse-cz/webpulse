@@ -2,27 +2,23 @@
 
 namespace App\Http\Resources\Admin\PriceOffer;
 
+use App\Http\Resources\Admin\Client\ClientSimpleResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PriceOfferSimpleResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'code' => $this->code,
-            'user_id' => $this->user_id,
-            'project_id' => $this->project_id,
-            'total_hours' => $this->total_hours,
-            'total_price' => $this->total_price,
-            'total_price_vat' => $this->total_price_vat,
-            'valid_to' => $this->valid_to,
-        ];
-    }
+	public function toArray(Request $request): array
+	{
+		return [
+			'id' => $this->id,
+			'code' => $this->code,
+			'title' => $this->title,
+			'status' => $this->status,
+			'client' => ClientSimpleResource::make($this->client),
+			'total_with_vat' => $this->total_with_vat,
+			'valid_to' => $this->valid_to?->format('Y-m-d'),
+			'created_at' => $this->created_at?->toIso8601String(),
+		];
+	}
 }

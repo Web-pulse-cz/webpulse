@@ -35,7 +35,10 @@ const breadcrumbs = ref([
 const settings = {
   enabled_modules: [
     'allergens',
-      'foodstuffs',
+    'foodstuffs',
+    'meals',
+    'recipes',
+    'menus',
     'posts',
     'pages',
     'novelties',
@@ -280,8 +283,16 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Changelog';
     case 'allergens':
       return 'Alergeny';
-      case 'foodstuffs':
+    case 'foodstuffs':
       return 'Potraviny';
+    case 'meals':
+      return 'Jídla';
+    case 'recipes':
+      return 'Recepty';
+    case 'menus':
+      return 'Menu';
+    case 'clients':
+      return 'Klienti';
     default:
       return key.replace('_', ' ').toUpperCase();
   }
@@ -298,7 +309,7 @@ function addRemoveEnabledModule(module: string) {
       1,
     );
   } else {
-    item.value.settings.enabled_modules.push(currency);
+    item.value.settings.enabled_modules.push(module);
   }
 }
 

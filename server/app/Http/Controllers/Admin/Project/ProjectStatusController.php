@@ -14,102 +14,63 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectStatusController extends Controller
 {
-    public function index(Request $request): JsonResponse
-    {
-        $query = ProjectStatus::query();
+	public function index(Request $request): JsonResponse
+	{
+		$statuses = ProjectStatus::orderBy('position')->get();
+		return Response::json(ProjectStatusResource::collection($statuses));
+	}
 
-        if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
-            $searchString = $request->get('search');
-            if (str_contains(':', $searchString)) {
-                $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
-            } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('color', 'like', '%' . $searchString . '%');
-            }
-        }
+	public function store(Request $request, int $id = null): JsonResponse
+	{
+		if ($id) {
+			$status = ProjectStatus::find($id);
+			if (!$status) {
+				App::abort(404);
+			}
+		} else {
+			$status = new ProjectStatus();
+		}
 
-        if ($request->has('orderWay') && $request->get('orderBy')) {
-            $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
-        }
+		$validator = Validator::make($request->all(), [
+			'name' => 'required|string|max:255',
+			'color' => 'nullable|string|max:20',
+		]);
 
-        if ($request->has('paginate')) {
-            $projectStatuses = $query->paginate($request->get('paginate'));
+		if ($validator->fails()) {
+			return Response::json($validator->errors(), 400);
+		}
 
-            return Response::json([
-                'data' => ProjectStatusResource::collection($projectStatuses->items()),
-                'total' => $projectStatuses->total(),
-                'perPage' => $projectStatuses->perPage(),
-                'currentPage' => $projectStatuses->currentPage(),
-                'lastPage' => $projectStatuses->lastPage(),
-            ]);
-        }
+		try {
+			DB::beginTransaction();
+			$status->fill($request->all());
+			$status->save();
+			DB::commit();
+		} catch (\Throwable $e) {
+			DB::rollBack();
+			return Response::json(['message' => 'Chyba při ukládání statusu.'], 500);
+		}
 
-        $projectStatuses = $query->get();
-        return Response::json(ProjectStatusResource::collection($projectStatuses));
-    }
+		return Response::json(ProjectStatusResource::make($status));
+	}
 
-    public function store(Request $request, int $id = null): JsonResponse
-    {
-        if ($id) {
-            $projectStatus = ProjectStatus::find($id);
-            if (!$projectStatus) {
-                App::abort(404);
-            }
-        } else {
-            $projectStatus = new ProjectStatus();
-        }
+	public function show(int $id): JsonResponse
+	{
+		$status = ProjectStatus::find($id);
+		if (!$status) {
+			App::abort(404);
+		}
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'color' => 'nullable|string',
-        ]);
+		return Response::json(ProjectStatusResource::make($status));
+	}
 
-        if ($validator->fails()) {
-            return Response::json($validator->errors(), 400);
-        }
+	public function destroy(int $id): JsonResponse
+	{
+		$status = ProjectStatus::find($id);
+		if (!$status) {
+			App::abort(404);
+		}
 
-        try {
-            DB::beginTransaction();
-
-            $projectStatus->fill($request->all());
-            $projectStatus->save();
-
-            DB::commit();
-        } catch (\Throwable|\Exception $e) {
-            DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating tax rate.'], 500);
-        }
-
-        return Response::json(ProjectStatusResource::make($projectStatus));
-    }
-
-    public function show(int $id): JsonResponse
-    {
-        if (!$id) {
-            App::abort(400);
-        }
-
-        $projectStatus = ProjectStatus::find($id);
-        if (!$projectStatus) {
-            App::abort(404);
-        }
-
-        return Response::json(ProjectStatusResource::make($projectStatus));
-    }
-
-    public function destroy(int $id)
-    {
-        if (!$id) {
-            App::abort(400);
-        }
-
-        $projectStatus = ProjectStatus::find($id);
-        if (!$projectStatus) {
-            App::abort(404);
-        }
-
-        $projectStatus->delete();
-        return Response::json();
-    }
+		$status->delete();
+		return Response::json();
+	}
 }

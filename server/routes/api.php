@@ -57,6 +57,15 @@ use App\Http\Controllers\Admin\Food\Meal\MealController;
 use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
 use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
 use App\Http\Controllers\Admin\Food\Menu\MenuController;
+use App\Http\Controllers\Admin\Client\ClientController;
+use App\Http\Controllers\Admin\Invoice\InvoiceController;
+use App\Http\Controllers\Admin\Project\TagController;
+use App\Http\Controllers\Admin\Project\ProjectMilestoneController;
+use App\Http\Controllers\Admin\Project\ProjectTaskController;
+use App\Http\Controllers\Admin\Project\ProjectTimeEntryController;
+use App\Http\Controllers\Admin\Project\ProjectCostController;
+use App\Http\Controllers\Admin\Project\ProjectNoteController;
+use App\Http\Controllers\Admin\Fakturoid\FakturoidWebhookController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -75,6 +84,9 @@ use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEvent
 use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
 use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
 use App\Http\Controllers\Client\Quiz\QuizController as ClientQuizController;
+
+// Fakturoid webhook (no auth required)
+Route::post('webhook/fakturoid', [FakturoidWebhookController::class, 'handle']);
 
 Route::group([
     'prefix' => 'filemanager'
@@ -484,6 +496,26 @@ Route::group([
             Route::delete('{id}', [PageController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
+        // Client routes
+        Route::group([
+            'prefix' => 'client'
+        ], function () {
+            Route::get('', [ClientController::class, 'index']);
+            Route::get('{id}', [ClientController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ClientController::class, 'store']);
+            Route::delete('{id}', [ClientController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Invoice routes
+        Route::group([
+            'prefix' => 'invoice'
+        ], function () {
+            Route::get('', [InvoiceController::class, 'index']);
+            Route::get('{id}', [InvoiceController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [InvoiceController::class, 'store']);
+            Route::delete('{id}', [InvoiceController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
         // Projects routes
         Route::group([
             'prefix' => 'project'
@@ -498,16 +530,53 @@ Route::group([
                 Route::delete('{id}', [ProjectStatusController::class, 'destroy'])->where('id', '[0-9]+');
             });
 
+            // Tag routes
+            Route::group([
+                'prefix' => 'tag'
+            ], function () {
+                Route::get('', [TagController::class, 'index']);
+                Route::get('{id}', [TagController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [TagController::class, 'store']);
+                Route::delete('{id}', [TagController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
             Route::get('', [ProjectController::class, 'index']);
             Route::get('{id}', [ProjectController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [ProjectController::class, 'store']);
             Route::delete('{id}', [ProjectController::class, 'destroy'])->where('id', '[0-9]+');
+
+            // Project sub-resources
+            Route::group([
+                'prefix' => '{projectId}'
+            ], function () {
+                // Milestones
+                Route::post('milestone/{id?}', [ProjectMilestoneController::class, 'store']);
+                Route::delete('milestone/{id}', [ProjectMilestoneController::class, 'destroy'])->where('id', '[0-9]+');
+                Route::post('milestone/{id}/complete', [ProjectMilestoneController::class, 'complete'])->where('id', '[0-9]+');
+
+                // Tasks
+                Route::post('task/{id?}', [ProjectTaskController::class, 'store']);
+                Route::delete('task/{id}', [ProjectTaskController::class, 'destroy'])->where('id', '[0-9]+');
+
+                // Time entries
+                Route::post('time-entry/{id?}', [ProjectTimeEntryController::class, 'store']);
+                Route::delete('time-entry/{id}', [ProjectTimeEntryController::class, 'destroy'])->where('id', '[0-9]+');
+                Route::post('timer/start', [ProjectTimeEntryController::class, 'startTimer']);
+                Route::post('timer/{id}/stop', [ProjectTimeEntryController::class, 'stopTimer'])->where('id', '[0-9]+');
+
+                // Costs
+                Route::post('cost/{id?}', [ProjectCostController::class, 'store']);
+                Route::delete('cost/{id}', [ProjectCostController::class, 'destroy'])->where('id', '[0-9]+');
+
+                // Notes
+                Route::post('note/{id?}', [ProjectNoteController::class, 'store']);
+                Route::delete('note/{id}', [ProjectNoteController::class, 'destroy'])->where('id', '[0-9]+');
+            })->where('projectId', '[0-9]+');
         });
 
         // Dashboard and statistics routes
         Route::get('dashboard', [BaseController::class, 'dashboard']);
         Route::get('statistics', [BaseController::class, 'statistics']);
-
 
         // Price offer routes
         Route::group([
@@ -517,6 +586,9 @@ Route::group([
             Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [PriceOfferController::class, 'store']);
             Route::delete('{id}', [PriceOfferController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::post('{id}/accept', [PriceOfferController::class, 'accept'])->where('id', '[0-9]+');
+            Route::post('{id}/reject', [PriceOfferController::class, 'reject'])->where('id', '[0-9]+');
+            Route::get('{id}/pdf', [PriceOfferController::class, 'pdf'])->where('id', '[0-9]+');
         });
 
         // Log routes
