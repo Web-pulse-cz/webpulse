@@ -12,20 +12,18 @@ export const useToastStore = defineStore('toast', {
   }),
   actions: {
     _color(severity: ToastSeverity) {
-      // mapuje na barvy z tvého tailwind.config.ts
       switch (severity) {
         case 'success':
-          return { base: 'bg-success', ring: 'ring-successLight', text: 'text-white' };
+          return { base: 'bg-emerald-600', ring: 'ring-emerald-400', text: 'text-white ' };
         case 'warning':
-          // warning je spíš světlý, ať je kontrast OK
-          return { base: 'bg-warningLight', ring: 'ring-warning', text: 'text-gray-900' };
+          return { base: 'bg-amber-50', ring: 'ring-amber-300', text: 'text-amber-900 ' };
         case 'error':
-          return { base: 'bg-danger', ring: 'ring-dangerLight', text: 'text-white' };
+          return { base: 'bg-red-600', ring: 'ring-red-400', text: 'text-white ' };
         case 'neutral':
-          return { base: 'bg-grayDark', ring: 'ring-grayLight', text: 'text-white' };
+          return { base: 'bg-slate-800', ring: 'ring-slate-600', text: 'text-white ' };
         case 'info':
         default:
-          return { base: 'bg-primaryCustom', ring: 'ring-primaryLight', text: 'text-white' };
+          return { base: 'bg-indigo-600', ring: 'ring-indigo-400', text: 'text-white ' };
       }
     },
 
@@ -111,8 +109,8 @@ export const useToastStore = defineStore('toast', {
       t._timer = setTimeout(() => this.remove(id), t.remaining);
     },
 
-    colorClasses(variant: ToastVariant) {
-      const c = this._color(variant);
+    colorClasses(severity: ToastSeverity) {
+      const c = this._color(severity);
       return { base: c.base, ring: c.ring, text: c.text };
     },
   },

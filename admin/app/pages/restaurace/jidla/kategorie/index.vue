@@ -131,7 +131,7 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'add', text: 'Přidat kategorii' }]"
-      slug="meal_categories"
+      slug="meals"
     />
     <BaseTable
       :items="items"
@@ -167,7 +167,7 @@ definePageMeta({
       singular="Kategorie"
       plural="Kategorie"
       :query="tableQuery"
-      slug="meal_categories"
+      slug="meals"
       @delete-item="deleteItem"
       @update-sort="updateSort"
       @update-page="updatePage"

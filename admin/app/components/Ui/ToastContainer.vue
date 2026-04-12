@@ -21,7 +21,7 @@ const posClass = computed(() => {
 <template>
   <div
     class="pointer-events-none fixed z-[9999] flex flex-col gap-3"
-    :class="posClass + 'pointer-events-none fixed z-[9999] flex flex-col gap-3'"
+    :class="posClass"
     role="region"
     aria-live="polite"
     aria-atomic="true"

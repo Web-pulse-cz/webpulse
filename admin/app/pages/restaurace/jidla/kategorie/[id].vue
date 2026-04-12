@@ -189,7 +189,7 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
-      slug="meal_categories"
+      slug="meals"
       @save="saveItem"
     />
 

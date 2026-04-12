@@ -260,7 +260,7 @@ definePageMeta({
                 class="col-span-full lg:col-span-1"
               />
 
-              <BaseFormInput
+<!--              <BaseFormInput
                 v-if="item.translations?.[selectedLocale]?.slug !== undefined"
                 :key="`slug-${selectedLocale}`"
                 v-model="item.translations[selectedLocale].slug"
@@ -315,7 +315,7 @@ definePageMeta({
                   label="Popis"
                   name="text"
                 />
-              </div>
+              </div>-->
             </div>
           </LayoutContainer>
 
