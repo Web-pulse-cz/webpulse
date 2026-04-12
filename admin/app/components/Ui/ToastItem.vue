@@ -61,7 +61,10 @@ function onMouseLeave() {
 
         <button
           type="button"
-          :class="cls.text + 'shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-inset'"
+          :class="
+            cls.text +
+            'shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-inset'
+          "
           aria-label="Zavřít"
           @click="remove(toast.id)"
         >

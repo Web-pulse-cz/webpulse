@@ -188,12 +188,7 @@ definePageMeta({
             </div>
 
             <div class="col-span-1">
-              <BaseFormInput
-                v-model="item.position"
-                label="Pořadí"
-                type="number"
-                name="position"
-              />
+              <BaseFormInput v-model="item.position" label="Pořadí" type="number" name="position" />
             </div>
 
             <div class="col-span-1">

@@ -11,140 +11,168 @@ const loading = ref(false);
 const error = ref(false);
 
 const breadcrumbs = ref([
-	{
-		name: pageTitle.value,
-		link: '/faktury',
-		current: true,
-	},
+  {
+    name: pageTitle.value,
+    link: '/faktury',
+    current: true,
+  },
 ]);
 
 const searchString = ref(inject('searchString', ''));
 const tableQuery = ref({
-	search: null as string | null,
-	paginate: 12 as number,
-	page: 1 as number,
-	orderBy: 'issued_on' as string,
-	orderWay: 'desc' as string,
+  search: null as string | null,
+  paginate: 12 as number,
+  page: 1 as number,
+  orderBy: 'issued_on' as string,
+  orderWay: 'desc' as string,
 });
 
 const items = ref([]);
 
 async function loadItems() {
-	loading.value = true;
-	const client = useSanctumClient();
+  loading.value = true;
+  const client = useSanctumClient();
 
-	await client<{ id: number }>('/api/admin/invoice', {
-		method: 'GET',
-		query: tableQuery.value,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-	})
-		.then((response) => {
-			items.value = response;
-			tableQuery.value.page = response.page;
-		})
-		.catch(() => {
-			error.value = true;
-			$toast.show({
-				summary: 'Chyba',
-				detail: 'Nepodařilo se načíst faktury. Zkuste to prosím později.',
-				severity: 'error',
-			});
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+  await client<{ id: number }>('/api/admin/invoice', {
+    method: 'GET',
+    query: tableQuery.value,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      items.value = response;
+      tableQuery.value.page = response.page;
+    })
+    .catch(() => {
+      error.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst faktury. Zkuste to prosím později.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
 
 async function deleteItem(id: number) {
-	loading.value = true;
-	const client = useSanctumClient();
+  loading.value = true;
+  const client = useSanctumClient();
 
-	await client<{ id: number }>('/api/admin/invoice/' + id, {
-		method: 'DELETE',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-	})
-		.catch(() => {
-			error.value = true;
-			$toast.show({
-				summary: 'Chyba',
-				detail: 'Nepodařilo se smazat fakturu.',
-				severity: 'error',
-			});
-		})
-		.finally(() => {
-			loading.value = false;
-			loadItems();
-		});
+  await client<{ id: number }>('/api/admin/invoice/' + id, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .catch(() => {
+      error.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat fakturu.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+      loadItems();
+    });
 }
 
 function updateSort(column: string) {
-	if (tableQuery.value.orderBy === column) {
-		tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
-	} else {
-		tableQuery.value.orderBy = column;
-		tableQuery.value.orderWay = 'asc';
-	}
-	loadItems();
+  if (tableQuery.value.orderBy === column) {
+    tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
+  } else {
+    tableQuery.value.orderBy = column;
+    tableQuery.value.orderWay = 'asc';
+  }
+  loadItems();
 }
 function updatePage(page: number) {
-	tableQuery.value.page = page;
-	loadItems();
+  tableQuery.value.page = page;
+  loadItems();
 }
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
-	tableQuery.value.search = searchString.value;
-	debouncedLoadItems();
+  tableQuery.value.search = searchString.value;
+  debouncedLoadItems();
 });
 
 useHead({
-	title: pageTitle.value,
+  title: pageTitle.value,
 });
 
 onMounted(() => {
-	loadItems();
+  loadItems();
 });
 definePageMeta({
-	middleware: 'sanctum:auth',
+  middleware: 'sanctum:auth',
 });
 </script>
 
 <template>
-	<div>
-		<LayoutHeader
-			:title="pageTitle"
-			:breadcrumbs="breadcrumbs"
-			:actions="[{ type: 'add', text: 'Přidat fakturu' }]"
-			slug="invoices"
-		/>
-		<BaseTable
-			:items="items"
-			:columns="[
-				{ key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
-				{ key: 'number', name: 'Číslo', type: 'text', width: 100, hidden: false, sortable: true },
-				{ key: 'subject', name: 'Předmět', type: 'text', width: 200, hidden: false, sortable: true },
-				{ key: 'client.name', name: 'Klient', type: 'text', width: 150, hidden: true, sortable: false },
-				{ key: 'total', name: 'Celkem', type: 'number', width: 100, hidden: true, sortable: true },
-				{ key: 'status', name: 'Stav', type: 'text', width: 100, hidden: false, sortable: true },
-				{ key: 'issued_on', name: 'Vystaveno', type: 'text', width: 100, hidden: true, sortable: true },
-				{ key: 'due_on', name: 'Splatnost', type: 'text', width: 100, hidden: true, sortable: true },
-			]"
-			:actions="[{ type: 'edit' }, { type: 'delete' }]"
-			:loading="loading"
-			:error="error"
-			singular="Faktura"
-			plural="Faktury"
-			:query="tableQuery"
-			slug="invoices"
-			@delete-item="deleteItem"
-			@update-sort="updateSort"
-			@update-page="updatePage"
-		/>
-	</div>
+  <div>
+    <LayoutHeader
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="[{ type: 'add', text: 'Přidat fakturu' }]"
+      slug="invoices"
+    />
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
+        { key: 'number', name: 'Číslo', type: 'text', width: 100, hidden: false, sortable: true },
+        {
+          key: 'subject',
+          name: 'Předmět',
+          type: 'text',
+          width: 200,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'client.name',
+          name: 'Klient',
+          type: 'text',
+          width: 150,
+          hidden: true,
+          sortable: false,
+        },
+        { key: 'total', name: 'Celkem', type: 'number', width: 100, hidden: true, sortable: true },
+        { key: 'status', name: 'Stav', type: 'text', width: 100, hidden: false, sortable: true },
+        {
+          key: 'issued_on',
+          name: 'Vystaveno',
+          type: 'text',
+          width: 100,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'due_on',
+          name: 'Splatnost',
+          type: 'text',
+          width: 100,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Faktura"
+      plural="Faktury"
+      :query="tableQuery"
+      slug="invoices"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
+  </div>
 </template>
