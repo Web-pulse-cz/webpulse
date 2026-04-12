@@ -185,12 +185,57 @@ async function saveItem(redirect = true as boolean) {
     });
 }
 
+const ingredientSearch = ref('');
+const showIngredientDropdown = ref(-1);
+const creatingFoodstuff = ref(false);
+
+const filteredFoodstuffs = computed(() => {
+  if (!ingredientSearch.value) return allFoodstuffs.value.slice(0, 20);
+  const q = ingredientSearch.value.toLowerCase();
+  return allFoodstuffs.value.filter((f: any) => f.name?.toLowerCase().includes(q)).slice(0, 20);
+});
+
 function addFoodstuff() {
   item.value.foodstuffs.push({ id: 0, name: '', quantity: null, unit: '' });
 }
 
 function removeFoodstuff(index: number) {
   item.value.foodstuffs.splice(index, 1);
+}
+
+function selectFoodstuff(index: number, foodstuff: any) {
+  item.value.foodstuffs[index].id = foodstuff.id;
+  item.value.foodstuffs[index].name = foodstuff.name;
+  ingredientSearch.value = '';
+  showIngredientDropdown.value = -1;
+}
+
+function openIngredientSearch(index: number) {
+  ingredientSearch.value = item.value.foodstuffs[index].name || '';
+  showIngredientDropdown.value = index;
+}
+
+async function createAndSelectFoodstuff(index: number) {
+  if (!ingredientSearch.value.trim()) return;
+  creatingFoodstuff.value = true;
+  const client = useSanctumClient();
+  await client('/api/admin/food/foodstuff', {
+    method: 'POST',
+    body: JSON.stringify({
+      translations: { cs: { name: ingredientSearch.value.trim(), slug: '' } },
+      sites: item.value.sites || [],
+    }),
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+  }).then((r) => {
+    allFoodstuffs.value.push(r);
+    selectFoodstuff(index, r);
+  }).catch(() => {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se vytvořit potravinu.', severity: 'error' });
+  }).finally(() => { creatingFoodstuff.value = false; });
+}
+
+function closeDropdowns() {
+  showIngredientDropdown.value = -1;
 }
 
 watch(selectedSiteHash, () => {
@@ -229,7 +274,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="space-y-6 pb-24">
+  <div class="space-y-6 pb-24" @click="closeDropdowns">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -378,17 +423,41 @@ definePageMeta({
                 :key="index"
                 class="flex items-end gap-4 rounded-xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200"
               >
-                <div class="flex-1">
+                <div class="relative flex-1">
                   <label class="mb-1.5 block text-sm font-medium text-slate-700">Potravina</label>
-                  <select
-                    v-model="foodstuff.id"
+                  <input
+                    :value="foodstuff.name || ''"
+                    type="text"
                     class="block w-full rounded-xl border-0 bg-white py-2.5 pl-4 pr-10 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:ring-slate-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                    placeholder="Vyhledejte potravinu..."
+                    @focus="openIngredientSearch(index)"
+                    @input="(e) => { ingredientSearch = (e.target as HTMLInputElement).value; showIngredientDropdown = index; }"
+                  />
+                  <div
+                    v-if="showIngredientDropdown === index"
+                    class="absolute left-0 right-0 top-full z-20 mt-1 max-h-48 overflow-y-auto rounded-xl bg-white shadow-lg ring-1 ring-slate-200"
                   >
-                    <option :value="0">— vyberte potravinu —</option>
-                    <option v-for="f in allFoodstuffs" :key="f.id" :value="f.id">
+                    <button
+                      v-for="f in filteredFoodstuffs"
+                      :key="f.id"
+                      type="button"
+                      class="flex w-full items-center px-4 py-2 text-left text-sm hover:bg-indigo-50 transition"
+                      @mousedown.prevent="selectFoodstuff(index, f)"
+                    >
                       {{ f.name }}
-                    </option>
-                  </select>
+                    </button>
+                    <div v-if="!filteredFoodstuffs.length && ingredientSearch" class="p-3">
+                      <p class="text-xs text-slate-400 mb-2">Potravina nenalezena.</p>
+                      <button
+                        type="button"
+                        class="w-full rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
+                        :disabled="creatingFoodstuff"
+                        @mousedown.prevent="createAndSelectFoodstuff(index)"
+                      >
+                        {{ creatingFoodstuff ? 'Vytvářím...' : `Vytvořit "${ingredientSearch}"` }}
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div class="w-28">
                   <BaseFormInput

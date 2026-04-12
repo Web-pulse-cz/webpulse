@@ -27,6 +27,7 @@ class Meal extends Model
     protected $fillable = [
         'price',
         'weight',
+        'recipe_id',
     ];
 
     protected $casts = [
@@ -73,5 +74,10 @@ class Meal extends Model
     public function menus()
     {
         return $this->belongsToMany(Menu::class, 'meal_menu');
+    }
+
+    public function recipe()
+    {
+        return $this->belongsTo(\App\Models\Food\Recipe\Recipe::class, 'recipe_id', 'id');
     }
 }

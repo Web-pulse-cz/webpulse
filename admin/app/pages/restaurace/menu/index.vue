@@ -61,6 +61,29 @@ async function loadItems() {
     });
 }
 
+async function downloadPdf(id: number) {
+  const client = useSanctumClient();
+  try {
+    const res = await client.raw('/api/admin/food/menu/' + id + '/pdf', {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'jidelni-listek-' + id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout PDF.', severity: 'error' });
+  }
+}
+
 async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
@@ -148,13 +171,14 @@ definePageMeta({
           sortable: false,
         },
       ]"
-      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :actions="[{ type: 'download' }, { type: 'edit' }, { type: 'delete' }]"
       :loading="loading"
       :error="error"
-      singular="Menu"
-      plural="Menu"
+      singular="Jídelní lístek"
+      plural="Jídelní lístky"
       :query="tableQuery"
       slug="menus"
+      @download="downloadPdf($event)"
       @delete-item="deleteItem"
       @update-sort="updateSort"
       @update-page="updatePage"

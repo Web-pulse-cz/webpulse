@@ -146,14 +146,33 @@ function startTimerDisplay(startedAt: string) {
   }, 1000);
 }
 
-function exportPdf() {
+async function exportPdf() {
+  const client = useSanctumClient();
   const params = new URLSearchParams();
   if (filters.value.date_from) params.set('date_from', filters.value.date_from);
   if (filters.value.date_to) params.set('date_to', filters.value.date_to);
   if (filters.value.project_id) params.set('project_id', String(filters.value.project_id));
   if (filters.value.user_id) params.set('user_id', String(filters.value.user_id));
   if (filters.value.search) params.set('search', filters.value.search);
-  window.open('/api/admin/time-entry/export-pdf?' + params.toString(), '_blank');
+  try {
+    const res = await client.raw('/api/admin/time-entry/export-pdf?' + params.toString(), {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'casove-zaznamy-' + new Date().toISOString().split('T')[0] + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se exportovat PDF.', severity: 'error' });
+  }
 }
 
 function applyFilters() {

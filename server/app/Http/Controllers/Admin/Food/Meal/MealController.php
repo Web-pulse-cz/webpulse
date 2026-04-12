@@ -72,11 +72,8 @@ class MealController extends Controller
         $validator = Validator::make($request->all(), [
             'translations' => 'required|array',
             'allergens' => 'nullable|array',
-            'allergens.*' => 'integer|exists:allergens,id',
-            'foodstuffs' => 'nullable|array',
-            'foodstuffs.*' => 'integer|exists:foodstuffs,id',
             'categories' => 'nullable|array',
-            'categories.*' => 'integer|exists:meal_categories,id',
+            'recipe_id' => 'nullable|integer|exists:recipes,id',
         ]);
 
         if ($validator->fails()) {
@@ -90,11 +87,10 @@ class MealController extends Controller
                 $meal->translateOrNew($locale)->fill($translation);
             }
 
-            $meal->fill($request->only(['price', 'weight']));
+            $meal->fill($request->only(['price', 'weight', 'recipe_id']));
             $meal->save();
 
             $meal->allergens()->sync($request->get('allergens', []));
-            $meal->foodstuffs()->sync($request->get('foodstuffs', []));
             $meal->categories()->sync($request->get('categories', []));
 
             $meal->saveSites($meal, $request->get('sites', []));
@@ -116,7 +112,7 @@ class MealController extends Controller
             App::abort(400);
         }
 
-        $meal = Meal::query()
+        $meal = Meal::with(['recipe.foodstuffs', 'recipe.allergens'])
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
         if (!$meal) {

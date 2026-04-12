@@ -20,11 +20,31 @@ class MenuSectionController extends Controller
 	public function index(Request $request): JsonResponse
 	{
 		$siteId = $this->handleSite($request->header('X-Site-Hash'));
-		$sections = MenuSection::whereRelation('sites', 'site_id', $siteId)
-			->orderBy('position')
-			->get();
+		$query = MenuSection::whereRelation('sites', 'site_id', $siteId);
 
-		return Response::json(MenuSectionResource::collection($sections));
+		if ($request->filled('search')) {
+			$query->where('name', 'like', '%' . $request->get('search') . '%');
+		}
+
+		if ($request->has('orderWay') && $request->get('orderBy')) {
+			$query->orderBy($request->get('orderBy'), $request->get('orderWay'));
+		} else {
+			$query->orderBy('position');
+		}
+
+		if ($request->has('paginate')) {
+			$sections = $query->paginate($request->get('paginate'));
+
+			return Response::json([
+				'data' => MenuSectionResource::collection($sections->items()),
+				'total' => $sections->total(),
+				'perPage' => $sections->perPage(),
+				'currentPage' => $sections->currentPage(),
+				'lastPage' => $sections->lastPage(),
+			]);
+		}
+
+		return Response::json(MenuSectionResource::collection($query->get()));
 	}
 
 	public function store(Request $request, int $id = null): JsonResponse

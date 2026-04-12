@@ -244,11 +244,27 @@ async function deleteContract(contractId: number) {
   });
 }
 
-function downloadContractPdf(contractId: number) {
-  window.open(
-    '/api/admin/employee/' + route.params.id + '/contract/' + contractId + '/pdf',
-    '_blank',
-  );
+async function downloadContractPdf(contractId: number) {
+  const client = useSanctumClient();
+  try {
+    const res = await client.raw('/api/admin/employee/' + route.params.id + '/contract/' + contractId + '/pdf', {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'smlouva-' + contractId + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout PDF.', severity: 'error' });
+  }
 }
 
 watchEffect(() => {

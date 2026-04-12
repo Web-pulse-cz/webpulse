@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { StarIcon, PrinterIcon, ServerIcon } from '@heroicons/vue/24/outline';
+import {
+  StarIcon,
+  PrinterIcon,
+  ServerIcon,
+  PlusIcon,
+  CheckIcon,
+  ArrowLeftStartOnRectangleIcon,
+  FunnelIcon,
+} from '@heroicons/vue/24/outline';
 import { inject, ref } from 'vue';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
 
@@ -174,6 +182,7 @@ const emitUpdateFilters = () => {
               size="lg"
               @click="emit('save', true)"
             >
+              <ArrowLeftStartOnRectangleIcon class="mr-2 size-4" />
               Uložit a odejít
             </BaseButton>
 
@@ -183,6 +192,7 @@ const emitUpdateFilters = () => {
               size="lg"
               @click="emit('save', false)"
             >
+              <CheckIcon class="mr-2 size-4" />
               Uložit
             </BaseButton>
 
@@ -192,6 +202,7 @@ const emitUpdateFilters = () => {
               size="lg"
               @click="router.push(route.fullPath + '/pridat')"
             >
+              <PlusIcon class="mr-2 size-4" />
               {{ action.text }}
             </BaseButton>
 
@@ -201,6 +212,7 @@ const emitUpdateFilters = () => {
               size="lg"
               @click="emit('add-dialog')"
             >
+              <PlusIcon class="mr-2 size-4" />
               {{ action.text }}
             </BaseButton>
 
@@ -210,20 +222,23 @@ const emitUpdateFilters = () => {
               size="lg"
               @click="emit('open-cashflow-dialog')"
             >
+              <PlusIcon class="mr-2 size-4" />
               {{ action.text }}
             </BaseButton>
 
             <BaseButton
               v-if="action.type === 'filter-dialog'"
-              variant="primary"
+              variant="secondary"
               size="lg"
               @click="emit('filter-dialog')"
             >
+              <FunnelIcon class="mr-2 size-4" />
               {{ action.text }}
             </BaseButton>
 
             <BaseButton v-if="action.type === 'print'" variant="secondary" size="lg" @click="print">
-              <PrinterIcon class="size-5 text-indigo-600" />
+              <PrinterIcon class="mr-2 size-4" />
+              Tisk
             </BaseButton>
           </template>
         </div>
@@ -233,12 +248,22 @@ const emitUpdateFilters = () => {
     <div v-if="actions && actions.length" class="mt-6 flex flex-wrap gap-3 lg:hidden">
       <template v-for="(action, key) in actions" :key="key">
         <BaseButton
-          v-if="action.type === 'save' && (canEditBySite(slug) || slug === '')"
+          v-if="action.type === 'save-and-stay' && (canEditBySite(slug) || slug === '')"
           variant="secondary"
           size="md"
           @click="emit('save', true)"
         >
+          <ArrowLeftStartOnRectangleIcon class="mr-1.5 size-4" />
           Uložit a odejít
+        </BaseButton>
+        <BaseButton
+          v-if="action.type === 'save' && (canEditBySite(slug) || slug === '')"
+          variant="primary"
+          size="md"
+          @click="emit('save', false)"
+        >
+          <CheckIcon class="mr-1.5 size-4" />
+          Uložit
         </BaseButton>
         <BaseButton
           v-if="action.type === 'add' && canEditBySite(slug)"
@@ -246,6 +271,7 @@ const emitUpdateFilters = () => {
           size="md"
           @click="router.push(route.fullPath + '/pridat')"
         >
+          <PlusIcon class="mr-1.5 size-4" />
           {{ action.text }}
         </BaseButton>
       </template>

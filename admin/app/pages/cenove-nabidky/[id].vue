@@ -220,8 +220,27 @@ async function rejectOffer() {
     });
 }
 
-function downloadPdf() {
-  window.open('/api/admin/price-offer/' + route.params.id + '/pdf', '_blank');
+async function downloadPdf() {
+  const client = useSanctumClient();
+  try {
+    const res = await client.raw('/api/admin/price-offer/' + route.params.id + '/pdf', {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cenova-nabidka-' + route.params.id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout PDF.', severity: 'error' });
+  }
 }
 
 const statusOptions = ref([
