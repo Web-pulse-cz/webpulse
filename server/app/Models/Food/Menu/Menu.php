@@ -50,4 +50,14 @@ class Menu extends Model
     {
         return $this->belongsToMany(Meal::class, 'meal_menu');
     }
+
+    public function items()
+    {
+        return $this->hasMany(MenuItem::class, 'menu_id', 'id')->orderBy('position');
+    }
+
+    public function itemsBySection()
+    {
+        return $this->items()->with(['section', 'meal']);
+    }
 }

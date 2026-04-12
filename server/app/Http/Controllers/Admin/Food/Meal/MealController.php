@@ -90,6 +90,7 @@ class MealController extends Controller
                 $meal->translateOrNew($locale)->fill($translation);
             }
 
+            $meal->fill($request->only(['price', 'weight']));
             $meal->save();
 
             $meal->allergens()->sync($request->get('allergens', []));

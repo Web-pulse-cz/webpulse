@@ -33,6 +33,8 @@ const breadcrumbs = ref([
 const item = ref({
   id: null as number | null,
   name: '' as string,
+  price: 0 as number,
+  weight: '' as string,
   allergen_ids: [] as number[],
   foodstuff_ids: [] as number[],
   category_ids: [] as number[],
@@ -316,6 +318,26 @@ definePageMeta({
                   name="text"
                 />
               </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <LayoutTitle>Cena a gramáž</LayoutTitle>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <BaseFormInput
+                v-model="item.price"
+                label="Cena (Kč)"
+                type="number"
+                name="price"
+                :step="1"
+              />
+              <BaseFormInput
+                v-model="item.weight"
+                label="Gramáž"
+                type="text"
+                name="weight"
+                placeholder="Např. 200g, 0.3l"
+              />
             </div>
           </LayoutContainer>
 

@@ -57,6 +57,7 @@ use App\Http\Controllers\Admin\Food\Meal\MealController;
 use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
 use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
 use App\Http\Controllers\Admin\Food\Menu\MenuController;
+use App\Http\Controllers\Admin\Food\Menu\MenuSectionController;
 use App\Http\Controllers\Admin\Client\ClientController;
 use App\Http\Controllers\Admin\Invoice\InvoiceController;
 use App\Http\Controllers\Admin\Project\TagController;
@@ -910,6 +911,16 @@ Route::group([
                 Route::delete('{id}', [RecipeController::class, 'destroy'])->where('id', '[0-9]+');
             });
 
+            // Menu section routes
+            Route::group([
+                'prefix' => 'menu-section'
+            ], function () {
+                Route::get('', [MenuSectionController::class, 'index']);
+                Route::get('{id}', [MenuSectionController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [MenuSectionController::class, 'store']);
+                Route::delete('{id}', [MenuSectionController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
             // Menu routes
             Route::group([
                 'prefix' => 'menu'
@@ -918,6 +929,7 @@ Route::group([
                 Route::get('{id}', [MenuController::class, 'show'])->where('id', '[0-9]+');
                 Route::post('{id?}', [MenuController::class, 'store']);
                 Route::delete('{id}', [MenuController::class, 'destroy'])->where('id', '[0-9]+');
+                Route::get('{id}/pdf', [MenuController::class, 'pdf'])->where('id', '[0-9]+');
             });
         });
     });

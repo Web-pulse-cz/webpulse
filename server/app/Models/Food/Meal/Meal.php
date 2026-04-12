@@ -24,7 +24,14 @@ class Meal extends Model
         'meta_description',
     ];
 
-    protected $fillable = [];
+    protected $fillable = [
+        'price',
+        'weight',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
 
     public function getAttribute($key)
     {

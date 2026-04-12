@@ -283,11 +283,22 @@ const navigation = ref([
         ],
       },
       {
-        name: 'Menu',
-        link: '/restaurace/menu',
+        name: 'Jídelní lístky',
         icon: DocumentTextIcon,
         current: false,
         slug: 'menus',
+        submenu: [
+          {
+            name: 'Jídelní lístky',
+            link: '/restaurace/menu',
+            current: false,
+          },
+          {
+            name: 'Sekce lístku',
+            link: '/restaurace/menu/sekce',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Rezervace',
