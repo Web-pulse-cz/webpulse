@@ -69,6 +69,11 @@ use App\Http\Controllers\Admin\Project\ProjectTaskCategoryController;
 use App\Http\Controllers\Admin\Project\ProjectTaskBoardController;
 use App\Http\Controllers\Admin\Project\ProjectTaskCommentController;
 use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
+use App\Http\Controllers\Admin\Employee\EmployeeController;
+use App\Http\Controllers\Admin\Employee\EmployeeDivisionController;
+use App\Http\Controllers\Admin\Employee\EmployeeContractController;
+use App\Http\Controllers\Admin\Shift\ShiftController;
+use App\Http\Controllers\Admin\Shift\ShiftTemplateController;
 use App\Http\Controllers\Admin\Fakturoid\FakturoidWebhookController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
@@ -607,6 +612,57 @@ Route::group([
             Route::post('timer/start', [TimeEntryController::class, 'startTimer']);
             Route::post('timer/{id}/stop', [TimeEntryController::class, 'stopTimer'])->where('id', '[0-9]+');
             Route::get('export-pdf', [TimeEntryController::class, 'exportPdf']);
+        });
+
+        // Employee routes
+        Route::group([
+            'prefix' => 'employee'
+        ], function () {
+            // Divisions
+            Route::group([
+                'prefix' => 'division'
+            ], function () {
+                Route::get('', [EmployeeDivisionController::class, 'index']);
+                Route::get('{id}', [EmployeeDivisionController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [EmployeeDivisionController::class, 'store']);
+                Route::delete('{id}', [EmployeeDivisionController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [EmployeeController::class, 'index']);
+            Route::get('{id}', [EmployeeController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [EmployeeController::class, 'store']);
+            Route::delete('{id}', [EmployeeController::class, 'destroy'])->where('id', '[0-9]+');
+
+            // Contracts (nested under employee)
+            Route::group([
+                'prefix' => '{employeeId}/contract'
+            ], function () {
+                Route::get('', [EmployeeContractController::class, 'index']);
+                Route::get('{id}', [EmployeeContractController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [EmployeeContractController::class, 'store']);
+                Route::delete('{id}', [EmployeeContractController::class, 'destroy'])->where('id', '[0-9]+');
+                Route::get('{id}/pdf', [EmployeeContractController::class, 'pdf'])->where('id', '[0-9]+');
+            })->where('employeeId', '[0-9]+');
+        });
+
+        // Shift routes
+        Route::group([
+            'prefix' => 'shift'
+        ], function () {
+            // Shift templates
+            Route::group([
+                'prefix' => 'template'
+            ], function () {
+                Route::get('', [ShiftTemplateController::class, 'index']);
+                Route::get('{id}', [ShiftTemplateController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ShiftTemplateController::class, 'store']);
+                Route::delete('{id}', [ShiftTemplateController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [ShiftController::class, 'index']);
+            Route::get('{id}', [ShiftController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ShiftController::class, 'store']);
+            Route::delete('{id}', [ShiftController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Dashboard and statistics routes

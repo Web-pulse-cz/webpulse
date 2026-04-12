@@ -455,10 +455,39 @@ const navigation = ref([
       },
       {
         name: 'Zaměstnanci',
-        link: '/demo',
         icon: UsersIcon,
         current: false,
         slug: 'employees',
+        submenu: [
+          {
+            name: 'Zaměstnanci',
+            link: '/zamestnanci',
+            current: false,
+          },
+          {
+            name: 'Divize',
+            link: '/zamestnanci/divize',
+            current: false,
+          },
+        ],
+      },
+      {
+        name: 'Směny',
+        icon: ClockIcon,
+        current: false,
+        slug: 'shifts',
+        submenu: [
+          {
+            name: 'Kalendář směn',
+            link: '/smeny',
+            current: false,
+          },
+          {
+            name: 'Šablony směn',
+            link: '/smeny/sablony',
+            current: false,
+          },
+        ],
       },
       {
         name: 'Úkoly',
@@ -472,7 +501,7 @@ const navigation = ref([
         link: '/demo',
         icon: DocumentTextIcon,
         current: false,
-        slug: 'contracts',
+        slug: 'employee_contracts',
       },
     ],
   },

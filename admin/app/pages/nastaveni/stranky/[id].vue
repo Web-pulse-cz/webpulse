@@ -65,8 +65,9 @@ const settings = {
     'invoices',
     'suppliers',
     'employees',
+    'employee_contracts',
+    'shifts',
     'tasks',
-    'contracts',
     'users',
     'settings',
     'activities',
@@ -260,8 +261,10 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Zaměstnanci';
     case 'tasks':
       return 'Úkoly';
-    case 'contracts':
+    case 'employee_contracts':
       return 'Smlouvy';
+    case 'shifts':
+      return 'Směny';
     case 'users':
       return 'Administrátoři';
     case 'settings':
