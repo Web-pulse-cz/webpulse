@@ -34,6 +34,8 @@ const breadcrumbs = ref([
 
 const settings = {
   enabled_modules: [
+    'allergens',
+      'foodstuffs',
     'posts',
     'pages',
     'novelties',
@@ -276,6 +278,10 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Stránky';
     case 'changelogs':
       return 'Changelog';
+    case 'allergens':
+      return 'Alergeny';
+      case 'foodstuffs':
+      return 'Potraviny';
     default:
       return key.replace('_', ' ').toUpperCase();
   }

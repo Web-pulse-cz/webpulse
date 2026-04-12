@@ -94,7 +94,6 @@ class SiteController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
             return Response::json(['message' => 'An error occurred while updating site.'], 500);
         }
 

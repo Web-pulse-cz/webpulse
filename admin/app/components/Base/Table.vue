@@ -172,6 +172,12 @@ function redirect(itemId: number, action: object) {
   }
 }
 
+const printText = computed(() => (item, column) => {
+  const value = column.key.split('.').reduce((obj, key) => obj?.[key], item);
+
+  return value ?? '-';
+});
+
 const emit = defineEmits([
   'delete-item',
   'update-sort',
@@ -250,7 +256,7 @@ const emit = defineEmits([
                       v-if="column.type === 'text' || column.type === 'number'"
                       class="text-slate-900"
                     >
-                      {{ item[column.key] ?? '-' }}
+                      {{ printText(item, column) }}
                     </span>
                     <span v-else-if="column.type === 'percent'">
                       {{ item[column.key] ?? '-' }}%

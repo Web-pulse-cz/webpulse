@@ -48,13 +48,12 @@ function onMouseLeave() {
     <div class="p-4 sm:p-5">
       <div class="flex items-start gap-4">
         <div class="min-w-0 flex-1">
-          <p class="text-sm font-bold tracking-tight sm:text-base" :class="cls.text">
+          <p :class="cls.text + 'text-sm font-bold tracking-tight sm:text-base'">
             {{ toast.summary }}
           </p>
           <p
             v-if="toast.detail"
-            class="mt-1 text-xs leading-relaxed opacity-80 sm:text-sm"
-            :class="cls.text"
+            :class="cls.text + 'mt-1 text-xs leading-relaxed opacity-80 sm:text-sm'"
           >
             {{ toast.detail }}
           </p>
@@ -62,8 +61,7 @@ function onMouseLeave() {
 
         <button
           type="button"
-          class="shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-inset"
-          :class="cls.text"
+          :class="cls.text + 'shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-inset'"
           aria-label="Zavřít"
           @click="remove(toast.id)"
         >
@@ -78,8 +76,7 @@ function onMouseLeave() {
 
     <div class="absolute bottom-0 left-0 h-1 w-full bg-black/5">
       <div
-        class="h-full bg-current transition-all duration-100 ease-linear"
-        :class="cls.text"
+        :class="cls.text + 'h-full bg-current transition-all duration-100 ease-linear'"
         :style="{ width: progress + '%' }"
       ></div>
     </div>

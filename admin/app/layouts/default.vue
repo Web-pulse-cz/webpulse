@@ -49,6 +49,8 @@ import {
   AcademicCapIcon,
   GlobeAltIcon,
   CodeBracketIcon,
+  ExclamationTriangleIcon,
+  ShoppingCartIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
@@ -213,6 +215,50 @@ const navigation = ref([
             current: false,
           },
         ],
+      },
+    ],
+  },
+  {
+    title: 'Restaurace',
+    menu: [
+      {
+        name: 'Alergeny',
+        link: '/restaurace/alergeny',
+        icon: ExclamationTriangleIcon,
+        current: false,
+        slug: 'allergens',
+      },
+      {
+        name: 'Potraviny',
+        icon: ShoppingCartIcon,
+        current: false,
+        slug: 'foodstuffs',
+        submenu: [
+          {
+            name: 'Potraviny',
+            link: '/restaurace/potraviny',
+            current: false,
+          },
+          {
+            name: 'Kategorie potravin',
+            link: '/restaurace/potraviny/kategorie',
+            current: false,
+          },
+        ],
+      },
+      {
+        name: 'Jídelní lístky',
+        link: '/restaurace/jidelni-listky',
+        icon: DocumentTextIcon,
+        current: false,
+        slug: 'menus',
+      },
+      {
+        name: 'Rezervace',
+        link: '/restaurace/rezervace',
+        icon: CalendarIcon,
+        current: false,
+        slug: 'reservations',
       },
     ],
   },

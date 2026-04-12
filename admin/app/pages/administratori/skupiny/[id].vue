@@ -41,6 +41,7 @@ const breadcrumbs = ref([
 ]);
 
 const allowedPermissions = ref([
+  { name: 'Alergeny', value: 'Alergeny', slug: 'allergens' },
   { name: 'Aktivita', value: 'Aktivita', slug: 'users_has_activities' },
   { name: 'Aktivity', value: 'Aktivity', slug: 'activities' },
   { name: 'Administrátoři', value: 'Administrátoři', slug: 'users' },
@@ -65,6 +66,7 @@ const allowedPermissions = ref([
   { name: 'Novinky', value: 'Novinky', slug: 'novelties' },
   { name: 'Oběry newsletteru', value: 'Odběry newsletteru', slug: 'newsletters' },
   { name: 'Poptávky', value: 'Poptávky', slug: 'demands' },
+  { name: 'Potraviny', value: 'Potraviny', slug: 'foodstuffs' },
   { name: 'Pracovní pozice', value: 'Pracovní pozice', slug: 'careers' },
   { name: 'Projekty', value: 'Projekty', slug: 'projects' },
   { name: 'Reference', value: 'Reference', slug: 'reviews' },

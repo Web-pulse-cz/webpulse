@@ -4,7 +4,6 @@ import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
-const user = useSanctumUser();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
@@ -16,22 +15,24 @@ const selectedLocale = ref('cs');
 const error = ref(false);
 const loading = ref(false);
 
-const pageTitle = ref(route.params.id === 'pridat' ? 'Nová kategorie' : 'Detail kategorie');
+const pageTitle = ref(
+  route.params.id === 'pridat' ? 'Nová kategorie potravin' : 'Detail kategorie potravin',
+);
 
 const breadcrumbs = ref([
   {
-    name: 'Blogové články',
-    link: '/obsah/clanky',
+    name: 'Potraviny',
+    link: '/restaurace/potraviny',
     current: false,
   },
   {
-    name: 'Kategorie',
-    link: '/obsah/clanky/kategorie',
+    name: 'Kategorie potravin',
+    link: '/restaurace/potraviny/kategorie',
     current: false,
   },
   {
     name: pageTitle.value,
-    link: '/obsah/clanky/kategorie/pridat',
+    link: '/restaurace/potraviny/kategorie/pridat',
     current: true,
   },
 ]);
@@ -39,9 +40,6 @@ const breadcrumbs = ref([
 const item = ref({
   id: null as number | null,
   name: '' as string,
-  position: 0 as number,
-  image: '' as string,
-  active: true as boolean,
   translations: {} as object,
   sites: [] as number[],
 });
@@ -61,11 +59,8 @@ async function loadItem() {
   await client<{
     id: number | null;
     name: string;
-    position: number;
-    image: string;
-    active: boolean;
     translations: object;
-  }>('/api/admin/post/category/' + route.params.id, {
+  }>('/api/admin/food/foodstuff/category/' + route.params.id, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -80,7 +75,7 @@ async function loadItem() {
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
         name: pageTitle.value,
-        link: '/obsah/clanky/kategorie/' + route.params.id,
+        link: '/restaurace/potraviny/kategorie/' + route.params.id,
         current: true,
       });
       fillEmptyTranslations();
@@ -92,7 +87,7 @@ async function loadItem() {
         detail: 'Nepodařilo se načíst kategorii. Zkuste to prosím později.',
         severity: 'error',
       });
-      router.push('/obsah/clanky/kategorie');
+      router.push('/restaurace/potraviny/kategorie');
     })
     .finally(() => {
       loading.value = false;
@@ -106,14 +101,11 @@ async function saveItem(redirect = true as boolean) {
   await client<{
     id: number | null;
     name: string;
-    position: number;
-    image: string;
-    active: boolean;
     translations: object;
   }>(
     route.params.id === 'pridat'
-      ? '/api/admin/post/category'
-      : '/api/admin/post/category/' + route.params.id,
+      ? '/api/admin/food/foodstuff/category'
+      : '/api/admin/food/foodstuff/category/' + route.params.id,
     {
       method: 'POST',
       body: JSON.stringify(item.value),
@@ -133,9 +125,9 @@ async function saveItem(redirect = true as boolean) {
         severity: 'success',
       });
       if (!redirect && route.params.id === 'pridat') {
-        router.push(`/obsah/clanky/kategorie/${response.id}`);
+        router.push(`/restaurace/potraviny/kategorie/${response.id}`);
       } else if (redirect) {
-        router.push('/obsah/clanky/kategorie');
+        router.push('/restaurace/potraviny/kategorie');
       } else {
         loadItem();
       }
@@ -193,7 +185,7 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
-      slug="posts"
+      slug="foodstuffs"
       @save="saveItem"
     />
 
@@ -231,7 +223,7 @@ definePageMeta({
                 name="name"
                 rules="required|min:3"
                 class="col-span-full lg:col-span-1"
-                placeholder="Např. Novinky z Barbershopu"
+                placeholder="Např. Ovoce"
               />
 
               <BaseFormInput
@@ -289,13 +281,8 @@ definePageMeta({
           <LayoutActionsDetailBlock
             v-model:selected-locale="selectedLocale"
             v-model:translate-automatically="item.translateAutomatically"
-            v-model:position="item.position"
-            v-model:image="item.image"
-            v-model:is-active="item.active"
             v-model:sites="item.sites"
-            :allow-position="true"
-            :allow-is-active="true"
-            image-type="post_category"
+            :allow-image="false"
             class="shadow-sm"
           />
         </aside>

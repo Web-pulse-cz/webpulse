@@ -49,6 +49,14 @@ use App\Http\Controllers\Admin\Quiz\QuizController;
 use App\Http\Controllers\Admin\Biography\BiographyController;
 use App\Http\Controllers\Admin\Site\SiteController;
 use App\Http\Controllers\Admin\Changelog\ChangelogController;
+use App\Http\Controllers\Admin\Food\Allergen\AllergenController;
+use App\Http\Controllers\Admin\Food\Foodstuff\FoodstuffCategoryController;
+use App\Http\Controllers\Admin\Food\Foodstuff\FoodstuffController;
+use App\Http\Controllers\Admin\Food\Meal\MealCategoryController;
+use App\Http\Controllers\Admin\Food\Meal\MealController;
+use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
+use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
+use App\Http\Controllers\Admin\Food\Menu\MenuController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
@@ -666,6 +674,88 @@ Route::group([
             Route::get('{id}', [ChangelogController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [ChangelogController::class, 'store']);
             Route::delete('{id}', [ChangelogController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Routes relatable with food
+        Route::group([
+            'prefix' => 'food'
+        ], function () {
+            // Allergen routes
+            Route::group([
+                'prefix' => 'allergen'
+            ], function () {
+                Route::get('', [AllergenController::class, 'index']);
+                Route::get('{id}', [AllergenController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [AllergenController::class, 'store']);
+                Route::delete('{id}', [AllergenController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            // Foodstuff routes
+            Route::group([
+                'prefix' => 'foodstuff'
+            ], function () {
+                Route::group([
+                    'prefix' => 'category'
+                ], function () {
+                    Route::get('', [FoodstuffCategoryController::class, 'index']);
+                    Route::get('{id}', [FoodstuffCategoryController::class, 'show'])->where('id', '[0-9]+');
+                    Route::post('{id?}', [FoodstuffCategoryController::class, 'store']);
+                    Route::delete('{id}', [FoodstuffCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+                });
+
+                Route::get('', [FoodstuffController::class, 'index']);
+                Route::get('{id}', [FoodstuffController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [FoodstuffController::class, 'store']);
+                Route::delete('{id}', [FoodstuffController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            // Meal routes
+            Route::group([
+                'prefix' => 'meal'
+            ], function () {
+                Route::group([
+                    'prefix' => 'category'
+                ], function () {
+                    Route::get('', [MealCategoryController::class, 'index']);
+                    Route::get('{id}', [MealCategoryController::class, 'show'])->where('id', '[0-9]+');
+                    Route::post('{id?}', [MealCategoryController::class, 'store']);
+                    Route::delete('{id}', [MealCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+                });
+
+                Route::get('', [MealController::class, 'index']);
+                Route::get('{id}', [MealController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [MealController::class, 'store']);
+                Route::delete('{id}', [MealController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            // Recipe routes
+            Route::group([
+                'prefix' => 'recipe'
+            ], function () {
+                Route::group([
+                    'prefix' => 'category'
+                ], function () {
+                    Route::get('', [RecipeCategoryController::class, 'index']);
+                    Route::get('{id}', [RecipeCategoryController::class, 'show'])->where('id', '[0-9]+');
+                    Route::post('{id?}', [RecipeCategoryController::class, 'store']);
+                    Route::delete('{id}', [RecipeCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+                });
+
+                Route::get('', [RecipeController::class, 'index']);
+                Route::get('{id}', [RecipeController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [RecipeController::class, 'store']);
+                Route::delete('{id}', [RecipeController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            // Menu routes
+            Route::group([
+                'prefix' => 'menu'
+            ], function () {
+                Route::get('', [MenuController::class, 'index']);
+                Route::get('{id}', [MenuController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [MenuController::class, 'store']);
+                Route::delete('{id}', [MenuController::class, 'destroy'])->where('id', '[0-9]+');
+            });
         });
     });
 });

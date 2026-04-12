@@ -21,14 +21,24 @@ trait Siteable
             ->where('siteable_type', get_class($model))
             ->delete();
 
-        foreach ($sites as $site) {
+        if (empty($sites)) {
             DB::table('siteables')->insert([
-                'site_id' => $site,
+                'site_id' => 1,
                 'siteable_type' => get_class($model),
                 'siteable_id' => $model->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        } else {
+            foreach ($sites as $site) {
+                DB::table('siteables')->insert([
+                    'site_id' => $site,
+                    'siteable_type' => get_class($model),
+                    'siteable_id' => $model->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 }
