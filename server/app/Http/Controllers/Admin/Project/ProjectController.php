@@ -70,6 +70,7 @@ class ProjectController extends Controller
 
 		$validator = Validator::make($request->all(), [
 			'name' => 'required|string|max:255',
+			'prefix' => ['nullable', 'string', 'max:5', 'alpha', \Illuminate\Validation\Rule::unique('projects', 'prefix')->ignore($project->id)],
 			'client_id' => 'nullable|integer|exists:clients,id',
 			'status_id' => 'nullable|integer|exists:project_statuses,id',
 			'currency_id' => 'nullable|integer|exists:currencies,id',
@@ -109,7 +110,9 @@ class ProjectController extends Controller
 	{
 		$project = Project::with([
 			'client', 'status', 'currency', 'taxRate', 'tags',
-			'milestones', 'tasks.user', 'timeEntries.user', 'timeEntries.task',
+			'taskCategories', 'taskBoards',
+			'milestones', 'tasks.user', 'tasks.category', 'tasks.board', 'tasks.assignees',
+			'timeEntries.user', 'timeEntries.task',
 			'costs', 'notes.user',
 		])->find($id);
 

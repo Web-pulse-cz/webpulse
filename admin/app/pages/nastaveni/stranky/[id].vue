@@ -60,6 +60,7 @@ const settings = {
     'biographies',
     'projects',
     'price_offers',
+    'project_time_entries',
     'trackings',
     'invoices',
     'suppliers',
@@ -291,8 +292,8 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Recepty';
     case 'menus':
       return 'Menu';
-    case 'clients':
-      return 'Klienti';
+    case 'project_time_entries':
+      return 'Sledování času';
     default:
       return key.replace('_', ' ').toUpperCase();
   }

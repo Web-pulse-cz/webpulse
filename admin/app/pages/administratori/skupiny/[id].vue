@@ -78,6 +78,7 @@ const allowedPermissions = ref([
   { name: 'Smlouvy', value: 'Smlouvy', slug: 'contracts' },
   { name: 'Stránky', value: 'Stránky', slug: 'sites' },
   { name: 'Šablony zpráv', value: 'Šablony zpráv', slug: 'message_blueprints' },
+  { name: 'Sledování času', value: 'Sledování času', slug: 'project_time_entries' },
   { name: 'Trackování', value: 'Trackování', slug: 'trackings' },
   { name: 'Události', value: 'Události', slug: 'events' },
   { name: 'Úkoly', value: 'Úkoly', slug: 'tasks' },

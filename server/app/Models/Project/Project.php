@@ -15,6 +15,7 @@ class Project extends Model
 
 	protected $fillable = [
 		'name',
+		'prefix',
 		'description',
 		'note',
 		'image',
@@ -102,5 +103,15 @@ class Project extends Model
 	public function invoices()
 	{
 		return $this->hasMany(Invoice::class, 'project_id', 'id');
+	}
+
+	public function taskCategories()
+	{
+		return $this->hasMany(ProjectTaskCategory::class, 'project_id', 'id')->orderBy('position');
+	}
+
+	public function taskBoards()
+	{
+		return $this->hasMany(ProjectTaskBoard::class, 'project_id', 'id')->orderBy('position');
 	}
 }

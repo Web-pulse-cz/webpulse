@@ -15,6 +15,7 @@ class ProjectResource extends JsonResource
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
+			'prefix' => $this->prefix,
 			'description' => $this->description,
 			'note' => $this->note,
 			'image' => $this->image,
@@ -38,6 +39,8 @@ class ProjectResource extends JsonResource
 			'profit' => $this->profit,
 			'is_archived' => $this->is_archived,
 			'tags' => TagResource::collection($this->tags),
+			'task_categories' => ProjectTaskCategoryResource::collection($this->taskCategories),
+			'task_boards' => ProjectTaskBoardResource::collection($this->taskBoards),
 			'milestones' => ProjectMilestoneResource::collection($this->milestones),
 			'tasks' => ProjectTaskResource::collection($this->tasks),
 			'time_entries' => ProjectTimeEntryResource::collection($this->timeEntries),

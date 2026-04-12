@@ -440,6 +440,13 @@ const navigation = ref([
         slug: 'invoices',
       },
       {
+        name: 'Sledování času',
+        link: '/sledovani-casu',
+        icon: ClockIcon,
+        current: false,
+        slug: 'project_time_entries',
+      },
+      {
         name: 'Dodavatelé',
         link: '/demo',
         icon: BuildingOfficeIcon,

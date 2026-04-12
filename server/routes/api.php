@@ -65,6 +65,10 @@ use App\Http\Controllers\Admin\Project\ProjectTaskController;
 use App\Http\Controllers\Admin\Project\ProjectTimeEntryController;
 use App\Http\Controllers\Admin\Project\ProjectCostController;
 use App\Http\Controllers\Admin\Project\ProjectNoteController;
+use App\Http\Controllers\Admin\Project\ProjectTaskCategoryController;
+use App\Http\Controllers\Admin\Project\ProjectTaskBoardController;
+use App\Http\Controllers\Admin\Project\ProjectTaskCommentController;
+use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
 use App\Http\Controllers\Admin\Fakturoid\FakturoidWebhookController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
@@ -554,11 +558,29 @@ Route::group([
                 Route::delete('milestone/{id}', [ProjectMilestoneController::class, 'destroy'])->where('id', '[0-9]+');
                 Route::post('milestone/{id}/complete', [ProjectMilestoneController::class, 'complete'])->where('id', '[0-9]+');
 
+                // Task categories
+                Route::get('task-category', [ProjectTaskCategoryController::class, 'index']);
+                Route::post('task-category/{id?}', [ProjectTaskCategoryController::class, 'store']);
+                Route::delete('task-category/{id}', [ProjectTaskCategoryController::class, 'destroy'])->where('id', '[0-9]+');
+
+                // Task boards
+                Route::get('task-board', [ProjectTaskBoardController::class, 'index']);
+                Route::post('task-board/{id?}', [ProjectTaskBoardController::class, 'store']);
+                Route::delete('task-board/{id}', [ProjectTaskBoardController::class, 'destroy'])->where('id', '[0-9]+');
+
                 // Tasks
+                Route::get('task', [ProjectTaskController::class, 'index']);
+                Route::get('task/{id}', [ProjectTaskController::class, 'show'])->where('id', '[0-9]+');
                 Route::post('task/{id?}', [ProjectTaskController::class, 'store']);
+                Route::post('task/{id}/move', [ProjectTaskController::class, 'move'])->where('id', '[0-9]+');
+                Route::post('task/reorder', [ProjectTaskController::class, 'reorder']);
                 Route::delete('task/{id}', [ProjectTaskController::class, 'destroy'])->where('id', '[0-9]+');
 
-                // Time entries
+                // Task comments
+                Route::post('task/{taskId}/comment/{id?}', [ProjectTaskCommentController::class, 'store'])->where('taskId', '[0-9]+');
+                Route::delete('task/{taskId}/comment/{id}', [ProjectTaskCommentController::class, 'destroy'])->where(['taskId' => '[0-9]+', 'id' => '[0-9]+']);
+
+                // Time entries (project-scoped)
                 Route::post('time-entry/{id?}', [ProjectTimeEntryController::class, 'store']);
                 Route::delete('time-entry/{id}', [ProjectTimeEntryController::class, 'destroy'])->where('id', '[0-9]+');
                 Route::post('timer/start', [ProjectTimeEntryController::class, 'startTimer']);
@@ -572,6 +594,19 @@ Route::group([
                 Route::post('note/{id?}', [ProjectNoteController::class, 'store']);
                 Route::delete('note/{id}', [ProjectNoteController::class, 'destroy'])->where('id', '[0-9]+');
             })->where('projectId', '[0-9]+');
+        });
+
+        // Global time tracking routes
+        Route::group([
+            'prefix' => 'time-entry'
+        ], function () {
+            Route::get('', [TimeEntryController::class, 'index']);
+            Route::post('{id?}', [TimeEntryController::class, 'store']);
+            Route::delete('{id}', [TimeEntryController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::get('running', [TimeEntryController::class, 'getRunning']);
+            Route::post('timer/start', [TimeEntryController::class, 'startTimer']);
+            Route::post('timer/{id}/stop', [TimeEntryController::class, 'stopTimer'])->where('id', '[0-9]+');
+            Route::get('export-pdf', [TimeEntryController::class, 'exportPdf']);
         });
 
         // Dashboard and statistics routes
