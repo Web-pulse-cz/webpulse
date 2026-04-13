@@ -72,7 +72,7 @@ class TimeEntryController extends Controller
                     ->when($request->filled('project_id'), fn ($q) => $q->where('project_id', $request->get('project_id')))
                     ->when($request->filled('task_id'), fn ($q) => $q->where('task_id', $request->get('task_id')))
                     ->when($request->filled('user_id'), fn ($q) => $q->where('user_id', $request->get('user_id')))
-                    ->sum('hours'),
+                    ->sum('seconds'),
             ]);
         }
 
@@ -167,7 +167,7 @@ class TimeEntryController extends Controller
         $entry->user_id = Auth::id();
         $entry->description = $request->get('description', '');
         $entry->date = now()->toDateString();
-        $entry->hours = 0;
+        $entry->seconds = 0;
         $entry->timer_started_at = now();
         $entry->is_running = true;
         $entry->site_id = $this->handleSite($request->header('X-Site-Hash'));
@@ -219,8 +219,9 @@ class TimeEntryController extends Controller
         }
 
         $entries = $query->orderBy('date', 'desc')->get();
-        $totalHours = $entries->sum('hours');
-        $totalCost = $entries->sum(fn ($e) => $e->hours * ($e->hourly_rate ?? 0));
+        $totalSeconds = $entries->sum('seconds');
+        $totalHours = $totalSeconds / 3600;
+        $totalCost = $entries->sum(fn ($e) => ($e->seconds / 3600) * ($e->hourly_rate ?? 0));
 
         $filters = [
             'date_from' => $request->get('date_from'),
@@ -241,8 +242,8 @@ class TimeEntryController extends Controller
     protected function stopRunningEntry(ProjectTimeEntry $entry): void
     {
         if ($entry->timer_started_at) {
-            $elapsed = Carbon::parse($entry->timer_started_at)->diffInSeconds(now());
-            $entry->hours = round($entry->hours + ($elapsed / 3600), 2);
+            $elapsed = (int) Carbon::parse($entry->timer_started_at)->diffInSeconds(now());
+            $entry->seconds = $entry->seconds + $elapsed;
         }
         $entry->is_running = false;
         $entry->timer_started_at = null;
@@ -257,8 +258,9 @@ class TimeEntryController extends Controller
 
         $project = Project::find($projectId);
         if ($project) {
-            $project->total_tracked_hours = ProjectTimeEntry::where('project_id', $projectId)->sum('hours');
-            $project->total_revenue = $project->total_tracked_hours * $project->hourly_rate;
+            $project->total_tracked_seconds = (int) ProjectTimeEntry::where('project_id', $projectId)->sum('seconds');
+            $totalHours = $project->total_tracked_seconds / 3600;
+            $project->total_revenue = $totalHours * $project->hourly_rate;
             $project->profit = $project->total_revenue - $project->total_costs;
             $project->saveQuietly();
         }

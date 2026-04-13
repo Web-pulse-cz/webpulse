@@ -18,7 +18,7 @@ class ProjectSimpleResource extends JsonResource
             'start_date' => $this->start_date?->format('Y-m-d'),
             'deadline_date' => $this->deadline_date?->format('Y-m-d'),
             'hourly_rate' => $this->hourly_rate,
-            'total_tracked_hours' => $this->total_tracked_hours,
+            'total_tracked_seconds' => $this->total_tracked_seconds,
             'total_revenue' => $this->total_revenue,
             'profit' => $this->profit,
             'is_archived' => $this->is_archived,

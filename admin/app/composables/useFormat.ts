@@ -53,10 +53,24 @@ export function useFormat() {
 		});
 	}
 
+	/**
+	 * Format seconds to HH:MM:SS
+	 */
+	function formatSeconds(value: number | string | null | undefined): string {
+		if (value === null || value === undefined || value === '') return '00:00:00';
+		const total = typeof value === 'string' ? parseInt(value) : Math.floor(value);
+		if (isNaN(total) || total < 0) return '00:00:00';
+		const h = String(Math.floor(total / 3600)).padStart(2, '0');
+		const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
+		const s = String(total % 60).padStart(2, '0');
+		return `${h}:${m}:${s}`;
+	}
+
 	return {
 		formatNumber,
 		formatCurrency,
 		formatDate,
 		formatDateTime,
+		formatSeconds,
 	};
 }

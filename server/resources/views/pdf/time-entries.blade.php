@@ -142,9 +142,10 @@
 					</td>
 					<td>{{ $entry->user?->name ?? '—' }}</td>
 					<td>{{ $entry->description ?? '—' }}</td>
-					<td class="right">{{ number_format($entry->hours, 2, ',', ' ') }}</td>
+					@php $h = floor($entry->seconds / 3600); $m = floor(($entry->seconds % 3600) / 60); $s = $entry->seconds % 60; @endphp
+					<td class="right">{{ sprintf('%02d:%02d:%02d', $h, $m, $s) }}</td>
 					<td class="right">{{ $entry->hourly_rate ? number_format($entry->hourly_rate, 2, ',', ' ') : '—' }}</td>
-					<td class="right">{{ number_format($entry->hours * ($entry->hourly_rate ?? 0), 2, ',', ' ') }}</td>
+					<td class="right">{{ number_format(($entry->seconds / 3600) * ($entry->hourly_rate ?? 0), 2, ',', ' ') }}</td>
 				</tr>
 			@endforeach
 		</tbody>

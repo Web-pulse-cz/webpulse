@@ -72,6 +72,8 @@ use App\Http\Controllers\Admin\Shift\ShiftController;
 use App\Http\Controllers\Admin\Shift\ShiftTemplateController;
 use App\Http\Controllers\Admin\Site\SiteController;
 use App\Http\Controllers\Admin\TaxRate\TaxRateController;
+use App\Http\Controllers\Admin\Task\TaskController;
+use App\Http\Controllers\Admin\Task\TaskBoardController;
 use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
 use App\Http\Controllers\Admin\User\ProfileController;
 use App\Http\Controllers\Admin\User\QuickAccessController;
@@ -606,6 +608,26 @@ Route::group([
                 Route::post('note/{id?}', [ProjectNoteController::class, 'store']);
                 Route::delete('note/{id}', [ProjectNoteController::class, 'destroy'])->where('id', '[0-9]+');
             })->where('projectId', '[0-9]+');
+        });
+
+        // Global task routes
+        Route::group([
+            'prefix' => 'task'
+        ], function () {
+            Route::get('', [TaskController::class, 'index']);
+            Route::get('{id}', [TaskController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [TaskController::class, 'store']);
+            Route::post('{id}/move', [TaskController::class, 'move'])->where('id', '[0-9]+');
+            Route::delete('{id}', [TaskController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Global task board routes
+        Route::group([
+            'prefix' => 'task-board'
+        ], function () {
+            Route::get('', [TaskBoardController::class, 'index']);
+            Route::post('{id?}', [TaskBoardController::class, 'store']);
+            Route::delete('{id}', [TaskBoardController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Global time tracking routes

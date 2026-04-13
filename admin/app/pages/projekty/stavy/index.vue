@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const pageTitle = ref('Stavy projektů');
 
 const loading = ref(false);
@@ -44,6 +45,7 @@ async function loadItems() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -72,6 +74,7 @@ async function deleteItem(id: number) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .catch(() => {
@@ -107,6 +110,7 @@ watch(searchString, () => {
   tableQuery.value.search = searchString.value;
   debouncedLoadItems();
 });
+watch(selectedSiteHash, () => loadItems());
 
 useHead({
   title: pageTitle.value,

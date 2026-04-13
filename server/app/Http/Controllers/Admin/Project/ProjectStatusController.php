@@ -20,13 +20,27 @@ class ProjectStatusController extends Controller
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
+        $query = ProjectStatus::whereRelation('sites', 'site_id', $siteId);
 
-        $statuses = ProjectStatus::query()
-            ->whereRelation('sites', 'site_id', $siteId)
-            ->orderBy('position')
-            ->get();
+        if ($request->has('orderWay') && $request->get('orderBy')) {
+            $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
+        } else {
+            $query->orderBy('position');
+        }
 
-        return Response::json(ProjectStatusResource::collection($statuses));
+        if ($request->has('paginate')) {
+            $statuses = $query->paginate($request->get('paginate'));
+
+            return Response::json([
+                'data' => ProjectStatusResource::collection($statuses->items()),
+                'total' => $statuses->total(),
+                'perPage' => $statuses->perPage(),
+                'currentPage' => $statuses->currentPage(),
+                'lastPage' => $statuses->lastPage(),
+            ]);
+        }
+
+        return Response::json(ProjectStatusResource::collection($query->get()));
     }
 
     public function store(Request $request, ?int $id = null): JsonResponse
@@ -52,6 +66,9 @@ class ProjectStatusController extends Controller
         try {
             DB::beginTransaction();
             $status->fill($request->all());
+            if (!$status->color) {
+                $status->color = '#6366f1';
+            }
             $status->save();
 
             if ($request->has('sites')) {
@@ -61,18 +78,19 @@ class ProjectStatusController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('ProjectStatus save error: ' . $e->getMessage());
 
-            return Response::json(['message' => 'Chyba při ukládání statusu.'], 500);
+            return Response::json(['message' => 'Chyba při ukládání statusu: ' . $e->getMessage()], 500);
         }
 
-        return Response::json(ProjectStatusResource::make($status));
+        return Response::json(ProjectStatusResource::make($status->fresh('sites')));
     }
 
     public function show(Request $request, int $id): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $status = ProjectStatus::query()
+        $status = ProjectStatus::with('sites')
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
         if (! $status) {

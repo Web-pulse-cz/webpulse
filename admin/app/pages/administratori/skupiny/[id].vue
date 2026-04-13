@@ -86,7 +86,7 @@ const allowedPermissions = ref([
   { name: 'Trackování', value: 'Trackování', slug: 'trackings' },
   { name: 'Události', value: 'Události', slug: 'events' },
   { name: 'Vouchery', value: 'Vouchery', slug: 'vouchers' },
-  { name: 'Úkoly', value: 'Úkoly', slug: 'tasks' },
+  { name: 'Úkoly', value: 'Úkoly', slug: 'project_tasks' },
   { name: 'Zaměstnanci', value: 'Zaměstnanci', slug: 'employees' },
   { name: 'Země', value: 'Země', slug: 'countries' },
   { name: 'Životopisy', value: 'Životopisy', slug: 'biographies' },

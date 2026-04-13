@@ -15,7 +15,7 @@ import { useUserGroupStore } from '~/../stores/userGroupStore';
 import { useFormat } from '~/composables/useFormat';
 
 const { $toast } = useNuxtApp();
-const { formatNumber, formatDate, formatDateTime } = useFormat();
+const { formatNumber, formatDate, formatDateTime, formatSeconds } = useFormat();
 
 const user = useSanctumUser();
 const userGroupStore = useUserGroupStore();
@@ -269,8 +269,8 @@ const emit = defineEmits([
                     <span v-else-if="column.type === 'percent'" class="tabular-nums">
                       {{ formatNumber(item[column.key], 0) }} %
                     </span>
-                    <PropsBadge v-else-if="column.type === 'badge'" :color="item[column.colorKey]">
-                      {{ item[column.key] }}
+                    <PropsBadge v-else-if="column.type === 'badge'" :color="column.colorKey ? column.colorKey.split('.').reduce((obj, key) => obj?.[key], item) : null">
+                      {{ printText(item, column) }}
                     </PropsBadge>
                     <span v-else-if="column.type === 'enum'">
                       {{ enums[column.key][item[column.key]] }}
@@ -280,6 +280,13 @@ const emit = defineEmits([
                     </span>
                     <span v-else-if="column.type === 'datetime'" class="tabular-nums">
                       {{ formatDateTime(printText(item, column)) }}
+                    </span>
+
+                    <span
+                      v-else-if="column.type === 'seconds'"
+                      class="font-mono text-slate-900 tabular-nums"
+                    >
+                      {{ formatSeconds(printText(item, column)) }}
                     </span>
 
                     <img

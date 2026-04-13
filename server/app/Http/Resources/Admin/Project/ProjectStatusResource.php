@@ -15,6 +15,7 @@ class ProjectStatusResource extends JsonResource
             'color' => $this->color,
             'position' => $this->position,
             'is_closed' => $this->is_closed,
+            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
         ];
     }
 }

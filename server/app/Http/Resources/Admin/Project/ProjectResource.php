@@ -32,7 +32,7 @@ class ProjectResource extends JsonResource
             'end_date' => $this->end_date?->format('Y-m-d'),
             'hourly_rate' => $this->hourly_rate,
             'expected_hours' => $this->expected_hours,
-            'total_tracked_hours' => $this->total_tracked_hours,
+            'total_tracked_seconds' => $this->total_tracked_seconds,
             'expected_revenue' => $this->expected_revenue,
             'total_revenue' => $this->total_revenue,
             'total_costs' => $this->total_costs,

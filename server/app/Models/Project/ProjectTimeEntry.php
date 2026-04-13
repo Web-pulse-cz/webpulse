@@ -16,7 +16,7 @@ class ProjectTimeEntry extends Model
         'task_id',
         'user_id',
         'description',
-        'hours',
+        'seconds',
         'hourly_rate',
         'date',
         'timer_started_at',
@@ -27,7 +27,7 @@ class ProjectTimeEntry extends Model
         'date' => 'date',
         'timer_started_at' => 'datetime',
         'is_running' => 'boolean',
-        'hours' => 'decimal:2',
+        'seconds' => 'integer',
         'hourly_rate' => 'decimal:2',
     ];
 

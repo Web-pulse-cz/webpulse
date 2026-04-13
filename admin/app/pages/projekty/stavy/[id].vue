@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 
 import { Form } from 'vee-validate';
 import { QuestionMarkCircleIcon, SwatchIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
 const router = useRouter();
@@ -38,6 +39,7 @@ const item = ref({
   color: '' as string,
   position: 0 as number,
   is_closed: false as boolean,
+  sites: [] as number[],
 });
 
 async function loadItem() {
@@ -53,10 +55,12 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = Array.isArray(response.sites) ? response.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -155,8 +159,9 @@ definePageMeta({
     />
 
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 gap-8">
-        <LayoutContainer class="w-full">
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+        <LayoutContainer>
           <div class="mb-8 flex items-center gap-3">
             <div
               class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
@@ -217,6 +222,16 @@ definePageMeta({
               </p>
             </div>
           </div>
+        </div>
+        </div>
+
+        <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:sites="item.sites"
+            :allow-image="false"
+            :allow-is-active="false"
+            :allow-translations="false"
+          />
         </div>
       </div>
     </Form>

@@ -483,6 +483,24 @@ const navigation = ref([
         slug: 'project_time_entries',
       },
       {
+        name: 'Úkoly',
+        icon: ChartBarSquareIcon,
+        current: false,
+        slug: 'project_tasks',
+        submenu: [
+          {
+            name: 'Přehled úkolů',
+            link: '/ukoly',
+            current: false,
+          },
+          {
+            name: 'Boardy',
+            link: '/ukoly/boardy',
+            current: false,
+          },
+        ],
+      },
+      {
         name: 'Zaměstnanci',
         icon: UsersIcon,
         current: false,
@@ -517,13 +535,6 @@ const navigation = ref([
             current: false,
           },
         ],
-      },
-      {
-        name: 'Úkoly',
-        link: '/demo',
-        icon: ChartBarSquareIcon,
-        current: false,
-        slug: 'tasks',
       },
       {
         name: 'Smlouvy',

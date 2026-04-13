@@ -11,10 +11,12 @@ class ProjectTask extends Model
     protected $table = 'project_tasks';
 
     protected $fillable = [
+        'site_id',
         'project_id',
         'milestone_id',
         'category_id',
         'board_id',
+        'global_board_id',
         'user_id',
         'name',
         'description',
@@ -42,10 +44,10 @@ class ProjectTask extends Model
 
     public static function generateNextCode(?int $projectId): string
     {
-        $prefix = 'UO';
+        $prefix = 'TK';
         if ($projectId) {
             $project = Project::find($projectId);
-            $prefix = $project?->prefix ?? 'UO';
+            $prefix = $project?->prefix ?? 'TK';
         }
 
         $sequence = DB::table('project_task_code_sequences')
@@ -89,6 +91,16 @@ class ProjectTask extends Model
         return $this->belongsTo(ProjectTaskBoard::class, 'board_id', 'id');
     }
 
+    public function globalBoard()
+    {
+        return $this->belongsTo(\App\Models\Task\TaskBoard::class, 'global_board_id', 'id');
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(\App\Models\Site\Site::class, 'site_id', 'id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -109,8 +121,8 @@ class ProjectTask extends Model
         return $this->hasMany(ProjectTimeEntry::class, 'task_id', 'id');
     }
 
-    public function getTotalTrackedHoursAttribute(): float
+    public function getTotalTrackedSecondsAttribute(): int
     {
-        return (float) $this->timeEntries()->sum('hours');
+        return (int) $this->timeEntries()->sum('seconds');
     }
 }

@@ -149,9 +149,9 @@ definePageMeta({
           colorKey: 'status.color',
         },
         {
-          key: 'total_tracked_hours',
-          name: 'Hodiny',
-          type: 'number',
+          key: 'total_tracked_seconds',
+          name: 'Čas',
+          type: 'seconds',
           width: 80,
           hidden: true,
           sortable: true,

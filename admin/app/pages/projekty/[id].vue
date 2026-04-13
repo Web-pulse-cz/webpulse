@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
-import { DocumentIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon } from '@heroicons/vue/24/outline';
+import { DocumentIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon, ChevronDownIcon, ChevronRightIcon, CheckCircleIcon, ChatBubbleLeftIcon, ClockIcon } from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
+
+const { formatSeconds } = useFormat();
 
 const { $toast } = useNuxtApp();
 const currencyStore = useCurrencyStore();
@@ -20,9 +22,7 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const tabs = ref([
   { name: 'Přehled', link: '#prehled', current: false },
   { name: 'Úkoly', link: '#ukoly', current: false },
-  { name: 'Sledování času', link: '#cas', current: false },
   { name: 'Náklady', link: '#naklady', current: false },
-  { name: 'Poznámky', link: '#poznamky', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nový projekt' : 'Detail projektu');
@@ -52,7 +52,7 @@ const item = ref({
   end_date: '',
   hourly_rate: 0,
   expected_hours: 0,
-  total_tracked_hours: 0,
+  total_tracked_seconds: 0,
   expected_revenue: 0,
   total_revenue: 0,
   total_costs: 0,
@@ -70,12 +70,9 @@ const item = ref({
 });
 
 const boards = ref([]);
-const categories = ref([]);
-const showTaskDetail = ref(false);
+const expandedBoards = ref<Record<number, boolean>>({});
+const showDrawer = ref(false);
 const selectedTask = ref(null as any);
-const timerInterval = ref(null as any);
-const timerDisplay = ref('00:00:00');
-const runningEntry = ref(null as any);
 
 // ─── Loaders ───────────────────────────────────────────────
 
@@ -89,14 +86,12 @@ async function loadItem() {
     .then((r) => {
       item.value = r;
       item.value.sites = Array.isArray(r.sites) ? r.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
-      categories.value = r.task_categories || [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
         link: '/projekty/' + route.params.id,
         current: true,
       };
-      checkRunningTimer();
     })
     .catch(() => {
       error.value = true;
@@ -109,14 +104,22 @@ async function loadItem() {
 
 async function loadBoards() {
   const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task-board', {
+  await client('/api/admin/task-board', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    query: { with_tasks: true, project_id: route.params.id },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       boards.value = r;
+      if (Object.keys(expandedBoards.value).length === 0) {
+        r.forEach((b: any) => { expandedBoards.value[b.id] = true; });
+      }
     })
     .catch(() => {});
+}
+
+function toggleBoard(boardId: number) {
+  expandedBoards.value[boardId] = !expandedBoards.value[boardId];
 }
 
 async function loadStatuses() {
@@ -198,120 +201,74 @@ async function saveItem(redirect = true) {
     });
 }
 
-// ─── Categories & Boards ───────────────────────────────────
-
-const newCategory = ref({ name: '', color: '#6366f1' });
-const newBoard = ref({ name: '', color: '#6366f1', is_completed: false });
-
-async function saveCategory() {
-  if (!newCategory.value.name) return;
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task-category', {
-    method: 'POST',
-    body: JSON.stringify(newCategory.value),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    newCategory.value = { name: '', color: '#6366f1' };
-    loadItem();
-    loadBoards();
-  });
-}
-async function deleteCategory(id: number) {
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task-category/' + id, {
-    method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadItem();
-    loadBoards();
-  });
-}
-async function saveBoard() {
-  if (!newBoard.value.name) return;
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task-board', {
-    method: 'POST',
-    body: JSON.stringify(newBoard.value),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    newBoard.value = { name: '', color: '#6366f1', is_completed: false };
-    loadBoards();
-  });
-}
-async function deleteBoard(id: number) {
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task-board/' + id, {
-    method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadBoards();
-  });
-}
-
 // ─── Tasks ─────────────────────────────────────────────────
 
-const newTask = ref({ name: '', board_id: null, category_id: null, priority: 'normal' });
+const newTask = ref({ name: '', global_board_id: null, priority: 'normal' });
 
 async function createTask() {
   if (!newTask.value.name) return;
   const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task', {
+  await client('/api/admin/task', {
     method: 'POST',
-    body: JSON.stringify(newTask.value),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...newTask.value, project_id: route.params.id }),
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   }).then(() => {
-    newTask.value = { name: '', board_id: null, category_id: null, priority: 'normal' };
+    newTask.value = { name: '', global_board_id: null, priority: 'normal' };
     loadBoards();
     loadItem();
+  }).catch(() => {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se vytvořit úkol.', severity: 'error' });
   });
 }
 
 async function moveTask(taskId: number, boardId: number) {
   const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task/' + taskId + '/move', {
+  await client('/api/admin/task/' + taskId + '/move', {
     method: 'POST',
-    body: JSON.stringify({ board_id: boardId }),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ global_board_id: boardId }),
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   }).then(() => {
     loadBoards();
   });
 }
 
-async function openTaskDetail(taskId: number) {
+async function openTaskDrawer(taskId: number) {
   const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task/' + taskId, {
+  await client('/api/admin/task/' + taskId, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   }).then((r) => {
     selectedTask.value = r;
-    showTaskDetail.value = true;
+    showDrawer.value = true;
   });
 }
 
-async function saveTaskDetail() {
+async function saveTask() {
   if (!selectedTask.value) return;
   const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task/' + selectedTask.value.id, {
+  await client('/api/admin/task/' + selectedTask.value.id, {
     method: 'POST',
     body: JSON.stringify({
       ...selectedTask.value,
       assignees: selectedTask.value.assignees?.map((a: any) => a.id || a) || [],
     }),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   }).then(() => {
     $toast.show({ summary: 'Hotovo', detail: 'Úkol uložen.', severity: 'success' });
     loadBoards();
     loadItem();
+  }).catch(() => {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se uložit úkol.', severity: 'error' });
   });
 }
 
 async function deleteTask(taskId: number) {
   const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/task/' + taskId, {
+  await client('/api/admin/task/' + taskId, {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   }).then(() => {
-    showTaskDetail.value = false;
+    showDrawer.value = false;
     selectedTask.value = null;
     loadBoards();
     loadItem();
@@ -333,7 +290,7 @@ async function addComment() {
     },
   ).then(() => {
     newComment.value = '';
-    openTaskDetail(selectedTask.value.id);
+    openTaskDrawer(selectedTask.value.id);
   });
 }
 async function deleteComment(commentId: number) {
@@ -351,72 +308,11 @@ async function deleteComment(commentId: number) {
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     },
   ).then(() => {
-    openTaskDetail(selectedTask.value.id);
+    openTaskDrawer(selectedTask.value.id);
   });
 }
 
-// ─── Timer & Time Entries ──────────────────────────────────
-
-const newTimeEntry = ref({ description: '', hours: 0, date: '', task_id: null });
-
-async function saveTimeEntry() {
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/time-entry', {
-    method: 'POST',
-    body: JSON.stringify(newTimeEntry.value),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    newTimeEntry.value = { description: '', hours: 0, date: '', task_id: null };
-    loadItem();
-  });
-}
-async function deleteTimeEntry(entryId: number) {
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/time-entry/' + entryId, {
-    method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadItem();
-  });
-}
-async function startTimer(taskId: number | null = null) {
-  const client = useSanctumClient();
-  await client('/api/admin/time-entry/timer/start', {
-    method: 'POST',
-    body: JSON.stringify({ project_id: route.params.id, task_id: taskId }),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadItem();
-  });
-}
-async function stopTimer(entryId: number) {
-  const client = useSanctumClient();
-  await client('/api/admin/time-entry/timer/' + entryId + '/stop', {
-    method: 'POST',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    clearInterval(timerInterval.value);
-    runningEntry.value = null;
-    timerDisplay.value = '00:00:00';
-    loadItem();
-  });
-}
-function checkRunningTimer() {
-  const running = item.value.time_entries?.find((e: any) => e.is_running);
-  if (running) {
-    runningEntry.value = running;
-    startTimerDisplay(running.timer_started_at);
-  }
-}
-function startTimerDisplay(startedAt: string) {
-  clearInterval(timerInterval.value);
-  timerInterval.value = setInterval(() => {
-    const e = Math.floor((Date.now() - new Date(startedAt).getTime()) / 1000);
-    timerDisplay.value = `${String(Math.floor(e / 3600)).padStart(2, '0')}:${String(Math.floor((e % 3600) / 60)).padStart(2, '0')}:${String(e % 60).padStart(2, '0')}`;
-  }, 1000);
-}
-
-// ─── Costs & Notes ─────────────────────────────────────────
+// ─── Costs ────────────────────────────────────────────────
 
 const newCost = ref({ name: '', amount: 0, category: 'other', date: '' });
 const costCategoryOptions = ref([
@@ -448,29 +344,6 @@ async function deleteCost(costId: number) {
     loadItem();
   });
 }
-const newNote = ref({ content: '' });
-async function saveNote() {
-  if (!newNote.value.content) return;
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/note', {
-    method: 'POST',
-    body: JSON.stringify(newNote.value),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    newNote.value = { content: '' };
-    loadItem();
-  });
-}
-async function deleteNote(noteId: number) {
-  const client = useSanctumClient();
-  await client('/api/admin/project/' + route.params.id + '/note/' + noteId, {
-    method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadItem();
-  });
-}
-
 // ─── Options & Lifecycle ───────────────────────────────────
 
 const priorityOptions = ref([
@@ -496,9 +369,6 @@ watchEffect(() => {
     tabs.value[0].current = true;
     router.push(route.path + '#prehled');
   }
-});
-onBeforeUnmount(() => {
-  clearInterval(timerInterval.value);
 });
 watch(selectedSiteHash, () => loadItem());
 
@@ -629,8 +499,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
               <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200">
-                  <div class="text-2xl font-bold">{{ item.total_tracked_hours }}</div>
-                  <div class="text-xs text-slate-500">Odpracováno h</div>
+                  <div class="text-2xl font-bold font-mono tabular-nums">{{ formatSeconds(item.total_tracked_seconds) }}</div>
+                  <div class="text-xs text-slate-500">Odpracováno</div>
                 </div>
                 <div class="rounded-xl bg-emerald-50 p-4 text-center ring-1 ring-emerald-200">
                   <div class="text-2xl font-bold text-emerald-700">{{ item.total_revenue }}</div>
@@ -706,337 +576,87 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </div>
       </template>
 
-      <!-- ═══ Úkoly (Kanban) ═══ -->
+      <!-- ═══ Úkoly ═══ -->
       <template v-if="tabs.find((t) => t.current && t.link === '#ukoly')">
         <div class="space-y-6">
-          <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <LayoutContainer class="!py-4">
-              <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Boardy</span>
-              <div class="mb-3 mt-2 flex gap-2">
-                <BaseFormInput
-                  v-model="newBoard.name"
-                  label=""
-                  name="board_name"
-                  placeholder="Nový board"
-                  class="flex-1"
-                />
-                <BaseFormInput
-                  v-model="newBoard.color"
-                  label=""
-                  type="color"
-                  name="board_color"
-                  class="w-12"
-                />
-                <BaseFormCheckbox
-                  v-model="newBoard.is_completed"
-                  label="Done"
-                  name="board_done"
-                  class="!mb-0 text-xs"
-                />
-                <button
-                  type="button"
-                  class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
-                  @click="saveBoard"
-                >
-                  +
+          <!-- New task form -->
+          <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <BaseFormInput v-model="newTask.name" label="" name="new_task" placeholder="Nový úkol..." class="flex-1" />
+              <div class="flex flex-wrap gap-3">
+                <BaseFormSelect v-model="newTask.global_board_id" label="" name="nt_board" :options="boards.map((b) => ({ value: b.id, name: b.name }))" class="w-full sm:w-36" />
+                <BaseFormSelect v-model="newTask.priority" label="" name="nt_prio" :options="priorityOptions" class="w-full sm:w-28" />
+                <button type="button" class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 sm:w-auto" @click="createTask">
+                  Přidat
                 </button>
               </div>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="b in boards"
-                  :key="b.id"
-                  class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ring-1 ring-slate-200"
-                  :style="{ backgroundColor: b.color + '20', color: b.color }"
-                  >{{ b.name }} <span v-if="b.is_completed">&#10003;</span
-                  ><button
-                    type="button"
-                    class="ml-1 text-red-400 hover:text-red-600"
-                    @click="deleteBoard(b.id)"
-                  >
-                    &times;
-                  </button></span
-                >
-              </div>
-            </LayoutContainer>
-            <LayoutContainer class="!py-4">
-              <span class="text-xs font-bold uppercase tracking-widest text-slate-400"
-                >Kategorie</span
-              >
-              <div class="mb-3 mt-2 flex gap-2">
-                <BaseFormInput
-                  v-model="newCategory.name"
-                  label=""
-                  name="cat_name"
-                  placeholder="Nová kategorie"
-                  class="flex-1"
-                />
-                <BaseFormInput
-                  v-model="newCategory.color"
-                  label=""
-                  type="color"
-                  name="cat_color"
-                  class="w-12"
-                />
-                <button
-                  type="button"
-                  class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
-                  @click="saveCategory"
-                >
-                  +
-                </button>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="c in categories"
-                  :key="c.id"
-                  class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ring-1 ring-slate-200"
-                  :style="{ backgroundColor: c.color + '20', color: c.color }"
-                  >{{ c.name
-                  }}<button
-                    type="button"
-                    class="ml-1 text-red-400 hover:text-red-600"
-                    @click="deleteCategory(c.id)"
-                  >
-                    &times;
-                  </button></span
-                >
-              </div>
-            </LayoutContainer>
+            </div>
           </div>
 
-          <LayoutContainer class="!py-4">
-            <div class="flex gap-3">
-              <BaseFormInput
-                v-model="newTask.name"
-                label=""
-                name="new_task"
-                placeholder="Nový úkol..."
-                class="flex-1"
-              />
-              <BaseFormSelect
-                v-model="newTask.board_id"
-                label=""
-                name="nt_board"
-                :options="boards.map((b) => ({ value: b.id, name: b.name }))"
-                class="w-40"
-              />
-              <BaseFormSelect
-                v-model="newTask.category_id"
-                label=""
-                name="nt_cat"
-                :options="categories.map((c) => ({ value: c.id, name: c.name }))"
-                class="w-40"
-              />
-              <BaseFormSelect
-                v-model="newTask.priority"
-                label=""
-                name="nt_prio"
-                :options="priorityOptions"
-                class="w-32"
-              />
-              <button
-                type="button"
-                class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-                @click="createTask"
-              >
-                Přidat
-              </button>
-            </div>
-          </LayoutContainer>
+          <!-- Empty state -->
+          <div v-if="!boards.length && !loading" class="py-16 text-center text-sm text-slate-400">
+            Zatím žádné boardy s úkoly.
+          </div>
 
-          <div class="flex gap-4 overflow-x-auto pb-4" style="min-height: 400px">
-            <div
-              v-for="board in boards"
-              :key="board.id"
-              class="flex w-72 shrink-0 flex-col rounded-2xl bg-slate-100/80 ring-1 ring-slate-200"
-            >
+          <!-- Boards as accordion sections -->
+          <div class="space-y-4">
+            <div v-for="board in boards" :key="board.id" class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+              <!-- Board header -->
               <div
-                class="flex items-center justify-between rounded-t-2xl px-4 py-3"
-                :style="{ borderBottom: '3px solid ' + board.color }"
+                class="flex cursor-pointer items-center justify-between px-5 py-4 transition hover:bg-slate-50"
+                :style="{ borderLeft: '4px solid ' + board.color }"
+                @click="toggleBoard(board.id)"
               >
-                <span class="text-sm font-bold text-slate-900">{{ board.name }}</span>
-                <span
-                  class="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-slate-500 ring-1 ring-slate-200"
-                  >{{ board.tasks?.length || 0 }}</span
-                >
+                <div class="flex items-center gap-3">
+                  <component :is="expandedBoards[board.id] ? ChevronDownIcon : ChevronRightIcon" class="size-5 text-slate-400" />
+                  <span class="text-sm font-bold text-slate-900">{{ board.name }}</span>
+                  <span v-if="board.is_completed" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">Dokončený</span>
+                  <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">{{ board.tasks?.length || 0 }}</span>
+                </div>
               </div>
-              <div class="flex-1 space-y-2 overflow-y-auto p-3">
-                <div
-                  v-for="task in board.tasks"
-                  :key="task.id"
-                  class="cursor-pointer rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-100 transition hover:shadow-md hover:ring-indigo-200"
-                  @click="openTaskDetail(task.id)"
-                >
-                  <div class="mb-1 flex items-center justify-between">
-                    <span class="font-mono text-[10px] font-bold text-indigo-500">{{
-                      task.code
-                    }}</span>
-                    <span
-                      v-if="task.priority && task.priority !== 'normal'"
-                      class="rounded-full px-1.5 py-0.5 text-[9px] font-bold"
-                      :class="priorityColors[task.priority]"
-                      >{{ task.priority }}</span
-                    >
-                  </div>
-                  <p class="text-sm font-medium leading-snug text-slate-900">{{ task.name }}</p>
-                  <div class="mt-2 flex items-center justify-between">
-                    <div
-                      v-if="task.category"
-                      class="rounded-full px-2 py-0.5 text-[10px] font-medium"
-                      :style="{
-                        backgroundColor: task.category.color + '20',
-                        color: task.category.color,
-                      }"
-                    >
-                      {{ task.category.name }}
-                    </div>
-                    <div class="flex -space-x-1">
-                      <div
-                        v-for="a in (task.assignees || []).slice(0, 3)"
-                        :key="a.id"
-                        class="flex size-5 items-center justify-center rounded-full bg-slate-200 text-[8px] font-bold text-slate-600 ring-1 ring-white"
-                      >
-                        {{ a.name?.charAt(0) }}
+
+              <!-- Tasks -->
+              <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100">
+                <div v-if="expandedBoards[board.id]" class="divide-y divide-slate-100 border-t border-slate-100">
+                  <div
+                    v-for="task in board.tasks"
+                    :key="task.id"
+                    class="cursor-pointer px-4 py-3 transition hover:bg-slate-50/80 sm:px-5"
+                    @click="openTaskDrawer(task.id)"
+                  >
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span class="font-mono text-[10px] font-bold text-indigo-500">{{ task.code }}</span>
+                        <span class="text-sm font-medium text-slate-900">{{ task.name }}</span>
+                        <span v-if="task.priority && task.priority !== 'normal'" class="rounded-full px-1.5 py-0.5 text-[9px] font-bold" :class="priorityColors[task.priority]">{{ task.priority }}</span>
+                      </div>
+                      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <div class="flex -space-x-1">
+                          <div v-for="a in (task.assignees || []).slice(0, 3)" :key="a.id" class="flex size-6 items-center justify-center rounded-full bg-slate-200 text-[9px] font-bold text-slate-600 ring-1 ring-white">{{ a.name?.charAt(0) }}</div>
+                        </div>
+                        <span v-if="task.due_date" class="text-xs text-slate-400">{{ task.due_date }}</span>
+                        <!-- Move buttons -->
+                        <div class="hidden gap-1 sm:flex" @click.stop>
+                          <button
+                            v-for="targetBoard in boards.filter((b) => b.id !== board.id)"
+                            :key="targetBoard.id"
+                            type="button"
+                            class="rounded px-1.5 py-0.5 text-[9px] font-medium text-slate-400 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-700"
+                            @click="moveTask(task.id, targetBoard.id)"
+                          >
+                            &rarr; {{ targetBoard.name }}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="mt-2 flex gap-1">
-                    <button
-                      v-for="tb in boards.filter((b) => b.id !== board.id)"
-                      :key="tb.id"
-                      type="button"
-                      class="rounded px-1.5 py-0.5 text-[9px] font-medium text-slate-400 ring-1 ring-slate-200 hover:bg-slate-50 hover:text-slate-700"
-                      @click.stop="moveTask(task.id, tb.id)"
-                    >
-                      &rarr; {{ tb.name }}
-                    </button>
+
+                  <div v-if="!board.tasks?.length" class="px-5 py-8 text-center text-xs text-slate-400">
+                    Žádné úkoly v tomto boardu.
                   </div>
                 </div>
-                <div v-if="!board.tasks?.length" class="py-8 text-center text-xs text-slate-400">
-                  Žádné úkoly
-                </div>
-              </div>
+              </Transition>
             </div>
-            <div
-              v-if="!boards.length"
-              class="flex w-full items-center justify-center text-sm text-slate-400"
-            >
-              Vytvořte první board.
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <!-- ═══ Sledování času ═══ -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#cas')">
-        <div class="space-y-8">
-          <LayoutContainer>
-            <div class="flex items-center justify-between">
-              <div>
-                <LayoutTitle class="!mb-0">Timer</LayoutTitle>
-                <p v-if="runningEntry" class="mt-1 text-sm text-slate-500">
-                  Běží od {{ new Date(runningEntry.timer_started_at).toLocaleTimeString() }}
-                </p>
-              </div>
-              <div class="flex items-center gap-4">
-                <span
-                  class="font-mono text-3xl font-bold"
-                  :class="runningEntry ? 'text-indigo-600' : 'text-slate-300'"
-                  >{{ timerDisplay }}</span
-                >
-                <button
-                  v-if="!runningEntry"
-                  type="button"
-                  class="rounded-lg bg-green-600 px-6 py-3 text-sm font-medium text-white hover:bg-green-500"
-                  @click="startTimer()"
-                >
-                  Start
-                </button>
-                <button
-                  v-else
-                  type="button"
-                  class="rounded-lg bg-red-600 px-6 py-3 text-sm font-medium text-white hover:bg-red-500"
-                  @click="stopTimer(runningEntry.id)"
-                >
-                  Stop
-                </button>
-              </div>
-            </div>
-          </LayoutContainer>
-          <LayoutContainer>
-            <LayoutTitle>Ruční záznam</LayoutTitle>
-            <div class="flex gap-3">
-              <BaseFormInput
-                v-model="newTimeEntry.description"
-                label=""
-                name="te_desc"
-                placeholder="Popis práce"
-                class="flex-1"
-              />
-              <BaseFormInput
-                v-model="newTimeEntry.hours"
-                label=""
-                type="number"
-                name="te_hours"
-                :step="0.25"
-                class="w-24"
-              />
-              <BaseFormInput
-                v-model="newTimeEntry.date"
-                label=""
-                type="date"
-                name="te_date"
-                class="w-40"
-              />
-              <button
-                type="button"
-                class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-                @click="saveTimeEntry"
-              >
-                Přidat
-              </button>
-            </div>
-          </LayoutContainer>
-          <LayoutContainer>
-            <LayoutTitle>Záznamy</LayoutTitle>
-            <div v-if="!item.time_entries?.length" class="py-8 text-center text-sm text-slate-400">
-              Žádné záznamy.
-            </div>
-            <div v-else class="divide-y divide-slate-100">
-              <div
-                v-for="entry in item.time_entries"
-                :key="entry.id"
-                class="flex items-center justify-between py-3"
-              >
-                <div>
-                  <span class="font-medium">{{ entry.hours }}h</span>
-                  <span v-if="entry.task_code" class="ml-2 font-mono text-xs text-indigo-500">{{
-                    entry.task_code
-                  }}</span>
-                  <span class="ml-2 text-sm text-slate-500">{{ entry.description || '—' }}</span>
-                  <span class="ml-2 text-xs text-slate-400">{{ entry.date }}</span>
-                  <span
-                    v-if="entry.is_running"
-                    class="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
-                    >Běží</span
-                  >
-                </div>
-                <button
-                  type="button"
-                  class="text-red-400 hover:text-red-600"
-                  @click="deleteTimeEntry(entry.id)"
-                >
-                  <TrashIcon class="size-4" />
-                </button>
-              </div>
-            </div>
-          </LayoutContainer>
-          <div class="text-right">
-            <NuxtLink
-              to="/sledovani-casu"
-              class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-              >Globální sledování času &rarr;</NuxtLink
-            >
           </div>
         </div>
       </template>
@@ -1045,13 +665,13 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <template v-if="tabs.find((t) => t.current && t.link === '#naklady')">
         <LayoutContainer>
           <LayoutTitle>Náklady projektu</LayoutTitle>
-          <div class="mb-4 flex gap-3">
+          <div class="mb-4 flex flex-col gap-3 sm:flex-row">
             <BaseFormInput
               v-model="newCost.name"
               label=""
               name="cost_name"
               placeholder="Název"
-              class="flex-1"
+              class="w-full sm:flex-1"
             />
             <BaseFormInput
               v-model="newCost.amount"
@@ -1059,25 +679,25 @@ definePageMeta({ middleware: 'sanctum:auth' });
               type="number"
               name="cost_amount"
               :step="0.01"
-              class="w-32"
+              class="w-full sm:w-32"
             />
             <BaseFormSelect
               v-model="newCost.category"
               label=""
               name="cost_cat"
               :options="costCategoryOptions"
-              class="w-40"
+              class="w-full sm:w-40"
             />
             <BaseFormInput
               v-model="newCost.date"
               label=""
               type="date"
               name="cost_date"
-              class="w-40"
+              class="w-full sm:w-40"
             />
             <button
               type="button"
-              class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+              class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 sm:w-auto"
               @click="saveCost"
             >
               Přidat
@@ -1111,243 +731,102 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </div>
         </LayoutContainer>
       </template>
-
-      <!-- ═══ Poznámky ═══ -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#poznamky')">
-        <LayoutContainer>
-          <LayoutTitle>Poznámky</LayoutTitle>
-          <div class="mb-4 flex gap-3">
-            <BaseFormTextarea
-              v-model="newNote.content"
-              label=""
-              name="note_content"
-              placeholder="Napište poznámku..."
-              rows="2"
-              class="flex-1"
-            />
-            <button
-              type="button"
-              class="self-end rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-              @click="saveNote"
-            >
-              Přidat
-            </button>
-          </div>
-          <div v-if="!item.notes?.length" class="py-8 text-center text-sm text-slate-400">
-            Žádné poznámky.
-          </div>
-          <div v-else class="space-y-3">
-            <div
-              v-for="note in item.notes"
-              :key="note.id"
-              class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="whitespace-pre-wrap text-sm text-slate-700">{{ note.content }}</p>
-                  <p class="mt-2 text-xs text-slate-400">
-                    {{ note.user_name }} &middot;
-                    {{ note.created_at ? new Date(note.created_at).toLocaleString() : '' }}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  class="text-red-400 hover:text-red-600"
-                  @click="deleteNote(note.id)"
-                >
-                  <TrashIcon class="size-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </LayoutContainer>
-      </template>
     </Form>
 
-    <!-- ═══ Task Detail Modal ═══ -->
+    <!-- ═══ Task Drawer ═══ -->
     <Teleport to="body">
       <Transition
-        enter-active-class="transition duration-200 ease-out"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition duration-150 ease-in"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="translate-x-full"
+        enter-to-class="translate-x-0"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="translate-x-0"
+        leave-to-class="translate-x-full"
       >
-        <div
-          v-if="showTaskDetail && selectedTask"
-          class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-8"
-          @click.self="showTaskDetail = false"
-        >
-          <div class="w-full max-w-3xl rounded-2xl bg-white p-6 shadow-xl">
-            <div class="mb-4 flex items-center justify-between">
+        <div v-if="showDrawer && selectedTask" class="fixed inset-y-0 right-0 z-50 flex">
+          <!-- Backdrop -->
+          <div class="fixed inset-0 bg-black/30" @click="showDrawer = false"></div>
+
+          <!-- Drawer panel -->
+          <div class="relative ml-auto flex h-full w-full flex-col bg-white shadow-2xl" style="max-width: 700px;">
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
               <div>
-                <span class="font-mono text-sm font-bold text-indigo-500">{{
-                  selectedTask.code
-                }}</span>
+                <span class="font-mono text-xs font-bold text-indigo-500">{{ selectedTask.code }}</span>
                 <h2 class="text-lg font-bold text-slate-900">{{ selectedTask.name }}</h2>
               </div>
-              <button
-                type="button"
-                class="rounded-lg p-2 text-slate-400 hover:bg-slate-100"
-                @click="showTaskDetail = false"
-              >
+              <button type="button" class="rounded-lg p-2 text-slate-400 hover:bg-slate-100" @click="showDrawer = false">
                 <XMarkIcon class="size-5" />
               </button>
             </div>
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div class="space-y-4 lg:col-span-2">
-                <BaseFormInput v-model="selectedTask.name" label="Název" name="task_name" />
-                <BaseFormTextarea
-                  v-model="selectedTask.description"
-                  label="Popis"
-                  name="task_desc"
-                  rows="4"
-                />
-                <div class="border-t border-slate-100 pt-4">
-                  <h3 class="mb-3 text-sm font-bold text-slate-700">
-                    Komentáře ({{ selectedTask.comments?.length || 0 }})
-                  </h3>
-                  <div class="mb-4 flex gap-2">
-                    <BaseFormInput
-                      v-model="newComment"
-                      label=""
-                      name="comment"
-                      placeholder="Komentář..."
-                      class="flex-1"
-                    />
-                    <button
-                      type="button"
-                      class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
-                      @click="addComment"
-                    >
-                      Odeslat
-                    </button>
-                  </div>
-                  <div class="max-h-60 space-y-3 overflow-y-auto">
-                    <div
-                      v-for="c in selectedTask.comments"
-                      :key="c.id"
-                      class="rounded-lg bg-slate-50 p-3"
-                    >
-                      <div class="flex items-start justify-between">
-                        <p class="text-sm text-slate-700">{{ c.content }}</p>
-                        <button
-                          type="button"
-                          class="text-red-300 hover:text-red-500"
-                          @click="deleteComment(c.id)"
-                        >
-                          <TrashIcon class="size-3" />
-                        </button>
-                      </div>
-                      <p class="mt-1 text-[10px] text-slate-400">
-                        {{ c.user_name }} &middot;
-                        {{ c.created_at ? new Date(c.created_at).toLocaleString() : '' }}
-                      </p>
-                    </div>
-                  </div>
+
+            <!-- Content (scrollable) -->
+            <div class="flex-1 space-y-5 overflow-y-auto px-6 py-5">
+              <BaseFormInput v-model="selectedTask.name" label="Název" name="task_name" />
+              <BaseFormTextarea v-model="selectedTask.description" label="Popis" name="task_desc" rows="4" />
+
+              <div class="grid grid-cols-2 gap-4">
+                <BaseFormSelect v-model="selectedTask.global_board_id" label="Board" name="task_board" :options="boards.map((b) => ({ value: b.id, name: b.name }))" />
+                <BaseFormSelect v-model="selectedTask.priority" label="Priorita" name="task_prio" :options="priorityOptions" />
+                <BaseFormInput v-model="selectedTask.estimated_hours" label="Odhad hodin" type="number" name="task_est" :step="0.5" />
+                <BaseFormInput v-model="selectedTask.due_date" label="Termín" type="date" name="task_due" />
+              </div>
+
+              <!-- Assignees -->
+              <div>
+                <label class="mb-1 block text-xs font-medium text-slate-700">Přiřazení</label>
+                <div class="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-2">
+                  <label v-for="user in users" :key="user.value" class="flex items-center gap-2 rounded p-1 text-xs hover:bg-slate-50">
+                    <input type="checkbox" :checked="selectedTask.assignees?.some((a) => (a.id || a) === user.value)" class="rounded text-indigo-600" @change="selectedTask.assignees?.some((a) => (a.id || a) === user.value) ? (selectedTask.assignees = selectedTask.assignees.filter((a) => (a.id || a) !== user.value)) : selectedTask.assignees.push({ id: user.value, name: user.name })" />
+                    {{ user.name }}
+                  </label>
                 </div>
-                <div
-                  v-if="selectedTask.time_entries?.length"
-                  class="border-t border-slate-100 pt-4"
-                >
-                  <h3 class="mb-2 text-sm font-bold text-slate-700">
-                    Čas ({{ selectedTask.total_tracked_hours }}h)
-                  </h3>
-                  <div class="space-y-1">
-                    <div
-                      v-for="te in selectedTask.time_entries"
-                      :key="te.id"
-                      class="flex items-center justify-between text-xs text-slate-600"
-                    >
-                      <span>{{ te.hours }}h — {{ te.description || '—' }} ({{ te.date }})</span
-                      ><span>{{ te.user_name }}</span>
-                    </div>
+              </div>
+
+              <!-- Time entries -->
+              <div v-if="selectedTask.time_entries?.length" class="border-t border-slate-100 pt-4">
+                <h3 class="mb-2 flex items-center gap-2 text-xs font-bold text-slate-700">
+                  <ClockIcon class="size-4" /> Čas ({{ formatSeconds(selectedTask.total_tracked_seconds) }})
+                </h3>
+                <div class="space-y-1">
+                  <div v-for="te in selectedTask.time_entries" :key="te.id" class="flex items-center justify-between text-xs text-slate-600">
+                    <span>{{ te.hours }}h — {{ te.description || '—' }} ({{ te.date }})</span>
+                    <span>{{ te.user_name }}</span>
                   </div>
                 </div>
               </div>
-              <div class="space-y-4">
-                <BaseFormSelect
-                  v-model="selectedTask.board_id"
-                  label="Board"
-                  name="task_board"
-                  :options="boards.map((b) => ({ value: b.id, name: b.name }))"
-                />
-                <BaseFormSelect
-                  v-model="selectedTask.category_id"
-                  label="Kategorie"
-                  name="task_cat"
-                  :options="categories.map((c) => ({ value: c.id, name: c.name }))"
-                />
-                <BaseFormSelect
-                  v-model="selectedTask.priority"
-                  label="Priorita"
-                  name="task_prio"
-                  :options="priorityOptions"
-                />
-                <BaseFormInput
-                  v-model="selectedTask.estimated_hours"
-                  label="Odhad hodin"
-                  type="number"
-                  name="task_est"
-                  :step="0.5"
-                />
-                <BaseFormInput
-                  v-model="selectedTask.due_date"
-                  label="Termín"
-                  type="date"
-                  name="task_due"
-                />
-                <div>
-                  <label class="mb-1 block text-xs font-medium text-slate-700">Přiřazení</label>
-                  <div class="max-h-40 space-y-1 overflow-y-auto">
-                    <label
-                      v-for="user in users"
-                      :key="user.value"
-                      class="flex items-center gap-2 rounded-lg p-1 text-xs hover:bg-slate-50"
-                    >
-                      <input
-                        type="checkbox"
-                        :checked="selectedTask.assignees?.some((a) => (a.id || a) === user.value)"
-                        class="rounded text-indigo-600"
-                        @change="
-                          selectedTask.assignees?.some((a) => (a.id || a) === user.value)
-                            ? (selectedTask.assignees = selectedTask.assignees.filter(
-                                (a) => (a.id || a) !== user.value,
-                              ))
-                            : selectedTask.assignees.push({ id: user.value, name: user.name })
-                        "
-                      />{{ user.name }}
-                    </label>
+
+              <!-- Comments -->
+              <div class="border-t border-slate-100 pt-4">
+                <h3 class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-700">
+                  <ChatBubbleLeftIcon class="size-4" /> Komentáře ({{ selectedTask.comments?.length || 0 }})
+                </h3>
+                <div class="mb-3 flex gap-2">
+                  <BaseFormInput v-model="newComment" label="" name="comment" placeholder="Napište komentář..." class="flex-1" />
+                  <button type="button" class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500" @click="addComment">Odeslat</button>
+                </div>
+                <div class="max-h-40 space-y-2 overflow-y-auto">
+                  <div v-for="c in selectedTask.comments" :key="c.id" class="rounded-lg bg-slate-50 p-3">
+                    <div class="flex items-start justify-between">
+                      <p class="text-sm text-slate-700">{{ c.content }}</p>
+                      <button type="button" class="text-red-300 hover:text-red-500" @click="deleteComment(c.id)">
+                        <TrashIcon class="size-3" />
+                      </button>
+                    </div>
+                    <p class="mt-1 text-[10px] text-slate-400">{{ c.user_name }} &middot; {{ c.created_at ? new Date(c.created_at).toLocaleString('cs-CZ') : '' }}</p>
                   </div>
                 </div>
-                <div class="flex gap-2 border-t border-slate-100 pt-4">
-                  <button
-                    type="button"
-                    class="flex-1 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-                    @click="saveTaskDetail"
-                  >
-                    Uložit
-                  </button>
-                  <button
-                    type="button"
-                    class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-200"
-                    @click="deleteTask(selectedTask.id)"
-                  >
-                    Smazat
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  class="w-full rounded-lg bg-green-50 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-100"
-                  @click="
-                    startTimer(selectedTask.id);
-                    showTaskDetail = false;
-                  "
-                >
-                  Spustit timer
-                </button>
               </div>
+            </div>
+
+            <!-- Footer actions -->
+            <div class="flex items-center justify-between border-t border-slate-200 px-6 py-4">
+              <button type="button" class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-200" @click="deleteTask(selectedTask.id)">
+                <TrashIcon class="mr-1 inline size-4" /> Smazat
+              </button>
+              <button type="button" class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-indigo-500" @click="saveTask">
+                <CheckCircleIcon class="mr-1 inline size-4" /> Uložit
+              </button>
             </div>
           </div>
         </div>

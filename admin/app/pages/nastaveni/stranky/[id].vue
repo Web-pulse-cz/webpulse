@@ -71,7 +71,8 @@ const settings = {
     'employees',
     'employee_contracts',
     'shifts',
-    'tasks',
+    'project_tasks',
+    'task_boards',
     'users',
     'settings',
     'activities',
@@ -277,8 +278,10 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Faktury';
     case 'employees':
       return 'Zaměstnanci';
-    case 'tasks':
+    case 'project_tasks':
       return 'Úkoly';
+    case 'task_boards':
+      return 'Boardy úkolů';
     case 'employee_contracts':
       return 'Smlouvy';
     case 'shifts':
