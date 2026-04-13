@@ -3,10 +3,13 @@
 namespace App\Models\Shift;
 
 use App\Models\Employee\Employee;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Shift extends Model
 {
+	use Siteable;
+
 	protected $table = 'shifts';
 
 	protected $fillable = [
@@ -35,5 +38,10 @@ class Shift extends Model
 		$end = \Carbon\Carbon::parse($this->end_time);
 		$totalMinutes = $start->diffInMinutes($end) - ($this->break_minutes ?? 0);
 		return round($totalMinutes / 60, 2);
+	}
+
+	public function sites()
+	{
+		return $this->morphToMany('App\Models\Site\Site', 'siteable');
 	}
 }

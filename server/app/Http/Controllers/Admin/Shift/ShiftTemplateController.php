@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Shift;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Shift\ShiftTemplateResource;
 use App\Models\Shift\ShiftTemplate;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,9 +15,18 @@ use Illuminate\Support\Facades\Validator;
 
 class ShiftTemplateController extends Controller
 {
-	public function index(): JsonResponse
+	use Siteable;
+
+	public function index(Request $request): JsonResponse
 	{
-		return Response::json(ShiftTemplateResource::collection(ShiftTemplate::orderBy('name')->get()));
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		return Response::json(ShiftTemplateResource::collection(
+			ShiftTemplate::query()
+				->whereRelation('sites', 'site_id', $siteId)
+				->orderBy('name')
+				->get()
+		));
 	}
 
 	public function store(Request $request, int $id = null): JsonResponse
@@ -44,6 +54,11 @@ class ShiftTemplateController extends Controller
 			DB::beginTransaction();
 			$template->fill($request->all());
 			$template->save();
+
+			if ($request->has('sites')) {
+				$this->saveSites($template, $request->get('sites', []));
+			}
+
 			DB::commit();
 		} catch (\Throwable $e) {
 			DB::rollBack();

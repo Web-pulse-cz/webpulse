@@ -10,6 +10,7 @@ class ProjectTimeEntry extends Model
 	protected $table = 'project_time_entries';
 
 	protected $fillable = [
+		'site_id',
 		'project_id',
 		'task_id',
 		'user_id',
@@ -42,5 +43,10 @@ class ProjectTimeEntry extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'user_id', 'id');
+	}
+
+	public function site()
+	{
+		return $this->belongsTo(\App\Models\Site\Site::class, 'site_id', 'id');
 	}
 }

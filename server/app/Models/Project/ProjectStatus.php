@@ -2,10 +2,13 @@
 
 namespace App\Models\Project;
 
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectStatus extends Model
 {
+	use Siteable;
+
 	protected $table = 'project_statuses';
 
 	protected $fillable = [
@@ -22,5 +25,10 @@ class ProjectStatus extends Model
 	public function projects()
 	{
 		return $this->hasMany(Project::class, 'status_id', 'id');
+	}
+
+	public function sites()
+	{
+		return $this->morphToMany('App\Models\Site\Site', 'siteable');
 	}
 }

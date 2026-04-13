@@ -3,6 +3,7 @@
 namespace App\Jobs\Fakturoid;
 
 use App\Models\Invoice\Invoice;
+use App\Models\Site\Site;
 use App\Services\FakturoidService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,22 +20,25 @@ class SyncInvoiceToFakturoidJob implements ShouldQueue
 	public int $backoff = 30;
 
 	public function __construct(
-		protected int $invoiceId
+		protected int $invoiceId,
+		protected int $siteId
 	) {}
 
 	public function handle(): void
 	{
 		$invoice = Invoice::find($this->invoiceId);
-		if (!$invoice) {
+		$site = Site::find($this->siteId);
+		if (!$invoice || !$site || !$site->hasFakturoid()) {
 			return;
 		}
 
 		try {
-			$service = new FakturoidService();
+			$service = new FakturoidService($site);
 			$service->pushInvoiceToFakturoid($invoice);
 		} catch (\Throwable $e) {
 			Log::error('SyncInvoiceToFakturoidJob failed: ' . $e->getMessage(), [
 				'invoice_id' => $this->invoiceId,
+				'site_id' => $this->siteId,
 			]);
 			throw $e;
 		}

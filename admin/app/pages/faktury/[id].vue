@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
 import { DocumentIcon, ChatBubbleLeftIcon, ListBulletIcon, CreditCardIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
@@ -13,6 +13,7 @@ const router = useRouter();
 
 const error = ref(false);
 const loading = ref(false);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const tabs = ref([
   { name: 'Základní údaje', link: '#info', current: false },
@@ -62,6 +63,7 @@ const item = ref({
   due_on: '',
   paid_on: '',
   items: [] as any[],
+  sites: [] as number[],
 });
 
 async function loadItem() {
@@ -73,10 +75,12 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites?.map?.((s: any) => s.id) || response.sites || [];
       pageTitle.value = item.value.number || 'Faktura #' + item.value.id;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -101,7 +105,7 @@ async function loadClients() {
   const client = useSanctumClient();
   await client('/api/admin/client', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((response) => {
       const data = response?.data || response;
@@ -114,7 +118,7 @@ async function loadProjects() {
   const client = useSanctumClient();
   await client('/api/admin/project', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((response) => {
       const data = response?.data || response;
@@ -215,6 +219,8 @@ watchEffect(() => {
     router.push(route.path + '#info');
   }
 });
+
+watch(selectedSiteHash, () => loadItem());
 
 useHead({
   title: pageTitle.value,
@@ -351,6 +357,12 @@ definePageMeta({
                 />
               </div>
             </LayoutContainer>
+            <LayoutActionsDetailBlock
+              v-model:sites="item.sites"
+              :allow-image="false"
+              :allow-is-active="false"
+              :allow-translations="false"
+            />
           </div>
         </div>
       </template>

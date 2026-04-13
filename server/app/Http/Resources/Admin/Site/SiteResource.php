@@ -22,6 +22,9 @@ class SiteResource extends JsonResource
             'is_secure' => $this->is_secure,
             'is_active' => $this->is_active,
             'settings' => $this->settings,
+            'fakturoid_client_id' => $this->fakturoid_client_id,
+            'fakturoid_client_secret' => $this->fakturoid_client_secret ? '••••••••' : null,
+            'fakturoid_slug' => $this->fakturoid_slug,
             'users' => $this->users,
         ];
     }

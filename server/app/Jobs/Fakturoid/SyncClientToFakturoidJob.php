@@ -3,6 +3,7 @@
 namespace App\Jobs\Fakturoid;
 
 use App\Models\Client\Client;
+use App\Models\Site\Site;
 use App\Services\FakturoidService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,22 +20,25 @@ class SyncClientToFakturoidJob implements ShouldQueue
 	public int $backoff = 30;
 
 	public function __construct(
-		protected int $clientId
+		protected int $clientId,
+		protected int $siteId
 	) {}
 
 	public function handle(): void
 	{
 		$client = Client::find($this->clientId);
-		if (!$client) {
+		$site = Site::find($this->siteId);
+		if (!$client || !$site || !$site->hasFakturoid()) {
 			return;
 		}
 
 		try {
-			$service = new FakturoidService();
+			$service = new FakturoidService($site);
 			$service->pushClientToFakturoid($client);
 		} catch (\Throwable $e) {
 			Log::error('SyncClientToFakturoidJob failed: ' . $e->getMessage(), [
 				'client_id' => $this->clientId,
+				'site_id' => $this->siteId,
 			]);
 			throw $e;
 		}

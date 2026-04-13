@@ -7,6 +7,7 @@ use App\Http\Resources\Admin\Client\ClientResource;
 use App\Http\Resources\Admin\Client\ClientSimpleResource;
 use App\Jobs\Fakturoid\SyncClientToFakturoidJob;
 use App\Models\Client\Client;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -16,9 +17,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
+	use Siteable;
+
 	public function index(Request $request): JsonResponse
 	{
-		$query = Client::query();
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$query = Client::query()
+			->whereRelation('sites', 'site_id', $siteId);
 
 		if ($request->filled('search')) {
 			$search = $request->get('search');
@@ -84,6 +90,10 @@ class ClientController extends Controller
 			$client->local_updated_at = now();
 			$client->save();
 
+			if ($request->has('sites')) {
+				$this->saveSites($client, $request->get('sites', []));
+			}
+
 			DB::commit();
 		} catch (\Throwable $e) {
 			DB::rollBack();
@@ -91,14 +101,19 @@ class ClientController extends Controller
 		}
 
 		// Push to Fakturoid
-		SyncClientToFakturoidJob::dispatch($client->id);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+		SyncClientToFakturoidJob::dispatch($client->id, $siteId);
 
 		return Response::json(ClientResource::make($client));
 	}
 
-	public function show(int $id): JsonResponse
+	public function show(Request $request, int $id): JsonResponse
 	{
-		$client = Client::find($id);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$client = Client::query()
+			->whereRelation('sites', 'site_id', $siteId)
+			->find($id);
 		if (!$client) {
 			App::abort(404);
 		}

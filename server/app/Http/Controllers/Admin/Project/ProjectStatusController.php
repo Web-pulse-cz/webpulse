@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Project;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Project\ProjectStatusResource;
 use App\Models\Project\ProjectStatus;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,9 +15,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectStatusController extends Controller
 {
+	use Siteable;
+
 	public function index(Request $request): JsonResponse
 	{
-		$statuses = ProjectStatus::orderBy('position')->get();
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$statuses = ProjectStatus::query()
+			->whereRelation('sites', 'site_id', $siteId)
+			->orderBy('position')
+			->get();
 		return Response::json(ProjectStatusResource::collection($statuses));
 	}
 
@@ -44,6 +52,11 @@ class ProjectStatusController extends Controller
 			DB::beginTransaction();
 			$status->fill($request->all());
 			$status->save();
+
+			if ($request->has('sites')) {
+				$this->saveSites($status, $request->get('sites', []));
+			}
+
 			DB::commit();
 		} catch (\Throwable $e) {
 			DB::rollBack();
@@ -53,9 +66,13 @@ class ProjectStatusController extends Controller
 		return Response::json(ProjectStatusResource::make($status));
 	}
 
-	public function show(int $id): JsonResponse
+	public function show(Request $request, int $id): JsonResponse
 	{
-		$status = ProjectStatus::find($id);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$status = ProjectStatus::query()
+			->whereRelation('sites', 'site_id', $siteId)
+			->find($id);
 		if (!$status) {
 			App::abort(404);
 		}

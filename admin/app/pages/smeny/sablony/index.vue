@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Šablony směn');
 const loading = ref(false);
 const items = ref([]);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const breadcrumbs = ref([
   { name: 'Směny', link: '/smeny', current: false },
@@ -17,7 +18,7 @@ async function loadItems() {
   const client = useSanctumClient();
   await client('/api/admin/shift/template', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       items.value = { data: r };
@@ -36,6 +37,8 @@ async function deleteItem(id: number) {
     loadItems();
   });
 }
+
+watch(selectedSiteHash, () => loadItems());
 
 useHead({ title: pageTitle.value });
 onMounted(() => {

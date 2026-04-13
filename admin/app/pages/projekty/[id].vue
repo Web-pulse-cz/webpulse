@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
 import { DocumentIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon } from '@heroicons/vue/24/outline';
 
@@ -15,6 +15,7 @@ const router = useRouter();
 
 const error = ref(false);
 const loading = ref(false);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const tabs = ref([
   { name: 'Přehled', link: '#prehled', current: false },
@@ -65,6 +66,7 @@ const item = ref({
   time_entries: [],
   costs: [],
   notes: [],
+  sites: [] as number[],
 });
 
 const boards = ref([]);
@@ -82,10 +84,11 @@ async function loadItem() {
   loading.value = true;
   await client('/api/admin/project/' + route.params.id, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       item.value = r;
+      item.value.sites = r.sites?.map?.((s: any) => s.id) || r.sites || [];
       categories.value = r.task_categories || [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
@@ -120,7 +123,7 @@ async function loadStatuses() {
   const client = useSanctumClient();
   await client('/api/admin/project/status', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       statuses.value = r.map((s: any) => ({ value: s.id, name: s.name }));
@@ -131,7 +134,7 @@ async function loadTags() {
   const client = useSanctumClient();
   await client('/api/admin/project/tag', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       tags.value = r;
@@ -142,7 +145,7 @@ async function loadClients() {
   const client = useSanctumClient();
   await client('/api/admin/client', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       const d = r?.data || r;
@@ -154,7 +157,7 @@ async function loadUsers() {
   const client = useSanctumClient();
   await client('/api/admin/user', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       const d = r?.data || r;
@@ -497,6 +500,8 @@ watchEffect(() => {
 onBeforeUnmount(() => {
   clearInterval(timerInterval.value);
 });
+watch(selectedSiteHash, () => loadItem());
+
 useHead({ title: pageTitle.value });
 onMounted(() => {
   loadStatuses();
@@ -691,6 +696,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 </label>
               </div>
             </LayoutContainer>
+            <LayoutActionsDetailBlock
+              v-model:sites="item.sites"
+              :allow-image="false"
+              :allow-is-active="false"
+              :allow-translations="false"
+            />
           </div>
         </div>
       </template>

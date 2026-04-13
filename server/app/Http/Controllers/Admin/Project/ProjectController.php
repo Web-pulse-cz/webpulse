@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Project\ProjectResource;
 use App\Http\Resources\Admin\Project\ProjectSimpleResource;
 use App\Models\Project\Project;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -15,9 +16,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
+	use Siteable;
+
 	public function index(Request $request): JsonResponse
 	{
-		$query = Project::with(['client', 'status', 'tags']);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$query = Project::with(['client', 'status', 'tags'])
+			->whereRelation('sites', 'site_id', $siteId);
 
 		if ($request->filled('search')) {
 			$search = $request->get('search');
@@ -94,6 +100,10 @@ class ProjectController extends Controller
 				$project->tags()->sync($request->get('tags', []));
 			}
 
+			if ($request->has('sites')) {
+				$this->saveSites($project, $request->get('sites', []));
+			}
+
 			DB::commit();
 		} catch (\Throwable $e) {
 			DB::rollBack();
@@ -106,9 +116,13 @@ class ProjectController extends Controller
 		])));
 	}
 
-	public function show(int $id): JsonResponse
+	public function show(Request $request, int $id): JsonResponse
 	{
-		$project = Project::with([
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$project = Project::query()
+			->whereRelation('sites', 'site_id', $siteId)
+			->with([
 			'client', 'status', 'currency', 'taxRate', 'tags',
 			'taskCategories', 'taskBoards',
 			'milestones', 'tasks.user', 'tasks.category', 'tasks.board', 'tasks.assignees',

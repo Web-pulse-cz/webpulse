@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Směny');
 const loading = ref(false);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const breadcrumbs = ref([{ name: pageTitle.value, link: '/smeny', current: true }]);
 
@@ -124,7 +125,7 @@ async function loadShifts() {
   await client('/api/admin/shift', {
     method: 'GET',
     query: { date_from: formatDate(firstDay), date_to: formatDate(lastDay) },
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       shifts.value = r;
@@ -138,7 +139,7 @@ async function loadEmployees() {
   const client = useSanctumClient();
   await client('/api/admin/employee', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       const d = r?.data || r;
@@ -154,7 +155,7 @@ async function loadTemplates() {
   const client = useSanctumClient();
   await client('/api/admin/shift/template', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       templates.value = r;
@@ -191,6 +192,8 @@ async function deleteShift(id: number) {
     loadShifts();
   });
 }
+
+watch(selectedSiteHash, () => loadShifts());
 
 useHead({ title: pageTitle.value });
 onMounted(() => {

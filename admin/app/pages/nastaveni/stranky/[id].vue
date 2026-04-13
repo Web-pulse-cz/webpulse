@@ -104,6 +104,9 @@ const item = ref({
     default_currency: null,
     default_locale: '',
   } as Record<string, unknown>,
+  fakturoid_client_id: '' as string,
+  fakturoid_client_secret: '' as string,
+  fakturoid_slug: '' as string,
   users: [] as Array<number>,
 });
 
@@ -429,6 +432,43 @@ definePageMeta({
                   />
                 </div>
               </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+              >
+                <CurrencyEuroIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Fakturoid API</LayoutTitle>
+            </div>
+
+            <p class="mb-4 text-xs text-slate-500">Přístupové údaje pro synchronizaci klientů a faktur s Fakturoidem. Ponechte prázdné pokud tato stránka Fakturoid nepoužívá.</p>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              <BaseFormInput
+                v-model="item.fakturoid_client_id"
+                label="Client ID"
+                type="text"
+                name="fakturoid_client_id"
+                placeholder="Vaše Fakturoid Client ID"
+              />
+              <BaseFormInput
+                v-model="item.fakturoid_client_secret"
+                label="Client Secret"
+                type="password"
+                name="fakturoid_client_secret"
+                placeholder="Vaše Fakturoid Client Secret"
+              />
+              <BaseFormInput
+                v-model="item.fakturoid_slug"
+                label="Slug účtu"
+                type="text"
+                name="fakturoid_slug"
+                placeholder="Např. moje-firma"
+              />
             </div>
           </LayoutContainer>
 

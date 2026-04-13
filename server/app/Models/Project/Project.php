@@ -7,10 +7,13 @@ use App\Models\Currency\Currency;
 use App\Models\Invoice\Invoice;
 use App\Models\TaxRate\TaxRate;
 use App\Models\User\User;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+	use Siteable;
+
 	protected $table = 'projects';
 
 	protected $fillable = [
@@ -113,5 +116,10 @@ class Project extends Model
 	public function taskBoards()
 	{
 		return $this->hasMany(ProjectTaskBoard::class, 'project_id', 'id')->orderBy('position');
+	}
+
+	public function sites()
+	{
+		return $this->morphToMany('App\Models\Site\Site', 'siteable');
 	}
 }

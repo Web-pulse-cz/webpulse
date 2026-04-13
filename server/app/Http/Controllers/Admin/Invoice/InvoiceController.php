@@ -8,6 +8,7 @@ use App\Http\Resources\Admin\Invoice\InvoiceSimpleResource;
 use App\Jobs\Fakturoid\SyncInvoiceToFakturoidJob;
 use App\Models\Invoice\Invoice;
 use App\Models\Invoice\InvoiceItem;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -17,9 +18,14 @@ use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
+	use Siteable;
+
 	public function index(Request $request): JsonResponse
 	{
-		$query = Invoice::with('client');
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$query = Invoice::with('client')
+			->whereRelation('sites', 'site_id', $siteId);
 
 		if ($request->filled('search')) {
 			$search = $request->get('search');
@@ -140,6 +146,10 @@ class InvoiceController extends Controller
 				]);
 			}
 
+			if ($request->has('sites')) {
+				$this->saveSites($invoice, $request->get('sites', []));
+			}
+
 			DB::commit();
 		} catch (\Throwable $e) {
 			DB::rollBack();
@@ -147,14 +157,19 @@ class InvoiceController extends Controller
 		}
 
 		// Push to Fakturoid
-		SyncInvoiceToFakturoidJob::dispatch($invoice->id);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+		SyncInvoiceToFakturoidJob::dispatch($invoice->id, $siteId);
 
 		return Response::json(InvoiceResource::make($invoice->fresh(['items', 'client'])));
 	}
 
-	public function show(int $id): JsonResponse
+	public function show(Request $request, int $id): JsonResponse
 	{
-		$invoice = Invoice::with(['items', 'client'])->find($id);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$invoice = Invoice::with(['items', 'client'])
+			->whereRelation('sites', 'site_id', $siteId)
+			->find($id);
 		if (!$invoice) {
 			App::abort(404);
 		}

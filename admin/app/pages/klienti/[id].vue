@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
 import { UserIcon, MapPinIcon, TruckIcon, BanknotesIcon, ChatBubbleLeftIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
 
@@ -13,6 +13,7 @@ const router = useRouter();
 
 const error = ref(false);
 const loading = ref(false);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const tabs = ref([
   { name: 'Základní údaje', link: '#info', current: false },
@@ -63,6 +64,7 @@ const item = ref({
   bank_account_swift: '',
   variable_symbol: '',
   note: '',
+  sites: [] as number[],
 });
 
 const clientInvoices = ref([]);
@@ -76,10 +78,12 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites?.map?.((s: any) => s.id) || response.sites || [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -109,6 +113,7 @@ async function loadClientInvoices() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -179,6 +184,8 @@ watchEffect(() => {
     router.push(route.path + '#info');
   }
 });
+
+watch(selectedSiteHash, () => loadItem());
 
 useHead({
   title: pageTitle.value,
@@ -297,6 +304,12 @@ definePageMeta({
                 </p>
               </div>
             </LayoutContainer>
+            <LayoutActionsDetailBlock
+              v-model:sites="item.sites"
+              :allow-image="false"
+              :allow-is-active="false"
+              :allow-translations="false"
+            />
           </div>
         </div>
       </template>

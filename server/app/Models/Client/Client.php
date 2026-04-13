@@ -7,10 +7,13 @@ use App\Models\Currency\Currency;
 use App\Models\Invoice\Invoice;
 use App\Models\Project\Project;
 use App\Models\PriceOffer\PriceOffer;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+	use Siteable;
+
 	protected $table = 'clients';
 
 	protected $fillable = [
@@ -75,5 +78,10 @@ class Client extends Model
 	public function priceOffers()
 	{
 		return $this->hasMany(PriceOffer::class, 'client_id', 'id');
+	}
+
+	public function sites()
+	{
+		return $this->morphToMany('App\Models\Site\Site', 'siteable');
 	}
 }

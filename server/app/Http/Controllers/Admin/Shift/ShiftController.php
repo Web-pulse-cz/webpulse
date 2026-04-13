@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Shift;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Shift\ShiftResource;
 use App\Models\Shift\Shift;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,9 +15,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ShiftController extends Controller
 {
+	use Siteable;
+
 	public function index(Request $request): JsonResponse
 	{
-		$query = Shift::with(['template', 'employees']);
+		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+		$query = Shift::with(['template', 'employees'])
+			->whereRelation('sites', 'site_id', $siteId);
 
 		if ($request->filled('date_from')) {
 			$query->where('date', '>=', $request->get('date_from'));
@@ -77,6 +83,10 @@ class ShiftController extends Controller
 					}
 				}
 				$shift->employees()->sync($employeeSync);
+			}
+
+			if ($request->has('sites')) {
+				$this->saveSites($shift, $request->get('sites', []));
 			}
 
 			DB::commit();

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Client\Client;
 use App\Models\Invoice\Invoice;
 use App\Models\Invoice\InvoiceItem;
+use App\Models\Site\Site;
 use Fakturoid\FakturoidManager;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Carbon;
@@ -14,19 +15,29 @@ use Illuminate\Support\Facades\Log;
 class FakturoidService
 {
 	protected FakturoidManager $client;
+	protected Site $site;
 
-	public function __construct()
+	public function __construct(Site $site)
 	{
+		if (!$site->hasFakturoid()) {
+			throw new \RuntimeException('Site "' . $site->name . '" nemá nakonfigurované Fakturoid přístupové údaje.');
+		}
+
+		$this->site = $site;
 		$this->client = new FakturoidManager(
 			new HttpClient(),
-			env('FAKTUROID_API_KEY', ''),
-			env('FAKTUROID_API_SECRET', ''),
-			'Webpulse <martas.hanzl@email.cz>'
+			$site->fakturoid_client_id,
+			$site->fakturoid_client_secret,
+			'Webpulse <' . ($site->url ?? 'app') . '>'
 		);
 		$this->client->authClientCredentials();
 
-		$user = $this->client->getUsersProvider()->getCurrentUser();
-		$this->client->setAccountSlug($user->getBody()->accounts[0]->slug);
+		if ($site->fakturoid_slug) {
+			$this->client->setAccountSlug($site->fakturoid_slug);
+		} else {
+			$user = $this->client->getUsersProvider()->getCurrentUser();
+			$this->client->setAccountSlug($user->getBody()->accounts[0]->slug);
+		}
 	}
 
 	// ─── Subjects (Clients) ────────────────────────────────────────

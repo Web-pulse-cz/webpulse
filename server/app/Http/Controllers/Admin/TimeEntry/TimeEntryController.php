@@ -42,6 +42,10 @@ class TimeEntryController extends Controller
 			$query->where('user_id', $request->get('user_id'));
 		}
 
+		if ($request->filled('site_id')) {
+			$query->where('site_id', $request->get('site_id'));
+		}
+
 		if ($request->filled('search')) {
 			$search = $request->get('search');
 			$query->where('description', 'like', '%' . $search . '%');
@@ -106,6 +110,7 @@ class TimeEntryController extends Controller
 			if (!$entry->date) {
 				$entry->date = now()->toDateString();
 			}
+			$entry->site_id = $this->handleSite($request->header('X-Site-Hash'));
 			$entry->save();
 
 			$this->recalculateProjectHours($entry->project_id);
@@ -164,6 +169,7 @@ class TimeEntryController extends Controller
 		$entry->hours = 0;
 		$entry->timer_started_at = now();
 		$entry->is_running = true;
+		$entry->site_id = $this->handleSite($request->header('X-Site-Hash'));
 
 		if ($entry->project_id) {
 			$project = Project::find($entry->project_id);

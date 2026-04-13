@@ -7,10 +7,13 @@ use App\Models\Currency\Currency;
 use App\Models\Language\Language;
 use App\Models\PriceOffer\PriceOffer;
 use App\Models\Project\Project;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+	use Siteable;
+
 	protected $table = 'invoices';
 
 	protected $fillable = [
@@ -87,5 +90,10 @@ class Invoice extends Model
 	public function items()
 	{
 		return $this->hasMany(InvoiceItem::class, 'invoice_id', 'id')->orderBy('position');
+	}
+
+	public function sites()
+	{
+		return $this->morphToMany('App\Models\Site\Site', 'siteable');
 	}
 }

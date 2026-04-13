@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
 
 const { $toast } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 const loading = ref(false);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nová šablona směny' : 'Detail šablony');
 const breadcrumbs = ref([
@@ -29,7 +30,7 @@ async function loadItem() {
   loading.value = true;
   await client('/api/admin/shift/template/' + route.params.id, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       item.value = r;
@@ -67,6 +68,8 @@ async function saveItem(redirect = true) {
       loading.value = false;
     });
 }
+
+watch(selectedSiteHash, () => loadItem());
 
 useHead({ title: pageTitle.value });
 onMounted(() => {
