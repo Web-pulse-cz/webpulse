@@ -259,14 +259,14 @@ async function uploadFromRemoteUrl() {
     <div
       :class="[
         multiple ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4' : 'grid-cols-1',
-        'mt-4 grid w-full gap-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 transition-colors hover:bg-slate-100/50',
+        'grid w-full gap-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 transition-colors hover:bg-slate-100/50',
       ]"
     >
       <div
         v-if="files.length === 0"
         :class="[
           !multiple ? 'col-span-full py-12' : 'col-span-1 aspect-square',
-          'flex cursor-pointer flex-col items-center justify-center gap-y-3 rounded-xl border border-dashed border-slate-300 bg-white shadow-sm transition-all hover:border-indigo-400 hover:bg-indigo-50',
+          'flex cursor-pointer flex-col items-center justify-center gap-y-3 rounded-xl bg-white shadow-sm transition-all hover:bg-indigo-50',
         ]"
         @click="isUploadDialogVisible = true"
       >

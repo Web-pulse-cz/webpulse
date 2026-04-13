@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { VPdfViewer } from '@vue-pdf-viewer/viewer';
 import { Form } from 'vee-validate';
+import { ArrowDownOnSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();

@@ -2,6 +2,7 @@
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
+import { DocumentTextIcon, FolderIcon, GlobeAltIcon, NewspaperIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const languageStore = useLanguageStore();

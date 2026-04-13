@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import { DocumentIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon } from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';

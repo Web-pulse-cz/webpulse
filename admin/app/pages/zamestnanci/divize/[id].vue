@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import { BuildingOfficeIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const route = useRoute();
@@ -120,7 +121,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
     />
     <Form @submit="saveItem">
       <LayoutContainer>
-        <LayoutTitle>Údaje divize</LayoutTitle>
+        <div class="mb-6 flex items-center gap-3">
+          <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+            <BuildingOfficeIcon class="size-5" />
+          </div>
+          <LayoutTitle class="!mb-0">Údaje divize</LayoutTitle>
+        </div>
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <BaseFormInput v-model="item.name" label="Název" name="name" rules="required" />
           <BaseFormColorPicker v-model="item.color" label="Barva" name="color" />

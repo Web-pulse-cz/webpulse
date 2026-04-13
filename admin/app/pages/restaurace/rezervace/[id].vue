@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import { CalendarDaysIcon, UserIcon, ChatBubbleLeftIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
@@ -281,7 +282,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </LayoutContainer>
 
           <LayoutContainer>
-            <LayoutTitle>Poznámka</LayoutTitle>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                <ChatBubbleLeftIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Poznámka</LayoutTitle>
+            </div>
             <BaseFormTextarea
               v-model="item.note"
               label=""

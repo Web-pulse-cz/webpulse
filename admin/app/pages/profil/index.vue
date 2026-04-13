@@ -3,6 +3,7 @@ import { Form } from 'vee-validate';
 
 import { definePageMeta } from '#imports';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
+import { DocumentDuplicateIcon, LockClosedIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const userGroupStore = useUserGroupStore();
 

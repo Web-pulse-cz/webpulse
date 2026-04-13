@@ -3,6 +3,7 @@ import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useCountryStore } from '~/../stores/countryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
+import { UserIcon, MapPinIcon, BuildingOfficeIcon, BanknotesIcon, TicketIcon, StarIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const countryStore = useCountryStore();
@@ -226,7 +227,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
             </LayoutContainer>
             <LayoutContainer>
-              <LayoutTitle>Adresa</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                  <MapPinIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Adresa</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <BaseFormInput
                   v-model="item.street"
@@ -246,7 +252,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
             </LayoutContainer>
             <LayoutContainer>
-              <LayoutTitle>Firemní údaje</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                  <BuildingOfficeIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Firemní údaje</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 <BaseFormInput v-model="item.company_name" label="Firma" name="company_name" />
                 <BaseFormInput v-model="item.ico" label="IČO" name="ico" />
@@ -359,7 +370,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <!-- Vouchery -->
       <template v-if="tabs.find((t) => t.current && t.link === '#vouchery')">
         <LayoutContainer>
-          <LayoutTitle>Přiřazené vouchery</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
+              <TicketIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Přiřazené vouchery</LayoutTitle>
+          </div>
           <div v-if="!item.vouchers?.length" class="py-12 text-center text-sm text-slate-400">
             Zákazník nemá přiřazené žádné vouchery.
           </div>

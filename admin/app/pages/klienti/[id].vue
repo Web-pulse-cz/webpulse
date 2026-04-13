@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import { UserIcon, MapPinIcon, TruckIcon, BanknotesIcon, ChatBubbleLeftIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
 
 import { useCountryStore } from '~/../stores/countryStore';
 
@@ -274,7 +275,12 @@ definePageMeta({
             </LayoutContainer>
 
             <LayoutContainer>
-              <LayoutTitle>Poznámka</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                  <ChatBubbleLeftIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Poznámka</LayoutTitle>
+              </div>
               <BaseFormTextarea v-model="item.note" label="" name="note" rows="4" />
             </LayoutContainer>
           </div>
@@ -298,7 +304,12 @@ definePageMeta({
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#adresy')">
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <LayoutContainer>
-            <LayoutTitle>Fakturační adresa</LayoutTitle>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                <MapPinIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Fakturační adresa</LayoutTitle>
+            </div>
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <BaseFormInput
                 v-model="item.street"
@@ -333,7 +344,12 @@ definePageMeta({
             enter-to-class="opacity-100 translate-x-0"
           >
             <LayoutContainer v-if="item.has_delivery_address">
-              <LayoutTitle>Doručovací adresa</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                  <TruckIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Doručovací adresa</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <BaseFormInput
                   v-model="item.delivery_name"
@@ -364,7 +380,12 @@ definePageMeta({
 
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#banka')">
         <LayoutContainer>
-          <LayoutTitle>Bankovní údaje</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+              <BanknotesIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Bankovní údaje</LayoutTitle>
+          </div>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
             <BaseFormInput
               v-model="item.bank_account_number"
@@ -388,7 +409,12 @@ definePageMeta({
 
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#faktury')">
         <LayoutContainer>
-          <LayoutTitle>Faktury klienta</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <DocumentTextIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Faktury klienta</LayoutTitle>
+          </div>
           <div v-if="clientInvoices.length === 0" class="py-8 text-center text-sm text-slate-400">
             Tento klient zatím nemá žádné faktury.
           </div>

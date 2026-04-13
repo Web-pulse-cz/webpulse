@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
+import { InformationCircleIcon, KeyIcon, ShieldCheckIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const userGroupStore = useUserGroupStore();
 const { $toast } = useNuxtApp();

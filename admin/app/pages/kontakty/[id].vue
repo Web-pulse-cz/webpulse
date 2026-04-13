@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useActivityStore } from '~~/stores/activityStore';
+import { CheckCircleIcon, HeartIcon, IdentificationIcon, PlusIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const activityStore = useActivityStore();
 

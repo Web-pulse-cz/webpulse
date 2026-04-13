@@ -202,7 +202,7 @@ function addRemoveItemSite(siteId) {
         <LayoutDivider class="text-xs font-bold uppercase tracking-widest text-slate-400">
           Náhledový obrázek
         </LayoutDivider>
-        <div class="overflow-hidden rounded-2xl bg-slate-50 p-1 ring-1 ring-slate-200">
+        <div class="overflow-hidden rounded-2xl bg-slate-50 pt-0">
           <BaseFormUploadImage
             v-model="image"
             :multiple="false"

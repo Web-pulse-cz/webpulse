@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
 import { useCurrencyStore } from '~~/stores/currencyStore';
+import { AdjustmentsHorizontalIcon, BanknotesIcon, ExclamationTriangleIcon, GlobeAltIcon, LanguageIcon, SquaresPlusIcon, TrashIcon, UsersIcon } from '@heroicons/vue/24/outline';
 
 const languageStore = useLanguageStore();
 const currencyStore = useCurrencyStore();

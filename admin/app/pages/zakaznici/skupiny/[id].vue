@@ -2,6 +2,7 @@
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
+import { UsersIcon, BanknotesIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const currencyStore = useCurrencyStore();

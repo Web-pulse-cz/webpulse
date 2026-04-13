@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useCountryStore } from '~/../stores/countryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
+import { UserIcon, MapPinIcon, PhoneIcon, BriefcaseIcon, BanknotesIcon, HeartIcon, DocumentTextIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const countryStore = useCountryStore();
@@ -366,7 +367,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
             </LayoutContainer>
             <LayoutContainer>
-              <LayoutTitle>Adresa</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                  <MapPinIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Adresa</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <BaseFormInput
                   v-model="item.street"
@@ -386,7 +392,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
             </LayoutContainer>
             <LayoutContainer>
-              <LayoutTitle>Nouzový kontakt</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                  <PhoneIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Nouzový kontakt</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 <BaseFormInput v-model="item.emergency_contact_name" label="Jméno" name="ec_name" />
                 <BaseFormInput
@@ -454,7 +465,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <!-- Pracovní údaje -->
       <template v-if="tabs.find((t) => t.current && t.link === '#prace')">
         <LayoutContainer>
-          <LayoutTitle>Pracovní informace</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+              <BriefcaseIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Pracovní informace</LayoutTitle>
+          </div>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
             <BaseFormInput v-model="item.position" label="Pozice" name="position" />
             <BaseFormInput
@@ -502,7 +518,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <template v-if="tabs.find((t) => t.current && t.link === '#banka')">
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <LayoutContainer>
-            <LayoutTitle>Bankovní údaje</LayoutTitle>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                <BanknotesIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Bankovní údaje</LayoutTitle>
+            </div>
             <div class="grid grid-cols-1 gap-6">
               <BaseFormInput
                 v-model="item.bank_account_number"
@@ -518,7 +539,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </div>
           </LayoutContainer>
           <LayoutContainer>
-            <LayoutTitle>Zdravotní pojištění</LayoutTitle>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-pink-50 text-pink-600">
+                <HeartIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Zdravotní pojištění</LayoutTitle>
+            </div>
             <div class="grid grid-cols-1 gap-6">
               <BaseFormInput
                 v-model="item.health_insurance_company"
@@ -539,7 +565,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <template v-if="tabs.find((t) => t.current && t.link === '#smlouvy')">
         <LayoutContainer>
           <div class="mb-4 flex items-center justify-between">
-            <LayoutTitle class="!mb-0">Smlouvy</LayoutTitle>
+            <div class="flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                <DocumentTextIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Smlouvy</LayoutTitle>
+            </div>
             <button
               type="button"
               class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"

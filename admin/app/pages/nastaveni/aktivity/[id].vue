@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
 import { useActivityStore } from '~~/stores/activityStore';
+import { QueueListIcon, SwatchIcon } from '@heroicons/vue/24/outline';
 
 const activityStore = useActivityStore();
 

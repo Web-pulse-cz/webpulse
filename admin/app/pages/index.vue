@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
+import { CalendarDaysIcon, PhoneIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline';
 
 const cashflowCategoryStore = useCashflowCategoryStore();
 const currencyStore = useCurrencyStore();

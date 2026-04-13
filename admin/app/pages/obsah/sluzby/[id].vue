@@ -4,6 +4,7 @@ import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
 import { useLanguageStore } from '~~/stores/languageStore';
+import { BanknotesIcon, IdentificationIcon, InformationCircleIcon } from '@heroicons/vue/24/outline';
 
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();

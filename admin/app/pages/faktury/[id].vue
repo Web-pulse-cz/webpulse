@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import { DocumentIcon, ChatBubbleLeftIcon, ListBulletIcon, CreditCardIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 
@@ -318,7 +319,12 @@ definePageMeta({
             </LayoutContainer>
 
             <LayoutContainer>
-              <LayoutTitle>Poznámky</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                  <ChatBubbleLeftIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Poznámky</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <BaseFormTextarea v-model="item.note" label="Poznámka" name="note" rows="3" />
                 <BaseFormTextarea
@@ -352,7 +358,12 @@ definePageMeta({
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#polozky')">
         <LayoutContainer>
           <div class="mb-6 flex items-center justify-between">
-            <LayoutTitle class="!mb-0">Položky faktury</LayoutTitle>
+            <div class="flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                <ListBulletIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Položky faktury</LayoutTitle>
+            </div>
             <button
               type="button"
               class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
@@ -425,7 +436,12 @@ definePageMeta({
 
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#platba')">
         <LayoutContainer>
-          <LayoutTitle>Platební údaje</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+              <CreditCardIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Platební údaje</LayoutTitle>
+          </div>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
             <BaseFormSelect
               v-model="item.payment_method"

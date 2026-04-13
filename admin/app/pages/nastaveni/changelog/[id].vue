@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
+import { ClipboardDocumentListIcon, RocketLaunchIcon, TagIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 

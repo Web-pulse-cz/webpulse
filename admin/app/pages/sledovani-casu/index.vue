@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { definePageMeta } from '#imports';
+import { TrashIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Sledování času');

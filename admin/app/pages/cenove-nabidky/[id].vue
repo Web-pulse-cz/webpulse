@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import { DocumentIcon, DocumentTextIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
@@ -344,7 +345,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </LayoutContainer>
 
             <LayoutContainer>
-              <LayoutTitle>Texty</LayoutTitle>
+              <div class="mb-6 flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                  <DocumentTextIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Texty</LayoutTitle>
+              </div>
               <div class="grid grid-cols-1 gap-6">
                 <BaseFormTextarea
                   v-model="item.introduction"
