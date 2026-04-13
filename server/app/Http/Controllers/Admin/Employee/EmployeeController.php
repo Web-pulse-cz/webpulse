@@ -21,7 +21,10 @@ class EmployeeController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = Employee::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = Employee::query()
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->filled('search')) {
             $search = $request->get('search');

@@ -2,7 +2,7 @@
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
-import { DocumentTextIcon, GlobeAltIcon, LightBulbIcon } from '@heroicons/vue/24/outline';
+import { DocumentTextIcon, GlobeAltIcon, LightBulbIcon, FolderIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();
@@ -39,6 +39,7 @@ const item = ref({
   translations: {} as object,
   sites: [] as number[],
 });
+const pageFiles = ref([] as any[]);
 const translatableAttributes = ref([
   { field: 'name' as string, label: 'Název' as string },
   { field: 'slug' as string, label: 'Slug' as string },
@@ -68,6 +69,7 @@ async function loadItem() {
     .then((response) => {
       item.value = response;
       item.value.sites = response.sites.map((site) => site.id);
+      pageFiles.value = response.files || [];
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -141,6 +143,72 @@ async function saveItem(redirect = true as boolean) {
     .finally(() => {
       loading.value = false;
     });
+}
+
+async function uploadPageFile(event: Event) {
+	const target = event.target as HTMLInputElement;
+	const file = target.files?.[0];
+	if (!file || !item.value.id) return;
+
+	const client = useSanctumClient();
+	const formData = new FormData();
+	formData.append('file', file);
+
+	loading.value = true;
+	await client('/api/admin/page/' + item.value.id + '/file', {
+		method: 'POST',
+		body: formData,
+		headers: { 'X-Site-Hash': selectedSiteHash.value },
+	})
+		.then((r) => {
+			$toast.show({ summary: 'Hotovo', detail: 'Soubor nahrán.', severity: 'success' });
+			pageFiles.value = r.files || [];
+		})
+		.catch(() => {
+			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se nahrát soubor.', severity: 'error' });
+		})
+		.finally(() => {
+			loading.value = false;
+			target.value = '';
+		});
+}
+
+async function downloadPageFile(file: any) {
+	const client = useSanctumClient();
+	try {
+		const res = await client.raw('/api/admin/page/' + item.value.id + '/file/' + file.id, {
+			method: 'GET',
+			credentials: 'include',
+			responseType: 'blob',
+		});
+		if (!res.ok) throw new Error('Chyba');
+		const blob = res._data as Blob;
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = file.name || 'soubor-' + file.id;
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+		URL.revokeObjectURL(url);
+	} catch (e) {
+		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+	}
+}
+
+async function deletePageFile(file: any) {
+	const client = useSanctumClient();
+	await client('/api/admin/page/' + item.value.id + '/file/' + file.id, {
+		method: 'DELETE',
+		headers: { Accept: 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+	})
+		.then(() => {
+			pageFiles.value = pageFiles.value.filter((f: any) => f.id !== file.id);
+			$toast.show({ summary: 'Hotovo', detail: 'Soubor smazán.', severity: 'success' });
+		})
+		.catch(() => {
+			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se smazat soubor.', severity: 'error' });
+		});
 }
 
 watch(selectedSiteHash, () => {
@@ -276,6 +344,65 @@ definePageMeta({
                   label="Hlavní obsah článku"
                   name="text"
                 />
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <!-- Soubory -->
+          <LayoutContainer v-if="item.id">
+            <div class="mb-6 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                  <FolderIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
+              </div>
+              <label
+                class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
+              >
+                <ArrowDownTrayIcon class="size-5 rotate-180" />
+                Nahrát soubor
+                <input type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" @change="uploadPageFile" />
+              </label>
+            </div>
+
+            <div v-if="!pageFiles.length" class="py-8 text-center text-sm text-slate-400">
+              Žádné soubory.
+            </div>
+            <div v-else class="space-y-3">
+              <div
+                v-for="file in pageFiles"
+                :key="file.id"
+                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="flex size-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                    <DocumentTextIcon class="size-5" />
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
+                    <p class="text-xs text-slate-400">
+                      {{ file.mime_type }}
+                      <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                    @click="downloadPageFile(file)"
+                  >
+                    Stáhnout
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
+                    @click="deletePageFile(file)"
+                  >
+                    <TrashIcon class="size-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </LayoutContainer>

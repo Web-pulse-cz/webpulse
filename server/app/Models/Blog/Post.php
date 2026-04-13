@@ -2,6 +2,7 @@
 
 namespace App\Models\Blog;
 
+use App\Traits\Fileable;
 use App\Traits\Imagable;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\App;
 
 class Post extends Model
 {
-    use Imagable, Siteable, Translatable;
+    use Fileable, Imagable, Siteable, Translatable;
 
     protected $table = 'posts';
 

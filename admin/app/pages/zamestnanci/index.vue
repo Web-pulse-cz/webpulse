@@ -10,6 +10,7 @@ const error = ref(false);
 
 const breadcrumbs = ref([{ name: pageTitle.value, link: '/zamestnanci', current: true }]);
 
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const searchString = ref(inject('searchString', ''));
 const tableQuery = ref({
   search: null as string | null,
@@ -27,7 +28,7 @@ async function loadItems() {
   await client('/api/admin/employee', {
     method: 'GET',
     query: tableQuery.value,
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       items.value = r;
@@ -50,7 +51,7 @@ async function deleteItem(id: number) {
   const client = useSanctumClient();
   await client('/api/admin/employee/' + id, {
     method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   }).then(() => {
     loadItems();
   });
@@ -77,6 +78,8 @@ watch(searchString, () => {
 });
 
 useHead({ title: pageTitle.value });
+watch(selectedSiteHash, () => loadItems());
+
 onMounted(() => {
   loadItems();
 });

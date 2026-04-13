@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -150,7 +151,67 @@ class PostController extends Controller
             App::abort(404);
         }
 
+        $post->removeAllFiles();
         $post->delete();
+
+        return Response::json();
+    }
+
+    public function uploadFile(Request $request, int $id): JsonResponse
+    {
+        $post = Post::find($id);
+        if (! $post) {
+            App::abort(404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|max:20480',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
+
+        $post->attachUploadedFile($request->file('file'), 'files/posts/' . $post->id);
+
+        return Response::json(PostResource::make($post));
+    }
+
+    public function downloadFile(int $postId, int $fileId)
+    {
+        $post = Post::find($postId);
+        if (! $post) {
+            App::abort(404);
+        }
+
+        $file = DB::table('fileables')
+            ->where('id', $fileId)
+            ->where('fileable_id', $postId)
+            ->where('fileable_type', get_class($post))
+            ->first();
+
+        if (! $file) {
+            App::abort(404);
+        }
+
+        $disk = $file->disk ?? 'public';
+        if (! Storage::disk($disk)->exists($file->path)) {
+            App::abort(404);
+        }
+
+        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
+            'Content-Type' => $file->mime_type,
+        ]);
+    }
+
+    public function deleteFile(int $postId, int $fileId): JsonResponse
+    {
+        $post = Post::find($postId);
+        if (! $post) {
+            App::abort(404);
+        }
+
+        $post->removeFile($fileId);
 
         return Response::json();
     }

@@ -85,7 +85,7 @@ async function loadItem() {
   loading.value = true;
   await client('/api/admin/employee/' + route.params.id, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       item.value = {
@@ -141,7 +141,7 @@ async function saveItem(redirect = true) {
     {
       method: 'POST',
       body: JSON.stringify(item.value),
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
     },
   )
     .then((r) => {
@@ -291,6 +291,8 @@ watchEffect(() => {
     router.push(route.path + '#osobni');
   }
 });
+
+watch(selectedSiteHash, () => loadItem());
 
 useHead({ title: pageTitle.value });
 onMounted(() => {
@@ -470,6 +472,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
               >
               <BaseFormTextarea v-model="item.note" label="" name="note" rows="3" class="mt-2" />
             </LayoutContainer>
+            <LayoutActionsDetailBlock
+              v-model:sites="item.sites"
+              :allow-image="false"
+              :allow-is-active="false"
+              :allow-translations="false"
+            />
           </div>
         </div>
       </template>

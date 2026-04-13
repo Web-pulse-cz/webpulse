@@ -2,6 +2,7 @@
 
 namespace App\Models\Page;
 
+use App\Traits\Fileable;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class Page extends Model
 {
-    use Siteable, Translatable;
+    use Siteable, Fileable, Translatable;
 
     protected $table = 'pages';
 

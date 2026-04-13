@@ -502,6 +502,9 @@ Route::group([
             Route::get('{id}', [PostController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [PostController::class, 'store']);
             Route::delete('{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::post('{id}/file', [PostController::class, 'uploadFile'])->where('id', '[0-9]+');
+            Route::get('{postId}/file/{fileId}', [PostController::class, 'downloadFile'])->where(['postId' => '[0-9]+', 'fileId' => '[0-9]+']);
+            Route::delete('{postId}/file/{fileId}', [PostController::class, 'deleteFile'])->where(['postId' => '[0-9]+', 'fileId' => '[0-9]+']);
         });
 
         // Page routes
@@ -512,6 +515,9 @@ Route::group([
             Route::get('{id}', [PageController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [PageController::class, 'store']);
             Route::delete('{id}', [PageController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::post('{id}/file', [PageController::class, 'uploadFile'])->where('id', '[0-9]+');
+            Route::get('{pageId}/file/{fileId}', [PageController::class, 'downloadFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
+            Route::delete('{pageId}/file/{fileId}', [PageController::class, 'deleteFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
         });
 
         // Client routes
