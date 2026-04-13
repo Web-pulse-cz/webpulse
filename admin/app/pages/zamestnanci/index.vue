@@ -122,7 +122,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
         {
           key: 'date_hired',
           name: 'Nástup',
-          type: 'text',
+          type: 'date',
           width: 100,
           hidden: true,
           sortable: true,

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const pageTitle = ref('Divize');
 const loading = ref(false);
 const error = ref(false);
@@ -28,7 +29,7 @@ async function loadItems() {
   const client = useSanctumClient();
   await client('/api/admin/employee/division', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
     .then((r) => {
       items.value = { data: r };
@@ -45,7 +46,7 @@ async function deleteItem(id: number) {
   const client = useSanctumClient();
   await client('/api/admin/employee/division/' + id, {
     method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   }).then(() => {
     loadItems();
   });
@@ -65,6 +66,7 @@ function updatePage(page: number) {
   loadItems();
 }
 
+watch(selectedSiteHash, () => loadItems());
 useHead({ title: pageTitle.value });
 onMounted(() => {
   loadItems();
@@ -85,15 +87,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
         { key: 'name', name: 'Název', type: 'text', width: 200, hidden: false, sortable: true },
+        { key: 'head_employee_name', name: 'Vedoucí', type: 'text', width: 150, hidden: false, sortable: false },
+        { key: 'phone', name: 'Telefon', type: 'text', width: 120, hidden: true, sortable: false },
         { key: 'email', name: 'E-mail', type: 'text', width: 150, hidden: true, sortable: false },
-        {
-          key: 'employees_count',
-          name: 'Zaměstnanců',
-          type: 'number',
-          width: 100,
-          hidden: false,
-          sortable: false,
-        },
+        { key: 'employees_count', name: 'Zaměstnanců', type: 'number', width: 80, hidden: false, sortable: false, decimals: 0 },
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"

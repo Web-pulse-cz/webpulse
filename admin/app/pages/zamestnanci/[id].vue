@@ -18,7 +18,6 @@ const tabs = ref([
   { name: 'Osobní údaje', link: '#osobni', current: false },
   { name: 'Pracovní údaje', link: '#prace', current: false },
   { name: 'Banka a pojištění', link: '#banka', current: false },
-  { name: 'Smlouvy', link: '#smlouvy', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nový zaměstnanec' : 'Detail zaměstnance');
@@ -332,14 +331,14 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   rules="required"
                 />
                 <BaseFormInput v-model="item.email" label="E-mail" type="email" name="email" />
-                <div class="flex gap-3">
+                <div class="col-span-full flex gap-3 sm:col-span-1">
                   <BaseFormInput
                     v-model="item.phone_prefix"
                     label="Předčíslí"
                     name="phone_prefix"
-                    class="w-24"
+                    class="w-20 shrink-0"
                   />
-                  <BaseFormInput v-model="item.phone" label="Telefon" name="phone" class="flex-1" />
+                  <BaseFormInput v-model="item.phone" label="Telefon" name="phone" class="min-w-0 flex-1" />
                 </div>
                 <BaseFormInput
                   v-model="item.date_of_birth"
@@ -516,7 +515,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
       <!-- Banka a pojištění -->
       <template v-if="tabs.find((t) => t.current && t.link === '#banka')">
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div class="space-y-8">
           <LayoutContainer>
             <div class="mb-6 flex items-center gap-3">
               <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
@@ -524,18 +523,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
               <LayoutTitle class="!mb-0">Bankovní údaje</LayoutTitle>
             </div>
-            <div class="grid grid-cols-1 gap-6">
-              <BaseFormInput
-                v-model="item.bank_account_number"
-                label="Číslo účtu"
-                name="bank_number"
-              />
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              <BaseFormInput v-model="item.bank_account_number" label="Číslo účtu" name="bank_number" />
               <BaseFormInput v-model="item.bank_account_iban" label="IBAN" name="bank_iban" />
-              <BaseFormInput
-                v-model="item.bank_account_swift"
-                label="SWIFT/BIC"
-                name="bank_swift"
-              />
+              <BaseFormInput v-model="item.bank_account_swift" label="SWIFT/BIC" name="bank_swift" />
             </div>
           </LayoutContainer>
           <LayoutContainer>
@@ -545,7 +536,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
               <LayoutTitle class="!mb-0">Zdravotní pojištění</LayoutTitle>
             </div>
-            <div class="grid grid-cols-1 gap-6">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <BaseFormInput
                 v-model="item.health_insurance_company"
                 label="Pojišťovna"
@@ -560,9 +551,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </LayoutContainer>
         </div>
       </template>
-
-      <!-- Smlouvy -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#smlouvy')">
+      <!-- Smlouvy tab odstraněn -->
+      <template v-if="false && tabs.find((t) => t.current && t.link === '#smlouvy')">
         <LayoutContainer>
           <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
