@@ -652,6 +652,7 @@ function isRouteActive(link: string | undefined | null, currentPath: string): bo
 }
 
 watchEffect(() => {
+  if (!route?.path) return;
   const currentPath = route.path;
 
   navigation.value.forEach((group) => {
