@@ -19,6 +19,7 @@ const tabs = ref([
   { name: 'Základní údaje', link: '#info', current: false },
   { name: 'Položky', link: '#polozky', current: false },
   { name: 'Platební údaje', link: '#platba', current: false },
+  { name: 'Soubory', link: '#soubory', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nová faktura' : 'Detail faktury');
@@ -63,6 +64,7 @@ const item = ref({
   due_on: '',
   paid_on: '',
   items: [] as any[],
+  files: [] as any[],
   sites: [] as number[],
 });
 
@@ -233,6 +235,29 @@ onMounted(() => {
     loadItem();
   }
 });
+async function downloadFile(fileId: number) {
+  const client = useSanctumClient();
+  try {
+    const res = await client.raw('/api/admin/invoice/' + route.params.id + '/file/' + fileId, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'faktura-' + route.params.id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+  }
+}
+
 definePageMeta({
   middleware: 'sanctum:auth',
 });
@@ -474,6 +499,49 @@ definePageMeta({
             <BaseFormInput v-model="item.bank_account" label="Číslo účtu" name="bank_account" />
             <BaseFormInput v-model="item.iban" label="IBAN" name="iban" />
             <BaseFormInput v-model="item.swift_bic" label="SWIFT/BIC" name="swift_bic" />
+          </div>
+        </LayoutContainer>
+      </template>
+
+      <template v-if="tabs.find((tab) => tab.current && tab.link === '#soubory')">
+        <LayoutContainer>
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <DocumentIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
+          </div>
+
+          <div v-if="!item.files?.length" class="py-12 text-center text-sm text-slate-400">
+            Žádné soubory. Soubory se stahují automaticky z Fakturoidu při synchronizaci.
+          </div>
+
+          <div v-else class="space-y-3">
+            <div
+              v-for="file in item.files"
+              :key="file.id"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+            >
+              <div class="flex items-center gap-4">
+                <div class="flex size-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                  <DocumentIcon class="size-5" />
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
+                  <p class="text-xs text-slate-400">
+                    {{ file.mime_type }}
+                    <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500 transition"
+                @click="downloadFile(file.id)"
+              >
+                Stáhnout
+              </button>
+            </div>
           </div>
         </LayoutContainer>
       </template>

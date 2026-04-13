@@ -184,9 +184,37 @@ class InvoiceController extends Controller
             App::abort(404);
         }
 
+        $invoice->removeAllFiles();
         $invoice->items()->delete();
         $invoice->delete();
 
         return Response::json();
+    }
+
+    public function downloadFile(int $invoiceId, int $fileId)
+    {
+        $invoice = Invoice::find($invoiceId);
+        if (!$invoice) {
+            App::abort(404);
+        }
+
+        $file = \Illuminate\Support\Facades\DB::table('fileables')
+            ->where('id', $fileId)
+            ->where('fileable_id', $invoiceId)
+            ->where('fileable_type', Invoice::class)
+            ->first();
+
+        if (!$file) {
+            App::abort(404);
+        }
+
+        $path = storage_path('app/public/' . $file->path);
+        if (!file_exists($path)) {
+            App::abort(404);
+        }
+
+        return response()->download($path, $file->name, [
+            'Content-Type' => $file->mime_type,
+        ]);
     }
 }

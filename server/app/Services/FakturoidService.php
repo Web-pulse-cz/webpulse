@@ -8,6 +8,7 @@ use App\Models\Site\Site;
 use Fakturoid\FakturoidManager;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FakturoidService
@@ -128,6 +129,18 @@ class FakturoidService
         $client->fakturoid_updated_at = Carbon::parse($subject->updated_at);
         $client->synced_at = now();
         $client->saveQuietly();
+
+        // Assign to current site if not already assigned
+        $existingSiteIds = $client->sites()->pluck('sites.id')->toArray();
+        if (!in_array($this->site->id, $existingSiteIds)) {
+            DB::table('siteables')->insert([
+                'site_id' => $this->site->id,
+                'siteable_type' => get_class($client),
+                'siteable_id' => $client->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         return $client;
     }
@@ -270,7 +283,54 @@ class FakturoidService
             }
         }
 
+        // Assign to current site
+        $existingSiteIds = $invoice->sites()->pluck('sites.id')->toArray();
+        if (!in_array($this->site->id, $existingSiteIds)) {
+            DB::table('siteables')->insert([
+                'site_id' => $this->site->id,
+                'siteable_type' => get_class($invoice),
+                'siteable_id' => $invoice->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Download PDF from Fakturoid
+        $this->downloadInvoicePdf($invoice);
+
         return $invoice;
+    }
+
+    /**
+     * Download invoice PDF from Fakturoid and attach via Fileable.
+     */
+    protected function downloadInvoicePdf(Invoice $invoice): void
+    {
+        if (!$invoice->fakturoid_id) {
+            return;
+        }
+
+        try {
+            $response = $this->client->getInvoicesProvider()->getPdf($invoice->fakturoid_id);
+            $pdfContent = $response->getBody();
+
+            if ($pdfContent) {
+                $path = 'files/invoices/' . $invoice->id . '.pdf';
+                $name = 'faktura-' . ($invoice->number ?? $invoice->id) . '.pdf';
+
+                // Remove old PDF if exists
+                $existingFiles = $invoice->files();
+                foreach ($existingFiles as $file) {
+                    if ($file->mime_type === 'application/pdf') {
+                        $invoice->removeFile($file->id);
+                    }
+                }
+
+                $invoice->attachFileFromContent($pdfContent, $path, $name, 'application/pdf');
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Fakturoid PDF download failed for invoice ' . $invoice->id . ': ' . $e->getMessage());
+        }
     }
 
     protected function mapInvoiceToFakturoidData(Invoice $invoice): array

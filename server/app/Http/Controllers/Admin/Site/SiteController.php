@@ -76,27 +76,38 @@ class SiteController extends Controller
 
         DB::beginTransaction();
         try {
-            $site->fill($request->all());
+            $site->fill($request->except(['fakturoid_client_secret', 'users']));
+
+            // Only update secret if a real value is provided (not masked)
+            if ($request->filled('fakturoid_client_secret') && $request->get('fakturoid_client_secret') !== '••••••••') {
+                $site->fakturoid_client_secret = $request->get('fakturoid_client_secret');
+            }
+
             if (! $id) {
                 $site->hash = Str::random(128);
             }
             $site->save();
 
-            DB::table('sites_has_users')->where('site_id', $site->id)->delete();
-            foreach ($request->users as $user) {
-                DB::table('sites_has_users')->insert([
-                    'user_id' => $user['id'],
-                    'site_id' => $site->id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+            if ($request->has('users') && is_array($request->users)) {
+                DB::table('sites_has_users')->where('site_id', $site->id)->delete();
+                foreach ($request->users as $user) {
+                    if (is_array($user) && isset($user['id'])) {
+                        DB::table('sites_has_users')->insert([
+                            'user_id' => $user['id'],
+                            'site_id' => $site->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
             }
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Site save error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
-            return Response::json(['message' => 'An error occurred while updating site.'], 500);
+            return Response::json(['message' => 'An error occurred while updating site: ' . $e->getMessage()], 500);
         }
 
         return Response::json(SiteResource::make($site));

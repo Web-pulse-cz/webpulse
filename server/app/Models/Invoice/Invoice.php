@@ -7,12 +7,13 @@ use App\Models\Currency\Currency;
 use App\Models\Language\Language;
 use App\Models\PriceOffer\PriceOffer;
 use App\Models\Project\Project;
+use App\Traits\Fileable;
 use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    use Siteable;
+    use Siteable, Fileable;
 
     protected $table = 'invoices';
 

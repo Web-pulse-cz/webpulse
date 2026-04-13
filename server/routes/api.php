@@ -529,6 +529,7 @@ Route::group([
             Route::get('{id}', [InvoiceController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [InvoiceController::class, 'store']);
             Route::delete('{id}', [InvoiceController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::get('{invoiceId}/file/{fileId}', [InvoiceController::class, 'downloadFile'])->where(['invoiceId' => '[0-9]+', 'fileId' => '[0-9]+']);
         });
 
         // Projects routes
