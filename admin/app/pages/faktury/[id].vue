@@ -82,7 +82,7 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      item.value.sites = response.sites?.map?.((s: any) => s.id) || response.sites || [];
+      item.value.sites = Array.isArray(response.sites) ? response.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
       pageTitle.value = item.value.number || 'Faktura #' + item.value.id;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -141,6 +141,7 @@ async function saveItem(redirect = true) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
       },
     },
   )
@@ -174,8 +175,11 @@ async function saveItem(redirect = true) {
     });
 }
 
+let itemUidCounter = 0;
+
 function addItem() {
   item.value.items.push({
+    _uid: ++itemUidCounter,
     name: '',
     quantity: 1,
     unit_name: 'ks',
@@ -417,35 +421,35 @@ definePageMeta({
           <div v-else class="space-y-4">
             <div
               v-for="(lineItem, index) in item.items"
-              :key="index"
+              :key="lineItem._uid || lineItem.id || index"
               class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-12">
                 <BaseFormInput
                   v-model="lineItem.name"
                   label="Název"
-                  name="item_name"
+                  :name="'item_name_' + index"
                   class="sm:col-span-4"
                 />
                 <BaseFormInput
                   v-model="lineItem.quantity"
                   label="Množství"
                   type="number"
-                  name="item_qty"
+                  :name="'item_qty_' + index"
                   :step="0.01"
                   class="sm:col-span-2"
                 />
                 <BaseFormInput
                   v-model="lineItem.unit_name"
                   label="Jednotka"
-                  name="item_unit"
+                  :name="'item_unit_' + index"
                   class="sm:col-span-1"
                 />
                 <BaseFormInput
                   v-model="lineItem.unit_price"
                   label="Cena/ks"
                   type="number"
-                  name="item_price"
+                  :name="'item_price_' + index"
                   :step="0.01"
                   class="sm:col-span-2"
                 />
@@ -453,7 +457,7 @@ definePageMeta({
                   v-model="lineItem.vat_rate"
                   label="DPH %"
                   type="number"
-                  name="item_vat"
+                  :name="'item_vat_' + index"
                   class="sm:col-span-2"
                 />
                 <div class="flex items-end sm:col-span-1">

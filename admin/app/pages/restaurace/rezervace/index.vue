@@ -138,7 +138,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 50, hidden: false, sortable: true },
-        { key: 'date', name: 'Datum', type: 'text', width: 100, hidden: false, sortable: true },
+        { key: 'date', name: 'Datum', type: 'date', width: 100, hidden: false, sortable: true },
         { key: 'time_from', name: 'Čas', type: 'text', width: 60, hidden: false, sortable: true },
         {
           key: 'guest_full_name',

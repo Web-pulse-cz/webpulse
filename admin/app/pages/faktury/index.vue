@@ -60,6 +60,39 @@ async function loadItems() {
     });
 }
 
+async function downloadInvoice(id: number) {
+  const client = useSanctumClient();
+  try {
+    // First get the invoice to find its file
+    const invoice = await client('/api/admin/invoice/' + id, {
+      method: 'GET',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    });
+    const file = invoice.files?.[0];
+    if (!file) {
+      $toast.show({ summary: 'Info', detail: 'Faktura nemá přiložený soubor.', severity: 'warning' });
+      return;
+    }
+    const res = await client.raw('/api/admin/invoice/' + id + '/file/' + file.id, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || 'faktura-' + id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout fakturu.', severity: 'error' });
+  }
+}
+
 async function deleteItem(id: number) {
   loading.value = true;
   const client = useSanctumClient();
@@ -158,7 +191,7 @@ definePageMeta({
         {
           key: 'issued_on',
           name: 'Vystaveno',
-          type: 'text',
+          type: 'date',
           width: 100,
           hidden: true,
           sortable: true,
@@ -166,19 +199,20 @@ definePageMeta({
         {
           key: 'due_on',
           name: 'Splatnost',
-          type: 'text',
+          type: 'date',
           width: 100,
           hidden: true,
           sortable: true,
         },
       ]"
-      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :actions="[{ type: 'download' }, { type: 'edit' }, { type: 'delete' }]"
       :loading="loading"
       :error="error"
       singular="Faktura"
       plural="Faktury"
       :query="tableQuery"
       slug="invoices"
+      @download="downloadInvoice($event)"
       @delete-item="deleteItem"
       @update-sort="updateSort"
       @update-page="updatePage"

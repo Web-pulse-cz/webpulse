@@ -50,7 +50,6 @@ const allowedPermissions = ref([
   { name: 'Cashflow', value: 'Cashflow', slug: 'cashflows' },
   { name: 'Cenové nabídky', value: 'Cenové nabídky', slug: 'price_offers' },
   { name: 'Changelog', value: 'Changelog', slug: 'changelogs' },
-  { name: 'Dodavatelé', value: 'Dodavatelé', slug: 'suppliers' },
   { name: 'Zákazníci', value: 'Zákazníci', slug: 'customers' },
   { name: 'E-maily', value: 'E-maily', slug: 'emails' },
   { name: 'Faktury', value: 'Faktury', slug: 'invoices' },

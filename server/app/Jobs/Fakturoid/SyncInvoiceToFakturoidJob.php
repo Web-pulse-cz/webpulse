@@ -36,6 +36,9 @@ class SyncInvoiceToFakturoidJob implements ShouldQueue
         try {
             $service = new FakturoidService($site);
             $service->pushInvoiceToFakturoid($invoice);
+
+            // After push, download PDF from Fakturoid
+            $service->downloadInvoicePdf($invoice->fresh());
         } catch (\Throwable $e) {
             Log::error('SyncInvoiceToFakturoidJob failed: '.$e->getMessage(), [
                 'invoice_id' => $this->invoiceId,

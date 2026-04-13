@@ -175,6 +175,16 @@ class FakturoidService
 
         try {
             if ($invoice->fakturoid_id) {
+                // Mark existing lines for deletion, then add new ones
+                $existing = $this->client->getInvoicesProvider()->get($invoice->fakturoid_id);
+                $existingBody = $existing->getBody();
+                $destroyLines = [];
+                if (!empty($existingBody->lines)) {
+                    foreach ($existingBody->lines as $line) {
+                        $destroyLines[] = ['id' => $line->id, '_destroy' => true];
+                    }
+                }
+                $data['lines'] = array_merge($destroyLines, $data['lines'] ?? []);
                 $this->client->getInvoicesProvider()->update($invoice->fakturoid_id, $data);
             } else {
                 $response = $this->client->getInvoicesProvider()->create($data);
@@ -304,7 +314,7 @@ class FakturoidService
     /**
      * Download invoice PDF from Fakturoid and attach via Fileable.
      */
-    protected function downloadInvoicePdf(Invoice $invoice): void
+    public function downloadInvoicePdf(Invoice $invoice): void
     {
         if (!$invoice->fakturoid_id) {
             return;
@@ -315,7 +325,8 @@ class FakturoidService
             $pdfContent = $response->getBody();
 
             if ($pdfContent) {
-                $path = 'files/invoices/' . $invoice->id . '.pdf';
+                $fileSlug = $invoice->number ? preg_replace('/[^a-zA-Z0-9\-]/', '-', $invoice->number) : $invoice->id;
+                $path = 'files/invoices/' . $fileSlug . '.pdf';
                 $name = 'faktura-' . ($invoice->number ?? $invoice->id) . '.pdf';
 
                 // Remove old PDF if exists

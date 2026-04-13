@@ -20,6 +20,15 @@ class Site extends Model
         'fakturoid_client_id',
         'fakturoid_client_secret',
         'fakturoid_slug',
+        'billing_name',
+        'billing_ico',
+        'billing_dic',
+        'billing_street',
+        'billing_city',
+        'billing_zip',
+        'billing_bank_account',
+        'billing_iban',
+        'billing_swift',
     ];
 
     protected $casts = [

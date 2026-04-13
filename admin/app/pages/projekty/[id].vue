@@ -88,7 +88,7 @@ async function loadItem() {
   })
     .then((r) => {
       item.value = r;
-      item.value.sites = r.sites?.map?.((s: any) => s.id) || r.sites || [];
+      item.value.sites = Array.isArray(r.sites) ? r.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
       categories.value = r.task_categories || [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
@@ -177,7 +177,7 @@ async function saveItem(redirect = true) {
     {
       method: 'POST',
       body: JSON.stringify(payload),
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
     },
   )
     .then((r) => {

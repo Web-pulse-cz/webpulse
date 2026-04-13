@@ -12,8 +12,10 @@ import {
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
+import { useFormat } from '~/composables/useFormat';
 
 const { $toast } = useNuxtApp();
+const { formatNumber, formatDate, formatDateTime } = useFormat();
 
 const user = useSanctumUser();
 const userGroupStore = useUserGroupStore();
@@ -253,13 +255,19 @@ const emit = defineEmits([
                     ]"
                   >
                     <span
-                      v-if="column.type === 'text' || column.type === 'number'"
+                      v-if="column.type === 'text'"
                       class="text-slate-900"
                     >
                       {{ printText(item, column) }}
                     </span>
-                    <span v-else-if="column.type === 'percent'">
-                      {{ item[column.key] ?? '-' }}%
+                    <span
+                      v-else-if="column.type === 'number'"
+                      class="text-slate-900 tabular-nums"
+                    >
+                      {{ formatNumber(printText(item, column), column.decimals ?? 2) }}
+                    </span>
+                    <span v-else-if="column.type === 'percent'" class="tabular-nums">
+                      {{ formatNumber(item[column.key], 0) }} %
                     </span>
                     <PropsBadge v-else-if="column.type === 'badge'" :color="item[column.colorKey]">
                       {{ item[column.key] }}
@@ -267,19 +275,11 @@ const emit = defineEmits([
                     <span v-else-if="column.type === 'enum'">
                       {{ enums[column.key][item[column.key]] }}
                     </span>
-                    <span v-else-if="column.type === 'date'">
-                      {{
-                        item[column.key] !== null
-                          ? new Date(item[column.key]).toLocaleDateString()
-                          : '-'
-                      }}
+                    <span v-else-if="column.type === 'date'" class="tabular-nums">
+                      {{ formatDate(printText(item, column)) }}
                     </span>
-                    <span v-else-if="column.type === 'datetime'">
-                      {{
-                        item[column.key] !== null
-                          ? new Date(item[column.key]).toLocaleString()
-                          : '-'
-                      }}
+                    <span v-else-if="column.type === 'datetime'" class="tabular-nums">
+                      {{ formatDateTime(printText(item, column)) }}
                     </span>
 
                     <img

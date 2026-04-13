@@ -6,6 +6,7 @@ import { UserIcon, MapPinIcon, TruckIcon, BanknotesIcon, ChatBubbleLeftIcon, Doc
 import { useCountryStore } from '~/../stores/countryStore';
 
 const { $toast } = useNuxtApp();
+const { formatCurrency, formatDate } = useFormat();
 const countryStore = useCountryStore();
 
 const route = useRoute();
@@ -83,7 +84,7 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      item.value.sites = response.sites?.map?.((s: any) => s.id) || response.sites || [];
+      item.value.sites = Array.isArray(response.sites) ? response.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -134,6 +135,7 @@ async function saveItem(redirect = true) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
       },
     },
   )
@@ -443,7 +445,7 @@ definePageMeta({
                 <span class="ml-3 text-sm text-slate-500">{{ inv.subject }}</span>
               </div>
               <div class="flex items-center gap-4">
-                <span class="text-sm font-medium">{{ inv.total }} </span>
+                <span class="text-sm font-medium tabular-nums">{{ formatCurrency(inv.total) }}</span>
                 <span
                   class="rounded-full px-2 py-0.5 text-xs font-medium"
                   :class="{
@@ -454,7 +456,7 @@ definePageMeta({
                     'bg-gray-50 text-gray-500': inv.status === 'cancelled',
                   }"
                 >
-                  {{ inv.status }}
+                  {{ { paid: 'Zaplacená', sent: 'Odeslaná', overdue: 'Po splatnosti', open: 'Otevřená', cancelled: 'Stornovaná' }[inv.status] || inv.status }}
                 </span>
               </div>
             </NuxtLink>

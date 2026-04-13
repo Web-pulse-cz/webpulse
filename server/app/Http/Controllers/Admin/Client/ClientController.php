@@ -101,18 +101,22 @@ class ClientController extends Controller
             return Response::json(['message' => 'Chyba při ukládání klienta.'], 500);
         }
 
-        // Push to Fakturoid
-        $siteId = $this->handleSite($request->header('X-Site-Hash'));
-        SyncClientToFakturoidJob::dispatch($client->id, $siteId);
+        // Push to Fakturoid (if site has credentials)
+        try {
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            SyncClientToFakturoidJob::dispatch($client->id, $siteId);
+        } catch (\Throwable $e) {
+            // Site hash missing or invalid — skip Fakturoid sync silently
+        }
 
-        return Response::json(ClientResource::make($client));
+        return Response::json(ClientResource::make($client->fresh('sites')));
     }
 
     public function show(Request $request, int $id): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $client = Client::query()
+        $client = Client::with('sites')
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
         if (! $client) {

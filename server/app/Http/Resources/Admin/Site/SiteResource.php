@@ -25,6 +25,15 @@ class SiteResource extends JsonResource
             'fakturoid_client_id' => $this->fakturoid_client_id,
             'fakturoid_client_secret' => $this->fakturoid_client_secret ? '••••••••' : null,
             'fakturoid_slug' => $this->fakturoid_slug,
+            'billing_name' => $this->billing_name,
+            'billing_ico' => $this->billing_ico,
+            'billing_dic' => $this->billing_dic,
+            'billing_street' => $this->billing_street,
+            'billing_city' => $this->billing_city,
+            'billing_zip' => $this->billing_zip,
+            'billing_bank_account' => $this->billing_bank_account,
+            'billing_iban' => $this->billing_iban,
+            'billing_swift' => $this->billing_swift,
             'users' => $this->users,
         ];
     }

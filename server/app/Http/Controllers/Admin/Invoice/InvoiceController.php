@@ -152,22 +152,34 @@ class InvoiceController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('Invoice save error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
-            return Response::json(['message' => 'Chyba při ukládání faktury.'], 500);
+            return Response::json(['message' => 'Chyba při ukládání faktury: ' . $e->getMessage()], 500);
         }
 
-        // Push to Fakturoid
-        $siteId = $this->handleSite($request->header('X-Site-Hash'));
-        SyncInvoiceToFakturoidJob::dispatch($invoice->id, $siteId);
+        // Generate PDF: Fakturoid if available, otherwise local
+        try {
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $site = \App\Models\Site\Site::find($siteId);
 
-        return Response::json(InvoiceResource::make($invoice->fresh(['items', 'client'])));
+            if ($site?->hasFakturoid()) {
+                SyncInvoiceToFakturoidJob::dispatch($invoice->id, $siteId);
+            } else {
+                $this->generateLocalPdf($invoice->fresh(['items', 'client', 'sites']), $site);
+            }
+        } catch (\Throwable $e) {
+            // Site hash missing — try local PDF generation without site
+            $this->generateLocalPdf($invoice->fresh(['items', 'client', 'sites']), null);
+        }
+
+        return Response::json(InvoiceResource::make($invoice->fresh(['items', 'client', 'sites'])));
     }
 
     public function show(Request $request, int $id): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $invoice = Invoice::with(['items', 'client'])
+        $invoice = Invoice::with(['items', 'client', 'sites'])
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
         if (! $invoice) {
@@ -216,5 +228,31 @@ class InvoiceController extends Controller
         return response()->download($path, $file->name, [
             'Content-Type' => $file->mime_type,
         ]);
+    }
+
+    protected function generateLocalPdf(Invoice $invoice, ?\App\Models\Site\Site $site): void
+    {
+        try {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', [
+                'invoice' => $invoice,
+                'site' => $site,
+            ]);
+
+            $fileSlug = $invoice->number ? preg_replace('/[^a-zA-Z0-9\-]/', '-', $invoice->number) : $invoice->id;
+            $path = 'files/invoices/' . $fileSlug . '.pdf';
+            $name = 'faktura-' . ($invoice->number ?? $invoice->id) . '.pdf';
+
+            // Remove old PDF
+            $existingFiles = $invoice->files();
+            foreach ($existingFiles as $file) {
+                if ($file->mime_type === 'application/pdf') {
+                    $invoice->removeFile($file->id);
+                }
+            }
+
+            $invoice->attachFileFromContent($pdf->output(), $path, $name, 'application/pdf');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Local PDF generation failed: ' . $e->getMessage());
+        }
     }
 }

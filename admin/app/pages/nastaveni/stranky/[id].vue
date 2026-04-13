@@ -68,7 +68,6 @@ const settings = {
     'project_time_entries',
     'trackings',
     'invoices',
-    'suppliers',
     'employees',
     'employee_contracts',
     'shifts',
@@ -107,6 +106,15 @@ const item = ref({
   fakturoid_client_id: '' as string,
   fakturoid_client_secret: '' as string,
   fakturoid_slug: '' as string,
+  billing_name: '' as string,
+  billing_ico: '' as string,
+  billing_dic: '' as string,
+  billing_street: '' as string,
+  billing_city: '' as string,
+  billing_zip: '' as string,
+  billing_bank_account: '' as string,
+  billing_iban: '' as string,
+  billing_swift: '' as string,
   users: [] as Array<number>,
 });
 
@@ -267,8 +275,6 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Trackování';
     case 'invoices':
       return 'Faktury';
-    case 'suppliers':
-      return 'Dodavatelé';
     case 'employees':
       return 'Zaměstnanci';
     case 'tasks':
@@ -432,6 +438,31 @@ definePageMeta({
                   />
                 </div>
               </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+              >
+                <BanknotesIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Fakturační údaje</LayoutTitle>
+            </div>
+
+            <p class="mb-4 text-xs text-slate-500">Údaje dodavatele pro generování faktur. Zobrazí se na fakturách a v QR kódu pro platbu.</p>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              <BaseFormInput v-model="item.billing_name" label="Název firmy" name="billing_name" class="col-span-full sm:col-span-1" />
+              <BaseFormInput v-model="item.billing_ico" label="IČO" name="billing_ico" />
+              <BaseFormInput v-model="item.billing_dic" label="DIČ" name="billing_dic" />
+              <BaseFormInput v-model="item.billing_street" label="Ulice" name="billing_street" />
+              <BaseFormInput v-model="item.billing_city" label="Město" name="billing_city" />
+              <BaseFormInput v-model="item.billing_zip" label="PSČ" name="billing_zip" />
+              <BaseFormInput v-model="item.billing_bank_account" label="Číslo účtu" name="billing_bank_account" />
+              <BaseFormInput v-model="item.billing_iban" label="IBAN" name="billing_iban" />
+              <BaseFormInput v-model="item.billing_swift" label="SWIFT/BIC" name="billing_swift" />
             </div>
           </LayoutContainer>
 
