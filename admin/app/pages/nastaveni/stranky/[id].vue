@@ -48,6 +48,8 @@ const settings = {
     'logos',
     'careers',
     'quizzes',
+    'customers',
+    'vouchers',
     'newsletters',
     'demands',
     'contacts',
@@ -245,6 +247,10 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Ligy';
     case 'clients':
       return 'Klienti';
+    case 'customers':
+      return 'Zákazníci';
+    case 'vouchers':
+      return 'Slevové vouchery';
     case 'biographies':
       return 'Životopisy';
     case 'projects':

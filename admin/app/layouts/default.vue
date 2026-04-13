@@ -310,8 +310,33 @@ const navigation = ref([
     ],
   },
   {
-    title: 'Uživatelé',
+    title: 'Zákazníci',
     menu: [
+      {
+        name: 'Zákazníci',
+        icon: UsersIcon,
+        current: false,
+        slug: 'customers',
+        submenu: [
+          {
+            name: 'Zákazníci',
+            link: '/zakaznici',
+            current: false,
+          },
+          {
+            name: 'Skupiny zákazníků',
+            link: '/zakaznici/skupiny',
+            current: false,
+          },
+        ],
+      },
+      {
+        name: 'Slevové vouchery',
+        link: '/zakaznici/vouchery',
+        icon: DocumentCurrencyEuroIcon,
+        current: false,
+        slug: 'vouchers',
+      },
       {
         name: 'Odběry newsletteru',
         link: '/uzivatele/newslettery',

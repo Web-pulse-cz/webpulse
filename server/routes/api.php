@@ -70,6 +70,9 @@ use App\Http\Controllers\Admin\Project\ProjectTaskCategoryController;
 use App\Http\Controllers\Admin\Project\ProjectTaskBoardController;
 use App\Http\Controllers\Admin\Project\ProjectTaskCommentController;
 use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
+use App\Http\Controllers\Admin\Customer\CustomerController;
+use App\Http\Controllers\Admin\Customer\CustomerGroupController;
+use App\Http\Controllers\Admin\Voucher\VoucherController;
 use App\Http\Controllers\Admin\Employee\EmployeeController;
 use App\Http\Controllers\Admin\Employee\EmployeeDivisionController;
 use App\Http\Controllers\Admin\Employee\EmployeeContractController;
@@ -613,6 +616,36 @@ Route::group([
             Route::post('timer/start', [TimeEntryController::class, 'startTimer']);
             Route::post('timer/{id}/stop', [TimeEntryController::class, 'stopTimer'])->where('id', '[0-9]+');
             Route::get('export-pdf', [TimeEntryController::class, 'exportPdf']);
+        });
+
+        // Customer routes
+        Route::group([
+            'prefix' => 'customer'
+        ], function () {
+            // Customer groups
+            Route::group([
+                'prefix' => 'group'
+            ], function () {
+                Route::get('', [CustomerGroupController::class, 'index']);
+                Route::get('{id}', [CustomerGroupController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [CustomerGroupController::class, 'store']);
+                Route::delete('{id}', [CustomerGroupController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [CustomerController::class, 'index']);
+            Route::get('{id}', [CustomerController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [CustomerController::class, 'store']);
+            Route::delete('{id}', [CustomerController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Voucher routes
+        Route::group([
+            'prefix' => 'voucher'
+        ], function () {
+            Route::get('', [VoucherController::class, 'index']);
+            Route::get('{id}', [VoucherController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [VoucherController::class, 'store']);
+            Route::delete('{id}', [VoucherController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Employee routes
