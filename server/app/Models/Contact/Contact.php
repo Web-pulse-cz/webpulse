@@ -35,14 +35,14 @@ class Contact extends Model
         'next_meeting',
         'next_contact',
         'last_contacted_at',
-        'interests'
+        'interests',
     ];
 
     protected $casts = [
         'next_meeting' => 'datetime',
         'last_contacted_at' => 'datetime',
         'next_contact' => 'datetime',
-        'interests' => 'json'
+        'interests' => 'json',
     ];
 
     protected $with = ['phase', 'source'];
@@ -96,11 +96,11 @@ class Contact extends Model
     {
         $tasks = $request->get('tasks', []);
         DB::table('contacts_has_tasks')->where('contact_id', $this->id)->delete();
-        if (!empty($tasks)) {
+        if (! empty($tasks)) {
             foreach ($tasks as $task) {
                 DB::table('contacts_has_tasks')->insert([
                     'contact_id' => $this->id,
-                    'contact_task_id' => $task
+                    'contact_task_id' => $task,
                 ]);
             }
         }
@@ -110,11 +110,11 @@ class Contact extends Model
     {
         $lists = $request->get('lists', []);
         DB::table('contacts_in_lists')->where('contact_id', $this->id)->delete();
-        if (!empty($lists)) {
+        if (! empty($lists)) {
             foreach ($lists as $list) {
                 DB::table('contacts_in_lists')->insert([
                     'contact_id' => $this->id,
-                    'contact_list_id' => $list
+                    'contact_list_id' => $list,
                 ]);
             }
         }

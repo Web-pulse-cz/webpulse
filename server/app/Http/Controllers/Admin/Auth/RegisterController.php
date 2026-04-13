@@ -36,16 +36,17 @@ class RegisterController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = new User();
+            $user = new User;
             $user->fill($data);
             $user->save();
 
-            //TODO:: send email verification
-            //Artisan::call(sprintf('app:registration --userId=%s', $user->id));
+            // TODO:: send email verification
+            // Artisan::call(sprintf('app:registration --userId=%s', $user->id));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => $e->getMessage()], 500);
         }
 

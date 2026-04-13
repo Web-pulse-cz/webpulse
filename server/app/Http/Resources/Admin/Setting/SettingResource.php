@@ -19,7 +19,7 @@ class SettingResource extends JsonResource
             'type' => $this->type,
             'value' => $this->value,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
-            'sites' => $this->sites
+            'sites' => $this->sites,
         ];
     }
 }

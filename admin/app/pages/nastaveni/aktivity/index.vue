@@ -127,48 +127,46 @@ definePageMeta({
       slug="activities"
       :actions="[{ type: 'add', text: 'Přidat aktivitu' }]"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'name',
-            name: 'Jméno',
-            type: 'badge',
-            width: 80,
-            hidden: false,
-            sortable: true,
-            colorKey: 'color',
-          },
-          {
-            key: 'is_business',
-            name: 'Byznysová aktivita',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'is_personal',
-            name: 'Osobní aktivita',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Aktivita"
-        plural="Aktivity"
-        :query="tableQuery"
-        slug="activities"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'name',
+          name: 'Jméno',
+          type: 'badge',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          colorKey: 'color',
+        },
+        {
+          key: 'is_business',
+          name: 'Byznysová aktivita',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'is_personal',
+          name: 'Osobní aktivita',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Aktivita"
+      plural="Aktivity"
+      :query="tableQuery"
+      slug="activities"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

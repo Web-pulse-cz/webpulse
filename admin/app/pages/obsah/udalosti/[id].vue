@@ -4,6 +4,7 @@ import { Form } from 'vee-validate';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
 import { useLanguageStore } from '~~/stores/languageStore';
+import { BanknotesIcon, CalendarIcon, PencilSquareIcon, PlusIcon } from '@heroicons/vue/24/outline';
 
 const currencyStore = useCurrencyStore();
 const taxRateStore = useTaxRateStore();
@@ -418,7 +419,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -427,250 +428,246 @@ definePageMeta({
       slug="events"
       @save="saveItem"
     />
-    <LayoutTabs :tabs="tabs" />
+
+    <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
+
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-          <LayoutContainer class="col-span-9 w-full">
-            <div class="grid grid-cols-4 gap-8">
-              <BaseFormInput
-                v-model="item.code"
-                label="Kód"
-                type="text"
-                name="code"
-                class="col-span-2"
-                disabled
-              />
-              <br />
-              <BaseFormInput
-                v-model="item.start_date"
-                label="Začátek"
-                type="datetime-local"
-                name="published_from"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.end_date"
-                label="Konec"
-                type="datetime-local"
-                name="published_to"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.place"
-                label="Místo konání události"
-                type="text"
-                name="place"
-                class="col-span-3"
-                :disabled="item.is_online"
-              />
-              <br />
-              <BaseFormCheckbox
-                v-model="item.is_online"
-                label="Online událost"
-                name="is_online"
-                class="col-span-1"
-              />
-              <BaseFormCheckbox
-                v-model="item.registration_required"
-                label="Povinná registrace"
-                name="registration_required"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.max_participants"
-                label="Maximální počet účastníků"
-                type="number"
-                name="max_participants"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.registration_from"
-                label="Začátek registrace"
-                type="datetime-local"
-                name="registration_from"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.price"
-                label="Cena"
-                type="number"
-                name="price"
-                class="col-span-2"
-                :min="0"
-              />
-              <BaseFormSelect
-                v-model="item.currency_id"
-                label="Měna"
-                name="currency_id"
-                class="col-span-1"
-                :options="currencyStore.currenciesOptions"
-              />
-              <BaseFormSelect
-                v-model="item.tax_rate_id"
-                label="Sazba DPH"
-                name="tax_rate_id"
-                class="col-span-1"
-                :options="taxRateStore.taxRateOptions"
-              />
-              <BaseFormInput
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].name !== undefined
-                "
-                :key="`name-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].name"
-                label="Název"
-                type="text"
-                name="name"
-                rules="required|min:3"
-                class="col-span-full"
-              />
-              <BaseFormInput
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].meta_title !== undefined
-                "
-                :key="`meta_title-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].meta_title"
-                label="Meta název"
-                type="text"
-                name="meta_title"
-                class="col-span-full"
-              />
-              <BaseFormTextarea
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].meta_description !== undefined
-                "
-                :key="`meta_description-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].meta_description"
-                label="Meta popis"
-                name="meta_description"
-                class="col-span-full"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].perex !== undefined
-                "
-                :key="`perex-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].perex"
-                label="Perex"
-                name="perex"
-                class="col-span-full"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].text !== undefined
-                "
-                :key="`text-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].text"
-                label="Popis"
-                name="text"
-                class="col-span-full"
-              />
-            </div>
-          </LayoutContainer>
-          <LayoutActionsDetailBlock
-            v-model:state="item.status"
-            v-model:category-id="item.event_category_id"
-            v-model:position="item.position"
-            v-model:sites="item.sites"
-            v-model:image="item.image"
-            v-model:selected-locale="selectedLocale"
-            v-model:translate-automatically="item.translateAutomatically"
-            :allow-state="true"
-            :states="[
-              { value: 'draft', name: 'Koncept' },
-              { value: 'published', name: 'Publikováno' },
-              { value: 'archived', name: 'Archivováno' },
-            ]"
-            :allow-categories="true"
-            :categories="eventCategories"
-            :allow-position="true"
-            image-type="event"
-            class="col-span-3"
-          />
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div class="col-span-1 space-y-8 lg:col-span-9">
+            <LayoutContainer>
+              <div class="mb-6 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                  >
+                    <CalendarIcon class="size-5" />
+                  </div>
+                  <LayoutTitle class="!mb-0">Termín a místo konání</LayoutTitle>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                    >Interní kód</span
+                  >
+                  <p class="font-mono text-sm font-bold text-slate-600">{{ item.code || '---' }}</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <BaseFormInput
+                  v-model="item.start_date"
+                  label="Začátek události"
+                  type="datetime-local"
+                  name="published_from"
+                />
+                <BaseFormInput
+                  v-model="item.end_date"
+                  label="Konec události"
+                  type="datetime-local"
+                  name="published_to"
+                />
+                <BaseFormInput
+                  v-model="item.place"
+                  label="Místo konání / Adresa"
+                  type="text"
+                  name="place"
+                  class="col-span-1 lg:col-span-2"
+                  :disabled="item.is_online"
+                />
+
+                <div
+                  class="col-span-full rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200"
+                >
+                  <BaseFormCheckbox
+                    v-model="item.is_online"
+                    label="Toto je online událost (webinář/stream)"
+                    name="is_online"
+                    class="w-full flex-row-reverse justify-between"
+                  />
+                </div>
+              </div>
+            </LayoutContainer>
+
+            <LayoutContainer>
+              <div class="mb-6 flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                >
+                  <BanknotesIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Registrace a cena</LayoutTitle>
+              </div>
+
+              <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                <div class="space-y-4 rounded-2xl border border-slate-100 p-5">
+                  <BaseFormCheckbox
+                    v-model="item.registration_required"
+                    label="Vyžadovat registraci"
+                    name="registration_required"
+                    class="w-full flex-row-reverse justify-between border-b border-slate-100 pb-4"
+                  />
+                  <BaseFormInput
+                    v-model="item.max_participants"
+                    label="Kapacita účastníků"
+                    type="number"
+                    name="max_participants"
+                  />
+                  <BaseFormInput
+                    v-model="item.registration_from"
+                    label="Registrace spuštěna od"
+                    type="datetime-local"
+                    name="registration_from"
+                  />
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:col-span-2">
+                  <div class="col-span-full sm:col-span-2">
+                    <BaseFormInput
+                      v-model="item.price"
+                      label="Základní cena (vstupný)"
+                      type="number"
+                      name="price"
+                      :min="0"
+                    />
+                  </div>
+                  <BaseFormSelect
+                    v-model="item.currency_id"
+                    label="Měna"
+                    name="currency_id"
+                    :options="currencyStore.currenciesOptions"
+                  />
+                  <BaseFormSelect
+                    v-model="item.tax_rate_id"
+                    label="Sazba DPH"
+                    name="tax_rate_id"
+                    :options="taxRateStore.taxRateOptions"
+                  />
+                </div>
+              </div>
+            </LayoutContainer>
+
+            <LayoutContainer>
+              <div class="mb-6 flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+                >
+                  <PencilSquareIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0"
+                  >Obsah události ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+                >
+              </div>
+
+              <div class="space-y-6">
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]"
+                  v-model="item.translations[selectedLocale].name"
+                  label="Název události"
+                  type="text"
+                  name="name"
+                  rules="required|min:3"
+                  class="col-span-full"
+                />
+
+                <div class="space-y-6 rounded-2xl bg-slate-50 p-6">
+                  <BaseFormInput
+                    v-if="item.translations?.[selectedLocale]"
+                    v-model="item.translations[selectedLocale].meta_title"
+                    label="SEO Titulek (Meta Title)"
+                    type="text"
+                    name="meta_title"
+                  />
+                  <BaseFormTextarea
+                    v-if="item.translations?.[selectedLocale]"
+                    v-model="item.translations[selectedLocale].meta_description"
+                    label="SEO Popis (Meta Description)"
+                    name="meta_description"
+                    rows="2"
+                  />
+                </div>
+
+                <div class="space-y-8">
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]"
+                    v-model="item.translations[selectedLocale].perex"
+                    label="Krátký perex (upoutávka)"
+                    name="perex"
+                  />
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]"
+                    v-model="item.translations[selectedLocale].text"
+                    label="Kompletní popis události"
+                    name="text"
+                  />
+                </div>
+              </div>
+            </LayoutContainer>
+          </div>
+
+          <div class="col-span-1 lg:col-span-3">
+            <LayoutActionsDetailBlock
+              v-model:state="item.status"
+              v-model:category-id="item.event_category_id"
+              v-model:position="item.position"
+              v-model:sites="item.sites"
+              v-model:image="item.image"
+              v-model:selected-locale="selectedLocale"
+              v-model:translate-automatically="item.translateAutomatically"
+              :allow-state="true"
+              :states="[
+                { value: 'draft', name: 'Koncept' },
+                { value: 'published', name: 'Publikováno' },
+                { value: 'archived', name: 'Archivováno' },
+              ]"
+              :allow-categories="true"
+              :categories="eventCategories"
+              :allow-position="true"
+              image-type="event"
+              class="sticky top-24"
+            />
+          </div>
         </div>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#registrace')">
-        <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-9">
-          <LayoutContainer class="col-span-full w-full">
-            <div class="flex items-center justify-between">
-              <p class="text-base text-grayCustom">
-                Počet přihlášených lidí: {{ item.registrations.data.length }}
-              </p>
+        <div class="space-y-6">
+          <LayoutContainer>
+            <div class="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <LayoutTitle class="!mb-1">Přihlášení účastníci</LayoutTitle>
+                <p class="text-sm font-medium text-slate-500">
+                  Aktuálně registrováno:
+                  <span class="font-bold text-indigo-600">{{
+                    item.registrations.data.length
+                  }}</span>
+                  <span v-if="item.max_participants > 0"> / {{ item.max_participants }}</span>
+                </p>
+              </div>
+
               <BaseButton
                 v-if="
-                  item.max_participants > 0 &&
+                  item.max_participants === 0 ||
                   item.registrations.data.length < item.max_participants
                 "
-                class="mb-4"
                 type="button"
                 variant="primary"
                 size="lg"
                 @click="openRegistrationDialog()"
-                >Vytvořit registraci</BaseButton
               >
+                <PlusIcon class="mr-2 size-5" />
+                Vytvořit registraci
+              </BaseButton>
             </div>
+
             <BaseTable
               :items="item.registrations"
               :columns="[
-                {
-                  key: 'id',
-                  name: 'ID',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'firstname',
-                  name: 'Jméno',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'lastname',
-                  name: 'Příjmení',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'email',
-                  name: 'E-mail',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'phone',
-                  name: 'Telefon',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'is_paid',
-                  name: 'Zaplaceno',
-                  type: 'status',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
+                { key: 'id', name: 'ID', type: 'text', width: 60 },
+                { key: 'firstname', name: 'Jméno', type: 'text' },
+                { key: 'lastname', name: 'Příjmení', type: 'text' },
+                { key: 'email', name: 'E-mail', type: 'text' },
+                { key: 'phone', name: 'Telefon', type: 'text' },
+                { key: 'is_paid', name: 'Zaplaceno', type: 'status', width: 100 },
               ]"
               :actions="[{ type: 'edit-dialog' }, { type: 'delete' }]"
               :loading="loading"
@@ -685,6 +682,7 @@ definePageMeta({
         </div>
       </template>
     </Form>
+
     <EventRegistrationDialog
       v-model:show="registrationDialog.show"
       :item="registrationDialog.item"

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useCountryStore } from '~~/stores/countryStore';
+import { MapPinIcon, PencilSquareIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -191,7 +192,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-12">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -199,60 +200,164 @@ definePageMeta({
       slug="events"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-7">
-        <LayoutContainer class="col-span-full w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.firstname"
-              name="firstname"
-              label="Jméno"
-              type="text"
-              rules="required|min:3"
-            />
-            <BaseFormInput v-model="item.ico" name="ico" label="IČO" type="text" />
-            <BaseFormInput
-              v-model="item.lastname"
-              name="lastname"
-              label="Příjmení"
-              type="text"
-              rules="required|min:3"
-            />
-            <BaseFormInput v-model="item.dic" name="dic" label="DIČ" type="text" />
-            <BaseFormInput
-              v-model="item.email"
-              name="email"
-              label="E-mail"
-              type="text"
-              rules="required|min:3"
-            />
-            <BaseFormInput v-model="item.company" name="company" label="Společnost" type="text" />
-            <BaseFormInput v-model="item.phone" name="phone" label="Telefon" type="text" />
-            <BaseFormInput
-              v-model="item.street"
-              name="street"
-              label="Ulice a číslo popisné"
-              type="text"
-            />
-            <BaseFormCheckbox v-model="item.is_paid" name="is_paid" label="Je uhrazeno?" />
-            <BaseFormInput v-model="item.city" name="city" label="Město" type="text" />
-            <div>&nbsp;</div>
-            <BaseFormInput v-model="item.zip" name="zip" label="PSČ" type="text" />
-            <div>&nbsp;</div>
-            <BaseFormSelect
-              v-model="item.country_id"
-              name="country_id"
-              label="Země"
-              :options="countryStore.countriesOptions"
-            />
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-8">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <UserIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Informace o účastníkovi</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              <BaseFormInput
+                v-model="item.firstname"
+                name="firstname"
+                label="Jméno"
+                type="text"
+                rules="required|min:3"
+                placeholder="Např. Jan"
+              />
+              <BaseFormInput
+                v-model="item.lastname"
+                name="lastname"
+                label="Příjmení"
+                type="text"
+                rules="required|min:3"
+                placeholder="Např. Novák"
+              />
+              <BaseFormInput
+                v-model="item.email"
+                name="email"
+                label="E-mail"
+                type="text"
+                rules="required|email"
+                placeholder="jan.novak@email.cz"
+              />
+              <BaseFormInput
+                v-model="item.phone"
+                name="phone"
+                label="Telefon"
+                type="text"
+                placeholder="+420 123 456 789"
+              />
+
+              <div class="col-span-full pt-4">
+                <LayoutDivider>Firemní údaje (volitelné)</LayoutDivider>
+              </div>
+
+              <BaseFormInput
+                v-model="item.company"
+                name="company"
+                label="Název společnosti"
+                type="text"
+                class="col-span-full"
+              />
+              <BaseFormInput v-model="item.ico" name="ico" label="IČO" type="text" />
+              <BaseFormInput v-model="item.dic" name="dic" label="DIČ" type="text" />
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600"
+              >
+                <MapPinIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Adresa bydliště / sídla</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-6">
+              <BaseFormInput
+                v-model="item.street"
+                name="street"
+                label="Ulice a číslo popisné"
+                type="text"
+                class="col-span-full sm:col-span-4"
+              />
+              <div class="hidden sm:col-span-2 sm:block"></div>
+              <BaseFormInput
+                v-model="item.city"
+                name="city"
+                label="Město"
+                type="text"
+                class="col-span-full sm:col-span-3"
+              />
+              <BaseFormInput
+                v-model="item.zip"
+                name="zip"
+                label="PSČ"
+                type="text"
+                class="col-span-full sm:col-span-1"
+              />
+
+              <BaseFormSelect
+                v-model="item.country_id"
+                name="country_id"
+                label="Země"
+                :options="countryStore.countriesOptions"
+                class="col-span-full sm:col-span-2"
+              />
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <div class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-4">
+          <LayoutContainer class="!py-6">
+            <LayoutTitle class="text-xs uppercase tracking-widest text-slate-400"
+              >Status registrace</LayoutTitle
+            >
+            <div
+              class="mt-6 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200 transition-all hover:bg-white hover:shadow-md"
+            >
+              <BaseFormCheckbox
+                v-model="item.is_paid"
+                name="is_paid"
+                label="Registrace je uhrazena"
+                class="flex-row-reverse justify-between font-bold text-slate-900"
+              />
+            </div>
+            <div class="mt-4 flex items-center gap-2 px-1">
+              <div
+                :class="[item.is_paid ? 'bg-emerald-500' : 'bg-amber-500', 'size-2 rounded-full']"
+              />
+              <p class="text-xs font-medium text-slate-500">
+                {{ item.is_paid ? 'Platba byla potvrzena' : 'Čeká se na úhradu' }}
+              </p>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer class="!py-6">
+            <div class="mb-4 flex items-center gap-2">
+              <PencilSquareIcon class="size-4 text-slate-400" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
+                >Interní poznámka</LayoutTitle
+              >
+            </div>
             <BaseFormTextarea
               v-model="item.note"
               name="note"
-              label="Poznámka"
-              class="col-span-full"
+              label=""
+              placeholder="Zde můžete dopsat doplňující informace k účastníkovi..."
+              rows="6"
+              class="!bg-slate-50 focus:!bg-white"
             />
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
+            <h4 class="text-sm font-bold">Potřebujete fakturu?</h4>
+            <p class="mt-2 text-xs leading-relaxed opacity-80">
+              Pokud jsou vyplněny firemní údaje (IČO/DIČ), systém automaticky vygeneruje daňový
+              doklad po označení registrace jako uhrazené.
+            </p>
           </div>
-        </LayoutContainer>
+        </div>
       </div>
     </Form>
   </div>

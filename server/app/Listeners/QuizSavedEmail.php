@@ -5,11 +5,9 @@ namespace App\Listeners;
 use App\Events\QuizSaved as Event;
 use App\Models\Newsletter\Newsletter;
 use App\Services\EmailService;
-use Illuminate\Support\Facades\App;
 
 class QuizSavedEmail
 {
-
     protected EmailService $emailService;
 
     public function __construct(EmailService $emailService)
@@ -27,7 +25,7 @@ class QuizSavedEmail
                 $this->emailService->buildEmail(
                     'quizSaved',
                     $newsletter->email,
-                    'Nový kvíz vytvořený: ' . $quiz->name,
+                    'Nový kvíz vytvořený: '.$quiz->name,
                     null,
                     null,
                     [

@@ -38,7 +38,7 @@ class DevCommand extends Command
             }
 
             $linkRaw['redirect'] = $linkRaw['redirect'] == 'CHYBÍ STRÁNKA' ? '/' : $linkRaw['redirect'];
-            $linkRaw['redirect'] = str_contains($linkRaw['redirect'], 'wp-', ) ? '/' : $linkRaw['redirect'];
+            $linkRaw['redirect'] = str_contains($linkRaw['redirect'], 'wp-') ? '/' : $linkRaw['redirect'];
 
             $correctLinks[] = [
                 'from' => str_replace(['https://www.etool.cz', 'http://www.etool.cz', 'https://etool.monster-media.cz/', 'http://etool.monster-media.cz/'], '/', $linkRaw['origin']),

@@ -2,6 +2,7 @@
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import { useLanguageStore } from '~~/stores/languageStore';
+import { LightBulbIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();
@@ -223,7 +224,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-24">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -231,63 +232,109 @@ definePageMeta({
       slug="faqs"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-        <LayoutContainer class="col-span-9 w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].question !== undefined
-              "
-              :key="`question-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].question"
-              label="Dotaz"
-              type="text"
-              name="question"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].answer !== undefined
-              "
-              :key="`answer-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].answer"
-              label="Odpověď"
-              name="answer"
-              class="col-span-2"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <QuestionMarkCircleIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Obsah dotazu</LayoutTitle>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                  >Jazyk:</span
+                >
+                <span
+                  class="rounded-md bg-slate-900 px-2 py-1 text-xs font-bold uppercase text-white"
+                  >{{ selectedLocale }}</span
+                >
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-y-6">
+              <BaseFormInput
+                v-if="item.translations?.[selectedLocale]?.question !== undefined"
+                :key="`question-${selectedLocale}`"
+                v-model="item.translations[selectedLocale].question"
+                label="Znění otázky / dotazu"
+                type="text"
+                name="question"
+                rules="required|min:3"
+                placeholder="Např. Jaká je doba dodání?"
+                class="col-span-full"
+              />
+
+              <div class="col-span-full pt-2">
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.answer !== undefined"
+                  :key="`answer-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].answer"
+                  label="Podrobná odpověď"
+                  name="answer"
+                />
+              </div>
+            </div>
+
+            <div v-if="categories.length > 0" class="mt-12">
+              <LayoutDivider>Zařazení do tématických kategorií</LayoutDivider>
+
+              <div class="mt-6 rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200/60">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div
+                    v-for="(category, key) in categories"
+                    :key="key"
+                    class="flex items-center rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200 transition-all hover:ring-indigo-300"
+                  >
+                    <BaseFormCheckbox
+                      :label="category.name"
+                      :name="String(category.id)"
+                      :value="item.categories.includes(category.id)"
+                      :checked="item.categories.includes(category.id)"
+                      class="w-full flex-row-reverse justify-between font-medium text-slate-700"
+                      @change="addRemoveItemCategory(category.id)"
+                    />
+                  </div>
+                </div>
+                <p v-if="!categories.length" class="text-center text-sm italic text-slate-400">
+                  Nejsou definovány žádné kategorie pro FAQ.
+                </p>
+              </div>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
+            v-model:position="item.position"
+            v-model:active="item.active"
+            v-model:sites="item.sites"
+            :allow-image="false"
+            :allow-position="true"
+            :allow-is-active="true"
+            class="shadow-sm"
+          />
+
+          <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-4 text-indigo-600" />
+              <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
+                Dobrá praxe
+              </h4>
+            </div>
+            <p class="text-sm leading-relaxed text-indigo-800/80">
+              Stručné a jasné otázky pomáhají zákazníkům rychleji najít to, co hledají. Odpověď se
+              snažte formátovat pomocí odrážek pro lepší čitelnost.
+            </p>
           </div>
-          <LayoutDivider>Zařazení do kategorií</LayoutDivider>
-          <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-6 pt-6">
-            <BaseFormCheckbox
-              v-for="(category, key) in categories"
-              :key="key"
-              :label="category.name"
-              :name="category.id"
-              :value="item.categories.includes(category.id)"
-              :checked="item.categories.includes(category.id)"
-              class="col-span-1"
-              label-color="grayCustom"
-              @change="addRemoveItemCategory(category.id)"
-            />
-          </div>
-        </LayoutContainer>
-        <LayoutActionsDetailBlock
-          v-model:selected-locale="selectedLocale"
-          v-model:translate-automatically="item.translateAutomatically"
-          v-model:position="item.position"
-          v-model:active="item.active"
-          v-model:sites="item.sites"
-          :allow-image="false"
-          :allow-position="true"
-          :allow-is-active="true"
-          class="col-span-3"
-        />
+        </aside>
       </div>
     </Form>
   </div>

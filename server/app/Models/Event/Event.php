@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class Event extends Model
 {
-    use Translatable, Imagable, Siteable;
+    use Imagable, Siteable, Translatable;
 
     protected $table = 'events';
 
@@ -30,7 +30,7 @@ class Event extends Model
         'end_date',
         'event_category_id',
         'currency_id',
-        'tax_rate_id'
+        'tax_rate_id',
     ];
 
     public $translatedAttributes = [
@@ -39,7 +39,7 @@ class Event extends Model
         'perex',
         'text',
         'meta_title',
-        'meta_description'
+        'meta_description',
     ];
 
     protected $casts = [
@@ -63,6 +63,7 @@ class Event extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 
@@ -71,9 +72,9 @@ class Event extends Model
 
     public function generateCode()
     {
-        //$this->code = 'EVT-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+        // $this->code = 'EVT-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
         $code = Str::random(8);
-        if(self::where('code', $code)->exists()) {
+        if (self::where('code', $code)->exists()) {
             $this->generateCode(); // Recursively generate a new code if the current one already exists
         } else {
             $this->code = $code;
@@ -99,7 +100,6 @@ class Event extends Model
     {
         return $this->hasMany(EventRegistration::class, 'event_id', 'id');
     }
-
 
     public function getMainImageAttribute()
     {

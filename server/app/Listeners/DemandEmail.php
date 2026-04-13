@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\DemandSaved as Event;
-use App\Models\Contact\ContactHistory;
 use App\Services\EmailService;
 
 class DemandEmail

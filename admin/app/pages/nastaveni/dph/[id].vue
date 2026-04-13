@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
+import { InformationCircleIcon, ReceiptPercentIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -135,7 +136,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -143,29 +144,74 @@ definePageMeta({
       slug="tax_rates"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 gap-x-10">
-        <LayoutContainer class="col-span-full w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.rate"
-              label="Sazba"
-              type="number"
-              name="rate"
-              min="0"
-              rules="required"
-              class="col-span-1"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+              >
+                <ReceiptPercentIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Nastavení daňové sazby</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              <BaseFormInput
+                v-model="item.name"
+                label="Název sazby"
+                type="text"
+                name="name"
+                rules="required|min:2"
+                placeholder="Např. Základní sazba DPH"
+              />
+
+              <div class="relative">
+                <BaseFormInput
+                  v-model="item.rate"
+                  label="Výše sazby (v %)"
+                  type="number"
+                  name="rate"
+                  min="0"
+                  rules="required"
+                  placeholder="21"
+                />
+                <div
+                  class="absolute bottom-3 right-4 flex h-6 items-center border-l border-slate-200 pl-3 text-slate-400"
+                >
+                  <span class="text-sm font-bold">%</span>
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <div class="rounded-3xl bg-slate-900 p-6 text-white shadow-xl shadow-slate-200">
+            <div class="mb-4 flex items-center gap-2">
+              <InformationCircleIcon class="size-5 text-indigo-400" />
+              <h4 class="text-xs font-bold uppercase tracking-widest">Důležité</h4>
+            </div>
+            <p class="text-sm leading-relaxed opacity-80">
+              Sazby DPH jsou přímo napojeny na položky v <strong>Ceníku služeb</strong> a
+              <strong>Produktech</strong>.
+            </p>
+            <p class="mt-4 text-sm leading-relaxed opacity-80">
+              Změna výše sazby u již existujících dokladů neovlivní historická data, ale projeví se
+              u všech nově generovaných faktur.
+            </p>
           </div>
-        </LayoutContainer>
+
+          <div class="rounded-3xl border border-dashed border-slate-300 p-6">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500">Tip</h5>
+            <p class="mt-2 text-xs italic leading-relaxed text-slate-400">
+              Pro sazby, které jsou osvobozeny od daně, zadejte hodnotu 0 a název např.
+              "Osvobozeno".
+            </p>
+          </div>
+        </aside>
       </div>
     </Form>
   </div>

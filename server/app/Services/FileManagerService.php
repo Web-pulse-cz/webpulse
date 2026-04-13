@@ -2,25 +2,26 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
+use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Interfaces\ImageInterface;
 
 class FileManagerService
 {
     private const IMAGES_BASE_PATH = 'images';
+
     private const FILES_BASE_PATH = 'files';
 
     private ImageManager $imageManager;
 
     public function __construct()
     {
-        $this->imageManager = new ImageManager(new Driver());
+        $this->imageManager = new ImageManager(new Driver);
     }
 
-    public function getImageFormats(string $type, string $format = null): array
+    public function getImageFormats(string $type, ?string $format = null): array
     {
         $config = config(sprintf('filemanager.images.%s', $type), []);
         $formats = [];
@@ -32,7 +33,7 @@ class FileManagerService
                     'width' => $item['width'],
                     'height' => $item['height'],
                     'keepAspectRatio' => $item['keepAspectRatio'],
-                    'path' => storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type . '/' . $item['path']),
+                    'path' => storage_path('app/public/'.self::IMAGES_BASE_PATH.'/'.$type.'/'.$item['path']),
                 ];
             }
             $formats[] = [
@@ -40,37 +41,37 @@ class FileManagerService
                 'width' => $item['width'],
                 'height' => $item['height'],
                 'keepAspectRatio' => $item['keepAspectRatio'],
-                'path' => storage_path('app/public/' . self::IMAGES_BASE_PATH . '/' . $type . '/' . $item['path']),
+                'path' => storage_path('app/public/'.self::IMAGES_BASE_PATH.'/'.$type.'/'.$item['path']),
             ];
         }
 
         return $formats;
     }
 
-    public function uploadImages(string $type, string $format = null, int $keepName = 0, array $files = [], string $url = null): array
+    public function uploadImages(string $type, ?string $format = null, int $keepName = 0, array $files = [], ?string $url = null): array
     {
         $uploadedImages = [];
 
         // Validate type
         $imageFormats = $this->getImageFormats($type, $format);
-        if (!empty($files)) {
+        if (! empty($files)) {
             foreach ($files as $file) {
                 // Validate file
-                if (!$file->isValid()) {
-                    throw new \Exception("Invalid file upload.");
+                if (! $file->isValid()) {
+                    throw new \Exception('Invalid file upload.');
                 }
 
                 $extension = strtolower($file->getClientOriginalExtension());
-                $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true) . '.' . $extension;
+                $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true).'.'.$extension;
 
                 foreach ($imageFormats as $configFormat) {
                     if (in_array($extension, ['svg', 'svgz']) || $file->getMimeType() === 'image/svg+xml') {
-                        if (!is_dir($configFormat['path'])) {
+                        if (! is_dir($configFormat['path'])) {
                             mkdir($configFormat['path'], 0755, true);
                         }
 
                         // Copy the file (instead of move) into each directory
-                        copy($file->getRealPath(), $configFormat['path'] . '/' . $filename);
+                        copy($file->getRealPath(), $configFormat['path'].'/'.$filename);
 
                         continue; // Pokračuj na další formát
                     }
@@ -78,45 +79,45 @@ class FileManagerService
                     try {
                         $imageData = $this->parseImage($file, $configFormat);
                     } catch (\Exception $e) {
-                        throw new \Exception("Error processing image: " . $e->getMessage());
+                        throw new \Exception('Error processing image: '.$e->getMessage());
                     }
 
-                    if (!is_dir($configFormat['path'])) {
+                    if (! is_dir($configFormat['path'])) {
                         mkdir($configFormat['path'], 0755, true);
                     }
 
-                    $imageData->save($configFormat['path'] . '/' . $filename);
+                    $imageData->save($configFormat['path'].'/'.$filename);
                 }
 
                 // Store the filename for the uploaded image
                 $uploadedImages[] = $filename;
             }
-        } else if ($url) {
+        } elseif ($url) {
             // Handle URL upload
             $imageContents = file_get_contents($url);
             if ($imageContents === false) {
-                throw new \Exception("Failed to fetch image from URL.");
+                throw new \Exception('Failed to fetch image from URL.');
             }
 
             $tempFilePath = tempnam(sys_get_temp_dir(), 'img_');
             file_put_contents($tempFilePath, $imageContents);
 
-            $file = new \Illuminate\Http\File($tempFilePath);
+            $file = new File($tempFilePath);
             $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
-            $filename = $keepName ? basename(parse_url($url, PHP_URL_PATH)) : uniqid('', true) . '.jpg';
+            $filename = $keepName ? basename(parse_url($url, PHP_URL_PATH)) : uniqid('', true).'.jpg';
 
             foreach ($imageFormats as $configFormat) {
                 try {
                     $imageData = $this->parseImage($file, $configFormat);
                 } catch (\Exception $e) {
-                    throw new \Exception("Error processing image from URL: " . $e->getMessage());
+                    throw new \Exception('Error processing image from URL: '.$e->getMessage());
                 }
 
-                if (!is_dir($configFormat['path'])) {
+                if (! is_dir($configFormat['path'])) {
                     mkdir($configFormat['path'], 0755, true);
                 }
 
-                $imageData->save($configFormat['path'] . '/' . $filename);
+                $imageData->save($configFormat['path'].'/'.$filename);
             }
 
             // Store the filename for the uploaded image
@@ -129,7 +130,7 @@ class FileManagerService
         return $uploadedImages;
     }
 
-    private function parseImage($file, array $format): \Intervention\Image\Interfaces\ImageInterface
+    private function parseImage($file, array $format): ImageInterface
     {
         $image = $this->imageManager->read($file);
 

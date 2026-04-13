@@ -10,8 +10,8 @@ use Illuminate\Console\Command;
 use Illuminate\Http\ResponseTrait;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use Spatie\SimpleExcel\SimpleExcelReader;
 use Revolution\Google\Sheets\Facades\Sheets;
+use Spatie\SimpleExcel\SimpleExcelReader;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
 class SyncContacts extends Command
@@ -34,14 +34,15 @@ class SyncContacts extends Command
         $this->output->progressStart(count($contacts));
 
         foreach ($contacts as $contact) {
-            $newPhone = preg_replace('/(\d{3})(?=\d)/', '$1 ', preg_replace('/\s+/', '', $contact->phone));            $contact->phone = $newPhone;
+            $newPhone = preg_replace('/(\d{3})(?=\d)/', '$1 ', preg_replace('/\s+/', '', $contact->phone));
+            $contact->phone = $newPhone;
             $contact->save();
             $this->output->progressAdvance();
         }
         $this->output->progressFinish();
-        //$this->createContactHistories();
-        //$this->databaseSync();
-        //$this->writeToExcel();
+        // $this->createContactHistories();
+        // $this->databaseSync();
+        // $this->writeToExcel();
     }
 
     private function createContactHistories(): void
@@ -52,7 +53,7 @@ class SyncContacts extends Command
 
         $contacts = Contact::query()->get();
         foreach ($contacts as $contact) {
-            $history = new ContactHistory();
+            $history = new ContactHistory;
             $history->fill([
                 'name' => 'Kontakt vytvořen',
                 'description' => 'Vytvořili jste nový kontakt!',
@@ -101,63 +102,63 @@ class SyncContacts extends Command
         foreach ($data as $key => $contact) {
             try {
 
-            $phase = ContactPhase::query()->where('name', $contact->phase)
-                ->where('user_id', 1)
-                ->first();
-            if (!$phase) {
-                $phase = new ContactPhase();
-                $phase->fill([
-                    'name' => $contact->phase,
-                    'color' => Str::upper(sprintf('#%s', Str::random(6))),
-                ]);
-                $phase->user_id = 1;
-                $phase->save();
-            }
+                $phase = ContactPhase::query()->where('name', $contact->phase)
+                    ->where('user_id', 1)
+                    ->first();
+                if (! $phase) {
+                    $phase = new ContactPhase;
+                    $phase->fill([
+                        'name' => $contact->phase,
+                        'color' => Str::upper(sprintf('#%s', Str::random(6))),
+                    ]);
+                    $phase->user_id = 1;
+                    $phase->save();
+                }
 
-            $source = ContactSource::query()->where('name', $contact->source)
-                ->where('user_id', 1)
-                ->first();
-            if (!$source) {
-                $source = new ContactSource();
-                $source->fill([
-                    'name' => $contact->source,
-                    'color' => Str::upper(sprintf('#%s', Str::random(6))),
-                ]);
-                $source->user_id = 1;
-                $source->save();
-            }
+                $source = ContactSource::query()->where('name', $contact->source)
+                    ->where('user_id', 1)
+                    ->first();
+                if (! $source) {
+                    $source = new ContactSource;
+                    $source->fill([
+                        'name' => $contact->source,
+                        'color' => Str::upper(sprintf('#%s', Str::random(6))),
+                    ]);
+                    $source->user_id = 1;
+                    $source->save();
+                }
 
-            $checkContact = Contact::query()
-                ->where('firstname', $contact->firstname)
-                ->where('lastname', $contact->lastname)
-                ->where('phone', $contact->phone)
-                ->where('user_id', 1)
-                ->first();
+                $checkContact = Contact::query()
+                    ->where('firstname', $contact->firstname)
+                    ->where('lastname', $contact->lastname)
+                    ->where('phone', $contact->phone)
+                    ->where('user_id', 1)
+                    ->first();
 
-            if (!$checkContact) {
-                $checkContact = new Contact();
-                $checkContact->fill([
-                    'firstname' => $contact->firstname,
-                    'lastname' => $contact->lastname,
-                    'phone' => $contact->phone,
-                    'email' => $contact->email,
-                    'company' => $contact->company,
-                    'occupation' => $contact->occupation,
-                    'goal' => $contact->goal,
-                    'note' => $contact->note,
-                    'phase_id' => $phase->id,
-                    'next_meeting' => $contact->next_meeting,
-                    'last_contacted_at' => $contact->last_contacted_at,
-                ]);
-                $checkContact->user_id = 1;
-                $checkContact->contact_source_id = $source->id;
-                $checkContact->contact_phase_id = $phase->id;
+                if (! $checkContact) {
+                    $checkContact = new Contact;
+                    $checkContact->fill([
+                        'firstname' => $contact->firstname,
+                        'lastname' => $contact->lastname,
+                        'phone' => $contact->phone,
+                        'email' => $contact->email,
+                        'company' => $contact->company,
+                        'occupation' => $contact->occupation,
+                        'goal' => $contact->goal,
+                        'note' => $contact->note,
+                        'phase_id' => $phase->id,
+                        'next_meeting' => $contact->next_meeting,
+                        'last_contacted_at' => $contact->last_contacted_at,
+                    ]);
+                    $checkContact->user_id = 1;
+                    $checkContact->contact_source_id = $source->id;
+                    $checkContact->contact_phase_id = $phase->id;
 
-                $checkContact->save();
-            }
+                    $checkContact->save();
+                }
 
-            $this->output->progressAdvance();
-            } catch (\Throwable | \Exception $e) {
+                $this->output->progressAdvance();
+            } catch (\Throwable|\Exception $e) {
                 dd($e->getMessage());
             }
         }
@@ -187,14 +188,14 @@ class SyncContacts extends Command
         $data = [
             'firstname' => count(explode(' ', $row['Jméno a příjmení'])) > 1 ? explode(' ', $row['Jméno a příjmení'])[1] : explode(' ', $row['Jméno a příjmení'])[0],
             'lastname' => explode(' ', $row['Jméno a příjmení'])[0],
-            'phone' => !in_array($row['Spojení'], ['', null, ' ', '-']) ? $row['Spojení'] : null,
+            'phone' => ! in_array($row['Spojení'], ['', null, ' ', '-']) ? $row['Spojení'] : null,
             'phase' => ucfirst(strtolower($row['Fáze'])),
-            'occupation' => !in_array($row['Profese/studium'], ['', null, ' ', '-']) ? $row['Profese/studium'] : null,
-            'goal' => !in_array($row['Sen/cíl'], ['', null, ' ', '-']) ? $row['Sen/cíl'] : null,
+            'occupation' => ! in_array($row['Profese/studium'], ['', null, ' ', '-']) ? $row['Profese/studium'] : null,
+            'goal' => ! in_array($row['Sen/cíl'], ['', null, ' ', '-']) ? $row['Sen/cíl'] : null,
             'source' => ucfirst(strtolower($row['Zdroj'])),
-            'next_meeting' => !in_array($row['Další schůzka'], ['', null, ' ', '-']) ? Carbon::parse($row['Další schůzka']) : null,
-            'last_contacted_at' => !in_array($row['Poslední kontakt'], ['', null, ' ', '-']) ? Carbon::parse($row['Poslední kontakt']) : null,
-            'note' => !in_array($row['Poznámky'], ['', null, ' ', '-']) ? $row['Poznámky'] : null,
+            'next_meeting' => ! in_array($row['Další schůzka'], ['', null, ' ', '-']) ? Carbon::parse($row['Další schůzka']) : null,
+            'last_contacted_at' => ! in_array($row['Poslední kontakt'], ['', null, ' ', '-']) ? Carbon::parse($row['Poslední kontakt']) : null,
+            'note' => ! in_array($row['Poznámky'], ['', null, ' ', '-']) ? $row['Poznámky'] : null,
         ];
 
         return $data;

@@ -44,7 +44,7 @@ const emit = defineEmits(['save-day-records']);
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -54,7 +54,7 @@ const emit = defineEmits(['save-day-records']);
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -71,7 +71,7 @@ const emit = defineEmits(['save-day-records']);
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-8"
               >
                 <Form
                   @submit="
@@ -85,40 +85,41 @@ const emit = defineEmits(['save-day-records']);
                     show = false;
                   "
                 >
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <DialogTitle
-                        as="h3"
-                        class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
-                      >
-                        Upravit denní záznam
-                      </DialogTitle>
+                  <div class="w-full text-left">
+                    <DialogTitle as="h3" class="mb-6 text-lg font-bold text-slate-900">
+                      Upravit denní záznam
+                    </DialogTitle>
+
+                    <div class="max-h-[65vh] overflow-y-auto overflow-x-hidden pr-2">
                       <div
                         v-for="(data, index) in dayRecords"
                         :key="index"
-                        class="mt-6 grid w-full grid-cols-5 gap-4"
+                        class="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-5 transition-colors hover:border-slate-300"
                       >
-                        <BaseFormInput
-                          v-model="dayRecords[index].amount"
-                          label="Částka"
-                          :min="0"
-                          step="0.01"
-                          type="number"
-                          :name="'dayRecords[' + index + '][amount]'"
-                          class="col-span-2"
-                          :autofocus="false"
-                          tabindex="-1"
-                        />
-                        <BaseFormInput
-                          v-model="dayRecords[index].description"
-                          label="Popis"
-                          type="text"
-                          :name="'dayRecords[' + index + '][description]'"
-                          :autofocus="false"
-                          class="col-span-3"
-                          tabindex="-1"
-                        />
-                        <div class="col-span-full flex gap-x-4">
+                        <div class="mb-4 grid w-full grid-cols-1 gap-4 sm:grid-cols-5">
+                          <BaseFormInput
+                            v-model="dayRecords[index].amount"
+                            label="Částka"
+                            :min="0"
+                            step="0.01"
+                            type="number"
+                            :name="'dayRecords[' + index + '][amount]'"
+                            class="sm:col-span-2"
+                            :autofocus="false"
+                            tabindex="-1"
+                          />
+                          <BaseFormInput
+                            v-model="dayRecords[index].description"
+                            label="Popis"
+                            type="text"
+                            :name="'dayRecords[' + index + '][description]'"
+                            :autofocus="false"
+                            class="sm:col-span-3"
+                            tabindex="-1"
+                          />
+                        </div>
+
+                        <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
                           <BaseFormSelect
                             v-if="categories && categories.length"
                             v-model="categoryId"
@@ -126,7 +127,7 @@ const emit = defineEmits(['save-day-records']);
                             name="category_id"
                             :autofocus="false"
                             :options="categories"
-                            class="w-1/2"
+                            class="w-full"
                             tabindex="-1"
                           />
                           <BaseFormSelect
@@ -136,7 +137,7 @@ const emit = defineEmits(['save-day-records']);
                             name="currency_id"
                             :autofocus="false"
                             :options="currencies"
-                            class="w-1/2"
+                            class="w-full"
                             tabindex="-1"
                           />
                           <BaseFormSelect
@@ -148,22 +149,24 @@ const emit = defineEmits(['save-day-records']);
                               { label: 'Výdej', name: 'Výdej', value: 'expense' },
                               { label: 'Příjem', name: 'Příjem', value: 'income' },
                             ]"
-                            class="w-1/2"
+                            class="w-full"
                             tabindex="-1"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
-                  >
-                    <BaseButton type="submit" variant="success" size="lg"> Uložit </BaseButton>
+
+                  <div class="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-start">
+                    <BaseButton type="submit" variant="success" size="lg" class="w-full sm:w-auto">
+                      Uložit
+                    </BaseButton>
                     <BaseButton
                       ref="cancelButtonRef"
                       type="button"
                       variant="secondary"
                       size="lg"
+                      class="w-full sm:w-auto"
                       @click="show = false"
                     >
                       Zavřít

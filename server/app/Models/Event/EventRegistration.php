@@ -3,7 +3,6 @@
 namespace App\Models\Event;
 
 use App\Models\Country\Country;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EventRegistration extends Model
@@ -24,7 +23,7 @@ class EventRegistration extends Model
         'city',
         'zip',
         'country_id',
-        'is_paid'
+        'is_paid',
     ];
 
     protected $casts = [

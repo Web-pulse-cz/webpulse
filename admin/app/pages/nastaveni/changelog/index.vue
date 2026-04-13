@@ -123,72 +123,70 @@ definePageMeta({
       slug="changelogs"
       :actions="[{ type: 'add', text: 'Přidat changelog' }]"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'version',
-            name: 'Verze',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'title',
-            name: 'Nadpis',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'type',
-            name: 'Typ',
-            type: 'enum',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'priority',
-            name: 'Priorita',
-            type: 'enum',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'updated_at',
-            name: 'Poslední úprava',
-            type: 'date',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :enums="{
-          type: {
-            feature: 'Nová funkce',
-            bugfix: 'Oprava chyby',
-            design: 'Vylepšení designu',
-            other: 'Ostatní',
-          },
-          priority: { low: 'Nízká', medium: 'Normální', high: 'Vysoká' },
-        }"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Chnagelog"
-        plural="Changelogy"
-        :query="tableQuery"
-        slug="changelogs"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'version',
+          name: 'Verze',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'title',
+          name: 'Nadpis',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'type',
+          name: 'Typ',
+          type: 'enum',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'priority',
+          name: 'Priorita',
+          type: 'enum',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'updated_at',
+          name: 'Poslední úprava',
+          type: 'date',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :enums="{
+        type: {
+          feature: 'Nová funkce',
+          bugfix: 'Oprava chyby',
+          design: 'Vylepšení designu',
+          other: 'Ostatní',
+        },
+        priority: { low: 'Nízká', medium: 'Normální', high: 'Vysoká' },
+      }"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Chnagelog"
+      plural="Changelogy"
+      :query="tableQuery"
+      slug="changelogs"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

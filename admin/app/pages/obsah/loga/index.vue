@@ -128,64 +128,62 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat logo' }]"
       slug="logos"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'image',
-            name: 'Logo',
-            type: 'image',
-            width: 80,
-            hidden: false,
-            sortable: true,
-            path: 'logo/medium',
-          },
-          {
-            key: 'name',
-            name: 'Název klienta',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'position',
-            name: 'Pořadí ve výpisu',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'url',
-            name: 'Odkaz',
-            type: 'link',
-            width: 80,
-            hidden: true,
-            sortable: false,
-            target: '_blank',
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Logo"
-        plural="Loga"
-        :query="tableQuery"
-        slug="logos"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'image',
+          name: 'Logo',
+          type: 'image',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          path: 'logo/medium',
+        },
+        {
+          key: 'name',
+          name: 'Název klienta',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'position',
+          name: 'Pořadí ve výpisu',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'url',
+          name: 'Odkaz',
+          type: 'link',
+          width: 80,
+          hidden: true,
+          sortable: false,
+          target: '_blank',
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Logo"
+      plural="Loga"
+      :query="tableQuery"
+      slug="logos"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

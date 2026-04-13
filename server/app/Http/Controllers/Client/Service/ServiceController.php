@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Response;
 
 class ServiceController extends Controller
 {
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -24,17 +24,17 @@ class ServiceController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('type', 'like', '%' . $searchString . '%')
-                    ->orWhere('price_type', 'like', '%' . $searchString . '%')
+                $query->where('type', 'like', '%'.$searchString.'%')
+                    ->orWhere('price_type', 'like', '%'.$searchString.'%')
                     ->orWhere('price', '=', $searchString)
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('slug', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('perex', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('description', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_title', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_description', 'like', '%' . $searchString . '%');
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('slug', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('perex', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('description', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_title', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_description', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -57,22 +57,23 @@ class ServiceController extends Controller
         }
 
         $services = $query->get();
+
         return Response::json(ServiceResource::collection($services));
     }
 
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $service = Service::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$service) {
+        if (! $service) {
             App::abort(404);
         }
 

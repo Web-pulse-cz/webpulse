@@ -17,11 +17,11 @@ class CashflowResource extends JsonResource
         return [
             'id' => $this->id,
             'cashflow_category_id' => $this->category ? $this->category->id : null,
-            'amount' => (float)$this->amount,
+            'amount' => (float) $this->amount,
             'type' => $this->type,
             'description' => $this->description,
             'date' => $this->date->format('Y-m-d'),
-            'is_repeated' => $this->is_repeated
+            'is_repeated' => $this->is_repeated,
         ];
     }
 }

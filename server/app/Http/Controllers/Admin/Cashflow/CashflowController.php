@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CashflowController extends Controller
 {
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         $categoryId = $request->input('categoryId');
         $currencyId = $request->has('currencyId') ? $request->input('currencyId') : 1;
@@ -38,7 +38,7 @@ class CashflowController extends Controller
         foreach ($records as $record) {
             if ($record['amount'] == 0 || $record['description'] == '0') {
                 Cashflow::query()
-                    ->where('id', (int)$record['id'])
+                    ->where('id', (int) $record['id'])
                     ->delete();
             }
 
@@ -48,17 +48,17 @@ class CashflowController extends Controller
                     $cashflow = Cashflow::query()
                         ->where('user_id', $request->user()->id)
                         ->find($record['id']);
-                    if (!$cashflow) {
+                    if (! $cashflow) {
                         throw new \Exception('Cashflow not found');
                     }
                 } else {
-                    $cashflow = new Cashflow();
+                    $cashflow = new Cashflow;
                 }
 
                 $amount = $record['amount'];
                 if ($currencyId != 1) {
                     $currency = Currency::find($currencyId);
-                    if (!$currency) {
+                    if (! $currency) {
                         throw new \Exception('Currency not found');
                     }
                     $amount = $currency->convertToBase($amount);
@@ -80,6 +80,7 @@ class CashflowController extends Controller
                 DB::commit();
             } catch (\Throwable|\Exception $e) {
                 DB::rollBack();
+
                 continue;
             }
         }

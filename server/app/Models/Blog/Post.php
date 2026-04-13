@@ -2,6 +2,7 @@
 
 namespace App\Models\Blog;
 
+use App\Traits\Fileable;
 use App\Traits\Imagable;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\App;
 
 class Post extends Model
 {
-    use Translatable, Imagable, Siteable;
+    use Fileable, Imagable, Siteable, Translatable;
 
     protected $table = 'posts';
 
@@ -54,6 +55,7 @@ class Post extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }
@@ -61,7 +63,6 @@ class Post extends Model
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
     }
-
 
     public function getMainImageAttribute()
     {

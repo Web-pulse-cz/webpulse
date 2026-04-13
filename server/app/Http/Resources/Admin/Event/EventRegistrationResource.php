@@ -36,7 +36,7 @@ class EventRegistrationResource extends JsonResource
                 'id' => $this->event->id,
                 'code' => $this->event->code,
                 'name' => $this->event->name,
-            ]
+            ],
         ];
     }
 }

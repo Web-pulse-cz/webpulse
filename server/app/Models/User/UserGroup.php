@@ -13,7 +13,7 @@ class UserGroup extends Model
 
     protected $fillable = [
         'name',
-        'permissions'
+        'permissions',
     ];
 
     public function users()

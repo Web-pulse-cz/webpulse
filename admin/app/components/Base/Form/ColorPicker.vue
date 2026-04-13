@@ -91,30 +91,38 @@ watchEffect(() => {
   <div class="w-full">
     <Listbox v-model="selectedOption">
       <div class="relative">
-        <ListboxLabel :for="name" class="block text-xs font-medium text-grayCustom lg:text-sm/6">
+        <ListboxLabel :for="name" class="mb-1.5 block text-sm font-medium text-slate-700">
           {{ label }}
         </ListboxLabel>
+
         <ListboxButton
           :class="[
-            'mt-1.5 block w-full rounded-md border-0 py-1 text-xs text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6',
-            { 'bg-grayLight': disabled },
+            disabled
+              ? 'cursor-not-allowed bg-slate-100 opacity-75'
+              : 'cursor-pointer bg-white hover:border-slate-400',
+            'relative w-full rounded-xl py-2.5 pl-4 pr-10 text-left text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500',
           ]"
         >
-          <PropsBadge :color="selectedOption.value">
-            {{ selectedOption.name }}
-          </PropsBadge>
-          <span class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center pr-2">
-            <ChevronUpDownIcon class="h-5 w-5 text-grayCustom" aria-hidden="true" />
+          <span class="block truncate">
+            <PropsBadge :color="selectedOption.value">
+              {{ selectedOption.name }}
+            </PropsBadge>
+          </span>
+          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <ChevronUpDownIcon class="h-5 w-5 text-slate-400" aria-hidden="true" />
           </span>
         </ListboxButton>
 
         <transition
+          enter-active-class="transition duration-150 ease-out"
+          enter-from-class="transform scale-95 opacity-0 translate-y-1"
+          enter-to-class="transform scale-100 opacity-100 translate-y-0"
           leave-active-class="transition duration-100 ease-in"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
+          leave-from-class="transform scale-100 opacity-100 translate-y-0"
+          leave-to-class="transform scale-95 opacity-0 translate-y-1"
         >
           <ListboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+            class="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-2xl bg-white p-1.5 text-base shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none sm:text-sm"
           >
             <ListboxOption
               v-for="(option, index) in options"
@@ -125,16 +133,19 @@ watchEffect(() => {
             >
               <li
                 :class="[
-                  active ? 'bg-secondaryLight' : 'text-gray-900',
-                  'relative cursor-default select-none py-2 pl-10 pr-4',
+                  active ? 'bg-indigo-50 text-indigo-700' : 'text-slate-700',
+                  'relative cursor-pointer select-none rounded-xl py-2.5 pl-10 pr-4 transition-colors duration-150',
                 ]"
               >
-                <span
-                  ><PropsBadge :color="option.value">{{ option.name }}</PropsBadge></span
-                >
+                <span class="block truncate">
+                  <PropsBadge :color="option.value">{{ option.name }}</PropsBadge>
+                </span>
                 <span
                   v-if="selected"
-                  class="absolute inset-y-0 left-0 flex items-center pl-3 text-primaryCustom"
+                  :class="[
+                    active ? 'text-indigo-700' : 'text-indigo-600',
+                    'absolute inset-y-0 left-0 flex items-center pl-3',
+                  ]"
                 >
                   <CheckIcon class="h-5 w-5" aria-hidden="true" />
                 </span>

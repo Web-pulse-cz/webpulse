@@ -13,11 +13,12 @@ const error = ref(false);
 const breadcrumbs = ref([
   {
     name: pageTitle.value,
-    link: '/projekty',
+    link: '/cenove-nabidky',
     current: true,
   },
 ]);
 
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const searchString = ref(inject('searchString', ''));
 const tableQuery = ref({
   search: null as string | null,
@@ -39,6 +40,7 @@ async function loadItems() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -49,7 +51,7 @@ async function loadItems() {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se načíst cenové nabídky. Zkuste to prosím později.',
+        detail: 'Nepodařilo se načíst cenové nabídky.',
         severity: 'error',
       });
     })
@@ -67,13 +69,14 @@ async function deleteItem(id: number) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .catch(() => {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se smazat položku cenové nabídky.',
+        detail: 'Nepodařilo se smazat cenovou nabídku.',
         severity: 'error',
       });
     })
@@ -107,6 +110,8 @@ useHead({
   title: pageTitle.value,
 });
 
+watch(selectedSiteHash, () => loadItems());
+
 onMounted(() => {
   loadItems();
 });
@@ -123,49 +128,54 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat nabídku' }]"
       slug="price_offers"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'expected_price_vat',
-            name: 'Očekávaná cena (vč. DPH)',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'total_price_vat',
-            name: 'Konečená cena (vč. DPH)',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'status_name',
-            name: 'Stav projektu',
-            type: 'badge',
-            width: 80,
-            hidden: false,
-            sortable: false,
-            colorKey: 'status_color',
-          },
-        ]"
-        :actions="[{ type: 'edit', hash: '#info' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Cenová nabídka"
-        plural="Cenové nabídky"
-        :query="tableQuery"
-        slug="price_offers"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
+        { key: 'code', name: 'Kód', type: 'text', width: 120, hidden: false, sortable: true },
+        { key: 'title', name: 'Název', type: 'text', width: 200, hidden: false, sortable: true },
+        {
+          key: 'client.name',
+          name: 'Klient',
+          type: 'text',
+          width: 150,
+          hidden: true,
+          sortable: false,
+        },
+        {
+          key: 'total_with_vat',
+          name: 'Celkem s DPH',
+          type: 'number',
+          width: 120,
+          hidden: true,
+          sortable: true,
+        },
+        { key: 'status', name: 'Stav', type: 'mapped', width: 100, hidden: false, sortable: true, map: {
+          draft: { label: 'Koncept', class: 'bg-slate-100 text-slate-600' },
+          sent: { label: 'Odeslaná', class: 'bg-blue-100 text-blue-700' },
+          accepted: { label: 'Přijatá', class: 'bg-emerald-100 text-emerald-700' },
+          rejected: { label: 'Zamítnutá', class: 'bg-red-100 text-red-700' },
+          expired: { label: 'Vypršelá', class: 'bg-amber-100 text-amber-700' },
+        }},
+        {
+          key: 'valid_to',
+          name: 'Platnost do',
+          type: 'text',
+          width: 100,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Cenová nabídka"
+      plural="Cenové nabídky"
+      :query="tableQuery"
+      slug="price_offers"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

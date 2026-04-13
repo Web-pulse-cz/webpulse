@@ -7,7 +7,6 @@ use App\Models\User\UserGroup;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -47,8 +46,8 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Czeski',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'name' => 'Slovenčina',
@@ -72,8 +71,8 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Słowacki',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'name' => 'English',
@@ -97,8 +96,8 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Angielski',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'name' => 'Deutsch',
@@ -122,8 +121,8 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Niemiecki',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'name' => 'Polish',
@@ -147,9 +146,9 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Polski',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         foreach ($languages as $language) {
@@ -158,7 +157,7 @@ class DatabaseSeeder extends Seeder
                 'iso' => $language['iso'],
                 'active' => $language['active'],
                 'created_at' => $language['created_at'],
-                'updated_at' => $language['updated_at']
+                'updated_at' => $language['updated_at'],
             ]);
             foreach ($language['translations'] as $locale => $translation) {
                 DB::table('language_translations')->insert([
@@ -166,7 +165,7 @@ class DatabaseSeeder extends Seeder
                     'locale' => $locale,
                     'name' => $translation['name'],
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             }
         }
@@ -198,8 +197,8 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Czechy',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'name' => 'Slovensko',
@@ -224,8 +223,8 @@ class DatabaseSeeder extends Seeder
                     ],
                     'pl' => [
                         'name' => 'Słowacja',
-                    ]
-                ]
+                    ],
+                ],
             ],
         ];
 
@@ -236,7 +235,7 @@ class DatabaseSeeder extends Seeder
                 'phone_prefix' => $country['phone_prefix'],
                 'active' => $country['active'],
                 'created_at' => $country['created_at'],
-                'updated_at' => $country['updated_at']
+                'updated_at' => $country['updated_at'],
             ]);
             foreach ($country['translations'] as $locale => $translation) {
                 DB::table('country_translations')->insert([
@@ -244,7 +243,7 @@ class DatabaseSeeder extends Seeder
                     'locale' => $locale,
                     'name' => $translation['name'],
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             }
         }
@@ -268,8 +267,8 @@ class DatabaseSeeder extends Seeder
                     'sk' => ['name' => 'Česká koruna', 'symbol_before' => 'CZK', 'symbol_after' => null],
                     'en' => ['name' => 'Czech koruna', 'symbol_before' => 'CZK', 'symbol_after' => null],
                     'de' => ['name' => 'Tschechische Krone', 'symbol_before' => 'CZK', 'symbol_after' => null],
-                    'pl' => ['name' => 'Korona czeska', 'symbol_before' => 'CZK', 'symbol_after' => null]
-                ]
+                    'pl' => ['name' => 'Korona czeska', 'symbol_before' => 'CZK', 'symbol_after' => null],
+                ],
             ],
             [
                 'name' => 'Euro',
@@ -284,9 +283,9 @@ class DatabaseSeeder extends Seeder
                     'sk' => ['name' => 'Euro', 'symbol_before' => '€', 'symbol_after' => null],
                     'en' => ['name' => 'Euro', 'symbol_before' => '€', 'symbol_after' => null],
                     'de' => ['name' => 'Euro', 'symbol_before' => '€', 'symbol_after' => null],
-                    'pl' => ['name' => 'Euro', 'symbol_before' => '€', 'symbol_after' => null]
-                ]
-            ]
+                    'pl' => ['name' => 'Euro', 'symbol_before' => '€', 'symbol_after' => null],
+                ],
+            ],
         ];
 
         foreach ($currencies as $currency) {
@@ -298,7 +297,7 @@ class DatabaseSeeder extends Seeder
                 'bank_account_number' => $currency['bank_account_number'] ?? null,
                 'bank_account_name' => $currency['bank_account_name'] ?? null,
                 'created_at' => $currency['created_at'],
-                'updated_at' => $currency['updated_at']
+                'updated_at' => $currency['updated_at'],
             ]);
             foreach ($currency['translations'] as $locale => $translation) {
                 DB::table('currency_translations')->insert([
@@ -308,7 +307,7 @@ class DatabaseSeeder extends Seeder
                     'symbol_before' => $translation['symbol_before'] ?? null,
                     'symbol_after' => $translation['symbol_after'] ?? null,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             }
         }
@@ -328,7 +327,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Druhá snížená sazba DPH',
                 'rate' => 10.0,
-            ]
+            ],
         ];
 
         foreach ($taxRates as $taxRate) {
@@ -336,7 +335,7 @@ class DatabaseSeeder extends Seeder
                 'name' => $taxRate['name'],
                 'rate' => $taxRate['rate'],
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
     }
@@ -354,8 +353,8 @@ class DatabaseSeeder extends Seeder
                         'permissions' => [
                             'view' => true,
                             'edit' => true,
-                            'delete' => true
-                        ]
+                            'delete' => true,
+                        ],
                     ],
                     [
 
@@ -364,18 +363,18 @@ class DatabaseSeeder extends Seeder
                         'permissions' => [
                             'view' => true,
                             'edit' => true,
-                            'delete' => true
-                        ]
-                    ]
-                ]
-            ]
+                            'delete' => true,
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         foreach ($userGroups as $userGroup) {
-            $item = new UserGroup();
+            $item = new UserGroup;
             $item->fill([
                 'name' => $userGroup['name'],
-                'permissions' => json_encode($userGroup['permissions'])
+                'permissions' => json_encode($userGroup['permissions']),
             ]);
             $item->save();
         }
@@ -395,10 +394,10 @@ class DatabaseSeeder extends Seeder
                 'zip' => 53002,
                 'invitation_token' => 'LYLPSXV6',
                 'user_group_id' => 1,
-                //'country_id' => 1,
+                // 'country_id' => 1,
                 'created_at' => now(),
-                'updated_at' => now()
-            ]
+                'updated_at' => now(),
+            ],
         ];
 
         foreach ($users as $user) {

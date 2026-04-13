@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
+import { InformationCircleIcon, KeyIcon, ShieldCheckIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const userGroupStore = useUserGroupStore();
 const { $toast } = useNuxtApp();
@@ -208,7 +209,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -216,118 +217,175 @@ definePageMeta({
       slug="users"
       @save="saveItem"
     />
-    <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-4">
-      <LayoutContainer class="col-span-3 w-full">
-        <Form @submit="saveItem">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.firstname"
-              label="Jméno"
-              type="text"
-              name="firstname"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.lastname"
-              label="Příjmení"
-              type="text"
-              name="lastname"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.email"
-              label="E-mail"
-              type="text"
-              name="email"
-              rules="required|email"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.phone"
-              label="Telefon"
-              type="text"
-              name="phone"
-              rules="required"
-              class="col-span-1"
-            />
-            <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />
-            <BaseFormInput
-              v-model="item.street"
-              label="Ulice a č.p."
-              type="text"
-              name="street"
-              class="col-span-1"
-            />
-            <br />
-            <BaseFormInput
-              v-model="item.zip"
-              label="PSČ"
-              type="text"
-              name="zip"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.city"
-              type="text"
-              label="Město"
-              name="city"
-              class="col-span-1"
-            />
-            <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />
-            <div v-if="item.id !== user.id" class="col-span-full grid grid-cols-2 gap-x-8 gap-y-4">
-              <BaseFormInput
-                v-model="item.new_password"
-                label="Nové heslo"
-                type="password"
-                name="new_password"
-                class="col-span-1"
-              />
-              <BaseFormInput
-                v-model="item.confirm_new_password"
-                label="Potvrzení nového hesla"
-                type="password"
-                name="confirm_new_password"
-                class="col-span-1"
-              />
+
+    <Form @submit="saveItem">
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-lg"
+              >
+                <UserIcon class="size-6" />
+              </div>
+              <LayoutTitle class="!mb-0">Osobní profil uživatele</LayoutTitle>
             </div>
-            <div v-else class="col-span-full">
-              <span class="block text-sm/6 font-medium text-grayCustom"
-                >Změnu hesla provedete ve svém uživatelském účtu</span
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              <BaseFormInput
+                v-model="item.firstname"
+                label="Jméno"
+                type="text"
+                name="firstname"
+                rules="required|min:3"
+                placeholder="Např. Michal"
+              />
+              <BaseFormInput
+                v-model="item.lastname"
+                label="Příjmení"
+                type="text"
+                name="lastname"
+                rules="required|min:3"
+                placeholder="Např. Holý"
+              />
+              <BaseFormInput
+                v-model="item.email"
+                label="E-mailová adresa (přihlašovací jméno)"
+                type="text"
+                name="email"
+                rules="required|email"
+                placeholder="jmeno@barbershop.cz"
+              />
+              <BaseFormInput
+                v-model="item.phone"
+                label="Kontaktní telefon"
+                type="text"
+                name="phone"
+                rules="required"
+                placeholder="+420 777 000 000"
+              />
+
+              <div class="col-span-full pt-4">
+                <LayoutDivider>Bydliště / Kontaktní adresa</LayoutDivider>
+              </div>
+
+              <BaseFormInput
+                v-model="item.street"
+                label="Ulice a číslo popisné"
+                type="text"
+                name="street"
+                class="col-span-full lg:col-span-1"
+              />
+
+              <div class="col-span-full grid grid-cols-3 gap-4 lg:col-span-1">
+                <BaseFormInput
+                  v-model="item.zip"
+                  label="PSČ"
+                  type="text"
+                  name="zip"
+                  class="col-span-1"
+                />
+                <BaseFormInput
+                  v-model="item.city"
+                  type="text"
+                  label="Město"
+                  name="city"
+                  class="col-span-2"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600"
+              >
+                <KeyIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Zabezpečení účtu</LayoutTitle>
+            </div>
+
+            <div
+              v-if="item.id !== user.id"
+              class="rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200/60"
+            >
+              <div class="mb-6">
+                <h4 class="text-sm font-bold text-slate-900">Resetovat přístupové heslo</h4>
+                <p class="text-xs text-slate-500">
+                  Ponechte pole prázdná, pokud heslo nechcete měnit.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <BaseFormInput
+                  v-model="item.new_password"
+                  label="Nové heslo"
+                  type="password"
+                  name="new_password"
+                  placeholder="••••••••"
+                />
+                <BaseFormInput
+                  v-model="item.confirm_new_password"
+                  label="Potvrzení hesla"
+                  type="password"
+                  name="confirm_new_password"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <div
+              v-else
+              class="flex items-center gap-4 rounded-2xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-200/50"
+            >
+              <InformationCircleIcon class="size-6 shrink-0 text-amber-600" />
+              <p class="text-sm font-medium text-amber-900">
+                Právě upravujete svůj vlastní profil. Změnu hesla z bezpečnostních důvodů proveďte v
+                <NuxtLink
+                  to="/profil"
+                  class="font-bold underline decoration-amber-500/30 hover:decoration-amber-500"
+                  >nastavení svého účtu</NuxtLink
+                >.
+              </p>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutContainer class="!py-6">
+            <div class="mb-6 flex items-center gap-2">
+              <ShieldCheckIcon class="size-4 text-slate-400" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
+                >Oprávnění</LayoutTitle
               >
             </div>
-          </div>
-        </Form>
-      </LayoutContainer>
-      <LayoutContainer class="col-span-3 w-full lg:col-span-1">
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-          <!--          <div class="col-span-full text-center">
-            <NuxtImg
-              class="mx-auto size-full rounded-full"
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt=""
+
+            <BaseFormSelect
+              v-model="item.user_group_id"
+              label="Uživatelská skupina (Role)"
+              name="user_group_id"
+              rules="required"
+              :options="userGroupStore.userGroupsOptions"
             />
+
+            <div class="mt-6 rounded-xl bg-slate-50 p-4">
+              <p class="text-[11px] leading-relaxed text-slate-400">
+                <strong>Poznámka:</strong> Role určuje, k jakým modulům a akcím (vytváření, mazání)
+                bude mít uživatel v adminu přístup.
+              </p>
+            </div>
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
+            <h4 class="text-sm font-bold">Auditní stopa</h4>
+            <p class="mt-2 text-xs leading-relaxed opacity-80">
+              Všechny změny provedené tímto uživatelem jsou logovány. Ujistěte se, že každý člen
+              týmu má svůj vlastní unikátní účet.
+            </p>
           </div>
-          <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />
-          <BaseFormInput
-            v-model="item.invitation_token"
-            label="Kód pozvánky"
-            disabled
-            name="invitation_token"
-            class="col-span-full cursor-pointer"
-            @click.prevent="copyToClipboard"
-          /> -->
-          <BaseFormSelect
-            v-model="item.user_group_id"
-            label="Skupina"
-            name="user_group_id"
-            rules="required"
-            class="col-span-full"
-            :options="userGroupStore.userGroupsOptions"
-          />
-        </div>
-      </LayoutContainer>
-    </div>
+        </aside>
+      </div>
+    </Form>
   </div>
 </template>

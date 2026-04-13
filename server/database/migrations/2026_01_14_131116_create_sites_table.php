@@ -2,9 +2,12 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('sites', function (Blueprint $table) {
@@ -58,13 +61,13 @@ return new class extends Migration {
                 'languages',
                 'countries',
                 'currencies',
-                'emails'
-            ]
+                'emails',
+            ],
         ];
-        \Illuminate\Support\Facades\DB::table('sites')->insert([
+        DB::table('sites')->insert([
             'name' => 'Martin Hanzl',
             'url' => 'martinhanzl.cz',
-            'hash' => \Illuminate\Support\Str::random(128),
+            'hash' => Str::random(128),
             'is_secure' => true,
             'is_active' => true,
             'settings' => json_encode($settings),
@@ -72,10 +75,10 @@ return new class extends Migration {
             'updated_at' => now(),
         ]);
 
-        \Illuminate\Support\Facades\DB::table('sites')->insert([
+        DB::table('sites')->insert([
             'name' => 'Test site',
             'url' => 'web-pulse.cz',
-            'hash' => \Illuminate\Support\Str::random(128),
+            'hash' => Str::random(128),
             'is_secure' => true,
             'is_active' => true,
             'settings' => json_encode($settings),
@@ -92,14 +95,14 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        \Illuminate\Support\Facades\DB::table('sites_has_users')->insert([
+        DB::table('sites_has_users')->insert([
             'site_id' => 1,
             'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        \Illuminate\Support\Facades\DB::table('sites_has_users')->insert([
+        DB::table('sites_has_users')->insert([
             'site_id' => 2,
             'user_id' => 1,
             'created_at' => now(),

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 class PostCategoryController extends Controller
 {
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -38,12 +38,12 @@ class PostCategoryController extends Controller
         return Response::json(PostCategoryResource::collection($categories));
     }
 
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['error' => 'Category ID is required'], 400);
         }
 
@@ -52,7 +52,7 @@ class PostCategoryController extends Controller
             ->where('active', true)
             ->find($id);
 
-        if (!$category) {
+        if (! $category) {
             return Response::json(['error' => 'Category not found'], 404);
         }
 

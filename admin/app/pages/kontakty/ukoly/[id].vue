@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
+import { ArrowPathIcon, CheckBadgeIcon, LightBulbIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -175,7 +176,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -183,27 +184,76 @@ definePageMeta({
       slug="contacts"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 gap-x-10">
-        <LayoutContainer class="col-span-full w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormSelect
-              v-model="item.contact_phase_id"
-              :options="phases"
-              label="Fáze procesu"
-              name="contact_phase_id"
-              class="col-span-1"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+              >
+                <CheckBadgeIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Zadání úkolu</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+              <BaseFormInput
+                v-model="item.name"
+                label="Co je potřeba udělat? (Název úkolu)"
+                type="text"
+                name="name"
+                rules="required|min:3"
+                placeholder="Např. Odeslat uvítací balíček, Zavolat po týdnu..."
+                class="max-w-xl"
+              />
+              <p class="text-sm text-slate-400">
+                Tento text se zobrazí jako položka v checklistu u konkrétního kontaktu.
+              </p>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutContainer class="!py-6">
+            <div class="mb-6 flex items-center gap-2 text-slate-400">
+              <ArrowPathIcon class="size-4" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest"
+                >Spouštěč úkolu</LayoutTitle
+              >
+            </div>
+
+            <div class="space-y-4">
+              <BaseFormSelect
+                v-model="item.contact_phase_id"
+                :options="phases"
+                label="Přiřadit k fázi"
+                name="contact_phase_id"
+                class="w-full"
+              />
+              <div class="rounded-xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200">
+                <p class="text-xs leading-relaxed text-slate-500">
+                  Úkol se v CRM automaticky nabídne u všech kontaktů, které se nacházejí ve zvolené
+                  fázi.
+                </p>
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-4 text-amber-600" />
+              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">
+                Automatizace
+              </h4>
+            </div>
+            <p class="text-sm leading-relaxed text-amber-800/80">
+              Správně nastavené úkoly pro každou fázi zajistí, že váš obchodní proces bude
+              konzistentní a na nikoho se nezapomene.
+            </p>
           </div>
-        </LayoutContainer>
+        </aside>
       </div>
     </Form>
   </div>

@@ -19,15 +19,16 @@ class FilemanagerController extends Controller
 
     public function getImageFormats(Request $request): JsonResponse
     {
-        if (!$request->has('securityKey') || $request->get('securityKey') !== 'your_security_key_here') {
+        if (! $request->has('securityKey') || $request->get('securityKey') !== 'your_security_key_here') {
             return Response::json(['error' => 'Unauthorized'], 401);
         }
+
         return Response::json($this->fileManagerService->getImageFormats($request->get('type', null), $request->get('format', null)));
     }
 
     public function uploadImages(Request $request): JsonResponse
     {
-        if (!$request->has('securityKey') || $request->get('securityKey') !== 'your_security_key_here') {
+        if (! $request->has('securityKey') || $request->get('securityKey') !== 'your_security_key_here') {
             return Response::json(['error' => 'Unauthorized'], 401);
         }
 
@@ -53,6 +54,7 @@ class FilemanagerController extends Controller
         } catch (\Throwable|\Exception $e) {
             return Response::json(['error' => $e->getMessage()], 500);
         }
+
         return Response::json($result);
     }
 

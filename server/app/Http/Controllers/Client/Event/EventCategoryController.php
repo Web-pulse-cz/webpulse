@@ -14,7 +14,7 @@ class EventCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -32,12 +32,12 @@ class EventCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['error' => 'Category ID is required'], 400);
         }
 
@@ -46,7 +46,7 @@ class EventCategoryController extends Controller
             ->where('id', $id)
             ->first();
 
-        if (!$eventCategory) {
+        if (! $eventCategory) {
             return Response::json(['error' => 'Category not found'], 404);
         }
 

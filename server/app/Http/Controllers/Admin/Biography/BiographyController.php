@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BiographyController extends Controller
@@ -27,9 +26,9 @@ class BiographyController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -50,18 +49,19 @@ class BiographyController extends Controller
         }
 
         $biographies = $query->get();
+
         return Response::json(BiographySimpleResource::collection($biographies));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $biography = Biography::find($id);
-            if (!$biography) {
+            if (! $biography) {
                 App::abort(404);
             }
         } else {
-            $biography = new Biography();
+            $biography = new Biography;
         }
 
         $validator = Validator::make($request->all(), [
@@ -86,7 +86,7 @@ class BiographyController extends Controller
         DB::beginTransaction();
         try {
             $biography->fill($request->all());
-            $biography->template = $request->get('template', 'default'); //TODO: create more templates
+            $biography->template = $request->get('template', 'default'); // TODO: create more templates
             $biography->phone_prefix = '+420';
             $biography->user_id = $request->user()->id;
 
@@ -95,6 +95,7 @@ class BiographyController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating biography.'], 500);
         }
 
@@ -103,14 +104,14 @@ class BiographyController extends Controller
 
     public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $biography = Biography::where('user_id', $request->user()->id)
             ->find($id);
 
-        if (!$biography) {
+        if (! $biography) {
             App::abort(404);
         }
 
@@ -119,32 +120,33 @@ class BiographyController extends Controller
 
     public function destroy(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $biography = Biography::find($id)
             ->where('user_id', $request->user()->id);
 
-        if (!$biography) {
+        if (! $biography) {
             App::abort(404);
         }
 
         // todo unlink file from storage
         $biography->delete();
+
         return Response::json();
     }
 
     public function download(Request $request, int $id): BinaryFileResponse|JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $biography = Biography::where('user_id', $request->user()->id)
             ->find($id);
 
-        if (!$biography) {
+        if (! $biography) {
             App::abort(404);
         }
 
@@ -155,30 +157,31 @@ class BiographyController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => $e->getMessage()], 500);
         }
 
-        if (!file_exists(storage_path('app/public/files/biographies/' . $biography->filename))) {
+        if (! file_exists(storage_path('app/public/files/biographies/'.$biography->filename))) {
             App::abort(404);
         }
 
-        return response()->download(storage_path('app/public/files/biographies/' . $biography->filename));
+        return response()->download(storage_path('app/public/files/biographies/'.$biography->filename));
     }
 
     public function replicate(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $biography = Biography::where('user_id', $request->user()->id)
             ->find($id);
-        if (!$biography) {
+        if (! $biography) {
             App::abort(404);
         }
 
         $newBiography = $biography->replicate();
-        $newBiography->name = $biography->name . ' (copy)';
+        $newBiography->name = $biography->name.' (copy)';
         $newBiography->save();
 
         return Response::json(BiographyResource::make($newBiography));

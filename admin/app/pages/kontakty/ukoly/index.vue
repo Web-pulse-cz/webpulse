@@ -128,41 +128,39 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat úkol' }]"
       slug="contacts"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'phase',
-            name: 'Fáze procesu',
-            type: 'badge',
-            width: 80,
-            hidden: true,
-            sortable: true,
-            colorKey: 'phase_color',
-          },
-          {
-            key: 'contacts_count',
-            name: 'Počet kontaktů',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Úkol"
-        plural="Úkoly"
-        :query="tableQuery"
-        slug="contacts"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'phase',
+          name: 'Fáze procesu',
+          type: 'badge',
+          width: 80,
+          hidden: true,
+          sortable: true,
+          colorKey: 'phase_color',
+        },
+        {
+          key: 'contacts_count',
+          name: 'Počet kontaktů',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Úkol"
+      plural="Úkoly"
+      :query="tableQuery"
+      slug="contacts"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

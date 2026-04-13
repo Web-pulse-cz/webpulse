@@ -22,7 +22,7 @@ class NoveltyResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
-            'sites' => $this->sites
+            'sites' => $this->sites,
         ];
     }
 }

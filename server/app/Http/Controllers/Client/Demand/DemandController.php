@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DemandController extends Controller
 {
-    public function store(Request $request, string $lang = null): JsonResponse
+    public function store(Request $request, ?string $lang = null): JsonResponse
     {
         $lang = $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -31,7 +31,7 @@ class DemandController extends Controller
 
         DB::beginTransaction();
         try {
-            $demand = new Demand();
+            $demand = new Demand;
             $demand->fill($request->all());
             $demand->service_id = $request->get('service_id', null);
             $demand->locale = $lang;
@@ -45,6 +45,7 @@ class DemandController extends Controller
             DemandSaved::dispatch($demand);
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => 'An error occurred while processing your request.'], 500);
         }
 

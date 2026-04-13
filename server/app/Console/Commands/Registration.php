@@ -9,8 +9,9 @@ use Illuminate\Console\Command;
 class Registration extends Command
 {
     protected $colors = [
-        'indigo', 'red', 'green', 'yellow', 'blue', 'purple', 'pink', 'orange', 'teal', 'cyan', 'gray', 'black'
+        'indigo', 'red', 'green', 'yellow', 'blue', 'purple', 'pink', 'orange', 'teal', 'cyan', 'gray', 'black',
     ];
+
     protected $signature = 'app:registration {--userId=}';
 
     protected $description = 'Create default values for the app for every new user registration';
@@ -18,8 +19,9 @@ class Registration extends Command
     public function handle()
     {
         $userId = $this->option('userId');
-        if (!$userId) {
+        if (! $userId) {
             $this->error('User id is required');
+
             return;
         } else {
             $this->seedContacts($userId);
@@ -47,14 +49,14 @@ class Registration extends Command
 
         foreach ($contactSources as $contactSource) {
             $contactSource['user_id'] = $userId;
-            $newContactSource = new ContactSource();
+            $newContactSource = new ContactSource;
             $newContactSource->fill($contactSource);
             $newContactSource->save();
         }
 
         foreach ($contactPhases as $contactPhase) {
             $contactPhase['user_id'] = $userId;
-            $newContactPhase = new ContactPhase();
+            $newContactPhase = new ContactPhase;
             $newContactPhase->fill($contactPhase);
             $newContactPhase->save();
         }

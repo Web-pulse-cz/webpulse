@@ -19,6 +19,7 @@ const breadcrumbs = ref([
 ]);
 
 const searchString = ref(inject('searchString', ''));
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const tableQuery = ref({
   search: null as string | null,
   paginate: 12 as number,
@@ -39,6 +40,7 @@ async function loadItems() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -73,7 +75,7 @@ async function deleteItem(id: number) {
       error.value = true;
       $toast.show({
         summary: 'Chyba',
-        detail: 'Nepodařilo se smazat položku projektu.',
+        detail: 'Nepodařilo se smazat projekt.',
         severity: 'error',
       });
     })
@@ -102,6 +104,7 @@ watch(searchString, () => {
   tableQuery.value.search = searchString.value;
   debouncedLoadItems();
 });
+watch(selectedSiteHash, () => loadItems());
 
 useHead({
   title: pageTitle.value,
@@ -123,49 +126,56 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat projekt' }]"
       slug="projects"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'expected_price_vat',
-            name: 'Očekávaná cena (vč. DPH)',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'total_price_vat',
-            name: 'Konečená cena (vč. DPH)',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'status_name',
-            name: 'Stav projektu',
-            type: 'badge',
-            width: 80,
-            hidden: false,
-            sortable: false,
-            colorKey: 'status_color',
-          },
-        ]"
-        :actions="[{ type: 'edit', hash: '#info' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Projekt"
-        plural="Projekty"
-        :query="tableQuery"
-        slug="projects"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 200, hidden: false, sortable: true },
+        {
+          key: 'client.name',
+          name: 'Klient',
+          type: 'text',
+          width: 150,
+          hidden: true,
+          sortable: false,
+        },
+        {
+          key: 'status.name',
+          name: 'Stav',
+          type: 'badge',
+          width: 100,
+          hidden: false,
+          sortable: false,
+          colorKey: 'status.color',
+        },
+        {
+          key: 'total_tracked_seconds',
+          name: 'Čas',
+          type: 'seconds',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'total_revenue_with_vat',
+          name: 'Celkem s DPH',
+          type: 'number',
+          width: 120,
+          hidden: true,
+          sortable: true,
+        },
+        { key: 'profit', name: 'Zisk', type: 'number', width: 100, hidden: true, sortable: true },
+      ]"
+      :actions="[{ type: 'edit', hash: '#prehled' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Projekt"
+      plural="Projekty"
+      :query="tableQuery"
+      slug="projects"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

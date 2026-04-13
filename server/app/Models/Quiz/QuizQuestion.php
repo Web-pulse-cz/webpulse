@@ -3,12 +3,12 @@
 namespace App\Models\Quiz;
 
 use App\Traits\Imagable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class QuizQuestion extends Model
 {
     use Imagable;
+
     protected $table = 'quiz_questions';
 
     protected $fillable = [

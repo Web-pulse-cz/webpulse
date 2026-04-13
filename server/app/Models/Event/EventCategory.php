@@ -4,13 +4,12 @@ namespace App\Models\Event;
 
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class EventCategory extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'event_categories';
 
@@ -26,7 +25,7 @@ class EventCategory extends Model
         'perex',
         'text',
         'meta_title',
-        'meta_description'
+        'meta_description',
     ];
 
     public function getAttribute($key)
@@ -40,6 +39,7 @@ class EventCategory extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 

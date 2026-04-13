@@ -3,19 +3,13 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 trait Imagable
 {
     /**
      * Save image to model through morph relation.
-     * @param Model $model
-     * @param array|string|null $images
-     *
-     * @return void
      */
     public function saveImages(Model $model, array|string|null $images): void
     {
@@ -28,18 +22,13 @@ trait Imagable
             foreach ($images as $image) {
                 $this->insertImage($model, $image);
             }
-        } else if ($images && $images != '' && $images != null) {
+        } elseif ($images && $images != '' && $images != null) {
             $this->insertImage($model, $images);
         }
     }
 
     /**
      * Insert image to database to table images.
-     * @param Model $model
-     * @param string $image
-     * @param int $key
-     *
-     * @return void
      */
     private function insertImage(Model $model, string $image, int $key = 0): void
     {
@@ -57,6 +46,7 @@ trait Imagable
 
     /**
      * Get model main image.
+     *
      * @return string|null
      */
     public function getMainImage($model)
@@ -75,7 +65,8 @@ trait Imagable
 
     /**
      * Get model images
-     * @return \Illuminate\Support\Collection
+     *
+     * @return Collection
      */
     public function imagesAttribute($model)
     {

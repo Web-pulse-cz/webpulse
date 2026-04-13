@@ -26,15 +26,15 @@ class EventRegistrationController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('email', 'like', '%' . $searchString . '%')
-                    ->orWhere('firstname', 'like', '%' . $searchString . '%')
-                    ->orWhere('lastname', 'like', '%' . $searchString . '%')
-                    ->orWhere('phone', 'like', '%' . $searchString . '%')
+                $query->where('email', 'like', '%'.$searchString.'%')
+                    ->orWhere('firstname', 'like', '%'.$searchString.'%')
+                    ->orWhere('lastname', 'like', '%'.$searchString.'%')
+                    ->orWhere('phone', 'like', '%'.$searchString.'%')
                     ->orWhereHas('event', function ($q) use ($searchString) {
-                        $q->where('code', 'like', '%' . $searchString . '%')
-                            ->orWhereTranslation('name', 'like', '%' . $searchString . '%');
+                        $q->where('code', 'like', '%'.$searchString.'%')
+                            ->orWhereTranslation('name', 'like', '%'.$searchString.'%');
                     });
             }
         }
@@ -56,21 +56,22 @@ class EventRegistrationController extends Controller
 
         }
         $eventRegistrations = $query->get();
+
         return Response::json(EventRegistrationResource::collection($eventRegistrations));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $eventRegistration = EventRegistration::find($id);
-            if (!$eventRegistration) {
+            if (! $eventRegistration) {
                 App::abort(404);
             }
         } else {
-            $eventRegistration = new EventRegistration();
+            $eventRegistration = new EventRegistration;
         }
 
         $validator = Validator::make($request->all(), [
@@ -91,11 +92,12 @@ class EventRegistrationController extends Controller
 
             DB::commit();
 
-            if (!$id) {
+            if (! $id) {
                 EventRegistrationSaved::dispatch($eventRegistration);
             }
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => 'An error occurred while saving the event registration.'], 500);
         }
 
@@ -107,12 +109,12 @@ class EventRegistrationController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $eventRegistration = EventRegistration::with(['event'])->find($id);
-        if (!$eventRegistration) {
+        if (! $eventRegistration) {
             App::abort(404);
         }
 
@@ -124,16 +126,17 @@ class EventRegistrationController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $eventRegistration = EventRegistration::find($id);
-        if (!$eventRegistration) {
+        if (! $eventRegistration) {
             App::abort(404);
         }
 
         $eventRegistration->delete();
+
         return response()->json();
     }
 }

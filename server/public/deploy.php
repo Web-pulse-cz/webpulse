@@ -3,9 +3,9 @@
 
 $secretToken = 'moje-super-tajne-heslo-pro-web-pulse-2026';
 
-if (!isset($_GET['token']) || $_GET['token'] !== $secretToken) {
+if (! isset($_GET['token']) || $_GET['token'] !== $secretToken) {
     header('HTTP/1.0 403 Forbidden');
-    die('Přístup odepřen.');
+    exit('Přístup odepřen.');
 }
 
 $output = '';
@@ -16,20 +16,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gitPath = '/var/www/html/api.web-pulse.cz';          // Kde je složka .git
     $laravelPath = '/var/www/html/api.web-pulse.cz/server'; // Kde je Laravel (artisan, composer.json)
 
-    $output .= "<pre>";
+    $output .= '<pre>';
 
     // --- 1. ČÁST: GIT ---
     chdir($gitPath); // Přepneme PHP do složky s gitem
     $output .= "<span style=\"color: #eab308;\">--- Přesun do: {$gitPath} ---</span>\n";
 
     $gitCommands = [
-        "git fetch origin 2>&1",
-        "git reset --hard origin/deploy_production 2>&1",
+        'git fetch origin 2>&1',
+        'git reset --hard origin/deploy_production 2>&1',
     ];
 
     foreach ($gitCommands as $command) {
         $output .= "<span style=\"color: #66d9ef;\">$ {$command}</span>\n";
-        $output .= htmlentities(trim(shell_exec($command))) . "\n\n";
+        $output .= htmlentities(trim(shell_exec($command)))."\n\n";
     }
 
     // --- 2. ČÁST: LARAVEL A COMPOSER ---
@@ -38,21 +38,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $laravelCommands = [
         // Přidán COMPOSER_HOME=/tmp
-        "COMPOSER_HOME=/tmp composer install --no-interaction --no-ansi --prefer-dist --optimize-autoloader 2>&1",
-        "php artisan migrate --force 2>&1",
-        "php artisan optimize:clear 2>&1",
-        "php artisan config:cache 2>&1",
-        "php artisan event:cache 2>&1",
-        "php artisan route:cache 2>&1",
-        "php artisan view:cache 2>&1",
+        'COMPOSER_HOME=/tmp composer install --no-interaction --no-ansi --prefer-dist --optimize-autoloader 2>&1',
+        'php artisan migrate --force 2>&1',
+        'php artisan optimize:clear 2>&1',
+        'php artisan config:cache 2>&1',
+        'php artisan event:cache 2>&1',
+        'php artisan route:cache 2>&1',
+        'php artisan view:cache 2>&1',
     ];
 
     foreach ($laravelCommands as $command) {
         $output .= "<span style=\"color: #66d9ef;\">$ {$command}</span>\n";
-        $output .= htmlentities(trim(shell_exec($command))) . "\n\n";
+        $output .= htmlentities(trim(shell_exec($command)))."\n\n";
     }
 
-    $output .= "</pre>";
+    $output .= '</pre>';
     $output .= "<div class='success'>✅ Nasazení bylo dokončeno! Zkontroluj výstup výše, jestli tam nejsou errory.</div>";
 }
 ?>
@@ -71,9 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <h1>🚀 Autodeployer pro api.web-pulse.cz</h1>
 <form method="POST"><button class="btn" type="submit">Nasadiť novou verzi</button></form>
-<?php if ($output): ?>
+<?php if ($output) { ?>
     <h2>Výstup z terminálu:</h2>
     <?php echo $output; ?>
-<?php endif; ?>
+<?php } ?>
 </body>
 </html>

@@ -18,9 +18,9 @@ class CashflowBudgetResource extends JsonResource
             'id' => $this->id,
             'cashflow_category_id' => $this->category->id,
             'type' => $this->type,
-            'amount' => (float)$this->amount,
+            'amount' => (float) $this->amount,
             'start_date' => $this->start_date->format('Y-m-d'),
-            'end_date' => $this->end_date->format('Y-m-d')
+            'end_date' => $this->end_date->format('Y-m-d'),
         ];
     }
 }

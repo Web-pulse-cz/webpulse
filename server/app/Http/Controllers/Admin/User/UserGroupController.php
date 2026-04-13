@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserGroupController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = UserGroup::query();
@@ -24,9 +23,9 @@ class UserGroupController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -51,18 +50,19 @@ class UserGroupController extends Controller
         }
 
         $userGroups = $query->get();
-        return Response::json(\App\Http\Resources\Admin\User\UserGroupResource::collection($userGroups));
+
+        return Response::json(UserGroupResource::collection($userGroups));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $userGroup = UserGroup::find($id);
-            if (!$userGroup) {
+            if (! $userGroup) {
                 App::abort(404);
             }
         } else {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroup;
         }
 
         $validator = Validator::make($request->all(), [
@@ -80,7 +80,6 @@ class UserGroupController extends Controller
                 $userGroup->password = Hash::make($request->get('new_password'));
             }
 
-
             $userGroup->fill($request->all());
             if ($request->has('permissions')) {
                 $userGroup->permissions = json_encode($request->get('permissions'));
@@ -90,20 +89,21 @@ class UserGroupController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => $e->getMessage()], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\User\UserGroupResource::make($userGroup));
+        return Response::json(UserGroupResource::make($userGroup));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $userGroup = UserGroup::find($id);
-        if (!$userGroup) {
+        if (! $userGroup) {
             App::abort(404);
         }
 
@@ -112,16 +112,17 @@ class UserGroupController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $userGroup = UserGroup::find($id);
-        if (!$userGroup) {
+        if (! $userGroup) {
             App::abort(404);
         }
 
         $userGroup->delete();
+
         return Response::json();
     }
 }

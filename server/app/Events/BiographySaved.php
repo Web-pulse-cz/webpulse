@@ -3,8 +3,6 @@
 namespace App\Events;
 
 use App\Models\Biography\Biography;
-use App\Models\Career\CareerApplication;
-use App\Models\Event\EventRegistration;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Http\Request;
@@ -19,6 +17,7 @@ class BiographySaved
     protected $user;
 
     protected array $data;
+
     public function __construct(Biography $biography, Request $request)
     {
         $this->biography = $biography;

@@ -128,54 +128,52 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat službu' }]"
       slug="services"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'price',
-            name: 'Cena',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'active',
-            name: 'Aktivní',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Službu"
-        plural="Služby"
-        :query="tableQuery"
-        slug="services"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'price',
+          name: 'Cena',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Službu"
+      plural="Služby"
+      :query="tableQuery"
+      slug="services"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

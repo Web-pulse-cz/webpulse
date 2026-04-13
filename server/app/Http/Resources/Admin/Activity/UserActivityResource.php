@@ -17,7 +17,7 @@ class UserActivityResource extends JsonResource
         return [
             'id' => $this->id,
             'activity' => ActivityResource::make($this->activity),
-            'activity_id' => (int)$this->activity_id,
+            'activity_id' => (int) $this->activity_id,
             'description' => $this->description,
             'duration' => $this->duration,
             'completed' => $this->completed,

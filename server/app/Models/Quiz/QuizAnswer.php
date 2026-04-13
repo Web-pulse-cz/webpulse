@@ -2,7 +2,6 @@
 
 namespace App\Models\Quiz;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class QuizAnswer extends Model
@@ -12,11 +11,11 @@ class QuizAnswer extends Model
     protected $fillable = [
         'question_id',
         'name',
-        'is_correct'
+        'is_correct',
     ];
 
     protected $casts = [
-        'is_correct' => 'boolean'
+        'is_correct' => 'boolean',
     ];
 
     public function question()

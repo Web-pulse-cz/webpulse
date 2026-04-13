@@ -15,7 +15,7 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -25,10 +25,10 @@ class EventController extends Controller
             ->with(['category'])
             ->where('status', 'published');
 
-        if($request->has('search') && in_array($request->input('search'), ['', null])) {
-            $query->where('code', 'like', '%' . $request->input('search') . '%')
-                ->orWhere('place', 'like', '%' . $request->input('search') . '%')
-                ->orWhereTranslation('name', 'like', '%' . $request->input('search') . '%');
+        if ($request->has('search') && in_array($request->input('search'), ['', null])) {
+            $query->where('code', 'like', '%'.$request->input('search').'%')
+                ->orWhere('place', 'like', '%'.$request->input('search').'%')
+                ->orWhereTranslation('name', 'like', '%'.$request->input('search').'%');
         }
 
         if ($request->has('category')) {
@@ -36,7 +36,7 @@ class EventController extends Controller
         }
 
         if ($request->has('paginate')) {
-            $events = $query->paginate((int)$request->get('paginate'));
+            $events = $query->paginate((int) $request->get('paginate'));
 
             return Response::json([
                 'data' => EventListResource::collection($events->items()),
@@ -48,18 +48,19 @@ class EventController extends Controller
         }
 
         $events = $query->get();
+
         return Response::json(EventListResource::collection($events));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['error' => 'Event ID is required'], 400);
         }
 
@@ -70,7 +71,7 @@ class EventController extends Controller
             ->with(['category', 'currency', 'taxRate'])
             ->first();
 
-        if (!$event) {
+        if (! $event) {
             return Response::json(['error' => 'Event not found'], 404);
         }
 

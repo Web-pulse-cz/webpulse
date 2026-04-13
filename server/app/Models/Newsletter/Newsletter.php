@@ -3,7 +3,6 @@
 namespace App\Models\Newsletter;
 
 use App\Traits\Siteable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Newsletter extends Model

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 class NoveltyController extends Controller
 {
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -39,12 +39,12 @@ class NoveltyController extends Controller
 
     }
 
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['message' => 'Novelty ID is required'], 400);
         }
 
@@ -53,7 +53,7 @@ class NoveltyController extends Controller
             ->where('active', true)
             ->find($id);
 
-        if (!$novelty) {
+        if (! $novelty) {
             return Response::json(['message' => 'Novelty not found'], 404);
         }
 

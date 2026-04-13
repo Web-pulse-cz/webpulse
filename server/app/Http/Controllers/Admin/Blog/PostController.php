@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -20,7 +20,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -33,16 +33,16 @@ class PostController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%')
-                    ->orWhereTranslation($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%')
+                    ->orWhereTranslation($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('status', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('slug', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('perex', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('description', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_title', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_description', 'like', '%' . $searchString . '%');
+                $query->where('status', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('slug', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('perex', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('description', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_title', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_description', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -63,22 +63,23 @@ class PostController extends Controller
         }
 
         $posts = $query->get();
+
         return Response::json(PostResource::collection($posts));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $post = Post::find($id);
-            if (!$post) {
+            if (! $post) {
                 App::abort(404);
             }
         } else {
-            $post = new Post();
+            $post = new Post;
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -88,13 +89,13 @@ class PostController extends Controller
         DB::beginTransaction();
         try {
             $post->fill($request->all());
-            if ($request->get('published_from') == "") {
+            if ($request->get('published_from') == '') {
                 $post->published_from = null;
             } else {
                 $post->published_from = $request->get('published_from');
             }
 
-            if ($request->get('published_to') == "") {
+            if ($request->get('published_to') == '') {
                 $post->published_to = null;
             } else {
                 $post->published_to = $request->get('published_to');
@@ -114,6 +115,7 @@ class PostController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating post.'], 500);
         }
 
@@ -124,14 +126,14 @@ class PostController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $post = Post::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$post) {
+        if (! $post) {
             App::abort(404);
         }
 
@@ -140,16 +142,77 @@ class PostController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $post = Post::find($id);
-        if (!$post) {
+        if (! $post) {
             App::abort(404);
         }
 
+        $post->removeAllFiles();
         $post->delete();
+
+        return Response::json();
+    }
+
+    public function uploadFile(Request $request, int $id): JsonResponse
+    {
+        $post = Post::find($id);
+        if (! $post) {
+            App::abort(404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|max:20480',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
+
+        $post->attachUploadedFile($request->file('file'), 'files/posts/' . $post->id);
+
+        return Response::json(PostResource::make($post));
+    }
+
+    public function downloadFile(int $postId, int $fileId)
+    {
+        $post = Post::find($postId);
+        if (! $post) {
+            App::abort(404);
+        }
+
+        $file = DB::table('fileables')
+            ->where('id', $fileId)
+            ->where('fileable_id', $postId)
+            ->where('fileable_type', get_class($post))
+            ->first();
+
+        if (! $file) {
+            App::abort(404);
+        }
+
+        $disk = $file->disk ?? 'public';
+        if (! Storage::disk($disk)->exists($file->path)) {
+            App::abort(404);
+        }
+
+        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
+            'Content-Type' => $file->mime_type,
+        ]);
+    }
+
+    public function deleteFile(int $postId, int $fileId): JsonResponse
+    {
+        $post = Post::find($postId);
+        if (! $post) {
+            App::abort(404);
+        }
+
+        $post->removeFile($fileId);
+
         return Response::json();
     }
 }

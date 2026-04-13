@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class FaqCategoryController extends Controller
 {
@@ -20,7 +19,7 @@ class FaqCategoryController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -34,10 +33,10 @@ class FaqCategoryController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%')
-                    ->orWhereTranslation($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%')
+                    ->orWhereTranslation($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->whereTranslation('name', 'like', '%' . $searchString . '%');
+                $query->whereTranslation('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -58,22 +57,23 @@ class FaqCategoryController extends Controller
         }
 
         $faqCategories = $query->get();
+
         return Response::json(FaqCategoryResource::collection($faqCategories));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $faqCategory = FaqCategory::find($id);
-            if (!$faqCategory) {
+            if (! $faqCategory) {
                 App::abort(404);
             }
         } else {
-            $faqCategory = new FaqCategory();
+            $faqCategory = new FaqCategory;
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -89,13 +89,13 @@ class FaqCategoryController extends Controller
                 $faqCategory->translateOrNew($locale)->fill($translation);
             }
 
-
             $faqCategory->save();
             $faqCategory->saveSites($faqCategory, $request->get('sites', []));
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating faq category.'], 500);
         }
 
@@ -106,14 +106,14 @@ class FaqCategoryController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $faqCategory = FaqCategory::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$faqCategory) {
+        if (! $faqCategory) {
             App::abort(404);
         }
 
@@ -122,16 +122,17 @@ class FaqCategoryController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $faqCategory = FaqCategory::find($id);
-        if (!$faqCategory) {
+        if (! $faqCategory) {
             App::abort(404);
         }
 
         $faqCategory->delete();
+
         return Response::json();
     }
 }

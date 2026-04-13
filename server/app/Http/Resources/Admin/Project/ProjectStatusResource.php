@@ -7,17 +7,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectStatusResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'color' => $this->color,
+            'position' => $this->position,
+            'is_closed' => $this->is_closed,
+            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
         ];
     }
 }

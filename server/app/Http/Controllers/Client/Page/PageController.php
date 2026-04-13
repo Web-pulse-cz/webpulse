@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Response;
 
 class PageController extends Controller
 {
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['error' => 'Page ID is required'], 400);
         }
 
@@ -25,7 +25,7 @@ class PageController extends Controller
             ->where('active', true)
             ->find($id);
 
-        if (!$page) {
+        if (! $page) {
             return Response::json(['error' => 'Page not found'], 404);
         }
 

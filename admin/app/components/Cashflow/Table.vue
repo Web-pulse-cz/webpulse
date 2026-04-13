@@ -242,149 +242,168 @@ function formatAmount(amount: number) {
 <template>
   <div class="px-4 sm:px-0">
     <div class="mt-8 flow-root">
-      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="-mx-4 -my-2 overflow-x-auto pb-4 sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <table class="min-w-full divide-y divide-gray-300">
-            <thead>
-              <tr class="divide-x divide-gray-300">
-                <th
-                  scope="col"
-                  class="w-[80px] bg-primaryLight px-2 py-2 text-center text-xxs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-xs"
-                >
-                  Datum
-                </th>
-                <th
-                  scope="col"
-                  class="w-auto bg-primaryLight py-2 pl-2 pr-2 text-left text-xs font-semibold text-gray-300 sm:pr-0 lg:py-3.5 lg:pl-4 lg:pr-4 lg:text-xs"
-                >
-                  Příjem
-                </th>
-                <th
-                  v-for="(category, index) in categories"
-                  :key="index"
-                  scope="col"
-                  class="w-auto min-w-[130px] bg-primaryLight px-2 py-2 text-left text-xs font-semibold text-gray-300 lg:px-4 lg:py-3.5 lg:text-xs"
-                  :class="{ 'vertical-line': index === categories.length - 1 }"
-                  @mouseover="handleMouseOver"
-                  @click="handleClick"
-                >
-                  {{ category.name }}
-                </th>
-                <th
-                  scope="col"
-                  class="bg-primaryLight py-2 pl-2 pr-2 text-left text-xs font-semibold text-gray-300 sm:pr-0 lg:py-3.5 lg:pl-4 lg:pr-4 lg:text-xs"
-                >
-                  Poznámky
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 bg-white">
-              <tr
-                v-for="(day, index) in daysInMonth(month, year)"
-                :key="index"
-                class="divide-x divide-gray-200"
-              >
-                <td
-                  class="whitespace-nowrap p-1 text-center text-sm font-semibold text-gray-500 lg:p-2 lg:text-xs"
-                >
-                  {{ day }}
-                </td>
-                <td
-                  class="cursor-pointer whitespace-nowrap p-1 text-end text-xs text-gray-500 hover:bg-gray-100 lg:p-2"
-                  @click="updateCashflowIncome(day)"
-                >
-                  <span v-if="incomeByDay(day) > 0">{{ formatAmount(incomeByDay(day)) }} Kč</span>
-                </td>
-                <td
-                  v-for="(category, index) in categories"
-                  :key="index"
-                  class="cursor-pointer whitespace-nowrap p-1 text-end text-xs text-gray-500 hover:bg-gray-100 lg:p-2"
-                  @click="updateCashflow('expense', category.id, day)"
-                  @mouseover="markRowColumn"
-                >
-                  <span v-if="summaryByDay(category.id, day) > 0"
-                    >{{ formatAmount(summaryByDay(category.id, day)) }} Kč</span
+          <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+            <table class="min-w-full border-collapse divide-y divide-slate-200">
+              <thead class="bg-slate-50">
+                <tr class="divide-x divide-slate-200">
+                  <th
+                    scope="col"
+                    class="w-[60px] px-3 py-3.5 text-center text-[10px] font-bold uppercase tracking-wider text-slate-500 lg:px-4 lg:text-[11px]"
                   >
-                </td>
-                <td class="whitespace-nowrap p-1 text-xs text-gray-500 lg:p-2">
-                  <span v-if="descriptionByDayIncome(day) !== ''" class="text-success"
-                    >{{ descriptionByDayIncome(day) }}
-                  </span>
-                  <span v-if="descriptionByDayIncome(day) !== ''">, </span>
-                  <span v-if="descriptionByDay(day) !== ''" class="text-danger">{{
-                    descriptionByDay(day)
-                  }}</span>
-                </td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
-                  colspan="2"
-                >
-                  Celkem utraceno
-                </td>
-                <td
-                  v-for="(category, index) in categories"
+                    Den
+                  </th>
+                  <th
+                    scope="col"
+                    class="w-auto px-3 py-3.5 text-right text-[10px] font-bold uppercase tracking-wider text-emerald-600 lg:px-4 lg:text-[11px]"
+                  >
+                    Příjem
+                  </th>
+                  <th
+                    v-for="(category, index) in categories"
+                    :key="index"
+                    scope="col"
+                    class="w-auto min-w-[120px] px-3 py-3.5 text-right text-[10px] font-bold uppercase tracking-wider text-slate-500 transition-colors hover:bg-slate-100 lg:px-4 lg:text-[11px]"
+                    :class="{ 'vertical-line': index === categories.length - 1 }"
+                    @mouseover="handleMouseOver"
+                    @click="handleClick"
+                  >
+                    {{ category.name }}
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-[10px] font-bold uppercase tracking-wider text-slate-500 lg:px-4 lg:text-[11px]"
+                  >
+                    Poznámky
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-slate-100 bg-white">
+                <tr
+                  v-for="(day, index) in daysInMonth(month, year)"
                   :key="index"
-                  class="whitespace-nowrap p-1 text-end text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
+                  class="divide-x divide-slate-100 transition-colors"
                 >
-                  {{ formatAmount(totalSpent(category.id)) + ' Kč' }}
-                </td>
-                <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-xs"
-                >
-                  {{ formatAmount(summaryMonthlySpent()) }} Kč
-                </td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
-                  colspan="2"
-                >
-                  Měsíční budget
-                </td>
-                <td
-                  v-for="(category, index) in categories"
-                  :key="index"
-                  class="cursor-pointer whitespace-nowrap p-1 text-end text-xs font-semibold text-gray-500 hover:bg-gray-100 lg:p-2 lg:text-xs"
-                  @click="updateBudget(category.id, monthlyCategoryBudget(category.id))"
-                >
-                  {{ formatAmount(monthlyCategoryBudget(category.id)) + ' Kč' }}
-                </td>
-                <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-xs"
-                >
-                  {{ formatAmount(summaryMonthlyBudget()) }} Kč
-                </td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-gray-500 lg:p-2 lg:text-xs"
-                  colspan="2"
-                >
-                  Zůstává z budgetu
-                </td>
-                <td
-                  v-for="(category, index) in categories"
-                  :key="index"
-                  :class="
-                    leftFromBudgetTextClass(category.id) +
-                    ' whitespace-nowrap p-1 text-end text-xs font-semibold lg:p-2 lg:text-xs'
-                  "
-                >
-                  {{ formatAmount(leftFromBudget(category.id)) + ' Kč' }}
-                </td>
-                <td
-                  class="whitespace-nowrap p-1 text-center text-xs font-semibold text-sky-500 lg:p-2 lg:text-xs"
-                >
-                  {{ formatAmount(summaryMonthlyLeft()) }} Kč
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td
+                    class="whitespace-nowrap bg-slate-50/30 px-3 py-2.5 text-center text-xs font-semibold text-slate-400"
+                  >
+                    {{ day }}.
+                  </td>
+
+                  <td
+                    class="cursor-pointer whitespace-nowrap px-3 py-2.5 text-right text-xs font-medium text-emerald-600 transition-colors hover:bg-emerald-50"
+                    @click="updateCashflowIncome(day)"
+                  >
+                    <span v-if="incomeByDay(day) > 0">{{ formatAmount(incomeByDay(day)) }} Kč</span>
+                    <span v-else class="text-slate-200">-</span>
+                  </td>
+
+                  <td
+                    v-for="(category, index) in categories"
+                    :key="index"
+                    class="cursor-pointer whitespace-nowrap px-3 py-2.5 text-right text-xs font-medium text-slate-700 transition-colors hover:bg-indigo-50"
+                    @click="updateCashflow('expense', category.id, day)"
+                    @mouseover="markRowColumn"
+                  >
+                    <span v-if="summaryByDay(category.id, day) > 0">
+                      {{ formatAmount(summaryByDay(category.id, day)) }} Kč
+                    </span>
+                    <span v-else class="text-slate-200">-</span>
+                  </td>
+
+                  <td class="whitespace-nowrap px-3 py-2.5 text-xs text-slate-500">
+                    <span
+                      v-if="descriptionByDayIncome(day) !== ''"
+                      class="font-medium text-emerald-600"
+                    >
+                      + {{ descriptionByDayIncome(day) }}
+                    </span>
+                    <span
+                      v-if="descriptionByDayIncome(day) !== '' && descriptionByDay(day) !== ''"
+                      class="mx-1 text-slate-300"
+                      >|</span
+                    >
+                    <span v-if="descriptionByDay(day) !== ''" class="text-slate-600">
+                      {{ descriptionByDay(day) }}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr class="divide-x divide-slate-200 border-t-2 border-slate-200 bg-slate-50/50">
+                  <td
+                    class="whitespace-nowrap px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-slate-600"
+                    colspan="2"
+                  >
+                    Celkem utraceno
+                  </td>
+                  <td
+                    v-for="(category, index) in categories"
+                    :key="index"
+                    class="whitespace-nowrap px-3 py-3 text-right text-xs font-bold text-slate-800"
+                  >
+                    {{ formatAmount(totalSpent(category.id)) }} Kč
+                  </td>
+                  <td
+                    class="whitespace-nowrap bg-indigo-50/50 px-3 py-3 text-center text-xs font-bold text-indigo-600"
+                  >
+                    {{ formatAmount(summaryMonthlySpent()) }} Kč
+                  </td>
+                </tr>
+
+                <tr class="divide-x divide-slate-200 bg-slate-50/50">
+                  <td
+                    class="whitespace-nowrap px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-slate-600"
+                    colspan="2"
+                  >
+                    Měsíční budget
+                  </td>
+                  <td
+                    v-for="(category, index) in categories"
+                    :key="index"
+                    class="cursor-pointer whitespace-nowrap px-3 py-3 text-right text-xs font-bold text-slate-500 transition-colors hover:bg-slate-200"
+                    @click="updateBudget(category.id, monthlyCategoryBudget(category.id))"
+                  >
+                    {{ formatAmount(monthlyCategoryBudget(category.id)) }} Kč
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-3 py-3 text-center text-xs font-bold text-slate-500"
+                  >
+                    {{ formatAmount(summaryMonthlyBudget()) }} Kč
+                  </td>
+                </tr>
+
+                <tr class="divide-x divide-slate-200 bg-slate-50/50">
+                  <td
+                    class="whitespace-nowrap px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-slate-600"
+                    colspan="2"
+                  >
+                    Zůstává z budgetu
+                  </td>
+                  <td
+                    v-for="(category, index) in categories"
+                    :key="index"
+                    :class="[
+                      leftFromBudgetTextClass(category.id),
+                      'whitespace-nowrap px-3 py-3 text-right text-xs font-bold transition-colors',
+                    ]"
+                  >
+                    {{ formatAmount(leftFromBudget(category.id)) }} Kč
+                  </td>
+                  <td
+                    class="whitespace-nowrap bg-indigo-50/50 px-3 py-3 text-center text-xs font-bold text-indigo-600"
+                  >
+                    {{ formatAmount(summaryMonthlyLeft()) }} Kč
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
+
     <CashflowDialogAction
       v-model:show="cashflowActionDialog.show"
       :day="cashflowActionDialog.day"
@@ -413,6 +432,7 @@ function formatAmount(amount: number) {
 </template>
 
 <style scoped>
+/* Vylepšené tlačítko pro přidání kategorie (+) */
 .vertical-line {
   position: relative;
 }
@@ -423,20 +443,29 @@ function formatAmount(amount: number) {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 32px;
-  background-color: blue;
+  width: 36px;
+  background-color: rgb(79 70 229 / 0.9); /* indigo-600 s lehkou průhledností */
+  backdrop-filter: blur(4px);
   display: none;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   color: #fff;
+  font-size: 1.25rem;
+  font-weight: 300;
+  transition: all 0.2s ease-in-out;
 }
 
 .vertical-line:hover::after {
   display: flex;
 }
 
+.vertical-line:active::after {
+  background-color: rgb(67 56 202); /* indigo-700 */
+}
+
+/* Vylepšený highlight kříže (sloupec + řádek) */
 .highlight {
-  background-color: #f9fafb;
+  background-color: #f8fafc !important; /* slate-50 */
 }
 </style>

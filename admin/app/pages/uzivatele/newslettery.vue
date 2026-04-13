@@ -123,54 +123,52 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="newsletters" />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'fullname',
-            name: 'Jméno a příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'locale',
-            name: 'Jazyk',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Oděbr newsletteru"
-        plural="Odběry newsletteru"
-        :query="tableQuery"
-        slug="newsletters"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'fullname',
+          name: 'Jméno a příjmení',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'email',
+          name: 'E-mail',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'locale',
+          name: 'Jazyk',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Oděbr newsletteru"
+      plural="Odběry newsletteru"
+      :query="tableQuery"
+      slug="newsletters"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

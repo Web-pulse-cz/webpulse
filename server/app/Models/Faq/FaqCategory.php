@@ -4,13 +4,12 @@ namespace App\Models\Faq;
 
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class FaqCategory extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'faq_categories';
 
@@ -42,6 +41,7 @@ class FaqCategory extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }

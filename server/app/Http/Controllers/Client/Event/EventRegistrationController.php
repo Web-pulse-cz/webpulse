@@ -36,7 +36,7 @@ class EventRegistrationController extends Controller
 
         DB::beginTransaction();
         try {
-            $eventRegistration = new EventRegistration();
+            $eventRegistration = new EventRegistration;
             $eventRegistration->fill($request->all());
             $eventRegistration->save();
 
@@ -45,6 +45,7 @@ class EventRegistrationController extends Controller
             EventRegistrationSaved::dispatch($eventRegistration);
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

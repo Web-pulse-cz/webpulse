@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class CareerController extends Controller
 {
@@ -20,7 +19,7 @@ class CareerController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     /**
@@ -37,7 +36,7 @@ class CareerController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where('type', '=', $searchString)
                     ->orWhere('status', '=', $searchString)
@@ -62,26 +61,26 @@ class CareerController extends Controller
 
         }
         $careers = $query->get();
+
         return Response::json(CareerResource::collection($careers));
     }
-
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $career = Career::find($id);
-            if (!$career) {
+            if (! $career) {
                 App::abort(404);
             }
         } else {
-            $career = new Career();
+            $career = new Career;
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -95,7 +94,7 @@ class CareerController extends Controller
                 $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $career->translateOrNew($locale)->fill($translation);
             }
-            if (!$id) {
+            if (! $id) {
                 $career->generateCode();
             }
 
@@ -105,6 +104,7 @@ class CareerController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating career.'], 500);
         }
 
@@ -118,14 +118,14 @@ class CareerController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $career = Career::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$career) {
+        if (! $career) {
             App::abort(404);
         }
 
@@ -137,16 +137,17 @@ class CareerController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $career = Career::find($id);
-        if (!$career) {
+        if (! $career) {
             App::abort(404);
         }
 
         $career->delete();
+
         return Response::json();
     }
 }

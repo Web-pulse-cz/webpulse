@@ -18,7 +18,7 @@ class UserGroupResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'permissions' => json_decode($this->permissions),
-            'users_count' => $this->users_count
+            'users_count' => $this->users_count,
         ];
     }
 }

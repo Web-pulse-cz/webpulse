@@ -2,9 +2,9 @@
 
 namespace App\Models\Language;
 
-use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Model;
 
 class Language extends Model implements TranslatableContract
 {
@@ -25,11 +25,11 @@ class Language extends Model implements TranslatableContract
 
     // init translation model
     public $translatedAttributes = [
-        'name'
+        'name',
     ];
 
     public function getFullCodeAttribute(): string
     {
-        return $this->code . '-' . $this->iso;
+        return $this->code.'-'.$this->iso;
     }
 }

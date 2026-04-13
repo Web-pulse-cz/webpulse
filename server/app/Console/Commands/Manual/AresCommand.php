@@ -19,7 +19,7 @@ class AresCommand extends Command
         $count = 10;
         $finalCount = 1000;
         $data = [['IČO', 'Obchodní název', 'Právní forma', 'Sídlo']];
-        $client = new Client();
+        $client = new Client;
 
         $this->output->progressStart($finalCount);
         do {
@@ -29,29 +29,30 @@ class AresCommand extends Command
                 'sidlo' => [
                     'kodMestskeCastiObvodu' => 500208,
                     'kodObce' => 554782,
-                    'kodUlice' => 480681
+                    'kodUlice' => 480681,
                 ],
-                'start' => $from
+                'start' => $from,
             ];
             $res = $client->request('POST', 'https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/vyhledat', [
-                'json' => $request
+                'json' => $request,
             ]);
             $body = json_decode($res->getBody()->getContents(), true);
 
-            if (!isset($body['ekonomickeSubjekty'])) {
+            if (! isset($body['ekonomickeSubjekty'])) {
                 break;
             }
 
             foreach ($body['ekonomickeSubjekty'] as $item) {
                 try {
                     $data[] = [
-                        array_key_exists('ico', $item) ? (int)$item['ico'] : 'bez IČO',
+                        array_key_exists('ico', $item) ? (int) $item['ico'] : 'bez IČO',
                         $item['obchodniJmeno'],
-                        (int)$item['pravniForma'],
-                        $item['sidlo']['textovaAdresa']
+                        (int) $item['pravniForma'],
+                        $item['sidlo']['textovaAdresa'],
                     ];
                 } catch (\Throwable $th) {
                     dd($th->getMessage());
+
                     continue;
                 }
                 $this->output->progressAdvance();

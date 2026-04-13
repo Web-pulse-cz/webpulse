@@ -4,13 +4,12 @@ namespace App\Models\Review;
 
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Review extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $fillable = [
         'rating',
@@ -43,6 +42,7 @@ class Review extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }

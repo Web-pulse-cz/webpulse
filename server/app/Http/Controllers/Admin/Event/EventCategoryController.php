@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class EventCategoryController extends Controller
 {
@@ -20,7 +19,7 @@ class EventCategoryController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -34,7 +33,7 @@ class EventCategoryController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->whereTranslation('code', '=', $searchString);
             }
@@ -57,25 +56,26 @@ class EventCategoryController extends Controller
 
         }
         $eventCategories = $query->get();
+
         return Response::json(EventCategoryResource::collection($eventCategories));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $eventCategory = EventCategory::find($id);
-            if (!$eventCategory) {
+            if (! $eventCategory) {
                 App::abort(404);
             }
         } else {
-            $eventCategory = new EventCategory();
+            $eventCategory = new EventCategory;
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -96,6 +96,7 @@ class EventCategoryController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating faq.'], 500);
         }
 
@@ -109,14 +110,14 @@ class EventCategoryController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $eventCategory = EventCategory::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$eventCategory) {
+        if (! $eventCategory) {
             App::abort(404);
         }
 
@@ -128,13 +129,13 @@ class EventCategoryController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $eventCategory = EventCategory::find($id);
 
-        if (!$eventCategory) {
+        if (! $eventCategory) {
             App::abort(404);
         }
 

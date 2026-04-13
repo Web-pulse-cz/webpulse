@@ -68,28 +68,38 @@ function addRemoveToFiltersQuery(slug: string, value: number) {
   <div class="w-full">
     <Popover v-slot="{ open }" class="relative">
       <PopoverButton
-        class="group inline-flex w-full items-center justify-between rounded-md bg-white px-2 py-1.5 text-xs text-grayDark shadow-sm ring-1 ring-inset ring-grayLight hover:bg-gray-50 focus-visible:outline-grayLight lg:px-3.5 lg:py-2.5 lg:text-sm"
+        :class="[
+          open
+            ? 'text-slate-900 ring-indigo-500'
+            : 'text-slate-700 ring-slate-300 hover:bg-slate-50 hover:ring-slate-400',
+          'group inline-flex w-full items-center justify-between rounded-xl bg-white px-4 py-2.5 text-sm font-medium shadow-sm ring-1 ring-inset transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500',
+        ]"
       >
         <span>{{ title }}</span>
         <ChevronDownIcon
-          class="-mr-1 ml-2 h-5 w-5 text-primaryCustom hover:text-primaryLight"
+          :class="[
+            open ? 'rotate-180 text-indigo-600' : 'text-slate-400 group-hover:text-slate-500',
+            'ml-2 h-5 w-5 shrink-0 transition-transform duration-200',
+          ]"
           aria-hidden="true"
         />
       </PopoverButton>
 
       <transition
         enter-active-class="transition duration-200 ease-out"
-        enter-from-class="translate-y-1 opacity-0"
+        enter-from-class="translate-y-2 opacity-0"
         enter-to-class="translate-y-0 opacity-100"
         leave-active-class="transition duration-150 ease-in"
         leave-from-class="translate-y-0 opacity-100"
-        leave-to-class="translate-y-1 opacity-0"
+        leave-to-class="translate-y-2 opacity-0"
       >
         <PopoverPanel
-          class="absolute left-80 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl"
+          class="absolute left-0 z-50 mt-2 w-screen max-w-[calc(100vw-2rem)] transform sm:max-w-sm lg:max-w-3xl"
         >
-          <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5">
-            <div class="relative grid gap-4 bg-white p-7 lg:grid-cols-3">
+          <div
+            class="overflow-hidden rounded-2xl bg-white shadow-xl shadow-slate-200/50 ring-1 ring-slate-200"
+          >
+            <div class="relative grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-3">
               <div v-for="(filterItem, key) in data" :key="key">
                 <BaseFormCheckbox
                   v-if="multiple === true"

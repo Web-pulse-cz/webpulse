@@ -1,61 +1,47 @@
 <script setup lang="ts">
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   color: {
     type: String,
     required: false,
-    default: '',
+    default: 'slate',
   },
 });
 
-const badgeClass = computed(() => (color: string) => {
-  if (color === 'red') {
-    return 'inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20';
-  } else if (color === 'orange') {
-    return 'inline-flex items-center rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-800 ring-1 ring-inset ring-orange-600/20';
-  } else if (color === 'amber') {
-    return 'inline-flex items-center rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-600/20';
-  } else if (color === 'yellow') {
-    return 'inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20';
-  } else if (color === 'lime') {
-    return 'inline-flex items-center rounded-full bg-lime-50 px-2 py-1 text-xs font-medium text-lime-800 ring-1 ring-inset ring-lime-600/20';
-  } else if (color === 'green') {
-    return 'inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-inset ring-green-600/20';
-  } else if (color === 'emerald') {
-    return 'inline-flex items-center rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-800 ring-1 ring-inset ring-emerald-600/20';
-  } else if (color === 'teal') {
-    return 'inline-flex items-center rounded-full bg-teal-50 px-2 py-1 text-xs font-medium text-teal-800 ring-1 ring-inset ring-teal-600/20';
-  } else if (color === 'cyan') {
-    return 'inline-flex items-center rounded-full bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-800 ring-1 ring-inset ring-cyan-600/20';
-  } else if (color === 'sky') {
-    return 'inline-flex items-center rounded-full bg-sky-50 px-2 py-1 text-xs font-medium text-sky-800 ring-1 ring-inset ring-sky-600/20';
-  } else if (color === 'blue') {
-    return 'inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-inset ring-blue-600/20';
-  } else if (color === 'indigo') {
-    return 'inline-flex items-center rounded-full bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-800 ring-1 ring-inset ring-indigo-600/20';
-  } else if (color === 'violet') {
-    return 'inline-flex items-center rounded-full bg-violet-50 px-2 py-1 text-xs font-medium text-violet-800 ring-1 ring-inset ring-violet-600/20';
-  } else if (color === 'purple') {
-    return 'inline-flex items-center rounded-full bg-purple-50 px-2 py-1 text-xs font-medium text-purple-800 ring-1 ring-inset ring-purple-600/20';
-  } else if (color === 'fuchsia') {
-    return 'inline-flex items-center rounded-full bg-fuchsia-50 px-2 py-1 text-xs font-medium text-fuchsia-800 ring-1 ring-inset ring-fuchsia-600/20';
-  } else if (color === 'pink') {
-    return 'inline-flex items-center rounded-full bg-pink-50 px-2 py-1 text-xs font-medium text-pink-800 ring-1 ring-inset ring-pink-600/20';
-  } else if (color === 'rose') {
-    return 'inline-flex items-center rounded-full bg-rose-50 px-2 py-1 text-xs font-medium text-rose-800 ring-1 ring-inset ring-rose-600/20';
-  } else if (color === 'slate') {
-    return 'inline-flex items-center rounded-full bg-slate-50 px-2 py-1 text-xs font-medium text-slate-800 ring-1 ring-inset ring-slate-600/20';
-  } else if (color === 'gray') {
-    return 'inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-800 ring-1 ring-inset ring-gray-600/20';
-  } else if (color === 'zinc') {
-    return 'inline-flex items-center rounded-full bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-800 ring-1 ring-inset ring-zinc-600/20';
-  } else if (color === 'stone') {
-    return 'inline-flex items-center rounded-full bg-stone-50 px-2 py-1 text-xs font-medium text-stone-800 ring-1 ring-inset ring-stone-600/20';
-  } else {
-    return 'inline-flex items-center rounded-full bg-neutral-50 px-2 py-1 text-xs font-medium text-neutral-800 ring-1 ring-inset ring-neutral-600/20';
-  }
+// Mapování barev na Tailwind třídy (zaručuje, že Tailwind třídy správně vyexportuje)
+const colorMap: Record<string, string> = {
+  red: 'bg-red-50 text-red-700 ring-red-600/20',
+  orange: 'bg-orange-50 text-orange-700 ring-orange-600/20',
+  amber: 'bg-amber-50 text-amber-700 ring-amber-600/20',
+  yellow: 'bg-yellow-50 text-yellow-700 ring-yellow-600/20',
+  lime: 'bg-lime-50 text-lime-700 ring-lime-600/20',
+  green: 'bg-green-50 text-green-700 ring-green-600/20',
+  emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+  teal: 'bg-teal-50 text-teal-700 ring-teal-600/20',
+  cyan: 'bg-cyan-50 text-cyan-700 ring-cyan-600/20',
+  sky: 'bg-sky-50 text-sky-700 ring-sky-600/20',
+  blue: 'bg-blue-50 text-blue-700 ring-blue-600/20',
+  indigo: 'bg-indigo-50 text-indigo-700 ring-indigo-600/20',
+  violet: 'bg-violet-50 text-violet-700 ring-violet-600/20',
+  purple: 'bg-purple-50 text-purple-700 ring-purple-600/20',
+  fuchsia: 'bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-600/20',
+  pink: 'bg-pink-50 text-pink-700 ring-pink-600/20',
+  rose: 'bg-rose-50 text-rose-700 ring-rose-600/20',
+  slate: 'bg-slate-50 text-slate-700 ring-slate-600/20',
+  gray: 'bg-gray-50 text-gray-700 ring-gray-600/20',
+  zinc: 'bg-zinc-50 text-zinc-700 ring-zinc-600/20',
+  stone: 'bg-stone-50 text-stone-700 ring-stone-600/20',
+};
+
+const badgeClass = computed(() => {
+  const selectedColor = colorMap[props.color] || colorMap.slate;
+  return `inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold ring-1 ring-inset ${selectedColor}`;
 });
 </script>
 
 <template>
-  <span :class="badgeClass(color)"><slot /></span>
+  <span :class="badgeClass">
+    <slot />
+  </span>
 </template>

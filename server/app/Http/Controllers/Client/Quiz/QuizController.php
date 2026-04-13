@@ -28,12 +28,12 @@ class QuizController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where(function ($subQuery) use ($searchString) {
-                    $subQuery->where('name', 'like', '%' . $searchString . '%')
-                        ->orWhere('description', 'like', '%' . $searchString . '%')
-                        ->orWhere('tags', 'like', '%' . $searchString . '%');
+                    $subQuery->where('name', 'like', '%'.$searchString.'%')
+                        ->orWhere('description', 'like', '%'.$searchString.'%')
+                        ->orWhere('tags', 'like', '%'.$searchString.'%');
                 });
             }
         }
@@ -41,7 +41,7 @@ class QuizController extends Controller
         if ($request->has('filters') && is_array($request->get('filters')) && count($request->get('filters')) > 0) {
             $filters = $request->get('filters');
             foreach ($filters as $filter) {
-                $query->where('tags', 'like', '%' . $filter . '%')
+                $query->where('tags', 'like', '%'.$filter.'%')
                     ->orWhere('tags', 'like', $filter);
             }
         }
@@ -63,21 +63,21 @@ class QuizController extends Controller
         }
 
         $quizzes = $query->get();
+
         return Response::json(QuizSimpleResource::collection($quizzes));
     }
-
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400, 'Quiz ID is required');
         }
 
         $quiz = Quiz::with(['questions', 'questions.answers'])->find($id);
-        if (!$quiz) {
+        if (! $quiz) {
             App::abort(404, 'Quiz not found');
         }
 
@@ -103,7 +103,7 @@ class QuizController extends Controller
                         $answers[$key]['userAnswer'] .= $originalAnswer->name;
                         $answers[$key]['isCorrect'] = true;
                         $correctAnswers++;
-                    } else if (!$originalAnswer->is_correct && $answer['is_selected']) {
+                    } elseif (! $originalAnswer->is_correct && $answer['is_selected']) {
                         $answer['solved_correct'] = false;
                         $answers[$key]['userAnswer'] .= $originalAnswer->name;
                         $incorrectAnswers++;
@@ -140,7 +140,7 @@ class QuizController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400, 'Quiz ID is required');
         }
 
@@ -152,7 +152,7 @@ class QuizController extends Controller
             ->whereRelation('sites', 'site_id', $siteId)
             ->whereIn('status', ['public', 'private'])
             ->find($id);
-        if (!$quiz) {
+        if (! $quiz) {
             App::abort(404, 'Quiz not found');
         }
 
@@ -171,13 +171,13 @@ class QuizController extends Controller
         foreach ($query as $tag) {
             $tags = explode(',', $tag);
             foreach ($tags as $item) {
-                if (!array_key_exists($item, $rawTags)) {
+                if (! array_key_exists($item, $rawTags)) {
                     $rawTags[ucfirst(trim($item))] = [
                         'name' => ucfirst(trim($item)),
                         'count' => Quiz::query()
                             ->where('status', '=', 'public')
                             ->where(function ($query) use ($item) {
-                                $query->where('tags', 'like', '%' . $item . '%')
+                                $query->where('tags', 'like', '%'.$item.'%')
                                     ->orWhere('tags', 'like', $item);
                             })
                             ->count(),

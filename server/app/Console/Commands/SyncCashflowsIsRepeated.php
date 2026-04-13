@@ -25,12 +25,12 @@ class SyncCashflowsIsRepeated extends Command
             ->where(function ($query) {
                 $query->where('is_repeated', 1)
                     ->orWhere('is_repeated', true);
-            })->whereRaw('month(date) = ' . $month . '  AND year(date) = ' . $year)
+            })->whereRaw('month(date) = '.$month.'  AND year(date) = '.$year)
             ->get();
 
         $this->output->progressStart($cashflows->count());
         foreach ($cashflows as $cashflow) {
-            $newCashflow = new Cashflow();
+            $newCashflow = new Cashflow;
 
             $newCashflow->fill([
                 'cashflow_category_id' => $cashflow->cashflow_category_id,

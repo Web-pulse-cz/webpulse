@@ -20,15 +20,15 @@ class EmailController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('from', 'like', '%' . $searchString . '%')
-                    ->orWhere('to', 'like', '%' . $searchString . '%')
-                    ->orWhere('cc', 'like', '%' . $searchString . '%')
-                    ->orWhere('bcc', 'like', '%' . $searchString . '%')
-                    ->orWhere('status', 'like', '%' . $searchString . '%')
-                    ->orWhere('template', 'like', '%' . $searchString . '%')
-                    ->orWhere('locale', 'like', '%' . $searchString . '%');
+                $query->where('from', 'like', '%'.$searchString.'%')
+                    ->orWhere('to', 'like', '%'.$searchString.'%')
+                    ->orWhere('cc', 'like', '%'.$searchString.'%')
+                    ->orWhere('bcc', 'like', '%'.$searchString.'%')
+                    ->orWhere('status', 'like', '%'.$searchString.'%')
+                    ->orWhere('template', 'like', '%'.$searchString.'%')
+                    ->orWhere('locale', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -49,17 +49,18 @@ class EmailController extends Controller
         }
 
         $emails = $query->get();
+
         return Response::json(EmailResource::collection($emails));
     }
 
     public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $email = Email::find($id);
-        if (!$email) {
+        if (! $email) {
             App::abort(404);
         }
 

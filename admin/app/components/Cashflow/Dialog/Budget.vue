@@ -32,7 +32,7 @@ const emit = defineEmits(['save-budget']);
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -42,7 +42,7 @@ const emit = defineEmits(['save-budget']);
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -59,7 +59,7 @@ const emit = defineEmits(['save-budget']);
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-8"
               >
                 <Form
                   @submit="
@@ -67,37 +67,35 @@ const emit = defineEmits(['save-budget']);
                     show = false;
                   "
                 >
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <DialogTitle
-                        as="h3"
-                        class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
-                      >
-                        Upravit budget pro měsíc {{ month }}/{{ year }}
-                      </DialogTitle>
-                      <div class="mt-6 grid w-full grid-cols-5 gap-4">
-                        <input
-                          v-model="budget"
-                          :min="0"
-                          step="0.01"
-                          type="number"
-                          class="sm:text-sm/6' col-span-full mt-2 block w-full rounded-md border-0 py-2 text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight"
-                          name="budget"
-                          :autofocus="false"
-                          tabindex="-1"
-                        />
-                      </div>
+                  <div class="w-full text-left">
+                    <DialogTitle as="h3" class="mb-6 text-lg font-bold text-slate-900">
+                      Upravit budget pro měsíc {{ month }}/{{ year }}
+                    </DialogTitle>
+
+                    <div class="mt-2 w-full">
+                      <input
+                        v-model="budget"
+                        :min="0"
+                        step="0.01"
+                        type="number"
+                        class="block w-full rounded-xl border-0 px-4 py-2.5 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 transition-all duration-200 placeholder:text-slate-400 hover:ring-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                        name="budget"
+                        :autofocus="false"
+                        tabindex="-1"
+                      />
                     </div>
                   </div>
-                  <div
-                    class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
-                  >
-                    <BaseButton type="submit" variant="success" size="lg"> Uložit </BaseButton>
+
+                  <div class="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-start">
+                    <BaseButton type="submit" variant="success" size="lg" class="w-full sm:w-auto">
+                      Uložit
+                    </BaseButton>
                     <BaseButton
                       ref="cancelButtonRef"
                       type="button"
                       variant="secondary"
                       size="lg"
+                      class="w-full sm:w-auto"
                       @click="show = false"
                     >
                       Zavřít

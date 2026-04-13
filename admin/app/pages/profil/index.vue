@@ -3,6 +3,7 @@ import { Form } from 'vee-validate';
 
 import { definePageMeta } from '#imports';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
+import { DocumentDuplicateIcon, LockClosedIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const userGroupStore = useUserGroupStore();
 
@@ -210,122 +211,176 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-12">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }]"
       @save="saveItem"
     />
-    <div class="grid grid-cols-1 items-baseline gap-x-8 gap-y-4 lg:grid-cols-4">
-      <LayoutContainer class="col-span-3 w-full">
-        <Form @submit="saveItem">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.firstname"
-              label="Jméno"
-              type="text"
-              name="firstname"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.lastname"
-              label="Příjmení"
-              type="text"
-              name="lastname"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.email"
-              label="E-mail"
-              type="text"
-              name="email"
-              rules="required|email"
-              class="col-span-1"
-            />
-            <div class="col-span-full mb-2 mt-4 border-b border-grayLight" />
-            <BaseFormInput
-              v-model="item.street"
-              label="Ulice a č.p."
-              type="text"
-              name="street"
-              class="col-span-1"
-            />
-            <br />
-            <BaseFormInput
-              v-model="item.zip"
-              label="PSČ"
-              type="text"
-              name="zip"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="item.city"
-              type="text"
-              label="Město"
-              name="city"
-              class="col-span-1"
-            />
-          </div>
-        </Form>
-      </LayoutContainer>
-      <LayoutContainer class="col-span-3 w-full lg:col-span-1">
-        <div class="grid w-full grid-cols-2 gap-x-8 gap-y-6">
-          <BaseFormInput
-            v-model="item.invitation_token"
-            label="Kód pozvánky"
-            disabled
-            name="invitation_token"
-            class="col-span-full hidden cursor-pointer"
-            @click.prevent="copyToClipboard"
-          />
-          <BaseFormSelect
-            v-model="item.user_group_id"
-            label="Skupina"
-            name="user_group_id"
-            rules="required"
-            class="col-span-full"
-            disabled
-            :options="userGroupStore.userGroupsOptions"
-          />
-        </div>
-      </LayoutContainer>
-      <LayoutContainer class="col-span-3 w-full lg:col-span-full">
-        <Form @submit="savePassword">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-3">
-            <BaseFormInput
-              v-model="passwords.current_password"
-              label="Současné heslo"
-              type="password"
-              name="password"
-              rules="required"
-              class="col-span-full lg:col-span-1"
-            />
-            <div class="col-span-2 hidden lg:block">&nbsp;</div>
-            <BaseFormInput
-              v-model="passwords.new_password"
-              label="Nové heslo"
-              type="password"
-              name="new_password"
-              rules="required"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-model="passwords.confirm_new_password"
-              label="Potvrzení nového hesla"
-              type="password"
-              name="confirm_new_password"
-              rules="required"
-              class="col-span-1"
-            />
-            <div class="col-span-full flex items-end justify-end lg:col-span-1">
-              <BaseButton type="submit" variant="primary" size="xl"> Změnit heslo </BaseButton>
+
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+      <div class="col-span-1 space-y-8 lg:col-span-9">
+        <LayoutContainer>
+          <Form @submit="saveItem">
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <UserIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Osobní údaje</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <BaseFormInput
+                v-model="item.firstname"
+                label="Jméno"
+                type="text"
+                name="firstname"
+                rules="required|min:3"
+              />
+              <BaseFormInput
+                v-model="item.lastname"
+                label="Příjmení"
+                type="text"
+                name="lastname"
+                rules="required|min:3"
+              />
+              <BaseFormInput
+                v-model="item.email"
+                label="E-mailová adresa"
+                type="text"
+                name="email"
+                rules="required|email"
+                class="col-span-1 lg:col-span-1"
+              />
+
+              <div class="col-span-full pt-4">
+                <LayoutDivider>Bydliště / Kontaktní adresa</LayoutDivider>
+              </div>
+
+              <BaseFormInput
+                v-model="item.street"
+                label="Ulice a č.p."
+                type="text"
+                name="street"
+                class="col-span-1 sm:col-span-2 lg:col-span-2"
+              />
+
+              <div class="col-span-1 hidden lg:block"></div>
+
+              <BaseFormInput v-model="item.zip" label="PSČ" type="text" name="zip" />
+              <BaseFormInput
+                v-model="item.city"
+                label="Město"
+                type="text"
+                name="city"
+                class="col-span-1 sm:col-span-1 lg:col-span-2"
+              />
+            </div>
+          </Form>
+        </LayoutContainer>
+
+        <LayoutContainer>
+          <Form @submit="savePassword">
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600"
+              >
+                <LockClosedIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Zabezpečení účtu</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <div class="col-span-full lg:col-span-1">
+                <BaseFormInput
+                  v-model="passwords.current_password"
+                  label="Současné heslo"
+                  type="password"
+                  name="password"
+                  rules="required"
+                />
+                <p class="mt-2 text-xs text-slate-400">
+                  Pro změnu údajů musíte potvrdit stávající heslo.
+                </p>
+              </div>
+
+              <div class="hidden lg:col-span-2 lg:block"></div>
+
+              <BaseFormInput
+                v-model="passwords.new_password"
+                label="Nové heslo"
+                type="password"
+                name="new_password"
+                rules="required"
+              />
+              <BaseFormInput
+                v-model="passwords.confirm_new_password"
+                label="Potvrzení hesla"
+                type="password"
+                name="confirm_new_password"
+                rules="required"
+              />
+
+              <div class="col-span-full flex items-end justify-end pt-4">
+                <BaseButton type="submit" variant="primary" size="xl" class="w-full sm:w-auto">
+                  Aktualizovat heslo
+                </BaseButton>
+              </div>
+            </div>
+          </Form>
+        </LayoutContainer>
+      </div>
+
+      <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+        <LayoutContainer class="!py-6">
+          <LayoutTitle class="text-xs uppercase tracking-widest text-slate-400"
+            >Informace o účtu</LayoutTitle
+          >
+
+          <div class="mt-6 space-y-6">
+            <div>
+              <BaseFormSelect
+                v-model="item.user_group_id"
+                label="Uživatelská skupina"
+                name="user_group_id"
+                disabled
+                class="opacity-80"
+                :options="userGroupStore.userGroupsOptions"
+              />
+              <p class="mt-1.5 text-[11px] italic text-slate-400">
+                Skupinu může měnit pouze administrátor.
+              </p>
+            </div>
+
+            <div v-if="item.invitation_token" class="border-t border-slate-100 pt-4">
+              <label class="mb-2 block text-sm font-medium text-slate-700">Kód pozvánky</label>
+              <div
+                class="group relative cursor-pointer rounded-xl bg-slate-50 p-3 ring-1 ring-inset ring-slate-200 transition-all hover:bg-slate-100"
+                @click="copyToClipboard"
+              >
+                <code class="font-mono text-xs text-indigo-600">{{ item.invitation_token }}</code>
+                <div class="absolute inset-y-0 right-3 flex items-center">
+                  <DocumentDuplicateIcon
+                    class="size-4 text-slate-400 group-hover:text-indigo-600"
+                  />
+                </div>
+              </div>
+              <p class="mt-2 text-[11px] text-slate-400">Kliknutím kód zkopírujete.</p>
             </div>
           </div>
-        </Form>
-      </LayoutContainer>
+        </LayoutContainer>
+
+        <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
+          <h4 class="text-sm font-bold text-indigo-900">Potřebujete pomoc?</h4>
+          <p class="mt-2 text-xs leading-relaxed text-indigo-700/80">
+            Pokud nemůžete změnit svůj e-mail nebo skupinu, kontaktujte prosím technickou podporu
+            Barbershop Adminu.
+          </p>
+        </div>
+      </aside>
     </div>
   </div>
 </template>
