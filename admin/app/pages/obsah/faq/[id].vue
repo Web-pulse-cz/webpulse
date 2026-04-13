@@ -281,7 +281,7 @@ definePageMeta({
               </div>
             </div>
 
-            <div class="mt-12">
+            <div v-if="categories.length > 0" class="mt-12">
               <LayoutDivider>Zařazení do tématických kategorií</LayoutDivider>
 
               <div class="mt-6 rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200/60">

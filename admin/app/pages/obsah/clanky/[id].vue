@@ -300,7 +300,7 @@ definePageMeta({
               </div>
             </LayoutContainer>
 
-            <LayoutContainer>
+            <LayoutContainer v-if="categories.length > 0">
               <div class="mb-6 flex items-center gap-3">
                 <div
                   class="flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"

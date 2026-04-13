@@ -427,7 +427,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 />
               </div>
             </LayoutContainer>
-            <LayoutContainer class="!py-6">
+            <LayoutContainer v-if="divisions.length > 0" class="!py-6">
               <LayoutTitle class="text-sm uppercase tracking-widest text-slate-400"
                 >Divize</LayoutTitle
               >
