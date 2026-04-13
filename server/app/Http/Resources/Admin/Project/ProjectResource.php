@@ -51,6 +51,7 @@ class ProjectResource extends JsonResource
             'time_entries' => ProjectTimeEntryResource::collection($this->timeEntries),
             'costs' => ProjectCostResource::collection($this->costs),
             'notes' => ProjectNoteResource::collection($this->notes),
+            'files' => $this->files(),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

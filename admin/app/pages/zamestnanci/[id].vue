@@ -3,7 +3,7 @@ import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
 import { useCountryStore } from '~/../stores/countryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
-import { UserIcon, MapPinIcon, PhoneIcon, BriefcaseIcon, BanknotesIcon, HeartIcon, DocumentTextIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { UserIcon, MapPinIcon, PhoneIcon, BriefcaseIcon, BanknotesIcon, HeartIcon, DocumentTextIcon, TrashIcon, FolderIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const countryStore = useCountryStore();
@@ -18,6 +18,7 @@ const tabs = ref([
   { name: 'Osobní údaje', link: '#osobni', current: false },
   { name: 'Pracovní údaje', link: '#prace', current: false },
   { name: 'Banka a pojištění', link: '#banka', current: false },
+  { name: 'Soubory', link: '#soubory', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nový zaměstnanec' : 'Detail zaměstnance');
@@ -92,6 +93,7 @@ async function loadItem() {
         divisions: r.divisions?.map((d: any) => d.id) || [],
         sites: r.sites || [],
       };
+      employeeFiles.value = r.files || [];
       pageTitle.value = r.first_name + ' ' + r.last_name;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -164,9 +166,10 @@ async function saveItem(redirect = true) {
     });
 }
 
-// ─── Contracts (Soubory tab) ──────────────────────────────
+// ─── Files & Contracts (Soubory tab) ──────────────────────────────
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const employeeContracts = ref([]);
+const employeeFiles = ref([] as any[]);
 
 async function loadEmployeeContracts() {
   if (route.params.id === 'pridat') return;
@@ -179,12 +182,74 @@ async function loadEmployeeContracts() {
     .then((r) => {
       const d = r?.data || r;
       employeeContracts.value = Array.isArray(d) ? d : [];
-      // Show Soubory tab if contracts exist
-      if (employeeContracts.value.length > 0 && !tabs.value.find((t) => t.link === '#soubory')) {
-        tabs.value.push({ name: 'Soubory', link: '#soubory', current: false });
-      }
     })
     .catch(() => {});
+}
+
+async function uploadEmployeeFile(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (!file || !route.params.id || route.params.id === 'pridat') return;
+
+  const client = useSanctumClient();
+  const formData = new FormData();
+  formData.append('file', file);
+
+  loading.value = true;
+  await client('/api/admin/employee/' + route.params.id + '/file', {
+    method: 'POST',
+    body: formData,
+    headers: { 'X-Site-Hash': selectedSiteHash.value },
+  })
+    .then((r) => {
+      $toast.show({ summary: 'Hotovo', detail: 'Soubor nahrán.', severity: 'success' });
+      employeeFiles.value = r.files || [];
+    })
+    .catch(() => {
+      $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se nahrát soubor.', severity: 'error' });
+    })
+    .finally(() => {
+      loading.value = false;
+      target.value = '';
+    });
+}
+
+async function downloadEmployeeFile(file: any) {
+  const client = useSanctumClient();
+  try {
+    const res = await client.raw('/api/admin/employee/' + route.params.id + '/file/' + file.id, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || 'soubor-' + file.id;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+  }
+}
+
+async function deleteEmployeeFile(file: any) {
+  const client = useSanctumClient();
+  await client('/api/admin/employee/' + route.params.id + '/file/' + file.id, {
+    method: 'DELETE',
+    headers: { Accept: 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+  })
+    .then(() => {
+      employeeFiles.value = employeeFiles.value.filter((f: any) => f.id !== file.id);
+      $toast.show({ summary: 'Hotovo', detail: 'Soubor smazán.', severity: 'success' });
+    })
+    .catch(() => {
+      $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se smazat soubor.', severity: 'error' });
+    });
 }
 
 async function downloadContractFile(contract: any) {
@@ -499,64 +564,120 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </LayoutContainer>
         </div>
       </template>
-      <!-- Soubory tab (contracts linked to this employee) -->
+      <!-- Soubory tab -->
       <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">
         <LayoutContainer>
           <div class="mb-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
               <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-                <DocumentTextIcon class="size-5" />
+                <FolderIcon class="size-5" />
               </div>
               <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
             </div>
-            <NuxtLink
-              to="/smlouvy/pridat"
-              class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-            >
-              Nová smlouva
-            </NuxtLink>
+            <div class="flex items-center gap-3">
+              <label
+                v-if="route.params.id !== 'pridat'"
+                class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
+              >
+                <ArrowDownTrayIcon class="size-5 rotate-180" />
+                Nahrát soubor
+                <input type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" @change="uploadEmployeeFile" />
+              </label>
+              <NuxtLink
+                to="/smlouvy/pridat"
+                class="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500"
+              >
+                Nová smlouva
+              </NuxtLink>
+            </div>
           </div>
 
-          <div v-if="!employeeContracts.length" class="py-12 text-center text-sm text-slate-400">
-            Žádné smlouvy.
-          </div>
-          <div v-else class="space-y-3">
-            <div
-              v-for="contract in employeeContracts"
-              :key="contract.id"
-              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
-                <div class="flex items-center gap-3">
-                  <span class="font-medium text-slate-900">{{ contract.title }}</span>
-                  <span
-                    class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                    :class="{
-                      'bg-emerald-100 text-emerald-700': contract.status === 'active',
-                      'bg-slate-100 text-slate-600': contract.status === 'draft',
-                      'bg-red-100 text-red-700': contract.status === 'terminated',
-                      'bg-amber-100 text-amber-700': contract.status === 'expired',
-                    }"
-                  >
-                    {{ { draft: 'Koncept', active: 'Aktivní', terminated: 'Ukončená', expired: 'Vypršelá' }[contract.status] || contract.status }}
-                  </span>
-                  <span class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-600">
-                    {{ { hpp: 'HPP', dpp: 'DPP', dpc: 'DPČ', osvc: 'OSVČ', internship: 'Stáž', nda: 'NDA', other: 'Jiný' }[contract.type] || contract.type }}
-                  </span>
-                </div>
-                <div class="mt-1 text-xs text-slate-500">
-                  {{ contract.date_from || '—' }} &mdash; {{ contract.date_to || 'Doba neurčitá' }}
-                </div>
-              </NuxtLink>
-              <button
-                v-if="contract.files?.length"
-                type="button"
-                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-                @click="downloadContractFile(contract)"
+          <!-- Uploaded files -->
+          <div v-if="employeeFiles.length" class="mb-6">
+            <h3 class="mb-3 text-sm font-semibold text-slate-500">Nahrané soubory</h3>
+            <div class="space-y-3">
+              <div
+                v-for="file in employeeFiles"
+                :key="file.id"
+                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
               >
-                Stáhnout
-              </button>
+                <div class="flex items-center gap-4">
+                  <div class="flex size-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                    <DocumentTextIcon class="size-5" />
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
+                    <p class="text-xs text-slate-400">
+                      {{ file.mime_type }}
+                      <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                    @click="downloadEmployeeFile(file)"
+                  >
+                    Stáhnout
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
+                    @click="deleteEmployeeFile(file)"
+                  >
+                    <TrashIcon class="size-4" />
+                  </button>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <!-- Contracts -->
+          <div v-if="employeeContracts.length">
+            <h3 class="mb-3 text-sm font-semibold text-slate-500">Smlouvy</h3>
+            <div class="space-y-3">
+              <div
+                v-for="contract in employeeContracts"
+                :key="contract.id"
+                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+              >
+                <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
+                  <div class="flex items-center gap-3">
+                    <span class="font-medium text-slate-900">{{ contract.title }}</span>
+                    <span
+                      class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                      :class="{
+                        'bg-emerald-100 text-emerald-700': contract.status === 'active',
+                        'bg-slate-100 text-slate-600': contract.status === 'draft',
+                        'bg-red-100 text-red-700': contract.status === 'terminated',
+                        'bg-amber-100 text-amber-700': contract.status === 'expired',
+                      }"
+                    >
+                      {{ { draft: 'Koncept', active: 'Aktivní', terminated: 'Ukončená', expired: 'Vypršelá' }[contract.status] || contract.status }}
+                    </span>
+                    <span class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-600">
+                      {{ { hpp: 'HPP', dpp: 'DPP', dpc: 'DPČ', osvc: 'OSVČ', internship: 'Stáž', nda: 'NDA', other: 'Jiný' }[contract.type] || contract.type }}
+                    </span>
+                  </div>
+                  <div class="mt-1 text-xs text-slate-500">
+                    {{ contract.date_from || '—' }} &mdash; {{ contract.date_to || 'Doba neurčitá' }}
+                  </div>
+                </NuxtLink>
+                <button
+                  v-if="contract.files?.length"
+                  type="button"
+                  class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                  @click="downloadContractFile(contract)"
+                >
+                  Stáhnout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="!employeeFiles.length && !employeeContracts.length" class="py-12 text-center text-sm text-slate-400">
+            Žádné soubory ani smlouvy.
           </div>
         </LayoutContainer>
       </template>

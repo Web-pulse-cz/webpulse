@@ -6,12 +6,13 @@ use App\Models\Client\Client;
 use App\Models\Currency\Currency;
 use App\Models\Invoice\Invoice;
 use App\Models\TaxRate\TaxRate;
+use App\Traits\Fileable;
 use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use Siteable;
+    use Siteable, Fileable;
 
     protected $table = 'projects';
 

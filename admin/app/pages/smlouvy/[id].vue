@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
-import { DocumentTextIcon, UserIcon, FolderIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import { DocumentTextIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const route = useRoute();
@@ -13,7 +13,6 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const tabs = ref([
 	{ name: 'Základní údaje', link: '#info', current: false },
 	{ name: 'Obsah smlouvy', link: '#obsah', current: false },
-	{ name: 'Soubory', link: '#soubory', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nová smlouva' : 'Detail smlouvy');
@@ -46,7 +45,6 @@ const item = ref({
 	vacation_days: 20,
 	notice_period_days: 60,
 	note: '',
-	files: [] as any[],
 	sites: [] as number[],
 });
 
@@ -160,59 +158,6 @@ async function saveItem(redirect = true) {
 		});
 }
 
-async function uploadFile(event: Event) {
-	const target = event.target as HTMLInputElement;
-	const file = target.files?.[0];
-	if (!file || !item.value.id) return;
-
-	const client = useSanctumClient();
-	const formData = new FormData();
-	formData.append('file', file);
-	formData.append('title', item.value.title || 'Smlouva');
-	formData.append('sites', JSON.stringify(item.value.sites));
-
-	loading.value = true;
-	await client('/api/admin/contract/' + item.value.id, {
-		method: 'POST',
-		body: formData,
-		headers: { 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then(() => {
-			$toast.show({ summary: 'Hotovo', detail: 'Soubor nahrán.', severity: 'success' });
-			loadItem();
-		})
-		.catch(() => {
-			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se nahrát soubor.', severity: 'error' });
-		})
-		.finally(() => {
-			loading.value = false;
-			target.value = '';
-		});
-}
-
-async function downloadFile(fileId: number) {
-	const client = useSanctumClient();
-	try {
-		const res = await client.raw('/api/admin/contract/' + item.value.id + '/file/' + fileId, {
-			method: 'GET',
-			credentials: 'include',
-			responseType: 'blob',
-		});
-		if (!res.ok) throw new Error('Chyba');
-		const blob = res._data as Blob;
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = 'smlouva-' + item.value.id + '.pdf';
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		URL.revokeObjectURL(url);
-	} catch (e) {
-		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
-	}
-}
-
 watchEffect(() => {
 	if (!route?.path) return;
 	const hash = route.hash || '#info';
@@ -317,63 +262,6 @@ definePageMeta({ middleware: 'sanctum:auth' });
 								Obsah smlouvy se při uložení automaticky vygeneruje do PDF.
 							</p>
 							<BaseFormEditor v-model="item.content" label="Text smlouvy" />
-						</LayoutContainer>
-					</template>
-
-					<!-- Files tab -->
-					<template v-if="tabs.find((tab) => tab.current && tab.link === '#soubory')">
-						<LayoutContainer>
-							<div class="mb-6 flex items-center gap-3">
-								<div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-									<FolderIcon class="size-5" />
-								</div>
-								<LayoutTitle class="!mb-0">Soubory</LayoutTitle>
-							</div>
-
-							<div v-if="item.id" class="mb-6">
-								<label
-									class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
-								>
-									<ArrowDownTrayIcon class="size-5 rotate-180" />
-									Nahrát soubor
-									<input type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" @change="uploadFile" />
-								</label>
-							</div>
-							<div v-else class="mb-6 text-sm text-slate-400">
-								Pro nahrání souborů nejprve uložte smlouvu.
-							</div>
-
-							<div v-if="!item.files?.length" class="py-12 text-center text-sm text-slate-400">
-								Žádné soubory.
-							</div>
-
-							<div v-else class="space-y-3">
-								<div
-									v-for="file in item.files"
-									:key="file.id"
-									class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-								>
-									<div class="flex items-center gap-4">
-										<div class="flex size-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
-											<DocumentTextIcon class="size-5" />
-										</div>
-										<div>
-											<p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
-											<p class="text-xs text-slate-400">
-												{{ file.mime_type }}
-												<span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
-											</p>
-										</div>
-									</div>
-									<button
-										type="button"
-										class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-										@click="downloadFile(file.id)"
-									>
-										Stáhnout
-									</button>
-								</div>
-							</div>
 						</LayoutContainer>
 					</template>
 				</div>

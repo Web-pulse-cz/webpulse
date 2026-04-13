@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PriceOfferController extends Controller
@@ -292,19 +293,19 @@ class PriceOfferController extends Controller
         $file = DB::table('fileables')
             ->where('id', $fileId)
             ->where('fileable_id', $offerId)
-            ->where('fileable_type', PriceOffer::class)
+            ->where('fileable_type', get_class($offer))
             ->first();
 
         if (!$file) {
             App::abort(404);
         }
 
-        $path = storage_path('app/public/' . $file->path);
-        if (!file_exists($path)) {
+        $disk = $file->disk ?? 'public';
+        if (!Storage::disk($disk)->exists($file->path)) {
             App::abort(404);
         }
 
-        return response()->download($path, $file->name, [
+        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
             'Content-Type' => $file->mime_type,
         ]);
     }

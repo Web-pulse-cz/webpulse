@@ -47,6 +47,7 @@ class EmployeeResource extends JsonResource
             'divisions' => EmployeeDivisionResource::collection($this->whenLoaded('divisions')),
             'contracts' => EmployeeContractResource::collection($this->whenLoaded('contracts')),
             'active_contract' => EmployeeContractResource::make($this->whenLoaded('activeContract')),
+            'files' => $this->files(),
             'sites' => $this->whenLoaded('sites', fn () => $this->sites->pluck('id')),
             'created_at' => $this->created_at?->toIso8601String(),
         ];

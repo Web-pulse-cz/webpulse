@@ -5,12 +5,13 @@ namespace App\Models\Employee;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Models\Shift\Shift;
+use App\Traits\Fileable;
 use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    use Siteable;
+    use Siteable, Fileable;
 
     protected $table = 'employees';
 

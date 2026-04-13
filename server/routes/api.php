@@ -563,6 +563,9 @@ Route::group([
             Route::get('{id}', [ProjectController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [ProjectController::class, 'store']);
             Route::delete('{id}', [ProjectController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::post('{id}/file', [ProjectController::class, 'uploadFile'])->where('id', '[0-9]+');
+            Route::get('{projectId}/file/{fileId}', [ProjectController::class, 'downloadFile'])->where(['projectId' => '[0-9]+', 'fileId' => '[0-9]+']);
+            Route::delete('{projectId}/file/{fileId}', [ProjectController::class, 'deleteFile'])->where(['projectId' => '[0-9]+', 'fileId' => '[0-9]+']);
 
             // Project sub-resources
             Route::group([
@@ -692,6 +695,9 @@ Route::group([
             Route::get('{id}', [EmployeeController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [EmployeeController::class, 'store']);
             Route::delete('{id}', [EmployeeController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::post('{id}/file', [EmployeeController::class, 'uploadFile'])->where('id', '[0-9]+');
+            Route::get('{employeeId}/file/{fileId}', [EmployeeController::class, 'downloadFile'])->where(['employeeId' => '[0-9]+', 'fileId' => '[0-9]+']);
+            Route::delete('{employeeId}/file/{fileId}', [EmployeeController::class, 'deleteFile'])->where(['employeeId' => '[0-9]+', 'fileId' => '[0-9]+']);
 
             // Contracts (nested under employee)
             Route::group([

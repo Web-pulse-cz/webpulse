@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ContractController extends Controller
@@ -108,8 +109,12 @@ class ContractController extends Controller
                 $contract->attachUploadedFile($file, 'files/contracts/' . $contract->id);
             }
 
-            if ($request->has('sites')) {
-                $this->saveSites($contract, $request->get('sites', []));
+            $sites = $request->get('sites', []);
+            if (is_string($sites)) {
+                $sites = json_decode($sites, true) ?? [];
+            }
+            if (!empty($sites)) {
+                $this->saveSites($contract, $sites);
             }
 
             DB::commit();
@@ -165,19 +170,19 @@ class ContractController extends Controller
         $file = DB::table('fileables')
             ->where('id', $fileId)
             ->where('fileable_id', $contractId)
-            ->where('fileable_type', Contract::class)
+            ->where('fileable_type', get_class($contract))
             ->first();
 
         if (!$file) {
             App::abort(404);
         }
 
-        $path = storage_path('app/public/' . $file->path);
-        if (!file_exists($path)) {
+        $disk = $file->disk ?? 'public';
+        if (!Storage::disk($disk)->exists($file->path)) {
             App::abort(404);
         }
 
-        return response()->download($path, $file->name, [
+        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
             'Content-Type' => $file->mime_type,
         ]);
     }

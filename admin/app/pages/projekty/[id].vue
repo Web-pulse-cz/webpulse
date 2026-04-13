@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
-import { DocumentIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon, ChevronDownIcon, ChevronRightIcon, CheckCircleIcon, ChatBubbleLeftIcon, ClockIcon } from '@heroicons/vue/24/outline';
+import { DocumentIcon, DocumentTextIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon, ChevronDownIcon, ChevronRightIcon, CheckCircleIcon, ChatBubbleLeftIcon, ClockIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
@@ -23,6 +23,7 @@ const tabs = ref([
   { name: 'Přehled', link: '#prehled', current: false },
   { name: 'Úkoly', link: '#ukoly', current: false },
   { name: 'Náklady', link: '#naklady', current: false },
+  { name: 'Soubory', link: '#soubory', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nový projekt' : 'Detail projektu');
@@ -86,6 +87,7 @@ async function loadItem() {
     .then((r) => {
       item.value = r;
       item.value.sites = Array.isArray(r.sites) ? r.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
+      projectFiles.value = r.files || [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -359,15 +361,10 @@ const priorityColors: Record<string, string> = {
   low: 'bg-blue-100 text-blue-600',
 };
 
-// ─── Contracts & Price Offers (Soubory tab) ──────────────────────────────
+// ─── Files, Contracts & Price Offers (Soubory tab) ──────────────────────────────
+const projectFiles = ref([] as any[]);
 const projectContracts = ref([]);
 const projectPriceOffers = ref([]);
-
-function addProjectSouboryTab() {
-	if ((projectContracts.value.length > 0 || projectPriceOffers.value.length > 0) && !tabs.value.find((t) => t.link === '#soubory')) {
-		tabs.value.push({ name: 'Soubory', link: '#soubory', current: false });
-	}
-}
 
 async function loadProjectContracts() {
 	if (route.params.id === 'pridat') return;
@@ -380,7 +377,6 @@ async function loadProjectContracts() {
 		.then((r) => {
 			const d = r?.data || r;
 			projectContracts.value = Array.isArray(d) ? d : [];
-			addProjectSouboryTab();
 		})
 		.catch(() => {});
 }
@@ -396,9 +392,74 @@ async function loadProjectPriceOffers() {
 		.then((r) => {
 			const d = r?.data || r;
 			projectPriceOffers.value = Array.isArray(d) ? d : [];
-			addProjectSouboryTab();
 		})
 		.catch(() => {});
+}
+
+async function uploadProjectFile(event: Event) {
+	const target = event.target as HTMLInputElement;
+	const file = target.files?.[0];
+	if (!file || !route.params.id || route.params.id === 'pridat') return;
+
+	const client = useSanctumClient();
+	const formData = new FormData();
+	formData.append('file', file);
+
+	loading.value = true;
+	await client('/api/admin/project/' + route.params.id + '/file', {
+		method: 'POST',
+		body: formData,
+		headers: { 'X-Site-Hash': selectedSiteHash.value },
+	})
+		.then((r) => {
+			$toast.show({ summary: 'Hotovo', detail: 'Soubor nahrán.', severity: 'success' });
+			projectFiles.value = r.files || [];
+		})
+		.catch(() => {
+			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se nahrát soubor.', severity: 'error' });
+		})
+		.finally(() => {
+			loading.value = false;
+			target.value = '';
+		});
+}
+
+async function downloadDirectFile(file: any) {
+	const client = useSanctumClient();
+	try {
+		const res = await client.raw('/api/admin/project/' + route.params.id + '/file/' + file.id, {
+			method: 'GET',
+			credentials: 'include',
+			responseType: 'blob',
+		});
+		if (!res.ok) throw new Error('Chyba');
+		const blob = res._data as Blob;
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = file.name || 'soubor-' + file.id;
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+		URL.revokeObjectURL(url);
+	} catch (e) {
+		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+	}
+}
+
+async function deleteProjectFile(file: any) {
+	const client = useSanctumClient();
+	await client('/api/admin/project/' + route.params.id + '/file/' + file.id, {
+		method: 'DELETE',
+		headers: { Accept: 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+	})
+		.then(() => {
+			projectFiles.value = projectFiles.value.filter((f: any) => f.id !== file.id);
+			$toast.show({ summary: 'Hotovo', detail: 'Soubor smazán.', severity: 'success' });
+		})
+		.catch(() => {
+			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se smazat soubor.', severity: 'error' });
+		});
 }
 
 async function downloadProjectFile(type: 'contract' | 'price-offer', entity: any) {
@@ -812,7 +873,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </LayoutContainer>
       </template>
 
-      <!-- Soubory tab (contracts + price offers linked to this project) -->
+      <!-- Soubory tab -->
       <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">
         <LayoutContainer>
           <div class="mb-6 flex items-center justify-between">
@@ -822,12 +883,63 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
               <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
             </div>
-            <NuxtLink
-              to="/smlouvy/pridat"
-              class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-            >
-              Nová smlouva
-            </NuxtLink>
+            <div class="flex items-center gap-3">
+              <label
+                v-if="route.params.id !== 'pridat'"
+                class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
+              >
+                <ArrowDownTrayIcon class="size-5 rotate-180" />
+                Nahrát soubor
+                <input type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" @change="uploadProjectFile" />
+              </label>
+              <NuxtLink
+                to="/smlouvy/pridat"
+                class="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500"
+              >
+                Nová smlouva
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Uploaded files -->
+          <div v-if="projectFiles.length" class="mb-6">
+            <h3 class="mb-3 text-sm font-semibold text-slate-500">Nahrané soubory</h3>
+            <div class="space-y-3">
+              <div
+                v-for="file in projectFiles"
+                :key="'f-' + file.id"
+                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="flex size-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                    <DocumentTextIcon class="size-5" />
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
+                    <p class="text-xs text-slate-400">
+                      {{ file.mime_type }}
+                      <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                    @click="downloadDirectFile(file)"
+                  >
+                    Stáhnout
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
+                    @click="deleteProjectFile(file)"
+                  >
+                    <TrashIcon class="size-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Contracts -->
@@ -911,7 +1023,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </div>
           </div>
 
-          <div v-if="!projectContracts.length && !projectPriceOffers.length" class="py-12 text-center text-sm text-slate-400">
+          <div v-if="!projectFiles.length && !projectContracts.length && !projectPriceOffers.length" class="py-12 text-center text-sm text-slate-400">
             Žádné soubory.
           </div>
         </LayoutContainer>

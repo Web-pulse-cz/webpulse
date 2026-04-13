@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -146,7 +147,71 @@ class ProjectController extends Controller
             App::abort(404);
         }
 
+        $project->removeAllFiles();
         $project->delete();
+
+        return Response::json();
+    }
+
+    public function uploadFile(Request $request, int $id): JsonResponse
+    {
+        $project = Project::find($id);
+        if (! $project) {
+            App::abort(404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|max:20480',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
+
+        $file = $request->file('file');
+        $project->attachUploadedFile($file, 'files/projects/' . $project->id);
+
+        return Response::json(ProjectResource::make($project->fresh([
+            'client', 'status', 'currency', 'taxRate', 'tags',
+            'milestones', 'tasks', 'timeEntries', 'costs', 'notes',
+        ])));
+    }
+
+    public function downloadFile(int $projectId, int $fileId)
+    {
+        $project = Project::find($projectId);
+        if (! $project) {
+            App::abort(404);
+        }
+
+        $file = DB::table('fileables')
+            ->where('id', $fileId)
+            ->where('fileable_id', $projectId)
+            ->where('fileable_type', get_class($project))
+            ->first();
+
+        if (! $file) {
+            App::abort(404);
+        }
+
+        $disk = $file->disk ?? 'public';
+        if (! Storage::disk($disk)->exists($file->path)) {
+            App::abort(404);
+        }
+
+        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
+            'Content-Type' => $file->mime_type,
+        ]);
+    }
+
+    public function deleteFile(int $projectId, int $fileId): JsonResponse
+    {
+        $project = Project::find($projectId);
+        if (! $project) {
+            App::abort(404);
+        }
+
+        $project->removeFile($fileId);
 
         return Response::json();
     }
