@@ -85,9 +85,10 @@ class ShiftController extends Controller
                 $shift->employees()->sync($employeeSync);
             }
 
-            if ($request->has('sites')) {
-                $this->saveSites($shift, $request->get('sites', []));
-            }
+            // Auto-assign site from header if no sites provided
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $sites = $request->get('sites', [$siteId]);
+            $this->saveSites($shift, $sites);
 
             DB::commit();
         } catch (\Throwable $e) {

@@ -17,6 +17,7 @@ class ShiftTemplateResource extends JsonResource
             'end_time' => $this->end_time,
             'break_minutes' => $this->break_minutes,
             'note' => $this->note,
+            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
         ];
     }
 }

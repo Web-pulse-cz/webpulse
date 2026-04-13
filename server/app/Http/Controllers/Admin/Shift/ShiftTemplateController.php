@@ -55,9 +55,10 @@ class ShiftTemplateController extends Controller
             $template->fill($request->all());
             $template->save();
 
-            if ($request->has('sites')) {
-                $this->saveSites($template, $request->get('sites', []));
-            }
+            // Auto-assign site from header if no sites provided
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $sites = $request->get('sites', [$siteId]);
+            $this->saveSites($template, $sites);
 
             DB::commit();
         } catch (\Throwable $e) {
@@ -71,12 +72,12 @@ class ShiftTemplateController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $template = ShiftTemplate::find($id);
+        $template = ShiftTemplate::with('sites')->find($id);
         if (! $template) {
             App::abort(404);
         }
 
-        return Response::json(ShiftTemplateResource::make($template));
+        return Response::json(ShiftTemplateResource::make($template->fresh('sites')));
     }
 
     public function destroy(int $id): JsonResponse
