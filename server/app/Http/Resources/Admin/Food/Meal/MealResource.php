@@ -18,6 +18,7 @@ class MealResource extends JsonResource
             'recipe_id' => $this->recipe_id,
             'recipe' => $this->whenLoaded('recipe', function () {
                 $r = $this->recipe;
+
                 return [
                     'id' => $r->id,
                     'name' => $r->name,
@@ -25,13 +26,13 @@ class MealResource extends JsonResource
                     'time_to_prepare' => $r->time_to_prepare,
                     'text' => $r->text,
                     'perex' => $r->perex,
-                    'foodstuffs' => $r->foodstuffs->map(fn($f) => [
+                    'foodstuffs' => $r->foodstuffs->map(fn ($f) => [
                         'id' => $f->id,
                         'name' => $f->name,
                         'quantity' => $f->pivot->quantity,
                         'unit' => $f->pivot->unit,
                     ]),
-                    'allergens' => $r->allergens->map(fn($a) => [
+                    'allergens' => $r->allergens->map(fn ($a) => [
                         'id' => $a->id,
                         'name' => $a->name,
                         'number' => $a->number,

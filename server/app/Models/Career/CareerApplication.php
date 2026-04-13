@@ -3,7 +3,6 @@
 namespace App\Models\Career;
 
 use App\Traits\Siteable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CareerApplication extends Model

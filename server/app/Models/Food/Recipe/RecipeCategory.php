@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RecipeCategory extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'recipe_categories';
 
@@ -34,6 +34,7 @@ class RecipeCategory extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 

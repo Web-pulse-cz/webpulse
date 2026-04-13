@@ -15,126 +15,128 @@ use Illuminate\Support\Facades\Validator;
 
 class RestaurantTableController extends Controller
 {
-	use Siteable;
+    use Siteable;
 
-	public function index(Request $request): JsonResponse
-	{
-		$siteId = $this->handleSite($request->header('X-Site-Hash'));
-		$query = RestaurantTable::withCount('upcomingReservations')
-			->whereRelation('sites', 'site_id', $siteId);
+    public function index(Request $request): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+        $query = RestaurantTable::withCount('upcomingReservations')
+            ->whereRelation('sites', 'site_id', $siteId);
 
-		if ($request->filled('search')) {
-			$search = $request->get('search');
-			$query->where(function ($q) use ($search) {
-				$q->where('number', 'like', '%' . $search . '%')
-					->orWhere('name', 'like', '%' . $search . '%')
-					->orWhere('location', 'like', '%' . $search . '%');
-			});
-		}
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('number', 'like', '%'.$search.'%')
+                    ->orWhere('name', 'like', '%'.$search.'%')
+                    ->orWhere('location', 'like', '%'.$search.'%');
+            });
+        }
 
-		if ($request->filled('status')) {
-			$query->where('status', $request->get('status'));
-		}
+        if ($request->filled('status')) {
+            $query->where('status', $request->get('status'));
+        }
 
-		if ($request->has('orderWay') && $request->get('orderBy')) {
-			$query->orderBy($request->get('orderBy'), $request->get('orderWay'));
-		} else {
-			$query->orderBy('position');
-		}
+        if ($request->has('orderWay') && $request->get('orderBy')) {
+            $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
+        } else {
+            $query->orderBy('position');
+        }
 
-		if ($request->has('paginate')) {
-			$tables = $query->paginate($request->get('paginate'));
+        if ($request->has('paginate')) {
+            $tables = $query->paginate($request->get('paginate'));
 
-			return Response::json([
-				'data' => RestaurantTableResource::collection($tables->items()),
-				'total' => $tables->total(),
-				'perPage' => $tables->perPage(),
-				'currentPage' => $tables->currentPage(),
-				'lastPage' => $tables->lastPage(),
-			]);
-		}
+            return Response::json([
+                'data' => RestaurantTableResource::collection($tables->items()),
+                'total' => $tables->total(),
+                'perPage' => $tables->perPage(),
+                'currentPage' => $tables->currentPage(),
+                'lastPage' => $tables->lastPage(),
+            ]);
+        }
 
-		return Response::json(RestaurantTableResource::collection($query->get()));
-	}
+        return Response::json(RestaurantTableResource::collection($query->get()));
+    }
 
-	public function store(Request $request, int $id = null): JsonResponse
-	{
-		if ($id) {
-			$table = RestaurantTable::find($id);
-			if (!$table) {
-				App::abort(404);
-			}
-		} else {
-			$table = new RestaurantTable();
-		}
+    public function store(Request $request, ?int $id = null): JsonResponse
+    {
+        if ($id) {
+            $table = RestaurantTable::find($id);
+            if (! $table) {
+                App::abort(404);
+            }
+        } else {
+            $table = new RestaurantTable;
+        }
 
-		$validator = Validator::make($request->all(), [
-			'number' => 'required|string|max:50',
-			'seats' => 'required|integer|min:1',
-		]);
+        $validator = Validator::make($request->all(), [
+            'number' => 'required|string|max:50',
+            'seats' => 'required|integer|min:1',
+        ]);
 
-		if ($validator->fails()) {
-			return Response::json($validator->errors(), 400);
-		}
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
 
-		try {
-			DB::beginTransaction();
-			$table->fill($request->except(['sites']));
-			$table->save();
+        try {
+            DB::beginTransaction();
+            $table->fill($request->except(['sites']));
+            $table->save();
 
-			if ($request->has('sites')) {
-				$this->saveSites($table, $request->get('sites', []));
-			}
+            if ($request->has('sites')) {
+                $this->saveSites($table, $request->get('sites', []));
+            }
 
-			DB::commit();
-		} catch (\Throwable $e) {
-			DB::rollBack();
-			return Response::json(['message' => 'Chyba při ukládání stolu.'], 500);
-		}
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-		return Response::json(RestaurantTableResource::make(
-			$table->fresh(['upcomingReservations', 'sites'])
-		));
-	}
+            return Response::json(['message' => 'Chyba při ukládání stolu.'], 500);
+        }
 
-	public function show(Request $request, int $id): JsonResponse
-	{
-		$siteId = $this->handleSite($request->header('X-Site-Hash'));
-		$table = RestaurantTable::with(['upcomingReservations.customer', 'todayReservations.customer', 'reservations.customer', 'sites'])
-			->withCount('upcomingReservations')
-			->whereRelation('sites', 'site_id', $siteId)
-			->find($id);
+        return Response::json(RestaurantTableResource::make(
+            $table->fresh(['upcomingReservations', 'sites'])
+        ));
+    }
 
-		if (!$table) {
-			App::abort(404);
-		}
+    public function show(Request $request, int $id): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+        $table = RestaurantTable::with(['upcomingReservations.customer', 'todayReservations.customer', 'reservations.customer', 'sites'])
+            ->withCount('upcomingReservations')
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
 
-		// Auto-refresh status
-		$table->refreshStatus();
+        if (! $table) {
+            App::abort(404);
+        }
 
-		return Response::json(RestaurantTableResource::make($table));
-	}
+        // Auto-refresh status
+        $table->refreshStatus();
 
-	public function destroy(int $id): JsonResponse
-	{
-		$table = RestaurantTable::find($id);
-		if (!$table) {
-			App::abort(404);
-		}
+        return Response::json(RestaurantTableResource::make($table));
+    }
 
-		$table->delete();
-		return Response::json();
-	}
+    public function destroy(int $id): JsonResponse
+    {
+        $table = RestaurantTable::find($id);
+        if (! $table) {
+            App::abort(404);
+        }
 
-	public function refreshStatuses(Request $request): JsonResponse
-	{
-		$siteId = $this->handleSite($request->header('X-Site-Hash'));
-		$tables = RestaurantTable::whereRelation('sites', 'site_id', $siteId)->get();
+        $table->delete();
 
-		foreach ($tables as $table) {
-			$table->refreshStatus();
-		}
+        return Response::json();
+    }
 
-		return Response::json(['status' => 'ok']);
-	}
+    public function refreshStatuses(Request $request): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+        $tables = RestaurantTable::whereRelation('sites', 'site_id', $siteId)->get();
+
+        foreach ($tables as $table) {
+            $table->refreshStatus();
+        }
+
+        return Response::json(['status' => 'ok']);
+    }
 }

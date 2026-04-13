@@ -2,7 +2,6 @@
 
 namespace App\Models\Logo;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LogoTranslation extends Model

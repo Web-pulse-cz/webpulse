@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FoodstuffCategory extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'foodstuff_categories';
 
@@ -18,11 +18,11 @@ class FoodstuffCategory extends Model
         'perex',
         'text',
         'meta_title',
-        'meta_description'
+        'meta_description',
     ];
 
     protected $fillable = [
-        'foodstuff_category_id'
+        'foodstuff_category_id',
     ];
 
     public function getAttribute($key)
@@ -36,6 +36,7 @@ class FoodstuffCategory extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 

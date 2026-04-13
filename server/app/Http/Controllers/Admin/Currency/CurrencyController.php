@@ -23,15 +23,15 @@ class CurrencyController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where('code', '=', $searchString)
-                    ->orWhere('rate', 'like', '%' . $searchString . '%')
-                    ->orWhere('decimals', 'like', '%' . $searchString . '%')
-                    ->orWhere('bank_account_number', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('symbol_before', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('symbol_after', 'like', '%' . $searchString . '%');
+                    ->orWhere('rate', 'like', '%'.$searchString.'%')
+                    ->orWhere('decimals', 'like', '%'.$searchString.'%')
+                    ->orWhere('bank_account_number', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('symbol_before', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('symbol_after', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -52,18 +52,19 @@ class CurrencyController extends Controller
         }
 
         $currencys = $query->get();
+
         return Response::json(CurrencyListResource::collection($currencys));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $currency = Currency::find($id);
-            if (!$currency) {
+            if (! $currency) {
                 App::abort(404);
             }
         } else {
-            $currency = new Currency();
+            $currency = new Currency;
         }
 
         $validator = Validator::make($request->all(), [
@@ -88,6 +89,7 @@ class CurrencyController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating language.'], 500);
         }
 
@@ -96,12 +98,12 @@ class CurrencyController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $currency = Currency::find($id);
-        if (!$currency) {
+        if (! $currency) {
             App::abort(404);
         }
 
@@ -110,16 +112,17 @@ class CurrencyController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $currency = Currency::find($id);
-        if (!$currency) {
+        if (! $currency) {
             App::abort(404);
         }
 
         $currency->delete();
+
         return Response::json();
     }
 }

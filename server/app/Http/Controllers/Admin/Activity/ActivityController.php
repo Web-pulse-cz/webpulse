@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ActivityController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = Activity::query();
@@ -24,9 +23,9 @@ class ActivityController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -60,19 +59,20 @@ class ActivityController extends Controller
         }
 
         $activities = $query->get();
+
         return Response::json(ActivityResource::collection($activities));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $activity = Activity::find($id);
 
-            if (!$activity) {
+            if (! $activity) {
                 App::abort(404);
             }
         } else {
-            $activity = new Activity();
+            $activity = new Activity;
         }
 
         $validator = Validator::make($request->all(), [
@@ -94,21 +94,22 @@ class ActivityController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating activity.'], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Activity\ActivityResource::make($activity));
+        return Response::json(ActivityResource::make($activity));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $activity = Activity::find($id);
 
-        if (!$activity) {
+        if (! $activity) {
             App::abort(404);
         }
 
@@ -117,13 +118,13 @@ class ActivityController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $activity = Activity::find($id);
 
-        if (!$activity) {
+        if (! $activity) {
             App::abort(404);
         }
         $activity->delete();

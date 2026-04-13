@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class NoveltyController extends Controller
 {
@@ -20,7 +19,7 @@ class NoveltyController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -34,17 +33,17 @@ class NoveltyController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('type', 'like', '%' . $searchString . '%')
-                    ->orWhere('price_type', 'like', '%' . $searchString . '%')
+                $query->where('type', 'like', '%'.$searchString.'%')
+                    ->orWhere('price_type', 'like', '%'.$searchString.'%')
                     ->orWhere('price', '=', $searchString)
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('slug', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('perex', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('description', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_title', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_description', 'like', '%' . $searchString . '%');
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('slug', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('perex', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('description', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_title', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_description', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -65,22 +64,23 @@ class NoveltyController extends Controller
         }
 
         $noveltys = $query->get();
+
         return Response::json(NoveltyResource::collection($noveltys));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $novelty = Novelty::find($id);
-            if (!$novelty) {
+            if (! $novelty) {
                 App::abort(404);
             }
         } else {
-            $novelty = new Novelty();
+            $novelty = new Novelty;
         }
 
         $validator = Validator::make($request->all(), [
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -104,6 +104,7 @@ class NoveltyController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating novelty.'], 500);
         }
 
@@ -114,14 +115,14 @@ class NoveltyController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $novelty = Novelty::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$novelty) {
+        if (! $novelty) {
             App::abort(404);
         }
 
@@ -130,16 +131,17 @@ class NoveltyController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $novelty = Novelty::find($id);
-        if (!$novelty) {
+        if (! $novelty) {
             App::abort(404);
         }
 
         $novelty->delete();
+
         return Response::json();
     }
 }

@@ -14,33 +14,34 @@ use Illuminate\Support\Facades\Log;
 
 class SyncClientToFakturoidJob implements ShouldQueue
 {
-	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-	public int $tries = 3;
-	public int $backoff = 30;
+    public int $tries = 3;
 
-	public function __construct(
-		protected int $clientId,
-		protected int $siteId
-	) {}
+    public int $backoff = 30;
 
-	public function handle(): void
-	{
-		$client = Client::find($this->clientId);
-		$site = Site::find($this->siteId);
-		if (!$client || !$site || !$site->hasFakturoid()) {
-			return;
-		}
+    public function __construct(
+        protected int $clientId,
+        protected int $siteId
+    ) {}
 
-		try {
-			$service = new FakturoidService($site);
-			$service->pushClientToFakturoid($client);
-		} catch (\Throwable $e) {
-			Log::error('SyncClientToFakturoidJob failed: ' . $e->getMessage(), [
-				'client_id' => $this->clientId,
-				'site_id' => $this->siteId,
-			]);
-			throw $e;
-		}
-	}
+    public function handle(): void
+    {
+        $client = Client::find($this->clientId);
+        $site = Site::find($this->siteId);
+        if (! $client || ! $site || ! $site->hasFakturoid()) {
+            return;
+        }
+
+        try {
+            $service = new FakturoidService($site);
+            $service->pushClientToFakturoid($client);
+        } catch (\Throwable $e) {
+            Log::error('SyncClientToFakturoidJob failed: '.$e->getMessage(), [
+                'client_id' => $this->clientId,
+                'site_id' => $this->siteId,
+            ]);
+            throw $e;
+        }
+    }
 }

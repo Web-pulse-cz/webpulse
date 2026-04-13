@@ -9,10 +9,8 @@ trait Siteable
 {
     /**
      * Save sites to model through morph relation.
-     * @param Model $model
-     * @param array|string $
      *
-     * @return void
+     * @param array|string $
      */
     public function saveSites(Model $model, array $sites): void
     {

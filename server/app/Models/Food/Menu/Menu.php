@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'menus';
 
@@ -35,6 +35,7 @@ class Menu extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 

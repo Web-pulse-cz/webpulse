@@ -15,79 +15,82 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectStatusController extends Controller
 {
-	use Siteable;
+    use Siteable;
 
-	public function index(Request $request): JsonResponse
-	{
-		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+    public function index(Request $request): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-		$statuses = ProjectStatus::query()
-			->whereRelation('sites', 'site_id', $siteId)
-			->orderBy('position')
-			->get();
-		return Response::json(ProjectStatusResource::collection($statuses));
-	}
+        $statuses = ProjectStatus::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->orderBy('position')
+            ->get();
 
-	public function store(Request $request, int $id = null): JsonResponse
-	{
-		if ($id) {
-			$status = ProjectStatus::find($id);
-			if (!$status) {
-				App::abort(404);
-			}
-		} else {
-			$status = new ProjectStatus();
-		}
+        return Response::json(ProjectStatusResource::collection($statuses));
+    }
 
-		$validator = Validator::make($request->all(), [
-			'name' => 'required|string|max:255',
-			'color' => 'nullable|string|max:20',
-		]);
+    public function store(Request $request, ?int $id = null): JsonResponse
+    {
+        if ($id) {
+            $status = ProjectStatus::find($id);
+            if (! $status) {
+                App::abort(404);
+            }
+        } else {
+            $status = new ProjectStatus;
+        }
 
-		if ($validator->fails()) {
-			return Response::json($validator->errors(), 400);
-		}
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'color' => 'nullable|string|max:20',
+        ]);
 
-		try {
-			DB::beginTransaction();
-			$status->fill($request->all());
-			$status->save();
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
 
-			if ($request->has('sites')) {
-				$this->saveSites($status, $request->get('sites', []));
-			}
+        try {
+            DB::beginTransaction();
+            $status->fill($request->all());
+            $status->save();
 
-			DB::commit();
-		} catch (\Throwable $e) {
-			DB::rollBack();
-			return Response::json(['message' => 'Chyba při ukládání statusu.'], 500);
-		}
+            if ($request->has('sites')) {
+                $this->saveSites($status, $request->get('sites', []));
+            }
 
-		return Response::json(ProjectStatusResource::make($status));
-	}
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-	public function show(Request $request, int $id): JsonResponse
-	{
-		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+            return Response::json(['message' => 'Chyba při ukládání statusu.'], 500);
+        }
 
-		$status = ProjectStatus::query()
-			->whereRelation('sites', 'site_id', $siteId)
-			->find($id);
-		if (!$status) {
-			App::abort(404);
-		}
+        return Response::json(ProjectStatusResource::make($status));
+    }
 
-		return Response::json(ProjectStatusResource::make($status));
-	}
+    public function show(Request $request, int $id): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-	public function destroy(int $id): JsonResponse
-	{
-		$status = ProjectStatus::find($id);
-		if (!$status) {
-			App::abort(404);
-		}
+        $status = ProjectStatus::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
+        if (! $status) {
+            App::abort(404);
+        }
 
-		$status->delete();
-		return Response::json();
-	}
+        return Response::json(ProjectStatusResource::make($status));
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $status = ProjectStatus::find($id);
+        if (! $status) {
+            App::abort(404);
+        }
+
+        $status->delete();
+
+        return Response::json();
+    }
 }

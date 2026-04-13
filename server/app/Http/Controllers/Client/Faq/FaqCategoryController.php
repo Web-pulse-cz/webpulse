@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 class FaqCategoryController extends Controller
 {
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -28,12 +28,12 @@ class FaqCategoryController extends Controller
         return Response::json(FaqCategoryResource::collection($faqCategories));
     }
 
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['error' => 'Category ID is required'], 400);
         }
 
@@ -44,7 +44,7 @@ class FaqCategoryController extends Controller
             ->with(['faqs'])
             ->first();
 
-        if (!$faqCategory) {
+        if (! $faqCategory) {
             return Response::json(['error' => 'Category not found'], 404);
         }
 

@@ -2,8 +2,6 @@
 
 namespace App\Models\Event;
 
-use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EventTranslation extends Model
@@ -18,6 +16,6 @@ class EventTranslation extends Model
         'perex',
         'text',
         'meta_title',
-        'meta_description'
+        'meta_description',
     ];
 }

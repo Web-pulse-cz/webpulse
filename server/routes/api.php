@@ -4,119 +4,119 @@ use App\Http\Controllers\Admin\Activity\ActivityController;
 use App\Http\Controllers\Admin\Activity\UserActivityController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
+use App\Http\Controllers\Admin\Biography\BiographyController;
+use App\Http\Controllers\Admin\Blog\PostCategoryController;
+use App\Http\Controllers\Admin\Blog\PostController;
+use App\Http\Controllers\Admin\Career\CareerApplicationController;
+use App\Http\Controllers\Admin\Career\CareerController;
 use App\Http\Controllers\Admin\Cashflow\CashflowBudgetController;
 use App\Http\Controllers\Admin\Cashflow\CashflowCategoryController;
 use App\Http\Controllers\Admin\Cashflow\CashflowController;
+use App\Http\Controllers\Admin\Changelog\ChangelogController;
+use App\Http\Controllers\Admin\Client\ClientController;
 use App\Http\Controllers\Admin\Contact\ContactController;
+use App\Http\Controllers\Admin\Contact\ContactListController;
 use App\Http\Controllers\Admin\Contact\ContactPhaseController;
 use App\Http\Controllers\Admin\Contact\ContactSourceController;
 use App\Http\Controllers\Admin\Contact\ContactTaskController;
-use App\Http\Controllers\Admin\Contact\ContactListController;
-use App\Http\Controllers\Admin\Message\MessageBlueprintController;
-use App\Http\Controllers\Admin\Project\ProjectController;
-use App\Http\Controllers\Admin\Project\ProjectStatusController;
-use App\Http\Controllers\Admin\TaxRate\TaxRateController;
-use \App\Http\Controllers\Admin\Language\LanguageController;
-use App\Http\Controllers\Admin\User\ProfileController;
-use App\Http\Controllers\Admin\User\QuickAccessController;
-use App\Http\Controllers\Admin\User\UserController;
-use App\Http\Controllers\Admin\User\UserGroupController;
-use App\Http\Controllers\Controller as BaseController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\Currency\CurrencyController;
 use App\Http\Controllers\Admin\Country\CountryController;
-use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
-use App\Http\Controllers\Admin\Service\ServiceController;
-use App\Http\Controllers\Admin\Novelty\NoveltyController;
+use App\Http\Controllers\Admin\Currency\CurrencyController;
+use App\Http\Controllers\Admin\Customer\CustomerController;
+use App\Http\Controllers\Admin\Customer\CustomerGroupController;
 use App\Http\Controllers\Admin\Demand\DemandController;
-use App\Http\Controllers\FilemanagerController;
-use App\Http\Controllers\Admin\Blog\PostCategoryController;
-use App\Http\Controllers\Admin\Blog\PostController;
 use App\Http\Controllers\Admin\Email\EmailController;
-use App\Http\Controllers\Admin\Page\PageController;
-use App\Http\Controllers\Admin\Setting\SettingController;
-use App\Http\Controllers\Admin\Review\ReviewController;
-use App\Http\Controllers\Admin\Logo\LogoController;
-use App\Http\Controllers\Admin\Newsletter\NewsletterController;
-use App\Http\Controllers\Admin\Faq\FaqCategoryController;
-use App\Http\Controllers\Admin\Faq\FaqController;
+use App\Http\Controllers\Admin\Employee\EmployeeContractController;
+use App\Http\Controllers\Admin\Employee\EmployeeController;
+use App\Http\Controllers\Admin\Employee\EmployeeDivisionController;
 use App\Http\Controllers\Admin\Event\EventCategoryController;
 use App\Http\Controllers\Admin\Event\EventController;
 use App\Http\Controllers\Admin\Event\EventRegistrationController;
-use App\Http\Controllers\Admin\Career\CareerController;
-use App\Http\Controllers\Admin\Career\CareerApplicationController;
-use App\Http\Controllers\Admin\Quiz\QuizController;
-use App\Http\Controllers\Admin\Biography\BiographyController;
-use App\Http\Controllers\Admin\Site\SiteController;
-use App\Http\Controllers\Admin\Changelog\ChangelogController;
+use App\Http\Controllers\Admin\Fakturoid\FakturoidWebhookController;
+use App\Http\Controllers\Admin\Faq\FaqCategoryController;
+use App\Http\Controllers\Admin\Faq\FaqController;
 use App\Http\Controllers\Admin\Food\Allergen\AllergenController;
 use App\Http\Controllers\Admin\Food\Foodstuff\FoodstuffCategoryController;
 use App\Http\Controllers\Admin\Food\Foodstuff\FoodstuffController;
 use App\Http\Controllers\Admin\Food\Meal\MealCategoryController;
 use App\Http\Controllers\Admin\Food\Meal\MealController;
-use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
-use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
 use App\Http\Controllers\Admin\Food\Menu\MenuController;
 use App\Http\Controllers\Admin\Food\Menu\MenuSectionController;
-use App\Http\Controllers\Admin\Restaurant\RestaurantTableController;
-use App\Http\Controllers\Admin\Restaurant\ReservationController;
-use App\Http\Controllers\Admin\Client\ClientController;
+use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
+use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
 use App\Http\Controllers\Admin\Invoice\InvoiceController;
-use App\Http\Controllers\Admin\Project\TagController;
+use App\Http\Controllers\Admin\Language\LanguageController;
+use App\Http\Controllers\Admin\Logo\LogoController;
+use App\Http\Controllers\Admin\Message\MessageBlueprintController;
+use App\Http\Controllers\Admin\Newsletter\NewsletterController;
+use App\Http\Controllers\Admin\Novelty\NoveltyController;
+use App\Http\Controllers\Admin\Page\PageController;
+use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
+use App\Http\Controllers\Admin\Project\ProjectController;
+use App\Http\Controllers\Admin\Project\ProjectCostController;
 use App\Http\Controllers\Admin\Project\ProjectMilestoneController;
+use App\Http\Controllers\Admin\Project\ProjectNoteController;
+use App\Http\Controllers\Admin\Project\ProjectStatusController;
+use App\Http\Controllers\Admin\Project\ProjectTaskBoardController;
+use App\Http\Controllers\Admin\Project\ProjectTaskCategoryController;
+use App\Http\Controllers\Admin\Project\ProjectTaskCommentController;
 use App\Http\Controllers\Admin\Project\ProjectTaskController;
 use App\Http\Controllers\Admin\Project\ProjectTimeEntryController;
-use App\Http\Controllers\Admin\Project\ProjectCostController;
-use App\Http\Controllers\Admin\Project\ProjectNoteController;
-use App\Http\Controllers\Admin\Project\ProjectTaskCategoryController;
-use App\Http\Controllers\Admin\Project\ProjectTaskBoardController;
-use App\Http\Controllers\Admin\Project\ProjectTaskCommentController;
-use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
-use App\Http\Controllers\Admin\Customer\CustomerController;
-use App\Http\Controllers\Admin\Customer\CustomerGroupController;
-use App\Http\Controllers\Admin\Voucher\VoucherController;
-use App\Http\Controllers\Admin\Employee\EmployeeController;
-use App\Http\Controllers\Admin\Employee\EmployeeDivisionController;
-use App\Http\Controllers\Admin\Employee\EmployeeContractController;
+use App\Http\Controllers\Admin\Project\TagController;
+use App\Http\Controllers\Admin\Quiz\QuizController;
+use App\Http\Controllers\Admin\Restaurant\ReservationController;
+use App\Http\Controllers\Admin\Restaurant\RestaurantTableController;
+use App\Http\Controllers\Admin\Review\ReviewController;
+use App\Http\Controllers\Admin\Service\ServiceController;
+use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Shift\ShiftController;
 use App\Http\Controllers\Admin\Shift\ShiftTemplateController;
-use App\Http\Controllers\Admin\Fakturoid\FakturoidWebhookController;
-use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
-use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
+use App\Http\Controllers\Admin\Site\SiteController;
+use App\Http\Controllers\Admin\TaxRate\TaxRateController;
+use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
+use App\Http\Controllers\Admin\User\ProfileController;
+use App\Http\Controllers\Admin\User\QuickAccessController;
+use App\Http\Controllers\Admin\User\UserController;
+use App\Http\Controllers\Admin\User\UserGroupController;
+use App\Http\Controllers\Admin\Voucher\VoucherController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
 use App\Http\Controllers\Client\Blog\PostController as ClientPostController;
-use App\Http\Controllers\Client\Page\PageController as ClientPageController;
-use App\Http\Controllers\Client\Logo\LogoController as ClientLogoController;
-use App\Http\Controllers\Client\Novelty\NoveltyController as ClientNoveltyController;
-use App\Http\Controllers\Client\Review\ReviewController as ClientReviewController;
-use App\Http\Controllers\Client\Setting\SettingController as ClientSettingController;
-use App\Http\Controllers\Client\Newsletter\NewsletterController as ClientNewsletterController;
-use App\Http\Controllers\Client\Faq\FaqController as ClientFaqController;
-use App\Http\Controllers\Client\Faq\FaqCategoryController as ClientFaqCategoryController;
+use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
+use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
+use App\Http\Controllers\Client\Demand\DemandController as ClientDemandController;
 use App\Http\Controllers\Client\Event\EventCategoryController as ClientEventCategoryController;
 use App\Http\Controllers\Client\Event\EventController as ClientEventController;
 use App\Http\Controllers\Client\Event\EventRegistrationController as ClientEventRegistrationController;
-use App\Http\Controllers\Client\Career\CareerController as ClientCareerController;
-use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
+use App\Http\Controllers\Client\Faq\FaqCategoryController as ClientFaqCategoryController;
+use App\Http\Controllers\Client\Faq\FaqController as ClientFaqController;
+use App\Http\Controllers\Client\Logo\LogoController as ClientLogoController;
+use App\Http\Controllers\Client\Newsletter\NewsletterController as ClientNewsletterController;
+use App\Http\Controllers\Client\Novelty\NoveltyController as ClientNoveltyController;
+use App\Http\Controllers\Client\Page\PageController as ClientPageController;
 use App\Http\Controllers\Client\Quiz\QuizController as ClientQuizController;
+use App\Http\Controllers\Client\Review\ReviewController as ClientReviewController;
+use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
+use App\Http\Controllers\Client\Setting\SettingController as ClientSettingController;
+use App\Http\Controllers\Controller as BaseController;
+use App\Http\Controllers\FilemanagerController;
+use Illuminate\Support\Facades\Route;
 
 // Fakturoid webhook (no auth required)
 Route::post('webhook/fakturoid', [FakturoidWebhookController::class, 'handle']);
 
 Route::group([
-    'prefix' => 'filemanager'
+    'prefix' => 'filemanager',
 ], function () {
     Route::get('formats', [FilemanagerController::class, 'getImageFormats']);
     Route::group([
-        'prefix' => 'upload'
+        'prefix' => 'upload',
     ], function () {
         Route::post('images', [FilemanagerController::class, 'uploadImages']);
-        //Route::post('files', [FilemanagerController::class, 'uploadFiles']);
+        // Route::post('files', [FilemanagerController::class, 'uploadFiles']);
     });
 });
 
 Route::group([
-    'prefix' => 'setting'
+    'prefix' => 'setting',
 ], function () {
     Route::get('{lang?}', [ClientSettingController::class, 'index']);
 });
@@ -127,30 +127,30 @@ Route::group([
  * -------------------------------------------------------------------------
  */
 Route::group([
-    'prefix' => 'service'
+    'prefix' => 'service',
 ], function () {
     Route::get('{lang?}', [ClientServiceController::class, 'index']);
     Route::get('{id}/{lang?}', [ClientServiceController::class, 'show'])->where('id', '[0-9]+');
 });
 
 Route::group([
-    'prefix' => 'demand'
+    'prefix' => 'demand',
 ], function () {
     Route::post('{lang?}', [ClientDemandController::class, 'store']);
 });
 
 Route::group([
-    'prefix' => 'blog'
+    'prefix' => 'blog',
 ], function () {
     Route::group([
-        'prefix' => 'category'
+        'prefix' => 'category',
     ], function () {
         Route::get('{lang?}', [ClientPostCategoryController::class, 'index']);
         Route::get('{id}/{lang?}', [ClientPostCategoryController::class, 'show'])->where('id', '[0-9]+');
     });
 
     Route::group([
-        'prefix' => 'post'
+        'prefix' => 'post',
     ], function () {
         Route::get('{lang?}', [ClientPostController::class, 'index']);
         Route::get('{id}/{lang?}', [ClientPostController::class, 'show'])->where('id', '[0-9]+');
@@ -158,41 +158,41 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'page'
+    'prefix' => 'page',
 ], function () {
     Route::get('{id}/{lang?}', [ClientPageController::class, 'show'])->where('id', '[0-9]+');
 });
 
 Route::group([
-    'prefix' => 'logo'
+    'prefix' => 'logo',
 ], function () {
     Route::get('{lang?}', [ClientLogoController::class, 'index']);
 });
 
 Route::group([
-    'prefix' => 'novelty'
+    'prefix' => 'novelty',
 ], function () {
     Route::get('{lang?}', [ClientNoveltyController::class, 'index']);
     Route::get('{id}/{lang?}', [ClientNoveltyController::class, 'show'])->where('id', '[0-9]+');
 });
 
 Route::group([
-    'prefix' => 'review'
+    'prefix' => 'review',
 ], function () {
     Route::get('{lang?}', [ClientReviewController::class, 'index']);
 });
 
 Route::group([
-    'prefix' => 'newsletter'
+    'prefix' => 'newsletter',
 ], function () {
     Route::post('{lang?}', [ClientNewsletterController::class, 'store']);
 });
 
 Route::group([
-    'prefix' => 'faq'
+    'prefix' => 'faq',
 ], function () {
     Route::group([
-        'prefix' => 'category'
+        'prefix' => 'category',
     ], function () {
         Route::get('{lang?}', [ClientFaqCategoryController::class, 'index']);
         Route::get('{id}/{lang?}', [ClientFaqCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -201,17 +201,17 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'event'
+    'prefix' => 'event',
 ], function () {
     Route::group([
-        'prefix' => 'category'
+        'prefix' => 'category',
     ], function () {
         Route::get('{lang?}', [ClientEventCategoryController::class, 'index']);
         Route::get('{id}/{lang?}', [ClientEventCategoryController::class, 'show'])->where('id', '[0-9]+');
     });
 
     Route::group([
-        'prefix' => 'registration'
+        'prefix' => 'registration',
     ], function () {
         Route::post('{lang?}', [ClientEventRegistrationController::class, 'store']);
     });
@@ -221,10 +221,10 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'career'
+    'prefix' => 'career',
 ], function () {
     Route::group([
-        'prefix' => 'application'
+        'prefix' => 'application',
     ], function () {
         Route::post('{lang?}', [ClientCareerApplicationController::class, 'store']);
     });
@@ -234,7 +234,7 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'quiz'
+    'prefix' => 'quiz',
 ], function () {
     Route::get('', [ClientQuizController::class, 'index']);
     Route::get('{id}', [ClientQuizController::class, 'show'])->where('id', '[0-9]+');
@@ -248,13 +248,13 @@ Route::group([
  * -------------------------------------------------------------------------
  */
 Route::group([
-    'prefix' => 'admin'
+    'prefix' => 'admin',
 ], function () {
     Route::post('register', [RegisterController::class, 'index']);
 
     // Login, logout, and refresh token routes
     Route::group([
-        'prefix' => 'auth'
+        'prefix' => 'auth',
     ], function () {
         Route::post('login', [LoginController::class, 'login']);
         Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
@@ -268,7 +268,7 @@ Route::group([
     ], function () {
         // Quick access routes
         Route::group([
-            'prefix' => 'quick-access'
+            'prefix' => 'quick-access',
         ], function () {
             Route::get('', [QuickAccessController::class, 'index']);
             Route::get('{id}', [QuickAccessController::class, 'show'])->where('id', '[0-9]+');
@@ -278,7 +278,7 @@ Route::group([
 
         // Profile routes
         Route::group([
-            'prefix' => 'profile'
+            'prefix' => 'profile',
         ], function () {
             Route::get('', [ProfileController::class, 'index']);
             Route::post('', [ProfileController::class, 'store']);
@@ -287,11 +287,11 @@ Route::group([
 
         // User routes
         Route::group([
-            'prefix' => 'user'
+            'prefix' => 'user',
         ], function () {
             // User group routes
             Route::group([
-                'prefix' => 'group'
+                'prefix' => 'group',
             ], function () {
                 Route::get('', [UserGroupController::class, 'index']);
                 Route::get('{id}', [UserGroupController::class, 'show'])->where('id', '[0-9]+');
@@ -300,7 +300,7 @@ Route::group([
             });
 
             Route::group([
-                'prefix' => 'activity'
+                'prefix' => 'activity',
             ], function () {
                 Route::get('', [UserActivityController::class, 'index']);
                 Route::get('{id}', [UserActivityController::class, 'show'])->where('id', '[0-9]+');
@@ -316,11 +316,11 @@ Route::group([
 
         // Contact routes
         Route::group([
-            'prefix' => 'contact'
+            'prefix' => 'contact',
         ], function () {
             // Contact phase routes
             Route::group([
-                'prefix' => 'phase'
+                'prefix' => 'phase',
             ], function () {
                 Route::get('', [ContactPhaseController::class, 'index']);
                 Route::get('{id}', [ContactPhaseController::class, 'show'])->where('id', '[0-9]+');
@@ -330,7 +330,7 @@ Route::group([
 
             // Contact source routes
             Route::group([
-                'prefix' => 'source'
+                'prefix' => 'source',
             ], function () {
                 Route::get('', [ContactSourceController::class, 'index']);
                 Route::get('{id}', [ContactSourceController::class, 'show'])->where('id', '[0-9]+');
@@ -340,7 +340,7 @@ Route::group([
 
             // Contact task routes
             Route::group([
-                'prefix' => 'task'
+                'prefix' => 'task',
             ], function () {
                 Route::get('', [ContactTaskController::class, 'index']);
                 Route::get('{id}', [ContactTaskController::class, 'show'])->where('id', '[0-9]+');
@@ -350,7 +350,7 @@ Route::group([
 
             // Contact list routes
             Route::group([
-                'prefix' => 'list'
+                'prefix' => 'list',
             ], function () {
                 Route::get('', [ContactListController::class, 'index']);
                 Route::get('{id}', [ContactListController::class, 'show'])->where('id', '[0-9]+');
@@ -367,10 +367,10 @@ Route::group([
         });
 
         Route::group([
-            'prefix' => 'message'
+            'prefix' => 'message',
         ], function () {
             Route::group([
-                'prefix' => 'blueprint'
+                'prefix' => 'blueprint',
             ], function () {
                 Route::get('', [MessageBlueprintController::class, 'index']);
                 Route::get('{id}', [MessageBlueprintController::class, 'show'])->where('id', '[0-9]+');
@@ -381,7 +381,7 @@ Route::group([
 
         // Activity routes
         Route::group([
-            'prefix' => 'activity'
+            'prefix' => 'activity',
         ], function () {
             Route::get('', [ActivityController::class, 'index']);
             Route::get('{id}', [ActivityController::class, 'show'])->where('id', '[0-9]+');
@@ -391,11 +391,11 @@ Route::group([
 
         // Cashflow routes
         Route::group([
-            'prefix' => 'cashflow'
+            'prefix' => 'cashflow',
         ], function () {
             // Cashflow category routes
             Route::group([
-                'prefix' => 'category'
+                'prefix' => 'category',
             ], function () {
                 Route::get('', [CashflowCategoryController::class, 'index']);
                 Route::get('{id}', [CashflowCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -405,7 +405,7 @@ Route::group([
 
             // Cashflow budget routes
             Route::group([
-                'prefix' => 'budget'
+                'prefix' => 'budget',
             ], function () {
                 Route::post('{id?}', [CashflowBudgetController::class, 'store']);
             });
@@ -415,7 +415,7 @@ Route::group([
 
         // Tax-rate routes
         Route::group([
-            'prefix' => 'tax-rate'
+            'prefix' => 'tax-rate',
         ], function () {
             Route::get('', [TaxRateController::class, 'index']);
             Route::get('{id}', [TaxRateController::class, 'show'])->where('id', '[0-9]+');
@@ -425,7 +425,7 @@ Route::group([
 
         // Language routes
         Route::group([
-            'prefix' => 'language'
+            'prefix' => 'language',
         ], function () {
             Route::get('', [LanguageController::class, 'index']);
             Route::get('{id}', [LanguageController::class, 'show'])->where('id', '[0-9]+');
@@ -435,7 +435,7 @@ Route::group([
 
         // Currency routes
         Route::group([
-            'prefix' => 'currency'
+            'prefix' => 'currency',
         ], function () {
             Route::get('', [CurrencyController::class, 'index']);
             Route::get('{id}', [CurrencyController::class, 'show'])->where('id', '[0-9]+');
@@ -445,7 +445,7 @@ Route::group([
 
         // Country routes
         Route::group([
-            'prefix' => 'country'
+            'prefix' => 'country',
         ], function () {
             Route::get('', [CountryController::class, 'index']);
             Route::get('{id}', [CountryController::class, 'show'])->where('id', '[0-9]+');
@@ -455,7 +455,7 @@ Route::group([
 
         // Service routes
         Route::group([
-            'prefix' => 'service'
+            'prefix' => 'service',
         ], function () {
             Route::get('', [ServiceController::class, 'index']);
             Route::get('{id}', [ServiceController::class, 'show'])->where('id', '[0-9]+');
@@ -465,7 +465,7 @@ Route::group([
 
         // Novelties routes
         Route::group([
-            'prefix' => 'novelty'
+            'prefix' => 'novelty',
         ], function () {
             Route::get('', [NoveltyController::class, 'index']);
             Route::get('{id}', [NoveltyController::class, 'show'])->where('id', '[0-9]+');
@@ -475,7 +475,7 @@ Route::group([
 
         // Demands routes
         Route::group([
-            'prefix' => 'demand'
+            'prefix' => 'demand',
         ], function () {
             Route::get('', [DemandController::class, 'index']);
             Route::get('{id}', [DemandController::class, 'show'])->where('id', '[0-9]+');
@@ -484,10 +484,10 @@ Route::group([
         });
 
         Route::group([
-            'prefix' => 'post'
+            'prefix' => 'post',
         ], function () {
             Route::group([
-                'prefix' => 'category'
+                'prefix' => 'category',
             ], function () {
                 Route::get('', [PostCategoryController::class, 'index']);
                 Route::get('{id}', [PostCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -503,7 +503,7 @@ Route::group([
 
         // Page routes
         Route::group([
-            'prefix' => 'page'
+            'prefix' => 'page',
         ], function () {
             Route::get('', [PageController::class, 'index']);
             Route::get('{id}', [PageController::class, 'show'])->where('id', '[0-9]+');
@@ -513,7 +513,7 @@ Route::group([
 
         // Client routes
         Route::group([
-            'prefix' => 'client'
+            'prefix' => 'client',
         ], function () {
             Route::get('', [ClientController::class, 'index']);
             Route::get('{id}', [ClientController::class, 'show'])->where('id', '[0-9]+');
@@ -523,7 +523,7 @@ Route::group([
 
         // Invoice routes
         Route::group([
-            'prefix' => 'invoice'
+            'prefix' => 'invoice',
         ], function () {
             Route::get('', [InvoiceController::class, 'index']);
             Route::get('{id}', [InvoiceController::class, 'show'])->where('id', '[0-9]+');
@@ -533,11 +533,11 @@ Route::group([
 
         // Projects routes
         Route::group([
-            'prefix' => 'project'
+            'prefix' => 'project',
         ], function () {
             // Project status routes
             Route::group([
-                'prefix' => 'status'
+                'prefix' => 'status',
             ], function () {
                 Route::get('', [ProjectStatusController::class, 'index']);
                 Route::get('{id}', [ProjectStatusController::class, 'show'])->where('id', '[0-9]+');
@@ -547,7 +547,7 @@ Route::group([
 
             // Tag routes
             Route::group([
-                'prefix' => 'tag'
+                'prefix' => 'tag',
             ], function () {
                 Route::get('', [TagController::class, 'index']);
                 Route::get('{id}', [TagController::class, 'show'])->where('id', '[0-9]+');
@@ -562,7 +562,7 @@ Route::group([
 
             // Project sub-resources
             Route::group([
-                'prefix' => '{projectId}'
+                'prefix' => '{projectId}',
             ], function () {
                 // Milestones
                 Route::post('milestone/{id?}', [ProjectMilestoneController::class, 'store']);
@@ -609,7 +609,7 @@ Route::group([
 
         // Global time tracking routes
         Route::group([
-            'prefix' => 'time-entry'
+            'prefix' => 'time-entry',
         ], function () {
             Route::get('', [TimeEntryController::class, 'index']);
             Route::post('{id?}', [TimeEntryController::class, 'store']);
@@ -622,11 +622,11 @@ Route::group([
 
         // Customer routes
         Route::group([
-            'prefix' => 'customer'
+            'prefix' => 'customer',
         ], function () {
             // Customer groups
             Route::group([
-                'prefix' => 'group'
+                'prefix' => 'group',
             ], function () {
                 Route::get('', [CustomerGroupController::class, 'index']);
                 Route::get('{id}', [CustomerGroupController::class, 'show'])->where('id', '[0-9]+');
@@ -642,7 +642,7 @@ Route::group([
 
         // Voucher routes
         Route::group([
-            'prefix' => 'voucher'
+            'prefix' => 'voucher',
         ], function () {
             Route::get('', [VoucherController::class, 'index']);
             Route::get('{id}', [VoucherController::class, 'show'])->where('id', '[0-9]+');
@@ -652,11 +652,11 @@ Route::group([
 
         // Employee routes
         Route::group([
-            'prefix' => 'employee'
+            'prefix' => 'employee',
         ], function () {
             // Divisions
             Route::group([
-                'prefix' => 'division'
+                'prefix' => 'division',
             ], function () {
                 Route::get('', [EmployeeDivisionController::class, 'index']);
                 Route::get('{id}', [EmployeeDivisionController::class, 'show'])->where('id', '[0-9]+');
@@ -671,7 +671,7 @@ Route::group([
 
             // Contracts (nested under employee)
             Route::group([
-                'prefix' => '{employeeId}/contract'
+                'prefix' => '{employeeId}/contract',
             ], function () {
                 Route::get('', [EmployeeContractController::class, 'index']);
                 Route::get('{id}', [EmployeeContractController::class, 'show'])->where('id', '[0-9]+');
@@ -683,11 +683,11 @@ Route::group([
 
         // Shift routes
         Route::group([
-            'prefix' => 'shift'
+            'prefix' => 'shift',
         ], function () {
             // Shift templates
             Route::group([
-                'prefix' => 'template'
+                'prefix' => 'template',
             ], function () {
                 Route::get('', [ShiftTemplateController::class, 'index']);
                 Route::get('{id}', [ShiftTemplateController::class, 'show'])->where('id', '[0-9]+');
@@ -707,7 +707,7 @@ Route::group([
 
         // Price offer routes
         Route::group([
-            'prefix' => 'price-offer'
+            'prefix' => 'price-offer',
         ], function () {
             Route::get('', [PriceOfferController::class, 'index']);
             Route::get('{id}', [PriceOfferController::class, 'show'])->where('id', '[0-9]+');
@@ -720,10 +720,10 @@ Route::group([
 
         // Log routes
         Route::group([
-            'prefix' => 'log'
+            'prefix' => 'log',
         ], function () {
             Route::group([
-                'prefix' => 'email'
+                'prefix' => 'email',
             ], function () {
                 Route::get('', [EmailController::class, 'index']);
                 Route::get('{id}', [EmailController::class, 'show'])->where('id', '[0-9]+');
@@ -732,7 +732,7 @@ Route::group([
 
         // Service routes
         Route::group([
-            'prefix' => 'setting'
+            'prefix' => 'setting',
         ], function () {
             Route::get('', [SettingController::class, 'index']);
             Route::get('{id}', [SettingController::class, 'show'])->where('id', '[0-9]+');
@@ -742,7 +742,7 @@ Route::group([
 
         // Review routes
         Route::group([
-            'prefix' => 'review'
+            'prefix' => 'review',
         ], function () {
             Route::get('', [ReviewController::class, 'index']);
             Route::get('{id}', [ReviewController::class, 'show'])->where('id', '[0-9]+');
@@ -752,7 +752,7 @@ Route::group([
 
         // Logo routes
         Route::group([
-            'prefix' => 'logo'
+            'prefix' => 'logo',
         ], function () {
             Route::get('', [LogoController::class, 'index']);
             Route::get('{id}', [LogoController::class, 'show'])->where('id', '[0-9]+');
@@ -762,7 +762,7 @@ Route::group([
 
         // Newsletter routes
         Route::group([
-            'prefix' => 'newsletter'
+            'prefix' => 'newsletter',
         ], function () {
             Route::get('', [NewsletterController::class, 'index']);
             Route::get('{id}', [NewsletterController::class, 'destroy'])->where('id', '[0-9]+');
@@ -770,10 +770,10 @@ Route::group([
 
         // Faq routes
         Route::group([
-            'prefix' => 'faq'
+            'prefix' => 'faq',
         ], function () {
             Route::group([
-                'prefix' => 'category'
+                'prefix' => 'category',
             ], function () {
                 Route::get('', [FaqCategoryController::class, 'index']);
                 Route::get('{id}', [FaqCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -788,10 +788,10 @@ Route::group([
 
         // Event routes
         Route::group([
-            'prefix' => 'event'
+            'prefix' => 'event',
         ], function () {
             Route::group([
-                'prefix' => 'category'
+                'prefix' => 'category',
             ], function () {
                 Route::get('', [EventCategoryController::class, 'index']);
                 Route::get('{id}', [EventCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -800,7 +800,7 @@ Route::group([
             });
 
             Route::group([
-                'prefix' => 'registration'
+                'prefix' => 'registration',
             ], function () {
                 Route::get('', [EventRegistrationController::class, 'index']);
                 Route::get('{id}', [EventRegistrationController::class, 'show'])->where('id', '[0-9]+');
@@ -816,10 +816,10 @@ Route::group([
 
         // Career routes
         Route::group([
-            'prefix' => 'career'
+            'prefix' => 'career',
         ], function () {
             Route::group([
-                'prefix' => 'application'
+                'prefix' => 'application',
             ], function () {
                 Route::get('', [CareerApplicationController::class, 'index']);
                 Route::get('{id}', [CareerApplicationController::class, 'show'])->where('id', '[0-9]+');
@@ -835,7 +835,7 @@ Route::group([
 
         // Quiz routes
         Route::group([
-            'prefix' => 'quiz'
+            'prefix' => 'quiz',
         ], function () {
             Route::get('', [QuizController::class, 'index']);
             Route::get('{id}', [QuizController::class, 'show'])->where('id', '[0-9]+');
@@ -845,7 +845,7 @@ Route::group([
 
         // Biographies routes
         Route::group([
-            'prefix' => 'biography'
+            'prefix' => 'biography',
         ], function () {
             Route::get('', [BiographyController::class, 'index']);
             Route::get('{id}', [BiographyController::class, 'show'])->where('id', '[0-9]+');
@@ -857,7 +857,7 @@ Route::group([
 
         // Sites routes
         Route::group([
-            'prefix' => 'site'
+            'prefix' => 'site',
         ], function () {
             Route::get('', [SiteController::class, 'index']);
             Route::get('{id}', [SiteController::class, 'show'])->where('id', '[0-9]+');
@@ -867,7 +867,7 @@ Route::group([
 
         // Changelog routes
         Route::group([
-            'prefix' => 'changelog'
+            'prefix' => 'changelog',
         ], function () {
             Route::get('', [ChangelogController::class, 'index']);
             Route::get('{id}', [ChangelogController::class, 'show'])->where('id', '[0-9]+');
@@ -877,11 +877,11 @@ Route::group([
 
         // Routes relatable with food
         Route::group([
-            'prefix' => 'food'
+            'prefix' => 'food',
         ], function () {
             // Allergen routes
             Route::group([
-                'prefix' => 'allergen'
+                'prefix' => 'allergen',
             ], function () {
                 Route::get('', [AllergenController::class, 'index']);
                 Route::get('{id}', [AllergenController::class, 'show'])->where('id', '[0-9]+');
@@ -891,10 +891,10 @@ Route::group([
 
             // Foodstuff routes
             Route::group([
-                'prefix' => 'foodstuff'
+                'prefix' => 'foodstuff',
             ], function () {
                 Route::group([
-                    'prefix' => 'category'
+                    'prefix' => 'category',
                 ], function () {
                     Route::get('', [FoodstuffCategoryController::class, 'index']);
                     Route::get('{id}', [FoodstuffCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -910,10 +910,10 @@ Route::group([
 
             // Meal routes
             Route::group([
-                'prefix' => 'meal'
+                'prefix' => 'meal',
             ], function () {
                 Route::group([
-                    'prefix' => 'category'
+                    'prefix' => 'category',
                 ], function () {
                     Route::get('', [MealCategoryController::class, 'index']);
                     Route::get('{id}', [MealCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -929,10 +929,10 @@ Route::group([
 
             // Recipe routes
             Route::group([
-                'prefix' => 'recipe'
+                'prefix' => 'recipe',
             ], function () {
                 Route::group([
-                    'prefix' => 'category'
+                    'prefix' => 'category',
                 ], function () {
                     Route::get('', [RecipeCategoryController::class, 'index']);
                     Route::get('{id}', [RecipeCategoryController::class, 'show'])->where('id', '[0-9]+');
@@ -948,7 +948,7 @@ Route::group([
 
             // Menu section routes
             Route::group([
-                'prefix' => 'menu-section'
+                'prefix' => 'menu-section',
             ], function () {
                 Route::get('', [MenuSectionController::class, 'index']);
                 Route::get('{id}', [MenuSectionController::class, 'show'])->where('id', '[0-9]+');
@@ -958,7 +958,7 @@ Route::group([
 
             // Menu routes
             Route::group([
-                'prefix' => 'menu'
+                'prefix' => 'menu',
             ], function () {
                 Route::get('', [MenuController::class, 'index']);
                 Route::get('{id}', [MenuController::class, 'show'])->where('id', '[0-9]+');
@@ -969,7 +969,7 @@ Route::group([
 
             // Restaurant table routes
             Route::group([
-                'prefix' => 'table'
+                'prefix' => 'table',
             ], function () {
                 Route::get('', [RestaurantTableController::class, 'index']);
                 Route::get('{id}', [RestaurantTableController::class, 'show'])->where('id', '[0-9]+');
@@ -980,7 +980,7 @@ Route::group([
 
             // Reservation routes
             Route::group([
-                'prefix' => 'reservation'
+                'prefix' => 'reservation',
             ], function () {
                 Route::get('', [ReservationController::class, 'index']);
                 Route::get('{id}', [ReservationController::class, 'show'])->where('id', '[0-9]+');

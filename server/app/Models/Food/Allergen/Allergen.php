@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Allergen extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'allergens';
 
     public $translatedAttributes = ['name', 'description'];
 
     protected $fillable = [
-        'number'
+        'number',
     ];
 
     protected $casts = [
@@ -33,6 +33,7 @@ class Allergen extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 

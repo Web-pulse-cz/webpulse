@@ -19,7 +19,7 @@ class RecipeController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -32,9 +32,9 @@ class RecipeController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->orWhereTranslation('name', 'like', '%' . $searchString . '%');
+                $query->orWhereTranslation('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -55,18 +55,19 @@ class RecipeController extends Controller
         }
 
         $recipes = $query->get();
+
         return Response::json(RecipeResource::collection($recipes));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $recipe = Recipe::find($id);
-            if (!$recipe) {
+            if (! $recipe) {
                 App::abort(404);
             }
         } else {
-            $recipe = new Recipe();
+            $recipe = new Recipe;
         }
 
         $validator = Validator::make($request->all(), [
@@ -100,7 +101,7 @@ class RecipeController extends Controller
 
             $foodstuffSync = [];
             foreach ($request->get('foodstuffs', []) as $foodstuff) {
-                if (!empty($foodstuff['id'])) {
+                if (! empty($foodstuff['id'])) {
                     $foodstuffSync[$foodstuff['id']] = [
                         'quantity' => $foodstuff['quantity'] ?? null,
                         'unit' => $foodstuff['unit'] ?? null,
@@ -114,6 +115,7 @@ class RecipeController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while saving recipe.'], 500);
         }
 
@@ -124,14 +126,14 @@ class RecipeController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $recipe = Recipe::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$recipe) {
+        if (! $recipe) {
             App::abort(404);
         }
 
@@ -140,16 +142,17 @@ class RecipeController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $recipe = Recipe::find($id);
-        if (!$recipe) {
+        if (! $recipe) {
             App::abort(404);
         }
 
         $recipe->delete();
+
         return Response::json();
     }
 }

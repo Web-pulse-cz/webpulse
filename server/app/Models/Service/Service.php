@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\App;
 
 class Service extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'services';
 
@@ -67,6 +67,7 @@ class Service extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }

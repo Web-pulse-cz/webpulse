@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 class PostController extends Controller
 {
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -39,12 +39,12 @@ class PostController extends Controller
         }
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
-            $query->whereTranslation('name', 'like', '%' . $request->get('search') . '%')
-                ->orWhereTranslation('text', 'like', '%' . $request->get('search') . '%');
+            $query->whereTranslation('name', 'like', '%'.$request->get('search').'%')
+                ->orWhereTranslation('text', 'like', '%'.$request->get('search').'%');
         }
 
         if ($request->has('paginate')) {
-            $posts = $query->paginate((int)$request->get('paginate'));
+            $posts = $query->paginate((int) $request->get('paginate'));
 
             return Response::json([
                 'data' => PostResource::collection($posts->items()),
@@ -60,12 +60,12 @@ class PostController extends Controller
         return Response::json(PostResource::collection($posts));
     }
 
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             return Response::json(['error' => 'Post ID is required'], 400);
         }
 
@@ -83,7 +83,7 @@ class PostController extends Controller
             ->with(['categories'])
             ->find($id);
 
-        if (!$post) {
+        if (! $post) {
             return Response::json(['error' => 'Post not found'], 404);
         }
 

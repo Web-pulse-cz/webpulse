@@ -23,7 +23,7 @@ class FoodstuffCategoryResource extends JsonResource
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,
             'category' => self::make($this->foodstuffCategory),
-//            'categories' => self::make($this->foodstuffCategories),
+            //            'categories' => self::make($this->foodstuffCategories),
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'sites' => $this->sites,
         ];

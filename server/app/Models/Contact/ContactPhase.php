@@ -16,11 +16,11 @@ class ContactPhase extends Model
         'color',
         'user_id',
         'position',
-        'show_in_statistics'
+        'show_in_statistics',
     ];
 
     protected $casts = [
-        'show_in_statistics' => 'boolean'
+        'show_in_statistics' => 'boolean',
     ];
 
     public function contacts()

@@ -32,11 +32,11 @@ class QuizController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('description', 'like', '%' . $searchString . '%')
-                    ->orWhere('tags', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%')
+                    ->orWhere('description', 'like', '%'.$searchString.'%')
+                    ->orWhere('tags', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -59,22 +59,22 @@ class QuizController extends Controller
         }
 
         $quizzes = $query->get();
+
         return Response::json(QuizSimpleResource::collection($quizzes));
     }
-
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $quiz = Quiz::find($id);
-            if (!$quiz) {
+            if (! $quiz) {
                 App::abort(404);
             }
         } else {
-            $quiz = new Quiz();
+            $quiz = new Quiz;
         }
 
         $validator = Validator::make($request->all(), [
@@ -82,7 +82,7 @@ class QuizController extends Controller
             'description' => 'nullable|string',
             'tags' => 'nullable|string',
             'questions' => 'required|array',
-            //'questions.*.name' => 'required|string|max:255', //TODO: změnit na name
+            // 'questions.*.name' => 'required|string|max:255', //TODO: změnit na name
             'questions.*.answers' => 'required|array|min:2',
             'questions.*.answers.*.name' => 'required|string|max:255',
         ]);
@@ -103,7 +103,7 @@ class QuizController extends Controller
 
             $quiz->questions()->delete();
             foreach ($request->questions as $questionData) {
-                $question = new QuizQuestion();
+                $question = new QuizQuestion;
                 $question->fill($questionData);
                 $quiz->questions()->save($question);
                 if (array_key_exists('image', $questionData) && $questionData['image'] != null) {
@@ -112,7 +112,7 @@ class QuizController extends Controller
                 foreach ($questionData['answers'] as $answer) {
                     $question->answers()->create([
                         'name' => $answer['name'],
-                        'is_correct' => (bool)$answer['is_correct'] ?? false, // Assuming is_correct is a boolean field
+                        'is_correct' => (bool) $answer['is_correct'] ?? false, // Assuming is_correct is a boolean field
                     ]);
                 }
             }
@@ -122,7 +122,8 @@ class QuizController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            dd($e->getMessage().' '.$e->getLine().' '.$e->getFile());
+
             return Response::json(['error' => 'An error occurred while saving the quiz.'], 500);
         }
 
@@ -136,14 +137,14 @@ class QuizController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $quiz = Quiz::with(['questions', 'questions.answers'])
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$quiz) {
+        if (! $quiz) {
             App::abort(404);
         }
 
@@ -155,16 +156,17 @@ class QuizController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $quiz = Quiz::find($id);
-        if (!$quiz) {
+        if (! $quiz) {
             App::abort(404);
         }
 
         $quiz->delete();
+
         return Response::json();
     }
 }

@@ -15,7 +15,7 @@ class CareerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -24,14 +24,14 @@ class CareerController extends Controller
             ->whereRelation('sites', 'site_id', $siteId)
             ->where('status', 'open');
 
-        if($request->has('search') && in_array($request->input('search'), ['', null])) {
-            $query->where('code', 'like', '%' . $request->input('search') . '%')
-                ->orWhereTranslation('name', 'like', '%' . $request->input('search') . '%')
-                ->orWhereTranslation('location', 'like', '%' . $request->input('search') . '%');
+        if ($request->has('search') && in_array($request->input('search'), ['', null])) {
+            $query->where('code', 'like', '%'.$request->input('search').'%')
+                ->orWhereTranslation('name', 'like', '%'.$request->input('search').'%')
+                ->orWhereTranslation('location', 'like', '%'.$request->input('search').'%');
         }
 
         if ($request->has('paginate')) {
-            $careers = $query->paginate((int)$request->get('paginate'));
+            $careers = $query->paginate((int) $request->get('paginate'));
 
             return Response::json([
                 'data' => CareerResource::collection($careers->items()),
@@ -43,6 +43,7 @@ class CareerController extends Controller
         }
 
         $careers = $query->get();
+
         return Response::json(CareerResource::collection($careers));
 
     }
@@ -50,12 +51,12 @@ class CareerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, int $id, string $lang = null): JsonResponse
+    public function show(Request $request, int $id, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if(!$id) {
+        if (! $id) {
             App::abort(400, 'Invalid career ID');
         }
 
@@ -63,7 +64,7 @@ class CareerController extends Controller
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
 
-        if(!$career) {
+        if (! $career) {
             App::abort(404, 'Career not found');
         }
 

@@ -4,13 +4,12 @@ namespace App\Models\Career;
 
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Career extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'careers';
 
@@ -57,6 +56,7 @@ class Career extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 
@@ -65,9 +65,9 @@ class Career extends Model
 
     public function generateCode()
     {
-        //$this->code = 'EVT-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+        // $this->code = 'EVT-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
         $code = Str::random(8);
-        if(self::where('code', $code)->exists()) {
+        if (self::where('code', $code)->exists()) {
             $this->generateCode(); // Recursively generate a new code if the current one already exists
         } else {
             $this->code = $code;

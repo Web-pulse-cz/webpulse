@@ -23,12 +23,12 @@ class NewsletterController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where('firstname', '=', $searchString)
-                    ->orWhere('lastname', 'like', '%' . $searchString . '%')
-                    ->orWhere('addressing', 'like', '%' . $searchString . '%')
-                    ->orWhere('email', 'like', '%' . $searchString . '%');
+                    ->orWhere('lastname', 'like', '%'.$searchString.'%')
+                    ->orWhere('addressing', 'like', '%'.$searchString.'%')
+                    ->orWhere('email', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -49,22 +49,24 @@ class NewsletterController extends Controller
         }
 
         $newsletters = $query->get();
+
         return Response::json(NewsletterResource::collection($newsletters));
     }
 
     public function destroy(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $newsletter = Newsletter::find($id);
 
-        if (!$newsletter) {
+        if (! $newsletter) {
             App::abort(404);
         }
 
         $newsletter->delete();
+
         return Response::json();
     }
 }

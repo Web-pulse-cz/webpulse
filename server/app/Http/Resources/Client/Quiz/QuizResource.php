@@ -21,7 +21,7 @@ class QuizResource extends JsonResource
             'description' => $this->description,
             'tags' => $this->tags,
             'status' => $this->status,
-            'accuracy' => (int)$this->accuracy,
+            'accuracy' => (int) $this->accuracy,
             'attempts' => $this->attempts,
             'questions' => QuizQuestionResource::collection($this->whenLoaded('questions')),
         ];

@@ -15,14 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $authUser = $request->user();
 
         $user = User::find($authUser->id);
 
-        if (!$user) {
+        if (! $user) {
             App::abort(404);
         }
 
@@ -34,15 +33,15 @@ class ProfileController extends Controller
         $authUser = $request->user();
 
         $user = User::find($authUser->id);
-        if(!$user) {
+        if (! $user) {
             App::abort(404);
         }
 
         $validator = Validator::make($request->all(), [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'required|string|max:255|unique:users,phone,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'phone' => 'required|string|max:255|unique:users,phone,'.$user->id,
         ]);
 
         if ($validator->fails()) {
@@ -56,8 +55,9 @@ class ProfileController extends Controller
             $user->save();
 
             DB::commit();
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating the user profile.'], 500);
         }
 
@@ -69,7 +69,7 @@ class ProfileController extends Controller
         $authUser = $request->user();
 
         $user = User::find($authUser->id);
-        if(!$user) {
+        if (! $user) {
             App::abort(404);
         }
 
@@ -79,7 +79,7 @@ class ProfileController extends Controller
             'confirm_new_password' => 'required|string|same:new_password',
         ]);
 
-        if ($validator->fails() || !Hash::check($request->current_password, $user->password)) {
+        if ($validator->fails() || ! Hash::check($request->current_password, $user->password)) {
             return Response::json(['errors' => $validator->errors()], 422);
         }
 
@@ -90,11 +90,12 @@ class ProfileController extends Controller
             $user->save();
 
             DB::commit();
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating the user password.'], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\User\UserResource::make($user));
+        return Response::json(UserResource::make($user));
     }
 }

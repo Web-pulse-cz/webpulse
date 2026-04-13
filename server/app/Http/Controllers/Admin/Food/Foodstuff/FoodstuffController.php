@@ -19,7 +19,7 @@ class FoodstuffController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -32,9 +32,9 @@ class FoodstuffController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->orWhereTranslation('name', 'like', '%' . $searchString . '%');
+                $query->orWhereTranslation('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -55,18 +55,19 @@ class FoodstuffController extends Controller
         }
 
         $foodstuffs = $query->get();
+
         return Response::json(FoodstuffResource::collection($foodstuffs));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $foodstuff = Foodstuff::find($id);
-            if (!$foodstuff) {
+            if (! $foodstuff) {
                 App::abort(404);
             }
         } else {
-            $foodstuff = new Foodstuff();
+            $foodstuff = new Foodstuff;
         }
 
         $validator = Validator::make($request->all(), [
@@ -100,6 +101,7 @@ class FoodstuffController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while saving foodstuff.'], 500);
         }
 
@@ -110,14 +112,14 @@ class FoodstuffController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $foodstuff = Foodstuff::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$foodstuff) {
+        if (! $foodstuff) {
             App::abort(404);
         }
 
@@ -126,16 +128,17 @@ class FoodstuffController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $foodstuff = Foodstuff::find($id);
-        if (!$foodstuff) {
+        if (! $foodstuff) {
             App::abort(404);
         }
 
         $foodstuff->delete();
+
         return Response::json();
     }
 }

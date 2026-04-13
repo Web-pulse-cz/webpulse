@@ -16,7 +16,7 @@ class RecipeResource extends JsonResource
             'difficulty' => $this->difficulty,
             'time_to_prepare' => $this->time_to_prepare,
             'allergens' => $this->allergens,
-            'foodstuffs' => $this->foodstuffs->map(fn($f) => [
+            'foodstuffs' => $this->foodstuffs->map(fn ($f) => [
                 'id' => $f->id,
                 'name' => $f->name,
                 'quantity' => $f->pivot->quantity,

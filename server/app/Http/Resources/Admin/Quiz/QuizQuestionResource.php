@@ -19,7 +19,7 @@ class QuizQuestionResource extends JsonResource
             'quiz_id' => $this->quiz_id,
             'name' => $this->name,
             'image' => $this->main_image,
-            'answers' => QuizAnswerResource::collection($this->whenLoaded('answers'))
+            'answers' => QuizAnswerResource::collection($this->whenLoaded('answers')),
         ];
     }
 }

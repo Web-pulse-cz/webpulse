@@ -19,7 +19,7 @@ class AllergenController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -32,11 +32,11 @@ class AllergenController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('rating', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('content', 'like', '%' . $searchString . '%');
+                $query->where('rating', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('content', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -57,23 +57,24 @@ class AllergenController extends Controller
         }
 
         $allergens = $query->get();
+
         return Response::json(AllergenResource::collection($allergens));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $allergen = Allergen::find($id);
-            if (!$allergen) {
+            if (! $allergen) {
                 App::abort(404);
             }
         } else {
-            $allergen = new Allergen();
+            $allergen = new Allergen;
         }
 
         $validator = Validator::make($request->all(), [
             'number' => 'required|integer|min:0|max:30',
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -96,6 +97,7 @@ class AllergenController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating allergen.'], 500);
         }
 
@@ -106,14 +108,14 @@ class AllergenController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $allergen = Allergen::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$allergen) {
+        if (! $allergen) {
             App::abort(404);
         }
 
@@ -122,16 +124,17 @@ class AllergenController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $allergen = Allergen::find($id);
-        if (!$allergen) {
+        if (! $allergen) {
             App::abort(404);
         }
 
         $allergen->delete();
+
         return Response::json();
     }
 }

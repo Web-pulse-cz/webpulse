@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = User::query();
@@ -25,12 +24,12 @@ class UserController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('firstname', 'like', '%' . $searchString . '%')
-                    ->orWhere('lastname', 'like', '%' . $searchString . '%')
-                    ->orWhere('email', 'like', '%' . $searchString . '%')
-                    ->orWhere('phone', 'like', '%' . $searchString . '%');
+                $query->where('firstname', 'like', '%'.$searchString.'%')
+                    ->orWhere('lastname', 'like', '%'.$searchString.'%')
+                    ->orWhere('email', 'like', '%'.$searchString.'%')
+                    ->orWhere('phone', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -51,25 +50,26 @@ class UserController extends Controller
         }
 
         $users = $query->get();
-        return Response::json(\App\Http\Resources\Admin\User\UserResource::collection($users));
+
+        return Response::json(UserResource::collection($users));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
-            $user = \App\Models\User\User::find($id);
-            if (!$user) {
+            $user = User::find($id);
+            if (! $user) {
                 App::abort(404);
             }
         } else {
-            $user = new User();
+            $user = new User;
         }
 
         $validator = Validator::make($request->all(), [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'phone' => 'required|string|max:255|unique:users,phone,' . $id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$id,
+            'phone' => 'required|string|max:255|unique:users,phone,'.$id,
             'user_group_id' => 'required|integer|exists:user_groups,id',
         ]);
 
@@ -84,9 +84,8 @@ class UserController extends Controller
                 $user->password = Hash::make($request->get('new_password'));
             }
 
-
             $user->fill($request->all());
-            if (!$id) {
+            if (! $id) {
                 $user->invitation_token = $this->generateUnqiueToken();
             }
             $user->user_group_id = $request->get('user_group_id');
@@ -95,20 +94,21 @@ class UserController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => $e->getMessage()], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\User\UserResource::make($user));
+        return Response::json(UserResource::make($user));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $user = User::find($id);
-        if (!$user) {
+        if (! $user) {
             App::abort(404);
         }
 
@@ -117,23 +117,24 @@ class UserController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $user = User::find($id);
-        if (!$user) {
+        if (! $user) {
             App::abort(404);
         }
 
         $user->delete();
+
         return Response::json();
     }
 
     private function generateUnqiueToken(): string
     {
         $token = Str::upper(Str::random(8));
-        $user = \App\Models\User\User::where('invitation_token', $token)->exists();
+        $user = User::where('invitation_token', $token)->exists();
 
         if ($user) {
             self::generateUnqiueToken();

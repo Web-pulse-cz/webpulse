@@ -22,7 +22,7 @@ class ChangelogResource extends JsonResource
             'description' => $this->description,
             'type' => $this->type,
             'priority' => $this->priority,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
         ];
     }
 }

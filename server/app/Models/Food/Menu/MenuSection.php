@@ -7,23 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class MenuSection extends Model
 {
-	use Siteable;
+    use Siteable;
 
-	protected $table = 'menu_sections';
+    protected $table = 'menu_sections';
 
-	protected $fillable = [
-		'name',
-		'description',
-		'position',
-	];
+    protected $fillable = [
+        'name',
+        'description',
+        'position',
+    ];
 
-	public function sites()
-	{
-		return $this->morphToMany('App\Models\Site\Site', 'siteable');
-	}
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
+    }
 
-	public function menuItems()
-	{
-		return $this->hasMany(MenuItem::class, 'section_id', 'id')->orderBy('position');
-	}
+    public function menuItems()
+    {
+        return $this->hasMany(MenuItem::class, 'section_id', 'id')->orderBy('position');
+    }
 }

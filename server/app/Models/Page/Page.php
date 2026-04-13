@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\App;
 
 class Page extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'pages';
 
@@ -44,6 +44,7 @@ class Page extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }

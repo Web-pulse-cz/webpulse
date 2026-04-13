@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\EventRegistrationSaved as Event;
-use App\Models\Contact\ContactHistory;
 use App\Services\EmailService;
 
 class EventRegistrationEmail
@@ -23,7 +22,7 @@ class EventRegistrationEmail
         $this->emailService->buildEmail(
             'eventRegistration',
             'martas.hanzl@email.cz', // TODO: replace with dynamic email
-            'Registrace na akci ' . $eventRegistration->event->name,
+            'Registrace na akci '.$eventRegistration->event->name,
             data: ['eventRegistration' => $eventRegistration]
         );
     }

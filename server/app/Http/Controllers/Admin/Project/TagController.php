@@ -14,62 +14,64 @@ use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
-	public function index(Request $request): JsonResponse
-	{
-		return Response::json(TagResource::collection(Tag::orderBy('name')->get()));
-	}
+    public function index(Request $request): JsonResponse
+    {
+        return Response::json(TagResource::collection(Tag::orderBy('name')->get()));
+    }
 
-	public function store(Request $request, int $id = null): JsonResponse
-	{
-		if ($id) {
-			$tag = Tag::find($id);
-			if (!$tag) {
-				App::abort(404);
-			}
-		} else {
-			$tag = new Tag();
-		}
+    public function store(Request $request, ?int $id = null): JsonResponse
+    {
+        if ($id) {
+            $tag = Tag::find($id);
+            if (! $tag) {
+                App::abort(404);
+            }
+        } else {
+            $tag = new Tag;
+        }
 
-		$validator = Validator::make($request->all(), [
-			'name' => 'required|string|max:255',
-			'color' => 'nullable|string|max:20',
-		]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'color' => 'nullable|string|max:20',
+        ]);
 
-		if ($validator->fails()) {
-			return Response::json($validator->errors(), 400);
-		}
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
 
-		try {
-			DB::beginTransaction();
-			$tag->fill($request->all());
-			$tag->save();
-			DB::commit();
-		} catch (\Throwable $e) {
-			DB::rollBack();
-			return Response::json(['message' => 'Chyba při ukládání tagu.'], 500);
-		}
+        try {
+            DB::beginTransaction();
+            $tag->fill($request->all());
+            $tag->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-		return Response::json(TagResource::make($tag));
-	}
+            return Response::json(['message' => 'Chyba při ukládání tagu.'], 500);
+        }
 
-	public function show(int $id): JsonResponse
-	{
-		$tag = Tag::find($id);
-		if (!$tag) {
-			App::abort(404);
-		}
+        return Response::json(TagResource::make($tag));
+    }
 
-		return Response::json(TagResource::make($tag));
-	}
+    public function show(int $id): JsonResponse
+    {
+        $tag = Tag::find($id);
+        if (! $tag) {
+            App::abort(404);
+        }
 
-	public function destroy(int $id): JsonResponse
-	{
-		$tag = Tag::find($id);
-		if (!$tag) {
-			App::abort(404);
-		}
+        return Response::json(TagResource::make($tag));
+    }
 
-		$tag->delete();
-		return Response::json();
-	}
+    public function destroy(int $id): JsonResponse
+    {
+        $tag = Tag::find($id);
+        if (! $tag) {
+            App::abort(404);
+        }
+
+        $tag->delete();
+
+        return Response::json();
+    }
 }

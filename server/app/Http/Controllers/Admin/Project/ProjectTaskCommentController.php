@@ -15,48 +15,50 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectTaskCommentController extends Controller
 {
-	public function store(Request $request, int $projectId, int $taskId, int $id = null): JsonResponse
-	{
-		if ($id) {
-			$comment = ProjectTaskComment::where('task_id', $taskId)->find($id);
-			if (!$comment) {
-				App::abort(404);
-			}
-		} else {
-			$comment = new ProjectTaskComment();
-			$comment->task_id = $taskId;
-			$comment->user_id = Auth::id();
-		}
+    public function store(Request $request, int $projectId, int $taskId, ?int $id = null): JsonResponse
+    {
+        if ($id) {
+            $comment = ProjectTaskComment::where('task_id', $taskId)->find($id);
+            if (! $comment) {
+                App::abort(404);
+            }
+        } else {
+            $comment = new ProjectTaskComment;
+            $comment->task_id = $taskId;
+            $comment->user_id = Auth::id();
+        }
 
-		$validator = Validator::make($request->all(), [
-			'content' => 'required|string',
-		]);
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+        ]);
 
-		if ($validator->fails()) {
-			return Response::json($validator->errors(), 400);
-		}
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
 
-		try {
-			DB::beginTransaction();
-			$comment->fill($request->all());
-			$comment->save();
-			DB::commit();
-		} catch (\Throwable $e) {
-			DB::rollBack();
-			return Response::json(['message' => 'Chyba při ukládání komentáře.'], 500);
-		}
+        try {
+            DB::beginTransaction();
+            $comment->fill($request->all());
+            $comment->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-		return Response::json(ProjectTaskCommentResource::make($comment->fresh('user')));
-	}
+            return Response::json(['message' => 'Chyba při ukládání komentáře.'], 500);
+        }
 
-	public function destroy(int $projectId, int $taskId, int $id): JsonResponse
-	{
-		$comment = ProjectTaskComment::where('task_id', $taskId)->find($id);
-		if (!$comment) {
-			App::abort(404);
-		}
+        return Response::json(ProjectTaskCommentResource::make($comment->fresh('user')));
+    }
 
-		$comment->delete();
-		return Response::json();
-	}
+    public function destroy(int $projectId, int $taskId, int $id): JsonResponse
+    {
+        $comment = ProjectTaskComment::where('task_id', $taskId)->find($id);
+        if (! $comment) {
+            App::abort(404);
+        }
+
+        $comment->delete();
+
+        return Response::json();
+    }
 }

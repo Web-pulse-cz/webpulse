@@ -22,7 +22,7 @@ class PostCategoryResource extends JsonResource
             'name' => $this->name,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'posts_count' => $this->posts->count(),
-            'sites' => $this->sites
+            'sites' => $this->sites,
         ];
     }
 }

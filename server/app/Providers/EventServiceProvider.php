@@ -33,13 +33,13 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         ContactUpdatedEvent::class => [
-            ContactUpdated::class
+            ContactUpdated::class,
         ],
         ProjectSavedEvent::class => [
-            ProjectSavedListener::class
+            ProjectSavedListener::class,
         ],
         DemandSaved::class => [
-            DemandEmail::class
+            DemandEmail::class,
         ],
         EventRegistrationSaved::class => [
             EventRegistrationEmail::class,
@@ -48,11 +48,11 @@ class EventServiceProvider extends ServiceProvider
             CareerApplicationEmail::class,
         ],
         BiographySaved::class => [
-            BiographyGenerator::class
+            BiographyGenerator::class,
         ],
         QuizSaved::class => [
-            QuizSavedEmail::class
-        ]
+            QuizSavedEmail::class,
+        ],
     ];
 
     /**

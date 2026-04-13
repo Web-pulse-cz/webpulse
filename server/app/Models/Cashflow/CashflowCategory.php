@@ -13,7 +13,7 @@ class CashflowCategory extends Model
 
     protected $fillable = [
         'name',
-        'icon'
+        'icon',
     ];
 
     public function budgets()

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Foodstuff extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'foodstuffs';
 
@@ -41,6 +41,7 @@ class Foodstuff extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 

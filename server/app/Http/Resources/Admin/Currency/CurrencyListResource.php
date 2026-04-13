@@ -22,7 +22,7 @@ class CurrencyListResource extends JsonResource
             'active' => $this->active,
             'name' => $this->name,
             'symbol_before' => $this->symbol_before,
-            'symbol_after' => $this->symbol_after
+            'symbol_after' => $this->symbol_after,
         ];
     }
 }

@@ -26,7 +26,7 @@ class LoginController extends Controller
             return Response::json(['errors' => $validator->errors()], 422);
         }
 
-        if (!Auth::attempt($data)) {
+        if (! Auth::attempt($data)) {
             return Response::json(['error' => 'Unauthorized'], 401);
         }
 

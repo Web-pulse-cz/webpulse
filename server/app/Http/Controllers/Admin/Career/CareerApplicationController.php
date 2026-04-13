@@ -27,15 +27,15 @@ class CareerApplicationController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where('firstname', '=', $searchString)
                     ->orWhere('lastname', '=', $searchString)
                     ->orWhere('email', '=', $searchString)
                     ->orWhere('phone', '=', $searchString)
                     ->orWhereHas('career', function ($q) use ($searchString) {
-                        $q->where('name', 'like', '%' . $searchString . '%')
-                            ->orWhere('code', 'like', '%' . $searchString . '%');
+                        $q->where('name', 'like', '%'.$searchString.'%')
+                            ->orWhere('code', 'like', '%'.$searchString.'%');
                     });
             }
         }
@@ -57,21 +57,22 @@ class CareerApplicationController extends Controller
 
         }
         $careerApplications = $query->get();
+
         return Response::json(CareerApplicationResource::collection($careerApplications));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
-        if($id) {
+        if ($id) {
             $careerApplication = CareerApplication::find($id);
-            if(!$careerApplication) {
+            if (! $careerApplication) {
                 App::abort(404);
             }
         } else {
-            $careerApplication = new CareerApplication();
+            $careerApplication = new CareerApplication;
         }
 
         $validator = Validator::make($request->all(), [
@@ -81,7 +82,7 @@ class CareerApplicationController extends Controller
             'email' => 'required|email|max:255',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return Response::json(['errors' => $validator->errors()], 422);
         }
 
@@ -97,12 +98,13 @@ class CareerApplicationController extends Controller
                 'salary_expectation',
                 'status',
             ));
-            $careerApplication->user_id = Auth::check() ? Auth::user()->id : null; //TODO!!!
+            $careerApplication->user_id = Auth::check() ? Auth::user()->id : null; // TODO!!!
             $careerApplication->save();
 
             DB::commit();
-        } catch (\Throwable | \Exception $e) {
+        } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => 'An error occurred while processing your request.'], 500);
         }
 
@@ -114,12 +116,12 @@ class CareerApplicationController extends Controller
      */
     public function show(int $id)
     {
-        if(!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $careerApplication = CareerApplication::with(['career'])->find($id);
-        if(!$careerApplication) {
+        if (! $careerApplication) {
             App::abort(404);
         }
 
@@ -131,16 +133,17 @@ class CareerApplicationController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if(!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $careerApplication = CareerApplication::find($id);
-        if(!$careerApplication) {
+        if (! $careerApplication) {
             App::abort(404);
         }
 
         $careerApplication->delete();
+
         return Response::json();
     }
 }

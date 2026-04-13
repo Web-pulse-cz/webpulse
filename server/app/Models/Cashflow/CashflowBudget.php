@@ -16,12 +16,12 @@ class CashflowBudget extends Model
         'type',
         'amount',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     protected $casts = [
         'start_date' => 'date',
-        'end_date' => 'date'
+        'end_date' => 'date',
     ];
 
     public function category()

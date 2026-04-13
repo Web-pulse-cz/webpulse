@@ -14,61 +14,63 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectMilestoneController extends Controller
 {
-	public function store(Request $request, int $projectId, int $id = null): JsonResponse
-	{
-		if ($id) {
-			$milestone = ProjectMilestone::where('project_id', $projectId)->find($id);
-			if (!$milestone) {
-				App::abort(404);
-			}
-		} else {
-			$milestone = new ProjectMilestone();
-			$milestone->project_id = $projectId;
-		}
+    public function store(Request $request, int $projectId, ?int $id = null): JsonResponse
+    {
+        if ($id) {
+            $milestone = ProjectMilestone::where('project_id', $projectId)->find($id);
+            if (! $milestone) {
+                App::abort(404);
+            }
+        } else {
+            $milestone = new ProjectMilestone;
+            $milestone->project_id = $projectId;
+        }
 
-		$validator = Validator::make($request->all(), [
-			'name' => 'required|string|max:255',
-			'due_date' => 'nullable|date',
-		]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'due_date' => 'nullable|date',
+        ]);
 
-		if ($validator->fails()) {
-			return Response::json($validator->errors(), 400);
-		}
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
 
-		try {
-			DB::beginTransaction();
-			$milestone->fill($request->all());
-			$milestone->save();
-			DB::commit();
-		} catch (\Throwable $e) {
-			DB::rollBack();
-			return Response::json(['message' => 'Chyba při ukládání milníku.'], 500);
-		}
+        try {
+            DB::beginTransaction();
+            $milestone->fill($request->all());
+            $milestone->save();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-		return Response::json(ProjectMilestoneResource::make($milestone));
-	}
+            return Response::json(['message' => 'Chyba při ukládání milníku.'], 500);
+        }
 
-	public function destroy(int $projectId, int $id): JsonResponse
-	{
-		$milestone = ProjectMilestone::where('project_id', $projectId)->find($id);
-		if (!$milestone) {
-			App::abort(404);
-		}
+        return Response::json(ProjectMilestoneResource::make($milestone));
+    }
 
-		$milestone->delete();
-		return Response::json();
-	}
+    public function destroy(int $projectId, int $id): JsonResponse
+    {
+        $milestone = ProjectMilestone::where('project_id', $projectId)->find($id);
+        if (! $milestone) {
+            App::abort(404);
+        }
 
-	public function complete(int $projectId, int $id): JsonResponse
-	{
-		$milestone = ProjectMilestone::where('project_id', $projectId)->find($id);
-		if (!$milestone) {
-			App::abort(404);
-		}
+        $milestone->delete();
 
-		$milestone->completed_at = $milestone->completed_at ? null : now();
-		$milestone->save();
+        return Response::json();
+    }
 
-		return Response::json(ProjectMilestoneResource::make($milestone));
-	}
+    public function complete(int $projectId, int $id): JsonResponse
+    {
+        $milestone = ProjectMilestone::where('project_id', $projectId)->find($id);
+        if (! $milestone) {
+            App::abort(404);
+        }
+
+        $milestone->completed_at = $milestone->completed_at ? null : now();
+        $milestone->save();
+
+        return Response::json(ProjectMilestoneResource::make($milestone));
+    }
 }

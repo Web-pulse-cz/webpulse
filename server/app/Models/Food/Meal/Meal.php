@@ -5,13 +5,14 @@ namespace App\Models\Food\Meal;
 use App\Models\Food\Allergen\Allergen;
 use App\Models\Food\Foodstuff\Foodstuff;
 use App\Models\Food\Menu\Menu;
+use App\Models\Food\Recipe\Recipe;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
 class Meal extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Translatable;
 
     protected $table = 'meals';
 
@@ -45,6 +46,7 @@ class Meal extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             return null;
         }
 
@@ -78,6 +80,6 @@ class Meal extends Model
 
     public function recipe()
     {
-        return $this->belongsTo(\App\Models\Food\Recipe\Recipe::class, 'recipe_id', 'id');
+        return $this->belongsTo(Recipe::class, 'recipe_id', 'id');
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class NewsletterController extends Controller
 {
-    public function store(Request $request, string $lang = null): JsonResponse
+    public function store(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -29,7 +29,7 @@ class NewsletterController extends Controller
 
         DB::beginTransaction();
         try {
-            $newsletter = new Newsletter();
+            $newsletter = new Newsletter;
 
             $newsletter->fill($request->all());
             $newsletter->locale = $lang ?? app()->getLocale();
@@ -41,6 +41,7 @@ class NewsletterController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while saving newsletter.'], 500);
         }
 

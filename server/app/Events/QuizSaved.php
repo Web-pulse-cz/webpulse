@@ -12,6 +12,7 @@ class QuizSaved
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected Quiz $quiz;
+
     public function __construct(Quiz $quiz)
     {
         $this->quiz = $quiz;

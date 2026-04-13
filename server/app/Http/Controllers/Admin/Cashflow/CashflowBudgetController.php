@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CashflowBudgetController extends Controller
 {
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'categoryId' => 'nullable|integer|exists:cashflow_categories,id',
@@ -29,7 +29,6 @@ class CashflowBudgetController extends Controller
         $month = $request->input('month');
         $year = $request->input('year');
 
-
         $cashflowBudget = CashflowBudget::query()
             ->where('cashflow_category_id', $categoryId)
             ->whereMonth('start_date', $month)
@@ -38,8 +37,8 @@ class CashflowBudgetController extends Controller
             ->whereYear('end_date', $year)
             ->first();
 
-        if (!$cashflowBudget) {
-            $cashflowBudget = new CashflowBudget();
+        if (! $cashflowBudget) {
+            $cashflowBudget = new CashflowBudget;
         }
 
         try {
@@ -58,6 +57,7 @@ class CashflowBudgetController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['errors' => $e->getMessage()], 500);
         }
 

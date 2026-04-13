@@ -19,7 +19,7 @@ class FoodstuffCategoryController extends Controller
 
     public function __construct()
     {
-        $this->googleTranslatorService = new GoogleTranslatorService();
+        $this->googleTranslatorService = new GoogleTranslatorService;
     }
 
     public function index(Request $request): JsonResponse
@@ -32,11 +32,11 @@ class FoodstuffCategoryController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('rating', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('content', 'like', '%' . $searchString . '%');
+                $query->where('rating', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('content', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -57,23 +57,24 @@ class FoodstuffCategoryController extends Controller
         }
 
         $foodstuffCategorys = $query->get();
+
         return Response::json(FoodstuffCategoryResource::collection($foodstuffCategorys));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $foodstuffCategory = FoodstuffCategory::find($id);
-            if (!$foodstuffCategory) {
+            if (! $foodstuffCategory) {
                 App::abort(404);
             }
         } else {
-            $foodstuffCategory = new FoodstuffCategory();
+            $foodstuffCategory = new FoodstuffCategory;
         }
 
         $validator = Validator::make($request->all(), [
             'foodstuff_category_id' => 'nullable|integer|exists:foodstuff_categories,id',
-            'translations' => 'required|array'
+            'translations' => 'required|array',
         ]);
 
         if ($validator->fails()) {
@@ -96,6 +97,7 @@ class FoodstuffCategoryController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating foodstuff category.'], 500);
         }
 
@@ -106,14 +108,14 @@ class FoodstuffCategoryController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $foodstuffCategory = FoodstuffCategory::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$foodstuffCategory) {
+        if (! $foodstuffCategory) {
             App::abort(404);
         }
 
@@ -122,16 +124,17 @@ class FoodstuffCategoryController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $foodstuffCategory = FoodstuffCategory::find($id);
-        if (!$foodstuffCategory) {
+        if (! $foodstuffCategory) {
             App::abort(404);
         }
 
         $foodstuffCategory->delete();
+
         return Response::json();
     }
 }

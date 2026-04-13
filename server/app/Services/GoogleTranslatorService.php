@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 class GoogleTranslatorService
 {
     protected Client $client;
+
     protected string $apiKey;
 
     public function __construct()
@@ -31,14 +32,14 @@ class GoogleTranslatorService
         try {
             $response = $this->client->post('', [
                 'query' => [
-                    'key' => $this->apiKey
+                    'key' => $this->apiKey,
                 ],
                 'json' => [
                     'q' => $text,
                     'source' => $sourceLanguage,
                     'target' => $targetLanguage,
-                    'format' => 'html'
-                ]
+                    'format' => 'html',
+                ],
             ]);
 
             $body = json_decode($response->getBody()->getContents(), true);
@@ -46,7 +47,8 @@ class GoogleTranslatorService
             return $body['data']['translations'][0]['translatedText'] ?? $text;
 
         } catch (\Exception $e) {
-            Log::error('Google Translate HTTP Error: ' . $e->getMessage());
+            Log::error('Google Translate HTTP Error: '.$e->getMessage());
+
             return $text;
         }
     }

@@ -2,14 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Blog\Post;
-use App\Models\Career\Career;
-use App\Models\Event\Event;
-use App\Models\Logo\Logo;
-use App\Models\Novelty\Novelty;
-use App\Models\Project\Project;
-use App\Models\Quiz\QuizQuestion;
-use App\Models\Service\Service;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

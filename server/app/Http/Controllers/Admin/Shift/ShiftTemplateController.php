@@ -15,77 +15,79 @@ use Illuminate\Support\Facades\Validator;
 
 class ShiftTemplateController extends Controller
 {
-	use Siteable;
+    use Siteable;
 
-	public function index(Request $request): JsonResponse
-	{
-		$siteId = $this->handleSite($request->header('X-Site-Hash'));
+    public function index(Request $request): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-		return Response::json(ShiftTemplateResource::collection(
-			ShiftTemplate::query()
-				->whereRelation('sites', 'site_id', $siteId)
-				->orderBy('name')
-				->get()
-		));
-	}
+        return Response::json(ShiftTemplateResource::collection(
+            ShiftTemplate::query()
+                ->whereRelation('sites', 'site_id', $siteId)
+                ->orderBy('name')
+                ->get()
+        ));
+    }
 
-	public function store(Request $request, int $id = null): JsonResponse
-	{
-		if ($id) {
-			$template = ShiftTemplate::find($id);
-			if (!$template) {
-				App::abort(404);
-			}
-		} else {
-			$template = new ShiftTemplate();
-		}
+    public function store(Request $request, ?int $id = null): JsonResponse
+    {
+        if ($id) {
+            $template = ShiftTemplate::find($id);
+            if (! $template) {
+                App::abort(404);
+            }
+        } else {
+            $template = new ShiftTemplate;
+        }
 
-		$validator = Validator::make($request->all(), [
-			'name' => 'required|string|max:255',
-			'start_time' => 'required',
-			'end_time' => 'required',
-		]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ]);
 
-		if ($validator->fails()) {
-			return Response::json($validator->errors(), 400);
-		}
+        if ($validator->fails()) {
+            return Response::json($validator->errors(), 400);
+        }
 
-		try {
-			DB::beginTransaction();
-			$template->fill($request->all());
-			$template->save();
+        try {
+            DB::beginTransaction();
+            $template->fill($request->all());
+            $template->save();
 
-			if ($request->has('sites')) {
-				$this->saveSites($template, $request->get('sites', []));
-			}
+            if ($request->has('sites')) {
+                $this->saveSites($template, $request->get('sites', []));
+            }
 
-			DB::commit();
-		} catch (\Throwable $e) {
-			DB::rollBack();
-			return Response::json(['message' => 'Chyba při ukládání šablony směny.'], 500);
-		}
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
 
-		return Response::json(ShiftTemplateResource::make($template));
-	}
+            return Response::json(['message' => 'Chyba při ukládání šablony směny.'], 500);
+        }
 
-	public function show(int $id): JsonResponse
-	{
-		$template = ShiftTemplate::find($id);
-		if (!$template) {
-			App::abort(404);
-		}
+        return Response::json(ShiftTemplateResource::make($template));
+    }
 
-		return Response::json(ShiftTemplateResource::make($template));
-	}
+    public function show(int $id): JsonResponse
+    {
+        $template = ShiftTemplate::find($id);
+        if (! $template) {
+            App::abort(404);
+        }
 
-	public function destroy(int $id): JsonResponse
-	{
-		$template = ShiftTemplate::find($id);
-		if (!$template) {
-			App::abort(404);
-		}
+        return Response::json(ShiftTemplateResource::make($template));
+    }
 
-		$template->delete();
-		return Response::json();
-	}
+    public function destroy(int $id): JsonResponse
+    {
+        $template = ShiftTemplate::find($id);
+        if (! $template) {
+            App::abort(404);
+        }
+
+        $template->delete();
+
+        return Response::json();
+    }
 }

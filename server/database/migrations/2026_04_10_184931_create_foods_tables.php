@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('locale')->index();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->unique(['allergen_id', 'locale'], 'unique_allergen_translations');;
+            $table->unique(['allergen_id', 'locale'], 'unique_allergen_translations');
             $table->timestamps();
         });
 
@@ -50,7 +50,7 @@ return new class extends Migration
             $table->text('text')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->unique(['foodstuff_category_id', 'locale'], 'unique_foodstuff_category_translations');;
+            $table->unique(['foodstuff_category_id', 'locale'], 'unique_foodstuff_category_translations');
             $table->timestamps();
         });
 
@@ -73,7 +73,7 @@ return new class extends Migration
             $table->text('text')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->unique(['foodstuff_id', 'locale'], 'unique_foodstuff_translations');;
+            $table->unique(['foodstuff_id', 'locale'], 'unique_foodstuff_translations');
             $table->timestamps();
         });
 
@@ -187,7 +187,7 @@ return new class extends Migration
             $table->text('text')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->unique(['menu_id', 'locale'], 'unique_menu_translations');;
+            $table->unique(['menu_id', 'locale'], 'unique_menu_translations');
             $table->timestamps();
         });
 

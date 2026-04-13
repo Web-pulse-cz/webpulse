@@ -2,7 +2,6 @@
 
 namespace App\Models\Event;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EventCategoryTranslation extends Model
@@ -17,6 +16,6 @@ class EventCategoryTranslation extends Model
         'perex',
         'text',
         'meta_title',
-        'meta_description'
+        'meta_description',
     ];
 }
