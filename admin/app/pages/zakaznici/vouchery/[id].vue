@@ -310,31 +310,23 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </div>
 
         <div class="col-span-1 space-y-6 lg:sticky lg:top-24 lg:col-span-3">
-          <LayoutContainer class="!py-6">
-            <LayoutTitle class="text-sm uppercase tracking-widest text-slate-400">Stav</LayoutTitle>
-            <div class="mt-4">
-              <BaseFormSwitch
-                v-model:enabled="item.is_active"
-                enabled-text="Aktivní"
-                disabled-text="Neaktivní"
-              />
-            </div>
-          </LayoutContainer>
+
+          <LayoutActionsDetailBlock
+            v-model:sites="item.sites"
+            v-model:active="item.is_active"
+            :allow-image="false"
+            :allow-translations="false"
+            :allow-is-active="true"
+          />
 
           <LayoutContainer v-if="item.code" class="!py-6">
             <LayoutTitle class="text-sm uppercase tracking-widest text-slate-400">Kód</LayoutTitle>
             <p
-              class="mt-2 text-center font-mono text-2xl font-bold tracking-widest text-indigo-600"
+                class="mt-2 text-center font-mono text-2xl font-bold tracking-widest text-indigo-600"
             >
               {{ item.code }}
             </p>
           </LayoutContainer>
-
-          <LayoutActionsDetailBlock
-            v-model:sites="item.sites"
-            :allow-image="false"
-            :allow-is-active="false"
-          />
         </div>
       </div>
     </Form>

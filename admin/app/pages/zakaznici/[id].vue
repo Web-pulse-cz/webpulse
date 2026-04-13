@@ -255,6 +255,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </LayoutContainer>
           </div>
           <div class="col-span-1 space-y-6 lg:sticky lg:top-24 lg:col-span-3">
+            <LayoutActionsDetailBlock
+                v-model:sites="item.sites"
+                :allow-image="false"
+                :allow-is-active="false"
+                :allow-translations="false"
+            />
             <LayoutContainer class="!py-6">
               <LayoutTitle class="text-sm uppercase tracking-widest text-slate-400"
                 >Stav</LayoutTitle
@@ -309,6 +315,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
               >
               <BaseFormTextarea v-model="item.note" label="" name="note" rows="3" class="mt-2" />
             </LayoutContainer>
+
           </div>
         </div>
       </template>

@@ -162,6 +162,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
             v-model:sites="item.sites"
             :allow-image="false"
             :allow-is-active="false"
+            :allow-translations="false"
           />
         </div>
       </div>
