@@ -751,6 +751,7 @@ Route::group([
             Route::post('{id}/accept', [PriceOfferController::class, 'accept'])->where('id', '[0-9]+');
             Route::post('{id}/reject', [PriceOfferController::class, 'reject'])->where('id', '[0-9]+');
             Route::get('{id}/pdf', [PriceOfferController::class, 'pdf'])->where('id', '[0-9]+');
+            Route::get('{offerId}/file/{fileId}', [PriceOfferController::class, 'downloadFile']);
         });
 
         // Log routes

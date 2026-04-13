@@ -18,6 +18,7 @@ class PriceOfferSimpleResource extends JsonResource
             'client' => ClientSimpleResource::make($this->client),
             'total_with_vat' => $this->total_with_vat,
             'valid_to' => $this->valid_to?->format('Y-m-d'),
+            'files' => $this->files(),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

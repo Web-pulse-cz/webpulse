@@ -8,10 +8,14 @@ use App\Models\Invoice\Invoice;
 use App\Models\Project\Project;
 use App\Models\TaxRate\TaxRate;
 use App\Models\User\User;
+use App\Traits\Fileable;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class PriceOffer extends Model
 {
+    use Siteable, Fileable;
+
     protected $table = 'price_offers';
 
     protected $fillable = [
@@ -77,6 +81,11 @@ class PriceOffer extends Model
     public function items()
     {
         return $this->hasMany(PriceOfferItem::class, 'price_offer_id', 'id')->orderBy('position');
+    }
+
+    public function sites()
+    {
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 
     public function generateCode(): string

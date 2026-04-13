@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\PriceOffer\PriceOfferSimpleResource;
 use App\Jobs\Fakturoid\SyncInvoiceToFakturoidJob;
 use App\Models\Invoice\Invoice;
 use App\Models\PriceOffer\PriceOffer;
+use App\Traits\Siteable;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,9 +21,14 @@ use Illuminate\Support\Facades\Validator;
 
 class PriceOfferController extends Controller
 {
+    use Siteable;
+
     public function index(Request $request): JsonResponse
     {
-        $query = PriceOffer::with('client');
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $query = PriceOffer::with('client')
+            ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->filled('search')) {
             $search = $request->get('search');
@@ -38,6 +44,10 @@ class PriceOfferController extends Controller
 
         if ($request->filled('client_id')) {
             $query->where('client_id', $request->get('client_id'));
+        }
+
+        if ($request->filled('project_id')) {
+            $query->where('project_id', $request->get('project_id'));
         }
 
         if ($request->has('orderWay') && $request->get('orderBy')) {
@@ -89,7 +99,7 @@ class PriceOfferController extends Controller
         try {
             DB::beginTransaction();
 
-            $offer->fill($request->except(['items']));
+            $offer->fill($request->except(['items', 'sites', 'code']));
             $offer->save();
 
             // Sync items
@@ -131,19 +141,31 @@ class PriceOfferController extends Controller
             $offer->total_with_vat = $totalWithVat;
             $offer->save();
 
+            // Auto-assign site from header
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $sites = $request->get('sites', [$siteId]);
+            $this->saveSites($offer, $sites);
+
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return Response::json(['message' => 'Chyba při ukládání cenové nabídky.'], 500);
+            return Response::json(['message' => 'Chyba při ukládání cenové nabídky: ' . $e->getMessage()], 500);
         }
 
-        return Response::json(PriceOfferResource::make($offer->fresh(['items', 'client'])));
+        // Generate PDF
+        $this->generatePdf($offer->fresh(['items', 'client', 'sites']));
+
+        return Response::json(PriceOfferResource::make($offer->fresh(['items', 'client', 'sites'])));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
-        $offer = PriceOffer::with(['items', 'client'])->find($id);
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $offer = PriceOffer::with(['items', 'client', 'sites'])
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
         if (! $offer) {
             App::abort(404);
         }
@@ -158,6 +180,7 @@ class PriceOfferController extends Controller
             App::abort(404);
         }
 
+        $offer->removeAllFiles();
         $offer->items()->delete();
         $offer->delete();
 
@@ -228,7 +251,11 @@ class PriceOfferController extends Controller
             DB::commit();
 
             // Sync invoice to Fakturoid
-            SyncInvoiceToFakturoidJob::dispatch($invoice->id);
+            try {
+                SyncInvoiceToFakturoidJob::dispatch($invoice->id);
+            } catch (\Throwable $e) {
+                // Fakturoid sync is optional
+            }
         } catch (\Throwable $e) {
             DB::rollBack();
 
@@ -255,6 +282,33 @@ class PriceOfferController extends Controller
         return Response::json(PriceOfferResource::make($offer->fresh(['items', 'client'])));
     }
 
+    public function downloadFile(int $offerId, int $fileId)
+    {
+        $offer = PriceOffer::find($offerId);
+        if (!$offer) {
+            App::abort(404);
+        }
+
+        $file = DB::table('fileables')
+            ->where('id', $fileId)
+            ->where('fileable_id', $offerId)
+            ->where('fileable_type', PriceOffer::class)
+            ->first();
+
+        if (!$file) {
+            App::abort(404);
+        }
+
+        $path = storage_path('app/public/' . $file->path);
+        if (!file_exists($path)) {
+            App::abort(404);
+        }
+
+        return response()->download($path, $file->name, [
+            'Content-Type' => $file->mime_type,
+        ]);
+    }
+
     public function pdf(int $id)
     {
         $offer = PriceOffer::with(['items', 'client'])->find($id);
@@ -267,5 +321,34 @@ class PriceOfferController extends Controller
         ]);
 
         return $pdf->download('cenova-nabidka-'.$offer->code.'.pdf');
+    }
+
+    protected function generatePdf(PriceOffer $offer): void
+    {
+        try {
+            $siteId = $offer->sites->first()?->id;
+            $site = $siteId ? \App\Models\Site\Site::find($siteId) : null;
+
+            $pdf = Pdf::loadView('pdf.price-offer', [
+                'offer' => $offer,
+                'site' => $site,
+            ]);
+
+            $fileSlug = $offer->code ? preg_replace('/[^a-zA-Z0-9\-]/', '-', $offer->code) : $offer->id;
+            $path = 'files/price-offers/' . $fileSlug . '.pdf';
+            $name = 'cenova-nabidka-' . ($offer->code ?? $offer->id) . '.pdf';
+
+            // Remove old generated PDF
+            $existingFiles = $offer->files();
+            foreach ($existingFiles as $file) {
+                if ($file->mime_type === 'application/pdf') {
+                    $offer->removeFile($file->id);
+                }
+            }
+
+            $offer->attachFileFromContent($pdf->output(), $path, $name, 'application/pdf');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Price offer PDF generation failed: ' . $e->getMessage());
+        }
     }
 }
