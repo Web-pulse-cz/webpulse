@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Cashflow\CashflowController;
 use App\Http\Controllers\Admin\Changelog\ChangelogController;
 use App\Http\Controllers\Admin\Client\ClientController;
 use App\Http\Controllers\Admin\Contact\ContactController;
+use App\Http\Controllers\Admin\Contract\ContractController;
 use App\Http\Controllers\Admin\Contact\ContactListController;
 use App\Http\Controllers\Admin\Contact\ContactPhaseController;
 use App\Http\Controllers\Admin\Contact\ContactSourceController;
@@ -727,6 +728,17 @@ Route::group([
         // Dashboard and statistics routes
         Route::get('dashboard', [BaseController::class, 'dashboard']);
         Route::get('statistics', [BaseController::class, 'statistics']);
+
+        // Contract routes
+        Route::group([
+            'prefix' => 'contract',
+        ], function () {
+            Route::get('', [ContractController::class, 'index']);
+            Route::get('{id}', [ContractController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ContractController::class, 'store']);
+            Route::delete('{id}', [ContractController::class, 'destroy'])->where('id', '[0-9]+');
+            Route::get('{contractId}/file/{fileId}', [ContractController::class, 'downloadFile']);
+        });
 
         // Price offer routes
         Route::group([

@@ -359,6 +359,55 @@ const priorityColors: Record<string, string> = {
   low: 'bg-blue-100 text-blue-600',
 };
 
+// ─── Contracts (Soubory tab) ──────────────────────────────
+const projectContracts = ref([]);
+
+async function loadProjectContracts() {
+  if (route.params.id === 'pridat') return;
+  const client = useSanctumClient();
+  await client('/api/admin/contract', {
+    method: 'GET',
+    query: { project_id: route.params.id },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+  })
+    .then((r) => {
+      const d = r?.data || r;
+      projectContracts.value = Array.isArray(d) ? d : [];
+      if (projectContracts.value.length > 0 && !tabs.value.find((t) => t.link === '#soubory')) {
+        tabs.value.push({ name: 'Soubory', link: '#soubory', current: false });
+      }
+    })
+    .catch(() => {});
+}
+
+async function downloadProjectContractFile(contract: any) {
+  const client = useSanctumClient();
+  try {
+    const file = contract.files?.[0];
+    if (!file) {
+      $toast.show({ summary: 'Info', detail: 'Smlouva nemá přiložený soubor.', severity: 'warning' });
+      return;
+    }
+    const res = await client.raw('/api/admin/contract/' + contract.id + '/file/' + file.id, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || 'smlouva-' + contract.id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+  }
+}
+
 watchEffect(() => {
   const h = route.hash;
   if (h)
@@ -381,6 +430,7 @@ onMounted(() => {
   if (route.params.id !== 'pridat') {
     loadItem();
     loadBoards();
+    loadProjectContracts();
   }
 });
 definePageMeta({ middleware: 'sanctum:auth' });
@@ -734,6 +784,65 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 @click="deleteCost(cost.id)"
               >
                 <TrashIcon class="size-4" />
+              </button>
+            </div>
+          </div>
+        </LayoutContainer>
+      </template>
+
+      <!-- Soubory tab (contracts linked to this project) -->
+      <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">
+        <LayoutContainer>
+          <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                <FolderIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
+            </div>
+            <NuxtLink
+              to="/smlouvy/pridat"
+              class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+            >
+              Nová smlouva
+            </NuxtLink>
+          </div>
+
+          <div v-if="!projectContracts.length" class="py-12 text-center text-sm text-slate-400">
+            Žádné smlouvy.
+          </div>
+          <div v-else class="space-y-3">
+            <div
+              v-for="contract in projectContracts"
+              :key="contract.id"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+            >
+              <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
+                <div class="flex items-center gap-3">
+                  <span class="font-medium text-slate-900">{{ contract.title }}</span>
+                  <span
+                    class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                    :class="{
+                      'bg-emerald-100 text-emerald-700': contract.status === 'active',
+                      'bg-slate-100 text-slate-600': contract.status === 'draft',
+                      'bg-red-100 text-red-700': contract.status === 'terminated',
+                      'bg-amber-100 text-amber-700': contract.status === 'expired',
+                    }"
+                  >
+                    {{ { draft: 'Koncept', active: 'Aktivní', terminated: 'Ukončená', expired: 'Vypršelá' }[contract.status] || contract.status }}
+                  </span>
+                </div>
+                <div class="mt-1 text-xs text-slate-500">
+                  {{ contract.date_from || '—' }} &mdash; {{ contract.date_to || 'Doba neurčitá' }}
+                </div>
+              </NuxtLink>
+              <button
+                v-if="contract.files?.length"
+                type="button"
+                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                @click="downloadProjectContractFile(contract)"
+              >
+                Stáhnout
               </button>
             </div>
           </div>

@@ -538,7 +538,7 @@ const navigation = ref([
       },
       {
         name: 'Smlouvy',
-        link: '/demo',
+        link: '/smlouvy',
         icon: DocumentTextIcon,
         current: false,
         slug: 'employee_contracts',

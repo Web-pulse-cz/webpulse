@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
 import { useCountryStore } from '~/../stores/countryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
@@ -65,7 +65,6 @@ const item = ref({
   note: '',
   divisions: [] as number[],
   sites: [] as number[],
-  contracts: [] as any[],
 });
 
 const genderOptions = ref([
@@ -78,24 +77,6 @@ const statusOptions = ref([
   { value: 'on_leave', name: 'Na dovolené' },
   { value: 'terminated', name: 'Ukončený' },
   { value: 'suspended', name: 'Pozastavený' },
-]);
-const contractTypeOptions = ref([
-  { value: 'hpp', name: 'HPP' },
-  { value: 'dpp', name: 'DPP' },
-  { value: 'dpc', name: 'DPČ' },
-  { value: 'osvc', name: 'OSVČ' },
-  { value: 'internship', name: 'Stáž' },
-  { value: 'other', name: 'Jiný' },
-]);
-const contractStatusOptions = ref([
-  { value: 'draft', name: 'Koncept' },
-  { value: 'active', name: 'Aktivní' },
-  { value: 'terminated', name: 'Ukončená' },
-  { value: 'expired', name: 'Vypršelá' },
-]);
-const salaryTypeOptions = ref([
-  { value: 'monthly', name: 'Měsíčně' },
-  { value: 'hourly', name: 'Hodinově' },
 ]);
 
 async function loadItem() {
@@ -183,90 +164,54 @@ async function saveItem(redirect = true) {
     });
 }
 
-// ─── Contracts ─────────────────────────────────────────────
+// ─── Contracts (Soubory tab) ──────────────────────────────
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
+const employeeContracts = ref([]);
 
-const newContract = ref({
-  title: '',
-  type: 'hpp',
-  status: 'draft',
-  date_from: '',
-  date_to: '',
-  salary: 0,
-  salary_type: 'monthly',
-  vacation_days: 20,
-  notice_period_days: 60,
-  content: '',
-  terms: '',
-  benefits: '',
-  note: '',
-});
-const showContractForm = ref(false);
-
-async function saveContract() {
-  if (!newContract.value.title) return;
+async function loadEmployeeContracts() {
+  if (route.params.id === 'pridat') return;
   const client = useSanctumClient();
-  await client('/api/admin/employee/' + route.params.id + '/contract', {
-    method: 'POST',
-    body: JSON.stringify(newContract.value),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+  await client('/api/admin/contract', {
+    method: 'GET',
+    query: { employee_id: route.params.id },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
   })
-    .then(() => {
-      newContract.value = {
-        title: '',
-        type: 'hpp',
-        status: 'draft',
-        date_from: '',
-        date_to: '',
-        salary: 0,
-        salary_type: 'monthly',
-        vacation_days: 20,
-        notice_period_days: 60,
-        content: '',
-        terms: '',
-        benefits: '',
-        note: '',
-      };
-      showContractForm.value = false;
-      loadItem();
+    .then((r) => {
+      const d = r?.data || r;
+      employeeContracts.value = Array.isArray(d) ? d : [];
+      // Show Soubory tab if contracts exist
+      if (employeeContracts.value.length > 0 && !tabs.value.find((t) => t.link === '#soubory')) {
+        tabs.value.push({ name: 'Soubory', link: '#soubory', current: false });
+      }
     })
-    .catch(() => {
-      $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se uložit smlouvu.', severity: 'error' });
-    });
+    .catch(() => {});
 }
 
-async function deleteContract(contractId: number) {
-  const client = useSanctumClient();
-  await client('/api/admin/employee/' + route.params.id + '/contract/' + contractId, {
-    method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadItem();
-  });
-}
-
-async function downloadContractPdf(contractId: number) {
+async function downloadContractFile(contract: any) {
   const client = useSanctumClient();
   try {
-    const res = await client.raw(
-      '/api/admin/employee/' + route.params.id + '/contract/' + contractId + '/pdf',
-      {
-        method: 'GET',
-        credentials: 'include',
-        responseType: 'blob',
-      },
-    );
+    const file = contract.files?.[0];
+    if (!file) {
+      $toast.show({ summary: 'Info', detail: 'Smlouva nemá přiložený soubor.', severity: 'warning' });
+      return;
+    }
+    const res = await client.raw('/api/admin/contract/' + contract.id + '/file/' + file.id, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
     if (!res.ok) throw new Error('Chyba');
     const blob = res._data as Blob;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'smlouva-' + contractId + '.pdf';
+    a.download = file.name || 'smlouva-' + contract.id + '.pdf';
     document.body.appendChild(a);
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
   } catch (e) {
-    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout PDF.', severity: 'error' });
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
   }
 }
 
@@ -286,7 +231,10 @@ useHead({ title: pageTitle.value });
 onMounted(() => {
   loadDivisions();
   loadSites();
-  if (route.params.id !== 'pridat') loadItem();
+  if (route.params.id !== 'pridat') {
+    loadItem();
+    loadEmployeeContracts();
+  }
 });
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
@@ -551,186 +499,63 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </LayoutContainer>
         </div>
       </template>
-      <!-- Smlouvy tab odstraněn -->
-      <template v-if="false && tabs.find((t) => t.current && t.link === '#smlouvy')">
+      <!-- Soubory tab (contracts linked to this employee) -->
+      <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">
         <LayoutContainer>
-          <div class="mb-4 flex items-center justify-between">
+          <div class="mb-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
               <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
                 <DocumentTextIcon class="size-5" />
               </div>
-              <LayoutTitle class="!mb-0">Smlouvy</LayoutTitle>
+              <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
             </div>
-            <button
-              type="button"
+            <NuxtLink
+              to="/smlouvy/pridat"
               class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-              @click="showContractForm = !showContractForm"
             >
-              {{ showContractForm ? 'Zrušit' : 'Nová smlouva' }}
-            </button>
+              Nová smlouva
+            </NuxtLink>
           </div>
 
-          <!-- New contract form -->
-          <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="opacity-0 -translate-y-2"
-            enter-to-class="opacity-100 translate-y-0"
-          >
-            <div
-              v-if="showContractForm"
-              class="mb-6 space-y-4 rounded-xl border border-indigo-200 bg-indigo-50/50 p-6"
-            >
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <BaseFormInput
-                  v-model="newContract.title"
-                  label="Název smlouvy"
-                  name="c_title"
-                  rules="required"
-                  class="col-span-full sm:col-span-1"
-                />
-                <BaseFormSelect
-                  v-model="newContract.type"
-                  label="Typ"
-                  name="c_type"
-                  :options="contractTypeOptions"
-                />
-                <BaseFormSelect
-                  v-model="newContract.status"
-                  label="Stav"
-                  name="c_status"
-                  :options="contractStatusOptions"
-                />
-                <BaseFormInput
-                  v-model="newContract.date_from"
-                  label="Platnost od"
-                  type="date"
-                  name="c_from"
-                />
-                <BaseFormInput
-                  v-model="newContract.date_to"
-                  label="Platnost do"
-                  type="date"
-                  name="c_to"
-                />
-                <BaseFormInput
-                  v-model="newContract.salary"
-                  label="Odměna"
-                  type="number"
-                  name="c_salary"
-                  :step="0.01"
-                />
-                <BaseFormSelect
-                  v-model="newContract.salary_type"
-                  label="Typ odměny"
-                  name="c_salary_type"
-                  :options="salaryTypeOptions"
-                />
-                <BaseFormInput
-                  v-model="newContract.vacation_days"
-                  label="Dny dovolené"
-                  type="number"
-                  name="c_vacation"
-                />
-                <BaseFormInput
-                  v-model="newContract.notice_period_days"
-                  label="Výpovědní lhůta (dny)"
-                  type="number"
-                  name="c_notice"
-                />
-              </div>
-              <BaseFormTextarea
-                v-model="newContract.content"
-                label="Obsah smlouvy"
-                name="c_content"
-                rows="6"
-              />
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <BaseFormTextarea
-                  v-model="newContract.terms"
-                  label="Podmínky"
-                  name="c_terms"
-                  rows="3"
-                />
-                <BaseFormTextarea
-                  v-model="newContract.benefits"
-                  label="Benefity"
-                  name="c_benefits"
-                  rows="3"
-                />
-              </div>
-              <BaseFormTextarea
-                v-model="newContract.note"
-                label="Poznámka"
-                name="c_note"
-                rows="2"
-              />
-              <div class="text-right">
-                <button
-                  type="button"
-                  class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-                  @click="saveContract"
-                >
-                  Uložit smlouvu
-                </button>
-              </div>
-            </div>
-          </Transition>
-
-          <!-- Existing contracts -->
-          <div
-            v-if="!item.contracts?.length && !showContractForm"
-            class="py-12 text-center text-sm text-slate-400"
-          >
+          <div v-if="!employeeContracts.length" class="py-12 text-center text-sm text-slate-400">
             Žádné smlouvy.
           </div>
           <div v-else class="space-y-3">
             <div
-              v-for="contract in item.contracts"
+              v-for="contract in employeeContracts"
               :key="contract.id"
               class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
-              <div>
+              <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
                 <div class="flex items-center gap-3">
                   <span class="font-medium text-slate-900">{{ contract.title }}</span>
                   <span
                     class="rounded-full px-2 py-0.5 text-[10px] font-bold"
                     :class="{
-                      'bg-green-100 text-green-700': contract.status === 'active',
+                      'bg-emerald-100 text-emerald-700': contract.status === 'active',
                       'bg-slate-100 text-slate-600': contract.status === 'draft',
                       'bg-red-100 text-red-700': contract.status === 'terminated',
-                      'bg-yellow-100 text-yellow-700': contract.status === 'expired',
+                      'bg-amber-100 text-amber-700': contract.status === 'expired',
                     }"
-                    >{{ contract.status }}</span
                   >
-                  <span
-                    class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-600"
-                    >{{ contract.type }}</span
-                  >
+                    {{ { draft: 'Koncept', active: 'Aktivní', terminated: 'Ukončená', expired: 'Vypršelá' }[contract.status] || contract.status }}
+                  </span>
+                  <span class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-600">
+                    {{ { hpp: 'HPP', dpp: 'DPP', dpc: 'DPČ', osvc: 'OSVČ', internship: 'Stáž', nda: 'NDA', other: 'Jiný' }[contract.type] || contract.type }}
+                  </span>
                 </div>
                 <div class="mt-1 text-xs text-slate-500">
                   {{ contract.date_from || '—' }} &mdash; {{ contract.date_to || 'Doba neurčitá' }}
-                  <span v-if="contract.salary" class="ml-3 font-medium"
-                    >{{ contract.salary }}
-                    {{ contract.salary_type === 'monthly' ? '/měs' : '/hod' }}</span
-                  >
                 </div>
-              </div>
-              <div class="flex gap-2">
-                <button
-                  type="button"
-                  class="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-200"
-                  @click="downloadContractPdf(contract.id)"
-                >
-                  PDF
-                </button>
-                <button
-                  type="button"
-                  class="rounded-lg p-1.5 text-red-400 hover:bg-red-50 hover:text-red-600"
-                  @click="deleteContract(contract.id)"
-                >
-                  <TrashIcon class="size-4" />
-                </button>
-              </div>
+              </NuxtLink>
+              <button
+                v-if="contract.files?.length"
+                type="button"
+                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                @click="downloadContractFile(contract)"
+              >
+                Stáhnout
+              </button>
             </div>
           </div>
         </LayoutContainer>
