@@ -20,6 +20,8 @@ class ProjectSimpleResource extends JsonResource
             'hourly_rate' => $this->hourly_rate,
             'total_tracked_seconds' => $this->total_tracked_seconds,
             'total_revenue' => $this->total_revenue,
+            'total_revenue_with_vat' => round(($this->total_tracked_seconds / 3600) * ($this->hourly_rate ?? 0) * (1 + ($this->taxRate?->rate ?? 0) / 100), 2),
+            'currency_symbol' => $this->currency?->code ?? 'Kč',
             'profit' => $this->profit,
             'is_archived' => $this->is_archived,
         ];

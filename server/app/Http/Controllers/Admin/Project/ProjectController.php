@@ -23,7 +23,7 @@ class ProjectController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $query = Project::with(['client', 'status', 'tags'])
+        $query = Project::with(['client', 'status', 'tags', 'currency', 'taxRate'])
             ->whereRelation('sites', 'site_id', $siteId);
 
         if ($request->filled('search')) {

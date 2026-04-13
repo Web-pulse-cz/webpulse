@@ -50,7 +50,7 @@ const filters = ref({
 // ─── Grouped entries ───────────────────────────────────────
 
 const groupedEntries = computed(() => {
-	const groups: Record<string, { date: string; dateFormatted: string; items: Record<string, { description: string; entries: any[]; totalSeconds: number; project_name: string | null; task_code: string | null }> }> = {};
+	const groups: Record<string, { date: string; dateFormatted: string; items: Record<string, any> }> = {};
 
 	for (const entry of entries.value as any[]) {
 		const date = entry.date || 'unknown';
@@ -63,12 +63,19 @@ const groupedEntries = computed(() => {
 				description: entry.description || '—',
 				entries: [],
 				totalSeconds: 0,
+				totalPriceWithoutVat: 0,
+				totalVat: 0,
+				totalPriceWithVat: 0,
+				currency_symbol: entry.currency_symbol || 'Kč',
 				project_name: entry.project_name,
 				task_code: entry.task_code,
 			};
 		}
 		groups[date].items[key].entries.push(entry);
 		groups[date].items[key].totalSeconds += parseInt(entry.seconds) || 0;
+		groups[date].items[key].totalPriceWithoutVat += parseFloat(entry.price_without_vat) || 0;
+		groups[date].items[key].totalVat += parseFloat(entry.vat) || 0;
+		groups[date].items[key].totalPriceWithVat += parseFloat(entry.price_with_vat) || 0;
 	}
 
 	return Object.values(groups).sort((a, b) => b.date.localeCompare(a.date));
@@ -370,8 +377,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
 									<span v-if="group.task_code" class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-mono font-bold text-indigo-600">{{ group.task_code }}</span>
 									<span v-if="group.project_name" class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500">{{ group.project_name }}</span>
 								</div>
-								<div class="flex items-center gap-3">
+								<div class="flex flex-wrap items-center gap-3">
 									<span class="font-mono text-sm font-bold tabular-nums text-slate-900">{{ formatSeconds(group.totalSeconds) }}</span>
+									<span v-if="group.totalPriceWithoutVat > 0" class="text-xs text-slate-500 tabular-nums">
+										{{ formatNumber(group.totalPriceWithoutVat) }} {{ group.currency_symbol }}
+										<span v-if="group.totalVat > 0" class="text-slate-400"> + {{ formatNumber(group.totalVat) }} DPH = <span class="font-medium text-slate-700">{{ formatNumber(group.totalPriceWithVat) }} {{ group.currency_symbol }}</span></span>
+									</span>
 									<button type="button" class="rounded-lg p-1.5 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-600" title="Spustit znovu" @click="restartEntry(group.entries[0])">
 										<ArrowPathIcon class="size-4" />
 									</button>
@@ -440,7 +451,13 @@ definePageMeta({ middleware: 'sanctum:auth' });
 									<span v-if="group.task_code" class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-mono font-bold text-indigo-600">{{ group.task_code }}</span>
 									<span v-if="group.project_name" class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500">{{ group.project_name }}</span>
 								</div>
-								<span class="font-mono text-sm font-bold tabular-nums text-slate-900">{{ formatSeconds(group.totalSeconds) }}</span>
+								<div class="flex flex-wrap items-center gap-2">
+									<span class="font-mono text-sm font-bold tabular-nums text-slate-900">{{ formatSeconds(group.totalSeconds) }}</span>
+									<span v-if="group.totalPriceWithoutVat > 0" class="text-xs text-slate-500 tabular-nums">
+										{{ formatNumber(group.totalPriceWithoutVat) }} {{ group.currency_symbol }}
+										<span v-if="group.totalVat > 0" class="text-slate-400"> + {{ formatNumber(group.totalVat) }} DPH = <span class="font-medium text-slate-700">{{ formatNumber(group.totalPriceWithVat) }} {{ group.currency_symbol }}</span></span>
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>

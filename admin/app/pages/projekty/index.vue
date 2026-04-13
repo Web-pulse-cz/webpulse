@@ -157,10 +157,10 @@ definePageMeta({
           sortable: true,
         },
         {
-          key: 'total_revenue',
-          name: 'Příjmy',
+          key: 'total_revenue_with_vat',
+          name: 'Celkem s DPH',
           type: 'number',
-          width: 100,
+          width: 120,
           hidden: true,
           sortable: true,
         },

@@ -123,13 +123,27 @@
 				<th>Úkol</th>
 				<th>Uživatel</th>
 				<th>Popis</th>
-				<th class="right">Hodiny</th>
+				<th class="right">Čas</th>
 				<th class="right">Sazba</th>
-				<th class="right">Celkem</th>
+				<th class="right">Bez DPH</th>
+				<th class="right">DPH</th>
+				<th class="right">S DPH</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach($entries as $entry)
+				@php
+					$h = floor($entry->seconds / 3600);
+					$m = floor(($entry->seconds % 3600) / 60);
+					$s = $entry->seconds % 60;
+					$hours = $entry->seconds / 3600;
+					$rate = $entry->hourly_rate ?? 0;
+					$priceNoVat = $hours * $rate;
+					$vatRate = $entry->project?->taxRate?->rate ?? 0;
+					$vat = $priceNoVat * ($vatRate / 100);
+					$priceWithVat = $priceNoVat + $vat;
+					$currency = $entry->project?->currency?->code ?? 'Kč';
+				@endphp
 				<tr>
 					<td>{{ $entry->date?->format('d.m.Y') }}</td>
 					<td>{{ $entry->project?->name ?? '—' }}</td>
@@ -142,24 +156,41 @@
 					</td>
 					<td>{{ $entry->user?->name ?? '—' }}</td>
 					<td>{{ $entry->description ?? '—' }}</td>
-					@php $h = floor($entry->seconds / 3600); $m = floor(($entry->seconds % 3600) / 60); $s = $entry->seconds % 60; @endphp
 					<td class="right">{{ sprintf('%02d:%02d:%02d', $h, $m, $s) }}</td>
-					<td class="right">{{ $entry->hourly_rate ? number_format($entry->hourly_rate, 2, ',', ' ') : '—' }}</td>
-					<td class="right">{{ number_format(($entry->seconds / 3600) * ($entry->hourly_rate ?? 0), 2, ',', ' ') }}</td>
+					<td class="right">{{ $rate ? number_format($rate, 2, ',', ' ') . ' ' . $currency : '—' }}</td>
+					<td class="right">{{ $priceNoVat ? number_format($priceNoVat, 2, ',', ' ') . ' ' . $currency : '—' }}</td>
+					<td class="right">{{ $vat ? number_format($vat, 2, ',', ' ') . ' ' . $currency : '—' }}</td>
+					<td class="right">{{ $priceWithVat ? number_format($priceWithVat, 2, ',', ' ') . ' ' . $currency : '—' }}</td>
 				</tr>
 			@endforeach
 		</tbody>
 	</table>
 
+	@php
+		$totalH = floor($totalSeconds / 3600);
+		$totalM = floor(($totalSeconds % 3600) / 60);
+		$totalS = $totalSeconds % 60;
+		$totalNoVat = $entries->sum(fn($e) => ($e->seconds / 3600) * ($e->hourly_rate ?? 0));
+		$totalVatSum = $entries->sum(fn($e) => ($e->seconds / 3600) * ($e->hourly_rate ?? 0) * (($e->project?->taxRate?->rate ?? 0) / 100));
+		$totalWithVat = $totalNoVat + $totalVatSum;
+	@endphp
 	<div class="summary">
 		<table>
 			<tr>
-				<td class="label">Celkem hodin:</td>
-				<td class="value">{{ number_format($totalHours, 2, ',', ' ') }} h</td>
+				<td class="label">Celkový čas:</td>
+				<td class="value">{{ sprintf('%02d:%02d:%02d', $totalH, $totalM, $totalS) }}</td>
 			</tr>
 			<tr>
-				<td class="label">Celková hodnota:</td>
-				<td class="value" style="color: #6366f1;">{{ number_format($totalCost, 2, ',', ' ') }}</td>
+				<td class="label">Celkem bez DPH:</td>
+				<td class="value">{{ number_format($totalNoVat, 2, ',', ' ') }} Kč</td>
+			</tr>
+			<tr>
+				<td class="label">DPH:</td>
+				<td class="value">{{ number_format($totalVatSum, 2, ',', ' ') }} Kč</td>
+			</tr>
+			<tr>
+				<td class="label">Celkem s DPH:</td>
+				<td class="value" style="color: #6366f1;">{{ number_format($totalWithVat, 2, ',', ' ') }} Kč</td>
 			</tr>
 		</table>
 	</div>

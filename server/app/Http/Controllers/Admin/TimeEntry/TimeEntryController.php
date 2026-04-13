@@ -20,7 +20,7 @@ class TimeEntryController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = ProjectTimeEntry::with(['project', 'task', 'user']);
+        $query = ProjectTimeEntry::with(['project.currency', 'project.taxRate', 'task', 'user']);
 
         if ($request->filled('date_from')) {
             $query->where('date', '>=', $request->get('date_from'));
@@ -197,7 +197,7 @@ class TimeEntryController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $query = ProjectTimeEntry::with(['project', 'task', 'user']);
+        $query = ProjectTimeEntry::with(['project.currency', 'project.taxRate', 'task', 'user']);
 
         if ($request->filled('date_from')) {
             $query->where('date', '>=', $request->get('date_from'));
@@ -231,6 +231,7 @@ class TimeEntryController extends Controller
 
         $pdf = Pdf::loadView('pdf.time-entries', [
             'entries' => $entries,
+            'totalSeconds' => $totalSeconds,
             'totalHours' => $totalHours,
             'totalCost' => $totalCost,
             'filters' => $filters,

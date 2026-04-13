@@ -6,7 +6,7 @@ import { DocumentIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon, ChevronD
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
 
-const { formatSeconds } = useFormat();
+const { formatSeconds, formatNumber } = useFormat();
 
 const { $toast } = useNuxtApp();
 const currencyStore = useCurrencyStore();
@@ -497,22 +497,30 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   :step="0.01"
                 />
               </div>
-              <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
                 <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200">
-                  <div class="text-2xl font-bold font-mono tabular-nums">{{ formatSeconds(item.total_tracked_seconds) }}</div>
+                  <div class="text-xl font-bold font-mono tabular-nums">{{ formatSeconds(item.total_tracked_seconds) }}</div>
                   <div class="text-xs text-slate-500">Odpracováno</div>
                 </div>
                 <div class="rounded-xl bg-emerald-50 p-4 text-center ring-1 ring-emerald-200">
-                  <div class="text-2xl font-bold text-emerald-700">{{ item.total_revenue }}</div>
-                  <div class="text-xs text-emerald-600">Příjmy</div>
+                  <div class="text-xl font-bold text-emerald-700 tabular-nums">{{ formatNumber(item.total_revenue_without_vat) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xs text-emerald-600">Bez DPH</div>
                 </div>
-                <div class="rounded-xl bg-red-50 p-4 text-center ring-1 ring-red-200">
-                  <div class="text-2xl font-bold text-red-700">{{ item.total_costs }}</div>
-                  <div class="text-xs text-red-600">Náklady</div>
+                <div class="rounded-xl bg-amber-50 p-4 text-center ring-1 ring-amber-200">
+                  <div class="text-xl font-bold text-amber-700 tabular-nums">{{ formatNumber(item.total_vat) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xs text-amber-600">DPH ({{ item.vat_rate }}%)</div>
                 </div>
                 <div class="rounded-xl bg-indigo-50 p-4 text-center ring-1 ring-indigo-200">
-                  <div class="text-2xl font-bold text-indigo-700">{{ item.profit }}</div>
-                  <div class="text-xs text-indigo-600">Zisk</div>
+                  <div class="text-xl font-bold text-indigo-700 tabular-nums">{{ formatNumber(item.total_revenue_with_vat) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xs text-indigo-600">S DPH</div>
+                </div>
+                <div class="rounded-xl bg-red-50 p-4 text-center ring-1 ring-red-200">
+                  <div class="text-xl font-bold text-red-700 tabular-nums">{{ formatNumber(item.total_costs) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xs text-red-600">Náklady</div>
+                </div>
+                <div class="rounded-xl bg-slate-900 p-4 text-center ring-1 ring-slate-700">
+                  <div class="text-xl font-bold text-white tabular-nums">{{ formatNumber(item.profit) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xs text-slate-400">Zisk</div>
                 </div>
               </div>
             </LayoutContainer>
