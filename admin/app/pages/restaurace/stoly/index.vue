@@ -114,7 +114,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
           hidden: true,
           sortable: true,
         },
-        { key: 'status', name: 'Stav', type: 'text', width: 100, hidden: false, sortable: true },
+        { key: 'status', name: 'Stav', type: 'mapped', width: 100, hidden: false, sortable: true, map: {
+          available: { label: 'Volný', class: 'bg-emerald-100 text-emerald-700' },
+          occupied: { label: 'Obsazený', class: 'bg-red-100 text-red-700' },
+          reserved: { label: 'Rezervovaný', class: 'bg-amber-100 text-amber-700' },
+          maintenance: { label: 'Údržba', class: 'bg-slate-100 text-slate-600' },
+        }},
         {
           key: 'upcoming_count',
           name: 'Rezervací',

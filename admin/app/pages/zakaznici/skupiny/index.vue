@@ -110,10 +110,14 @@ definePageMeta({ middleware: 'sanctum:auth' });
         {
           key: 'discount_type',
           name: 'Typ slevy',
-          type: 'text',
+          type: 'mapped',
           width: 80,
           hidden: true,
           sortable: false,
+          map: {
+            fixed: { label: 'Pevná částka', class: 'bg-emerald-100 text-emerald-700' },
+            percentage: { label: 'Procenta', class: 'bg-indigo-100 text-indigo-700' },
+          },
         },
         {
           key: 'customers_count',

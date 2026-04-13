@@ -297,6 +297,14 @@ const emit = defineEmits([
                       />
                     </span>
 
+                    <span
+                      v-else-if="column.type === 'mapped' && column.map"
+                      class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
+                      :class="column.map[printText(item, column)]?.class || 'bg-slate-100 text-slate-600'"
+                    >
+                      {{ column.map[printText(item, column)]?.label || printText(item, column) }}
+                    </span>
+
                     <span v-else-if="column.type === 'status'" class="flex items-center">
                       <CheckIcon v-if="item[column.key]" class="size-5 text-emerald-500" />
                       <XMarkIcon v-else class="size-5 text-red-500" />

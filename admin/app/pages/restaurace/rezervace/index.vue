@@ -172,8 +172,20 @@ definePageMeta({ middleware: 'sanctum:auth' });
           hidden: true,
           sortable: false,
         },
-        { key: 'status', name: 'Stav', type: 'text', width: 80, hidden: false, sortable: true },
-        { key: 'source', name: 'Zdroj', type: 'text', width: 60, hidden: true, sortable: true },
+        { key: 'status', name: 'Stav', type: 'mapped', width: 80, hidden: false, sortable: true, map: {
+          pending: { label: 'Čeká', class: 'bg-amber-100 text-amber-700' },
+          confirmed: { label: 'Potvrzeno', class: 'bg-blue-100 text-blue-700' },
+          seated: { label: 'Usazení', class: 'bg-emerald-100 text-emerald-700' },
+          completed: { label: 'Dokončeno', class: 'bg-slate-100 text-slate-600' },
+          cancelled: { label: 'Zrušeno', class: 'bg-red-100 text-red-700' },
+          no_show: { label: 'Nedorazili', class: 'bg-red-50 text-red-500' },
+        }},
+        { key: 'source', name: 'Zdroj', type: 'mapped', width: 60, hidden: true, sortable: true, map: {
+          manual: { label: 'Manuální', class: 'bg-slate-100 text-slate-600' },
+          web: { label: 'Web', class: 'bg-indigo-100 text-indigo-700' },
+          phone: { label: 'Telefon', class: 'bg-emerald-100 text-emerald-700' },
+          email: { label: 'E-mail', class: 'bg-blue-100 text-blue-700' },
+        }},
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"

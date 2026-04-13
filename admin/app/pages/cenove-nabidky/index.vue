@@ -145,7 +145,13 @@ definePageMeta({
           hidden: true,
           sortable: true,
         },
-        { key: 'status', name: 'Stav', type: 'text', width: 100, hidden: false, sortable: true },
+        { key: 'status', name: 'Stav', type: 'mapped', width: 100, hidden: false, sortable: true, map: {
+          draft: { label: 'Koncept', class: 'bg-slate-100 text-slate-600' },
+          sent: { label: 'Odeslaná', class: 'bg-blue-100 text-blue-700' },
+          accepted: { label: 'Přijatá', class: 'bg-emerald-100 text-emerald-700' },
+          rejected: { label: 'Zamítnutá', class: 'bg-red-100 text-red-700' },
+          expired: { label: 'Vypršelá', class: 'bg-amber-100 text-amber-700' },
+        }},
         {
           key: 'valid_to',
           name: 'Platnost do',
