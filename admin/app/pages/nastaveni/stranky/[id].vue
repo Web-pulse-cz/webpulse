@@ -39,6 +39,8 @@ const settings = {
     'meals',
     'recipes',
     'menus',
+    'restaurant_tables',
+    'reservations',
     'posts',
     'pages',
     'novelties',
@@ -300,7 +302,11 @@ const getSettingTitle = computed(() => (key: string) => {
     case 'recipes':
       return 'Recepty';
     case 'menus':
-      return 'Menu';
+      return 'Jídelní lístky';
+    case 'restaurant_tables':
+      return 'Stoly';
+    case 'reservations':
+      return 'Rezervace';
     case 'project_time_entries':
       return 'Sledování času';
     default:

@@ -301,9 +301,16 @@ const navigation = ref([
         ],
       },
       {
+        name: 'Stoly',
+        link: '/restaurace/stoly',
+        icon: BuildingOfficeIcon,
+        current: false,
+        slug: 'restaurant_tables',
+      },
+      {
         name: 'Rezervace',
         link: '/restaurace/rezervace',
-        icon: CalendarIcon,
+        icon: CalendarDaysIcon,
         current: false,
         slug: 'reservations',
       },

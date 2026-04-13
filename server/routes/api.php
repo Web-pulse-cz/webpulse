@@ -58,6 +58,8 @@ use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
 use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
 use App\Http\Controllers\Admin\Food\Menu\MenuController;
 use App\Http\Controllers\Admin\Food\Menu\MenuSectionController;
+use App\Http\Controllers\Admin\Restaurant\RestaurantTableController;
+use App\Http\Controllers\Admin\Restaurant\ReservationController;
 use App\Http\Controllers\Admin\Client\ClientController;
 use App\Http\Controllers\Admin\Invoice\InvoiceController;
 use App\Http\Controllers\Admin\Project\TagController;
@@ -963,6 +965,28 @@ Route::group([
                 Route::post('{id?}', [MenuController::class, 'store']);
                 Route::delete('{id}', [MenuController::class, 'destroy'])->where('id', '[0-9]+');
                 Route::get('{id}/pdf', [MenuController::class, 'pdf'])->where('id', '[0-9]+');
+            });
+
+            // Restaurant table routes
+            Route::group([
+                'prefix' => 'table'
+            ], function () {
+                Route::get('', [RestaurantTableController::class, 'index']);
+                Route::get('{id}', [RestaurantTableController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [RestaurantTableController::class, 'store']);
+                Route::delete('{id}', [RestaurantTableController::class, 'destroy'])->where('id', '[0-9]+');
+                Route::post('refresh-statuses', [RestaurantTableController::class, 'refreshStatuses']);
+            });
+
+            // Reservation routes
+            Route::group([
+                'prefix' => 'reservation'
+            ], function () {
+                Route::get('', [ReservationController::class, 'index']);
+                Route::get('{id}', [ReservationController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ReservationController::class, 'store']);
+                Route::post('{id}/status', [ReservationController::class, 'updateStatus'])->where('id', '[0-9]+');
+                Route::delete('{id}', [ReservationController::class, 'destroy'])->where('id', '[0-9]+');
             });
         });
     });

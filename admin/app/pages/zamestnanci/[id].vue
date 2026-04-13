@@ -247,11 +247,14 @@ async function deleteContract(contractId: number) {
 async function downloadContractPdf(contractId: number) {
   const client = useSanctumClient();
   try {
-    const res = await client.raw('/api/admin/employee/' + route.params.id + '/contract/' + contractId + '/pdf', {
-      method: 'GET',
-      credentials: 'include',
-      responseType: 'blob',
-    });
+    const res = await client.raw(
+      '/api/admin/employee/' + route.params.id + '/contract/' + contractId + '/pdf',
+      {
+        method: 'GET',
+        credentials: 'include',
+        responseType: 'blob',
+      },
+    );
     if (!res.ok) throw new Error('Chyba');
     const blob = res._data as Blob;
     const url = URL.createObjectURL(blob);

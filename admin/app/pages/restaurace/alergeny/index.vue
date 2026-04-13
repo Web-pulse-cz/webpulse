@@ -145,7 +145,8 @@ definePageMeta({
           width: 80,
           hidden: false,
           sortable: false,
-        },{
+        },
+        {
           key: 'description',
           name: 'Popis',
           type: 'text',

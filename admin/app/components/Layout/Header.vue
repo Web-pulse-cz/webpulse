@@ -54,6 +54,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  inlineFilters: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
   modifyBottom: {
     type: Boolean,
     required: false,
@@ -64,6 +69,7 @@ const props = defineProps({
 const emit = defineEmits([
   'save',
   'update-filters',
+  'apply-filters',
   'add-dialog',
   'filter-dialog',
   'open-cashflow-dialog',
@@ -275,6 +281,58 @@ const emitUpdateFilters = () => {
           {{ action.text }}
         </BaseButton>
       </template>
+    </div>
+
+    <div v-if="inlineFilters && inlineFilters.length" class="mt-8">
+      <div class="h-px w-full bg-slate-100" />
+      <div class="mt-6 flex flex-wrap items-end gap-3">
+        <div v-for="(filter, key) in inlineFilters" :key="key">
+          <label
+            v-if="filter.label"
+            class="mb-1 block text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >{{ filter.label }}</label
+          >
+          <input
+            v-if="filter.type === 'date' || filter.type === 'text'"
+            :type="filter.type"
+            :value="filter.modelValue"
+            :placeholder="filter.placeholder || ''"
+            class="block rounded-xl border-0 bg-white py-2 pl-3 pr-8 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:ring-slate-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            :class="filter.class || 'w-40'"
+            @input="
+              $emit('apply-filters', {
+                key: filter.key,
+                value: ($event.target as HTMLInputElement).value,
+              })
+            "
+          />
+          <select
+            v-else-if="filter.type === 'select'"
+            :value="filter.modelValue"
+            class="block rounded-xl border-0 bg-white py-2 pl-3 pr-8 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:ring-slate-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            :class="filter.class || 'w-40'"
+            @change="
+              $emit('apply-filters', {
+                key: filter.key,
+                value: ($event.target as HTMLSelectElement).value,
+              })
+            "
+          >
+            <option v-for="opt in filter.options" :key="opt.value" :value="opt.value">
+              {{ opt.name }}
+            </option>
+          </select>
+        </div>
+        <BaseButton
+          variant="primary"
+          size="md"
+          type="button"
+          @click="$emit('apply-filters', { key: '_apply' })"
+        >
+          <FunnelIcon class="mr-1.5 size-4" />
+          Filtrovat
+        </BaseButton>
+      </div>
     </div>
 
     <div v-if="filters && filters.length" class="mt-8">

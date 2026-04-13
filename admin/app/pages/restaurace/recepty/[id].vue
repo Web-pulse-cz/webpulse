@@ -226,12 +226,21 @@ async function createAndSelectFoodstuff(index: number) {
       sites: item.value.sites || [],
     }),
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then((r) => {
-    allFoodstuffs.value.push(r);
-    selectFoodstuff(index, r);
-  }).catch(() => {
-    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se vytvořit potravinu.', severity: 'error' });
-  }).finally(() => { creatingFoodstuff.value = false; });
+  })
+    .then((r) => {
+      allFoodstuffs.value.push(r);
+      selectFoodstuff(index, r);
+    })
+    .catch(() => {
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se vytvořit potravinu.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      creatingFoodstuff.value = false;
+    });
 }
 
 function closeDropdowns() {
@@ -431,7 +440,12 @@ definePageMeta({
                     class="block w-full rounded-xl border-0 bg-white py-2.5 pl-4 pr-10 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:ring-slate-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                     placeholder="Vyhledejte potravinu..."
                     @focus="openIngredientSearch(index)"
-                    @input="(e) => { ingredientSearch = (e.target as HTMLInputElement).value; showIngredientDropdown = index; }"
+                    @input="
+                      (e) => {
+                        ingredientSearch = (e.target as HTMLInputElement).value;
+                        showIngredientDropdown = index;
+                      }
+                    "
                   />
                   <div
                     v-if="showIngredientDropdown === index"
@@ -441,13 +455,13 @@ definePageMeta({
                       v-for="f in filteredFoodstuffs"
                       :key="f.id"
                       type="button"
-                      class="flex w-full items-center px-4 py-2 text-left text-sm hover:bg-indigo-50 transition"
+                      class="flex w-full items-center px-4 py-2 text-left text-sm transition hover:bg-indigo-50"
                       @mousedown.prevent="selectFoodstuff(index, f)"
                     >
                       {{ f.name }}
                     </button>
                     <div v-if="!filteredFoodstuffs.length && ingredientSearch" class="p-3">
-                      <p class="text-xs text-slate-400 mb-2">Potravina nenalezena.</p>
+                      <p class="mb-2 text-xs text-slate-400">Potravina nenalezena.</p>
                       <button
                         type="button"
                         class="w-full rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
