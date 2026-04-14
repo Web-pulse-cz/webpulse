@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Activity\ActivityController;
 use App\Http\Controllers\Admin\Activity\UserActivityController;
+use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Biography\BiographyController;
@@ -263,6 +264,8 @@ Route::group([
         Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
         Route::get('refresh', [LoginController::class, 'refresh'])->middleware('auth:sanctum');
         Route::get('me', [LoginController::class, 'me'])->middleware('auth:sanctum');
+        Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
+        Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword']);
     });
 
     // User routes

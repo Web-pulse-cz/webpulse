@@ -62,6 +62,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'admin_url' => env('ADMIN_URL', 'https://admin.martinhanzl.cz'),
+
     'asset_url' => env('ASSET_URL'),
 
     /*
