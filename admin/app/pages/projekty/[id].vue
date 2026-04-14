@@ -966,6 +966,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
             entity-type="project"
             :entity-id="route.params.id !== 'pridat' ? route.params.id : null"
             :files="projectFiles"
+            :allow-upload="true"
             @file-uploaded="onFileUploaded"
             @file-deleted="onFileDeleted"
           >

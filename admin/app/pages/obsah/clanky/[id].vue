@@ -480,6 +480,7 @@ definePageMeta({
             entity-type="post"
             :entity-id="item.id"
             :files="postFiles"
+            :allow-upload="true"
             @file-uploaded="onFileUploaded"
             @file-deleted="onFileDeleted"
           />

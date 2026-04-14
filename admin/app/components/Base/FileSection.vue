@@ -10,13 +10,19 @@ import {
 const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const props = defineProps<{
-  entityType: string;
-  entityId: number | string | null;
-  files: any[];
-  title?: string;
-  allowUpload?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    entityType: string;
+    entityId: number | string | null;
+    files: any[];
+    title?: string;
+    allowUpload?: boolean;
+  }>(),
+  {
+    title: 'Soubory',
+    allowUpload: true,
+  },
+);
 
 const emit = defineEmits<{
   (e: 'file-uploaded', files: any[]): void;
@@ -108,7 +114,7 @@ async function deleteFile(file: any) {
       </div>
       <div class="flex items-center gap-3">
         <label
-          v-if="allowUpload !== false && entityId"
+          v-if="allowUpload && entityId"
           class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
         >
           <ArrowDownTrayIcon class="size-5 rotate-180" />
