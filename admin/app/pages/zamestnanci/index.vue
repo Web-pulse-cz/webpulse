@@ -28,7 +28,11 @@ async function loadItems() {
   await client('/api/admin/employee', {
     method: 'GET',
     query: tableQuery.value,
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       items.value = r;
@@ -51,7 +55,11 @@ async function deleteItem(id: number) {
   const client = useSanctumClient();
   await client('/api/admin/employee/' + id, {
     method: 'DELETE',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   }).then(() => {
     loadItems();
   });
@@ -116,12 +124,20 @@ definePageMeta({ middleware: 'sanctum:auth' });
         },
         { key: 'email', name: 'E-mail', type: 'text', width: 150, hidden: true, sortable: true },
         { key: 'position', name: 'Pozice', type: 'text', width: 120, hidden: true, sortable: true },
-        { key: 'status', name: 'Stav', type: 'mapped', width: 80, hidden: false, sortable: true, map: {
-          active: { label: 'Aktivní', class: 'bg-emerald-100 text-emerald-700' },
-          on_leave: { label: 'Na dovolené', class: 'bg-amber-100 text-amber-700' },
-          terminated: { label: 'Ukončený', class: 'bg-red-100 text-red-700' },
-          suspended: { label: 'Pozastavený', class: 'bg-slate-100 text-slate-600' },
-        }},
+        {
+          key: 'status',
+          name: 'Stav',
+          type: 'mapped',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          map: {
+            active: { label: 'Aktivní', class: 'bg-emerald-100 text-emerald-700' },
+            on_leave: { label: 'Na dovolené', class: 'bg-amber-100 text-amber-700' },
+            terminated: { label: 'Ukončený', class: 'bg-red-100 text-red-700' },
+            suspended: { label: 'Pozastavený', class: 'bg-slate-100 text-slate-600' },
+          },
+        },
         {
           key: 'date_hired',
           name: 'Nástup',

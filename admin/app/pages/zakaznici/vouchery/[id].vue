@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  DocumentCurrencyEuroIcon,
+  BanknotesIcon,
+  ClockIcon,
+  UsersIcon,
+} from '@heroicons/vue/24/outline';
 import { useCurrencyStore } from '~/../stores/currencyStore';
-import { DocumentCurrencyEuroIcon, BanknotesIcon, ClockIcon, UsersIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const currencyStore = useCurrencyStore();
@@ -311,7 +316,6 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </div>
 
         <div class="col-span-1 space-y-6 lg:sticky lg:top-24 lg:col-span-3">
-
           <LayoutActionsDetailBlock
             v-model:sites="item.sites"
             v-model:active="item.is_active"
@@ -323,7 +327,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <LayoutContainer v-if="item.code" class="!py-6">
             <LayoutTitle class="text-sm uppercase tracking-widest text-slate-400">Kód</LayoutTitle>
             <p
-                class="mt-2 text-center font-mono text-2xl font-bold tracking-widest text-indigo-600"
+              class="mt-2 text-center font-mono text-2xl font-bold tracking-widest text-indigo-600"
             >
               {{ item.code }}
             </p>

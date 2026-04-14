@@ -283,7 +283,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
           <LayoutContainer>
             <div class="mb-6 flex items-center gap-3">
-              <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600"
+              >
                 <ChatBubbleLeftIcon class="size-5" />
               </div>
               <LayoutTitle class="!mb-0">Poznámka</LayoutTitle>

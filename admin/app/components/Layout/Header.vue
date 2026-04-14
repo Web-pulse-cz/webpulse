@@ -9,16 +9,13 @@ import {
   FunnelIcon,
 } from '@heroicons/vue/24/outline';
 import { inject, ref } from 'vue';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
 
-const userGroupStore = useUserGroupStore();
+const permissions = usePermissions();
 
 const user = useSanctumUser();
 const route = useRoute();
 const router = useRouter();
 const quickAccessDialogShow = ref(false);
-
-const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const props = defineProps({
   title: {
@@ -82,44 +79,11 @@ const quickAccessItem = ref({
 });
 
 function canEdit(slug: string) {
-  if (user && user.value && user.value.user_group_id && userGroupStore.userGroups) {
-    const userGroup = userGroupStore.userGroups.find(
-      (group) => group.id === user.value.user_group_id,
-    );
-    if (userGroup && userGroup.permissions) {
-      const currentPermissionSlug = userGroup.permissions.find(
-        (permission) => permission.slug === slug,
-      );
-      if (
-        currentPermissionSlug &&
-        currentPermissionSlug.slug === slug &&
-        currentPermissionSlug.permissions.edit == true
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return permissions.canEdit(slug);
 }
 
 function canEditBySite(slug: string) {
-  if (user && user.value && user.value.sites) {
-    const currentSite = user.value.sites.find((site) => site.hash === selectedSiteHash.value);
-    if (
-      currentSite &&
-      currentSite.settings &&
-      currentSite.settings.enabled_modules &&
-      currentSite.is_active
-    ) {
-      const currentModuleSlug = currentSite.settings.enabled_modules.find(
-        (module) => module === slug,
-      );
-      if (currentModuleSlug) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return permissions.moduleBelongsToSite(slug);
 }
 
 const isInQuickAccess = computed(() => {

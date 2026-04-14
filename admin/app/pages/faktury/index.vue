@@ -66,11 +66,19 @@ async function downloadInvoice(id: number) {
     // First get the invoice to find its file
     const invoice = await client('/api/admin/invoice/' + id, {
       method: 'GET',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
+      },
     });
     const file = invoice.files?.[0];
     if (!file) {
-      $toast.show({ summary: 'Info', detail: 'Faktura nemá přiložený soubor.', severity: 'warning' });
+      $toast.show({
+        summary: 'Info',
+        detail: 'Faktura nemá přiložený soubor.',
+        severity: 'warning',
+      });
       return;
     }
     const res = await client.raw('/api/admin/invoice/' + id + '/file/' + file.id, {
@@ -181,13 +189,21 @@ definePageMeta({
           sortable: false,
         },
         { key: 'total', name: 'Celkem', type: 'number', width: 100, hidden: true, sortable: true },
-        { key: 'status', name: 'Stav', type: 'mapped', width: 100, hidden: false, sortable: true, map: {
-          open: { label: 'Otevřená', class: 'bg-slate-100 text-slate-600' },
-          sent: { label: 'Odeslaná', class: 'bg-blue-100 text-blue-700' },
-          overdue: { label: 'Po splatnosti', class: 'bg-red-100 text-red-700' },
-          paid: { label: 'Zaplacená', class: 'bg-emerald-100 text-emerald-700' },
-          cancelled: { label: 'Stornovaná', class: 'bg-slate-50 text-slate-400' },
-        }},
+        {
+          key: 'status',
+          name: 'Stav',
+          type: 'mapped',
+          width: 100,
+          hidden: false,
+          sortable: true,
+          map: {
+            open: { label: 'Otevřená', class: 'bg-slate-100 text-slate-600' },
+            sent: { label: 'Odeslaná', class: 'bg-blue-100 text-blue-700' },
+            overdue: { label: 'Po splatnosti', class: 'bg-red-100 text-red-700' },
+            paid: { label: 'Zaplacená', class: 'bg-emerald-100 text-emerald-700' },
+            cancelled: { label: 'Stornovaná', class: 'bg-slate-50 text-slate-400' },
+          },
+        },
         {
           key: 'issued_on',
           name: 'Vystaveno',

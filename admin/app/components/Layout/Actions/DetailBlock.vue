@@ -173,7 +173,20 @@ function addRemoveItemSite(siteId) {
         </div>
       </div>
 
-      <div v-if="allowSites && user?.sites" :class="[allowSites && !allowIsActive && !allowState && !allowCategories && !allowPosition && !allowTranslations ? 'pt-0' : 'pt-4', 'space-y-4']">
+      <div
+        v-if="allowSites && user?.sites"
+        :class="[
+          allowSites &&
+          !allowIsActive &&
+          !allowState &&
+          !allowCategories &&
+          !allowPosition &&
+          !allowTranslations
+            ? 'pt-0'
+            : 'pt-4',
+          'space-y-4',
+        ]"
+      >
         <LayoutDivider class="text-xs font-bold uppercase tracking-widest text-slate-400">
           Zařazení do stránek
         </LayoutDivider>

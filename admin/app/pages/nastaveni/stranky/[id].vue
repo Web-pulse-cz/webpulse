@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  AdjustmentsHorizontalIcon,
+  BanknotesIcon,
+  ExclamationTriangleIcon,
+  GlobeAltIcon,
+  LanguageIcon,
+  SquaresPlusIcon,
+  TrashIcon,
+  UsersIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 import { useCurrencyStore } from '~~/stores/currencyStore';
-import { AdjustmentsHorizontalIcon, BanknotesIcon, ExclamationTriangleIcon, GlobeAltIcon, LanguageIcon, SquaresPlusIcon, TrashIcon, UsersIcon } from '@heroicons/vue/24/outline';
 
 const languageStore = useLanguageStore();
 const currencyStore = useCurrencyStore();
@@ -454,16 +463,28 @@ definePageMeta({
               <LayoutTitle class="!mb-0">Fakturační údaje</LayoutTitle>
             </div>
 
-            <p class="mb-4 text-xs text-slate-500">Údaje dodavatele pro generování faktur. Zobrazí se na fakturách a v QR kódu pro platbu.</p>
+            <p class="mb-4 text-xs text-slate-500">
+              Údaje dodavatele pro generování faktur. Zobrazí se na fakturách a v QR kódu pro
+              platbu.
+            </p>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
-              <BaseFormInput v-model="item.billing_name" label="Název firmy" name="billing_name" class="col-span-full sm:col-span-1" />
+              <BaseFormInput
+                v-model="item.billing_name"
+                label="Název firmy"
+                name="billing_name"
+                class="col-span-full sm:col-span-1"
+              />
               <BaseFormInput v-model="item.billing_ico" label="IČO" name="billing_ico" />
               <BaseFormInput v-model="item.billing_dic" label="DIČ" name="billing_dic" />
               <BaseFormInput v-model="item.billing_street" label="Ulice" name="billing_street" />
               <BaseFormInput v-model="item.billing_city" label="Město" name="billing_city" />
               <BaseFormInput v-model="item.billing_zip" label="PSČ" name="billing_zip" />
-              <BaseFormInput v-model="item.billing_bank_account" label="Číslo účtu" name="billing_bank_account" />
+              <BaseFormInput
+                v-model="item.billing_bank_account"
+                label="Číslo účtu"
+                name="billing_bank_account"
+              />
               <BaseFormInput v-model="item.billing_iban" label="IBAN" name="billing_iban" />
               <BaseFormInput v-model="item.billing_swift" label="SWIFT/BIC" name="billing_swift" />
             </div>
@@ -479,7 +500,10 @@ definePageMeta({
               <LayoutTitle class="!mb-0">Fakturoid API</LayoutTitle>
             </div>
 
-            <p class="mb-4 text-xs text-slate-500">Přístupové údaje pro synchronizaci klientů a faktur s Fakturoidem. Ponechte prázdné pokud tato stránka Fakturoid nepoužívá.</p>
+            <p class="mb-4 text-xs text-slate-500">
+              Přístupové údaje pro synchronizaci klientů a faktur s Fakturoidem. Ponechte prázdné
+              pokud tato stránka Fakturoid nepoužívá.
+            </p>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
               <BaseFormInput

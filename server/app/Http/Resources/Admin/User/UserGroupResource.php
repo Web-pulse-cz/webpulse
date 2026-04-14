@@ -18,7 +18,15 @@ class UserGroupResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'permissions' => json_decode($this->permissions),
-            'users_count' => $this->users_count,
+            'users_count' => $this->users_count ?? $this->whenCounted('users'),
+            'sites' => $this->whenLoaded('sites'),
+            'users' => $this->whenLoaded('users', fn () => $this->users->map(fn ($user) => [
+                'id' => $user->id,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+            ])),
         ];
     }
 }

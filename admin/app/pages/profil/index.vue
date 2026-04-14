@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 
+import { DocumentDuplicateIcon, LockClosedIcon, UserIcon } from '@heroicons/vue/24/outline';
 import { definePageMeta } from '#imports';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
-import { DocumentDuplicateIcon, LockClosedIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const userGroupStore = useUserGroupStore();
 
@@ -203,6 +203,7 @@ useHead({
 });
 
 onMounted(() => {
+  userGroupStore.fetchUserGroups();
   loadItem();
 });
 definePageMeta({

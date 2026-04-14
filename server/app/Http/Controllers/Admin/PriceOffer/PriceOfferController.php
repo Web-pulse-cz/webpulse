@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\PriceOffer\PriceOfferSimpleResource;
 use App\Jobs\Fakturoid\SyncInvoiceToFakturoidJob;
 use App\Models\Invoice\Invoice;
 use App\Models\PriceOffer\PriceOffer;
+use App\Traits\HasFiles;
 use App\Traits\Siteable;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -17,12 +18,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PriceOfferController extends Controller
 {
-    use Siteable;
+    use Siteable, HasFiles;
 
     public function index(Request $request): JsonResponse
     {
@@ -285,29 +285,7 @@ class PriceOfferController extends Controller
 
     public function downloadFile(int $offerId, int $fileId)
     {
-        $offer = PriceOffer::find($offerId);
-        if (!$offer) {
-            App::abort(404);
-        }
-
-        $file = DB::table('fileables')
-            ->where('id', $fileId)
-            ->where('fileable_id', $offerId)
-            ->where('fileable_type', get_class($offer))
-            ->first();
-
-        if (!$file) {
-            App::abort(404);
-        }
-
-        $disk = $file->disk ?? 'public';
-        if (!Storage::disk($disk)->exists($file->path)) {
-            App::abort(404);
-        }
-
-        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
-            'Content-Type' => $file->mime_type,
-        ]);
+        return $this->handleDownloadFile(PriceOffer::class, $offerId, $fileId);
     }
 
     public function pdf(int $id)

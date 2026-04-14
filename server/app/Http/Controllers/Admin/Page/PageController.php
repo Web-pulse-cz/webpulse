@@ -6,16 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Page\PageResource;
 use App\Models\Page\Page;
 use App\Services\GoogleTranslatorService;
+use App\Traits\HasFiles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
 {
+    use HasFiles;
+
     protected GoogleTranslatorService $googleTranslatorService;
 
     public function __construct()
@@ -146,60 +148,16 @@ class PageController extends Controller
 
     public function uploadFile(Request $request, int $id): JsonResponse
     {
-        $page = Page::find($id);
-        if (! $page) {
-            App::abort(404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|max:20480',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::json($validator->errors(), 400);
-        }
-
-        $page->attachUploadedFile($request->file('file'), 'files/pages/' . $page->id);
-
-        return Response::json(PageResource::make($page));
+        return $this->handleUploadFile($request, Page::class, $id, 'files/pages', PageResource::class);
     }
 
     public function downloadFile(int $pageId, int $fileId)
     {
-        $page = Page::find($pageId);
-        if (! $page) {
-            App::abort(404);
-        }
-
-        $file = DB::table('fileables')
-            ->where('id', $fileId)
-            ->where('fileable_id', $pageId)
-            ->where('fileable_type', get_class($page))
-            ->first();
-
-        if (! $file) {
-            App::abort(404);
-        }
-
-        $disk = $file->disk ?? 'public';
-        if (! Storage::disk($disk)->exists($file->path)) {
-            App::abort(404);
-        }
-
-        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
-            'Content-Type' => $file->mime_type,
-        ]);
+        return $this->handleDownloadFile(Page::class, $pageId, $fileId);
     }
 
     public function deleteFile(int $pageId, int $fileId): JsonResponse
     {
-        $page = Page::find($pageId);
-        if (! $page) {
-            App::abort(404);
-        }
-
-        $page->removeFile($fileId);
-
-        return Response::json();
+        return $this->handleDeleteFile(Page::class, $pageId, $fileId);
     }
 }

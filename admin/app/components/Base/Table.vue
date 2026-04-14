@@ -11,14 +11,13 @@ import {
   ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
 import { useFormat } from '~/composables/useFormat';
 
 const { $toast } = useNuxtApp();
 const { formatNumber, formatDate, formatDateTime, formatSeconds } = useFormat();
 
 const user = useSanctumUser();
-const userGroupStore = useUserGroupStore();
+const permissions = usePermissions();
 
 const route = useRoute();
 const router = useRouter();
@@ -81,65 +80,15 @@ defineProps({
 });
 
 function canEdit(slug: string) {
-  if (user && user.value && user.value.user_group_id && userGroupStore.userGroups) {
-    const userGroup = userGroupStore.userGroups.find(
-      (group) => group.id === user.value.user_group_id,
-    );
-    if (userGroup && userGroup.permissions) {
-      const currentPermissionSlug = userGroup.permissions.find(
-        (permission) => permission.slug === slug,
-      );
-      if (
-        currentPermissionSlug &&
-        currentPermissionSlug.slug === slug &&
-        currentPermissionSlug.permissions.edit
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return permissions.canEdit(slug);
 }
 
 function canEditOrDeleteBySite(slug: string) {
-  if (user && user.value && user.value.sites) {
-    const currentSite = user.value.sites.find((site) => site.hash === selectedSiteHash.value);
-    if (
-      currentSite &&
-      currentSite.settings &&
-      currentSite.settings.enabled_modules &&
-      currentSite.is_active
-    ) {
-      const currentModuleSlug = currentSite.settings.enabled_modules.find(
-        (module) => module === slug,
-      );
-      if (currentModuleSlug) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return permissions.moduleBelongsToSite(slug);
 }
 
 function canDelete(slug: string) {
-  if (user && user.value && user.value.user_group_id && userGroupStore.userGroups) {
-    const userGroup = userGroupStore.userGroups.find(
-      (group) => group.id === user.value.user_group_id,
-    );
-    if (userGroup && userGroup.permissions) {
-      const currentPermissionSlug = userGroup.permissions.find(
-        (permission) => permission.slug === slug,
-      );
-      if (
-        currentPermissionSlug &&
-        currentPermissionSlug.slug === slug &&
-        currentPermissionSlug.permissions.delete == true
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return permissions.canDelete(slug);
 }
 
 async function copyToClipboard(item, key) {
@@ -254,22 +203,23 @@ const emit = defineEmits([
                       'whitespace-nowrap py-3.5 pl-4 pr-3 text-sm font-medium text-slate-600 sm:pl-6',
                     ]"
                   >
-                    <span
-                      v-if="column.type === 'text'"
-                      class="text-slate-900"
-                    >
+                    <span v-if="column.type === 'text'" class="text-slate-900">
                       {{ printText(item, column) }}
                     </span>
-                    <span
-                      v-else-if="column.type === 'number'"
-                      class="text-slate-900 tabular-nums"
-                    >
+                    <span v-else-if="column.type === 'number'" class="tabular-nums text-slate-900">
                       {{ formatNumber(printText(item, column), column.decimals ?? 2) }}
                     </span>
                     <span v-else-if="column.type === 'percent'" class="tabular-nums">
                       {{ formatNumber(item[column.key], 0) }} %
                     </span>
-                    <PropsBadge v-else-if="column.type === 'badge'" :color="column.colorKey ? column.colorKey.split('.').reduce((obj, key) => obj?.[key], item) : null">
+                    <PropsBadge
+                      v-else-if="column.type === 'badge'"
+                      :color="
+                        column.colorKey
+                          ? column.colorKey.split('.').reduce((obj, key) => obj?.[key], item)
+                          : null
+                      "
+                    >
                       {{ printText(item, column) }}
                     </PropsBadge>
                     <span v-else-if="column.type === 'enum'">
@@ -284,7 +234,7 @@ const emit = defineEmits([
 
                     <span
                       v-else-if="column.type === 'seconds'"
-                      class="font-mono text-slate-900 tabular-nums"
+                      class="font-mono tabular-nums text-slate-900"
                     >
                       {{ formatSeconds(printText(item, column)) }}
                     </span>
@@ -307,7 +257,9 @@ const emit = defineEmits([
                     <span
                       v-else-if="column.type === 'mapped' && column.map"
                       class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
-                      :class="column.map[printText(item, column)]?.class || 'bg-slate-100 text-slate-600'"
+                      :class="
+                        column.map[printText(item, column)]?.class || 'bg-slate-100 text-slate-600'
+                      "
                     >
                       {{ column.map[printText(item, column)]?.label || printText(item, column) }}
                     </span>

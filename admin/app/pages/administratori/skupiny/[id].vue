@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 
 import { Form } from 'vee-validate';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
-import { InformationCircleIcon, KeyIcon, PlusIcon, ShieldCheckIcon, ShieldExclamationIcon, TrashIcon } from '@heroicons/vue/24/outline';
-
-const userGroupStore = useUserGroupStore();
+import {
+  InformationCircleIcon,
+  KeyIcon,
+  PlusIcon,
+  ShieldCheckIcon,
+  ShieldExclamationIcon,
+  TrashIcon,
+  UserGroupIcon,
+  UserIcon,
+} from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
 const router = useRouter();
@@ -97,6 +104,7 @@ const item = ref({
   name: '' as string,
   permissions: [] as [],
   sites: [] as number[],
+  users: [] as any[],
 });
 
 async function loadItem() {
@@ -112,10 +120,13 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites?.map((site: any) => site.id) || [];
+      item.value.users = response.users || [];
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -156,6 +167,7 @@ async function saveItem(redirect = true as boolean) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
       },
     },
   )
@@ -189,7 +201,6 @@ async function saveItem(redirect = true as boolean) {
     })
     .finally(() => {
       loading.value = false;
-      userGroupStore.fetchUserGroups();
     });
 }
 
@@ -233,6 +244,12 @@ watch(
 
 useHead({
   title: pageTitle.value,
+});
+
+watch(selectedSiteHash, () => {
+  if (route.params.id !== 'pridat') {
+    loadItem();
+  }
 });
 
 onMounted(() => {
@@ -394,9 +411,73 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
+
+          <LayoutContainer v-if="item.id">
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                >
+                  <UserGroupIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Uživatelé v této skupině</LayoutTitle>
+              </div>
+              <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+                {{ item.users?.length || 0 }}
+              </span>
+            </div>
+
+            <div v-if="item.users && item.users.length > 0" class="space-y-2">
+              <NuxtLink
+                v-for="u in item.users"
+                :key="u.id"
+                :to="`/administratori/${u.id}`"
+                class="group flex items-center gap-4 rounded-2xl p-3 transition-all hover:bg-slate-50"
+              >
+                <div
+                  class="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 group-hover:bg-slate-200"
+                >
+                  <img
+                    v-if="u.avatar"
+                    :src="u.avatar"
+                    :alt="`${u.firstname} ${u.lastname}`"
+                    class="size-10 rounded-full object-cover"
+                  />
+                  <UserIcon v-else class="size-5" />
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-slate-800 group-hover:text-slate-900">
+                    {{ u.firstname }} {{ u.lastname }}
+                  </p>
+                  <p class="text-xs text-slate-400">{{ u.email }}</p>
+                </div>
+              </NuxtLink>
+            </div>
+
+            <div
+              v-else
+              class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 py-12 text-center"
+            >
+              <UserGroupIcon class="mb-4 size-10 text-slate-300" />
+              <p class="text-sm font-medium text-slate-500">
+                V této skupině zatím nejsou žádní uživatelé.
+              </p>
+              <p class="mt-1 text-xs text-slate-400">
+                Uživatele přiřadíte ke skupině v jeho detailu.
+              </p>
+            </div>
+          </LayoutContainer>
         </div>
 
         <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:sites="item.sites"
+            :allow-translations="false"
+            :allow-image="false"
+            :allow-is-active="false"
+            class="shadow-sm"
+          />
+
           <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
             <div class="mb-4 flex items-center gap-2">
               <InformationCircleIcon class="size-5 text-indigo-200" />

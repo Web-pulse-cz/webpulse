@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  CheckCircleIcon,
+  HeartIcon,
+  IdentificationIcon,
+  PlusIcon,
+  UserIcon,
+} from '@heroicons/vue/24/outline';
 import { useActivityStore } from '~~/stores/activityStore';
-import { CheckCircleIcon, HeartIcon, IdentificationIcon, PlusIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const activityStore = useActivityStore();
 

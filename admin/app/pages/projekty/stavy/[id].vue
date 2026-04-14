@@ -60,7 +60,9 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      item.value.sites = Array.isArray(response.sites) ? response.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
+      item.value.sites = Array.isArray(response.sites)
+        ? response.sites.map((s: any) => (typeof s === 'object' ? s.id : s))
+        : [];
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -161,68 +163,73 @@ definePageMeta({
     <Form @submit="saveItem">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 space-y-8 lg:col-span-9">
-        <LayoutContainer>
-          <div class="mb-8 flex items-center gap-3">
-            <div
-              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
-            >
-              <SwatchIcon class="size-5" />
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <SwatchIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Identifikace projektu</LayoutTitle>
             </div>
-            <LayoutTitle class="!mb-0">Identifikace projektu</LayoutTitle>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+              <div class="col-span-1">
+                <BaseFormInput
+                  v-model="item.name"
+                  label="Název"
+                  type="text"
+                  name="name"
+                  rules="required|min:3"
+                  placeholder="Např. Branding 2026"
+                />
+                <p class="mt-1.5 text-xs text-slate-400">
+                  Jasný a unikátní název pro snadnou identifikaci v seznamech.
+                </p>
+              </div>
+
+              <div class="col-span-1">
+                <BaseFormColorPicker v-model="item.color" label="Barva projektu" name="color" />
+                <p class="mt-1.5 text-xs text-slate-400">
+                  Tato barva se použije pro odlišení projektu v kalendáři a grafech.
+                </p>
+              </div>
+
+              <div class="col-span-1">
+                <BaseFormInput
+                  v-model="item.position"
+                  label="Pořadí"
+                  type="number"
+                  name="position"
+                />
+              </div>
+
+              <div class="col-span-1">
+                <BaseFormCheckbox
+                  v-model="item.is_closed"
+                  label="Uzavřený stav (projekt je ukončen)"
+                  name="is_closed"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200 lg:p-8">
+            <div class="flex items-start gap-4">
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm"
+              >
+                <QuestionMarkCircleIcon class="size-6" />
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">Proč zvolit barvu?</h4>
+                <p class="mt-1 text-sm leading-relaxed text-slate-600">
+                  Přiřazení barvy vám pomůže vizuálně seskupit související úkoly a poptávky. V
+                  přehledech tak na první pohled uvidíte, které aktivity patří k tomuto projektu.
+                </p>
+              </div>
+            </div>
           </div>
-
-          <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
-            <div class="col-span-1">
-              <BaseFormInput
-                v-model="item.name"
-                label="Název"
-                type="text"
-                name="name"
-                rules="required|min:3"
-                placeholder="Např. Branding 2026"
-              />
-              <p class="mt-1.5 text-xs text-slate-400">
-                Jasný a unikátní název pro snadnou identifikaci v seznamech.
-              </p>
-            </div>
-
-            <div class="col-span-1">
-              <BaseFormColorPicker v-model="item.color" label="Barva projektu" name="color" />
-              <p class="mt-1.5 text-xs text-slate-400">
-                Tato barva se použije pro odlišení projektu v kalendáři a grafech.
-              </p>
-            </div>
-
-            <div class="col-span-1">
-              <BaseFormInput v-model="item.position" label="Pořadí" type="number" name="position" />
-            </div>
-
-            <div class="col-span-1">
-              <BaseFormCheckbox
-                v-model="item.is_closed"
-                label="Uzavřený stav (projekt je ukončen)"
-                name="is_closed"
-              />
-            </div>
-          </div>
-        </LayoutContainer>
-
-        <div class="rounded-3xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200 lg:p-8">
-          <div class="flex items-start gap-4">
-            <div
-              class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm"
-            >
-              <QuestionMarkCircleIcon class="size-6" />
-            </div>
-            <div>
-              <h4 class="text-sm font-bold text-slate-900">Proč zvolit barvu?</h4>
-              <p class="mt-1 text-sm leading-relaxed text-slate-600">
-                Přiřazení barvy vám pomůže vizuálně seskupit související úkoly a poptávky. V
-                přehledech tak na první pohled uvidíte, které aktivity patří k tomuto projektu.
-              </p>
-            </div>
-          </div>
-        </div>
         </div>
 
         <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">

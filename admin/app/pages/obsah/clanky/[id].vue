@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  BookmarkSquareIcon,
+  CalendarDaysIcon,
+  GlobeAltIcon,
+  PencilSquareIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
-import { BookmarkSquareIcon, CalendarDaysIcon, GlobeAltIcon, PencilSquareIcon, FolderIcon, DocumentTextIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();
@@ -199,70 +204,12 @@ async function saveItem(redirect = true as boolean) {
     });
 }
 
-async function uploadPostFile(event: Event) {
-	const target = event.target as HTMLInputElement;
-	const file = target.files?.[0];
-	if (!file || !item.value.id) return;
-
-	const client = useSanctumClient();
-	const formData = new FormData();
-	formData.append('file', file);
-
-	loading.value = true;
-	await client('/api/admin/post/' + item.value.id + '/file', {
-		method: 'POST',
-		body: formData,
-		headers: { 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then((r) => {
-			$toast.show({ summary: 'Hotovo', detail: 'Soubor nahrán.', severity: 'success' });
-			postFiles.value = r.files || [];
-		})
-		.catch(() => {
-			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se nahrát soubor.', severity: 'error' });
-		})
-		.finally(() => {
-			loading.value = false;
-			target.value = '';
-		});
+function onFileUploaded(files: any[]) {
+  postFiles.value = files;
 }
 
-async function downloadPostFile(file: any) {
-	const client = useSanctumClient();
-	try {
-		const res = await client.raw('/api/admin/post/' + item.value.id + '/file/' + file.id, {
-			method: 'GET',
-			credentials: 'include',
-			responseType: 'blob',
-		});
-		if (!res.ok) throw new Error('Chyba');
-		const blob = res._data as Blob;
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = file.name || 'soubor-' + file.id;
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		URL.revokeObjectURL(url);
-	} catch (e) {
-		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
-	}
-}
-
-async function deletePostFile(file: any) {
-	const client = useSanctumClient();
-	await client('/api/admin/post/' + item.value.id + '/file/' + file.id, {
-		method: 'DELETE',
-		headers: { Accept: 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then(() => {
-			postFiles.value = postFiles.value.filter((f: any) => f.id !== file.id);
-			$toast.show({ summary: 'Hotovo', detail: 'Soubor smazán.', severity: 'success' });
-		})
-		.catch(() => {
-			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se smazat soubor.', severity: 'error' });
-		});
+function onFileDeleted(fileId: number) {
+  postFiles.value = postFiles.value.filter((f: any) => f.id !== fileId);
 }
 
 watch(selectedSiteHash, () => {
@@ -525,65 +472,17 @@ definePageMeta({
       <!-- Soubory tab -->
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#soubory')">
         <LayoutContainer>
-          <div class="mb-6 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-                <FolderIcon class="size-5" />
-              </div>
-              <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
-            </div>
-            <label
-              v-if="item.id"
-              class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
-            >
-              <ArrowDownTrayIcon class="size-5 rotate-180" />
-              Nahrát soubor
-              <input type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" @change="uploadPostFile" />
-            </label>
-          </div>
-
           <div v-if="!item.id" class="py-8 text-center text-sm text-slate-400">
             Pro nahrání souborů nejprve uložte článek.
           </div>
-          <div v-else-if="!postFiles.length" class="py-8 text-center text-sm text-slate-400">
-            Žádné soubory.
-          </div>
-          <div v-else class="space-y-3">
-            <div
-              v-for="file in postFiles"
-              :key="file.id"
-              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <div class="flex items-center gap-4">
-                <div class="flex size-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-                  <DocumentTextIcon class="size-5" />
-                </div>
-                <div>
-                  <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
-                  <p class="text-xs text-slate-400">
-                    {{ file.mime_type }}
-                    <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-center gap-2">
-                <button
-                  type="button"
-                  class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-                  @click="downloadPostFile(file)"
-                >
-                  Stáhnout
-                </button>
-                <button
-                  type="button"
-                  class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
-                  @click="deletePostFile(file)"
-                >
-                  <TrashIcon class="size-4" />
-                </button>
-              </div>
-            </div>
-          </div>
+          <BaseFileSection
+            v-else
+            entity-type="post"
+            :entity-id="item.id"
+            :files="postFiles"
+            @file-uploaded="onFileUploaded"
+            @file-deleted="onFileDeleted"
+          />
         </LayoutContainer>
       </template>
     </Form>

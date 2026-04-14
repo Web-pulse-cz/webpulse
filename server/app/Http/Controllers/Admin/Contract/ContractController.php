@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Contract;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Contract\ContractResource;
 use App\Models\Contract\Contract;
+use App\Traits\HasFiles;
 use App\Traits\Siteable;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -12,12 +13,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ContractController extends Controller
 {
-    use Siteable;
+    use Siteable, HasFiles;
 
     public function index(Request $request): JsonResponse
     {
@@ -162,29 +162,7 @@ class ContractController extends Controller
 
     public function downloadFile(int $contractId, int $fileId)
     {
-        $contract = Contract::find($contractId);
-        if (!$contract) {
-            App::abort(404);
-        }
-
-        $file = DB::table('fileables')
-            ->where('id', $fileId)
-            ->where('fileable_id', $contractId)
-            ->where('fileable_type', get_class($contract))
-            ->first();
-
-        if (!$file) {
-            App::abort(404);
-        }
-
-        $disk = $file->disk ?? 'public';
-        if (!Storage::disk($disk)->exists($file->path)) {
-            App::abort(404);
-        }
-
-        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
-            'Content-Type' => $file->mime_type,
-        ]);
+        return $this->handleDownloadFile(Contract::class, $contractId, $fileId);
     }
 
     protected function generatePdf(Contract $contract): void

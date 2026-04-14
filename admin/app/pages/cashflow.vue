@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { definePageMeta } from '#imports';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
+import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
 const tableQuery = ref({

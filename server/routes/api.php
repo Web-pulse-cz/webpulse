@@ -267,7 +267,7 @@ Route::group([
 
     // User routes
     Route::group([
-        'middleware' => 'auth:sanctum',
+        'middleware' => ['auth:sanctum', 'check.group.site'],
     ], function () {
         // Quick access routes
         Route::group([
