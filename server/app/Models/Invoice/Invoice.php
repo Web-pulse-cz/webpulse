@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    use Siteable, Fileable;
+    use Fileable, Siteable;
 
     protected $table = 'invoices';
 

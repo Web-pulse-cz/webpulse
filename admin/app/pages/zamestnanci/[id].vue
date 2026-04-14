@@ -589,7 +589,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="contract.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex items-center gap-4 flex-1">
+                    <NuxtLink
+                      :to="'/smlouvy/' + contract.id"
+                      class="flex flex-1 items-center gap-4"
+                    >
                       <div
                         class="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
                       >
@@ -597,7 +600,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
                       </div>
                       <div>
                         <div class="flex items-center gap-2">
-                          <span class="text-sm font-medium text-slate-900">{{ contract.title }}</span>
+                          <span class="text-sm font-medium text-slate-900">{{
+                            contract.title
+                          }}</span>
                           <span
                             class="rounded-full px-2 py-0.5 text-[10px] font-bold"
                             :class="{

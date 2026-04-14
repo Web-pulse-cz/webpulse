@@ -578,7 +578,10 @@ definePageMeta({
                 :key="offer.id"
                 class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
               >
-                <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex items-center gap-4 flex-1">
+                <NuxtLink
+                  :to="'/cenove-nabidky/' + offer.id"
+                  class="flex flex-1 items-center gap-4"
+                >
                   <div
                     class="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
                   >

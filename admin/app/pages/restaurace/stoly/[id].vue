@@ -312,13 +312,19 @@ definePageMeta({ middleware: 'sanctum:auth' });
               <div class="flex items-center gap-4">
                 <div
                   class="flex size-10 items-center justify-center rounded-lg"
-                  :class="res.is_registered_customer ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'"
+                  :class="
+                    res.is_registered_customer
+                      ? 'bg-indigo-50 text-indigo-600'
+                      : 'bg-slate-100 text-slate-500'
+                  "
                 >
                   <UserIcon class="size-5" />
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-slate-900">{{ res.guest_full_name }}</span>
+                    <span class="text-sm font-medium text-slate-900">{{
+                      res.guest_full_name
+                    }}</span>
                     <span
                       v-if="res.is_registered_customer"
                       class="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700"

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
 {
-    use Siteable, HasFiles;
+    use HasFiles, Siteable;
 
     public function index(Request $request): JsonResponse
     {

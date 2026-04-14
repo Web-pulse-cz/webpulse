@@ -772,9 +772,7 @@ definePageMeta({
                   :key="group.title"
                   class="overflow-hidden rounded-2xl ring-1 ring-slate-200"
                 >
-                  <div
-                    class="flex items-center justify-between bg-slate-50 px-4 py-2.5"
-                  >
+                  <div class="flex items-center justify-between bg-slate-50 px-4 py-2.5">
                     <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">{{
                       group.title
                     }}</span>
@@ -795,7 +793,9 @@ definePageMeta({
                       }}
                     </button>
                   </div>
-                  <div class="grid grid-cols-1 gap-0 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0">
+                  <div
+                    class="grid grid-cols-1 gap-0 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0"
+                  >
                     <BaseFormCheckbox
                       v-for="slug in group.slugs"
                       :key="slug"

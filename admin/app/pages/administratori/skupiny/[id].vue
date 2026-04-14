@@ -358,9 +358,7 @@ definePageMeta({
                 class="overflow-hidden rounded-2xl ring-1 ring-slate-200"
               >
                 <!-- Group header with bulk toggles -->
-                <div
-                  class="flex items-center justify-between bg-slate-50 px-5 py-3"
-                >
+                <div class="flex items-center justify-between bg-slate-50 px-5 py-3">
                   <span class="text-xs font-bold uppercase tracking-widest text-slate-500">{{
                     group.title
                   }}</span>

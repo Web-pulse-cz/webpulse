@@ -892,9 +892,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <template v-if="tabs.find((t) => t.current && t.link === '#naklady')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div
-              class="flex size-8 items-center justify-center rounded-lg bg-red-50 text-red-600"
-            >
+            <div class="flex size-8 items-center justify-center rounded-lg bg-red-50 text-red-600">
               <BanknotesIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Náklady projektu</LayoutTitle>
@@ -957,7 +955,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     <span class="text-sm font-medium text-slate-900">{{ cost.name }}</span>
                     <span
                       class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600"
-                    >{{ cost.category }}</span>
+                      >{{ cost.category }}</span
+                    >
                   </div>
                   <p class="text-xs text-slate-400">
                     <span class="font-medium text-red-600">{{ cost.amount }}</span>
@@ -1006,7 +1005,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="'c-' + contract.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex items-center gap-4 flex-1">
+                    <NuxtLink
+                      :to="'/smlouvy/' + contract.id"
+                      class="flex flex-1 items-center gap-4"
+                    >
                       <div
                         class="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
                       >
@@ -1014,7 +1016,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
                       </div>
                       <div>
                         <div class="flex items-center gap-2">
-                          <span class="text-sm font-medium text-slate-900">{{ contract.title }}</span>
+                          <span class="text-sm font-medium text-slate-900">{{
+                            contract.title
+                          }}</span>
                           <span
                             class="rounded-full px-2 py-0.5 text-[10px] font-bold"
                             :class="{
@@ -1061,7 +1065,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="'o-' + offer.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex items-center gap-4 flex-1">
+                    <NuxtLink
+                      :to="'/cenove-nabidky/' + offer.id"
+                      class="flex flex-1 items-center gap-4"
+                    >
                       <div
                         class="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
                       >
@@ -1069,7 +1076,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
                       </div>
                       <div>
                         <div class="flex items-center gap-2">
-                          <span class="text-sm font-medium text-slate-900">{{ offer.code }} — {{ offer.title }}</span>
+                          <span class="text-sm font-medium text-slate-900"
+                            >{{ offer.code }} — {{ offer.title }}</span
+                          >
                           <span
                             class="rounded-full px-2 py-0.5 text-[10px] font-bold"
                             :class="{

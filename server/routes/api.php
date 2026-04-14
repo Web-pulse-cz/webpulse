@@ -15,11 +15,11 @@ use App\Http\Controllers\Admin\Cashflow\CashflowController;
 use App\Http\Controllers\Admin\Changelog\ChangelogController;
 use App\Http\Controllers\Admin\Client\ClientController;
 use App\Http\Controllers\Admin\Contact\ContactController;
-use App\Http\Controllers\Admin\Contract\ContractController;
 use App\Http\Controllers\Admin\Contact\ContactListController;
 use App\Http\Controllers\Admin\Contact\ContactPhaseController;
 use App\Http\Controllers\Admin\Contact\ContactSourceController;
 use App\Http\Controllers\Admin\Contact\ContactTaskController;
+use App\Http\Controllers\Admin\Contract\ContractController;
 use App\Http\Controllers\Admin\Country\CountryController;
 use App\Http\Controllers\Admin\Currency\CurrencyController;
 use App\Http\Controllers\Admin\Customer\CustomerController;
@@ -72,9 +72,9 @@ use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Shift\ShiftController;
 use App\Http\Controllers\Admin\Shift\ShiftTemplateController;
 use App\Http\Controllers\Admin\Site\SiteController;
-use App\Http\Controllers\Admin\TaxRate\TaxRateController;
-use App\Http\Controllers\Admin\Task\TaskController;
 use App\Http\Controllers\Admin\Task\TaskBoardController;
+use App\Http\Controllers\Admin\Task\TaskController;
+use App\Http\Controllers\Admin\TaxRate\TaxRateController;
 use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
 use App\Http\Controllers\Admin\User\ProfileController;
 use App\Http\Controllers\Admin\User\QuickAccessController;
@@ -622,7 +622,7 @@ Route::group([
 
         // Global task routes
         Route::group([
-            'prefix' => 'task'
+            'prefix' => 'task',
         ], function () {
             Route::get('', [TaskController::class, 'index']);
             Route::get('{id}', [TaskController::class, 'show'])->where('id', '[0-9]+');
@@ -633,7 +633,7 @@ Route::group([
 
         // Global task board routes
         Route::group([
-            'prefix' => 'task-board'
+            'prefix' => 'task-board',
         ], function () {
             Route::get('', [TaskBoardController::class, 'index']);
             Route::post('{id?}', [TaskBoardController::class, 'store']);
