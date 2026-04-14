@@ -2,9 +2,6 @@
 import { ref, inject } from 'vue';
 
 import _ from 'lodash';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
-
-const userGroupStore = useUserGroupStore();
 
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Administrátorské skupiny');
@@ -25,6 +22,7 @@ const breadcrumbs = ref([
   },
 ]);
 
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const searchString = ref(inject('searchString', ''));
 const tableQuery = ref({
   search: null as string | null,
@@ -46,6 +44,7 @@ async function loadItems() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -74,6 +73,7 @@ async function deleteItem(id: number) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then(() => {})
@@ -88,7 +88,6 @@ async function deleteItem(id: number) {
     .finally(() => {
       loading.value = false;
       loadItems();
-      userGroupStore.fetchUserGroups();
     });
 }
 
@@ -116,6 +115,8 @@ useHead({
   title: pageTitle.value,
 });
 
+watch(selectedSiteHash, () => loadItems());
+
 onMounted(() => {
   loadItems();
 });
@@ -132,32 +133,30 @@ definePageMeta({
       slug="users"
       :actions="[{ type: 'add', text: 'Přidat administrátorskou skupinu' }]"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Jméno', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'users_count',
-            name: 'Počet uživatelů',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Uživatelská skupiny"
-        plural="Uživatelské skupiny"
-        :query="tableQuery"
-        slug="users"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'name', name: 'Jméno', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'users_count',
+          name: 'Počet uživatelů',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Uživatelská skupiny"
+      plural="Uživatelské skupiny"
+      :query="tableQuery"
+      slug="users"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

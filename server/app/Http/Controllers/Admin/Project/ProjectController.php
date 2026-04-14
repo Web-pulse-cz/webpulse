@@ -2,38 +2,52 @@
 
 namespace App\Http\Controllers\Admin\Project;
 
-use App\Events\ProjectSavedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Project\ProjectResource;
 use App\Http\Resources\Admin\Project\ProjectSimpleResource;
 use App\Models\Project\Project;
+use App\Traits\HasFiles;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
+    use Siteable, HasFiles;
+
     public function index(Request $request): JsonResponse
     {
-        $query = Project::query();
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
-            $searchString = $request->get('search');
-            if (str_contains(':', $searchString)) {
-                $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
-            } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('color', 'like', '%' . $searchString . '%');
-            }
+        $query = Project::with(['client', 'status', 'tags', 'currency', 'taxRate'])
+            ->whereRelation('sites', 'site_id', $siteId);
+
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where('name', 'like', '%'.$search.'%');
+        }
+
+        if ($request->filled('status_id')) {
+            $query->where('status_id', $request->get('status_id'));
+        }
+
+        if ($request->filled('client_id')) {
+            $query->where('client_id', $request->get('client_id'));
+        }
+
+        if ($request->has('is_archived')) {
+            $query->where('is_archived', $request->boolean('is_archived'));
         }
 
         if ($request->has('orderWay') && $request->get('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
+        } else {
+            $query->orderBy('created_at', 'desc');
         }
 
         if ($request->has('paginate')) {
@@ -48,30 +62,30 @@ class ProjectController extends Controller
             ]);
         }
 
-        $projects = $query->get();
-        return Response::json(ProjectSimpleResource::collection($projects));
+        return Response::json(ProjectSimpleResource::collection($query->get()));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $project = Project::find($id);
-            if (!$project) {
+            if (! $project) {
                 App::abort(404);
             }
         } else {
-            $project = new Project();
+            $project = new Project;
         }
 
         $validator = Validator::make($request->all(), [
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'tax_rate_id' => 'nullable|integer|exists:tax_rates,id',
-            'client_id' => 'nullable|integer|exists:contacts,id',
-            'currency_id' => 'nullable|integer|exists:currencies,id',
-            'invoice_country_id' => 'nullable|integer|exists:countries,id',
-            'delivery_country_id' => 'nullable|integer|exists:countries,id',
+            'name' => 'required|string|max:255',
+            'prefix' => ['nullable', 'string', 'max:5', 'alpha', Rule::unique('projects', 'prefix')->ignore($project->id)],
+            'client_id' => 'nullable|integer|exists:clients,id',
             'status_id' => 'nullable|integer|exists:project_statuses,id',
+            'currency_id' => 'nullable|integer|exists:currencies,id',
+            'tax_rate_id' => 'nullable|integer|exists:tax_rates,id',
+            'start_date' => 'nullable|date',
+            'deadline_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
@@ -81,59 +95,79 @@ class ProjectController extends Controller
         try {
             DB::beginTransaction();
 
-            $project->fill($request->all());
-
-            if ($request->has('formatted_start_date') && $request->get('formatted_start_date') != null) {
-                $project->start_date = Carbon::parse($request->get('formatted_start_date'));
-            } else {
-                $project->start_date = null;
-            }
-
-            if ($request->has('formatted_end_date') && $request->get('formatted_end_date') != null) {
-                $project->end_date = Carbon::parse($request->get('formatted_end_date'));
-            } else {
-                $project->end_date = null;
-            }
-
-            ProjectSavedEvent::dispatch($project, $request->all());
-
+            $project->fill($request->except(['tags']));
             $project->save();
 
+            if ($request->has('tags')) {
+                $project->tags()->sync($request->get('tags', []));
+            }
+
+            if ($request->has('sites')) {
+                $this->saveSites($project, $request->get('sites', []));
+            }
+
             DB::commit();
-        } catch (\Throwable|\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating project.'], 500);
+
+            return Response::json(['message' => 'Chyba při ukládání projektu.'], 500);
         }
 
-        return Response::json(ProjectResource::make($project));
+        return Response::json(ProjectResource::make($project->fresh([
+            'client', 'status', 'currency', 'taxRate', 'tags',
+            'milestones', 'tasks', 'timeEntries', 'costs', 'notes',
+        ])));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
-            App::abort(400);
-        }
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $project = Project::find($id);
-        if (!$project) {
+        $project = Project::query()
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->with([
+                'client', 'status', 'currency', 'taxRate', 'tags',
+                'taskCategories', 'taskBoards',
+                'milestones', 'tasks.user', 'tasks.category', 'tasks.board', 'tasks.assignees',
+                'timeEntries.user', 'timeEntries.task',
+                'costs', 'notes.user',
+            ])->find($id);
+
+        if (! $project) {
             App::abort(404);
         }
 
         return Response::json(ProjectResource::make($project));
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
-            App::abort(400);
-        }
-
         $project = Project::find($id);
-        if (!$project) {
+        if (! $project) {
             App::abort(404);
         }
 
+        $project->removeAllFiles();
         $project->delete();
+
         return Response::json();
+    }
+
+    public function uploadFile(Request $request, int $id): JsonResponse
+    {
+        return $this->handleUploadFile($request, Project::class, $id, 'files/projects', ProjectResource::class, [
+            'client', 'status', 'currency', 'taxRate', 'tags',
+            'milestones', 'tasks', 'timeEntries', 'costs', 'notes',
+        ]);
+    }
+
+    public function downloadFile(int $projectId, int $fileId)
+    {
+        return $this->handleDownloadFile(Project::class, $projectId, $fileId);
+    }
+
+    public function deleteFile(int $projectId, int $fileId): JsonResponse
+    {
+        return $this->handleDeleteFile(Project::class, $projectId, $fileId);
     }
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import { MagnifyingGlassIcon, NewspaperIcon, SparklesIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -181,7 +182,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-24">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -189,95 +190,134 @@ definePageMeta({
       slug="novelties"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-        <LayoutContainer class="col-span-9 w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormSelect
-              v-model="item.priority"
-              label="Priorita"
-              name="priority"
-              class="col-span-1"
-              :options="[
-                { value: 1, name: 'Vysoká' },
-                { value: 2, name: 'Normální' },
-                { value: 3, name: 'Nízká' },
-              ]"
-            />
-            <br />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].name !== undefined
-              "
-              :key="`name-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_title !== undefined
-              "
-              :key="`meta_title-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_title"
-              label="Meta název"
-              type="text"
-              name="meta_title"
-              class="col-span-1"
-            />
-            <BaseFormTextarea
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_description !== undefined
-              "
-              :key="`meta_description-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_description"
-              label="Meta popis"
-              name="meta_description"
-              class="col-span-full"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].perex !== undefined
-              "
-              :key="`perex-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].perex"
-              label="Perex"
-              name="perex"
-              class="col-span-2"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].text !== undefined
-              "
-              :key="`text-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].text"
-              label="Popis"
-              name="text"
-              class="col-span-2"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-orange-50 text-orange-600"
+                >
+                  <NewspaperIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Obsah aktuality</LayoutTitle>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                  >Jazyk:</span
+                >
+                <span
+                  class="rounded-md bg-slate-900 px-2 py-1 text-xs font-bold uppercase tracking-tight text-white"
+                >
+                  {{ selectedLocale }}
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+              <BaseFormSelect
+                v-model="item.priority"
+                label="Důležitost (Priorita)"
+                name="priority"
+                class="col-span-full lg:col-span-1"
+                :options="[
+                  { value: 1, name: 'Vysoká (připnout nahoru)' },
+                  { value: 2, name: 'Normální' },
+                  { value: 3, name: 'Nízká' },
+                ]"
+              />
+
+              <BaseFormInput
+                v-if="item.translations?.[selectedLocale]?.name !== undefined"
+                :key="`name-${selectedLocale}`"
+                v-model="item.translations[selectedLocale].name"
+                label="Název novinky"
+                type="text"
+                name="name"
+                rules="required|min:3"
+                class="col-span-full lg:col-span-1"
+                placeholder="O čem je tato aktualita?"
+              />
+
+              <div
+                class="col-span-full grid grid-cols-1 gap-6 rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200 lg:grid-cols-2"
+              >
+                <div class="col-span-full mb-1 flex items-center gap-2">
+                  <MagnifyingGlassIcon class="size-4 text-slate-400" />
+                  <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                    >SEO a vyhledávání</span
+                  >
+                </div>
+
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.meta_title !== undefined"
+                  :key="`meta_title-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_title"
+                  label="Meta název"
+                  type="text"
+                  name="meta_title"
+                  class="col-span-full"
+                />
+
+                <BaseFormTextarea
+                  v-if="item.translations?.[selectedLocale]?.meta_description !== undefined"
+                  :key="`meta_description-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_description"
+                  label="Meta popis"
+                  name="meta_description"
+                  rows="2"
+                  class="col-span-full"
+                />
+              </div>
+
+              <div class="col-span-full space-y-8 pt-4">
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.perex !== undefined"
+                  :key="`perex-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].perex"
+                  label="Perex (Stručné shrnutí)"
+                  name="perex"
+                />
+
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.text !== undefined"
+                  :key="`text-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].text"
+                  label="Celý text aktuality"
+                  name="text"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
+            v-model:active="item.active"
+            v-model:image="item.image"
+            v-model:sites="item.sites"
+            :allow-is-active="true"
+            image-type="novelty"
+            class="shadow-sm"
+          />
+
+          <div
+            class="mt-6 rounded-3xl border border-dashed border-slate-300 bg-white/50 p-6 transition-colors hover:bg-white"
+          >
+            <div class="mb-3 flex items-center gap-2">
+              <SparklesIcon class="size-4 text-orange-500" />
+              <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900">Nápověda</h4>
+            </div>
+            <p class="text-sm leading-relaxed text-slate-500">
+              U novinek s <strong>vysokou prioritou</strong> doporučujeme nahrát kvalitní náhledový
+              obrázek, který upoutá pozornost na úvodní straně.
+            </p>
           </div>
-        </LayoutContainer>
-        <LayoutActionsDetailBlock
-          v-model:selected-locale="selectedLocale"
-          v-model:active="item.active"
-          v-model:image="item.image"
-          v-model:sites="item.sites"
-          :allow-is-active="true"
-          class="col-span-3"
-        />
+        </aside>
       </div>
     </Form>
   </div>

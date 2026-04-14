@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  BookmarkSquareIcon,
+  CalendarDaysIcon,
+  GlobeAltIcon,
+  PencilSquareIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -19,6 +25,7 @@ const loading = ref(false);
 const tabs = ref([
   { name: 'Základní údaje a zařazení', link: '#info', current: false },
   { name: 'Obsah článku', link: '#obsah', current: false },
+  { name: 'Soubory', link: '#soubory', current: false },
 ]);
 
 const pageTitle = ref(route.params.id === 'pridat' ? 'Nový článek' : 'Detail článku');
@@ -56,6 +63,7 @@ const translatableAttributes = ref([
   { field: 'meta_description' as string, label: 'Meta popis' as string },
 ]);
 
+const postFiles = ref([] as any[]);
 const categories = ref([]);
 
 async function loadItem() {
@@ -82,6 +90,7 @@ async function loadItem() {
     .then((response) => {
       item.value = response;
       item.value.sites = response.sites.map((site) => site.id);
+      postFiles.value = response.files || [];
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -195,6 +204,14 @@ async function saveItem(redirect = true as boolean) {
     });
 }
 
+function onFileUploaded(files: any[]) {
+  postFiles.value = files;
+}
+
+function onFileDeleted(fileId: number) {
+  postFiles.value = postFiles.value.filter((f: any) => f.id !== fileId);
+}
+
 watch(selectedSiteHash, () => {
   loadItem();
   loadCategories();
@@ -239,11 +256,6 @@ watchEffect(() => {
   }
 });
 
-watch(selectedSiteHash, () => {
-  loadItem();
-  loadCategories();
-});
-
 onMounted(() => {
   loadCategories();
   if (route.params.id !== 'pridat') {
@@ -257,7 +269,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-24">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -266,133 +278,213 @@ definePageMeta({
       slug="posts"
       @save="saveItem"
     />
-    <LayoutTabs :tabs="tabs" />
+
+    <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
+
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-          <LayoutContainer class="col-span-9 w-full">
-            <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-              <BaseFormInput
-                v-model="item.published_from"
-                label="Publikovat od"
-                type="datetime-local"
-                name="published_from"
-                class="col-span-1"
-              />
-              <BaseFormInput
-                v-model="item.published_to"
-                label="Publikovat do"
-                type="datetime-local"
-                name="published_to"
-                class="col-span-1"
-              />
-              <LayoutDivider>Zaření do kategorií</LayoutDivider>
-              <div class="col-span-full grid grid-cols-4 gap-x-4 gap-y-6">
-                <BaseFormCheckbox
-                  v-for="(category, key) in categories"
-                  :key="key"
-                  :label="category.name"
-                  :name="category.id"
-                  :value="item.categories.includes(category.id)"
-                  :checked="item.categories.includes(category.id)"
-                  class="col-span-1"
-                  label-color="grayCustom"
-                  @change="addRemoveItemCategory(category.id)"
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div class="col-span-1 space-y-8 lg:col-span-9">
+            <LayoutContainer>
+              <div class="mb-8 flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <CalendarDaysIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Plánování publikace</LayoutTitle>
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <BaseFormInput
+                  v-model="item.published_from"
+                  label="Publikovat od"
+                  type="datetime-local"
+                  name="published_from"
+                />
+                <BaseFormInput
+                  v-model="item.published_to"
+                  label="Publikovat do (volitelné)"
+                  type="datetime-local"
+                  name="published_to"
                 />
               </div>
-            </div>
-          </LayoutContainer>
-          <LayoutActionsDetailBlock
-            v-model:image="item.image"
-            v-model:state="item.status"
-            v-model:sites="item.sites"
-            :allow-translations="false"
-            :allow-state="true"
-            :states="[
-              { value: 'draft', name: 'Koncept' },
-              { value: 'published', name: 'Publikováno' },
-              { value: 'archived', name: 'Archivováno' },
-            ]"
-            class="col-span-3"
-          />
+            </LayoutContainer>
+
+            <LayoutContainer v-if="categories.length > 0">
+              <div class="mb-6 flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+                >
+                  <BookmarkSquareIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Zařazení do kategorií</LayoutTitle>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200/60">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div
+                    v-for="(category, key) in categories"
+                    :key="key"
+                    class="flex items-center rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200 transition-all hover:ring-indigo-300"
+                  >
+                    <BaseFormCheckbox
+                      :label="category.name"
+                      :name="String(category.id)"
+                      :value="item.categories.includes(category.id)"
+                      :checked="item.categories.includes(category.id)"
+                      class="w-full flex-row-reverse justify-between font-medium text-slate-700"
+                      @change="addRemoveItemCategory(category.id)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </LayoutContainer>
+          </div>
+
+          <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
+            <LayoutActionsDetailBlock
+              v-model:image="item.image"
+              v-model:state="item.status"
+              v-model:sites="item.sites"
+              :allow-translations="false"
+              :allow-state="true"
+              :states="[
+                { value: 'draft', name: 'Koncept' },
+                { value: 'published', name: 'Publikováno' },
+                { value: 'archived', name: 'Archivováno' },
+              ]"
+              image-type="post"
+            />
+          </div>
         </div>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#obsah')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-          <LayoutContainer class="col-span-9 w-full">
-            <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-              <BaseFormInput
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].name !== undefined
-                "
-                :key="`name-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].name"
-                label="Název"
-                type="text"
-                name="name"
-                rules="required|min:3"
-                class="col-span-1"
-              />
-              <BaseFormInput
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].meta_title !== undefined
-                "
-                :key="`meta_title-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].meta_title"
-                label="Meta název"
-                type="text"
-                name="meta_title"
-                class="col-span-1"
-              />
-              <BaseFormTextarea
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].meta_description !== undefined
-                "
-                :key="`meta_description-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].meta_description"
-                label="Meta popis"
-                name="meta_description"
-                class="col-span-full"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].perex !== undefined
-                "
-                :key="`perex-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].perex"
-                label="Perex"
-                name="perex"
-                class="col-span-2"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].text !== undefined
-                "
-                :key="`text-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].text"
-                label="Popis"
-                name="text"
-                class="col-span-2"
-              />
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div class="col-span-1 space-y-8 lg:col-span-9">
+            <LayoutContainer>
+              <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                  >
+                    <PencilSquareIcon class="size-5" />
+                  </div>
+                  <LayoutTitle class="!mb-0">Editor obsahu</LayoutTitle>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                    >Jazyk:</span
+                  >
+                  <span
+                    class="rounded-md bg-slate-900 px-2 py-1 text-xs font-bold uppercase tracking-tight text-white"
+                  >
+                    {{ selectedLocale }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.name !== undefined"
+                  :key="`name-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].name"
+                  label="Hlavní nadpis (H1)"
+                  type="text"
+                  name="name"
+                  rules="required|min:3"
+                  class="col-span-full lg:col-span-1"
+                />
+
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.meta_title !== undefined"
+                  :key="`meta_title-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_title"
+                  label="Meta název (pro Google)"
+                  type="text"
+                  name="meta_title"
+                  class="col-span-full lg:col-span-1"
+                />
+
+                <div
+                  class="col-span-full rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200"
+                >
+                  <div class="mb-4 flex items-center gap-2">
+                    <GlobeAltIcon class="size-4 text-slate-400" />
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                      >SEO Popisek</span
+                    >
+                  </div>
+                  <BaseFormTextarea
+                    v-if="item.translations?.[selectedLocale]?.meta_description !== undefined"
+                    :key="`meta_description-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].meta_description"
+                    label="Meta popis (Snippet ve výsledcích vyhledávání)"
+                    name="meta_description"
+                    rows="2"
+                    class="bg-white"
+                  />
+                </div>
+
+                <div class="col-span-full space-y-10 pt-4">
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]?.perex !== undefined"
+                    :key="`perex-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].perex"
+                    label="Perex (Stručný úvod článku)"
+                    name="perex"
+                  />
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]?.text !== undefined"
+                    :key="`text-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].text"
+                    label="Hlavní text příspěvku"
+                    name="text"
+                  />
+                </div>
+              </div>
+            </LayoutContainer>
+          </div>
+
+          <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
+            <LayoutActionsDetailBlock
+              v-model:selected-locale="selectedLocale"
+              v-model:translate-automatically="item.translateAutomatically"
+              :allow-image="false"
+              :allow-sites="false"
+              class="shadow-sm"
+            />
+
+            <div class="mt-6 rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
+              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">
+                Publikační tip
+              </h4>
+              <p class="mt-2 text-sm leading-relaxed text-amber-800/80">
+                Perex by měl být krátký a úderný. Zobrazuje se v náhledech na hlavní stránce a ve
+                výpisu blogu.
+              </p>
             </div>
-          </LayoutContainer>
-          <LayoutActionsDetailBlock
-            v-model:selected-locale="selectedLocale"
-            :allow-image="false"
-            :allow-sites="false"
-            class="col-span-3"
-          />
+          </div>
         </div>
+      </template>
+
+      <!-- Soubory tab -->
+      <template v-if="tabs.find((tab) => tab.current && tab.link === '#soubory')">
+        <LayoutContainer>
+          <div v-if="!item.id" class="py-8 text-center text-sm text-slate-400">
+            Pro nahrání souborů nejprve uložte článek.
+          </div>
+          <BaseFileSection
+            v-else
+            entity-type="post"
+            :entity-id="item.id"
+            :files="postFiles"
+            :allow-upload="true"
+            @file-uploaded="onFileUploaded"
+            @file-deleted="onFileDeleted"
+          />
+        </LayoutContainer>
       </template>
     </Form>
   </div>

@@ -245,61 +245,59 @@ definePageMeta({
       slug="contacts"
       @update-filters="updateFilters"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'firstname',
-            name: 'Jméno',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'lastname',
-            name: 'Příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          { key: 'phone', name: 'Telefon', type: 'text', width: 80, hidden: true, sortable: true },
-          { key: 'email', name: 'E-mail', type: 'text', width: 80, hidden: true, sortable: true },
-          {
-            key: 'phase',
-            name: 'Fáze',
-            type: 'badge',
-            width: 80,
-            hidden: true,
-            sortable: false,
-            colorKey: 'phase_color',
-          },
-          {
-            key: 'source',
-            name: 'Zdroj',
-            type: 'badge',
-            width: 80,
-            hidden: true,
-            sortable: false,
-            colorKey: 'source_color',
-          },
-        ]"
-        :actions="[{ type: 'edit', hash: '#proces' }, { type: 'edit-dialog' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Kontakt"
-        plural="Kontakty"
-        :query="tableQuery"
-        slug="contacts"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-        @open-dialog="showEditDialog"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'firstname',
+          name: 'Jméno',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'lastname',
+          name: 'Příjmení',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        { key: 'phone', name: 'Telefon', type: 'text', width: 80, hidden: true, sortable: true },
+        { key: 'email', name: 'E-mail', type: 'text', width: 80, hidden: true, sortable: true },
+        {
+          key: 'phase',
+          name: 'Fáze',
+          type: 'badge',
+          width: 80,
+          hidden: true,
+          sortable: false,
+          colorKey: 'phase_color',
+        },
+        {
+          key: 'source',
+          name: 'Zdroj',
+          type: 'badge',
+          width: 80,
+          hidden: true,
+          sortable: false,
+          colorKey: 'source_color',
+        },
+      ]"
+      :actions="[{ type: 'edit', hash: '#proces' }, { type: 'edit-dialog' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Kontakt"
+      plural="Kontakty"
+      :query="tableQuery"
+      slug="contacts"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+      @open-dialog="showEditDialog"
+    />
     <ContactQuickEditDialog
       v-model:show="showQuickEditDialog"
       v-model:item="quickEditDialogItem"

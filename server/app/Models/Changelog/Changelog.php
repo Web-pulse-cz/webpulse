@@ -14,6 +14,6 @@ class Changelog extends Model
         'subtitle',
         'description',
         'type',
-        'priority'
+        'priority',
     ];
 }

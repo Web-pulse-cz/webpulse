@@ -2,16 +2,24 @@
 
 namespace App\Models\Project;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Siteable;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectStatus extends Model
 {
-    use HasFactory;
+    use Siteable;
+
+    protected $table = 'project_statuses';
 
     protected $fillable = [
         'name',
         'color',
+        'position',
+        'is_closed',
+    ];
+
+    protected $casts = [
+        'is_closed' => 'boolean',
     ];
 
     public function projects()
@@ -19,8 +27,8 @@ class ProjectStatus extends Model
         return $this->hasMany(Project::class, 'status_id', 'id');
     }
 
-    public function events()
+    public function sites()
     {
-        return $this->hasMany(ProjectEvent::class, 'status_id', 'id');
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }

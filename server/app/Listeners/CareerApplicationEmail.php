@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\CareerApplicationSaved as Event;
-
 use App\Services\EmailService;
 
 class CareerApplicationEmail
@@ -24,7 +23,7 @@ class CareerApplicationEmail
         $this->emailService->buildEmail(
             'careerApplication',
             'martas.hanzl@email.cz', // TODO: replace with dynamic email
-            'Žádost o pracovní pozici ' . $careerApplication->career->name,
+            'Žádost o pracovní pozici '.$careerApplication->career->name,
             data: ['careerApplication' => $careerApplication, 'type' => 'client']
         );
 
@@ -32,7 +31,7 @@ class CareerApplicationEmail
         $this->emailService->buildEmail(
             'careerApplication',
             'martas.hanzl@email.cz', // TODO: replace with dynamic email
-            'Nová žádost o pracovní pozici ' . $careerApplication->career->name,
+            'Nová žádost o pracovní pozici '.$careerApplication->career->name,
             data: ['careerApplication' => $careerApplication, 'type' => 'admin']
         );
     }

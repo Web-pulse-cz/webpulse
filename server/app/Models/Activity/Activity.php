@@ -17,6 +17,13 @@ class Activity extends Model
         'name',
         'description',
         'color',
+        'is_business',
+        'is_personal',
+    ];
+
+    protected $casts = [
+        'is_business' => 'boolean',
+        'is_personal' => 'boolean',
     ];
 
     public function users()

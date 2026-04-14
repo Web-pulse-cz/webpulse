@@ -14,6 +14,7 @@ class EventRegistrationSaved
     protected EventRegistration $eventRegistration;
 
     protected array $data;
+
     public function __construct(EventRegistration $eventRegistration)
     {
         $this->eventRegistration = $eventRegistration;

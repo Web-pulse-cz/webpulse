@@ -29,7 +29,7 @@ class ContactsUpdateNextCall extends Command
                 $contact->next_contact = Carbon::now()->endOfDay();
                 $contact->save();
 
-                $history = new ContactHistory();
+                /*$history = new ContactHistory();
                 $history->fill([
                     'name' => 'Systémová změna',
                     'description' => 'Tomuto kontaktu jste se dlouho neozvali. Systém proto změnil datum dalšího telefonátu na dnes.',
@@ -41,7 +41,7 @@ class ContactsUpdateNextCall extends Command
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-                $history->save();
+                $history->save();*/
             }
             $this->output->progressAdvance();
         }

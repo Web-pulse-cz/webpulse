@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Project;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Project\ProjectStatusResource;
 use App\Models\Project\ProjectStatus;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,55 +15,48 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectStatusController extends Controller
 {
+    use Siteable;
+
     public function index(Request $request): JsonResponse
     {
-        $query = ProjectStatus::query();
-
-        if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
-            $searchString = $request->get('search');
-            if (str_contains(':', $searchString)) {
-                $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
-            } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('color', 'like', '%' . $searchString . '%');
-            }
-        }
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+        $query = ProjectStatus::whereRelation('sites', 'site_id', $siteId);
 
         if ($request->has('orderWay') && $request->get('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
+        } else {
+            $query->orderBy('position');
         }
 
         if ($request->has('paginate')) {
-            $projectStatuses = $query->paginate($request->get('paginate'));
+            $statuses = $query->paginate($request->get('paginate'));
 
             return Response::json([
-                'data' => ProjectStatusResource::collection($projectStatuses->items()),
-                'total' => $projectStatuses->total(),
-                'perPage' => $projectStatuses->perPage(),
-                'currentPage' => $projectStatuses->currentPage(),
-                'lastPage' => $projectStatuses->lastPage(),
+                'data' => ProjectStatusResource::collection($statuses->items()),
+                'total' => $statuses->total(),
+                'perPage' => $statuses->perPage(),
+                'currentPage' => $statuses->currentPage(),
+                'lastPage' => $statuses->lastPage(),
             ]);
         }
 
-        $projectStatuses = $query->get();
-        return Response::json(ProjectStatusResource::collection($projectStatuses));
+        return Response::json(ProjectStatusResource::collection($query->get()));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
-            $projectStatus = ProjectStatus::find($id);
-            if (!$projectStatus) {
+            $status = ProjectStatus::find($id);
+            if (! $status) {
                 App::abort(404);
             }
         } else {
-            $projectStatus = new ProjectStatus();
+            $status = new ProjectStatus;
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'color' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'color' => 'nullable|string|max:20',
         ]);
 
         if ($validator->fails()) {
@@ -71,45 +65,50 @@ class ProjectStatusController extends Controller
 
         try {
             DB::beginTransaction();
+            $status->fill($request->all());
+            if (!$status->color) {
+                $status->color = '#6366f1';
+            }
+            $status->save();
 
-            $projectStatus->fill($request->all());
-            $projectStatus->save();
+            if ($request->has('sites')) {
+                $this->saveSites($status, $request->get('sites', []));
+            }
 
             DB::commit();
-        } catch (\Throwable|\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return Response::json(['message' => 'An error occurred while updating tax rate.'], 500);
+            \Illuminate\Support\Facades\Log::error('ProjectStatus save error: ' . $e->getMessage());
+
+            return Response::json(['message' => 'Chyba při ukládání statusu: ' . $e->getMessage()], 500);
         }
 
-        return Response::json(ProjectStatusResource::make($projectStatus));
+        return Response::json(ProjectStatusResource::make($status->fresh('sites')));
     }
 
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
-            App::abort(400);
-        }
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        $projectStatus = ProjectStatus::find($id);
-        if (!$projectStatus) {
+        $status = ProjectStatus::with('sites')
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->find($id);
+        if (! $status) {
             App::abort(404);
         }
 
-        return Response::json(ProjectStatusResource::make($projectStatus));
+        return Response::json(ProjectStatusResource::make($status));
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
-            App::abort(400);
-        }
-
-        $projectStatus = ProjectStatus::find($id);
-        if (!$projectStatus) {
+        $status = ProjectStatus::find($id);
+        if (! $status) {
             App::abort(404);
         }
 
-        $projectStatus->delete();
+        $status->delete();
+
         return Response::json();
     }
 }

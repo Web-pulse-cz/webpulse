@@ -6,7 +6,7 @@ return [
             ['format' => 'small', 'width' => 200, 'height' => 200, 'keepAspectRatio' => true, 'path' => 'small'],
             ['format' => 'medium', 'width' => 400, 'height' => 400, 'keepAspectRatio' => true, 'path' => 'medium'],
             ['format' => 'large', 'width' => 800, 'height' => 800, 'keepAspectRatio' => true, 'path' => 'large'],
-            //['format' => 'original', 'width' => null, 'height' => null, 'keepAspectRatio' => false, 'path' => 'original'],
+            // ['format' => 'original', 'width' => null, 'height' => null, 'keepAspectRatio' => false, 'path' => 'original'],
         ],
 
         'user' => [
@@ -21,9 +21,8 @@ return [
         ],
 
         'post' => [
-            ['format' => 'small', 'width' => 200, 'height' => 200, 'keepAspectRatio' => true, 'path' => 'small'],
-            ['format' => 'medium', 'width' => 400, 'height' => 400, 'keepAspectRatio' => true, 'path' => 'medium'],
-            ['format' => 'large', 'width' => 800, 'height' => 800, 'keepAspectRatio' => true, 'path' => 'large'],
+            ['format' => 'medium', 'width' => 450, 'height' => 310, 'keepAspectRatio' => false, 'path' => 'medium'],
+            ['format' => 'large', 'width' => 700, 'height' => 400, 'keepAspectRatio' => false, 'path' => 'large'],
         ],
 
         'post_category' => [
@@ -56,5 +55,5 @@ return [
             ['format' => 'large', 'width' => 256, 'height' => 256, 'keepAspectRatio' => true, 'path' => 'large'],
             ['format' => 'screen', 'width' => 1024, 'height' => 768, 'keepAspectRatio' => true, 'path' => 'screen'],
         ],
-    ]
+    ],
 ];

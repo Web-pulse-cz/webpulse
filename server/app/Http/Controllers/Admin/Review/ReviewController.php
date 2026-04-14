@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Admin\Review;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Review\ReviewResource;
 use App\Models\Review\Review;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class ReviewController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -26,11 +33,11 @@ class ReviewController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('rating', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('content', 'like', '%' . $searchString . '%');
+                $query->where('rating', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('content', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -51,24 +58,24 @@ class ReviewController extends Controller
         }
 
         $reviews = $query->get();
+
         return Response::json(ReviewResource::collection($reviews));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $review = Review::find($id);
-            if (!$review) {
+            if (! $review) {
                 App::abort(404);
             }
         } else {
-            $review = new Review();
+            $review = new Review;
         }
 
         $validator = Validator::make($request->all(), [
-            //'rating' => 'required|integer|min:0|max:5',
+            // 'rating' => 'required|integer|min:0|max:5',
             'translations' => 'required|array',
-            'translations.*.content' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -80,6 +87,7 @@ class ReviewController extends Controller
             $review->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale, false);
                 $review->translateOrNew($locale)->fill($translation);
             }
 
@@ -90,6 +98,7 @@ class ReviewController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating review.'], 500);
         }
 
@@ -100,14 +109,14 @@ class ReviewController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $review = Review::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$review) {
+        if (! $review) {
             App::abort(404);
         }
 
@@ -116,16 +125,17 @@ class ReviewController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $review = Review::find($id);
-        if (!$review) {
+        if (! $review) {
             App::abort(404);
         }
 
         $review->delete();
+
         return Response::json();
     }
 }

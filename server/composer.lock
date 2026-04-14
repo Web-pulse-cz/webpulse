@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04d4c928714d1f66a8512ef059accbd2",
+    "content-hash": "b4d82ce24775f4acd8a002c096482826",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -3755,16 +3755,16 @@
         },
         {
             "name": "opcodesio/log-viewer",
-            "version": "v3.21.1",
+            "version": "v3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "6dfa99c3a8c5ae128c6b7f2f0a4f026af7ca055c"
+                "reference": "c57cb45282b01f0f4d239b90b302cc29f64a139d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/6dfa99c3a8c5ae128c6b7f2f0a4f026af7ca055c",
-                "reference": "6dfa99c3a8c5ae128c6b7f2f0a4f026af7ca055c",
+                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/c57cb45282b01f0f4d239b90b302cc29f64a139d",
+                "reference": "c57cb45282b01f0f4d239b90b302cc29f64a139d",
                 "shasum": ""
             },
             "require": {
@@ -3780,7 +3780,7 @@
                 "itsgoingd/clockwork": "^5.1",
                 "laravel/pint": "^1.0",
                 "nunomaduro/collision": "^7.0|^8.0",
-                "orchestra/testbench": "^7.6|^8.0|^9.0|^10.0",
+                "orchestra/testbench": "^7.6|^8.0|^9.5|^10.0",
                 "pestphp/pest": "^2.0|^3.7",
                 "pestphp/pest-plugin-laravel": "^2.0|^3.1",
                 "spatie/test-time": "^1.3"
@@ -3827,7 +3827,7 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v3.21.1"
+                "source": "https://github.com/opcodesio/log-viewer/tree/v3.22.0"
             },
             "funding": [
                 {
@@ -3839,7 +3839,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-23T05:12:09+00:00"
+            "time": "2026-02-28T07:43:48+00:00"
         },
         {
             "name": "opcodesio/mail-parser",
@@ -8779,16 +8779,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.25.1",
+            "version": "v1.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "5016e263f95d97670d71b9a987bd8996ade6d8d9"
+                "reference": "bdec963f53172c5e36330f3a400604c69bf02d39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/5016e263f95d97670d71b9a987bd8996ade6d8d9",
-                "reference": "5016e263f95d97670d71b9a987bd8996ade6d8d9",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/bdec963f53172c5e36330f3a400604c69bf02d39",
+                "reference": "bdec963f53172c5e36330f3a400604c69bf02d39",
                 "shasum": ""
             },
             "require": {
@@ -8799,13 +8799,14 @@
                 "php": "^8.2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.87.2",
-                "illuminate/view": "^11.46.0",
-                "larastan/larastan": "^3.7.1",
-                "laravel-zero/framework": "^11.45.0",
+                "friendsofphp/php-cs-fixer": "^3.94.2",
+                "illuminate/view": "^12.54.1",
+                "larastan/larastan": "^3.9.3",
+                "laravel-zero/framework": "^12.0.5",
                 "mockery/mockery": "^1.6.12",
-                "nunomaduro/termwind": "^2.3.1",
-                "pestphp/pest": "^2.36.0"
+                "nunomaduro/termwind": "^2.4.0",
+                "pestphp/pest": "^3.8.6",
+                "shipfastlabs/agent-detector": "^1.1.0"
             },
             "bin": [
                 "builds/pint"
@@ -8831,6 +8832,7 @@
             "description": "An opinionated code formatter for PHP.",
             "homepage": "https://laravel.com",
             "keywords": [
+                "dev",
                 "format",
                 "formatter",
                 "lint",
@@ -8841,7 +8843,7 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2025-09-19T02:57:12+00:00"
+            "time": "2026-03-12T15:51:39+00:00"
         },
         {
             "name": "laravel/sail",

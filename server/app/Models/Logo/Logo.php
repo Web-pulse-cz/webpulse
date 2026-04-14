@@ -5,13 +5,12 @@ namespace App\Models\Logo;
 use App\Traits\Imagable;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Logo extends Model
 {
-    use Translatable, Imagable, Siteable;
+    use Imagable, Siteable, Translatable;
 
     protected $table = 'logos';
 
@@ -42,6 +41,7 @@ class Logo extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }

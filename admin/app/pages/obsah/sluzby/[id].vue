@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  BanknotesIcon,
+  IdentificationIcon,
+  InformationCircleIcon,
+} from '@heroicons/vue/24/outline';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
 import { useLanguageStore } from '~~/stores/languageStore';
@@ -195,7 +200,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-24">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -203,127 +208,164 @@ definePageMeta({
       slug="services"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-        <LayoutContainer class="col-span-9 w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.price"
-              label="Cena"
-              type="number"
-              name="price"
-              rules="required|min:1"
-              class="col-span-1"
-            />
-            <BaseFormSelect
-              v-model="item.type"
-              label="Typ služby"
-              name="type"
-              class="col-span-1"
-              :options="[
-                { value: 'service', name: 'Služba' },
-                { value: 'product', name: 'Produkt' },
-              ]"
-            />
-            <BaseFormSelect
-              v-model="item.price_type"
-              label="Typ ceny"
-              name="price_type"
-              class="col-span-1"
-              :options="[
-                { value: 'total', name: 'Celkem za službu' },
-                { value: 'hourly', name: 'Cena za hodinu' },
-              ]"
-            />
-            <br />
-            <BaseFormSelect
-              v-model="item.tax_rate_id"
-              label="DPH"
-              name="tax_rate_id"
-              class="col-span-1"
-              :options="taxRateStore.taxRateOptions"
-            />
-            <BaseFormSelect
-              v-model="item.currency_id"
-              label="Měna"
-              name="currency_id"
-              class="col-span-1"
-              :options="currencyStore.currenciesOptions"
-            />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].name !== undefined
-              "
-              :key="`name-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_title !== undefined
-              "
-              :key="`meta_title-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_title"
-              label="Meta název"
-              type="text"
-              name="meta_title"
-              class="col-span-1"
-            />
-            <br />
-            <BaseFormTextarea
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_description !== undefined
-              "
-              :key="`meta_description-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_description"
-              label="Meta popis"
-              name="meta_description"
-              class="col-span-full"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].perex !== undefined
-              "
-              :key="`perex-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].perex"
-              label="Perex"
-              name="perex"
-              class="col-span-2"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].description !== undefined
-              "
-              :key="`description-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].description"
-              label="Popis"
-              name="description"
-              class="col-span-2"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+              >
+                <BanknotesIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Nastavení ceny a typu</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-6">
+              <BaseFormSelect
+                v-model="item.type"
+                label="Typ položky"
+                name="type"
+                class="col-span-full sm:col-span-3 lg:col-span-2"
+                :options="[
+                  { value: 'service', name: 'Služba' },
+                  { value: 'product', name: 'Produkt' },
+                ]"
+              />
+              <BaseFormSelect
+                v-model="item.price_type"
+                label="Způsob účtování"
+                name="price_type"
+                class="col-span-full sm:col-span-3 lg:col-span-2"
+                :options="[
+                  { value: 'total', name: 'Fixní cena za kus/akci' },
+                  { value: 'hourly', name: 'Hodinová sazba' },
+                ]"
+              />
+
+              <div class="hidden lg:col-span-2 lg:block"></div>
+              <BaseFormInput
+                v-model="item.price"
+                label="Základní cena (bez DPH)"
+                type="number"
+                name="price"
+                rules="required|min:1"
+                class="col-span-full sm:col-span-2 lg:col-span-2"
+              />
+              <BaseFormSelect
+                v-model="item.currency_id"
+                label="Měna"
+                name="currency_id"
+                class="col-span-full sm:col-span-2 lg:col-span-2"
+                :options="currencyStore.currenciesOptions"
+              />
+              <BaseFormSelect
+                v-model="item.tax_rate_id"
+                label="Sazba DPH"
+                name="tax_rate_id"
+                class="col-span-full sm:col-span-2 lg:col-span-2"
+                :options="taxRateStore.taxRateOptions"
+              />
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <IdentificationIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0"
+                  >Popis a marketing ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+                >
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+              <BaseFormInput
+                v-if="item.translations?.[selectedLocale]?.name !== undefined"
+                :key="`name-${selectedLocale}`"
+                v-model="item.translations[selectedLocale].name"
+                label="Název služby / produktu"
+                type="text"
+                name="name"
+                rules="required|min:3"
+                class="col-span-full"
+                placeholder="Zadejte název, který uvidí zákazník..."
+              />
+
+              <div
+                class="col-span-full grid grid-cols-1 gap-6 rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200 lg:grid-cols-2"
+              >
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.meta_title !== undefined"
+                  :key="`meta_title-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_title"
+                  label="SEO Titulek (Meta Title)"
+                  type="text"
+                  name="meta_title"
+                  class="col-span-full"
+                />
+                <BaseFormTextarea
+                  v-if="item.translations?.[selectedLocale]?.meta_description !== undefined"
+                  :key="`meta_description-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_description"
+                  label="SEO Popis (Meta Description)"
+                  name="meta_description"
+                  rows="2"
+                  class="col-span-full"
+                />
+              </div>
+
+              <div class="col-span-full space-y-10 pt-4">
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.perex !== undefined"
+                  :key="`perex-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].perex"
+                  label="Krátká upoutávka (Perex)"
+                  name="perex"
+                />
+
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.description !== undefined"
+                  :key="`description-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].description"
+                  label="Podrobný popis služby"
+                  name="description"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <div class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
+            v-model:sites="item.sites"
+            v-model:image="item.image"
+            v-model:active="item.active"
+            :allow-is-active="true"
+            image-type="service"
+            class="shadow-sm"
+          />
+
+          <div class="mt-6 rounded-3xl bg-emerald-50 p-6 ring-1 ring-inset ring-emerald-100">
+            <div class="mb-3 flex items-center gap-2">
+              <InformationCircleIcon class="size-4 text-emerald-600" />
+              <h4 class="text-xs font-bold uppercase tracking-widest text-emerald-900">
+                Dobrá rada
+              </h4>
+            </div>
+            <p class="text-sm leading-relaxed text-emerald-800/80">
+              Ujistěte se, že <strong>Perex</strong> je dostatečně úderný. Je to první věc, kterou
+              zákazník uvidí v ceníku nebo v náhledu služby.
+            </p>
           </div>
-        </LayoutContainer>
-        <LayoutActionsDetailBlock
-          v-model:selected-locale="selectedLocale"
-          v-model:sites="item.sites"
-          v-model:image="item.image"
-          v-model:active="item.active"
-          :allow-is-active="true"
-          class="col-span-3"
-        />
+        </div>
       </div>
     </Form>
   </div>

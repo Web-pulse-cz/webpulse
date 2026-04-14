@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import { TagIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -187,7 +188,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -195,85 +196,112 @@ definePageMeta({
       slug="events"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-        <LayoutContainer class="col-span-9 w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].name !== undefined
-              "
-              :key="`name-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].name"
-              label="Název"
-              type="text"
-              name="name"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_title !== undefined
-              "
-              :key="`meta_title-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_title"
-              label="Meta název"
-              type="text"
-              name="meta_title"
-              class="col-span-1"
-            />
-            <BaseFormTextarea
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].meta_description !== undefined
-              "
-              :key="`meta_description-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].meta_description"
-              label="Meta popis"
-              name="meta_description"
-              class="col-span-full"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].perex !== undefined
-              "
-              :key="`perex-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].perex"
-              label="Perex"
-              name="perex"
-              class="col-span-2"
-            />
-            <BaseFormEditor
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].text !== undefined
-              "
-              :key="`text-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].text"
-              label="Popis"
-              name="text"
-              class="col-span-2"
-            />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <TagIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Obsah kategorie</LayoutTitle>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                  >Právě upravujete:</span
+                >
+                <span
+                  class="rounded-md bg-slate-900 px-2 py-1 text-xs font-bold uppercase text-white"
+                  >{{ selectedLocale }}</span
+                >
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+              <BaseFormInput
+                v-if="item.translations?.[selectedLocale]?.name !== undefined"
+                :key="`name-${selectedLocale}`"
+                v-model="item.translations[selectedLocale].name"
+                label="Název kategorie"
+                type="text"
+                name="name"
+                rules="required|min:3"
+                class="col-span-full lg:col-span-1"
+                placeholder="Např. Workshopy a školení"
+              />
+
+              <BaseFormInput
+                v-if="item.translations?.[selectedLocale]?.meta_title !== undefined"
+                :key="`meta_title-${selectedLocale}`"
+                v-model="item.translations[selectedLocale].meta_title"
+                label="SEO Titulek (Meta Title)"
+                type="text"
+                name="meta_title"
+                class="col-span-full lg:col-span-1"
+              />
+
+              <div
+                class="col-span-full rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-100"
+              >
+                <BaseFormTextarea
+                  v-if="item.translations?.[selectedLocale]?.meta_description !== undefined"
+                  :key="`meta_description-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_description"
+                  label="SEO Popisek (Meta Description)"
+                  name="meta_description"
+                  rows="2"
+                  class="bg-white"
+                />
+              </div>
+
+              <div class="col-span-full space-y-8 pt-4">
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.perex !== undefined"
+                  :key="`perex-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].perex"
+                  label="Krátký perex"
+                  name="perex"
+                />
+
+                <BaseFormEditor
+                  v-if="item.translations?.[selectedLocale]?.text !== undefined"
+                  :key="`text-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].text"
+                  label="Hlavní popis kategorie"
+                  name="text"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <div class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
+            v-model:sites="item.sites"
+            v-model:position="item.position"
+            v-model:active="item.active"
+            :allow-is-active="true"
+            :allow-position="true"
+            :allow-image="false"
+            class="shadow-sm"
+          />
+
+          <div class="mt-6 rounded-3xl border border-dashed border-slate-300 p-6">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">
+              Tip pro editora
+            </h4>
+            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+              Nezapomeňte vyplnit <strong>Meta název</strong>. Pokud zůstane prázdný, systém
+              automaticky použije název kategorie, což nemusí být ideální pro vyhledávače.
+            </p>
           </div>
-        </LayoutContainer>
-        <LayoutActionsDetailBlock
-          v-model:selected-locale="selectedLocale"
-          v-model:sites="item.sites"
-          v-model:position="item.position"
-          v-model:active="item.active"
-          :allow-is-active="true"
-          :allow-position="true"
-          :allow-image="false"
-          class="col-span-3"
-        />
+        </div>
       </div>
     </Form>
   </div>

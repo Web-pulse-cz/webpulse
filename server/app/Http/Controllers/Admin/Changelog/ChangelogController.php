@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin\Changelog;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Changelog\ChangelogResource;
+use App\Models\Changelog\Changelog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Changelog\Changelog;
-use App\Http\Resources\Admin\Changelog\ChangelogResource;
 
 class ChangelogController extends Controller
 {
@@ -22,11 +22,11 @@ class ChangelogController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where('version', '=', $searchString)
-                    ->orWhere('title', 'like', '%' . $searchString . '%')
-                    ->orWhere('subtitle', 'like', '%' . $searchString . '%');
+                    ->orWhere('title', 'like', '%'.$searchString.'%')
+                    ->orWhere('subtitle', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -47,23 +47,24 @@ class ChangelogController extends Controller
         }
 
         $changelogs = $query->get();
+
         return Response::json(ChangelogResource::collection($changelogs));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $changelog = Changelog::find($id);
-            if (!$changelog) {
+            if (! $changelog) {
                 App::abort(404);
             }
         } else {
-            $changelog = new Changelog();
+            $changelog = new Changelog;
         }
 
         $validator = Validator::make($request->all(), [
             'version' => 'required|string',
-            'title' => 'required|string'
+            'title' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -79,6 +80,7 @@ class ChangelogController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating changelog.'], 500);
         }
 
@@ -87,12 +89,12 @@ class ChangelogController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $changelog = Changelog::find($id);
-        if (!$changelog) {
+        if (! $changelog) {
             App::abort(404);
         }
 
@@ -101,16 +103,17 @@ class ChangelogController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $changelog = Changelog::find($id);
-        if (!$changelog) {
+        if (! $changelog) {
             App::abort(404);
         }
 
         $changelog->delete();
+
         return Response::json();
     }
 }

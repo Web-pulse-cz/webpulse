@@ -213,164 +213,229 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-24">
     <LayoutHeader
       :title="route.params.id === 'pridat' ? 'Nový kvíz' : item.name"
       :breadcrumbs="breadcrumbs"
       :actions="
         route.params.id === 'pridat'
           ? [{ type: 'save' }]
-          : [
-              { type: 'copy', text: 'Kopírovat odkaz na kvíz' },
-              { type: 'save' },
-              { type: 'save-and-stay' },
-            ]
+          : [{ type: 'copy', text: 'Kopírovat odkaz' }, { type: 'save' }, { type: 'save-and-stay' }]
       "
       :modify-bottom="false"
       slug="quizzes"
       @copy="copyQuizUrl"
       @save="saveItem"
     />
-    <LayoutTabs :tabs="tabs" />
+
+    <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
+
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-          <LayoutContainer class="col-span-9 w-full">
-            <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-              <BaseFormInput
-                v-model="item.name"
-                label="Název kvízu"
-                name="name"
-                required
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.tags"
-                label="Štítky"
-                name="tags"
-                placeholder="např. sport, zábava, historie"
-                class="col-span-2"
-              />
-              <BaseFormEditor
-                key="description"
-                v-model="item.description"
-                label="Popis"
-                name="description"
-                class="col-span-2"
-              />
-            </div>
-          </LayoutContainer>
-          <LayoutActionsDetailBlock
-            v-model:state="item.status"
-            v-model:sites="item.sites"
-            :allow-image="false"
-            :states="[
-              { value: 'draft', name: 'Koncept' },
-              { value: 'public', name: 'Veřejný' },
-              { value: 'private', name: 'Soukromý' },
-              { value: 'archived', name: 'Archivováno' },
-            ]"
-            :allow-state="true"
-            class="col-span-3"
-          />
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div class="col-span-1 space-y-8 lg:col-span-9">
+            <LayoutContainer>
+              <div class="mb-8 flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                >
+                  <InformationCircleIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Základní nastavení kvízu</LayoutTitle>
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <BaseFormInput
+                  v-model="item.name"
+                  label="Název kvízu"
+                  name="name"
+                  required
+                  class="col-span-full"
+                  placeholder="Např. Poznáte české barbershopy?"
+                />
+                <div class="col-span-full">
+                  <BaseFormInput
+                    v-model="item.tags"
+                    label="Štítky (Tags)"
+                    name="tags"
+                    placeholder="sport, zábava, historie..."
+                  />
+                  <p class="mt-2 text-xs italic text-slate-400">
+                    Pomáhá při vyhledávání a filtrování na webu.
+                  </p>
+                </div>
+
+                <div class="col-span-full pt-4">
+                  <BaseFormEditor
+                    key="description"
+                    v-model="item.description"
+                    label="Úvodní popis kvízu"
+                    name="description"
+                  />
+                </div>
+              </div>
+            </LayoutContainer>
+          </div>
+
+          <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
+            <LayoutActionsDetailBlock
+              v-model:state="item.status"
+              v-model:sites="item.sites"
+              :allow-image="false"
+              :states="[
+                { value: 'draft', name: 'Koncept' },
+                { value: 'public', name: 'Veřejný' },
+                { value: 'private', name: 'Soukromý' },
+                { value: 'archived', name: 'Archivováno' },
+              ]"
+              :allow-state="true"
+              image-type="quiz"
+            />
+          </div>
         </div>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#otazky')">
-        <LayoutContainer class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-7">
+        <div class="space-y-8">
           <div
             v-for="(question, index) in item.questions"
-            class="col-span-full grid grid-cols-12 items-end justify-between gap-x-4 rounded-lg bg-gray-100 p-6"
+            :key="index"
+            class="relative rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-md lg:p-8"
           >
-            <div class="col-span-full mb-4 md:mb-0 md:hidden">
-              <BaseFormUploadImage
-                v-model="question.image"
-                :multiple="false"
-                type="quiz"
-                format="large"
-                label="Obrázek"
-                :allow-remote-url="true"
-                @update-files="updateQuestionImage($event, index)"
-                @remove-file="removeQuestionImage(index)"
-              />
-            </div>
-            <div class="col-span-11 md:col-span-8">
-              <BaseFormInput
-                v-model="question.name"
-                :label="'Otázka ' + (index + 1)"
-                :name="'question_' + index"
-                class="col-span-8"
-                required
-              />
-            </div>
-            <div class="col-span-3 hidden md:block">
-              <BaseFormUploadImage
-                v-model="question.image"
-                :multiple="false"
-                type="quiz"
-                format="large"
-                label="Obrázek"
-                :allow-remote-url="true"
-                @update-files="updateQuestionImage($event, index)"
-                @remove-file="removeQuestionImage(index)"
-              />
-            </div>
-            <div class="col-span-1 flex justify-end">
+            <div class="mb-8 flex items-start justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <span
+                  class="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-lg font-bold text-white shadow-lg"
+                >
+                  {{ index + 1 }}
+                </span>
+                <LayoutTitle class="!mb-0">Otázka</LayoutTitle>
+              </div>
               <BaseButton
                 type="button"
                 variant="danger"
                 size="md"
+                class="rounded-xl shadow-none ring-1 ring-red-200 hover:bg-red-50"
                 @click="removeItemQuestion(index)"
               >
-                <TrashIcon class="h-5 w-5" />
+                <TrashIcon class="size-5" />
               </BaseButton>
             </div>
-            <LayoutDivider />
-            <div class="col-span-full mt-2 grid grid-cols-1 gap-4">
-              <div v-for="(answer, answerIndex) in question.answers" :key="answerIndex">
-                <div class="flex items-end gap-4">
-                  <BaseFormInput
-                    v-model="answer.name"
-                    :label="'Odpověď ' + (answerIndex + 1)"
-                    :name="'answer_' + answerIndex + '_' + index"
-                    class="flex-1"
-                    required
+
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+              <div class="col-span-1 space-y-6 lg:col-span-8">
+                <div class="md:hidden">
+                  <BaseFormUploadImage
+                    v-model="question.image"
+                    :multiple="false"
+                    type="quiz"
+                    format="large"
+                    label="Obrázek k otázce"
+                    :allow-remote-url="true"
+                    @update-files="updateQuestionImage($event, index)"
+                    @remove-file="removeQuestionImage(index)"
                   />
-                  <!-- Button for remove answer -->
-                  <BaseButton
-                    v-if="question.answers.length > 2"
-                    type="button"
-                    variant="danger"
-                    size="md"
-                    class="col-span-2 mt-2"
-                    :disabled="question.answers.length <= 2"
-                    @click="question.answers.splice(answerIndex, 1)"
-                  >
-                    <TrashIcon class="h-5 w-5" />
-                  </BaseButton>
                 </div>
-                <BaseFormCheckbox
-                  v-model="answer.is_correct"
-                  :label="'Správná odpověď ' + (answerIndex + 1)"
-                  :name="'isCorrect_' + answerIndex + '_' + index"
+
+                <BaseFormInput
+                  v-model="question.name"
+                  label="Znění otázky"
+                  :name="'question_' + index"
+                  required
+                  placeholder="Co se stane, když..."
                 />
+
+                <div class="pt-4">
+                  <span
+                    class="mb-4 block text-[11px] font-bold uppercase tracking-widest text-slate-400"
+                    >Možnosti odpovědí</span
+                  >
+                  <div class="grid grid-cols-1 gap-4">
+                    <div
+                      v-for="(answer, answerIndex) in question.answers"
+                      :key="answerIndex"
+                      class="group flex flex-col gap-3 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200/60 transition-all hover:bg-slate-100/50"
+                    >
+                      <div class="flex items-end gap-3">
+                        <BaseFormInput
+                          v-model="answer.name"
+                          :label="'Odpověď ' + (answerIndex + 1)"
+                          :name="'answer_' + answerIndex + '_' + index"
+                          class="flex-1"
+                          required
+                        />
+                        <BaseButton
+                          v-if="question.answers.length > 2"
+                          type="button"
+                          variant="danger"
+                          size="md"
+                          class="mb-0.5 rounded-xl bg-white shadow-sm ring-1 ring-slate-200 hover:text-red-600"
+                          @click="question.answers.splice(answerIndex, 1)"
+                        >
+                          <TrashIcon class="size-4" />
+                        </BaseButton>
+                      </div>
+
+                      <div
+                        class="flex items-center rounded-lg bg-white/60 p-2 px-3 ring-1 ring-inset ring-slate-200/50"
+                      >
+                        <BaseFormCheckbox
+                          v-model="answer.is_correct"
+                          :label="'Označit jako správnou'"
+                          :name="'isCorrect_' + answerIndex + '_' + index"
+                          class="w-full flex-row-reverse justify-between font-bold text-slate-700"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-6">
+                    <BaseButton
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      class="w-full border-dashed bg-transparent ring-slate-300"
+                      @click="question.answers.push({ id: null, name: '', is_correct: false })"
+                    >
+                      + Přidat další odpověď
+                    </BaseButton>
+                  </div>
+                </div>
               </div>
-              <BaseButton
-                type="button"
-                variant="primary"
-                size="sm"
-                class="mt-2"
-                @click="question.answers.push({ id: null, name: '', is_correct: false })"
-              >
-                Přidat odpověď
-              </BaseButton>
+
+              <div class="hidden lg:col-span-4 lg:block">
+                <div class="sticky top-4 rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200">
+                  <BaseFormUploadImage
+                    v-model="question.image"
+                    :multiple="false"
+                    type="quiz"
+                    format="large"
+                    label="Obrázek k otázce"
+                    :allow-remote-url="true"
+                    @update-files="updateQuestionImage($event, index)"
+                    @remove-file="removeQuestionImage(index)"
+                  />
+                  <p class="mt-4 text-center text-xs italic text-slate-400">
+                    Obrázek pomůže uživatelům lépe pochopit kontext otázky.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-span-full text-center">
-            <BaseButton type="button" variant="primary" size="lg" class="mb-4" @click="addQuestion">
-              Přidat otázku
+
+          <div class="pt-4 text-center">
+            <BaseButton
+              type="button"
+              variant="primary"
+              size="xl"
+              class="shadow-indigo-200 ring-4 ring-indigo-50"
+              @click="addQuestion"
+            >
+              <PlusIcon class="mr-2 size-5" />
+              Nová otázka do kvízu
             </BaseButton>
           </div>
-        </LayoutContainer>
+        </div>
       </template>
     </Form>
   </div>

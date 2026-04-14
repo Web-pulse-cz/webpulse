@@ -2,9 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { useActivityStore } from '~~/stores/activityStore';
-
-const activityStore = useActivityStore();
+import { ClipboardDocumentListIcon, RocketLaunchIcon, TagIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -133,7 +131,6 @@ async function saveItem(redirect = true as boolean) {
     })
     .finally(() => {
       loading.value = false;
-      activityStore.fetchActivities();
     });
 }
 
@@ -152,7 +149,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -160,65 +157,117 @@ definePageMeta({
       slug="activities"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <LayoutContainer>
-        <div class="grid grid-cols-4 gap-x-8 gap-y-4">
-          <BaseFormInput
-            v-model="item.version"
-            label="Verze"
-            type="text"
-            name="version"
-            rules="required|min:3"
-            class="col-span-1"
-          />
-          <BaseFormSelect
-            v-model="item.type"
-            label="Typ"
-            name="type"
-            :options="[
-              { value: 'bugfix', name: 'Oprava chyby' },
-              { value: 'feature', name: 'Nová funkce' },
-              { value: 'design', name: 'Vylepšení designu' },
-              { value: 'other', name: 'Ostatní' },
-            ]"
-            rules="required"
-            class="col-span-1"
-          />
-          <BaseFormSelect
-            v-model="item.priority"
-            label="Priorita"
-            name="priority"
-            :options="[
-              { value: 'low', name: 'Nízká' },
-              { value: 'medium', name: 'Normální' },
-              { value: 'high', name: 'Vysoká' },
-            ]"
-            rules="required"
-            class="col-span-1"
-          />
-          <BaseFormInput
-            v-model="item.title"
-            label="Název"
-            type="text"
-            name="title"
-            rules="required|min:3"
-            class="col-span-2"
-          /><BaseFormInput
-            v-model="item.subtitle"
-            label="Podnadpis"
-            type="text"
-            name="subtitle"
-            class="col-span-2"
-          />
-          <BaseFormEditor
-            v-model="item.description"
-            label="Popisek"
-            name="description"
-            rules="min:3"
-            class="col-span-full"
-          />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-8">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <RocketLaunchIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Detail záznamu</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+              <BaseFormInput
+                v-model="item.title"
+                label="Hlavní název aktivity"
+                type="text"
+                name="title"
+                rules="required|min:3"
+                placeholder="Např. Optimalizace databáze a nové API"
+              />
+
+              <BaseFormInput
+                v-model="item.subtitle"
+                label="Podnadpis / Krátké shrnutí"
+                type="text"
+                name="subtitle"
+                placeholder="Drobné úpravy v jádru systému..."
+              />
+
+              <div class="pt-4">
+                <BaseFormEditor
+                  v-model="item.description"
+                  label="Podrobný popis změn"
+                  name="description"
+                  rules="min:3"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
         </div>
-      </LayoutContainer>
+
+        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-4">
+          <LayoutContainer class="!py-6">
+            <div class="mb-6 flex items-center gap-2">
+              <TagIcon class="size-4 text-slate-400" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
+                >Metadata záznamu</LayoutTitle
+              >
+            </div>
+
+            <div class="space-y-6">
+              <div class="rounded-2xl bg-slate-900 p-5 text-white shadow-lg shadow-slate-200">
+                <BaseFormInput
+                  v-model="item.version"
+                  label="Verze sestavení"
+                  type="text"
+                  name="version"
+                  rules="required|min:1"
+                  placeholder="v1.0.0"
+                  class="!text-white"
+                />
+              </div>
+
+              <div
+                class="grid grid-cols-1 gap-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200"
+              >
+                <BaseFormSelect
+                  v-model="item.type"
+                  label="Typ záznamu"
+                  name="type"
+                  :options="[
+                    { value: 'bugfix', name: '🐞 Oprava chyby' },
+                    { value: 'feature', name: '✨ Nová funkce' },
+                    { value: 'design', name: '🎨 Vylepšení designu' },
+                    { value: 'other', name: '🔧 Ostatní' },
+                  ]"
+                  rules="required"
+                />
+
+                <BaseFormSelect
+                  v-model="item.priority"
+                  label="Důležitost"
+                  name="priority"
+                  :options="[
+                    { value: 'low', name: 'Nízká' },
+                    { value: 'medium', name: 'Normální' },
+                    { value: 'high', name: 'Vysoká' },
+                  ]"
+                  rules="required"
+                />
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
+            <div class="mb-3 flex items-center gap-2">
+              <ClipboardDocumentListIcon class="size-4 text-indigo-600" />
+              <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
+                Správa aktivit
+              </h4>
+            </div>
+            <p class="text-sm leading-relaxed text-indigo-800/80">
+              Záznamy o aktivitách se automaticky propisují do <strong>Timeline</strong> projektu.
+              Snažte se o stručné a jasné názvy, aby uživatelé věděli, co je nového na první pohled.
+            </p>
+          </div>
+        </aside>
+      </div>
     </Form>
   </div>
 </template>

@@ -123,49 +123,47 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat měnu' }]"
       slug="currencies"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: false },
-          { key: 'code', name: 'Kód', type: 'text', width: 80, hidden: true, sortable: true },
-          {
-            key: 'symbol_before',
-            name: 'Symbol před',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-          {
-            key: 'symbol_after',
-            name: 'Symbol za',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-          {
-            key: 'active',
-            name: 'Aktivní',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Měnu"
-        plural="Měny"
-        :query="tableQuery"
-        slug="currencies"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: false },
+        { key: 'code', name: 'Kód', type: 'text', width: 80, hidden: true, sortable: true },
+        {
+          key: 'symbol_before',
+          name: 'Symbol před',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+        {
+          key: 'symbol_after',
+          name: 'Symbol za',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+        {
+          key: 'active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Měnu"
+      plural="Měny"
+      :query="tableQuery"
+      slug="currencies"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Logo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Logo\LogoResource;
 use App\Models\Logo\Logo;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,6 +15,13 @@ use Illuminate\Support\Facades\Validator;
 
 class LogoController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -25,12 +33,12 @@ class LogoController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('rating', 'like', '%' . $searchString . '%')
-                    ->orWhere('position', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('url', 'like', '%' . $searchString . '%');
+                $query->where('rating', 'like', '%'.$searchString.'%')
+                    ->orWhere('position', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('url', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -51,24 +59,24 @@ class LogoController extends Controller
         }
 
         $logos = $query->get();
+
         return Response::json(LogoResource::collection($logos));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $logo = Logo::find($id);
-            if (!$logo) {
+            if (! $logo) {
                 App::abort(404);
             }
         } else {
-            $logo = new Logo();
+            $logo = new Logo;
         }
 
         $validator = Validator::make($request->all(), [
             'image' => 'required|string',
             'translations' => 'required|array',
-            'translations.*.url' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -80,6 +88,7 @@ class LogoController extends Controller
             $logo->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale, false);
                 $logo->translateOrNew($locale)->fill($translation);
             }
 
@@ -91,6 +100,7 @@ class LogoController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating review.'], 500);
         }
 
@@ -101,14 +111,14 @@ class LogoController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $logo = Logo::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$logo) {
+        if (! $logo) {
             App::abort(404);
         }
 
@@ -117,16 +127,17 @@ class LogoController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $logo = Logo::find($id);
-        if (!$logo) {
+        if (! $logo) {
             App::abort(404);
         }
 
         $logo->delete();
+
         return Response::json();
     }
 }

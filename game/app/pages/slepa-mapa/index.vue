@@ -31,6 +31,11 @@ const games = ref([
     imageUrl:
       'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F6cb22c7142484c0b937793553e92cd6f/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAANuCyJohDD7qCRxNG9yh9_0cfe5kwhGZ7OKYNKW-6_D2&exp=1756335301&osig=AAAAAAAAAAAAAAAAAAAAAL5omqzdpfps7zpvHP09VezFhMJenWI-2Ls6NJvAhLMC&signer=media-rpc&x-canva-quality=screen_2x',
     linkUrl: '/slepa-mapa/cr/kraje',
+  },{
+    name: 'Celá ČR',
+    imageUrl:
+      'https://media.canva.com/v2/image-resize/format:JPG/height:896/quality:92/uri:ifs%3A%2F%2FM%2F6cb22c7142484c0b937793553e92cd6f/watermark:F/width:1600?csig=AAAAAAAAAAAAAAAAAAAAANuCyJohDD7qCRxNG9yh9_0cfe5kwhGZ7OKYNKW-6_D2&exp=1756335301&osig=AAAAAAAAAAAAAAAAAAAAAL5omqzdpfps7zpvHP09VezFhMJenWI-2Ls6NJvAhLMC&signer=media-rpc&x-canva-quality=screen_2x',
+    linkUrl: '/slepa-mapa/cr/cela',
   },
 ]);
 </script>

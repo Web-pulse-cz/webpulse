@@ -5,19 +5,23 @@ namespace App\Http\Controllers\Admin\Event;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Event\EventCategoryResource;
 use App\Models\Event\EventCategory;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class EventCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -29,7 +33,7 @@ class EventCategoryController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->whereTranslation('code', '=', $searchString);
             }
@@ -52,26 +56,26 @@ class EventCategoryController extends Controller
 
         }
         $eventCategories = $query->get();
+
         return Response::json(EventCategoryResource::collection($eventCategories));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $eventCategory = EventCategory::find($id);
-            if (!$eventCategory) {
+            if (! $eventCategory) {
                 App::abort(404);
             }
         } else {
-            $eventCategory = new EventCategory();
+            $eventCategory = new EventCategory;
         }
 
         $validator = Validator::make($request->all(), [
             'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -83,7 +87,7 @@ class EventCategoryController extends Controller
             $eventCategory->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
-                $translation['slug'] = Str::slug($translation['name']);
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $eventCategory->translateOrNew($locale)->fill($translation);
             }
 
@@ -92,6 +96,7 @@ class EventCategoryController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating faq.'], 500);
         }
 
@@ -105,14 +110,14 @@ class EventCategoryController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $eventCategory = EventCategory::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$eventCategory) {
+        if (! $eventCategory) {
             App::abort(404);
         }
 
@@ -124,13 +129,13 @@ class EventCategoryController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $eventCategory = EventCategory::find($id);
 
-        if (!$eventCategory) {
+        if (! $eventCategory) {
             App::abort(404);
         }
 

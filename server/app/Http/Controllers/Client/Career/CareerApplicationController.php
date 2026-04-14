@@ -16,7 +16,7 @@ class CareerApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $lang = null): JsonResponse
+    public function store(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -43,7 +43,7 @@ class CareerApplicationController extends Controller
 
         DB::beginTransaction();
         try {
-            $careerApplication = new CareerApplication();
+            $careerApplication = new CareerApplication;
             $careerApplication->career_id = $request->input('career_id');
             $careerApplication->fill($request->all());
             $careerApplication->locale = $lang;
@@ -57,6 +57,7 @@ class CareerApplicationController extends Controller
             CareerApplicationSaved::dispatch($careerApplication);
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

@@ -94,32 +94,48 @@ onMounted(() => {
 <template>
   <div>
     <div
-      v-if="showBar"
-      class="fixed bottom-0 left-0 right-8 z-10 w-full max-w-full rounded border border-primary bg-beige p-6 text-primary shadow-lg md:bottom-4 md:left-4 md:max-w-md"
+        v-if="showBar"
+        class="fixed bottom-4 left-4 right-4 z-[60] max-w-sm md:left-8 md:bottom-8 md:max-w-md bg-white border-4 border-deep-blue rounded-3xl p-6 shadow-[8px_8px_0px_0px_rgba(26,83,92,1)]"
     >
-      <BasePropsParagraph class="mb-4" size="base" color="black">
-        {{ t('cookies.description') }}
-      </BasePropsParagraph>
-      <div class="flex gap-x-4">
-        <BaseButton size="lg" @click="acceptAllCookies">
-          {{ t('cookies.acceptAll') }}
-        </BaseButton>
-        <BaseButton size="lg" @click="showSettings = true">
-          {{ t('cookies.settings') }}
-        </BaseButton>
+      <div class="flex items-center gap-3 mb-4">
+        <CookieIcon class="size-8 fill-primary" />
+        <h3 class="font-display font-black text-2xl text-deep-blue italic">Cookies!</h3>
       </div>
+
+      <p class="text-deep-blue/80 font-medium text-sm mb-6">
+        {{ t('cookies.description') }}
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button
+            @click="acceptAllCookies"
+            class="flex-1 bg-primary text-white font-black px-4 py-3 rounded-xl border-2 border-deep-blue shadow-[4px_4px_0px_0px_rgba(26,83,92,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all uppercase tracking-widest text-xs"
+        >
+          {{ t('cookies.acceptAll') }}
+        </button>
+
+        <button
+            @click="showSettings = true"
+            class="flex-1 bg-sunny text-deep-blue font-black px-4 py-3 rounded-xl border-2 border-deep-blue shadow-[4px_4px_0px_0px_rgba(26,83,92,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all uppercase tracking-widest text-xs"
+        >
+          {{ t('cookies.settings') }}
+        </button>
+      </div>
+
       <LayoutCookiesDialog
-        v-model:open="showSettings"
-        :cookies="cookies"
-        @accept-all="acceptAllCookies"
-        @accept-selected="acceptSelectedCookies"
+          v-model:open="showSettings"
+          :cookies="cookies"
+          @accept-all="acceptAllCookies"
+          @accept-selected="acceptSelectedCookies"
       />
     </div>
+
     <div
-      v-if="showIcon"
-      class="fixed bottom-0 left-0 right-8 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded border border-primary bg-beige p-2 md:bottom-4 md:left-4"
+        v-if="showIcon"
+        @click="showBar = true"
+        class="fixed bottom-4 left-4 z-[50] md:bottom-8 md:left-8 bg-turquoise flex size-14 cursor-pointer items-center justify-center rounded-[30%_70%_70%_30%/30%_30%_70%_70%] border-4 border-deep-blue shadow-[4px_4px_0px_0px_rgba(26,83,92,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group"
     >
-      <CookieIcon class="h-6 w-6 cursor-pointer fill-primary" @click="showBar = true" />
+      <CookieIcon class="size-7 fill-deep-blue group-hover:-rotate-12 transition-transform" />
     </div>
   </div>
 </template>

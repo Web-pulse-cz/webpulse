@@ -14,20 +14,19 @@ use Illuminate\Support\Facades\Validator;
 
 class ContactSourceController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = ContactSource::query()
-            //->with(['contacts'])
+            // ->with(['contacts'])
             ->where('user_id', $request->user()->id);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -50,18 +49,19 @@ class ContactSourceController extends Controller
         }
 
         $contactSources = $query->get();
+
         return Response::json(ContactSourceResource::collection($contactSources));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $contactSource = ContactSource::find($id);
-            if (!$contactSource) {
+            if (! $contactSource) {
                 App::abort(404);
             }
         } else {
-            $contactSource = new ContactSource();
+            $contactSource = new ContactSource;
         }
 
         $validator = Validator::make($request->all(), [
@@ -81,8 +81,9 @@ class ContactSourceController extends Controller
             $contactSource->save();
 
             DB::commit();
-        } catch (\Throwable | \Exception $e) {
+        } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating contact source.'], 500);
         }
 
@@ -91,12 +92,12 @@ class ContactSourceController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $contactSource = ContactSource::find($id);
-        if (!$contactSource) {
+        if (! $contactSource) {
             App::abort(404);
         }
 
@@ -105,16 +106,17 @@ class ContactSourceController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $contactSource = ContactSource::find($id);
-        if (!$contactSource) {
+        if (! $contactSource) {
             App::abort(404);
         }
 
         $contactSource->delete();
+
         return Response::json();
     }
 }

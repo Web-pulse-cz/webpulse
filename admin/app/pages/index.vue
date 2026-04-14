@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import { CalendarDaysIcon, PhoneIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline';
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 
@@ -164,105 +165,116 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'add-cashflow', text: 'Přidat útratu' }]"
+      :actions="[{ type: 'add-cashflow', text: 'Zaznamenat výdaj' }]"
       @open-cashflow-dialog="openCashflowDialog"
     />
-    <div
-      class="grid grid-cols-1 items-start justify-between gap-x-8 gap-y-2 lg:grid-cols-2 lg:gap-y-4"
-    >
-      <div class="col-span-full lg:col-span-1">
+
+    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+      <div class="col-span-1 space-y-8 lg:col-span-8">
         <LayoutContainer>
-          <LayoutTitle>Dnes máš zavolat těmto kontaktům</LayoutTitle>
+          <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+            <div class="flex items-center gap-3">
+              <div
+                class="relative flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+              >
+                <PhoneIcon class="size-5" />
+                <div
+                  class="absolute -right-1 -top-1 flex h-2.5 w-2.5 animate-pulse rounded-full bg-amber-400 ring-2 ring-white"
+                />
+              </div>
+              <LayoutTitle class="!mb-0">Dnes kontaktovat (Hovory)</LayoutTitle>
+            </div>
+            <div
+              class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Celkem:
+              <span class="text-sm/none font-black text-indigo-600">{{
+                dashboard.contactsToCall?.length || 0
+              }}</span>
+            </div>
+          </div>
+
           <BaseTable
             :items="dashboard.contactsToCall"
             :columns="[
-              {
-                key: 'firstname',
-                name: 'Jméno',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'lastname',
-                name: 'Příjmení',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'phone',
-                name: 'Telefon',
-                type: 'text',
-                width: 80,
-                hidden: true,
-                sortable: false,
-              },
+              { key: 'firstname', name: 'Jméno', type: 'text', sortable: false },
+              { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
+              { key: 'phone', name: 'Telefonní číslo', type: 'text', sortable: false },
             ]"
             :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
             :loading="loading"
             :error="error"
-            singular="Poseldní přidaný kontakt"
-            plural="Poslední přidané kontakty"
+            singular="Hovor na dnes"
+            plural="Hovory na dnes"
           />
         </LayoutContainer>
+
         <LayoutContainer>
-          <LayoutTitle>Nadcházející schůzky</LayoutTitle>
+          <div class="mb-8 flex items-center gap-3">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+            >
+              <CalendarDaysIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Nadcházející schůzky</LayoutTitle>
+          </div>
+
           <BaseTable
             :items="dashboard.comingEvents"
             :columns="[
-              {
-                key: 'firstname',
-                name: 'Jméno',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'lastname',
-                name: 'Příjmení',
-                type: 'text',
-                width: 80,
-                hidden: false,
-                sortable: false,
-              },
-              {
-                key: 'next_meeting',
-                name: 'Datum a čas',
-                type: 'datetime',
-                width: 80,
-                hidden: true,
-                sortable: false,
-              },
+              { key: 'firstname', name: 'Jméno klienta', type: 'text', sortable: false },
+              { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
+              { key: 'next_meeting', name: 'Termín schůzky', type: 'datetime', sortable: false },
             ]"
             :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
             :loading="loading"
             :error="error"
-            singular="Nadcházející schůzka"
-            plural="Nadházející schůzky"
+            singular="Naplánovaná schůzka"
+            plural="Naplánované schůzky"
           />
         </LayoutContainer>
       </div>
-      <div>
-        <LayoutContainer
-          class="col-span-full max-h-[512px] space-y-4 overflow-y-auto lg:col-span-1"
-        >
-          <LayoutTitle>Changelog</LayoutTitle>
-          <ChangelogCard
-            v-for="(changelogItem, index) in changelog"
-            :key="index"
-            :changelog="changelogItem"
-          />
+
+      <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-4">
+        <LayoutContainer class="!py-6">
+          <div class="mb-6 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <RocketLaunchIcon class="size-4 text-slate-400" />
+              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
+                >Changelog</LayoutTitle
+              >
+            </div>
+            <span
+              class="rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"
+            >
+              v1.0.6
+            </span>
+          </div>
+
+          <div
+            class="custom-scrollbar max-h-[calc(100vh-200px)] space-y-6 overflow-y-auto pb-2 pr-2"
+          >
+            <ChangelogCard
+              v-for="(changelogItem, index) in changelog"
+              :key="index"
+              :changelog="changelogItem"
+            />
+          </div>
         </LayoutContainer>
-      </div>
+
+        <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100/50">
+          <p class="text-sm leading-relaxed text-indigo-800/80">
+            <strong>Tip:</strong> Zaznamenávejte schůzky a hovory ihned po jejich skončení. Udržíte
+            tak histori kontaktu v CRM aktuální a nezapomenete na důležité detaily.
+          </p>
+        </div>
+      </aside>
     </div>
+
     <CashflowDialogExtendedAction
       v-model:show="cashflowActionDialog.show"
       :categories="cashflowCategoryStore.categoriesOptions"
@@ -273,3 +285,20 @@ definePageMeta({
     />
   </div>
 </template>
+
+<style scoped>
+/* Jemný scrollbar pro Changelog sloupec, aby nerušil design */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* slate-300 */
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* slate-400 */
+}
+</style>

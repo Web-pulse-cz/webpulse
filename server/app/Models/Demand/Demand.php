@@ -4,7 +4,6 @@ namespace App\Models\Demand;
 
 use App\Models\Service\Service;
 use App\Traits\Siteable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Demand extends Model
@@ -23,7 +22,7 @@ class Demand extends Model
         'service_id',
         'offer_price',
         'locale',
-        'message'
+        'message',
     ];
 
     protected $casts = [
@@ -37,7 +36,7 @@ class Demand extends Model
 
     public function getFullPhoneAttribute()
     {
-        return $this->phone_prefix . trim($this->phone);
+        return $this->phone_prefix.trim($this->phone);
     }
 
     public function sites()

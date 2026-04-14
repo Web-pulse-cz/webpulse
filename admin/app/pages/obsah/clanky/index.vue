@@ -128,77 +128,75 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat článek' }]"
       slug="posts"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'status',
-            name: 'Stav',
-            type: 'enum',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'published_from',
-            name: 'Publikováno od',
-            type: 'datetime',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'published_to',
-            name: 'Publikováno do',
-            type: 'datetime',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'active',
-            name: 'Aktivní',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :enums="{
-          status: {
-            draft: 'Koncept',
-            published: 'Publikováno',
-            archived: 'Archivováno',
-          },
-        }"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Článek"
-        plural="Články"
-        :query="tableQuery"
-        slug="posts"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'status',
+          name: 'Stav',
+          type: 'enum',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'published_from',
+          name: 'Publikováno od',
+          type: 'datetime',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'published_to',
+          name: 'Publikováno do',
+          type: 'datetime',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+      ]"
+      :enums="{
+        status: {
+          draft: 'Koncept',
+          published: 'Publikováno',
+          archived: 'Archivováno',
+        },
+      }"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Článek"
+      plural="Články"
+      :query="tableQuery"
+      slug="posts"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

@@ -128,40 +128,38 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat zdroj kontaktů' }]"
       slug="contacts"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'badge',
-            width: 80,
-            hidden: false,
-            sortable: true,
-            colorKey: 'color',
-          },
-          {
-            key: 'contacts_count',
-            name: 'Počet kontaktů',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Zdroj kontaktů"
-        plural="Zdroje kontaktů"
-        :query="tableQuery"
-        slug="contacts"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'badge',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          colorKey: 'color',
+        },
+        {
+          key: 'contacts_count',
+          name: 'Počet kontaktů',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Zdroj kontaktů"
+      plural="Zdroje kontaktů"
+      :query="tableQuery"
+      slug="contacts"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

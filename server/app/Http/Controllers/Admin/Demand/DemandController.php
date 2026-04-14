@@ -26,12 +26,12 @@ class DemandController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('fullname', 'like', '%' . $searchString . '%')
-                    ->orWhere('email', 'like', '%' . $searchString . '%')
-                    ->orWhere('url', 'like', '%' . $searchString . '%')
-                    ->orWhere('offer_price', 'like', '%' . $searchString . '%')
+                $query->where('fullname', 'like', '%'.$searchString.'%')
+                    ->orWhere('email', 'like', '%'.$searchString.'%')
+                    ->orWhere('url', 'like', '%'.$searchString.'%')
+                    ->orWhere('offer_price', 'like', '%'.$searchString.'%')
                     ->orWhere('phone', '=', $searchString);
             }
         }
@@ -53,18 +53,19 @@ class DemandController extends Controller
         }
 
         $demands = $query->get();
+
         return Response::json(DemandResource::collection($demands));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $demand = Demand::find($id);
-            if (!$demand) {
+            if (! $demand) {
                 App::abort(404);
             }
         } else {
-            $demand = new Demand();
+            $demand = new Demand;
         }
 
         $validator = Validator::make($request->all(), [
@@ -89,6 +90,7 @@ class DemandController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating service.'], 500);
         }
 
@@ -99,14 +101,14 @@ class DemandController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $demand = Demand::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$demand) {
+        if (! $demand) {
             App::abort(404);
         }
 
@@ -115,16 +117,17 @@ class DemandController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $demand = Demand::find($id);
-        if (!$demand) {
+        if (! $demand) {
             App::abort(404);
         }
 
         $demand->delete();
+
         return Response::json();
     }
 }

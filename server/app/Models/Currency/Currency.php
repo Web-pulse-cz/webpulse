@@ -2,9 +2,9 @@
 
 namespace App\Models\Currency;
 
-use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 class Currency extends Model implements TranslatableContract
@@ -50,6 +50,7 @@ class Currency extends Model implements TranslatableContract
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }
@@ -62,11 +63,10 @@ class Currency extends Model implements TranslatableContract
     {
         // Pokud je kurz 0, vyhoď výjimku (dělení nulou by dalo chybu)
         if ($this->rate == 0) {
-            throw new \InvalidArgumentException("Currency rate cannot be zero.");
+            throw new \InvalidArgumentException('Currency rate cannot be zero.');
         }
 
         // Převod z měny na CZK = amount * rate
         return $amount * $this->rate;
     }
-
 }

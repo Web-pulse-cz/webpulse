@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Contact;
 
 use App\Events\ContactUpdatedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Contact\ContactResource;
 use App\Http\Resources\Admin\Contact\ContactSimpleResource;
 use App\Models\Contact\Contact;
 use App\Models\Contact\ContactHistory;
@@ -17,34 +18,34 @@ use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = Contact::query()
-            ->with(['contact'])
-            ->where('user_id', $request->user()->id);
+            ->with(['contact']);
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('firstname', 'like', '%' . $searchString . '%')
-                    ->orWhere('lastname', 'like', '%' . $searchString . '%')
-                    ->orWhere('phone', 'like', '%' . $searchString . '%')
-                    ->orWhere('email', 'like', '%' . $searchString . '%')
-                    ->orWhere('company', 'like', '%' . $searchString . '%')
-                    ->orWhere('street', 'like', '%' . $searchString . '%')
-                    ->orWhere('city', 'like', '%' . $searchString . '%')
-                    ->orWhere('zip', 'like', '%' . $searchString . '%')
-                    ->orWhere('occupation', 'like', '%' . $searchString . '%')
-                    ->orWhere('goal', 'like', '%' . $searchString . '%');
+                $query->where(function ($subQuery) use ($searchString) {
+                    $subQuery->where('firstname', 'like', '%'.$searchString.'%')
+                        ->orWhere('lastname', 'like', '%'.$searchString.'%')
+                        ->orWhere('phone', 'like', '%'.$searchString.'%')
+                        ->orWhere('email', 'like', '%'.$searchString.'%')
+                        ->orWhere('company', 'like', '%'.$searchString.'%')
+                        ->orWhere('street', 'like', '%'.$searchString.'%')
+                        ->orWhere('city', 'like', '%'.$searchString.'%')
+                        ->orWhere('zip', 'like', '%'.$searchString.'%')
+                        ->orWhere('occupation', 'like', '%'.$searchString.'%')
+                        ->orWhere('goal', 'like', '%'.$searchString.'%');
+                });
             }
         }
         if ($request->has('filters')) {
             $rawFilters = json_decode($request->get('filters'), true);
-            if (!empty($rawFilters)) {
+            if (! empty($rawFilters)) {
                 foreach ($rawFilters as $key => $rawFilter) {
                     switch ($key) {
                         case 'phase':
@@ -61,7 +62,7 @@ class ContactController extends Controller
             }
         }
 
-        if($request->has('contact_list_id') && $request->get('contact_list_id') != null) {
+        if ($request->has('contact_list_id') && $request->get('contact_list_id') != null) {
             $query->whereHas('lists', function ($q) use ($request) {
                 $q->where('contact_list_id', $request->get('contact_list_id'));
             });
@@ -70,6 +71,8 @@ class ContactController extends Controller
         if ($request->has('orderWay') && $request->get('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('orderWay'));
         }
+
+        $query->where('user_id', '=', $request->user()->id);
 
         if ($request->has('paginate')) {
             $contacts = $query->paginate($request->get('paginate'));
@@ -84,18 +87,19 @@ class ContactController extends Controller
         }
 
         $contacts = $query->get();
+
         return Response::json(ContactSimpleResource::collection($contacts));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $contact = Contact::find($id);
-            if (!$contact) {
+            if (! $contact) {
                 App::abort(404);
             }
         } else {
-            $contact = new Contact();
+            $contact = new Contact;
         }
 
         $validator = Validator::make($request->all(), [
@@ -159,7 +163,7 @@ class ContactController extends Controller
             if ($id) {
                 ContactUpdatedEvent::dispatch($oldContact, $contact);
             } else {
-                $history = new ContactHistory();
+                $history = new ContactHistory;
                 $history->fill([
                     'name' => 'Kontakt vytvořen',
                     'description' => 'Vytvořili jste nový kontakt!',
@@ -173,61 +177,63 @@ class ContactController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating contact.'], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Contact\ContactResource::make($contact));
+        return Response::json(ContactResource::make($contact));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $contact = Contact::with(['contact', 'source', 'contacts', 'phase', 'tasks', 'histories' => function ($query) {
             return $query->orderBy('created_at', 'desc');
         }])->find($id);
-        if (!$contact) {
+        if (! $contact) {
             App::abort(404);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Contact\ContactResource::make($contact));
+        return Response::json(ContactResource::make($contact));
     }
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $contact = Contact::find($id);
-        if (!$contact) {
+        if (! $contact) {
             App::abort(404);
         }
 
         $contact->delete();
+
         return Response::json();
     }
 
-    public function history(Request $request, int $id, int $historyId = null): JsonResponse
+    public function history(Request $request, int $id, ?int $historyId = null): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $contact = Contact::find($id);
-        if (!$contact) {
+        if (! $contact) {
             App::abort(404);
         }
 
         if ($historyId) {
             $history = ContactHistory::find($historyId);
-            if (!$history) {
+            if (! $history) {
                 App::abort(404);
             }
         } else {
-            $history = new ContactHistory();
+            $history = new ContactHistory;
         }
 
         try {
@@ -244,7 +250,7 @@ class ContactController extends Controller
                 $history->contact_phase_id = $request->get('contact_phase_id');
             }*/
 
-            if (!$request->has('description') || $request->get('description') == null) {
+            if (! $request->has('description') || $request->get('description') == null) {
                 $history->description = 'Nepřidali jste žádnou poznámku.';
             }
             $history->origin = 'user';
@@ -254,6 +260,7 @@ class ContactController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating contact history.'], 500);
         }
 
@@ -262,16 +269,17 @@ class ContactController extends Controller
 
     public function historyDestroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $history = ContactHistory::find($id);
-        if (!$history) {
+        if (! $history) {
             App::abort(404);
         }
 
         $history->delete();
+
         return Response::json([]);
     }
 }

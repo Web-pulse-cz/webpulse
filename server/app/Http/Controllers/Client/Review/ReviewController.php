@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 class ReviewController extends Controller
 {
-    public function index(Request $request, string $lang = null): JsonResponse
+    public function index(Request $request, ?string $lang = null): JsonResponse
     {
         $this->handleLanguage($lang);
         $siteId = $this->handleSite($request->header('X-Site-Hash'));

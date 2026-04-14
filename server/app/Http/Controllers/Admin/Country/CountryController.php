@@ -22,11 +22,11 @@ class CountryController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
                 $query->where('code', '=', $searchString)
-                    ->orWhere('iso', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%');
+                    ->orWhere('iso', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -47,18 +47,19 @@ class CountryController extends Controller
         }
 
         $countries = $query->get();
+
         return Response::json(CountryResource::collection($countries));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $country = Country::find($id);
-            if (!$country) {
+            if (! $country) {
                 App::abort(404);
             }
         } else {
-            $country = new Country();
+            $country = new Country;
         }
 
         $validator = Validator::make($request->all(), [
@@ -84,6 +85,7 @@ class CountryController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating country.'], 500);
         }
 
@@ -92,12 +94,12 @@ class CountryController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $country = Country::find($id);
-        if (!$country) {
+        if (! $country) {
             App::abort(404);
         }
 
@@ -106,16 +108,17 @@ class CountryController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $country = Country::find($id);
-        if (!$country) {
+        if (! $country) {
             App::abort(404);
         }
 
         $country->delete();
+
         return Response::json();
     }
 }

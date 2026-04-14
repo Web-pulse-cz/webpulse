@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources\Client\Service;
 
-use App\Http\Resources\Client\Currency\CurrencyResource;
 use App\Http\Resources\Admin\TaxRate\TaxRateResource;
+use App\Http\Resources\Client\Currency\CurrencyResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class ServiceResource extends JsonResource
 {

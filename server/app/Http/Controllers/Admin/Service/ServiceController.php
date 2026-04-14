@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Admin\Service;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Service\ServiceResource;
 use App\Models\Service\Service;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class ServiceController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -26,17 +33,17 @@ class ServiceController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('type', 'like', '%' . $searchString . '%')
-                    ->orWhere('price_type', 'like', '%' . $searchString . '%')
+                $query->where('type', 'like', '%'.$searchString.'%')
+                    ->orWhere('price_type', 'like', '%'.$searchString.'%')
                     ->orWhere('price', '=', $searchString)
-                    ->orWhereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('slug', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('perex', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('description', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_title', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_description', 'like', '%' . $searchString . '%');
+                    ->orWhereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('slug', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('perex', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('description', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_title', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_description', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -57,23 +64,23 @@ class ServiceController extends Controller
         }
 
         $services = $query->get();
+
         return Response::json(ServiceResource::collection($services));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $service = Service::find($id);
-            if (!$service) {
+            if (! $service) {
                 App::abort(404);
             }
         } else {
-            $service = new Service();
+            $service = new Service;
         }
 
         $validator = Validator::make($request->all(), [
             'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +92,7 @@ class ServiceController extends Controller
             $service->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
-                $translation['slug'] = Str::slug($translation['name']);
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $service->translateOrNew($locale)->fill($translation);
             }
 
@@ -95,6 +102,7 @@ class ServiceController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating service.'], 500);
         }
 
@@ -105,14 +113,14 @@ class ServiceController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $service = Service::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$service) {
+        if (! $service) {
             App::abort(404);
         }
 
@@ -121,16 +129,17 @@ class ServiceController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $service = Service::find($id);
-        if (!$service) {
+        if (! $service) {
             App::abort(404);
         }
 
         $service->delete();
+
         return Response::json();
     }
 }

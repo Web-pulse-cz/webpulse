@@ -2,7 +2,6 @@
 
 namespace App\Models\Contact;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ContactList extends Model
@@ -13,7 +12,7 @@ class ContactList extends Model
         'name',
         'description',
         'color',
-        'user_id'
+        'user_id',
     ];
 
     public function contacts()

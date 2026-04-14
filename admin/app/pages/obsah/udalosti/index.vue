@@ -128,85 +128,83 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat událost' }]"
       slug="events"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'code',
-            name: 'Kód',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'status',
-            name: 'Stav',
-            type: 'enum',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'start_date',
-            name: 'Od',
-            type: 'datetime',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'end_date',
-            name: 'Do',
-            type: 'datetime',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'registrations_count',
-            name: 'Počet přihlášených',
-            type: 'number',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :enums="{
-          status: {
-            draft: 'Koncept',
-            published: 'Publikováno',
-            archived: 'Archivováno',
-          },
-        }"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Událost"
-        plural="Události"
-        :query="tableQuery"
-        slug="events"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'code',
+          name: 'Kód',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'status',
+          name: 'Stav',
+          type: 'enum',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'start_date',
+          name: 'Od',
+          type: 'datetime',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'end_date',
+          name: 'Do',
+          type: 'datetime',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'registrations_count',
+          name: 'Počet přihlášených',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+      ]"
+      :enums="{
+        status: {
+          draft: 'Koncept',
+          published: 'Publikováno',
+          archived: 'Archivováno',
+        },
+      }"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Událost"
+      plural="Události"
+      :query="tableQuery"
+      slug="events"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

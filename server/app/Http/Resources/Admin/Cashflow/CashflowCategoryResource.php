@@ -17,9 +17,9 @@ class CashflowCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            //'icon' => $this->icon,
+            // 'icon' => $this->icon,
             'budgets' => CashflowBudgetResource::collection($this->budgets),
-            'cashflows' => CashflowResource::collection($this->cashflows)
+            'cashflows' => CashflowResource::collection($this->cashflows),
         ];
     }
 }

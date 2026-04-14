@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\User\UserGroupResource;
 use App\Models\User\UserGroup;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -15,18 +16,24 @@ use Illuminate\Support\Facades\Validator;
 
 class UserGroupController extends Controller
 {
+    use Siteable;
 
     public function index(Request $request): JsonResponse
     {
         $query = UserGroup::query();
 
+        if ($request->header('X-Site-Hash')) {
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $query->whereRelation('sites', 'site_id', $siteId);
+        }
+
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -51,18 +58,19 @@ class UserGroupController extends Controller
         }
 
         $userGroups = $query->get();
-        return Response::json(\App\Http\Resources\Admin\User\UserGroupResource::collection($userGroups));
+
+        return Response::json(UserGroupResource::collection($userGroups));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $userGroup = UserGroup::find($id);
-            if (!$userGroup) {
+            if (! $userGroup) {
                 App::abort(404);
             }
         } else {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroup;
         }
 
         $validator = Validator::make($request->all(), [
@@ -80,30 +88,34 @@ class UserGroupController extends Controller
                 $userGroup->password = Hash::make($request->get('new_password'));
             }
 
-
-            $userGroup->fill($request->all());
+            $userGroup->fill($request->except(['sites']));
             if ($request->has('permissions')) {
                 $userGroup->permissions = json_encode($request->get('permissions'));
             }
             $userGroup->save();
 
+            if ($request->has('sites')) {
+                $this->saveSites($userGroup, $request->get('sites', []));
+            }
+
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['error' => $e->getMessage()], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\User\UserGroupResource::make($userGroup));
+        return Response::json(UserGroupResource::make($userGroup->fresh(['sites', 'users'])));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
-        $userGroup = UserGroup::find($id);
-        if (!$userGroup) {
+        $userGroup = UserGroup::with(['sites', 'users'])->find($id);
+        if (! $userGroup) {
             App::abort(404);
         }
 
@@ -112,16 +124,17 @@ class UserGroupController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $userGroup = UserGroup::find($id);
-        if (!$userGroup) {
+        if (! $userGroup) {
             App::abort(404);
         }
 
         $userGroup->delete();
+
         return Response::json();
     }
 }

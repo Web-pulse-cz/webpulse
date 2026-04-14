@@ -14,6 +14,7 @@ class ContactUpdatedEvent
     protected Contact $oldContact;
 
     protected Contact $newContact;
+
     public function __construct(Contact $oldContact, Contact $newContact)
     {
         $this->oldContact = $oldContact;

@@ -123,33 +123,31 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat šablonu' }]"
       slug="message_blueprints"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'type', name: 'Typ', type: 'text', width: 80, hidden: true, sortable: true },
-          {
-            key: 'updated_at',
-            name: 'Poslední úprava',
-            type: 'date',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'copy', key: 'message' }, { type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Šablona zprávy"
-        plural="Šablony zpráv"
-        :query="tableQuery"
-        slug="message_blueprints"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'type', name: 'Typ', type: 'text', width: 80, hidden: true, sortable: true },
+        {
+          key: 'updated_at',
+          name: 'Poslední úprava',
+          type: 'date',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'copy', key: 'message' }, { type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Šablona zprávy"
+      plural="Šablony zpráv"
+      :query="tableQuery"
+      slug="message_blueprints"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

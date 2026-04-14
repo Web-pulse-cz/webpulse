@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Currency\Currency;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class SyncCurrencyRates extends Command
 {
@@ -21,7 +22,7 @@ class SyncCurrencyRates extends Command
 
         $date = date('Y-m-d');
 
-        $response = \Illuminate\Support\Facades\Http::get("https://api.cnb.cz/cnbapi/exrates/daily", [
+        $response = Http::get('https://api.cnb.cz/cnbapi/exrates/daily', [
             'date' => $date,
             'lang' => 'CZ',
         ]);

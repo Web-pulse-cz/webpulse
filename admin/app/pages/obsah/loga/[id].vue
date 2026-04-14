@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import { BuildingOfficeIcon, PhotoIcon, SparklesIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -179,7 +180,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -187,53 +188,108 @@ definePageMeta({
       slug="logos"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-        <LayoutContainer class="col-span-9 w-full">
-          <div class="grid grid-cols-2 gap-x-8 gap-y-4">
-            <BaseFormInput
-              v-model="item.name"
-              label="Název klienta"
-              type="text"
-              name="name"
-              rules="required|min:1"
-              class="col-span-1"
-            />
-            <BaseFormInput
-              v-if="
-                item.translations &&
-                item.translations[selectedLocale] !== undefined &&
-                item.translations[selectedLocale].url !== undefined
-              "
-              :key="`url-${selectedLocale}`"
-              v-model="item.translations[selectedLocale].url"
-              label="Odkaz"
-              type="text"
-              name="url"
-              rules="required|min:3"
-              class="col-span-1"
-            />
-            <div class="col-span-1">
-              <BaseFormUploadImage
-                v-model="item.image"
-                :multiple="false"
-                type="logo"
-                format="large"
-                label="Logo"
-                class="pt-6"
-                @update-files="updateItemImage"
-              />
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div class="col-span-1 space-y-8 lg:col-span-9">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-slate-900 text-white"
+                >
+                  <BuildingOfficeIcon class="size-5" />
+                </div>
+                <LayoutTitle class="!mb-0">Identita klienta</LayoutTitle>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                  >Verze:</span
+                >
+                <span
+                  class="rounded-md bg-indigo-600 px-2 py-1 text-xs font-bold uppercase text-white"
+                  >{{ selectedLocale }}</span
+                >
+              </div>
             </div>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+              <div class="col-span-1">
+                <BaseFormInput
+                  v-model="item.name"
+                  label="Název klienta / firmy"
+                  type="text"
+                  name="name"
+                  rules="required|min:1"
+                  placeholder="Např. Apple Inc."
+                />
+              </div>
+
+              <div class="col-span-1">
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.url !== undefined"
+                  :key="`url-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].url"
+                  label="Webová stránka (URL)"
+                  type="text"
+                  name="url"
+                  rules="required|min:3"
+                  placeholder="https://www.klient.cz"
+                />
+              </div>
+
+              <div class="col-span-full pt-4">
+                <div
+                  class="rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-8 transition-colors hover:border-indigo-300"
+                >
+                  <div class="mb-4 flex items-center gap-2">
+                    <PhotoIcon class="size-4 text-slate-400" />
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                      >Soubor loga</span
+                    >
+                  </div>
+
+                  <BaseFormUploadImage
+                    v-model="item.image"
+                    :multiple="false"
+                    type="logo"
+                    format="large"
+                    label="Klikněte nebo přetáhněte logo klienta"
+                    @update-files="updateItemImage"
+                  />
+
+                  <p class="mt-4 text-center text-xs text-slate-400">
+                    Doporučený formát: <strong>SVG nebo průhledné PNG</strong>. Minimální šířka
+                    400px.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
+        </div>
+
+        <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:selected-locale="selectedLocale"
+            v-model:translate-automatically="item.translateAutomatically"
+            v-model:position="item.position"
+            v-model:sites="item.sites"
+            :allow-position="true"
+            :allow-image="false"
+            class="shadow-sm"
+          />
+
+          <div class="mt-6 rounded-3xl bg-slate-900 p-6 text-white shadow-xl shadow-slate-200">
+            <div class="mb-3 flex items-center gap-2">
+              <SparklesIcon class="size-4 text-amber-400" />
+              <h4 class="text-xs font-bold uppercase tracking-widest">Tip pro zobrazení</h4>
+            </div>
+            <p class="text-sm leading-relaxed opacity-80">
+              Loga se na webu obvykle zobrazují v řadě (carousel). Pokud má logo příliš bílého
+              místa, ořízněte jej pro lepší zarovnání s ostatními.
+            </p>
           </div>
-        </LayoutContainer>
-        <LayoutActionsDetailBlock
-          v-model:selected-locale="selectedLocale"
-          v-model:position="item.position"
-          v-model:sites="item.sites"
-          :allow-position="true"
-          :allow-image="false"
-          class="col-span-3"
-        />
+        </aside>
       </div>
     </Form>
   </div>

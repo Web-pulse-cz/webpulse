@@ -127,61 +127,59 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat novinku' }]"
       slug="novelties"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'priority',
-            name: 'Priorita',
-            type: 'enum',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-          {
-            key: 'active',
-            name: 'Aktivní',
-            type: 'status',
-            width: 80,
-            hidden: true,
-            sortable: true,
-          },
-        ]"
-        :enums="{
-          priority: {
-            1: 'Vysoká',
-            2: 'Normální',
-            3: 'Nízká',
-          },
-        }"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Novinku"
-        plural="Novinky"
-        :query="tableQuery"
-        slug="novelties"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'priority',
+          name: 'Priorita',
+          type: 'enum',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :enums="{
+        priority: {
+          1: 'Vysoká',
+          2: 'Normální',
+          3: 'Nízká',
+        },
+      }"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Novinku"
+      plural="Novinky"
+      :query="tableQuery"
+      slug="novelties"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

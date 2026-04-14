@@ -3,7 +3,6 @@
 namespace App\Models\Quiz;
 
 use App\Traits\Siteable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Quiz extends Model
@@ -21,13 +20,13 @@ class Quiz extends Model
         'accuracy',
         'attempts',
         'user_id',
-        'published_at'
+        'published_at',
     ];
 
     protected $casts = [
         'accuracy' => 'decimal:2',
         'attempts' => 'integer',
-        'status' => 'string'
+        'status' => 'string',
     ];
 
     public function questions()

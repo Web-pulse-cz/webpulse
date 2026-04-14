@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Cashflow;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Cashflow\CashflowCategoryResource;
 use App\Http\Resources\Admin\Cashflow\CashflowCategorySimpleResource;
+use App\Http\Resources\Admin\Cashflow\CashflowResource;
 use App\Models\Cashflow\Cashflow;
 use App\Models\Cashflow\CashflowBudget;
 use App\Models\Cashflow\CashflowCategory;
@@ -17,19 +18,18 @@ use Illuminate\Support\Facades\Validator;
 
 class CashflowCategoryController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
-        $month = $request->has('month') ? (int)$request->month : (int)date('m');
-        $year = $request->has('year') ? (int)$request->year : (int)date('Y');
+        $month = $request->has('month') ? (int) $request->month : (int) date('m');
+        $year = $request->has('year') ? (int) $request->year : (int) date('Y');
 
         // determine if we want to load only categories without cashflows and budgets (used on admin homepage)
-        $onlyCategories = $request->has('only_categories') && (bool)$request->only_categories;
-        $onlyCategories = (bool)$onlyCategories;
+        $onlyCategories = $request->has('only_categories') && (bool) $request->only_categories;
+        $onlyCategories = (bool) $onlyCategories;
 
         $categoriesQuery = CashflowCategory::query();
 
-        if (!$onlyCategories) {
+        if (! $onlyCategories) {
             $categoriesQuery->with([
                 'budgets' => function ($query) use ($month, $year) {
                     $query->whereMonth('start_date', $month)
@@ -46,7 +46,7 @@ class CashflowCategoryController extends Controller
                     if ($request->has('dayTo')) {
                         $query->whereDay('date', '<=', $request->dayTo);
                     }
-                }
+                },
             ]);
         } else {
             $categoriesQuery->without(['budgets', 'cashflows']);
@@ -54,7 +54,7 @@ class CashflowCategoryController extends Controller
 
         $categoriesQuery->where('user_id', $request->user()->id);
 
-        if (!$onlyCategories) {
+        if (! $onlyCategories) {
             $incomeQuery = Cashflow::query()
                 ->where('user_id', $request->user()->id)
                 ->whereMonth('date', $month)
@@ -64,17 +64,17 @@ class CashflowCategoryController extends Controller
 
         $categories = $categoriesQuery->get();
 
-        if (!$onlyCategories) {
+        if (! $onlyCategories) {
             foreach ($categories as $category) {
                 if ($category->budgets->isEmpty()) {
-                    $budget = new CashflowBudget();
+                    $budget = new CashflowBudget;
                     $budget->fill([
                         'user_id' => $request->user()->id,
                         'type' => 'month',
                         'amount' => 1000,
                         'start_date' => date('Y-m-01', strtotime("first day of $year-$month")),
                         'end_date' => date('Y-m-t', strtotime("last day of $year-$month")),
-                        'cashflow_category_id' => $category->id
+                        'cashflow_category_id' => $category->id,
                     ]);
                     $budget->cashflow_category_id = $category->id;
                     $budget->save();
@@ -90,17 +90,17 @@ class CashflowCategoryController extends Controller
 
         return Response::json([
             'categories' => CashflowCategoryResource::collection($categories),
-            'income' => \App\Http\Resources\Admin\Cashflow\CashflowResource::collection($incomeQuery->get())
+            'income' => CashflowResource::collection($incomeQuery->get()),
         ]);
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $cashflowCategory = CashflowCategory::find($id);
             $cashflowCategory->update($request->all());
         } else {
-            $cashflowCategory = new CashflowCategory();
+            $cashflowCategory = new CashflowCategory;
         }
 
         $validator = Validator::make($request->all(), [
@@ -118,17 +118,18 @@ class CashflowCategoryController extends Controller
 
             $cashflowCategory->save();
 
-            if (!$id) {
+            if (! $id) {
                 $cashflowCategory->budgets()->create([
                     'start_date' => date('Y-m-01'),
                     'end_date' => date('Y-m-t'),
-                    'amount' => 1000
+                    'amount' => 1000,
                 ]);
             }
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['errors' => $e->getMessage()], 422);
         }
 
@@ -137,7 +138,7 @@ class CashflowCategoryController extends Controller
 
     public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -148,12 +149,12 @@ class CashflowCategoryController extends Controller
                     ->whereMonth('end_date', date('m'))
                     ->whereYear('end_date', date('Y'));
             },
-            'cashflows'
+            'cashflows',
         ])
             ->where('user_id', $request->user()->id)
             ->where('id', $id)
             ->first();
-        if (!$cashflowCategory) {
+        if (! $cashflowCategory) {
             App::abort(404);
         }
 
@@ -162,16 +163,17 @@ class CashflowCategoryController extends Controller
 
     public function destroy(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $cashflowCategory = CashflowCategory::where('user_id', $request->user()->id)->find($id);
-        if (!$cashflowCategory) {
+        if (! $cashflowCategory) {
             App::abort(404);
         }
 
         $cashflowCategory->delete();
+
         return Response::json();
     }
 }

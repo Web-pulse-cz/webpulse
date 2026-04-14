@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Activity;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Activity\ActivityResource;
 use App\Models\Activity\Activity;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ActivityController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = Activity::query();
@@ -23,10 +23,21 @@ class ActivityController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
+        }
+
+        if ($request->has('is_business') || $request->has('is_personal')) {
+            $query->where(function (Builder $query) use ($request) {
+                if ($request->has('is_business') && $request->get('is_business') == 'true') {
+                    $query->orWhere('is_business', true);
+                }
+                if ($request->has('is_personal') && $request->get('is_personal') == 'true') {
+                    $query->orWhere('is_personal', true);
+                }
+            });
         }
 
         if ($request->has('orderWay') && $request->get('orderBy')) {
@@ -48,19 +59,20 @@ class ActivityController extends Controller
         }
 
         $activities = $query->get();
+
         return Response::json(ActivityResource::collection($activities));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $activity = Activity::find($id);
 
-            if (!$activity) {
+            if (! $activity) {
                 App::abort(404);
             }
         } else {
-            $activity = new Activity();
+            $activity = new Activity;
         }
 
         $validator = Validator::make($request->all(), [
@@ -82,21 +94,22 @@ class ActivityController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating activity.'], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Activity\ActivityResource::make($activity));
+        return Response::json(ActivityResource::make($activity));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $activity = Activity::find($id);
 
-        if (!$activity) {
+        if (! $activity) {
             App::abort(404);
         }
 
@@ -105,13 +118,13 @@ class ActivityController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $activity = Activity::find($id);
 
-        if (!$activity) {
+        if (! $activity) {
             App::abort(404);
         }
         $activity->delete();

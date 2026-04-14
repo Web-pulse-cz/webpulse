@@ -29,7 +29,7 @@ const emit = defineEmits(['save-item']);
 <template>
   <div>
     <TransitionRoot as="template" :show="show">
-      <Dialog class="relative z-10">
+      <Dialog class="relative z-50">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -39,7 +39,7 @@ const emit = defineEmits(['save-item']);
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grayCustom/75 transition-opacity" />
+          <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -56,66 +56,57 @@ const emit = defineEmits(['save-item']);
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel
-                class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6"
+                class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-2xl shadow-slate-200/50 transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-8"
               >
                 <Form @submit="emit('save-item', item)">
-                  <div class="sm:flex sm:items-start">
-                    <div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <DialogTitle
-                        as="h3"
-                        class="mb-4 text-sm font-semibold text-grayDark lg:mb-6 lg:text-base"
-                      >
-                        {{ item.id ? 'Upravit záznam historie' : 'Přidat záznam historie' }}
-                      </DialogTitle>
-                      <div class="mt-8 grid grid-cols-2 gap-x-8 gap-y-4">
-                        <BaseFormInput
-                          v-model="item.name"
-                          type="text"
-                          label="Název"
-                          name="name"
-                          class="col-span-full text-sm font-medium text-grayDark"
-                        />
-                        <BaseFormTextarea
-                          v-model="item.description"
-                          class="col-span-full text-sm font-medium text-grayDark"
-                          label="Poznámka"
-                          name="description"
-                          rules="required"
-                        />
-                        <!-- <BaseFormSelect
-													v-model="item.contact_phase_id"
-													:options="phases"
-													label="Fáze"
-													name="contact_phase_id"
-													class="col-span-1"
-												/> -->
-                        <BaseFormSelect
-                          v-model="item.activity_id"
-                          :options="activityStore.activitiesOptions"
-                          label="Aktivita"
-                          name="activity_id"
-                          class="col-span-1"
-                        />
-                        <BaseFormSelect
-                          v-model="item.type"
-                          :options="[
-                            { value: 'activity', name: 'Aktivita' },
-                            { value: 'email', name: 'E-mail' },
-                            { value: 'meeting', name: 'Meeting' },
-                            { value: 'other', name: 'Neurčeno' },
-                            { value: 'call', name: 'Telefonát' },
-                          ]"
-                          label="Typ"
-                          name="type"
-                          class="col-span-1"
-                        />
-                      </div>
+                  <div class="w-full text-left">
+                    <DialogTitle as="h3" class="mb-6 text-lg font-bold text-slate-900">
+                      {{ item.id ? 'Upravit záznam historie' : 'Přidat záznam historie' }}
+                    </DialogTitle>
+
+                    <div class="mt-2 grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
+                      <BaseFormInput
+                        v-model="item.name"
+                        type="text"
+                        label="Název"
+                        name="name"
+                        class="sm:col-span-2"
+                      />
+
+                      <BaseFormTextarea
+                        v-model="item.description"
+                        label="Poznámka"
+                        name="description"
+                        rules="required"
+                        class="sm:col-span-2"
+                      />
+
+                      <BaseFormSelect
+                        v-model="item.activity_id"
+                        :options="activityStore.activitiesOptions"
+                        label="Aktivita"
+                        name="activity_id"
+                        class="col-span-1"
+                      />
+
+                      <BaseFormSelect
+                        v-model="item.type"
+                        :options="[
+                          { value: 'activity', name: 'Aktivita' },
+                          { value: 'email', name: 'E-mail' },
+                          { value: 'meeting', name: 'Meeting' },
+                          { value: 'other', name: 'Neurčeno' },
+                          { value: 'call', name: 'Telefonát' },
+                        ]"
+                        label="Typ"
+                        name="type"
+                        class="col-span-1"
+                      />
                     </div>
                   </div>
-                  <div
-                    class="mt-4 flex justify-end gap-x-4 lg:mt-6 lg:flex-row-reverse lg:justify-start"
-                  >
-                    <BaseButton type="submit" variant="success" size="lg">
+
+                  <div class="mt-8 flex flex-col gap-3 sm:flex-row-reverse sm:justify-start">
+                    <BaseButton type="submit" variant="success" size="lg" class="w-full sm:w-auto">
                       {{ item.id ? 'Uložit' : 'Přidat' }}
                     </BaseButton>
                     <BaseButton
@@ -123,6 +114,7 @@ const emit = defineEmits(['save-item']);
                       type="button"
                       variant="secondary"
                       size="lg"
+                      class="w-full sm:w-auto"
                       @click="show = false"
                     >
                       Zavřít

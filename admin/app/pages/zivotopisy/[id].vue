@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { VPdfViewer } from '@vue-pdf-viewer/viewer';
 import { Form } from 'vee-validate';
+import { ArrowDownOnSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const user = useSanctumUser();
@@ -278,7 +279,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -287,19 +288,22 @@ function removeSkill(groupIndex: number, skillIndex: number) {
       slug="biographies"
       @save="saveItem"
     />
+
     <LayoutTabs :tabs="tabs" />
+
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 gap-x-10">
-          <LayoutContainer class="col-span-full w-full">
-            <div class="grid grid-cols-4 gap-x-8 gap-y-4">
+        <div class="flex flex-col gap-8">
+          <LayoutContainer>
+            <LayoutTitle>Základní informace</LayoutTitle>
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-4">
               <BaseFormInput
                 v-model="item.name"
-                label="Název"
+                label="Název životopisu (interní)"
                 type="text"
                 name="name"
                 rules="required|min:3"
-                class="col-span-1"
+                class="col-span-1 lg:col-span-2"
               />
               <BaseFormSelect
                 v-model="item.template"
@@ -310,12 +314,12 @@ function removeSkill(groupIndex: number, skillIndex: number) {
                 label="Šablona"
                 name="template"
                 rules="required"
-                class="col-span-1"
+                class="col-span-1 lg:col-span-2"
               />
-              <div class="col-span-2"></div>
+
               <BaseFormInput
                 v-model="item.job_title"
-                label="Název pracovní pozice"
+                label="Pracovní pozice"
                 type="text"
                 name="job_title"
                 rules="min:3"
@@ -323,336 +327,350 @@ function removeSkill(groupIndex: number, skillIndex: number) {
               />
               <BaseFormInput
                 v-model="item.address"
-                label="Adresa"
+                label="Adresa / Lokalita"
                 type="text"
                 name="address"
                 rules="min:3"
-                class="col-span-2"
+                class="col-span-1 lg:col-span-2"
               />
-              <div class="col-span-1"></div>
-              <div class="col-span-1 flex items-end">
-                <BaseFormInput
-                  v-model="item.email"
-                  label="E-mail"
-                  type="text"
-                  name="email"
-                  rules="required|min:3"
-                  class="flex-1"
-                />
-                <BaseButton
-                  type="button"
-                  variant="secondary"
-                  size="xl"
-                  @click="takeEmailFromProfile"
-                  >Převzít z profilu</BaseButton
-                >
+
+              <div class="hidden lg:col-span-1 lg:block"></div>
+
+              <div class="col-span-1 space-y-2">
+                <div class="flex items-end gap-2">
+                  <BaseFormInput
+                    v-model="item.email"
+                    label="E-mail"
+                    type="text"
+                    name="email"
+                    rules="required|min:3"
+                    class="flex-1"
+                  />
+                  <BaseButton
+                    type="button"
+                    variant="secondary"
+                    size="md"
+                    class="mb-0.5 shadow-none ring-slate-200"
+                    @click="takeEmailFromProfile"
+                  >
+                    <ArrowDownOnSquareIcon class="size-4 sm:hidden" />
+                    <span class="hidden text-xs sm:inline">Z profilu</span>
+                  </BaseButton>
+                </div>
               </div>
-              <div class="col-span-1 flex items-end">
-                <BaseFormInput
-                  v-model="item.phone_prefix"
-                  label="Předčíslí"
-                  type="text"
-                  name="phone_prefix"
-                  rules="min:3"
-                  class="flex-1"
-                />
-                <BaseButton
-                  v-if="user.phone_prefix"
-                  type="button"
-                  variant="secondary"
-                  size="xl"
-                  @click="takePhonePrefixFromProfile"
-                  >Převzít z profilu</BaseButton
-                >
+
+              <div class="col-span-1 space-y-2">
+                <div class="flex items-end gap-2">
+                  <BaseFormInput
+                    v-model="item.phone_prefix"
+                    label="Předčíslí"
+                    type="text"
+                    name="phone_prefix"
+                    rules="min:3"
+                    class="w-24"
+                  />
+                  <BaseFormInput
+                    v-model="item.phone"
+                    label="Telefon"
+                    type="text"
+                    name="phone"
+                    rules="required|min:3"
+                    class="flex-1"
+                  />
+                  <BaseButton
+                    v-if="user.phone"
+                    type="button"
+                    variant="secondary"
+                    size="md"
+                    class="mb-0.5 shadow-none ring-slate-200"
+                    @click="takePhoneFromProfile"
+                  >
+                    <span class="hidden text-xs sm:inline">Z profilu</span>
+                  </BaseButton>
+                </div>
               </div>
-              <div class="col-span-1 flex items-end">
-                <BaseFormInput
-                  v-model="item.phone"
-                  label="Telefonní číslo"
-                  type="text"
-                  name="phone"
-                  rules="required|min:3"
-                  class="flex-1"
-                />
-                <BaseButton
-                  v-if="user.phone"
-                  type="button"
-                  variant="secondary"
-                  size="xl"
-                  @click="takePhoneFromProfile"
-                  >Převzít z profilu</BaseButton
-                >
+
+              <div
+                class="col-span-full grid grid-cols-1 gap-6 border-t border-slate-100 pt-4 md:grid-cols-3"
+              >
+                <BaseFormInput v-model="item.linkedin" label="LinkedIn" name="linkedin" />
+                <BaseFormInput v-model="item.github" label="GitHub" name="github" />
+                <BaseFormInput v-model="item.website" label="Web" name="website" />
               </div>
-              <div class="col-span-1"></div>
-              <BaseFormInput
-                v-model="item.linkedin"
-                label="Odkaz na LinkedIn"
-                type="text"
-                name="linkedin"
-                rules="min:3"
-                class="col-span-1"
-              />
-              <BaseFormInput
-                v-model="item.github"
-                label="Odkaz na GitHub"
-                type="text"
-                name="github"
-                rules="min:3"
-                class="col-span-1"
-              />
-              <BaseFormInput
-                v-model="item.website"
-                label="Odkaz na webovou stránku"
-                type="text"
-                name="website"
-                rules="min:3"
-                class="col-span-1"
-              />
+
               <BaseFormTextarea
                 v-model="item.about_me"
                 label="O mně"
                 name="about_me"
-                rules="min:3"
-                class="col-span-2"
+                class="col-span-full lg:col-span-2"
                 :max="1000"
+                rows="4"
               />
               <BaseFormTextarea
                 v-model="item.summary"
-                label="Shrnutí"
+                label="Shrnutí / Cíle"
                 name="summary"
-                rules="min:3"
-                class="col-span-2"
+                class="col-span-full lg:col-span-2"
                 :max="1000"
+                rows="4"
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-full w-full">
-            <LayoutTitle>Dovednosti</LayoutTitle>
-            <div class="grid grid-cols-2 gap-x-8 gap-y-4">
+
+          <LayoutContainer>
+            <div class="mb-8 flex items-center justify-between">
+              <LayoutTitle class="!mb-0">Dovednosti</LayoutTitle>
+              <BaseButton type="button" variant="primary" @click="addSkillGroup">
+                Přidat skupinu
+              </BaseButton>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
               <div
                 v-for="(group, index) in item.skills"
                 :key="index"
-                class="col-span-1 grid grid-cols-3 items-end gap-4 rounded-lg bg-gray-100 p-4"
+                class="relative rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200 transition-all hover:shadow-lg hover:shadow-slate-200/50"
               >
-                <BaseFormInput
-                  v-model="group.name"
-                  :label="`Název skupiny dovedností #${index + 1}`"
-                  type="text"
-                  :name="`skills[${index}][name]`"
-                  rules="required|min:2"
-                  class="col-span-2"
-                />
-                <BaseButton
-                  type="button"
-                  variant="danger"
-                  size="xl"
-                  class="col-span-1"
-                  @click="removeSkillGroup(index)"
-                  >Smazat skupinu</BaseButton
-                >
-                <LayoutDivider />
-                <div
-                  v-for="(skill, key) in group.skills"
-                  :key="key"
-                  class="col-span-3 grid grid-cols-6 gap-4"
-                >
+                <div class="mb-6 flex items-center gap-4">
                   <BaseFormInput
-                    v-model="skill.name"
-                    :label="`Dovednost #${key + 1}`"
+                    v-model="group.name"
+                    :label="`Skupina #${index + 1}`"
                     type="text"
-                    :name="`skills[${index}][skills][${key}][name]`"
-                    rules="required|min:2"
-                    class="col-span-3"
-                  />
-                  <BaseFormInput
-                    v-model="skill.level"
-                    :label="`Úroveň dovednosti #${key + 1} (0-100)`"
-                    type="number"
-                    :name="`skills[${index}][skills][${key}][level]`"
-                    rules="required|min:2"
-                    class="col-span-2"
+                    :name="`skills[${index}][name]`"
+                    rules="required"
+                    class="flex-1"
                   />
                   <BaseButton
                     type="button"
                     variant="danger"
-                    size="xl"
-                    class="col-span-1 mt-6"
-                    @click="removeSkill(index, key)"
-                    >Smazat</BaseButton
+                    size="md"
+                    class="mt-6"
+                    @click="removeSkillGroup(index)"
                   >
+                    Smazat
+                  </BaseButton>
                 </div>
-                <div class="col-span-full text-center">
-                  <BaseButton type="button" variant="primary" size="xl" @click="addSkill(index)"
-                    >Přidat dovednost</BaseButton
+
+                <div class="space-y-4">
+                  <div
+                    v-for="(skill, key) in group.skills"
+                    :key="key"
+                    class="grid grid-cols-12 items-end gap-3 rounded-2xl bg-white p-3 ring-1 ring-slate-100"
                   >
+                    <BaseFormInput
+                      v-model="skill.name"
+                      label="Dovednost"
+                      type="text"
+                      :name="`skills[${index}][skills][${key}][name]`"
+                      rules="required"
+                      class="col-span-6"
+                    />
+                    <BaseFormInput
+                      v-model="skill.level"
+                      label="Úroveň %"
+                      type="number"
+                      :name="`skills[${index}][skills][${key}][level]`"
+                      class="col-span-4"
+                    />
+                    <BaseButton
+                      type="button"
+                      variant="danger"
+                      size="md"
+                      class="col-span-2 mb-0.5 flex h-[42px] justify-center"
+                      @click="removeSkill(index, key)"
+                    >
+                      <TrashIcon class="size-4" />
+                    </BaseButton>
+                  </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                  <BaseButton
+                    type="button"
+                    variant="secondary"
+                    size="md"
+                    class="w-full border-dashed bg-transparent ring-slate-300"
+                    @click="addSkill(index)"
+                  >
+                    + Přidat dovednost
+                  </BaseButton>
                 </div>
               </div>
             </div>
-            <BaseButton
-              type="button"
-              variant="primary"
-              size="xl"
-              class="mt-4"
-              @click="addSkillGroup"
-              >Přidat skupinu dovedností</BaseButton
-            >
           </LayoutContainer>
         </div>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#pracovni-zkusenosti')">
-        <div class="grid grid-cols-1 gap-x-10">
-          <LayoutContainer class="col-span-full w-full">
+        <LayoutContainer>
+          <div class="mb-8 flex items-center justify-between">
+            <LayoutTitle class="!mb-0">Pracovní zkušenosti</LayoutTitle>
+            <BaseButton size="lg" type="button" @click="addJobExperience">
+              + Přidat zkušenost
+            </BaseButton>
+          </div>
+
+          <div class="space-y-8">
             <div
               v-for="(experience, index) in item.job_experiences"
               :key="index"
-              class="my-4 mb-6 grid grid-cols-4 gap-x-8 rounded-lg bg-gray-100 p-4"
+              class="group relative rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200 lg:p-8"
             >
-              <div class="col-span-1">
-                <BaseFormInput
-                  v-model="experience.company"
-                  :label="`Společnost #${index + 1}`"
-                  type="text"
-                  :name="`job_experiences[${index}][company]`"
-                  rules="required|min:3"
-                />
-                <BaseFormInput
-                  v-model="experience.position"
-                  :label="`Pozice #${index + 1}`"
-                  type="text"
-                  :name="`job_experiences[${index}][position]`"
-                  rules="required|min:3"
-                />
-              </div>
-              <div class="col-span-1">
-                <BaseFormInput
-                  v-model="experience.start_date"
-                  :label="`Datum začátku #${index + 1}`"
-                  type="date"
-                  :name="`job_experiences[${index}][start_date]`"
-                  rules="required|date"
-                />
-                <BaseFormInput
-                  v-model="experience.end_date"
-                  :label="`Datum konce #${index + 1}`"
-                  type="date"
-                  :name="`job_experiences[${index}][end_date]`"
-                  rules="date"
-                />
-              </div>
-              <BaseFormTextarea
-                v-model="experience.description"
-                :label="`Popis práce #${index + 1}`"
-                :name="`job_experiences[${index}][description]`"
-                rules="min:3"
-                class="col-span-2"
-                :max="1000"
-              />
-              <LayoutDivider />
-              <div class="col-span-4 grid grid-cols-8 gap-4">
-                <div v-for="(skill, key) in experience.skills" :key="key" class="col-span-1">
+              <div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+                <div class="space-y-5 lg:col-span-1">
                   <BaseFormInput
-                    v-model="skill.name"
-                    :label="`Dovednost #${key + 1}`"
-                    type="text"
-                    :name="`job_experiences[${index}][skills][${key}][name]`"
-                    rules="required|min:2"
+                    v-model="experience.company"
+                    label="Společnost"
+                    :name="`job_experiences[${index}][company]`"
+                    rules="required"
                   />
+                  <BaseFormInput
+                    v-model="experience.position"
+                    label="Pozice"
+                    :name="`job_experiences[${index}][position]`"
+                    rules="required"
+                  />
+                  <div class="grid grid-cols-2 gap-4">
+                    <BaseFormInput
+                      v-model="experience.start_date"
+                      label="Od"
+                      type="date"
+                      name="..."
+                    />
+                    <BaseFormInput
+                      v-model="experience.end_date"
+                      label="Do"
+                      type="date"
+                      name="..."
+                    />
+                  </div>
                 </div>
-                <div class="col-span-1">
-                  <BaseButton
-                    type="button"
-                    variant="primary"
-                    size="xl"
-                    @click="addJobExperienceSkill(index)"
-                    >Přidat dovednost</BaseButton
-                  >
+
+                <div class="space-y-6 lg:col-span-3">
+                  <BaseFormTextarea
+                    v-model="experience.description"
+                    label="Náplň práce a úspěchy"
+                    rows="6"
+                    :name="`job_experiences[${index}][description]`"
+                  />
+
+                  <div class="border-t border-slate-200 pt-4">
+                    <span
+                      class="mb-4 block text-xs font-bold uppercase tracking-widest text-slate-400"
+                      >Použité technologie / Dovednosti</span
+                    >
+                    <div class="flex flex-wrap gap-3">
+                      <div
+                        v-for="(skill, key) in experience.skills"
+                        :key="key"
+                        class="flex items-center gap-2 rounded-xl bg-white p-1.5 ring-1 ring-slate-200"
+                      >
+                        <input
+                          v-model="skill.name"
+                          class="w-24 border-none p-0 text-xs font-medium focus:ring-0"
+                          placeholder="Dovednost..."
+                        />
+                        <button
+                          class="text-slate-400 hover:text-red-500"
+                          @click="removeJobExperienceSkill(index, key)"
+                        >
+                          <XMarkIcon class="size-3" />
+                        </button>
+                      </div>
+                      <BaseButton
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        class="rounded-xl border-dashed"
+                        @click="addJobExperienceSkill(index)"
+                      >
+                        +
+                      </BaseButton>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-span-full mt-4 text-center">
-                <BaseButton type="button" variant="danger" size="xl" @click="removeEducation(index)"
-                  >Odstranit pracovní zkušenost</BaseButton
-                >
-              </div>
-            </div>
-            <div class="text-center">
-              <BaseButton size="xl" type="button" @click="addJobExperience"
-                >Přidat pracovní zkušenost</BaseButton
+
+              <div
+                class="absolute right-4 top-4 opacity-0 transition-opacity group-hover:opacity-100"
               >
+                <BaseButton variant="danger" size="sm" @click="removeJobExperience(index)">
+                  Odstranit
+                </BaseButton>
+              </div>
             </div>
-          </LayoutContainer>
-        </div>
+          </div>
+        </LayoutContainer>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#vzdelani')">
-        <div class="grid grid-cols-1 gap-x-10">
-          <LayoutContainer class="col-span-full w-full">
+        <LayoutContainer>
+          <div class="mb-8 flex items-center justify-between">
+            <LayoutTitle class="!mb-0">Dosažené vzdělání</LayoutTitle>
+            <BaseButton size="lg" type="button" @click="addEducation">
+              + Přidat vzdělání
+            </BaseButton>
+          </div>
+
+          <div class="space-y-6">
             <div
               v-for="(education, index) in item.education"
               :key="index"
-              class="my-4 mb-6 grid grid-cols-4 gap-x-8 rounded-lg bg-gray-100 p-4"
+              class="group relative rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200"
             >
-              <div class="col-span-1">
-                <BaseFormInput
-                  v-model="education.institution"
-                  :label="`Instituce #${index + 1}`"
-                  type="text"
-                  :name="`education[${index}][institution]`"
-                  rules="required|min:3"
-                />
-                <BaseFormInput
-                  v-model="education.degree"
-                  :label="`Nejvyšší dosažené vzdělání #${index + 1}`"
-                  type="text"
-                  :name="`education[${index}][degree]`"
-                  rules="required|min:3"
-                />
+              <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                <div class="space-y-4 lg:col-span-1">
+                  <BaseFormInput
+                    v-model="education.institution"
+                    label="Instituce"
+                    name="..."
+                    rules="required"
+                  />
+                  <BaseFormInput
+                    v-model="education.degree"
+                    label="Titul / Obor"
+                    name="..."
+                    rules="required"
+                  />
+                  <div class="grid grid-cols-2 gap-4">
+                    <BaseFormInput
+                      v-model="education.start_date"
+                      label="Od"
+                      type="date"
+                      name="..."
+                    />
+                    <BaseFormInput v-model="education.end_date" label="Do" type="date" name="..." />
+                  </div>
+                </div>
+                <div class="lg:col-span-3">
+                  <BaseFormTextarea
+                    v-model="education.description"
+                    label="Popis studia"
+                    rows="4"
+                    name="..."
+                  />
+                </div>
               </div>
-              <div class="col-span-1">
-                <BaseFormInput
-                  v-model="education.start_date"
-                  :label="`Datum začátku #${index + 1}`"
-                  type="date"
-                  :name="`education[${index}][start_date]`"
-                  rules="required|date"
-                />
-                <BaseFormInput
-                  v-model="education.end_date"
-                  :label="`Datum konce #${index + 1}`"
-                  type="date"
-                  :name="`education[${index}][end_date]`"
-                  rules="date"
-                />
-              </div>
-              <BaseFormTextarea
-                v-model="education.description"
-                :label="`Popis průběhu vzdělání #${index + 1}`"
-                :name="`education[${index}][description]`"
-                rules="min:3"
-                class="col-span-2"
-                :max="1000"
-              />
-              <div class="col-span-full">
-                <BaseButton type="button" variant="danger" size="xl" @click="removeEducation(index)"
-                  >Odstranit vzdělání</BaseButton
-                >
+              <div class="mt-4 text-right">
+                <BaseButton variant="danger" size="sm" @click="removeEducation(index)">
+                  Odstranit toto vzdělání
+                </BaseButton>
               </div>
             </div>
-            <div class="text-center">
-              <BaseButton size="xl" type="button" @click="addEducation">Přidat vzdělání</BaseButton>
-            </div>
-          </LayoutContainer>
-        </div>
+          </div>
+        </LayoutContainer>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#nahled')">
-        <LayoutContainer>
-          <VPdfViewer :src="'/content/biographies/' + item.filename" />
+        <LayoutContainer class="overflow-hidden bg-slate-800 p-0 ring-slate-800">
+          <div class="flex min-h-[800px] items-center justify-center bg-slate-700/50 p-8">
+            <VPdfViewer
+              :src="'/content/biographies/' + item.filename"
+              class="rounded-sm shadow-2xl ring-1 ring-black/20"
+            />
+          </div>
         </LayoutContainer>
       </template>
     </Form>
   </div>
 </template>
-
-<style scoped>
-.vpv-sidebar-wrapper {
-  display: none !important;
-}
-</style>

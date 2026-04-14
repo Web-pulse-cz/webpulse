@@ -5,16 +5,26 @@ namespace App\Http\Controllers\Admin\Page;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Page\PageResource;
 use App\Models\Page\Page;
+use App\Services\GoogleTranslatorService;
+use App\Traits\HasFiles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
+    use HasFiles;
+
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -26,15 +36,15 @@ class PageController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%')
-                    ->orWhereTranslation($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%')
+                    ->orWhereTranslation($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->whereTranslation('name', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('slug', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('perex', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('description', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_title', 'like', '%' . $searchString . '%')
-                    ->orWhereTranslation('meta_description', 'like', '%' . $searchString . '%');
+                $query->whereTranslation('name', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('slug', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('perex', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('description', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_title', 'like', '%'.$searchString.'%')
+                    ->orWhereTranslation('meta_description', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -55,24 +65,23 @@ class PageController extends Controller
         }
 
         $pages = $query->get();
+
         return Response::json(PageResource::collection($pages));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $page = Page::find($id);
-            if (!$page) {
+            if (! $page) {
                 App::abort(404);
             }
         } else {
-            $page = new Page();
+            $page = new Page;
         }
 
         $validator = Validator::make($request->all(), [
             'translations' => 'required|array',
-            'translations.*.name' => 'required|string',
-            'translations.*.text' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -84,7 +93,7 @@ class PageController extends Controller
             $page->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
-                $translation['slug'] = Str::slug($translation['name']);
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale);
                 $page->translateOrNew($locale)->fill($translation);
             }
 
@@ -95,6 +104,7 @@ class PageController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating post category.'], 500);
         }
 
@@ -105,14 +115,14 @@ class PageController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $page = Page::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$page) {
+        if (! $page) {
             App::abort(404);
         }
 
@@ -121,16 +131,33 @@ class PageController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $page = Page::find($id);
-        if (!$page) {
+        if (! $page) {
             App::abort(404);
         }
 
+        $page->removeAllFiles();
         $page->delete();
+
         return Response::json();
+    }
+
+    public function uploadFile(Request $request, int $id): JsonResponse
+    {
+        return $this->handleUploadFile($request, Page::class, $id, 'files/pages', PageResource::class);
+    }
+
+    public function downloadFile(int $pageId, int $fileId)
+    {
+        return $this->handleDownloadFile(Page::class, $pageId, $fileId);
+    }
+
+    public function deleteFile(int $pageId, int $fileId): JsonResponse
+    {
+        return $this->handleDeleteFile(Page::class, $pageId, $fileId);
     }
 }

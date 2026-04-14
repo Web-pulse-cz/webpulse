@@ -123,70 +123,68 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="demands" />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'fullname',
-            name: 'Jméno a příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'phone',
-            name: 'Telefon',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'service_name',
-            name: 'Služba',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: false,
-          },
-          {
-            key: 'offer_price',
-            name: 'Navrhovaná cena',
-            type: 'number',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Poptávku"
-        plural="Poptávky"
-        :query="tableQuery"
-        slug="demands"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'fullname',
+          name: 'Jméno a příjmení',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'email',
+          name: 'E-mail',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'phone',
+          name: 'Telefon',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'service_name',
+          name: 'Služba',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'offer_price',
+          name: 'Navrhovaná cena',
+          type: 'number',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Poptávku"
+      plural="Poptávky"
+      :query="tableQuery"
+      slug="demands"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

@@ -19,7 +19,7 @@ class ContactHistory extends Model
         'type',
         'contact_id',
         'contact_phase_id',
-        'activity_id'
+        'activity_id',
     ];
 
     protected $with = ['phase', 'activity'];

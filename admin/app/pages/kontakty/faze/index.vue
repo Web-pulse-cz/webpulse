@@ -128,40 +128,54 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat fázi procesu' }]"
       slug="contacts"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          {
-            key: 'name',
-            name: 'Název',
-            type: 'badge',
-            width: 80,
-            hidden: false,
-            sortable: true,
-            colorKey: 'color',
-          },
-          {
-            key: 'contacts_count',
-            name: 'Počet kontaktů',
-            type: 'text',
-            width: 80,
-            hidden: true,
-            sortable: false,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Fáze procesu"
-        plural="Fáze procesu"
-        :query="tableQuery"
-        slug="contacts"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        {
+          key: 'name',
+          name: 'Název',
+          type: 'badge',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          colorKey: 'color',
+        },
+        {
+          key: 'contacts_count',
+          name: 'Počet kontaktů',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: false,
+        },
+        {
+          key: 'position',
+          name: 'Pořadí ve výpisu',
+          type: 'text',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+        {
+          key: 'show_in_statistics',
+          name: 'Zobrazit ve statistikách',
+          type: 'status',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Fáze procesu"
+      plural="Fáze procesu"
+      :query="tableQuery"
+      slug="contacts"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

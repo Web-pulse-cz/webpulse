@@ -2,6 +2,7 @@
 
 namespace App\Models\Page;
 
+use App\Traits\Fileable;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class Page extends Model
 {
-    use Translatable, Siteable;
+    use Siteable, Fileable, Translatable;
 
     protected $table = 'pages';
 
@@ -44,6 +45,7 @@ class Page extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }

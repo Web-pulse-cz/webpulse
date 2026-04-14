@@ -12,8 +12,8 @@ class ContactUpdated
         $oldContact = $event->getOldContact();
         $newContact = $event->getNewContact();
 
-        if (empty($oldContact->goal) && !empty($newContact->goal)) {
-            $history = new ContactHistory();
+        if (empty($oldContact->goal) && ! empty($newContact->goal)) {
+            $history = new ContactHistory;
             $history->fill([
                 'name' => 'Už znáš jeho/její cíl!',
                 'description' => $newContact->goal,
@@ -25,10 +25,10 @@ class ContactUpdated
         }
 
         if ($oldContact->contact_phase_id !== $newContact->contact_phase_id) {
-            $history = new ContactHistory();
+            $history = new ContactHistory;
             $history->fill([
                 'name' => 'Fáze kontaktu změněna',
-                'description' => 'Fáze kontaktu byla změněna z ' . $oldContact->phase?->name . ' na ' . $newContact->phase->name,
+                'description' => 'Fáze kontaktu byla změněna z '.$oldContact->phase?->name.' na '.$newContact->phase->name,
                 'origin' => 'system',
                 'type' => 'call',
             ]);

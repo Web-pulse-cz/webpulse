@@ -32,7 +32,7 @@ class CareerResource extends JsonResource
             'sites' => $this->sites,
             'applications' => [
                 'data' => CareerApplicationResource::collection($this->applications),
-            ]
+            ],
         ];
     }
 }

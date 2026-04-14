@@ -52,82 +52,95 @@ generatePages();
 
 <template>
   <div
-    class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+    class="flex items-center justify-between border-t border-slate-200 bg-white px-4 py-4 sm:px-6"
   >
     <div class="flex flex-1 justify-between sm:hidden">
       <span
-        class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 lg:px-4 lg:py-2 lg:text-sm"
+        :class="[
+          page === 1
+            ? 'cursor-not-allowed opacity-50'
+            : 'cursor-pointer hover:bg-slate-50 active:scale-95',
+          'relative inline-flex items-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 transition-all duration-200',
+        ]"
         @click="page !== 1 ? emit('update-page', Number(page - 1)) : null"
-        >Předchozí</span
       >
+        Předchozí
+      </span>
       <span
-        class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 lg:px-4 lg:py-2 lg:text-sm"
+        :class="[
+          page === lastPage
+            ? 'cursor-not-allowed opacity-50'
+            : 'cursor-pointer hover:bg-slate-50 active:scale-95',
+          'relative ml-3 inline-flex items-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 transition-all duration-200',
+        ]"
         @click="page !== lastPage ? emit('update-page', Number(page + 1)) : null"
-        >Následující</span
       >
+        Následující
+      </span>
     </div>
+
     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
       <div>
-        <p class="text-sm text-grayLight">
+        <p class="text-sm text-slate-500">
           Zobrazeno
           {{ ' ' }}
-          <span class="font-medium">{{ (page - 1) * perPage + 1 }}</span>
+          <span class="font-semibold text-slate-900">{{ (page - 1) * perPage + 1 }}</span>
           {{ ' ' }}
           ─
           {{ ' ' }}
-          <span class="font-medium">{{ Math.min(page * perPage, total) }}</span>
+          <span class="font-semibold text-slate-900">{{ Math.min(page * perPage, total) }}</span>
           {{ ' ' }}
           z
           {{ ' ' }}
-          <span class="font-medium">{{ total }}</span>
+          <span class="font-semibold text-slate-900">{{ total }}</span>
           {{ ' ' }}
           výsledků
         </p>
       </div>
+
       <div>
-        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        <nav class="isolate inline-flex -space-x-px rounded-xl shadow-sm" aria-label="Pagination">
           <span
             :class="[
-              page === 1 ? 'cursor-not-allowed' : 'cursor-pointer',
-              'relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0',
+              page === 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-slate-50',
+              'relative inline-flex items-center rounded-l-xl px-2.5 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 transition-colors focus:z-20',
             ]"
+            @click="page !== 1 ? emit('update-page', Number(page - 1)) : null"
           >
             <span class="sr-only">Předchozí</span>
-            <ChevronLeftIcon
-              class="size-5"
-              aria-hidden="true"
-              @click="page !== 1 ? emit('update-page', Number(page - 1)) : null"
-            />
+            <ChevronLeftIcon class="size-5" aria-hidden="true" />
           </span>
-          <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+
           <span
             v-for="(generatedPage, key) in generatedPages"
             :key="key"
             :class="[
               generatedPage === page
-                ? 'bg-primaryCustom text-white'
-                : 'text-grayDark ring-1 ring-inset ring-gray-300',
-              'relative z-10 inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold',
+                ? 'z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                : 'text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50',
+              generatedPage === '...' ? 'cursor-default' : 'cursor-pointer',
+              'relative inline-flex items-center px-4 py-2 text-sm font-semibold transition-colors',
             ]"
             @click="
               generatedPage != '...' && generatedPage !== page
                 ? emit('update-page', Number(generatedPage))
                 : null
             "
-            >{{ generatedPage }}</span
           >
+            {{ generatedPage }}
+          </span>
+
           <span
             :class="[
-              page === lastPage ? 'cursor-not-allowed' : 'cursor-pointer',
-              'relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0',
+              page === lastPage
+                ? 'cursor-not-allowed opacity-50'
+                : 'cursor-pointer hover:bg-slate-50',
+              'relative inline-flex items-center rounded-r-xl px-2.5 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 transition-colors focus:z-20',
             ]"
+            @click="page !== lastPage ? emit('update-page', Number(page + 1)) : null"
           >
             <span class="sr-only">Následující</span>
-            <ChevronRightIcon
-              class="size-5"
-              aria-hidden="true"
-              @click="page !== lastPage ? emit('update-page', Number(page + 1)) : null"
-            />
+            <ChevronRightIcon class="size-5" aria-hidden="true" />
           </span>
         </nav>
       </div>

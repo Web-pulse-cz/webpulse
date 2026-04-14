@@ -52,6 +52,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function () {
                 Log::error('Contacts next call update command failed');
             });
+
+        $schedule->command('fakturoid:sync --full')
+            ->everyFifteenMinutes()
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->onFailure(function () {
+                Log::error('Fakturoid sync command failed');
+            });
     }
 
     /**
@@ -59,7 +67,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

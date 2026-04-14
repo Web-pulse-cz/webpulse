@@ -23,7 +23,7 @@ class Controller extends BaseController
 
     public function handleLanguage(?string $lang = null): string
     {
-        if (!$lang) {
+        if (! $lang) {
             $lang = App::getLocale();
         }
         App::setLocale($lang);
@@ -33,11 +33,11 @@ class Controller extends BaseController
 
     public function handleSite(?string $hash = null): int
     {
-        if (!$hash) {
+        if (! $hash) {
             App::abort(404);
         }
         $site = Site::query()->where('hash', $hash)->first();
-        if (!$site) {
+        if (! $site) {
             App::abort(404);
         }
 
@@ -66,27 +66,34 @@ class Controller extends BaseController
 
         return Response::json([
             'lastAddedContacts' => [
-                'data' => $lastAddedContacts
+                'data' => $lastAddedContacts,
             ],
             'contactsToCall' => [
-                'data' => $contactsToCall
+                'data' => $contactsToCall,
             ],
             'comingEvents' => [
-                'data' => $comingEvents
-            ]
+                'data' => $comingEvents,
+            ],
         ]);
     }
 
     public function statistics(Request $request): JsonResponse
     {
-        $businessGrowthActivityIds = [1, 6, 7, 8, 9, 10, 11, 12, 21, 22, 24];
-        $personalGrowthActivityIds = [2, 3, 4, 5, 16, 17, 18, 27, 28, 29, 30];
+        $bActivityIds = Activity::query()
+            ->where('is_business', true)
+            ->pluck('id')
+            ->toArray();
+
+        $pActivityIds = Activity::query()
+            ->where('is_personal', true)
+            ->pluck('id')
+            ->toArray();
 
         $daysMonths = now()->daysInMonth;
         if ($request->has('filter')) {
             if ($request->get('filter') == 'month' && $request->has('year')) {
                 $daysMonths = Carbon::createFromDate($request->year, $request->month)->daysInMonth;
-            } else if ($request->get('filter') == 'year') {
+            } elseif ($request->get('filter') == 'year') {
                 $daysMonths = 12;
             }
         }
@@ -107,12 +114,12 @@ class Controller extends BaseController
 
         $businessActivitiesQuery = UserActivity::with('activity')
             ->where('user_id', $request->user()->id)
-            ->whereIn('activity_id', $businessGrowthActivityIds)
+            ->whereIn('activity_id', $bActivityIds)
             ->groupBy('activity_id', 'day');
 
         $personalActivitiesQuery = UserActivity::with('activity')
             ->where('user_id', $request->user()->id)
-            ->whereIn('activity_id', $personalGrowthActivityIds)
+            ->whereIn('activity_id', $pActivityIds)
             ->groupBy('activity_id', 'day');
 
         $cashflowQuery = CashflowCategory::with([
@@ -130,7 +137,7 @@ class Controller extends BaseController
                                 ->whereMonth('date', now()->month)
                                 ->whereYear('date', now()->year);
                         }
-                    } else if ($request->get('filter') == 'year') {
+                    } elseif ($request->get('filter') == 'year') {
                         if ($request->has('year')) {
                             $query->whereYear('date', $request->year)
                                 ->whereYear('date', $request->year);
@@ -155,7 +162,7 @@ class Controller extends BaseController
                                 ->whereMonth('end_date', now()->month)
                                 ->whereYear('end_date', now()->year);
                         }
-                    } else if ($request->get('filter') == 'year') {
+                    } elseif ($request->get('filter') == 'year') {
                         if ($request->has('year')) {
                             $query->whereYear('start_date', $request->year)
                                 ->whereYear('start_date', $request->year)
@@ -169,16 +176,16 @@ class Controller extends BaseController
                         }
                     }
                 }
-            }
+            },
         ])
             ->where('user_id', $request->user()->id);
 
         if ($request->has('filter')) {
             if ($request->get('filter') == 'month') {
                 if ($request->has('month') && $request->has('year')) {
-                    $businessActivitiesQuery->whereMonth('date', (int)$request->month)
+                    $businessActivitiesQuery->whereMonth('date', (int) $request->month)
                         ->whereYear('date', $request->year);
-                    $personalActivitiesQuery->whereMonth('date', (int)$request->month)
+                    $personalActivitiesQuery->whereMonth('date', (int) $request->month)
                         ->whereYear('date', $request->year);
                 } else {
                     $businessActivitiesQuery->whereMonth('date', now()->month)
@@ -188,7 +195,7 @@ class Controller extends BaseController
                 }
                 $businessActivitiesQuery->selectRaw('activity_id, COUNT(*) as count, DATE_FORMAT(date, "%e. %c.") as day');
                 $personalActivitiesQuery->selectRaw('activity_id, COUNT(*) as count, DATE_FORMAT(date, "%e. %c.") as day');
-            } else if ($request->get('filter') == 'year') {
+            } elseif ($request->get('filter') == 'year') {
                 if ($request->has('year')) {
                     $businessActivitiesQuery->whereYear('date', $request->year);
                     $personalActivitiesQuery->whereYear('date', $request->year);
@@ -208,10 +215,10 @@ class Controller extends BaseController
         $rawBusinessActivitiesArr = [];
         $rawPersonalActivitiesArr = [];
         $businessActivitiesRaw = Activity::query()
-            ->whereIn('id', $businessGrowthActivityIds)
+            ->whereIn('id', $bActivityIds)
             ->get();
         $personalActivitiesRaw = Activity::query()
-            ->whereIn('id', $personalGrowthActivityIds)
+            ->whereIn('id', $pActivityIds)
             ->get();
 
         $businessColors = [];
@@ -247,9 +254,9 @@ class Controller extends BaseController
             $activityName = $rawBusinessActivitiesArr[$activity->activity_id];
             if ($request->has('filter')) {
                 if ($request->get('filter') == 'month' && $request->has('year')) {
-                    $day = (int)explode('. ', $activity->day)[0] - 1;
-                } else if ($request->get('filter') == 'year') {
-                    $day = (int)$activity->day - 1;
+                    $day = (int) explode('. ', $activity->day)[0] - 1;
+                } elseif ($request->get('filter') == 'year') {
+                    $day = (int) $activity->day - 1;
                 }
             }
             $businessActivityData[$activityName][$day] = $activity->count;
@@ -259,9 +266,9 @@ class Controller extends BaseController
             $activityName = $rawPersonalActivitiesArr[$activity->activity_id];
             if ($request->has('filter')) {
                 if ($request->get('filter') == 'month' && $request->has('year')) {
-                    $day = (int)explode('. ', $activity->day)[0] - 1;
-                } else if ($request->get('filter') == 'year') {
-                    $day = (int)$activity->day - 1;
+                    $day = (int) explode('. ', $activity->day)[0] - 1;
+                } elseif ($request->get('filter') == 'year') {
+                    $day = (int) $activity->day - 1;
                 }
             }
             $personalActivityData[$activityName][$day] = $activity->count;
@@ -271,14 +278,14 @@ class Controller extends BaseController
             $businessSeries[] = [
                 'name' => $name,
                 'data' => $data,
-                'color' => $businessColors[$name]
+                'color' => $businessColors[$name],
             ];
         }
         foreach ($personalActivityData as $name => $data) {
             $personalSeries[] = [
                 'name' => $name,
                 'data' => $data,
-                'color' => $personalColors[$name]
+                'color' => $personalColors[$name],
             ];
         }
 
@@ -287,7 +294,7 @@ class Controller extends BaseController
             $budget = round($cashflowCategory->budgets->sum('amount'), 2);
             $name = $cashflowCategory->name;
 
-            $percentageLeft = (($budget - $spent) / $budget) * 100;
+            $percentageLeft = $budget > 0 ? (($budget - $spent) / $budget) * 100 : 100;
 
             if ($percentageLeft <= 0) {
                 $stroke = [
@@ -298,7 +305,7 @@ class Controller extends BaseController
                     'strokeLineCap' => 'round',
                     'strokeColor' => '#7f1d1d',
                 ];
-            } else if ($percentageLeft <= 25) {
+            } elseif ($percentageLeft <= 25) {
                 $stroke = [
                     'name' => $name,
                     'value' => $budget,
@@ -320,7 +327,7 @@ class Controller extends BaseController
                 'x' => $cashflowCategory->name,
                 'y' => $spent,
                 'goals' => [$stroke],
-                'percentage' => $percentageLeft
+                'percentage' => $percentageLeft,
             ];
         }
 
@@ -328,40 +335,43 @@ class Controller extends BaseController
         if ($request->has('filter')) {
             if ($request->get('filter') == 'month' && $request->has('year')) {
                 for ($day = 1; $day <= $daysMonths; $day++) {
-                    $axis[] = $day . '. ' . $request->month . '.';
+                    $axis[] = $day.'. '.$request->month.'.';
                 }
-            } else if ($request->get('filter') == 'year') {
+            } elseif ($request->get('filter') == 'year') {
                 for ($month = 1; $month <= 12; $month++) {
-                    $axis[] = $month . '.';
+                    $axis[] = $month.'.';
                 }
             }
         }
 
         $contactsSeries = [0];
         $contactsAxis = ['Celkem'];
-        foreach ($contactPhasesQuery as $contactPhase) {
+        foreach ($contactPhasesQuery as $i => $contactPhase) {
             $contactsSeries[] = $contactPhase->contacts_count;
             $contactsAxis[] = $contactPhase->name;
             $contactsSeries[0] += $contactPhase->contacts_count;
+            /*if ($i > 1) {
+                $contactsSeries[$i-1] += $contactPhase->contacts_count;
+            }*/
         }
 
         return Response::json([
             'contacts' => [
                 'series' => $contactsSeries,
-                'axis' => $contactsAxis
+                'axis' => $contactsAxis,
             ],
             'business' => [
                 'series' => $businessSeries,
-                'axis' => $axis
+                'axis' => $axis,
             ],
             'personal' => [
                 'series' => $personalSeries,
-                'axis' => $axis
+                'axis' => $axis,
             ],
             'cashflow' => $cashflowData,
             'businessSummary' => [],
             'businessColors' => $rawBusinessColors,
-            'personalColors' => $rawPersonalColors
+            'personalColors' => $rawPersonalColors,
         ]);
     }
 

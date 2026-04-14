@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class Novelty extends Model
 {
-    use Translatable, Imagable, Siteable;
+    use Imagable, Siteable, Translatable;
 
     protected $table = 'novelties';
 
@@ -47,6 +47,7 @@ class Novelty extends Model
             if ($fallbackTranslation && $fallbackTranslation->$key !== null) {
                 return $fallbackTranslation->$key;
             }
+
             // Jinak můžeš vrátit null nebo původní hodnotu
             return null;
         }
@@ -54,7 +55,6 @@ class Novelty extends Model
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
     }
-
 
     public function getMainImageAttribute()
     {

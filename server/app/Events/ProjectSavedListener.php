@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Project\Project;
 use App\Events\ProjectSavedEvent as Event;
 use App\Models\Project\ProjectEvent;
 
@@ -14,7 +13,7 @@ class ProjectSavedListener
         $data = $event->getData();
 
         if ($project->events->count() == 0) {
-            $event = new ProjectEvent();
+            $event = new ProjectEvent;
             $event->fill([
                 'name' => 'Projekt byl vytvořen',
                 'description' => 'Nový projekt byl vytvořen a uložen ve stavu ',
@@ -27,7 +26,7 @@ class ProjectSavedListener
         }
 
         if ($project->events->count() != 0 && $project->status_id !== $project->events->last()->status_id) {
-            $event = new ProjectEvent();
+            $event = new ProjectEvent;
             $event->fill([
                 'name' => 'Změna stavu',
                 'description' => 'Projekt byl přepnut do stavu ',

@@ -16,12 +16,22 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex space-x-1.5">
-    <div v-for="star in maxStars" :key="star" class="cursor-pointer focus:outline-none">
+  <div class="flex items-center space-x-1">
+    <button
+      v-for="star in maxStars"
+      :key="star"
+      type="button"
+      class="group relative flex items-center justify-center rounded-md p-1 transition-transform duration-200 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 active:scale-95"
+      @click="rating = star"
+    >
       <StarIcon
-        :class="`h-6 w-6 ${star <= rating ? 'text-yellow-400' : 'text-grayLight'}`"
-        @click="rating = star"
+        :class="[
+          star <= rating ? 'text-amber-400' : 'text-slate-200',
+          'size-6 fill-current transition-colors duration-200',
+        ]"
+        aria-hidden="true"
       />
-    </div>
+      <span class="sr-only">Ohodnotit {{ star }} z {{ maxStars }}</span>
+    </button>
   </div>
 </template>

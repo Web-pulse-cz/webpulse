@@ -89,6 +89,7 @@ useHead({
 });
 
 onMounted(() => {
+  activityStore.fetchActivities();
   loadItems();
 });
 definePageMeta({

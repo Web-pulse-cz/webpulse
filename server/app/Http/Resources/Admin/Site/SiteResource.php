@@ -14,6 +14,13 @@ class SiteResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $hasFakturoidSecret = false;
+        try {
+            $hasFakturoidSecret = ! empty($this->fakturoid_client_secret);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            // Secret was encrypted with a different APP_KEY
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -22,6 +29,18 @@ class SiteResource extends JsonResource
             'is_secure' => $this->is_secure,
             'is_active' => $this->is_active,
             'settings' => $this->settings,
+            'fakturoid_client_id' => $this->fakturoid_client_id,
+            'fakturoid_client_secret' => $hasFakturoidSecret ? '••••••••' : null,
+            'fakturoid_slug' => $this->fakturoid_slug,
+            'billing_name' => $this->billing_name,
+            'billing_ico' => $this->billing_ico,
+            'billing_dic' => $this->billing_dic,
+            'billing_street' => $this->billing_street,
+            'billing_city' => $this->billing_city,
+            'billing_zip' => $this->billing_zip,
+            'billing_bank_account' => $this->billing_bank_account,
+            'billing_iban' => $this->billing_iban,
+            'billing_swift' => $this->billing_swift,
             'users' => $this->users,
         ];
     }

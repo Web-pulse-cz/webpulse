@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Admin\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Setting\SettingResource;
 use App\Models\Setting\Setting;
+use App\Services\GoogleTranslatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
+    protected GoogleTranslatorService $googleTranslatorService;
+
+    public function __construct()
+    {
+        $this->googleTranslatorService = new GoogleTranslatorService;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
@@ -26,9 +33,9 @@ class SettingController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('type', 'like', '%' . $searchString . '%');
+                $query->where('type', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -49,23 +56,23 @@ class SettingController extends Controller
         }
 
         $settings = $query->get();
+
         return Response::json(SettingResource::collection($settings));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $setting = Setting::find($id);
-            if (!$setting) {
+            if (! $setting) {
                 App::abort(404);
             }
         } else {
-            $setting = new Setting();
+            $setting = new Setting;
         }
 
         $validator = Validator::make($request->all(), [
             'translations' => 'required|array',
-            'translations.*.value' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -77,9 +84,9 @@ class SettingController extends Controller
             $setting->fill($request->all());
 
             foreach ($request->translations as $locale => $translation) {
+                $translation = $this->googleTranslatorService->parseTranslation($request, $translation, $locale, false);
                 $setting->translateOrNew($locale)->fill($translation);
             }
-
 
             $setting->save();
             $setting->saveSites($setting, $request->get('sites', []));
@@ -87,6 +94,7 @@ class SettingController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating setting.'], 500);
         }
 
@@ -97,14 +105,14 @@ class SettingController extends Controller
     {
         $siteId = $this->handleSite($request->header('X-Site-Hash'));
 
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $setting = Setting::query()
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
-        if (!$setting) {
+        if (! $setting) {
             App::abort(404);
         }
 
@@ -113,16 +121,17 @@ class SettingController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $setting = Setting::find($id);
-        if (!$setting) {
+        if (! $setting) {
             App::abort(404);
         }
 
         $setting->delete();
+
         return Response::json();
     }
 }

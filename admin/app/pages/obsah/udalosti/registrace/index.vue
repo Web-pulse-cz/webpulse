@@ -123,70 +123,68 @@ definePageMeta({
 <template>
   <div>
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="events" />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          {
-            key: 'id',
-            name: 'ID',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'firstname',
-            name: 'Jméno',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'lastname',
-            name: 'Příjmení',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'email',
-            name: 'E-mail',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'phone',
-            name: 'Telefon',
-            type: 'text',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-          {
-            key: 'is_paid',
-            name: 'Zaplaceno',
-            type: 'status',
-            width: 80,
-            hidden: false,
-            sortable: true,
-          },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Registrace"
-        plural="Registrace"
-        :query="tableQuery"
-        slug="events"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        {
+          key: 'id',
+          name: 'ID',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'firstname',
+          name: 'Jméno',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'lastname',
+          name: 'Příjmení',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'email',
+          name: 'E-mail',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'phone',
+          name: 'Telefon',
+          type: 'text',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'is_paid',
+          name: 'Zaplaceno',
+          type: 'status',
+          width: 80,
+          hidden: false,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Registrace"
+      plural="Registrace"
+      :query="tableQuery"
+      slug="events"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

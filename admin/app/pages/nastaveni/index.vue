@@ -128,27 +128,25 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat nastavení' }]"
       slug="settings"
     />
-    <LayoutContainer>
-      <BaseTable
-        :items="items"
-        :columns="[
-          { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-          { key: 'type', name: 'Název', type: 'enum', width: 80, hidden: false, sortable: false },
-        ]"
-        :actions="[{ type: 'edit' }, { type: 'delete' }]"
-        :loading="loading"
-        :error="error"
-        singular="Nastavení"
-        plural="Nastavení"
-        :query="tableQuery"
-        slug="settings"
-        :enums="{
-          type: { topMenu: 'Horní menu', bottomMenu: 'Spodní menu' },
-        }"
-        @delete-item="deleteItem"
-        @update-sort="updateSort"
-        @update-page="updatePage"
-      />
-    </LayoutContainer>
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
+        { key: 'type', name: 'Název', type: 'enum', width: 80, hidden: false, sortable: false },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Nastavení"
+      plural="Nastavení"
+      :query="tableQuery"
+      slug="settings"
+      :enums="{
+        type: { topMenu: 'Horní menu', bottomMenu: 'Spodní menu' },
+      }"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+    />
   </div>
 </template>

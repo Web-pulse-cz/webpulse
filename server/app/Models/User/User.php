@@ -45,7 +45,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected $with = ['quickAccess', 'userGroup'];
+    protected $with = ['quickAccess', 'userGroup.sites'];
 
     public function quickAccess()
     {

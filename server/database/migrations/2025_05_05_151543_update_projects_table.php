@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -31,7 +32,7 @@ return new class extends Migration {
             $table->boolean('is_delivery_address_same')->after('invoice_country_id')->default(0);
 
             $table->unsignedBigInteger('status_id')->after('delivery_country_id')->nullable();
-            $table->foreign('status_id')->references('id')->on('project_statuses')->onDelete('SET NULL')->onUpdate('CASCADE'); //TODO currency_id
+            $table->foreign('status_id')->references('id')->on('project_statuses')->onDelete('SET NULL')->onUpdate('CASCADE'); // TODO currency_id
 
             $table->decimal('hourly_rate', 10, 2)->after('image')->default(0);
         });

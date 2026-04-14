@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useActivityStore } from '~~/stores/activityStore';
 
 import { definePageMeta } from '#imports';
+
+const activityStore = useActivityStore();
 
 const { $toast } = useNuxtApp();
 const pageTitle = ref('Aktivita');
@@ -150,6 +153,10 @@ function showUpdateEditDialog(item) {
 
 useHead({
   title: pageTitle.value,
+});
+
+onBeforeMount(() => {
+  activityStore.fetchActivities(true, true);
 });
 
 onMounted(() => {

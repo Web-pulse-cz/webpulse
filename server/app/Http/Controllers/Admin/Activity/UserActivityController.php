@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Activity;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Activity\UserActivityResource;
 use App\Models\Activity\UserActivity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserActivityController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = UserActivity::query()
@@ -28,20 +28,20 @@ class UserActivityController extends Controller
                 ->whereYear('date', date('Y'));
         }
 
-        return Response::json(\App\Http\Resources\Admin\Activity\UserActivityResource::collection($query->get()));
+        return Response::json(UserActivityResource::collection($query->get()));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $userActivity = UserActivity::query()
                 ->where('user_id', $request->user()->id)
                 ->find($id);
-            if (!$userActivity) {
+            if (! $userActivity) {
                 App::abort(404);
             }
         } else {
-            $userActivity = new UserActivity();
+            $userActivity = new UserActivity;
         }
 
         $validator = Validator::make($request->all(), [
@@ -71,15 +71,16 @@ class UserActivityController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['errors' => $e->getMessage()], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Activity\UserActivityResource::make($userActivity));
+        return Response::json(UserActivityResource::make($userActivity));
     }
 
     public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -87,16 +88,16 @@ class UserActivityController extends Controller
             ->where('user_id', $request->user()->id)
             ->find($id);
 
-        if (!$userActivity) {
+        if (! $userActivity) {
             App::abort(404);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Activity\UserActivityResource::make($userActivity));
+        return Response::json(UserActivityResource::make($userActivity));
     }
 
     public function destroy(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -104,7 +105,7 @@ class UserActivityController extends Controller
             ->where('user_id', $request->user()->id)
             ->find($id);
 
-        if (!$userActivity) {
+        if (! $userActivity) {
             App::abort(404);
         }
         $userActivity->delete();

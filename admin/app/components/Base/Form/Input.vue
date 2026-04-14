@@ -77,10 +77,12 @@ defineRule('email', (value) => {
 </script>
 
 <template>
-  <div>
-    <label :for="name" class="block text-left text-xs font-medium text-grayCustom lg:text-sm/6"
-      >{{ label }}<span v-if="rules.includes('required')" class="ml-1 text-danger">*</span></label
-    >
+  <div class="w-full">
+    <label :for="name" class="mb-1.5 block text-sm font-medium text-slate-700">
+      {{ label }}
+      <span v-if="rules && rules.includes('required')" class="ml-1 text-red-500">*</span>
+    </label>
+
     <Field
       v-if="
         type === 'text' ||
@@ -101,10 +103,13 @@ defineRule('email', (value) => {
       autocomplete="off"
       :autofocus="false"
       :class="[
-        'mt-2 block w-full rounded-md border-0 py-1.5 text-xs text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6',
-        { 'bg-grayLight': disabled },
+        disabled
+          ? 'cursor-not-allowed bg-slate-50 text-slate-500 ring-slate-200'
+          : 'bg-white text-slate-900 ring-slate-300 hover:ring-slate-400',
+        'block w-full rounded-xl border-0 px-4 py-2.5 text-sm shadow-sm ring-1 ring-inset transition-all duration-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500',
       ]"
     />
+
     <Field
       v-else-if="type === 'number'"
       v-bind="$attrs"
@@ -121,10 +126,13 @@ defineRule('email', (value) => {
       :step="step"
       :autofocus="false"
       :class="[
-        'mt-2 block w-full rounded-md border-0 py-1.5 text-xs text-grayDark shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6',
-        { 'bg-grayLight': disabled },
+        disabled
+          ? 'cursor-not-allowed bg-slate-50 text-slate-500 ring-slate-200'
+          : 'bg-white text-slate-900 ring-slate-300 hover:ring-slate-400',
+        'block w-full rounded-xl border-0 px-4 py-2.5 text-sm shadow-sm ring-1 ring-inset transition-all duration-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500',
       ]"
     />
-    <ErrorMessage :name="name" class="text-sm text-danger" />
+
+    <ErrorMessage :name="name" class="mt-1.5 block text-xs font-medium text-red-500" />
   </div>
 </template>

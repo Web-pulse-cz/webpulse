@@ -130,11 +130,11 @@ const badgeClass = computed(() => (color: string) => {
       <div
         :class="[
           reverse ? 'flex-row-reverse justify-between' : 'flex-row',
-          'flex items-center gap-3',
+          'group flex cursor-pointer items-center gap-3',
         ]"
       >
-        <div class="flex h-6 shrink-0 items-center">
-          <div class="group grid size-4 grid-cols-1">
+        <div class="flex shrink-0 items-center">
+          <div class="group/checkbox grid size-5 grid-cols-1 place-items-center">
             <input
               :id="name"
               v-model="model"
@@ -142,24 +142,24 @@ const badgeClass = computed(() => (color: string) => {
               :name="name"
               type="checkbox"
               :checked="checked"
-              class="col-start-1 row-start-1 appearance-none rounded border border-grayLight bg-white checked:border-primaryCustom checked:bg-primaryCustom indeterminate:border-primaryCustom indeterminate:bg-primaryCustom focus:border-primaryCustom focus:ring-primaryCustom active:border-primaryCustom active:bg-primaryCustom disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100"
+              class="col-start-1 row-start-1 size-5 cursor-pointer appearance-none rounded-md border-2 border-slate-300 bg-white transition-all duration-200 ease-in-out checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-50 disabled:checked:bg-slate-200"
             />
             <svg
-              class="pointer-events-none col-start-1 row-start-1 size-1.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
+              class="pointer-events-none col-start-1 row-start-1 size-3.5 stroke-white group-has-[:disabled]/checkbox:stroke-slate-400"
               viewBox="0 0 14 14"
               fill="none"
             >
               <path
-                class="opacity-0 group-has-[:checked]:opacity-100"
+                class="opacity-0 transition-opacity duration-200 group-has-[:checked]/checkbox:opacity-100"
                 d="M3 8L6 11L11 3.5"
-                stroke-width="2"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
               <path
-                class="opacity-0 group-has-[:indeterminate]:opacity-100"
+                class="opacity-0 transition-opacity duration-200 group-has-[:indeterminate]/checkbox:opacity-100"
                 d="M3 7H11"
-                stroke-width="2"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
@@ -167,11 +167,24 @@ const badgeClass = computed(() => (color: string) => {
           </div>
         </div>
 
-        <div class="text-xs lg:text-sm/6">
-          <label v-if="type === 'badge'" :for="name" :class="badgeClass(color)">{{ label }}</label>
-          <label v-else :for="name" :class="'font-medium' + ' text-' + labelColor">{{
-            label
-          }}</label>
+        <div class="flex-1 text-sm/6">
+          <label
+            v-if="type === 'badge'"
+            :for="name"
+            :class="[badgeClass(color), 'cursor-pointer select-none']"
+          >
+            {{ label }}
+          </label>
+          <label
+            v-else
+            :for="name"
+            :class="[
+              'cursor-pointer select-none font-medium transition-colors duration-200',
+              labelColor ? 'text-' + labelColor : 'text-slate-700 group-hover:text-slate-900',
+            ]"
+          >
+            {{ label }}
+          </label>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import { BriefcaseIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -223,7 +224,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -232,254 +233,206 @@ definePageMeta({
       slug="careers"
       @save="saveItem"
     />
-    <LayoutTabs :tabs="tabs" />
+
+    <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
+
     <Form @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
-        <div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 lg:grid-cols-12">
-          <LayoutContainer class="col-span-9 w-full">
-            <div class="grid grid-cols-4 gap-4">
-              <BaseFormInput
-                v-model="item.code"
-                label="Kód"
-                type="text"
-                name="code"
-                class="col-span-2"
-                disabled
-              />
-              <br />
-              <BaseFormSelect
-                v-model="item.type"
-                label="Typ úvazku"
-                name="type"
-                class="col-span-2"
-                :options="[
-                  { value: 'full-time', name: 'Plný úvazek' },
-                  { value: 'part-time', name: 'Částečný úvazek' },
-                  { value: 'freelance', name: 'Freelance' },
-                  { value: 'internship', name: 'Stáž' },
-                  { value: 'volunteer', name: 'Dobrovolník' },
-                ]"
-              />
-              <BaseFormSelect
-                v-model="item.salary_type"
-                label="Typ mzdy"
-                name="salary_type"
-                class="col-span-2"
-                :options="[
-                  { value: 'hourly', name: 'Hodinová' },
-                  { value: 'monthly', name: 'Měsíční' },
-                ]"
-              />
-              <BaseFormInput
-                v-model="item.salary_from"
-                label="Mzda od"
-                type="number"
-                name="salary_from"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-model="item.salary_to"
-                label="Mzda do"
-                type="number"
-                name="salary_to"
-                class="col-span-2"
-              />
-
-              <BaseFormSelect
-                v-model="item.start_date"
-                label="Nástup možný od"
-                name="start_date"
-                class="col-span-2"
-                :options="[
-                  { value: 'immediate', name: 'Ihned' },
-                  { value: 'negotiable', name: 'Dohodou' },
-                ]"
-              />
-              <div class="relative col-span-full mb-4 mt-8">
-                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div class="w-full border-t border-gray-300" />
-                </div>
-                <div class="relative flex justify-center">
-                  <span class="bg-white px-3 text-base font-semibold text-gray-900"
-                    >Popis pozice & SEO</span
+        <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          <div class="col-span-1 space-y-8 lg:col-span-9">
+            <LayoutContainer>
+              <div class="mb-6 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
                   >
+                    <BriefcaseIcon class="size-5" />
+                  </div>
+                  <LayoutTitle class="!mb-0">Parametry spolupráce</LayoutTitle>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                    >Kód pozice</span
+                  >
+                  <p class="font-mono text-sm font-bold text-slate-600">{{ item.code || '---' }}</p>
                 </div>
               </div>
-              <BaseFormInput
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].location !== undefined
-                "
-                :key="`location-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].location"
-                label="Místo výkonu práce"
-                type="text"
-                name="location"
-                rules="required|min:3"
-                class="col-span-2"
-              />
-              <BaseFormInput
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].name !== undefined
-                "
-                :key="`name-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].name"
-                label="Název"
-                type="text"
-                name="name"
-                rules="required|min:3"
-                class="col-span-full"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].text !== undefined
-                "
-                :key="`text-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].text"
-                label="Popis"
-                name="text"
-                class="col-span-full"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].benefits !== undefined
-                "
-                :key="`benefits-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].benefits"
-                label="Benefity"
-                name="text"
-                class="col-span-2"
-              />
-              <BaseFormEditor
-                v-if="
-                  item.translations &&
-                  item.translations[selectedLocale] !== undefined &&
-                  item.translations[selectedLocale].requirements !== undefined
-                "
-                :key="`requirements-${selectedLocale}`"
-                v-model="item.translations[selectedLocale].requirements"
-                label="Požadavky"
-                name="requirements"
-                class="col-span-2"
-              />
-            </div>
-          </LayoutContainer>
-          <LayoutActionsDetailBlock
-            v-model:selected-locale="selectedLocale"
-            v-model:sites="item.sites"
-            v-model:image="item.image"
-            v-model:position="item.position"
-            v-model:state="item.status"
-            :allow-position="true"
-            :allow-state="true"
-            :states="[
-              { value: 'open', name: 'Otevřená' },
-              { value: 'closed', name: 'Uzavřená' },
-            ]"
-            class="col-span-3"
-          />
+
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <BaseFormSelect
+                  v-model="item.type"
+                  label="Typ úvazku"
+                  name="type"
+                  class="col-span-1 lg:col-span-2"
+                  :options="[
+                    { value: 'full-time', name: 'Plný úvazek' },
+                    { value: 'part-time', name: 'Částečný úvazek' },
+                    { value: 'freelance', name: 'Freelance' },
+                    { value: 'internship', name: 'Stáž' },
+                    { value: 'volunteer', name: 'Dobrovolník' },
+                  ]"
+                />
+                <BaseFormSelect
+                  v-model="item.start_date"
+                  label="Možný nástup"
+                  name="start_date"
+                  class="col-span-1 lg:col-span-2"
+                  :options="[
+                    { value: 'immediate', name: 'Ihned' },
+                    { value: 'negotiable', name: 'Dohodou' },
+                  ]"
+                />
+
+                <div
+                  class="col-span-full grid grid-cols-1 gap-6 rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200 sm:grid-cols-3"
+                >
+                  <BaseFormSelect
+                    v-model="item.salary_type"
+                    label="Typ mzdy"
+                    name="salary_type"
+                    :options="[
+                      { value: 'hourly', name: 'Hodinová' },
+                      { value: 'monthly', name: 'Měsíční' },
+                    ]"
+                  />
+                  <BaseFormInput
+                    v-model="item.salary_from"
+                    label="Mzda od"
+                    type="number"
+                    name="salary_from"
+                  />
+                  <BaseFormInput
+                    v-model="item.salary_to"
+                    label="Mzda do"
+                    type="number"
+                    name="salary_to"
+                  />
+                </div>
+              </div>
+            </LayoutContainer>
+
+            <LayoutContainer>
+              <div class="mb-8">
+                <LayoutDivider
+                  >Popis pozice & SEO ({{ selectedLocale.toUpperCase() }})</LayoutDivider
+                >
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.location !== undefined"
+                  :key="`location-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].location"
+                  label="Místo výkonu práce"
+                  type="text"
+                  name="location"
+                  rules="required|min:3"
+                  class="col-span-1"
+                />
+
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.name !== undefined"
+                  :key="`name-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].name"
+                  label="Název pozice"
+                  type="text"
+                  name="name"
+                  rules="required|min:3"
+                  class="col-span-full"
+                  placeholder="Např. Senior Frontend Developer"
+                />
+
+                <div class="col-span-full space-y-8 pt-4">
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]?.text !== undefined"
+                    :key="`text-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].text"
+                    label="Detailní popis pozice"
+                    name="text"
+                  />
+
+                  <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                    <BaseFormEditor
+                      v-if="item.translations?.[selectedLocale]?.benefits !== undefined"
+                      :key="`benefits-${selectedLocale}`"
+                      v-model="item.translations[selectedLocale].benefits"
+                      label="Co nabízíme (Benefity)"
+                      name="benefits"
+                    />
+                    <BaseFormEditor
+                      v-if="item.translations?.[selectedLocale]?.requirements !== undefined"
+                      :key="`requirements-${selectedLocale}`"
+                      v-model="item.translations[selectedLocale].requirements"
+                      label="Co požadujeme (Požadavky)"
+                      name="requirements"
+                    />
+                  </div>
+                </div>
+              </div>
+            </LayoutContainer>
+          </div>
+
+          <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
+            <LayoutActionsDetailBlock
+              v-model:selected-locale="selectedLocale"
+              v-model:translate-automatically="item.translateAutomatically"
+              v-model:sites="item.sites"
+              v-model:image="item.image"
+              v-model:position="item.position"
+              v-model:state="item.status"
+              :allow-position="true"
+              :allow-state="true"
+              :states="[
+                { value: 'open', name: 'Otevřená' },
+                { value: 'closed', name: 'Uzavřená' },
+              ]"
+              image-type="career"
+              class="shadow-sm"
+            />
+          </div>
         </div>
       </template>
+
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#zadosti')">
-        <div class="grid grid-cols-1 items-baseline gap-x-4 gap-y-8 lg:grid-cols-9">
-          <LayoutContainer class="col-span-full w-full">
-            <div class="flex items-center justify-between">
-              <p class="text-base text-grayCustom">
-                Počet žádostí: {{ item.applications.data.length }}
+        <LayoutContainer>
+          <div class="mb-8 flex items-center justify-between">
+            <div>
+              <LayoutTitle class="!mb-1">Přijaté žádosti</LayoutTitle>
+              <p class="text-sm font-medium text-slate-500">
+                Celkový počet uchazečů:
+                <span class="font-bold text-indigo-600">{{ item.applications.data.length }}</span>
               </p>
             </div>
-            <BaseTable
-              :items="item.applications"
-              :columns="[
-                {
-                  key: 'id',
-                  name: 'ID',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'firstname',
-                  name: 'Jméno',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'lastname',
-                  name: 'Příjmení',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'email',
-                  name: 'E-mail',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'phone',
-                  name: 'Telefon',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'availability',
-                  name: 'Nástup možný od',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'salary_expectation',
-                  name: 'Očekáváná mzda',
-                  type: 'text',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-                {
-                  key: 'status',
-                  name: 'Stav přihlášky',
-                  type: 'enum',
-                  width: 80,
-                  hidden: false,
-                  sortable: false,
-                },
-              ]"
-              :enums="{
-                status: {
-                  pending: 'Čeká',
-                  reviewed: 'Zobrazeno',
-                  accepted: 'Přijato',
-                  rejected: 'Zamítnuto',
-                },
-              }"
-              :actions="[{ type: 'edit' }, { type: 'delete' }]"
-              :loading="loading"
-              :error="error"
-              singular="Pracovní pozici"
-              plural="Pracovní pozice"
-              slug="careers"
-            />
-          </LayoutContainer>
-        </div>
+          </div>
+
+          <BaseTable
+            :items="item.applications"
+            :columns="[
+              { key: 'id', name: 'ID', type: 'text', width: 60 },
+              { key: 'firstname', name: 'Jméno', type: 'text' },
+              { key: 'lastname', name: 'Příjmení', type: 'text' },
+              { key: 'email', name: 'E-mail', type: 'text' },
+              { key: 'phone', name: 'Telefon', type: 'text' },
+              { key: 'availability', name: 'Nástup od', type: 'text' },
+              { key: 'salary_expectation', name: 'Očekávaná mzda', type: 'text' },
+              { key: 'status', name: 'Stav', type: 'enum', width: 120 },
+            ]"
+            :enums="{
+              status: {
+                pending: 'Čeká',
+                reviewed: 'Zobrazeno',
+                accepted: 'Přijato',
+                rejected: 'Zamítnuto',
+              },
+            }"
+            :actions="[{ type: 'edit' }, { type: 'delete' }]"
+            :loading="loading"
+            :error="error"
+            singular="Uchazeče"
+            plural="Uchazeči"
+            slug="careers"
+          />
+        </LayoutContainer>
       </template>
     </Form>
   </div>

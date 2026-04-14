@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  AdjustmentsHorizontalIcon,
+  BanknotesIcon,
+  ExclamationTriangleIcon,
+  GlobeAltIcon,
+  LanguageIcon,
+  SquaresPlusIcon,
+  TrashIcon,
+  UsersIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 import { useCurrencyStore } from '~~/stores/currencyStore';
 
@@ -34,6 +44,13 @@ const breadcrumbs = ref([
 
 const settings = {
   enabled_modules: [
+    'allergens',
+    'foodstuffs',
+    'meals',
+    'recipes',
+    'menus',
+    'restaurant_tables',
+    'reservations',
     'posts',
     'pages',
     'novelties',
@@ -43,6 +60,8 @@ const settings = {
     'logos',
     'careers',
     'quizzes',
+    'customers',
+    'vouchers',
     'newsletters',
     'demands',
     'contacts',
@@ -55,12 +74,14 @@ const settings = {
     'biographies',
     'projects',
     'price_offers',
+    'project_time_entries',
     'trackings',
     'invoices',
-    'suppliers',
     'employees',
-    'tasks',
-    'contracts',
+    'employee_contracts',
+    'shifts',
+    'project_tasks',
+    'task_boards',
     'users',
     'settings',
     'activities',
@@ -92,6 +113,18 @@ const item = ref({
     default_currency: null,
     default_locale: '',
   } as Record<string, unknown>,
+  fakturoid_client_id: '' as string,
+  fakturoid_client_secret: '' as string,
+  fakturoid_slug: '' as string,
+  billing_name: '' as string,
+  billing_ico: '' as string,
+  billing_dic: '' as string,
+  billing_street: '' as string,
+  billing_city: '' as string,
+  billing_zip: '' as string,
+  billing_bank_account: '' as string,
+  billing_iban: '' as string,
+  billing_swift: '' as string,
   users: [] as Array<number>,
 });
 
@@ -238,6 +271,10 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Ligy';
     case 'clients':
       return 'Klienti';
+    case 'customers':
+      return 'Zákazníci';
+    case 'vouchers':
+      return 'Slevové vouchery';
     case 'biographies':
       return 'Životopisy';
     case 'projects':
@@ -248,14 +285,16 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Trackování';
     case 'invoices':
       return 'Faktury';
-    case 'suppliers':
-      return 'Dodavatelé';
     case 'employees':
       return 'Zaměstnanci';
-    case 'tasks':
+    case 'project_tasks':
       return 'Úkoly';
-    case 'contracts':
+    case 'task_boards':
+      return 'Boardy úkolů';
+    case 'employee_contracts':
       return 'Smlouvy';
+    case 'shifts':
+      return 'Směny';
     case 'users':
       return 'Administrátoři';
     case 'settings':
@@ -276,6 +315,22 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Stránky';
     case 'changelogs':
       return 'Changelog';
+    case 'allergens':
+      return 'Alergeny';
+    case 'foodstuffs':
+      return 'Potraviny';
+    case 'meals':
+      return 'Jídla';
+    case 'recipes':
+      return 'Recepty';
+    case 'menus':
+      return 'Jídelní lístky';
+    case 'restaurant_tables':
+      return 'Stoly';
+    case 'reservations':
+      return 'Rezervace';
+    case 'project_time_entries':
+      return 'Sledování času';
     default:
       return key.replace('_', ' ').toUpperCase();
   }
@@ -285,6 +340,95 @@ useHead({
   title: pageTitle.value,
 });
 
+const moduleGroups = [
+  {
+    title: 'Obsah',
+    slugs: [
+      'posts',
+      'pages',
+      'novelties',
+      'services',
+      'events',
+      'reviews',
+      'logos',
+      'careers',
+      'quizzes',
+      'faqs',
+    ],
+  },
+  {
+    title: 'Restaurace',
+    slugs: [
+      'allergens',
+      'foodstuffs',
+      'meals',
+      'recipes',
+      'menus',
+      'restaurant_tables',
+      'reservations',
+    ],
+  },
+  {
+    title: 'Zákazníci',
+    slugs: ['customers', 'vouchers', 'newsletters', 'demands'],
+  },
+  {
+    title: 'Byznys a osobní růst',
+    slugs: [
+      'contacts',
+      'users_has_activities',
+      'message_blueprints',
+      'calendars',
+      'cashflows',
+      'leagues',
+    ],
+  },
+  {
+    title: 'Vedení firmy',
+    slugs: [
+      'clients',
+      'invoices',
+      'projects',
+      'price_offers',
+      'project_time_entries',
+      'project_tasks',
+      'task_boards',
+      'employees',
+      'shifts',
+      'employee_contracts',
+      'biographies',
+    ],
+  },
+  {
+    title: 'Nastavení a správa',
+    slugs: [
+      'users',
+      'sites',
+      'settings',
+      'changelogs',
+      'activities',
+      'emails',
+      'languages',
+      'countries',
+      'currencies',
+      'tax_rates',
+      'trackings',
+    ],
+  },
+];
+
+function toggleGroupModules(group: { slugs: string[] }) {
+  const allEnabled = group.slugs.every((s) => item.value.settings.enabled_modules.includes(s));
+  group.slugs.forEach((s) => {
+    const idx = item.value.settings.enabled_modules.indexOf(s);
+    if (allEnabled) {
+      if (idx !== -1) item.value.settings.enabled_modules.splice(idx, 1);
+    } else {
+      if (idx === -1) item.value.settings.enabled_modules.push(s);
+    }
+  });
+}
+
 function addRemoveEnabledModule(module: string) {
   if (item.value.settings.enabled_modules.includes(module)) {
     item.value.settings.enabled_modules.splice(
@@ -292,7 +436,7 @@ function addRemoveEnabledModule(module: string) {
       1,
     );
   } else {
-    item.value.settings.enabled_modules.push(currency);
+    item.value.settings.enabled_modules.push(module);
   }
 }
 
@@ -331,7 +475,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-20">
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
@@ -339,140 +483,346 @@ definePageMeta({
       slug="sites"
       @save="saveItem"
     />
+
     <Form @submit="saveItem">
-      <div class="grid grid-cols-2 items-baseline gap-x-10">
-        <div class="col-span-1 w-full">
-          <LayoutContainer class="col-span-1 w-full">
-            <div class="grid grid-cols-12 gap-x-8 gap-y-4">
+      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+        <div class="space-y-8">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-slate-900 text-white"
+              >
+                <GlobeAltIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Identita webu</LayoutTitle>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <BaseFormInput
                 v-model="item.name"
-                label="Název"
+                label="Název projektu"
                 type="text"
                 name="name"
                 rules="required|min:3"
-                class="col-span-6"
+                placeholder="Např. Barbershop Praha"
               />
               <BaseFormInput
                 v-model="item.url"
-                label="URL"
+                label="Doména (URL)"
                 type="text"
                 name="url"
                 rules="required|min:3"
-                class="col-span-6"
+                placeholder="www.barbershop-praha.cz"
               />
-              <BaseFormSwitch
-                v-model:enabled="item.is_secure"
-                disabled-text="HTTP"
-                enabled-text="HTTPS"
-                class="col-span-4"
+
+              <div
+                class="col-span-full grid grid-cols-2 gap-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200"
+              >
+                <div class="flex flex-col gap-2">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                    >Zabezpečení</span
+                  >
+                  <BaseFormSwitch
+                    v-model:enabled="item.is_secure"
+                    disabled-text="HTTP"
+                    enabled-text="HTTPS"
+                  />
+                </div>
+                <div class="flex flex-col gap-2 border-l border-slate-200 pl-4">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                    >Stav webu</span
+                  >
+                  <BaseFormSwitch
+                    v-model:enabled="item.is_active"
+                    disabled-text="Neaktivní"
+                    enabled-text="Aktivní"
+                  />
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+              >
+                <BanknotesIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Fakturační údaje</LayoutTitle>
+            </div>
+
+            <p class="mb-4 text-xs text-slate-500">
+              Údaje dodavatele pro generování faktur. Zobrazí se na fakturách a v QR kódu pro
+              platbu.
+            </p>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              <BaseFormInput
+                v-model="item.billing_name"
+                label="Název firmy"
+                name="billing_name"
+                class="col-span-full sm:col-span-1"
               />
-              <div class="col-span-4"></div>
-              <BaseFormSwitch
-                v-model:enabled="item.is_active"
-                disabled-text="Neaktivní"
-                enabled-text="Aktivní"
-                class="col-span-4"
+              <BaseFormInput v-model="item.billing_ico" label="IČO" name="billing_ico" />
+              <BaseFormInput v-model="item.billing_dic" label="DIČ" name="billing_dic" />
+              <BaseFormInput v-model="item.billing_street" label="Ulice" name="billing_street" />
+              <BaseFormInput v-model="item.billing_city" label="Město" name="billing_city" />
+              <BaseFormInput v-model="item.billing_zip" label="PSČ" name="billing_zip" />
+              <BaseFormInput
+                v-model="item.billing_bank_account"
+                label="Číslo účtu"
+                name="billing_bank_account"
+              />
+              <BaseFormInput v-model="item.billing_iban" label="IBAN" name="billing_iban" />
+              <BaseFormInput v-model="item.billing_swift" label="SWIFT/BIC" name="billing_swift" />
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+              >
+                <CurrencyEuroIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Fakturoid API</LayoutTitle>
+            </div>
+
+            <p class="mb-4 text-xs text-slate-500">
+              Přístupové údaje pro synchronizaci klientů a faktur s Fakturoidem. Ponechte prázdné
+              pokud tato stránka Fakturoid nepoužívá.
+            </p>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              <BaseFormInput
+                v-model="item.fakturoid_client_id"
+                label="Client ID"
+                type="text"
+                name="fakturoid_client_id"
+                placeholder="Vaše Fakturoid Client ID"
+              />
+              <BaseFormInput
+                v-model="item.fakturoid_client_secret"
+                label="Client Secret"
+                type="password"
+                name="fakturoid_client_secret"
+                placeholder="Vaše Fakturoid Client Secret"
+              />
+              <BaseFormInput
+                v-model="item.fakturoid_slug"
+                label="Slug účtu"
+                type="text"
+                name="fakturoid_slug"
+                placeholder="Např. moje-firma"
               />
             </div>
           </LayoutContainer>
-          <LayoutContainer class="col-span-1 w-full">
-            <LayoutTitle>Přiřazení uživatelé</LayoutTitle>
-            <div class="grid grid-cols-3 gap-x-8 gap-y-4">
-              <div class="col-span-full grid grid-cols-3 items-end gap-x-8 p-1.5">
-                <SiteUsersAutocomplete
-                  v-model="assigenedUser"
-                  label="Vyhledat uživatele"
-                  class="col-span-2"
-                />
-                <BaseButton
-                  v-if="assigenedUser !== null"
-                  type="button"
-                  variant="secondary"
-                  size="lg"
-                  @click="addUserToItem"
-                  >Přidat</BaseButton
-                >
+
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <UsersIcon class="size-5" />
               </div>
+              <LayoutTitle class="!mb-0">Správa přístupů</LayoutTitle>
+            </div>
+
+            <div
+              class="flex items-end gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 p-4"
+            >
+              <SiteUsersAutocomplete
+                v-model="assigenedUser"
+                label="Vyhledat uživatele podle e-mailu nebo jména"
+                class="flex-1"
+              />
+              <BaseButton
+                v-if="assigenedUser !== null"
+                type="button"
+                variant="primary"
+                size="xl"
+                @click="addUserToItem"
+              >
+                Přidat
+              </BaseButton>
+            </div>
+
+            <div class="mt-6 space-y-3">
               <div
                 v-for="(user, index) in item.users"
                 :key="index"
-                class="col-span-full grid grid-cols-3 items-center border p-1.5"
+                class="group flex items-center justify-between rounded-2xl bg-white p-4 ring-1 ring-slate-200 transition-all hover:shadow-md"
               >
-                <div class="col-span-1 text-grayCustom">
-                  {{ user.firstname + ' ' + user.lastname }}
-                </div>
-                <div class="col-span-1 text-grayCustom">
-                  {{ user.email }}
-                </div>
-                <div class="col-span-1 text-end">
-                  <BaseButton
-                    type="button"
-                    variant="secondary"
-                    size="lg"
-                    @click="item.users.splice(index, 1)"
-                    >Odstranit</BaseButton
+                <div class="flex items-center gap-4">
+                  <div
+                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 font-bold text-slate-600"
                   >
+                    {{ user.firstname.charAt(0) }}{{ user.lastname.charAt(0) }}
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-slate-900">
+                      {{ user.firstname }} {{ user.lastname }}
+                    </p>
+                    <p class="text-xs text-slate-500">{{ user.email }}</p>
+                  </div>
                 </div>
+                <BaseButton
+                  type="button"
+                  variant="danger"
+                  size="sm"
+                  class="opacity-0 transition-opacity group-hover:opacity-100"
+                  @click="item.users.splice(index, 1)"
+                >
+                  <TrashIcon class="size-4" />
+                </BaseButton>
+              </div>
+
+              <div
+                v-if="!item.users?.length"
+                class="rounded-3xl border-2 border-dashed border-slate-100 py-8 text-center"
+              >
+                <p class="text-sm text-slate-400">
+                  K tomuto webu nejsou přiřazeni žádní uživatelé.
+                </p>
               </div>
             </div>
           </LayoutContainer>
         </div>
-        <LayoutContainer class="col-span-1 w-full">
-          <LayoutTitle>Nastavení</LayoutTitle>
-          <div class="grid grid-cols-4 gap-x-8 gap-y-4">
-            <BaseFormSelect
-              v-model="settings.default_locale"
-              :options="languageStore.languageOptions"
-              :label="getSettingTitle('default_locale')"
-              class="col-span-2"
-              name="default_locale"
-            />
-            <BaseFormSelect
-              v-model="settings.default_currency"
-              :options="currencyStore.currenciesOptions"
-              :label="getSettingTitle('default_currency')"
-              class="col-span-2"
-              name="default_currency"
-            />
+
+        <div class="space-y-8">
+          <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+              >
+                <AdjustmentsHorizontalIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Regionální nastavení & Moduly</LayoutTitle>
+            </div>
+
+            <div class="mb-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <BaseFormSelect
+                v-model="settings.default_locale"
+                :options="languageStore.languageOptions"
+                :label="getSettingTitle('default_locale')"
+                name="default_locale"
+              />
+              <BaseFormSelect
+                v-model="settings.default_currency"
+                :options="currencyStore.currenciesOptions"
+                :label="getSettingTitle('default_currency')"
+                name="default_currency"
+              />
+            </div>
+
+            <div class="space-y-8">
+              <div class="rounded-2xl border border-slate-100 p-6">
+                <div class="mb-4 flex items-center gap-2 border-b border-slate-50 pb-2">
+                  <LanguageIcon class="size-4 text-slate-400" />
+                  <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                    >Povolené jazyky</span
+                  >
+                </div>
+                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                  <BaseFormCheckbox
+                    v-for="(language, index) in languageStore.languages"
+                    :key="index"
+                    :value="item.settings.enabled_locales.includes(language.code)"
+                    :checked="item.settings.enabled_locales.includes(language.code)"
+                    :label="language.name"
+                    :name="'enabled_locales' + index"
+                    class="flex-row-reverse justify-between rounded-lg bg-slate-50 p-2"
+                    @click="addRemoveEnabledLocale(language.code)"
+                  />
+                </div>
+              </div>
+
+              <div class="rounded-2xl border border-slate-100 p-6">
+                <div class="mb-4 flex items-center gap-2 border-b border-slate-50 pb-2">
+                  <BanknotesIcon class="size-4 text-slate-400" />
+                  <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                    >Povolené měny</span
+                  >
+                </div>
+                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                  <BaseFormCheckbox
+                    v-for="(currency, index) in currencyStore.currencies"
+                    :key="index"
+                    :value="item.settings.enabled_currencies.includes(currency.id)"
+                    :checked="item.settings.enabled_currencies.includes(currency.id)"
+                    :label="currency.name"
+                    :name="'enabled_currencies_' + index"
+                    class="flex-row-reverse justify-between rounded-lg bg-slate-50 p-2"
+                    @click="addRemoveEnabledCurrency(currency.id)"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-center gap-2">
+                  <SquaresPlusIcon class="size-4 text-slate-400" />
+                  <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                    >Aktivní moduly systému</span
+                  >
+                </div>
+
+                <div
+                  v-for="group in moduleGroups"
+                  :key="group.title"
+                  class="overflow-hidden rounded-2xl ring-1 ring-slate-200"
+                >
+                  <div
+                    class="flex items-center justify-between bg-slate-50 px-4 py-2.5"
+                  >
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">{{
+                      group.title
+                    }}</span>
+                    <button
+                      type="button"
+                      class="text-[10px] font-bold uppercase tracking-widest transition"
+                      :class="
+                        group.slugs.every((s) => item.settings.enabled_modules.includes(s))
+                          ? 'text-indigo-600'
+                          : 'text-slate-400 hover:text-slate-600'
+                      "
+                      @click="toggleGroupModules(group)"
+                    >
+                      {{
+                        group.slugs.every((s) => item.settings.enabled_modules.includes(s))
+                          ? 'Odebrat vše'
+                          : 'Vybrat vše'
+                      }}
+                    </button>
+                  </div>
+                  <div class="grid grid-cols-1 gap-0 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0">
+                    <BaseFormCheckbox
+                      v-for="slug in group.slugs"
+                      :key="slug"
+                      :value="item.settings.enabled_modules.includes(slug)"
+                      :checked="item.settings.enabled_modules.includes(slug)"
+                      :label="getSettingTitle(slug)"
+                      :name="'enabled_modules_' + slug"
+                      class="flex-row-reverse justify-between border-b border-slate-50 px-4 py-2.5 sm:border-b-0 sm:odd:border-r sm:odd:border-slate-100"
+                      @click="addRemoveEnabledModule(slug)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <div class="rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
+            <div class="flex items-start gap-4">
+              <ExclamationTriangleIcon class="size-6 shrink-0 text-amber-600" />
+              <p class="text-sm leading-relaxed text-amber-900">
+                <strong>Pozor:</strong> Deaktivace modulu, který se na webu aktivně používá, může
+                způsobit chyby v zobrazení frontendu. Před vypnutím se ujistěte, že modul není nikde
+                nasazen.
+              </p>
+            </div>
           </div>
-          <LayoutDivider>Povolené jazyky</LayoutDivider>
-          <div class="grid grid-cols-3 gap-x-8 gap-y-4">
-            <BaseFormCheckbox
-              v-for="(language, index) in languageStore.languages"
-              :key="index"
-              :value="item.settings.enabled_locales.includes(language.code)"
-              :checked="item.settings.enabled_locales.includes(language.code)"
-              :label="language.name"
-              :name="'enabled_locales' + index"
-              @click="addRemoveEnabledLocale(language.code)"
-            />
-          </div>
-          <LayoutDivider>Povolené měny</LayoutDivider>
-          <div class="grid grid-cols-3 gap-x-8 gap-y-4">
-            <BaseFormCheckbox
-              v-for="(currency, index) in currencyStore.currencies"
-              :key="index"
-              :value="item.settings.enabled_currencies.includes(currency.id)"
-              :checked="item.settings.enabled_currencies.includes(currency.id)"
-              :label="currency.name"
-              :name="'enabled_currencies_' + index"
-              @click="addRemoveEnabledCurrency(currency.id)"
-            />
-          </div>
-          <LayoutDivider>Povolené moduly</LayoutDivider>
-          <div class="grid grid-cols-3 gap-x-8 gap-y-4">
-            <BaseFormCheckbox
-              v-for="(module, index) in settings.enabled_modules"
-              :key="index"
-              :value="item.settings.enabled_modules.includes(module)"
-              :checked="item.settings.enabled_modules.includes(module)"
-              class="col-span-1"
-              :label="getSettingTitle(module)"
-              :name="'enabled_modules' + module"
-              @click="addRemoveEnabledModule(module)"
-            />
-          </div>
-        </LayoutContainer>
+        </div>
       </div>
     </Form>
   </div>

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Response;
 
 class QuickAccessController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = QuickAccess::query()
@@ -23,10 +22,12 @@ class QuickAccessController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('link', 'like', '%' . $searchString . '%');
+                $query->where(function ($subQuery) use ($searchString) {
+                    $subQuery->where('name', 'like', '%'.$searchString.'%')
+                        ->orWhere('link', 'like', '%'.$searchString.'%');
+                });
             }
         }
 
@@ -47,21 +48,22 @@ class QuickAccessController extends Controller
         }
 
         $items = $query->get();
+
         return Response::json(QuickAccessResource::collection($items));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $item = QuickAccess::query()
                 ->where('id', '=', $id)
                 ->where('user_id', '=', $request->user()->id)
                 ->first();
-            if (!$item) {
+            if (! $item) {
                 App::abort(404);
-            };
+            }
         } else {
-            $item = new QuickAccess();
+            $item = new QuickAccess;
         }
 
         try {
@@ -82,7 +84,7 @@ class QuickAccessController extends Controller
 
     public function show(Request $request, int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -91,7 +93,7 @@ class QuickAccessController extends Controller
             ->where('user_id', '=', $request->user()->id)
             ->first();
 
-        if (!$item) {
+        if (! $item) {
             App::abort(404);
         }
 
@@ -100,7 +102,7 @@ class QuickAccessController extends Controller
 
     public function destroy(Request $request, int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -109,11 +111,12 @@ class QuickAccessController extends Controller
             ->where('user_id', '=', $request->user()->id)
             ->first();
 
-        if (!$item) {
+        if (! $item) {
             App::abort(404);
         }
 
         $item->delete();
+
         return Response::json();
     }
 }

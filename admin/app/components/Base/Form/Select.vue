@@ -59,10 +59,12 @@ defineRule('required', (value) => {
 </script>
 
 <template>
-  <div>
-    <label :for="name" class="block text-xs font-medium text-grayCustom lg:text-sm/6"
-      >{{ label }}<span v-if="rules.includes('required')" class="ml-1 text-danger">*</span></label
-    >
+  <div class="w-full">
+    <label :for="name" class="mb-1.5 block text-sm font-medium text-slate-700">
+      {{ label }}
+      <span v-if="rules && rules.includes('required')" class="ml-1 text-red-500">*</span>
+    </label>
+
     <Field
       v-bind="$attrs"
       v-model="model"
@@ -73,15 +75,21 @@ defineRule('required', (value) => {
       :disabled="disabled"
       :autofocus="false"
       :class="[
-        theme === 'dark' ? 'bg-gray-900 text-gray-300' : 'bg-white text-grayDark',
-        'mt-2 block w-full rounded-md border-0 py-1.5 text-xs shadow-sm ring-1 ring-inset ring-grayLight placeholder:text-grayLight focus:ring-1 focus:ring-inset focus:ring-primaryLight lg:py-2 lg:text-sm/6',
-        { 'bg-grayLight': disabled },
+        'block w-full rounded-xl border-0 py-2.5 pl-4 pr-10 text-sm shadow-sm ring-1 ring-inset transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500',
+        disabled
+          ? theme === 'dark'
+            ? 'cursor-not-allowed bg-zinc-900/50 text-zinc-500 ring-zinc-800'
+            : 'cursor-not-allowed bg-slate-50 text-slate-400 ring-slate-200'
+          : theme === 'dark'
+            ? 'bg-zinc-900 text-zinc-300 ring-zinc-700 hover:ring-zinc-600'
+            : 'bg-white text-slate-900 ring-slate-300 hover:ring-slate-400',
       ]"
     >
       <option v-for="option in options" :key="option.value" :value="option.value">
         {{ option.name }}
       </option>
     </Field>
-    <ErrorMessage :name="name" class="text-sm text-danger" />
+
+    <ErrorMessage :name="name" class="mt-1.5 block text-xs font-medium text-red-500" />
   </div>
 </template>

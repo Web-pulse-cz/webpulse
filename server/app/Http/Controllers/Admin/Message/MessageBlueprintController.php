@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class MessageBlueprintController extends Controller
 {
-
     public function index(Request $request): JsonResponse
     {
         $query = MessageBlueprint::query()
@@ -24,10 +23,12 @@ class MessageBlueprintController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%')
-                    ->orWhere('type', 'like', '%' . $searchString . '%');
+                $query->where(function ($subQuery) use ($searchString) {
+                    $subQuery->where('name', 'like', '%'.$searchString.'%')
+                        ->orWhere('type', 'like', '%'.$searchString.'%');
+                });
             }
         }
 
@@ -48,18 +49,19 @@ class MessageBlueprintController extends Controller
         }
 
         $messageBlueprints = $query->get();
-        return Response::json(\App\Http\Resources\Admin\Message\MessageBlueprintResource::collection($messageBlueprints));
+
+        return Response::json(MessageBlueprintResource::collection($messageBlueprints));
     }
 
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $messageBlueprint = MessageBlueprint::find($id);
-            if (!$messageBlueprint) {
+            if (! $messageBlueprint) {
                 App::abort(404);
             }
         } else {
-            $messageBlueprint = new MessageBlueprint();
+            $messageBlueprint = new MessageBlueprint;
         }
 
         $validator = Validator::make($request->all(), [
@@ -80,22 +82,23 @@ class MessageBlueprintController extends Controller
             $messageBlueprint->save();
 
             DB::commit();
-        } catch (\Throwable | \Exception $e) {
+        } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating message blueprint.'], 500);
         }
 
-        return Response::json(\App\Http\Resources\Admin\Message\MessageBlueprintResource::make($messageBlueprint));
+        return Response::json(MessageBlueprintResource::make($messageBlueprint));
     }
 
     public function show(int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $messageBlueprint = MessageBlueprint::find($id);
-        if (!$messageBlueprint) {
+        if (! $messageBlueprint) {
             App::abort(404);
         }
 
@@ -104,16 +107,17 @@ class MessageBlueprintController extends Controller
 
     public function destroy(int $id)
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
         $messageBlueprint = MessageBlueprint::find($id);
-        if (!$messageBlueprint) {
+        if (! $messageBlueprint) {
             App::abort(404);
         }
 
         $messageBlueprint->delete();
+
         return Response::json();
     }
 }

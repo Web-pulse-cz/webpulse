@@ -24,7 +24,8 @@ class PostResource extends JsonResource
             'name' => $this->name,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'categories' => $this->categories->pluck('id')->toArray(),
-            'sites' => $this->sites
+            'files' => $this->files(),
+            'sites' => $this->sites,
         ];
     }
 }

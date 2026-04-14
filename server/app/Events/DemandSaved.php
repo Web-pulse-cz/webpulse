@@ -14,6 +14,7 @@ class DemandSaved
     protected Demand $demand;
 
     protected array $data;
+
     public function __construct(Demand $demand)
     {
         $this->demand = $demand;

@@ -26,9 +26,9 @@ class ContactListController extends Controller
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
                 $searchString = explode(':', $searchString);
-                $query->where($searchString[0], 'like', '%' . $searchString[1] . '%');
+                $query->where($searchString[0], 'like', '%'.$searchString[1].'%');
             } else {
-                $query->where('name', 'like', '%' . $searchString . '%');
+                $query->where('name', 'like', '%'.$searchString.'%');
             }
         }
 
@@ -49,26 +49,27 @@ class ContactListController extends Controller
         }
 
         $contactList = $query->get();
+
         return Response::json(ContactListResource::collection($contactList));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $id = null): JsonResponse
+    public function store(Request $request, ?int $id = null): JsonResponse
     {
         if ($id) {
             $contactList = ContactList::query()
-            ->where('user_id', $request->user()->id)->find($id);
-            if (!$contactList) {
+                ->where('user_id', $request->user()->id)->find($id);
+            if (! $contactList) {
                 App::abort(404);
             }
         } else {
-            $contactList = new ContactList();
+            $contactList = new ContactList;
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -84,8 +85,9 @@ class ContactListController extends Controller
             $contactList->save();
 
             DB::commit();
-        } catch (\Throwable | \Exception $e) {
+        } catch (\Throwable|\Exception $e) {
             DB::rollBack();
+
             return Response::json(['message' => 'An error occurred while updating contact list.'], 500);
         }
 
@@ -97,7 +99,7 @@ class ContactListController extends Controller
      */
     public function show(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -105,7 +107,7 @@ class ContactListController extends Controller
             ->where('user_id', $request->user()->id)
             ->find($id);
 
-        if (!$contact_list) {
+        if (! $contact_list) {
             App::abort(404);
         }
 
@@ -117,7 +119,7 @@ class ContactListController extends Controller
      */
     public function destroy(Request $request, int $id): JsonResponse
     {
-        if (!$id) {
+        if (! $id) {
             App::abort(400);
         }
 
@@ -125,11 +127,12 @@ class ContactListController extends Controller
             ->where('user_id', $request->user()->id)
             ->find($id);
 
-        if (!$contact_list) {
+        if (! $contact_list) {
             App::abort(404);
         }
 
         $contact_list->delete();
+
         return Response::json();
     }
 }
