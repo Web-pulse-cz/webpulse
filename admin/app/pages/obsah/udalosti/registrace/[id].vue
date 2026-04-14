@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
-import { useCountryStore } from '~~/stores/countryStore';
 import { MapPinIcon, PencilSquareIcon, UserIcon } from '@heroicons/vue/24/outline';
+import { useCountryStore } from '~~/stores/countryStore';
 
 const { $toast } = useNuxtApp();
 

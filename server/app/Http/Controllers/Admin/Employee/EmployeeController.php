@@ -6,18 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Employee\EmployeeResource;
 use App\Http\Resources\Admin\Employee\EmployeeSimpleResource;
 use App\Models\Employee\Employee;
+use App\Traits\HasFiles;
 use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
 {
-    use Siteable;
+    use Siteable, HasFiles;
 
     public function index(Request $request): JsonResponse
     {
@@ -141,63 +141,16 @@ class EmployeeController extends Controller
 
     public function uploadFile(Request $request, int $id): JsonResponse
     {
-        $employee = Employee::find($id);
-        if (! $employee) {
-            App::abort(404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|max:20480',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::json($validator->errors(), 400);
-        }
-
-        $file = $request->file('file');
-        $employee->attachUploadedFile($file, 'files/employees/' . $employee->id);
-
-        return Response::json(EmployeeResource::make(
-            $employee->fresh(['divisions', 'contracts', 'activeContract', 'sites'])
-        ));
+        return $this->handleUploadFile($request, Employee::class, $id, 'files/employees', EmployeeResource::class, ['divisions', 'contracts', 'activeContract', 'sites']);
     }
 
     public function downloadFile(int $employeeId, int $fileId)
     {
-        $employee = Employee::find($employeeId);
-        if (! $employee) {
-            App::abort(404);
-        }
-
-        $file = DB::table('fileables')
-            ->where('id', $fileId)
-            ->where('fileable_id', $employeeId)
-            ->where('fileable_type', get_class($employee))
-            ->first();
-
-        if (! $file) {
-            App::abort(404);
-        }
-
-        $disk = $file->disk ?? 'public';
-        if (! Storage::disk($disk)->exists($file->path)) {
-            App::abort(404);
-        }
-
-        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
-            'Content-Type' => $file->mime_type,
-        ]);
+        return $this->handleDownloadFile(Employee::class, $employeeId, $fileId);
     }
 
     public function deleteFile(int $employeeId, int $fileId): JsonResponse
     {
-        $employee = Employee::find($employeeId);
-        if (! $employee) {
-            App::abort(404);
-        }
-
-        $employee->removeFile($fileId);
-
-        return Response::json();
+        return $this->handleDeleteFile(Employee::class, $employeeId, $fileId);
     }
 }

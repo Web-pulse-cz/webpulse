@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
-import { UserIcon, MapPinIcon, TruckIcon, BanknotesIcon, ChatBubbleLeftIcon, DocumentTextIcon, FolderIcon } from '@heroicons/vue/24/outline';
+import {
+  UserIcon,
+  MapPinIcon,
+  TruckIcon,
+  BanknotesIcon,
+  ChatBubbleLeftIcon,
+  DocumentTextIcon,
+  FolderIcon,
+} from '@heroicons/vue/24/outline';
 
 import { useCountryStore } from '~/../stores/countryStore';
 
@@ -84,7 +92,9 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      item.value.sites = Array.isArray(response.sites) ? response.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
+      item.value.sites = Array.isArray(response.sites)
+        ? response.sites.map((s: any) => (typeof s === 'object' ? s.id : s))
+        : [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -179,49 +189,53 @@ const typeOptions = ref([
 const clientPriceOffers = ref([]);
 
 async function loadClientPriceOffers() {
-	if (route.params.id === 'pridat') return;
-	const client = useSanctumClient();
-	await client('/api/admin/price-offer', {
-		method: 'GET',
-		query: { client_id: route.params.id },
-		headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then((r) => {
-			const d = r?.data || r;
-			clientPriceOffers.value = Array.isArray(d) ? d : [];
-			if (clientPriceOffers.value.length > 0 && !tabs.value.find((t) => t.link === '#soubory')) {
-				tabs.value.push({ name: 'Soubory', link: '#soubory', current: false });
-			}
-		})
-		.catch(() => {});
+  if (route.params.id === 'pridat') return;
+  const client = useSanctumClient();
+  await client('/api/admin/price-offer', {
+    method: 'GET',
+    query: { client_id: route.params.id },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then((r) => {
+      const d = r?.data || r;
+      clientPriceOffers.value = Array.isArray(d) ? d : [];
+      if (clientPriceOffers.value.length > 0 && !tabs.value.find((t) => t.link === '#soubory')) {
+        tabs.value.push({ name: 'Soubory', link: '#soubory', current: false });
+      }
+    })
+    .catch(() => {});
 }
 
 async function downloadClientPriceOfferFile(offer: any) {
-	const client = useSanctumClient();
-	try {
-		const file = offer.files?.[0];
-		if (!file) {
-			$toast.show({ summary: 'Info', detail: 'Žádný přiložený soubor.', severity: 'warning' });
-			return;
-		}
-		const res = await client.raw('/api/admin/price-offer/' + offer.id + '/file/' + file.id, {
-			method: 'GET',
-			credentials: 'include',
-			responseType: 'blob',
-		});
-		if (!res.ok) throw new Error('Chyba');
-		const blob = res._data as Blob;
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = file.name || 'cenova-nabidka-' + offer.id + '.pdf';
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		URL.revokeObjectURL(url);
-	} catch (e) {
-		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
-	}
+  const client = useSanctumClient();
+  try {
+    const file = offer.files?.[0];
+    if (!file) {
+      $toast.show({ summary: 'Info', detail: 'Žádný přiložený soubor.', severity: 'warning' });
+      return;
+    }
+    const res = await client.raw('/api/admin/price-offer/' + offer.id + '/file/' + file.id, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || 'cenova-nabidka-' + offer.id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+  }
 }
 
 watchEffect(() => {
@@ -335,7 +349,9 @@ definePageMeta({
 
             <LayoutContainer>
               <div class="mb-6 flex items-center gap-3">
-                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600"
+                >
                   <ChatBubbleLeftIcon class="size-5" />
                 </div>
                 <LayoutTitle class="!mb-0">Poznámka</LayoutTitle>
@@ -370,7 +386,9 @@ definePageMeta({
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <LayoutContainer>
             <div class="mb-6 flex items-center gap-3">
-              <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+              >
                 <MapPinIcon class="size-5" />
               </div>
               <LayoutTitle class="!mb-0">Fakturační adresa</LayoutTitle>
@@ -410,7 +428,9 @@ definePageMeta({
           >
             <LayoutContainer v-if="item.has_delivery_address">
               <div class="mb-6 flex items-center gap-3">
-                <div class="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+                >
                   <TruckIcon class="size-5" />
                 </div>
                 <LayoutTitle class="!mb-0">Doručovací adresa</LayoutTitle>
@@ -446,7 +466,9 @@ definePageMeta({
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#banka')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+            >
               <BanknotesIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Bankovní údaje</LayoutTitle>
@@ -475,7 +497,9 @@ definePageMeta({
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#faktury')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+            >
               <DocumentTextIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Faktury klienta</LayoutTitle>
@@ -483,31 +507,48 @@ definePageMeta({
           <div v-if="clientInvoices.length === 0" class="py-8 text-center text-sm text-slate-400">
             Tento klient zatím nemá žádné faktury.
           </div>
-          <div v-else class="divide-y divide-slate-100">
+          <div v-else class="space-y-3">
             <NuxtLink
               v-for="inv in clientInvoices"
               :key="inv.id"
               :to="'/faktury/' + inv.id"
-              class="flex items-center justify-between rounded-lg px-2 py-3 transition hover:bg-slate-50"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:ring-1 hover:ring-indigo-200"
             >
-              <div>
-                <span class="font-medium text-slate-900">{{ inv.number || '—' }}</span>
-                <span class="ml-3 text-sm text-slate-500">{{ inv.subject }}</span>
-              </div>
               <div class="flex items-center gap-4">
-                <span class="text-sm font-medium tabular-nums">{{ formatCurrency(inv.total) }}</span>
-                <span
-                  class="rounded-full px-2 py-0.5 text-xs font-medium"
-                  :class="{
-                    'bg-green-50 text-green-700': inv.status === 'paid',
-                    'bg-yellow-50 text-yellow-700': inv.status === 'sent',
-                    'bg-red-50 text-red-700': inv.status === 'overdue',
-                    'bg-slate-50 text-slate-700': inv.status === 'open',
-                    'bg-gray-50 text-gray-500': inv.status === 'cancelled',
-                  }"
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
                 >
-                  {{ { paid: 'Zaplacená', sent: 'Odeslaná', overdue: 'Po splatnosti', open: 'Otevřená', cancelled: 'Stornovaná' }[inv.status] || inv.status }}
-                </span>
+                  <BanknotesIcon class="size-5" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-slate-900">{{ inv.number || '—' }}</span>
+                    <span class="text-sm text-slate-500">{{ inv.subject }}</span>
+                    <span
+                      class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                      :class="{
+                        'bg-green-100 text-green-700': inv.status === 'paid',
+                        'bg-yellow-100 text-yellow-700': inv.status === 'sent',
+                        'bg-red-100 text-red-700': inv.status === 'overdue',
+                        'bg-slate-100 text-slate-700': inv.status === 'open',
+                        'bg-gray-100 text-gray-500': inv.status === 'cancelled',
+                      }"
+                    >
+                      {{
+                        {
+                          paid: 'Zaplacená',
+                          sent: 'Odeslaná',
+                          overdue: 'Po splatnosti',
+                          open: 'Otevřená',
+                          cancelled: 'Stornovaná',
+                        }[inv.status] || inv.status
+                      }}
+                    </span>
+                  </div>
+                  <p class="text-xs text-slate-400">
+                    {{ formatCurrency(inv.total) }}
+                  </p>
+                </div>
               </div>
             </NuxtLink>
           </div>
@@ -518,7 +559,9 @@ definePageMeta({
       <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+            >
               <FolderIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
@@ -535,24 +578,42 @@ definePageMeta({
                 :key="offer.id"
                 class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
               >
-                <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex-1">
-                  <div class="flex items-center gap-3">
-                    <span class="font-medium text-slate-900">{{ offer.code }} — {{ offer.title }}</span>
-                    <span
-                      class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                      :class="{
-                        'bg-slate-100 text-slate-600': offer.status === 'draft',
-                        'bg-blue-100 text-blue-700': offer.status === 'sent',
-                        'bg-emerald-100 text-emerald-700': offer.status === 'accepted',
-                        'bg-red-100 text-red-700': offer.status === 'rejected',
-                        'bg-amber-100 text-amber-700': offer.status === 'expired',
-                      }"
-                    >
-                      {{ { draft: 'Koncept', sent: 'Odeslaná', accepted: 'Přijatá', rejected: 'Zamítnutá', expired: 'Vypršelá' }[offer.status] || offer.status }}
-                    </span>
+                <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex items-center gap-4 flex-1">
+                  <div
+                    class="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+                  >
+                    <DocumentTextIcon class="size-5" />
                   </div>
-                  <div class="mt-1 text-xs text-slate-500">
-                    {{ formatCurrency(offer.total_with_vat) }} · Platnost do {{ offer.valid_to || '—' }}
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-sm font-medium text-slate-900"
+                        >{{ offer.code }} — {{ offer.title }}</span
+                      >
+                      <span
+                        class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                        :class="{
+                          'bg-slate-100 text-slate-600': offer.status === 'draft',
+                          'bg-blue-100 text-blue-700': offer.status === 'sent',
+                          'bg-emerald-100 text-emerald-700': offer.status === 'accepted',
+                          'bg-red-100 text-red-700': offer.status === 'rejected',
+                          'bg-amber-100 text-amber-700': offer.status === 'expired',
+                        }"
+                      >
+                        {{
+                          {
+                            draft: 'Koncept',
+                            sent: 'Odeslaná',
+                            accepted: 'Přijatá',
+                            rejected: 'Zamítnutá',
+                            expired: 'Vypršelá',
+                          }[offer.status] || offer.status
+                        }}
+                      </span>
+                    </div>
+                    <p class="text-xs text-slate-400">
+                      {{ formatCurrency(offer.total_with_vat) }} · Platnost do
+                      {{ offer.valid_to || '—' }}
+                    </p>
                   </div>
                 </NuxtLink>
                 <button

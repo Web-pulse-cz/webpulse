@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  UserIcon,
+  MapPinIcon,
+  BuildingOfficeIcon,
+  BanknotesIcon,
+  TicketIcon,
+  StarIcon,
+} from '@heroicons/vue/24/outline';
 import { useCountryStore } from '~/../stores/countryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
-import { UserIcon, MapPinIcon, BuildingOfficeIcon, BanknotesIcon, TicketIcon, StarIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const countryStore = useCountryStore();
@@ -228,7 +235,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </LayoutContainer>
             <LayoutContainer>
               <div class="mb-6 flex items-center gap-3">
-                <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                >
                   <MapPinIcon class="size-5" />
                 </div>
                 <LayoutTitle class="!mb-0">Adresa</LayoutTitle>
@@ -253,7 +262,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </LayoutContainer>
             <LayoutContainer>
               <div class="mb-6 flex items-center gap-3">
-                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600"
+                >
                   <BuildingOfficeIcon class="size-5" />
                 </div>
                 <LayoutTitle class="!mb-0">Firemní údaje</LayoutTitle>
@@ -267,10 +278,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </div>
           <div class="col-span-1 space-y-6 lg:sticky lg:top-24 lg:col-span-3">
             <LayoutActionsDetailBlock
-                v-model:sites="item.sites"
-                :allow-image="false"
-                :allow-is-active="false"
-                :allow-translations="false"
+              v-model:sites="item.sites"
+              :allow-image="false"
+              :allow-is-active="false"
+              :allow-translations="false"
             />
             <LayoutContainer class="!py-6">
               <LayoutTitle class="text-sm uppercase tracking-widest text-slate-400"
@@ -326,7 +337,6 @@ definePageMeta({ middleware: 'sanctum:auth' });
               >
               <BaseFormTextarea v-model="item.note" label="" name="note" rows="3" class="mt-2" />
             </LayoutContainer>
-
           </div>
         </div>
       </template>
@@ -371,7 +381,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <template v-if="tabs.find((t) => t.current && t.link === '#vouchery')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-purple-50 text-purple-600"
+            >
               <TicketIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Přiřazené vouchery</LayoutTitle>
@@ -379,17 +391,26 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <div v-if="!item.vouchers?.length" class="py-12 text-center text-sm text-slate-400">
             Zákazník nemá přiřazené žádné vouchery.
           </div>
-          <div v-else class="divide-y divide-slate-100">
+          <div v-else class="space-y-3">
             <div
               v-for="v in item.vouchers"
               :key="v.id"
-              class="flex items-center justify-between py-3"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
-              <div>
-                <span class="font-mono text-sm font-bold text-indigo-600">{{ v.code }}</span>
-                <span class="ml-3 text-sm text-slate-600">{{ v.name }}</span>
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg bg-purple-50 text-purple-600"
+                >
+                  <TicketIcon class="size-5" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-sm font-bold text-indigo-600">{{ v.code }}</span>
+                    <span class="text-sm font-medium text-slate-900">{{ v.name }}</span>
+                  </div>
+                  <p class="text-xs text-slate-400">Použito: {{ v.times_used }}x</p>
+                </div>
               </div>
-              <span class="text-xs text-slate-400">Použito: {{ v.times_used }}x</span>
             </div>
           </div>
         </LayoutContainer>

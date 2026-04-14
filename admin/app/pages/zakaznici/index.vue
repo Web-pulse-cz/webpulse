@@ -142,11 +142,19 @@ definePageMeta({ middleware: 'sanctum:auth' });
           hidden: true,
           sortable: false,
         },
-        { key: 'status', name: 'Stav', type: 'mapped', width: 80, hidden: false, sortable: true, map: {
-          active: { label: 'Aktivní', class: 'bg-emerald-100 text-emerald-700' },
-          inactive: { label: 'Neaktivní', class: 'bg-slate-100 text-slate-600' },
-          blocked: { label: 'Blokovaný', class: 'bg-red-100 text-red-700' },
-        }},
+        {
+          key: 'status',
+          name: 'Stav',
+          type: 'mapped',
+          width: 80,
+          hidden: false,
+          sortable: true,
+          map: {
+            active: { label: 'Aktivní', class: 'bg-emerald-100 text-emerald-700' },
+            inactive: { label: 'Neaktivní', class: 'bg-slate-100 text-slate-600' },
+            blocked: { label: 'Blokovaný', class: 'bg-red-100 text-red-700' },
+          },
+        },
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"

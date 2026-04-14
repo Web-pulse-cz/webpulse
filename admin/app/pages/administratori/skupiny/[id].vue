@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 
 import { Form } from 'vee-validate';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
-import { InformationCircleIcon, KeyIcon, PlusIcon, ShieldCheckIcon, ShieldExclamationIcon, TrashIcon } from '@heroicons/vue/24/outline';
-
-const userGroupStore = useUserGroupStore();
+import {
+  InformationCircleIcon,
+  KeyIcon,
+  ShieldCheckIcon,
+  UserGroupIcon,
+  UserIcon,
+} from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
 const router = useRouter();
@@ -41,55 +45,85 @@ const breadcrumbs = ref([
   },
 ]);
 
-const allowedPermissions = ref([
-  { name: 'Administrátoři', value: 'Administrátoři', slug: 'users' },
-  { name: 'Aktivita', value: 'Aktivita', slug: 'users_has_activities' },
-  { name: 'Aktivity', value: 'Aktivity', slug: 'activities' },
-  { name: 'Alergeny', value: 'Alergeny', slug: 'allergens' },
-  { name: 'Blogové články', value: 'Blogové články', slug: 'posts' },
-  { name: 'Cashflow', value: 'Cashflow', slug: 'cashflows' },
-  { name: 'Cenové nabídky', value: 'Cenové nabídky', slug: 'price_offers' },
-  { name: 'Changelog', value: 'Changelog', slug: 'changelogs' },
-  { name: 'Zákazníci', value: 'Zákazníci', slug: 'customers' },
-  { name: 'E-maily', value: 'E-maily', slug: 'emails' },
-  { name: 'Faktury', value: 'Faktury', slug: 'invoices' },
-  { name: 'FAQ', value: 'FAQ', slug: 'faqs' },
-  { name: 'Informační stránky', value: 'Informační stránky', slug: 'pages' },
-  { name: 'Jazyky', value: 'Jazyky', slug: 'languages' },
-  { name: 'Jídla', value: 'Jídla', slug: 'meals' },
-  { name: 'Kalendář', value: 'Kalendář', slug: 'calendars' },
-  { name: 'Klienti', value: 'Klienti', slug: 'clients' },
-  { name: 'Kontakty', value: 'Kontakty', slug: 'contacts' },
-  { name: 'Kvízy', value: 'Kvízy', slug: 'quizzes' },
-  { name: 'Ligy', value: 'Ligy', slug: 'leagues' },
-  { name: 'Loga klientů', value: 'Loga klientů', slug: 'logos' },
-  { name: 'Menu', value: 'Menu', slug: 'menus' },
-  { name: 'Měny', value: 'Měny', slug: 'currencies' },
-  { name: 'Nastavení', value: 'Nastavení', slug: 'settings' },
-  { name: 'Novinky', value: 'Novinky', slug: 'novelties' },
-  { name: 'Odběry newsletteru', value: 'Odběry newsletteru', slug: 'newsletters' },
-  { name: 'Poptávky', value: 'Poptávky', slug: 'demands' },
-  { name: 'Potraviny', value: 'Potraviny', slug: 'foodstuffs' },
-  { name: 'Pracovní pozice', value: 'Pracovní pozice', slug: 'careers' },
-  { name: 'Projekty', value: 'Projekty', slug: 'projects' },
-  { name: 'Recepty', value: 'Recepty', slug: 'recipes' },
-  { name: 'Reference', value: 'Reference', slug: 'reviews' },
-  { name: 'Rezervace', value: 'Rezervace', slug: 'reservations' },
-  { name: 'Sazby DPH', value: 'Sazby DPH', slug: 'tax_rates' },
-  { name: 'Služby', value: 'Služby', slug: 'services' },
-  { name: 'Směny', value: 'Směny', slug: 'shifts' },
-  { name: 'Smlouvy', value: 'Smlouvy', slug: 'employee_contracts' },
-  { name: 'Stoly', value: 'Stoly', slug: 'restaurant_tables' },
-  { name: 'Stránky', value: 'Stránky', slug: 'sites' },
-  { name: 'Šablony zpráv', value: 'Šablony zpráv', slug: 'message_blueprints' },
-  { name: 'Sledování času', value: 'Sledování času', slug: 'project_time_entries' },
-  { name: 'Trackování', value: 'Trackování', slug: 'trackings' },
-  { name: 'Události', value: 'Události', slug: 'events' },
-  { name: 'Vouchery', value: 'Vouchery', slug: 'vouchers' },
-  { name: 'Úkoly', value: 'Úkoly', slug: 'project_tasks' },
-  { name: 'Zaměstnanci', value: 'Zaměstnanci', slug: 'employees' },
-  { name: 'Země', value: 'Země', slug: 'countries' },
-  { name: 'Životopisy', value: 'Životopisy', slug: 'biographies' },
+const moduleGroups = ref([
+  {
+    title: 'Obsah',
+    modules: [
+      { slug: 'posts', name: 'Blogové články' },
+      { slug: 'pages', name: 'Informační stránky' },
+      { slug: 'novelties', name: 'Novinky' },
+      { slug: 'services', name: 'Služby' },
+      { slug: 'events', name: 'Události' },
+      { slug: 'reviews', name: 'Reference' },
+      { slug: 'logos', name: 'Loga klientů' },
+      { slug: 'careers', name: 'Pracovní pozice' },
+      { slug: 'quizzes', name: 'Kvízy' },
+      { slug: 'faqs', name: 'FAQ' },
+    ],
+  },
+  {
+    title: 'Restaurace',
+    modules: [
+      { slug: 'allergens', name: 'Alergeny' },
+      { slug: 'foodstuffs', name: 'Potraviny' },
+      { slug: 'meals', name: 'Jídla' },
+      { slug: 'recipes', name: 'Recepty' },
+      { slug: 'menus', name: 'Menu' },
+      { slug: 'restaurant_tables', name: 'Stoly' },
+      { slug: 'reservations', name: 'Rezervace' },
+    ],
+  },
+  {
+    title: 'Zákazníci',
+    modules: [
+      { slug: 'customers', name: 'Zákazníci' },
+      { slug: 'vouchers', name: 'Vouchery' },
+      { slug: 'newsletters', name: 'Odběry newsletteru' },
+      { slug: 'demands', name: 'Poptávky' },
+    ],
+  },
+  {
+    title: 'Byznys a osobní růst',
+    modules: [
+      { slug: 'contacts', name: 'Kontakty' },
+      { slug: 'users_has_activities', name: 'Aktivita' },
+      { slug: 'message_blueprints', name: 'Šablony zpráv' },
+      { slug: 'calendars', name: 'Kalendář' },
+      { slug: 'cashflows', name: 'Cashflow' },
+      { slug: 'leagues', name: 'Ligy' },
+    ],
+  },
+  {
+    title: 'Vedení firmy',
+    modules: [
+      { slug: 'clients', name: 'Klienti' },
+      { slug: 'invoices', name: 'Faktury' },
+      { slug: 'projects', name: 'Projekty' },
+      { slug: 'price_offers', name: 'Cenové nabídky' },
+      { slug: 'project_time_entries', name: 'Sledování času' },
+      { slug: 'project_tasks', name: 'Úkoly' },
+      { slug: 'employees', name: 'Zaměstnanci' },
+      { slug: 'shifts', name: 'Směny' },
+      { slug: 'employee_contracts', name: 'Smlouvy' },
+      { slug: 'biographies', name: 'Životopisy' },
+    ],
+  },
+  {
+    title: 'Nastavení a správa',
+    modules: [
+      { slug: 'users', name: 'Administrátoři' },
+      { slug: 'sites', name: 'Stránky' },
+      { slug: 'settings', name: 'Nastavení' },
+      { slug: 'changelogs', name: 'Changelog' },
+      { slug: 'activities', name: 'Aktivity' },
+      { slug: 'emails', name: 'E-maily' },
+      { slug: 'languages', name: 'Jazyky' },
+      { slug: 'countries', name: 'Země' },
+      { slug: 'currencies', name: 'Měny' },
+      { slug: 'tax_rates', name: 'Sazby DPH' },
+      { slug: 'trackings', name: 'Trackování' },
+    ],
+  },
 ]);
 
 const item = ref({
@@ -97,6 +131,7 @@ const item = ref({
   name: '' as string,
   permissions: [] as [],
   sites: [] as number[],
+  users: [] as any[],
 });
 
 async function loadItem() {
@@ -112,10 +147,13 @@ async function loadItem() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
       item.value = response;
+      item.value.sites = response.sites?.map((site: any) => site.id) || [];
+      item.value.users = response.users || [];
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
@@ -156,6 +194,7 @@ async function saveItem(redirect = true as boolean) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
       },
     },
   )
@@ -189,50 +228,69 @@ async function saveItem(redirect = true as boolean) {
     })
     .finally(() => {
       loading.value = false;
-      userGroupStore.fetchUserGroups();
     });
 }
 
-function addPermission() {
-  item.value.permissions.push({
-    name: '',
-    slug: '',
-    permissions: {
-      view: true,
-      edit: true,
-      delete: true,
-    },
-  });
+function getPermission(slug: string) {
+  return item.value.permissions.find((p: any) => p.slug === slug);
 }
 
-function removePermission(key: number) {
-  item.value.permissions.splice(key, 1);
+function hasPermission(slug: string, type: 'view' | 'edit' | 'delete'): boolean {
+  const perm = getPermission(slug);
+  return perm?.permissions?.[type] === true;
 }
 
-function availablePermissions(index: number) {
-  const selectedPermissions = item.value.permissions.map((p) => p.name);
-  const currentPermission = item.value.permissions[index]?.name;
-
-  return allowedPermissions.value.filter((perm) => {
-    return perm.value === currentPermission || !selectedPermissions.includes(perm.value);
-  });
+function togglePermission(slug: string, name: string, type: 'view' | 'edit' | 'delete') {
+  let perm = getPermission(slug);
+  if (!perm) {
+    perm = { name, slug, permissions: { view: false, edit: false, delete: false } };
+    item.value.permissions.push(perm);
+  }
+  perm.permissions[type] = !perm.permissions[type];
+  if (!perm.permissions.view && !perm.permissions.edit && !perm.permissions.delete) {
+    const idx = item.value.permissions.findIndex((p: any) => p.slug === slug);
+    if (idx !== -1) item.value.permissions.splice(idx, 1);
+  }
 }
 
-watch(
-  () => item.value.permissions,
-  (newPermissions) => {
-    newPermissions.forEach((permission) => {
-      const selectedPermission = allowedPermissions.value.find((p) => p.value === permission.name);
-      if (selectedPermission) {
-        permission.slug = selectedPermission.slug;
+function toggleGroupAll(group: any, type: 'view' | 'edit' | 'delete') {
+  const allSet = group.modules.every((mod: any) => hasPermission(mod.slug, type));
+  group.modules.forEach((mod: any) => {
+    const perm = getPermission(mod.slug);
+    if (allSet) {
+      if (perm) {
+        perm.permissions[type] = false;
+        if (!perm.permissions.view && !perm.permissions.edit && !perm.permissions.delete) {
+          const idx = item.value.permissions.findIndex((p: any) => p.slug === mod.slug);
+          if (idx !== -1) item.value.permissions.splice(idx, 1);
+        }
       }
-    });
-  },
-  { deep: true },
-);
+    } else {
+      if (!perm) {
+        item.value.permissions.push({
+          name: mod.name,
+          slug: mod.slug,
+          permissions: { view: false, edit: false, delete: false, [type]: true },
+        });
+      } else {
+        perm.permissions[type] = true;
+      }
+    }
+  });
+}
+
+function isGroupAllChecked(group: any, type: 'view' | 'edit' | 'delete'): boolean {
+  return group.modules.every((mod: any) => hasPermission(mod.slug, type));
+}
 
 useHead({
   title: pageTitle.value,
+});
+
+watch(selectedSiteHash, () => {
+  if (route.params.id !== 'pridat') {
+    loadItem();
+  }
 });
 
 onMounted(() => {
@@ -284,119 +342,198 @@ definePageMeta({
           </LayoutContainer>
 
           <LayoutContainer>
+            <div class="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <KeyIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Přístupy k modulům systému</LayoutTitle>
+            </div>
+
+            <div class="space-y-5">
+              <div
+                v-for="group in moduleGroups"
+                :key="group.title"
+                class="overflow-hidden rounded-2xl ring-1 ring-slate-200"
+              >
+                <!-- Group header with bulk toggles -->
+                <div
+                  class="flex items-center justify-between bg-slate-50 px-5 py-3"
+                >
+                  <span class="text-xs font-bold uppercase tracking-widest text-slate-500">{{
+                    group.title
+                  }}</span>
+                  <div class="hidden items-center gap-6 sm:flex">
+                    <button
+                      type="button"
+                      class="text-[10px] font-bold uppercase tracking-widest transition"
+                      :class="
+                        isGroupAllChecked(group, 'view')
+                          ? 'text-indigo-600'
+                          : 'text-slate-400 hover:text-slate-600'
+                      "
+                      @click="toggleGroupAll(group, 'view')"
+                    >
+                      Zobrazit
+                    </button>
+                    <button
+                      type="button"
+                      class="text-[10px] font-bold uppercase tracking-widest transition"
+                      :class="
+                        isGroupAllChecked(group, 'edit')
+                          ? 'text-indigo-600'
+                          : 'text-slate-400 hover:text-slate-600'
+                      "
+                      @click="toggleGroupAll(group, 'edit')"
+                    >
+                      Editovat
+                    </button>
+                    <button
+                      type="button"
+                      class="text-[10px] font-bold uppercase tracking-widest transition"
+                      :class="
+                        isGroupAllChecked(group, 'delete')
+                          ? 'text-indigo-600'
+                          : 'text-slate-400 hover:text-slate-600'
+                      "
+                      @click="toggleGroupAll(group, 'delete')"
+                    >
+                      Mazat
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Module rows -->
+                <div class="divide-y divide-slate-100">
+                  <div
+                    v-for="mod in group.modules"
+                    :key="mod.slug"
+                    class="grid grid-cols-1 items-center gap-2 px-5 py-3 transition-colors hover:bg-slate-50/50 sm:grid-cols-12"
+                  >
+                    <div
+                      class="col-span-1 text-sm font-medium sm:col-span-6"
+                      :class="
+                        hasPermission(mod.slug, 'view') ||
+                        hasPermission(mod.slug, 'edit') ||
+                        hasPermission(mod.slug, 'delete')
+                          ? 'text-slate-900'
+                          : 'text-slate-400'
+                      "
+                    >
+                      {{ mod.name }}
+                    </div>
+                    <div
+                      class="col-span-1 flex items-center justify-between sm:col-span-2 sm:justify-center"
+                    >
+                      <span class="text-xs text-slate-400 sm:hidden">Zobrazit</span>
+                      <BaseFormCheckbox
+                        :value="hasPermission(mod.slug, 'view')"
+                        :checked="hasPermission(mod.slug, 'view')"
+                        label=""
+                        :name="mod.slug + '_view'"
+                        class="!mb-0"
+                        @click="togglePermission(mod.slug, mod.name, 'view')"
+                      />
+                    </div>
+                    <div
+                      class="col-span-1 flex items-center justify-between sm:col-span-2 sm:justify-center"
+                    >
+                      <span class="text-xs text-slate-400 sm:hidden">Editovat</span>
+                      <BaseFormCheckbox
+                        :value="hasPermission(mod.slug, 'edit')"
+                        :checked="hasPermission(mod.slug, 'edit')"
+                        label=""
+                        :name="mod.slug + '_edit'"
+                        class="!mb-0"
+                        @click="togglePermission(mod.slug, mod.name, 'edit')"
+                      />
+                    </div>
+                    <div
+                      class="col-span-1 flex items-center justify-between sm:col-span-2 sm:justify-center"
+                    >
+                      <span class="text-xs text-slate-400 sm:hidden">Mazat</span>
+                      <BaseFormCheckbox
+                        :value="hasPermission(mod.slug, 'delete')"
+                        :checked="hasPermission(mod.slug, 'delete')"
+                        label=""
+                        :name="mod.slug + '_delete'"
+                        class="!mb-0"
+                        @click="togglePermission(mod.slug, mod.name, 'delete')"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer v-if="item.id">
             <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
               <div class="flex items-center gap-3">
                 <div
-                  class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+                  class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
                 >
-                  <KeyIcon class="size-5" />
+                  <UserGroupIcon class="size-5" />
                 </div>
-                <LayoutTitle class="!mb-0">Přístupy k modulům systému</LayoutTitle>
+                <LayoutTitle class="!mb-0">Uživatelé v této skupině</LayoutTitle>
               </div>
-
-              <BaseButton type="button" variant="secondary" size="md" @click="addPermission">
-                <PlusIcon class="mr-2 size-4" />
-                Přidat modul
-              </BaseButton>
+              <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+                {{ item.users?.length || 0 }}
+              </span>
             </div>
 
-            <div class="space-y-4">
-              <div
-                class="hidden grid-cols-12 gap-4 px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 lg:grid"
+            <div v-if="item.users && item.users.length > 0" class="space-y-2">
+              <NuxtLink
+                v-for="u in item.users"
+                :key="u.id"
+                :to="`/administratori/${u.id}`"
+                class="group flex items-center gap-4 rounded-2xl p-3 transition-all hover:bg-slate-50"
               >
-                <div class="col-span-4">Modul / Sekce</div>
-                <div class="col-span-2 text-center">Zobrazit</div>
-                <div class="col-span-2 text-center">Editovat</div>
-                <div class="col-span-2 text-center">Mazat</div>
-                <div class="col-span-2"></div>
-              </div>
-
-              <div
-                v-for="(permission, key) in item.permissions"
-                :key="key"
-                class="group relative grid grid-cols-1 gap-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200 transition-all hover:bg-white hover:shadow-md lg:grid-cols-12 lg:items-center lg:px-6"
-              >
-                <div class="col-span-1 lg:col-span-4">
-                  <BaseFormSelect
-                    v-model="permission.name"
-                    label=""
-                    :name="key + '_name'"
-                    rules="required"
-                    :options="availablePermissions(key)"
-                    class="!mb-0"
-                  />
-                </div>
-
                 <div
-                  class="col-span-1 flex items-center justify-between rounded-xl bg-white p-2 px-4 ring-1 ring-slate-100 lg:col-span-2 lg:justify-center lg:bg-transparent lg:ring-0"
+                  class="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 group-hover:bg-slate-200"
                 >
-                  <span class="text-xs font-bold text-slate-500 lg:hidden">Zobrazit</span>
-                  <BaseFormCheckbox
-                    v-model="permission.permissions.view"
-                    label=""
-                    :name="key + '_view'"
-                    class="!mb-0"
+                  <img
+                    v-if="u.avatar"
+                    :src="u.avatar"
+                    :alt="`${u.firstname} ${u.lastname}`"
+                    class="size-10 rounded-full object-cover"
                   />
+                  <UserIcon v-else class="size-5" />
                 </div>
-
-                <div
-                  class="col-span-1 flex items-center justify-between rounded-xl bg-white p-2 px-4 ring-1 ring-slate-100 lg:col-span-2 lg:justify-center lg:bg-transparent lg:ring-0"
-                >
-                  <span class="text-xs font-bold text-slate-500 lg:hidden">Editovat</span>
-                  <BaseFormCheckbox
-                    v-model="permission.permissions.edit"
-                    label=""
-                    :name="key + '_edit'"
-                    class="!mb-0"
-                  />
+                <div>
+                  <p class="text-sm font-semibold text-slate-800 group-hover:text-slate-900">
+                    {{ u.firstname }} {{ u.lastname }}
+                  </p>
+                  <p class="text-xs text-slate-400">{{ u.email }}</p>
                 </div>
+              </NuxtLink>
+            </div>
 
-                <div
-                  class="col-span-1 flex items-center justify-between rounded-xl bg-white p-2 px-4 ring-1 ring-slate-100 lg:col-span-2 lg:justify-center lg:bg-transparent lg:ring-0"
-                >
-                  <span class="text-xs font-bold text-slate-500 lg:hidden">Mazat</span>
-                  <BaseFormCheckbox
-                    v-model="permission.permissions.delete"
-                    label=""
-                    :name="key + '_delete'"
-                    class="!mb-0"
-                  />
-                </div>
-
-                <div class="col-span-1 flex justify-end lg:col-span-2">
-                  <button
-                    type="button"
-                    class="flex size-9 items-center justify-center rounded-full text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500"
-                    @click="removePermission(key)"
-                  >
-                    <TrashIcon class="size-5" />
-                  </button>
-                </div>
-              </div>
-
-              <div
-                v-if="!item.permissions || Object.keys(item.permissions).length === 0"
-                class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 py-12 text-center"
-              >
-                <ShieldExclamationIcon class="mb-4 size-10 text-slate-300" />
-                <p class="text-sm font-medium text-slate-500">
-                  Tato role nemá definována žádná specifická oprávnění.
-                </p>
-                <BaseButton
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  class="mt-4"
-                  @click="addPermission"
-                >
-                  Vytvořit první přístup
-                </BaseButton>
-              </div>
+            <div
+              v-else
+              class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 py-12 text-center"
+            >
+              <UserGroupIcon class="mb-4 size-10 text-slate-300" />
+              <p class="text-sm font-medium text-slate-500">
+                V této skupině zatím nejsou žádní uživatelé.
+              </p>
+              <p class="mt-1 text-xs text-slate-400">
+                Uživatele přiřadíte ke skupině v jeho detailu.
+              </p>
             </div>
           </LayoutContainer>
         </div>
 
         <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
+          <LayoutActionsDetailBlock
+            v-model:sites="item.sites"
+            :allow-translations="false"
+            :allow-image="false"
+            :allow-is-active="false"
+            class="shadow-sm"
+          />
+
           <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
             <div class="mb-4 flex items-center gap-2">
               <InformationCircleIcon class="size-5 text-indigo-200" />

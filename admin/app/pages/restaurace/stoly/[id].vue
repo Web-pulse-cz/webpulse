@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import { BuildingOfficeIcon, CalendarDaysIcon } from '@heroicons/vue/24/outline';
+import { BuildingOfficeIcon, CalendarDaysIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
@@ -302,53 +302,55 @@ definePageMeta({ middleware: 'sanctum:auth' });
             Žádné rezervace.
           </div>
 
-          <div v-else class="divide-y divide-slate-100">
+          <div v-else class="space-y-3">
             <div
               v-for="res in filteredReservations"
               :key="res.id"
-              class="flex items-center justify-between py-4 transition"
-              :class="res.is_registered_customer ? '-mx-4 rounded-lg bg-indigo-50/50 px-4' : ''"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+              :class="res.is_registered_customer ? 'ring-1 ring-indigo-200' : ''"
             >
               <div class="flex items-center gap-4">
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg"
+                  :class="res.is_registered_customer ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'"
+                >
+                  <UserIcon class="size-5" />
+                </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-medium text-slate-900">{{ res.guest_full_name }}</span>
+                    <span class="text-sm font-medium text-slate-900">{{ res.guest_full_name }}</span>
                     <span
                       v-if="res.is_registered_customer"
                       class="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700"
                     >
                       Registrovaný zákazník
                     </span>
+                    <span
+                      class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                      :class="reservationStatusColors[res.status]"
+                    >
+                      {{ reservationStatusLabels[res.status] || res.status }}
+                    </span>
                   </div>
-                  <div class="mt-0.5 text-xs text-slate-500">
+                  <p class="text-xs text-slate-400">
                     {{ res.date }} &middot; {{ res.time_from?.slice(0, 5)
                     }}<span v-if="res.time_to"> — {{ res.time_to?.slice(0, 5) }}</span> &middot;
                     {{ res.guests_count }}
                     {{ res.guests_count === 1 ? 'host' : res.guests_count < 5 ? 'hosté' : 'hostů' }}
-                  </div>
-                  <div
-                    v-if="res.guest_phone || res.guest_email"
-                    class="mt-0.5 text-xs text-slate-400"
-                  >
-                    {{ res.guest_phone ? res.guest_phone_prefix + ' ' + res.guest_phone : '' }}
-                    {{ res.guest_email ? ' · ' + res.guest_email : '' }}
-                  </div>
+                    <template v-if="res.guest_phone || res.guest_email">
+                      &middot;
+                      {{ res.guest_phone ? res.guest_phone_prefix + ' ' + res.guest_phone : '' }}
+                      {{ res.guest_email ? ' · ' + res.guest_email : '' }}
+                    </template>
+                  </p>
                 </div>
               </div>
-              <div class="flex items-center gap-2">
-                <span
-                  class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                  :class="reservationStatusColors[res.status]"
-                >
-                  {{ reservationStatusLabels[res.status] || res.status }}
-                </span>
-                <NuxtLink
-                  :to="'/restaurace/rezervace/' + res.id"
-                  class="text-xs font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Detail
-                </NuxtLink>
-              </div>
+              <NuxtLink
+                :to="'/restaurace/rezervace/' + res.id"
+                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+              >
+                Detail
+              </NuxtLink>
             </div>
           </div>
         </LayoutContainer>

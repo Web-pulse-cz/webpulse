@@ -38,10 +38,19 @@ async function loadItem() {
   loading.value = true;
   await client('/api/admin/employee/division/' + route.params.id, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
-      item.value = { ...r, sites: Array.isArray(r.sites) ? r.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [] };
+      item.value = {
+        ...r,
+        sites: Array.isArray(r.sites)
+          ? r.sites.map((s: any) => (typeof s === 'object' ? s.id : s))
+          : [],
+      };
       pageTitle.value = r.name;
       breadcrumbs.value[2] = {
         name: r.name,
@@ -61,7 +70,11 @@ async function loadEmployees() {
   const client = useSanctumClient();
   await client('/api/admin/employee', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       const d = r?.data || r;
@@ -83,7 +96,11 @@ async function saveItem(redirect = true) {
     {
       method: 'POST',
       body: JSON.stringify(item.value),
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
+      },
     },
   )
     .then((r) => {
@@ -124,37 +141,39 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <Form @submit="saveItem">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 lg:col-span-9">
-      <LayoutContainer>
-        <div class="mb-6 flex items-center gap-3">
-          <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-            <BuildingOfficeIcon class="size-5" />
-          </div>
-          <LayoutTitle class="!mb-0">Údaje divize</LayoutTitle>
-        </div>
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <BaseFormInput v-model="item.name" label="Název" name="name" rules="required" />
-          <BaseFormColorPicker v-model="item.color" label="Barva" name="color" />
-          <BaseFormTextarea
-            v-model="item.description"
-            label="Popis"
-            name="description"
-            rows="3"
-            class="col-span-full"
-          />
-          <BaseFormInput v-model="item.address" label="Adresa" name="address" />
-          <BaseFormInput v-model="item.city" label="Město" name="city" />
-          <BaseFormInput v-model="item.zip" label="PSČ" name="zip" />
-          <BaseFormInput v-model="item.phone" label="Telefon" name="phone" />
-          <BaseFormInput v-model="item.email" label="E-mail" name="email" />
-          <BaseFormSelect
-            v-model="item.head_employee_id"
-            label="Vedoucí"
-            name="head_employee_id"
-            :options="employees"
-          />
-          <BaseFormInput v-model="item.position" label="Pořadí" type="number" name="position" />
-        </div>
-      </LayoutContainer>
+          <LayoutContainer>
+            <div class="mb-6 flex items-center gap-3">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <BuildingOfficeIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0">Údaje divize</LayoutTitle>
+            </div>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <BaseFormInput v-model="item.name" label="Název" name="name" rules="required" />
+              <BaseFormColorPicker v-model="item.color" label="Barva" name="color" />
+              <BaseFormTextarea
+                v-model="item.description"
+                label="Popis"
+                name="description"
+                rows="3"
+                class="col-span-full"
+              />
+              <BaseFormInput v-model="item.address" label="Adresa" name="address" />
+              <BaseFormInput v-model="item.city" label="Město" name="city" />
+              <BaseFormInput v-model="item.zip" label="PSČ" name="zip" />
+              <BaseFormInput v-model="item.phone" label="Telefon" name="phone" />
+              <BaseFormInput v-model="item.email" label="E-mail" name="email" />
+              <BaseFormSelect
+                v-model="item.head_employee_id"
+                label="Vedoucí"
+                name="head_employee_id"
+                :options="employees"
+              />
+              <BaseFormInput v-model="item.position" label="Pořadí" type="number" name="position" />
+            </div>
+          </LayoutContainer>
         </div>
         <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
           <LayoutActionsDetailBlock

@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
-import { DocumentIcon, ChatBubbleLeftIcon, ListBulletIcon, CreditCardIcon, TrashIcon } from '@heroicons/vue/24/outline';
+import {
+  DocumentIcon,
+  ChatBubbleLeftIcon,
+  ListBulletIcon,
+  CreditCardIcon,
+  TrashIcon,
+} from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 
@@ -82,7 +88,9 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      item.value.sites = Array.isArray(response.sites) ? response.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
+      item.value.sites = Array.isArray(response.sites)
+        ? response.sites.map((s: any) => (typeof s === 'object' ? s.id : s))
+        : [];
       pageTitle.value = item.value.number || 'Faktura #' + item.value.id;
       breadcrumbs.value[1] = {
         name: pageTitle.value,
@@ -107,7 +115,11 @@ async function loadClients() {
   const client = useSanctumClient();
   await client('/api/admin/client', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((response) => {
       const data = response?.data || response;
@@ -120,7 +132,11 @@ async function loadProjects() {
   const client = useSanctumClient();
   await client('/api/admin/project', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((response) => {
       const data = response?.data || response;
@@ -355,7 +371,9 @@ definePageMeta({
 
             <LayoutContainer>
               <div class="mb-6 flex items-center gap-3">
-                <div class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                <div
+                  class="flex size-8 items-center justify-center rounded-lg bg-slate-50 text-slate-600"
+                >
                   <ChatBubbleLeftIcon class="size-5" />
                 </div>
                 <LayoutTitle class="!mb-0">Poznámky</LayoutTitle>
@@ -400,7 +418,9 @@ definePageMeta({
         <LayoutContainer>
           <div class="mb-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
                 <ListBulletIcon class="size-5" />
               </div>
               <LayoutTitle class="!mb-0">Položky faktury</LayoutTitle>
@@ -478,7 +498,9 @@ definePageMeta({
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#platba')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+            >
               <CreditCardIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Platební údaje</LayoutTitle>
@@ -510,7 +532,9 @@ definePageMeta({
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#soubory')">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
-            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+            >
               <DocumentIcon class="size-5" />
             </div>
             <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
@@ -527,20 +551,24 @@ definePageMeta({
               class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
               <div class="flex items-center gap-4">
-                <div class="flex size-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg bg-red-50 text-red-600"
+                >
                   <DocumentIcon class="size-5" />
                 </div>
                 <div>
                   <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
                   <p class="text-xs text-slate-400">
                     {{ file.mime_type }}
-                    <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
+                    <span v-if="file.size" class="ml-2"
+                      >{{ (file.size / 1024).toFixed(0) }} KB</span
+                    >
                   </p>
                 </div>
               </div>
               <button
                 type="button"
-                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500 transition"
+                class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
                 @click="downloadFile(file.id)"
               >
                 Stáhnout

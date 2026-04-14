@@ -6,16 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Blog\PostResource;
 use App\Models\Blog\Post;
 use App\Services\GoogleTranslatorService;
+use App\Traits\HasFiles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
+    use HasFiles;
+
     protected GoogleTranslatorService $googleTranslatorService;
 
     public function __construct()
@@ -159,60 +161,16 @@ class PostController extends Controller
 
     public function uploadFile(Request $request, int $id): JsonResponse
     {
-        $post = Post::find($id);
-        if (! $post) {
-            App::abort(404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|max:20480',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::json($validator->errors(), 400);
-        }
-
-        $post->attachUploadedFile($request->file('file'), 'files/posts/' . $post->id);
-
-        return Response::json(PostResource::make($post));
+        return $this->handleUploadFile($request, Post::class, $id, 'files/posts', PostResource::class);
     }
 
     public function downloadFile(int $postId, int $fileId)
     {
-        $post = Post::find($postId);
-        if (! $post) {
-            App::abort(404);
-        }
-
-        $file = DB::table('fileables')
-            ->where('id', $fileId)
-            ->where('fileable_id', $postId)
-            ->where('fileable_type', get_class($post))
-            ->first();
-
-        if (! $file) {
-            App::abort(404);
-        }
-
-        $disk = $file->disk ?? 'public';
-        if (! Storage::disk($disk)->exists($file->path)) {
-            App::abort(404);
-        }
-
-        return response()->download(Storage::disk($disk)->path($file->path), $file->name, [
-            'Content-Type' => $file->mime_type,
-        ]);
+        return $this->handleDownloadFile(Post::class, $postId, $fileId);
     }
 
     public function deleteFile(int $postId, int $fileId): JsonResponse
     {
-        $post = Post::find($postId);
-        if (! $post) {
-            App::abort(404);
-        }
-
-        $post->removeFile($fileId);
-
-        return Response::json();
+        return $this->handleDeleteFile(Post::class, $postId, $fileId);
     }
 }

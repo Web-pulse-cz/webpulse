@@ -7,6 +7,7 @@ use App\Http\Resources\Admin\Invoice\InvoiceResource;
 use App\Http\Resources\Admin\Invoice\InvoiceSimpleResource;
 use App\Jobs\Fakturoid\SyncInvoiceToFakturoidJob;
 use App\Models\Invoice\Invoice;
+use App\Traits\HasFiles;
 use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
-    use Siteable;
+    use Siteable, HasFiles;
 
     public function index(Request $request): JsonResponse
     {
@@ -205,29 +206,7 @@ class InvoiceController extends Controller
 
     public function downloadFile(int $invoiceId, int $fileId)
     {
-        $invoice = Invoice::find($invoiceId);
-        if (!$invoice) {
-            App::abort(404);
-        }
-
-        $file = \Illuminate\Support\Facades\DB::table('fileables')
-            ->where('id', $fileId)
-            ->where('fileable_id', $invoiceId)
-            ->where('fileable_type', Invoice::class)
-            ->first();
-
-        if (!$file) {
-            App::abort(404);
-        }
-
-        $path = storage_path('app/public/' . $file->path);
-        if (!file_exists($path)) {
-            App::abort(404);
-        }
-
-        return response()->download($path, $file->name, [
-            'Content-Type' => $file->mime_type,
-        ]);
+        return $this->handleDownloadFile(Invoice::class, $invoiceId, $fileId);
     }
 
     protected function generateLocalPdf(Invoice $invoice, ?\App\Models\Site\Site $site): void

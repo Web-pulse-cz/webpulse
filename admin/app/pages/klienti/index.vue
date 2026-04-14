@@ -134,11 +134,19 @@ definePageMeta({
         { key: 'email', name: 'E-mail', type: 'text', width: 80, hidden: true, sortable: true },
         { key: 'ico', name: 'IČO', type: 'text', width: 80, hidden: true, sortable: true },
         { key: 'city', name: 'Město', type: 'text', width: 80, hidden: true, sortable: true },
-        { key: 'type', name: 'Typ', type: 'mapped', width: 80, hidden: true, sortable: true, map: {
-          customer: { label: 'Odběratel', class: 'bg-blue-100 text-blue-700' },
-          supplier: { label: 'Dodavatel', class: 'bg-amber-100 text-amber-700' },
-          both: { label: 'Obojí', class: 'bg-indigo-100 text-indigo-700' },
-        }},
+        {
+          key: 'type',
+          name: 'Typ',
+          type: 'mapped',
+          width: 80,
+          hidden: true,
+          sortable: true,
+          map: {
+            customer: { label: 'Odběratel', class: 'bg-blue-100 text-blue-700' },
+            supplier: { label: 'Dodavatel', class: 'bg-amber-100 text-amber-700' },
+            both: { label: 'Obojí', class: 'bg-indigo-100 text-indigo-700' },
+          },
+        },
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"

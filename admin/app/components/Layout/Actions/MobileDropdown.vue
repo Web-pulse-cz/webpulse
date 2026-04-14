@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
 
-const userGroupStore = useUserGroupStore();
+const permissions = usePermissions();
 
-const user = useSanctumUser();
 const route = useRoute();
 const router = useRouter();
 
@@ -23,24 +21,7 @@ defineProps({
 });
 
 function canEdit(slug: string) {
-  if (user && user.value && user.value.user_group_id && userGroupStore.userGroups) {
-    const userGroup = userGroupStore.userGroups.find(
-      (group) => group.id === user.value.user_group_id,
-    );
-    if (userGroup && userGroup.permissions) {
-      const currentPermissionSlug = userGroup.permissions.find(
-        (permission) => permission.slug === slug,
-      );
-      if (
-        currentPermissionSlug &&
-        currentPermissionSlug.slug === slug &&
-        currentPermissionSlug.permissions.edit == true
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return permissions.canEdit(slug);
 }
 const emit = defineEmits(['save', 'add-dialog', 'filter-dialog']);
 </script>

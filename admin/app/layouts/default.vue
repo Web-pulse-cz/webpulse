@@ -53,7 +53,6 @@ import {
   ShoppingCartIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
-import { useUserGroupStore } from '~/../stores/userGroupStore';
 import { useActivityStore } from '~/../stores/activityStore';
 import { useLanguageStore } from '~/../stores/languageStore';
 import { useCountryStore } from '~/../stores/countryStore';
@@ -61,7 +60,6 @@ import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 
-const userGroupStore = useUserGroupStore();
 const activityStore = useActivityStore();
 const languageStore = useLanguageStore();
 const countryStore = useCountryStore();
@@ -677,54 +675,24 @@ watchEffect(() => {
   });
 });
 
-function filterNavigationGroups(navigation: any[]): any[] {
-  return navigation.filter((group: any) =>
+const { canView, moduleBelongsToSite } = usePermissions(selectedSiteHash);
+
+const filteredNavigation = computed(() => {
+  return navigation.value.filter((group: any) =>
     group.menu.some(
       (item: any) =>
         !item.slug ||
-        (item.slug && canViewBySite(item.slug) && item.slug && canViewBySlug(item.slug)),
+        (item.slug && moduleBelongsToSite(item.slug) && canView(item.slug)),
     ),
   );
-}
+});
 
 function canViewBySlug(slug: string): boolean {
-  if (user?.value && (user.value as any).user_group_id && userGroupStore.userGroups) {
-    const userGroup = userGroupStore.userGroups.find(
-      (group: any) => group.id === (user.value as any).user_group_id,
-    );
-    if (userGroup && userGroup.permissions) {
-      const currentPermissionSlug = userGroup.permissions.find(
-        (permission: any) => permission.slug === slug,
-      );
-      if (currentPermissionSlug && currentPermissionSlug.permissions.view === true) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return canView(slug);
 }
 
 function canViewBySite(slug: string): boolean {
-  if (!user?.value?.sites?.length) {
-    return true;
-  }
-  if (user?.value?.sites) {
-    const currentSite = user.value.sites.find((site: any) => site.hash === selectedSiteHash.value);
-    if (
-      currentSite &&
-      currentSite.settings &&
-      currentSite.settings.enabled_modules &&
-      currentSite.is_active
-    ) {
-      const currentModuleSlug = currentSite.settings.enabled_modules.find(
-        (module: any) => module === slug,
-      );
-      if (currentModuleSlug) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return moduleBelongsToSite(slug);
 }
 
 function handleLogout() {
@@ -778,17 +746,12 @@ onMounted(() => {
     selectedSiteHash.value = localStorage.getItem('selectedSiteHash') || '';
   }
 
-  userGroupStore.fetchUserGroups();
   activityStore.fetchActivities();
   languageStore.fetchLanguages();
   countryStore.fetchCountries();
   currencyStore.fetchCurrencies();
   taxRateStore.fetchTaxRates();
   cashflowCategoryStore.fetchCategories();
-
-  setTimeout(() => {
-    navigation.value = filterNavigationGroups(navigation.value);
-  }, 1000);
 
   setInterval(() => {
     refreshIdentity();
@@ -873,7 +836,7 @@ onMounted(() => {
                 </div>
                 <nav class="flex flex-1 flex-col">
                   <ul role="list" class="flex flex-1 flex-col gap-y-8">
-                    <li v-for="(group, index) in navigation" :key="index">
+                    <li v-for="(group, index) in filteredNavigation" :key="index">
                       <div
                         class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500"
                       >
@@ -1024,7 +987,7 @@ onMounted(() => {
 
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-8">
-            <li v-for="(group, index) in navigation" :key="index">
+            <li v-for="(group, index) in filteredNavigation" :key="index">
               <div class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500">
                 {{ group.title }}
               </div>

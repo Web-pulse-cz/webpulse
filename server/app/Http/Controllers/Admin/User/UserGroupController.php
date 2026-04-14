@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\User\UserGroupResource;
 use App\Models\User\UserGroup;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -15,9 +16,16 @@ use Illuminate\Support\Facades\Validator;
 
 class UserGroupController extends Controller
 {
+    use Siteable;
+
     public function index(Request $request): JsonResponse
     {
         $query = UserGroup::query();
+
+        if ($request->header('X-Site-Hash')) {
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $query->whereRelation('sites', 'site_id', $siteId);
+        }
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
@@ -80,11 +88,15 @@ class UserGroupController extends Controller
                 $userGroup->password = Hash::make($request->get('new_password'));
             }
 
-            $userGroup->fill($request->all());
+            $userGroup->fill($request->except(['sites']));
             if ($request->has('permissions')) {
                 $userGroup->permissions = json_encode($request->get('permissions'));
             }
             $userGroup->save();
+
+            if ($request->has('sites')) {
+                $this->saveSites($userGroup, $request->get('sites', []));
+            }
 
             DB::commit();
         } catch (\Throwable|\Exception $e) {
@@ -93,7 +105,7 @@ class UserGroupController extends Controller
             return Response::json(['error' => $e->getMessage()], 500);
         }
 
-        return Response::json(UserGroupResource::make($userGroup));
+        return Response::json(UserGroupResource::make($userGroup->fresh(['sites', 'users'])));
     }
 
     public function show(int $id): JsonResponse
@@ -102,7 +114,7 @@ class UserGroupController extends Controller
             App::abort(400);
         }
 
-        $userGroup = UserGroup::find($id);
+        $userGroup = UserGroup::with(['sites', 'users'])->find($id);
         if (! $userGroup) {
             App::abort(404);
         }

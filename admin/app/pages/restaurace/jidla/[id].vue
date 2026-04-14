@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
+import {
+  DocumentIcon,
+  ExclamationTriangleIcon,
+  FolderIcon,
+  NewspaperIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
-import { DocumentIcon, ExclamationTriangleIcon, FolderIcon, NewspaperIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));

@@ -2,8 +2,13 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
+import {
+  InformationCircleIcon,
+  KeyIcon,
+  ShieldCheckIcon,
+  UserIcon,
+} from '@heroicons/vue/24/outline';
 import { useUserGroupStore } from '~/../stores/userGroupStore';
-import { InformationCircleIcon, KeyIcon, ShieldCheckIcon, UserIcon } from '@heroicons/vue/24/outline';
 
 const userGroupStore = useUserGroupStore();
 const { $toast } = useNuxtApp();
@@ -199,6 +204,7 @@ useHead({
 });
 
 onMounted(() => {
+  userGroupStore.fetchUserGroups();
   if (route.params.id !== 'pridat') {
     loadItem();
   }

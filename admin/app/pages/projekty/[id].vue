@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { Form } from 'vee-validate';
-import { DocumentIcon, DocumentTextIcon, BanknotesIcon, TrashIcon, XMarkIcon, FolderIcon, ChevronDownIcon, ChevronRightIcon, CheckCircleIcon, ChatBubbleLeftIcon, ClockIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
+import {
+  DocumentIcon,
+  DocumentTextIcon,
+  BanknotesIcon,
+  TrashIcon,
+  XMarkIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  CheckCircleIcon,
+  ChatBubbleLeftIcon,
+  ClockIcon,
+} from '@heroicons/vue/24/outline';
 
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
@@ -82,11 +93,17 @@ async function loadItem() {
   loading.value = true;
   await client('/api/admin/project/' + route.params.id, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       item.value = r;
-      item.value.sites = Array.isArray(r.sites) ? r.sites.map((s: any) => typeof s === 'object' ? s.id : s) : [];
+      item.value.sites = Array.isArray(r.sites)
+        ? r.sites.map((s: any) => (typeof s === 'object' ? s.id : s))
+        : [];
       projectFiles.value = r.files || [];
       pageTitle.value = item.value.name;
       breadcrumbs.value[1] = {
@@ -109,12 +126,18 @@ async function loadBoards() {
   await client('/api/admin/task-board', {
     method: 'GET',
     query: { with_tasks: true, project_id: route.params.id },
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       boards.value = r;
       if (Object.keys(expandedBoards.value).length === 0) {
-        r.forEach((b: any) => { expandedBoards.value[b.id] = true; });
+        r.forEach((b: any) => {
+          expandedBoards.value[b.id] = true;
+        });
       }
     })
     .catch(() => {});
@@ -128,7 +151,11 @@ async function loadStatuses() {
   const client = useSanctumClient();
   await client('/api/admin/project/status', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       statuses.value = r.map((s: any) => ({ value: s.id, name: s.name }));
@@ -139,7 +166,11 @@ async function loadTags() {
   const client = useSanctumClient();
   await client('/api/admin/project/tag', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       tags.value = r;
@@ -150,7 +181,11 @@ async function loadClients() {
   const client = useSanctumClient();
   await client('/api/admin/client', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       const d = r?.data || r;
@@ -162,7 +197,11 @@ async function loadUsers() {
   const client = useSanctumClient();
   await client('/api/admin/user', {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   })
     .then((r) => {
       const d = r?.data || r;
@@ -182,7 +221,11 @@ async function saveItem(redirect = true) {
     {
       method: 'POST',
       body: JSON.stringify(payload),
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-Site-Hash': selectedSiteHash.value,
+      },
     },
   )
     .then((r) => {
@@ -213,14 +256,20 @@ async function createTask() {
   await client('/api/admin/task', {
     method: 'POST',
     body: JSON.stringify({ ...newTask.value, project_id: route.params.id }),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-  }).then(() => {
-    newTask.value = { name: '', global_board_id: null, priority: 'normal' };
-    loadBoards();
-    loadItem();
-  }).catch(() => {
-    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se vytvořit úkol.', severity: 'error' });
-  });
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then(() => {
+      newTask.value = { name: '', global_board_id: null, priority: 'normal' };
+      loadBoards();
+      loadItem();
+    })
+    .catch(() => {
+      $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se vytvořit úkol.', severity: 'error' });
+    });
 }
 
 async function moveTask(taskId: number, boardId: number) {
@@ -228,7 +277,11 @@ async function moveTask(taskId: number, boardId: number) {
   await client('/api/admin/task/' + taskId + '/move', {
     method: 'POST',
     body: JSON.stringify({ global_board_id: boardId }),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   }).then(() => {
     loadBoards();
   });
@@ -238,7 +291,11 @@ async function openTaskDrawer(taskId: number) {
   const client = useSanctumClient();
   await client('/api/admin/task/' + taskId, {
     method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
   }).then((r) => {
     selectedTask.value = r;
     showDrawer.value = true;
@@ -254,14 +311,20 @@ async function saveTask() {
       ...selectedTask.value,
       assignees: selectedTask.value.assignees?.map((a: any) => a.id || a) || [],
     }),
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-  }).then(() => {
-    $toast.show({ summary: 'Hotovo', detail: 'Úkol uložen.', severity: 'success' });
-    loadBoards();
-    loadItem();
-  }).catch(() => {
-    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se uložit úkol.', severity: 'error' });
-  });
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then(() => {
+      $toast.show({ summary: 'Hotovo', detail: 'Úkol uložen.', severity: 'success' });
+      loadBoards();
+      loadItem();
+    })
+    .catch(() => {
+      $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se uložit úkol.', severity: 'error' });
+    });
 }
 
 async function deleteTask(taskId: number) {
@@ -367,127 +430,77 @@ const projectContracts = ref([]);
 const projectPriceOffers = ref([]);
 
 async function loadProjectContracts() {
-	if (route.params.id === 'pridat') return;
-	const client = useSanctumClient();
-	await client('/api/admin/contract', {
-		method: 'GET',
-		query: { project_id: route.params.id },
-		headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then((r) => {
-			const d = r?.data || r;
-			projectContracts.value = Array.isArray(d) ? d : [];
-		})
-		.catch(() => {});
+  if (route.params.id === 'pridat') return;
+  const client = useSanctumClient();
+  await client('/api/admin/contract', {
+    method: 'GET',
+    query: { project_id: route.params.id },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then((r) => {
+      const d = r?.data || r;
+      projectContracts.value = Array.isArray(d) ? d : [];
+    })
+    .catch(() => {});
 }
 
 async function loadProjectPriceOffers() {
-	if (route.params.id === 'pridat') return;
-	const client = useSanctumClient();
-	await client('/api/admin/price-offer', {
-		method: 'GET',
-		query: { project_id: route.params.id },
-		headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then((r) => {
-			const d = r?.data || r;
-			projectPriceOffers.value = Array.isArray(d) ? d : [];
-		})
-		.catch(() => {});
+  if (route.params.id === 'pridat') return;
+  const client = useSanctumClient();
+  await client('/api/admin/price-offer', {
+    method: 'GET',
+    query: { project_id: route.params.id },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then((r) => {
+      const d = r?.data || r;
+      projectPriceOffers.value = Array.isArray(d) ? d : [];
+    })
+    .catch(() => {});
 }
 
-async function uploadProjectFile(event: Event) {
-	const target = event.target as HTMLInputElement;
-	const file = target.files?.[0];
-	if (!file || !route.params.id || route.params.id === 'pridat') return;
-
-	const client = useSanctumClient();
-	const formData = new FormData();
-	formData.append('file', file);
-
-	loading.value = true;
-	await client('/api/admin/project/' + route.params.id + '/file', {
-		method: 'POST',
-		body: formData,
-		headers: { 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then((r) => {
-			$toast.show({ summary: 'Hotovo', detail: 'Soubor nahrán.', severity: 'success' });
-			projectFiles.value = r.files || [];
-		})
-		.catch(() => {
-			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se nahrát soubor.', severity: 'error' });
-		})
-		.finally(() => {
-			loading.value = false;
-			target.value = '';
-		});
+function onFileUploaded(files: any[]) {
+  projectFiles.value = files;
 }
 
-async function downloadDirectFile(file: any) {
-	const client = useSanctumClient();
-	try {
-		const res = await client.raw('/api/admin/project/' + route.params.id + '/file/' + file.id, {
-			method: 'GET',
-			credentials: 'include',
-			responseType: 'blob',
-		});
-		if (!res.ok) throw new Error('Chyba');
-		const blob = res._data as Blob;
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = file.name || 'soubor-' + file.id;
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		URL.revokeObjectURL(url);
-	} catch (e) {
-		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
-	}
-}
-
-async function deleteProjectFile(file: any) {
-	const client = useSanctumClient();
-	await client('/api/admin/project/' + route.params.id + '/file/' + file.id, {
-		method: 'DELETE',
-		headers: { Accept: 'application/json', 'X-Site-Hash': selectedSiteHash.value },
-	})
-		.then(() => {
-			projectFiles.value = projectFiles.value.filter((f: any) => f.id !== file.id);
-			$toast.show({ summary: 'Hotovo', detail: 'Soubor smazán.', severity: 'success' });
-		})
-		.catch(() => {
-			$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se smazat soubor.', severity: 'error' });
-		});
+function onFileDeleted(fileId: number) {
+  projectFiles.value = projectFiles.value.filter((f: any) => f.id !== fileId);
 }
 
 async function downloadProjectFile(type: 'contract' | 'price-offer', entity: any) {
-	const client = useSanctumClient();
-	try {
-		const file = entity.files?.[0];
-		if (!file) {
-			$toast.show({ summary: 'Info', detail: 'Žádný přiložený soubor.', severity: 'warning' });
-			return;
-		}
-		const res = await client.raw('/api/admin/' + type + '/' + entity.id + '/file/' + file.id, {
-			method: 'GET',
-			credentials: 'include',
-			responseType: 'blob',
-		});
-		if (!res.ok) throw new Error('Chyba');
-		const blob = res._data as Blob;
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = file.name || type + '-' + entity.id + '.pdf';
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		URL.revokeObjectURL(url);
-	} catch (e) {
-		$toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
-	}
+  const client = useSanctumClient();
+  try {
+    const file = entity.files?.[0];
+    if (!file) {
+      $toast.show({ summary: 'Info', detail: 'Žádný přiložený soubor.', severity: 'warning' });
+      return;
+    }
+    const res = await client.raw('/api/admin/' + type + '/' + entity.id + '/file/' + file.id, {
+      method: 'GET',
+      credentials: 'include',
+      responseType: 'blob',
+    });
+    if (!res.ok) throw new Error('Chyba');
+    const blob = res._data as Blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || type + '-' + entity.id + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
+  }
 }
 
 watchEffect(() => {
@@ -632,27 +645,39 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </div>
               <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
                 <div class="rounded-xl bg-slate-50 p-4 text-center ring-1 ring-slate-200">
-                  <div class="text-xl font-bold font-mono tabular-nums">{{ formatSeconds(item.total_tracked_seconds) }}</div>
+                  <div class="font-mono text-xl font-bold tabular-nums">
+                    {{ formatSeconds(item.total_tracked_seconds) }}
+                  </div>
                   <div class="text-xs text-slate-500">Odpracováno</div>
                 </div>
                 <div class="rounded-xl bg-emerald-50 p-4 text-center ring-1 ring-emerald-200">
-                  <div class="text-xl font-bold text-emerald-700 tabular-nums">{{ formatNumber(item.total_revenue_without_vat) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xl font-bold tabular-nums text-emerald-700">
+                    {{ formatNumber(item.total_revenue_without_vat) }} {{ item.currency_symbol }}
+                  </div>
                   <div class="text-xs text-emerald-600">Bez DPH</div>
                 </div>
                 <div class="rounded-xl bg-amber-50 p-4 text-center ring-1 ring-amber-200">
-                  <div class="text-xl font-bold text-amber-700 tabular-nums">{{ formatNumber(item.total_vat) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xl font-bold tabular-nums text-amber-700">
+                    {{ formatNumber(item.total_vat) }} {{ item.currency_symbol }}
+                  </div>
                   <div class="text-xs text-amber-600">DPH ({{ item.vat_rate }}%)</div>
                 </div>
                 <div class="rounded-xl bg-indigo-50 p-4 text-center ring-1 ring-indigo-200">
-                  <div class="text-xl font-bold text-indigo-700 tabular-nums">{{ formatNumber(item.total_revenue_with_vat) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xl font-bold tabular-nums text-indigo-700">
+                    {{ formatNumber(item.total_revenue_with_vat) }} {{ item.currency_symbol }}
+                  </div>
                   <div class="text-xs text-indigo-600">S DPH</div>
                 </div>
                 <div class="rounded-xl bg-red-50 p-4 text-center ring-1 ring-red-200">
-                  <div class="text-xl font-bold text-red-700 tabular-nums">{{ formatNumber(item.total_costs) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xl font-bold tabular-nums text-red-700">
+                    {{ formatNumber(item.total_costs) }} {{ item.currency_symbol }}
+                  </div>
                   <div class="text-xs text-red-600">Náklady</div>
                 </div>
                 <div class="rounded-xl bg-slate-900 p-4 text-center ring-1 ring-slate-700">
-                  <div class="text-xl font-bold text-white tabular-nums">{{ formatNumber(item.profit) }} {{ item.currency_symbol }}</div>
+                  <div class="text-xl font-bold tabular-nums text-white">
+                    {{ formatNumber(item.profit) }} {{ item.currency_symbol }}
+                  </div>
                   <div class="text-xs text-slate-400">Zisk</div>
                 </div>
               </div>
@@ -723,11 +748,33 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <!-- New task form -->
           <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
             <div class="flex flex-col gap-3 sm:flex-row">
-              <BaseFormInput v-model="newTask.name" label="" name="new_task" placeholder="Nový úkol..." class="flex-1" />
+              <BaseFormInput
+                v-model="newTask.name"
+                label=""
+                name="new_task"
+                placeholder="Nový úkol..."
+                class="flex-1"
+              />
               <div class="flex flex-wrap gap-3">
-                <BaseFormSelect v-model="newTask.global_board_id" label="" name="nt_board" :options="boards.map((b) => ({ value: b.id, name: b.name }))" class="w-full sm:w-36" />
-                <BaseFormSelect v-model="newTask.priority" label="" name="nt_prio" :options="priorityOptions" class="w-full sm:w-28" />
-                <button type="button" class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 sm:w-auto" @click="createTask">
+                <BaseFormSelect
+                  v-model="newTask.global_board_id"
+                  label=""
+                  name="nt_board"
+                  :options="boards.map((b) => ({ value: b.id, name: b.name }))"
+                  class="w-full sm:w-36"
+                />
+                <BaseFormSelect
+                  v-model="newTask.priority"
+                  label=""
+                  name="nt_prio"
+                  :options="priorityOptions"
+                  class="w-full sm:w-28"
+                />
+                <button
+                  type="button"
+                  class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 sm:w-auto"
+                  @click="createTask"
+                >
                   Přidat
                 </button>
               </div>
@@ -741,7 +788,11 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
           <!-- Boards as accordion sections -->
           <div class="space-y-4">
-            <div v-for="board in boards" :key="board.id" class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+            <div
+              v-for="board in boards"
+              :key="board.id"
+              class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200"
+            >
               <!-- Board header -->
               <div
                 class="flex cursor-pointer items-center justify-between px-5 py-4 transition hover:bg-slate-50"
@@ -749,40 +800,72 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 @click="toggleBoard(board.id)"
               >
                 <div class="flex items-center gap-3">
-                  <component :is="expandedBoards[board.id] ? ChevronDownIcon : ChevronRightIcon" class="size-5 text-slate-400" />
+                  <component
+                    :is="expandedBoards[board.id] ? ChevronDownIcon : ChevronRightIcon"
+                    class="size-5 text-slate-400"
+                  />
                   <span class="text-sm font-bold text-slate-900">{{ board.name }}</span>
-                  <span v-if="board.is_completed" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">Dokončený</span>
-                  <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">{{ board.tasks?.length || 0 }}</span>
+                  <span
+                    v-if="board.is_completed"
+                    class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700"
+                    >Dokončený</span
+                  >
+                  <span
+                    class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500"
+                    >{{ board.tasks?.length || 0 }}</span
+                  >
                 </div>
               </div>
 
               <!-- Tasks -->
-              <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100">
-                <div v-if="expandedBoards[board.id]" class="divide-y divide-slate-100 border-t border-slate-100">
+              <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+              >
+                <div
+                  v-if="expandedBoards[board.id]"
+                  class="divide-y divide-slate-100 border-t border-slate-100"
+                >
                   <div
                     v-for="task in board.tasks"
                     :key="task.id"
-                    class="cursor-pointer px-4 py-3 transition hover:bg-slate-50/80 sm:px-5"
+                    class="cursor-pointer px-5 py-4 transition hover:bg-slate-50/80"
                     @click="openTaskDrawer(task.id)"
                   >
-                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <div class="flex flex-wrap items-center gap-2">
-                        <span class="font-mono text-[10px] font-bold text-indigo-500">{{ task.code }}</span>
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div class="flex flex-wrap items-center gap-3">
+                        <span class="font-mono text-xs font-bold text-indigo-500">{{
+                          task.code
+                        }}</span>
                         <span class="text-sm font-medium text-slate-900">{{ task.name }}</span>
-                        <span v-if="task.priority && task.priority !== 'normal'" class="rounded-full px-1.5 py-0.5 text-[9px] font-bold" :class="priorityColors[task.priority]">{{ task.priority }}</span>
+                        <span
+                          v-if="task.priority && task.priority !== 'normal'"
+                          class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                          :class="priorityColors[task.priority]"
+                          >{{ task.priority }}</span
+                        >
                       </div>
-                      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                        <div class="flex -space-x-1">
-                          <div v-for="a in (task.assignees || []).slice(0, 3)" :key="a.id" class="flex size-6 items-center justify-center rounded-full bg-slate-200 text-[9px] font-bold text-slate-600 ring-1 ring-white">{{ a.name?.charAt(0) }}</div>
+                      <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex -space-x-1.5">
+                          <div
+                            v-for="a in (task.assignees || []).slice(0, 3)"
+                            :key="a.id"
+                            class="flex size-7 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-600 ring-2 ring-white"
+                          >
+                            {{ a.name?.charAt(0) }}
+                          </div>
                         </div>
-                        <span v-if="task.due_date" class="text-xs text-slate-400">{{ task.due_date }}</span>
+                        <span v-if="task.due_date" class="text-xs text-slate-400">{{
+                          task.due_date
+                        }}</span>
                         <!-- Move buttons -->
-                        <div class="hidden gap-1 sm:flex" @click.stop>
+                        <div class="hidden gap-1.5 sm:flex" @click.stop>
                           <button
                             v-for="targetBoard in boards.filter((b) => b.id !== board.id)"
                             :key="targetBoard.id"
                             type="button"
-                            class="rounded px-1.5 py-0.5 text-[9px] font-medium text-slate-400 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-700"
+                            class="rounded-md px-2 py-0.5 text-[10px] font-medium text-slate-400 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-700"
                             @click="moveTask(task.id, targetBoard.id)"
                           >
                             &rarr; {{ targetBoard.name }}
@@ -792,7 +875,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     </div>
                   </div>
 
-                  <div v-if="!board.tasks?.length" class="px-5 py-8 text-center text-xs text-slate-400">
+                  <div
+                    v-if="!board.tasks?.length"
+                    class="px-5 py-8 text-center text-xs text-slate-400"
+                  >
                     Žádné úkoly v tomto boardu.
                   </div>
                 </div>
@@ -805,7 +891,14 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <!-- ═══ Náklady ═══ -->
       <template v-if="tabs.find((t) => t.current && t.link === '#naklady')">
         <LayoutContainer>
-          <LayoutTitle>Náklady projektu</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-red-50 text-red-600"
+            >
+              <BanknotesIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Náklady projektu</LayoutTitle>
+          </div>
           <div class="mb-4 flex flex-col gap-3 sm:flex-row">
             <BaseFormInput
               v-model="newCost.name"
@@ -847,23 +940,34 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <div v-if="!item.costs?.length" class="py-8 text-center text-sm text-slate-400">
             Žádné náklady.
           </div>
-          <div v-else class="divide-y divide-slate-100">
+          <div v-else class="space-y-3">
             <div
               v-for="cost in item.costs"
               :key="cost.id"
-              class="flex items-center justify-between py-3"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
-              <div>
-                <span class="font-medium">{{ cost.name }}</span
-                ><span class="ml-2 text-sm font-bold text-red-600">{{ cost.amount }}</span
-                ><span class="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{{
-                  cost.category
-                }}</span
-                ><span v-if="cost.date" class="ml-2 text-xs text-slate-400">{{ cost.date }}</span>
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg bg-red-50 text-red-600"
+                >
+                  <BanknotesIcon class="size-5" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-slate-900">{{ cost.name }}</span>
+                    <span
+                      class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600"
+                    >{{ cost.category }}</span>
+                  </div>
+                  <p class="text-xs text-slate-400">
+                    <span class="font-medium text-red-600">{{ cost.amount }}</span>
+                    <span v-if="cost.date" class="ml-2">{{ cost.date }}</span>
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
-                class="text-red-400 hover:text-red-600"
+                class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
                 @click="deleteCost(cost.id)"
               >
                 <TrashIcon class="size-4" />
@@ -876,156 +980,136 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <!-- Soubory tab -->
       <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">
         <LayoutContainer>
-          <div class="mb-6 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-                <FolderIcon class="size-5" />
-              </div>
-              <LayoutTitle class="!mb-0">Soubory</LayoutTitle>
-            </div>
-            <div class="flex items-center gap-3">
-              <label
-                v-if="route.params.id !== 'pridat'"
-                class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-600"
-              >
-                <ArrowDownTrayIcon class="size-5 rotate-180" />
-                Nahrát soubor
-                <input type="file" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" @change="uploadProjectFile" />
-              </label>
+          <BaseFileSection
+            entity-type="project"
+            :entity-id="route.params.id !== 'pridat' ? route.params.id : null"
+            :files="projectFiles"
+            :allow-upload="true"
+            @file-uploaded="onFileUploaded"
+            @file-deleted="onFileDeleted"
+          >
+            <template #actions>
               <NuxtLink
                 to="/smlouvy/pridat"
                 class="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500"
               >
                 Nová smlouva
               </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Uploaded files -->
-          <div v-if="projectFiles.length" class="mb-6">
-            <h3 class="mb-3 text-sm font-semibold text-slate-500">Nahrané soubory</h3>
-            <div class="space-y-3">
-              <div
-                v-for="file in projectFiles"
-                :key="'f-' + file.id"
-                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-              >
-                <div class="flex items-center gap-4">
-                  <div class="flex size-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-                    <DocumentTextIcon class="size-5" />
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-slate-900">{{ file.name }}</p>
-                    <p class="text-xs text-slate-400">
-                      {{ file.mime_type }}
-                      <span v-if="file.size" class="ml-2">{{ (file.size / 1024).toFixed(0) }} KB</span>
-                    </p>
+            </template>
+            <template #extra>
+              <!-- Contracts -->
+              <div v-if="projectContracts.length" class="mt-6">
+                <h3 class="mb-3 text-sm font-semibold text-slate-500">Smlouvy</h3>
+                <div class="space-y-3">
+                  <div
+                    v-for="contract in projectContracts"
+                    :key="'c-' + contract.id"
+                    class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                  >
+                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex items-center gap-4 flex-1">
+                      <div
+                        class="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                      >
+                        <DocumentTextIcon class="size-5" />
+                      </div>
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-medium text-slate-900">{{ contract.title }}</span>
+                          <span
+                            class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                            :class="{
+                              'bg-emerald-100 text-emerald-700': contract.status === 'active',
+                              'bg-slate-100 text-slate-600': contract.status === 'draft',
+                              'bg-red-100 text-red-700': contract.status === 'terminated',
+                              'bg-amber-100 text-amber-700': contract.status === 'expired',
+                            }"
+                          >
+                            {{
+                              {
+                                draft: 'Koncept',
+                                active: 'Aktivní',
+                                terminated: 'Ukončená',
+                                expired: 'Vypršelá',
+                              }[contract.status] || contract.status
+                            }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                          {{ contract.date_from || '—' }} &mdash;
+                          {{ contract.date_to || 'Doba neurčitá' }}
+                        </p>
+                      </div>
+                    </NuxtLink>
+                    <button
+                      v-if="contract.files?.length"
+                      type="button"
+                      class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                      @click="downloadProjectFile('contract', contract)"
+                    >
+                      Stáhnout
+                    </button>
                   </div>
                 </div>
-                <div class="flex items-center gap-2">
-                  <button
-                    type="button"
-                    class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-                    @click="downloadDirectFile(file)"
+              </div>
+
+              <!-- Price Offers -->
+              <div v-if="projectPriceOffers.length" class="mt-6">
+                <h3 class="mb-3 text-sm font-semibold text-slate-500">Cenové nabídky</h3>
+                <div class="space-y-3">
+                  <div
+                    v-for="offer in projectPriceOffers"
+                    :key="'o-' + offer.id"
+                    class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    Stáhnout
-                  </button>
-                  <button
-                    type="button"
-                    class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
-                    @click="deleteProjectFile(file)"
-                  >
-                    <TrashIcon class="size-4" />
-                  </button>
+                    <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex items-center gap-4 flex-1">
+                      <div
+                        class="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+                      >
+                        <DocumentIcon class="size-5" />
+                      </div>
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-medium text-slate-900">{{ offer.code }} — {{ offer.title }}</span>
+                          <span
+                            class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                            :class="{
+                              'bg-slate-100 text-slate-600': offer.status === 'draft',
+                              'bg-blue-100 text-blue-700': offer.status === 'sent',
+                              'bg-emerald-100 text-emerald-700': offer.status === 'accepted',
+                              'bg-red-100 text-red-700': offer.status === 'rejected',
+                              'bg-amber-100 text-amber-700': offer.status === 'expired',
+                            }"
+                          >
+                            {{
+                              {
+                                draft: 'Koncept',
+                                sent: 'Odeslaná',
+                                accepted: 'Přijatá',
+                                rejected: 'Zamítnutá',
+                                expired: 'Vypršelá',
+                              }[offer.status] || offer.status
+                            }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                          Celkem s DPH: {{ offer.total_with_vat }} · Platnost do
+                          {{ offer.valid_to || '—' }}
+                        </p>
+                      </div>
+                    </NuxtLink>
+                    <button
+                      v-if="offer.files?.length"
+                      type="button"
+                      class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+                      @click="downloadProjectFile('price-offer', offer)"
+                    >
+                      Stáhnout PDF
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Contracts -->
-          <div v-if="projectContracts.length" class="mb-6">
-            <h3 class="mb-3 text-sm font-semibold text-slate-500">Smlouvy</h3>
-            <div class="space-y-3">
-              <div
-                v-for="contract in projectContracts"
-                :key="'c-' + contract.id"
-                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-              >
-                <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
-                  <div class="flex items-center gap-3">
-                    <span class="font-medium text-slate-900">{{ contract.title }}</span>
-                    <span
-                      class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                      :class="{
-                        'bg-emerald-100 text-emerald-700': contract.status === 'active',
-                        'bg-slate-100 text-slate-600': contract.status === 'draft',
-                        'bg-red-100 text-red-700': contract.status === 'terminated',
-                        'bg-amber-100 text-amber-700': contract.status === 'expired',
-                      }"
-                    >
-                      {{ { draft: 'Koncept', active: 'Aktivní', terminated: 'Ukončená', expired: 'Vypršelá' }[contract.status] || contract.status }}
-                    </span>
-                  </div>
-                  <div class="mt-1 text-xs text-slate-500">
-                    {{ contract.date_from || '—' }} &mdash; {{ contract.date_to || 'Doba neurčitá' }}
-                  </div>
-                </NuxtLink>
-                <button
-                  v-if="contract.files?.length"
-                  type="button"
-                  class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-                  @click="downloadProjectFile('contract', contract)"
-                >
-                  Stáhnout
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Price Offers -->
-          <div v-if="projectPriceOffers.length" class="mb-6">
-            <h3 class="mb-3 text-sm font-semibold text-slate-500">Cenové nabídky</h3>
-            <div class="space-y-3">
-              <div
-                v-for="offer in projectPriceOffers"
-                :key="'o-' + offer.id"
-                class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-              >
-                <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex-1">
-                  <div class="flex items-center gap-3">
-                    <span class="font-medium text-slate-900">{{ offer.code }} — {{ offer.title }}</span>
-                    <span
-                      class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                      :class="{
-                        'bg-slate-100 text-slate-600': offer.status === 'draft',
-                        'bg-blue-100 text-blue-700': offer.status === 'sent',
-                        'bg-emerald-100 text-emerald-700': offer.status === 'accepted',
-                        'bg-red-100 text-red-700': offer.status === 'rejected',
-                        'bg-amber-100 text-amber-700': offer.status === 'expired',
-                      }"
-                    >
-                      {{ { draft: 'Koncept', sent: 'Odeslaná', accepted: 'Přijatá', rejected: 'Zamítnutá', expired: 'Vypršelá' }[offer.status] || offer.status }}
-                    </span>
-                  </div>
-                  <div class="mt-1 text-xs text-slate-500">
-                    Celkem s DPH: {{ offer.total_with_vat }} · Platnost do {{ offer.valid_to || '—' }}
-                  </div>
-                </NuxtLink>
-                <button
-                  v-if="offer.files?.length"
-                  type="button"
-                  class="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
-                  @click="downloadProjectFile('price-offer', offer)"
-                >
-                  Stáhnout PDF
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="!projectFiles.length && !projectContracts.length && !projectPriceOffers.length" class="py-12 text-center text-sm text-slate-400">
-            Žádné soubory.
-          </div>
+            </template>
+          </BaseFileSection>
         </LayoutContainer>
       </template>
     </Form>
@@ -1045,14 +1129,23 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <div class="fixed inset-0 bg-black/30" @click="showDrawer = false"></div>
 
           <!-- Drawer panel -->
-          <div class="relative ml-auto flex h-full w-full flex-col bg-white shadow-2xl" style="max-width: 700px;">
+          <div
+            class="relative ml-auto flex h-full w-full flex-col bg-white shadow-2xl"
+            style="max-width: 700px"
+          >
             <!-- Header -->
             <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
               <div>
-                <span class="font-mono text-xs font-bold text-indigo-500">{{ selectedTask.code }}</span>
+                <span class="font-mono text-xs font-bold text-indigo-500">{{
+                  selectedTask.code
+                }}</span>
                 <h2 class="text-lg font-bold text-slate-900">{{ selectedTask.name }}</h2>
               </div>
-              <button type="button" class="rounded-lg p-2 text-slate-400 hover:bg-slate-100" @click="showDrawer = false">
+              <button
+                type="button"
+                class="rounded-lg p-2 text-slate-400 hover:bg-slate-100"
+                @click="showDrawer = false"
+              >
                 <XMarkIcon class="size-5" />
               </button>
             </div>
@@ -1060,21 +1153,64 @@ definePageMeta({ middleware: 'sanctum:auth' });
             <!-- Content (scrollable) -->
             <div class="flex-1 space-y-5 overflow-y-auto px-6 py-5">
               <BaseFormInput v-model="selectedTask.name" label="Název" name="task_name" />
-              <BaseFormTextarea v-model="selectedTask.description" label="Popis" name="task_desc" rows="4" />
+              <BaseFormTextarea
+                v-model="selectedTask.description"
+                label="Popis"
+                name="task_desc"
+                rows="4"
+              />
 
               <div class="grid grid-cols-2 gap-4">
-                <BaseFormSelect v-model="selectedTask.global_board_id" label="Board" name="task_board" :options="boards.map((b) => ({ value: b.id, name: b.name }))" />
-                <BaseFormSelect v-model="selectedTask.priority" label="Priorita" name="task_prio" :options="priorityOptions" />
-                <BaseFormInput v-model="selectedTask.estimated_hours" label="Odhad hodin" type="number" name="task_est" :step="0.5" />
-                <BaseFormInput v-model="selectedTask.due_date" label="Termín" type="date" name="task_due" />
+                <BaseFormSelect
+                  v-model="selectedTask.global_board_id"
+                  label="Board"
+                  name="task_board"
+                  :options="boards.map((b) => ({ value: b.id, name: b.name }))"
+                />
+                <BaseFormSelect
+                  v-model="selectedTask.priority"
+                  label="Priorita"
+                  name="task_prio"
+                  :options="priorityOptions"
+                />
+                <BaseFormInput
+                  v-model="selectedTask.estimated_hours"
+                  label="Odhad hodin"
+                  type="number"
+                  name="task_est"
+                  :step="0.5"
+                />
+                <BaseFormInput
+                  v-model="selectedTask.due_date"
+                  label="Termín"
+                  type="date"
+                  name="task_due"
+                />
               </div>
 
               <!-- Assignees -->
               <div>
                 <label class="mb-1 block text-xs font-medium text-slate-700">Přiřazení</label>
-                <div class="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-2">
-                  <label v-for="user in users" :key="user.value" class="flex items-center gap-2 rounded p-1 text-xs hover:bg-slate-50">
-                    <input type="checkbox" :checked="selectedTask.assignees?.some((a) => (a.id || a) === user.value)" class="rounded text-indigo-600" @change="selectedTask.assignees?.some((a) => (a.id || a) === user.value) ? (selectedTask.assignees = selectedTask.assignees.filter((a) => (a.id || a) !== user.value)) : selectedTask.assignees.push({ id: user.value, name: user.name })" />
+                <div
+                  class="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-2"
+                >
+                  <label
+                    v-for="user in users"
+                    :key="user.value"
+                    class="flex items-center gap-2 rounded p-1 text-xs hover:bg-slate-50"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="selectedTask.assignees?.some((a) => (a.id || a) === user.value)"
+                      class="rounded text-indigo-600"
+                      @change="
+                        selectedTask.assignees?.some((a) => (a.id || a) === user.value)
+                          ? (selectedTask.assignees = selectedTask.assignees.filter(
+                              (a) => (a.id || a) !== user.value,
+                            ))
+                          : selectedTask.assignees.push({ id: user.value, name: user.name })
+                      "
+                    />
                     {{ user.name }}
                   </label>
                 </div>
@@ -1083,10 +1219,16 @@ definePageMeta({ middleware: 'sanctum:auth' });
               <!-- Time entries -->
               <div v-if="selectedTask.time_entries?.length" class="border-t border-slate-100 pt-4">
                 <h3 class="mb-2 flex items-center gap-2 text-xs font-bold text-slate-700">
-                  <ClockIcon class="size-4" /> Čas ({{ formatSeconds(selectedTask.total_tracked_seconds) }})
+                  <ClockIcon class="size-4" /> Čas ({{
+                    formatSeconds(selectedTask.total_tracked_seconds)
+                  }})
                 </h3>
                 <div class="space-y-1">
-                  <div v-for="te in selectedTask.time_entries" :key="te.id" class="flex items-center justify-between text-xs text-slate-600">
+                  <div
+                    v-for="te in selectedTask.time_entries"
+                    :key="te.id"
+                    class="flex items-center justify-between text-xs text-slate-600"
+                  >
                     <span>{{ te.hours }}h — {{ te.description || '—' }} ({{ te.date }})</span>
                     <span>{{ te.user_name }}</span>
                   </div>
@@ -1096,21 +1238,46 @@ definePageMeta({ middleware: 'sanctum:auth' });
               <!-- Comments -->
               <div class="border-t border-slate-100 pt-4">
                 <h3 class="mb-3 flex items-center gap-2 text-xs font-bold text-slate-700">
-                  <ChatBubbleLeftIcon class="size-4" /> Komentáře ({{ selectedTask.comments?.length || 0 }})
+                  <ChatBubbleLeftIcon class="size-4" /> Komentáře ({{
+                    selectedTask.comments?.length || 0
+                  }})
                 </h3>
                 <div class="mb-3 flex gap-2">
-                  <BaseFormInput v-model="newComment" label="" name="comment" placeholder="Napište komentář..." class="flex-1" />
-                  <button type="button" class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500" @click="addComment">Odeslat</button>
+                  <BaseFormInput
+                    v-model="newComment"
+                    label=""
+                    name="comment"
+                    placeholder="Napište komentář..."
+                    class="flex-1"
+                  />
+                  <button
+                    type="button"
+                    class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
+                    @click="addComment"
+                  >
+                    Odeslat
+                  </button>
                 </div>
                 <div class="max-h-40 space-y-2 overflow-y-auto">
-                  <div v-for="c in selectedTask.comments" :key="c.id" class="rounded-lg bg-slate-50 p-3">
+                  <div
+                    v-for="c in selectedTask.comments"
+                    :key="c.id"
+                    class="rounded-lg bg-slate-50 p-3"
+                  >
                     <div class="flex items-start justify-between">
                       <p class="text-sm text-slate-700">{{ c.content }}</p>
-                      <button type="button" class="text-red-300 hover:text-red-500" @click="deleteComment(c.id)">
+                      <button
+                        type="button"
+                        class="text-red-300 hover:text-red-500"
+                        @click="deleteComment(c.id)"
+                      >
                         <TrashIcon class="size-3" />
                       </button>
                     </div>
-                    <p class="mt-1 text-[10px] text-slate-400">{{ c.user_name }} &middot; {{ c.created_at ? new Date(c.created_at).toLocaleString('cs-CZ') : '' }}</p>
+                    <p class="mt-1 text-[10px] text-slate-400">
+                      {{ c.user_name }} &middot;
+                      {{ c.created_at ? new Date(c.created_at).toLocaleString('cs-CZ') : '' }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1118,10 +1285,18 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
             <!-- Footer actions -->
             <div class="flex items-center justify-between border-t border-slate-200 px-6 py-4">
-              <button type="button" class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-200" @click="deleteTask(selectedTask.id)">
+              <button
+                type="button"
+                class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-200"
+                @click="deleteTask(selectedTask.id)"
+              >
                 <TrashIcon class="mr-1 inline size-4" /> Smazat
               </button>
-              <button type="button" class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-indigo-500" @click="saveTask">
+              <button
+                type="button"
+                class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
+                @click="saveTask"
+              >
                 <CheckCircleIcon class="mr-1 inline size-4" /> Uložit
               </button>
             </div>
