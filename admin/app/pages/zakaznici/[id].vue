@@ -391,17 +391,26 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <div v-if="!item.vouchers?.length" class="py-12 text-center text-sm text-slate-400">
             Zákazník nemá přiřazené žádné vouchery.
           </div>
-          <div v-else class="divide-y divide-slate-100">
+          <div v-else class="space-y-3">
             <div
               v-for="v in item.vouchers"
               :key="v.id"
-              class="flex items-center justify-between py-3"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
-              <div>
-                <span class="font-mono text-sm font-bold text-indigo-600">{{ v.code }}</span>
-                <span class="ml-3 text-sm text-slate-600">{{ v.name }}</span>
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg bg-purple-50 text-purple-600"
+                >
+                  <TicketIcon class="size-5" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-sm font-bold text-indigo-600">{{ v.code }}</span>
+                    <span class="text-sm font-medium text-slate-900">{{ v.name }}</span>
+                  </div>
+                  <p class="text-xs text-slate-400">Použito: {{ v.times_used }}x</p>
+                </div>
               </div>
-              <span class="text-xs text-slate-400">Použito: {{ v.times_used }}x</span>
             </div>
           </div>
         </LayoutContainer>

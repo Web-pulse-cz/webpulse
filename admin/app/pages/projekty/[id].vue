@@ -830,28 +830,28 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   <div
                     v-for="task in board.tasks"
                     :key="task.id"
-                    class="cursor-pointer px-4 py-3 transition hover:bg-slate-50/80 sm:px-5"
+                    class="cursor-pointer px-5 py-4 transition hover:bg-slate-50/80"
                     @click="openTaskDrawer(task.id)"
                   >
-                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <div class="flex flex-wrap items-center gap-2">
-                        <span class="font-mono text-[10px] font-bold text-indigo-500">{{
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div class="flex flex-wrap items-center gap-3">
+                        <span class="font-mono text-xs font-bold text-indigo-500">{{
                           task.code
                         }}</span>
                         <span class="text-sm font-medium text-slate-900">{{ task.name }}</span>
                         <span
                           v-if="task.priority && task.priority !== 'normal'"
-                          class="rounded-full px-1.5 py-0.5 text-[9px] font-bold"
+                          class="rounded-full px-2 py-0.5 text-[10px] font-bold"
                           :class="priorityColors[task.priority]"
                           >{{ task.priority }}</span
                         >
                       </div>
-                      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                        <div class="flex -space-x-1">
+                      <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex -space-x-1.5">
                           <div
                             v-for="a in (task.assignees || []).slice(0, 3)"
                             :key="a.id"
-                            class="flex size-6 items-center justify-center rounded-full bg-slate-200 text-[9px] font-bold text-slate-600 ring-1 ring-white"
+                            class="flex size-7 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-600 ring-2 ring-white"
                           >
                             {{ a.name?.charAt(0) }}
                           </div>
@@ -860,12 +860,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
                           task.due_date
                         }}</span>
                         <!-- Move buttons -->
-                        <div class="hidden gap-1 sm:flex" @click.stop>
+                        <div class="hidden gap-1.5 sm:flex" @click.stop>
                           <button
                             v-for="targetBoard in boards.filter((b) => b.id !== board.id)"
                             :key="targetBoard.id"
                             type="button"
-                            class="rounded px-1.5 py-0.5 text-[9px] font-medium text-slate-400 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-700"
+                            class="rounded-md px-2 py-0.5 text-[10px] font-medium text-slate-400 ring-1 ring-slate-200 transition hover:bg-slate-50 hover:text-slate-700"
                             @click="moveTask(task.id, targetBoard.id)"
                           >
                             &rarr; {{ targetBoard.name }}
@@ -891,7 +891,14 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <!-- ═══ Náklady ═══ -->
       <template v-if="tabs.find((t) => t.current && t.link === '#naklady')">
         <LayoutContainer>
-          <LayoutTitle>Náklady projektu</LayoutTitle>
+          <div class="mb-6 flex items-center gap-3">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-red-50 text-red-600"
+            >
+              <BanknotesIcon class="size-5" />
+            </div>
+            <LayoutTitle class="!mb-0">Náklady projektu</LayoutTitle>
+          </div>
           <div class="mb-4 flex flex-col gap-3 sm:flex-row">
             <BaseFormInput
               v-model="newCost.name"
@@ -933,23 +940,34 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <div v-if="!item.costs?.length" class="py-8 text-center text-sm text-slate-400">
             Žádné náklady.
           </div>
-          <div v-else class="divide-y divide-slate-100">
+          <div v-else class="space-y-3">
             <div
               v-for="cost in item.costs"
               :key="cost.id"
-              class="flex items-center justify-between py-3"
+              class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
             >
-              <div>
-                <span class="font-medium">{{ cost.name }}</span
-                ><span class="ml-2 text-sm font-bold text-red-600">{{ cost.amount }}</span
-                ><span class="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{{
-                  cost.category
-                }}</span
-                ><span v-if="cost.date" class="ml-2 text-xs text-slate-400">{{ cost.date }}</span>
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex size-10 items-center justify-center rounded-lg bg-red-50 text-red-600"
+                >
+                  <BanknotesIcon class="size-5" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-slate-900">{{ cost.name }}</span>
+                    <span
+                      class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600"
+                    >{{ cost.category }}</span>
+                  </div>
+                  <p class="text-xs text-slate-400">
+                    <span class="font-medium text-red-600">{{ cost.amount }}</span>
+                    <span v-if="cost.date" class="ml-2">{{ cost.date }}</span>
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
-                class="text-red-400 hover:text-red-600"
+                class="rounded-lg bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
                 @click="deleteCost(cost.id)"
               >
                 <TrashIcon class="size-4" />
@@ -988,31 +1006,38 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="'c-' + contract.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
-                      <div class="flex items-center gap-3">
-                        <span class="font-medium text-slate-900">{{ contract.title }}</span>
-                        <span
-                          class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                          :class="{
-                            'bg-emerald-100 text-emerald-700': contract.status === 'active',
-                            'bg-slate-100 text-slate-600': contract.status === 'draft',
-                            'bg-red-100 text-red-700': contract.status === 'terminated',
-                            'bg-amber-100 text-amber-700': contract.status === 'expired',
-                          }"
-                        >
-                          {{
-                            {
-                              draft: 'Koncept',
-                              active: 'Aktivní',
-                              terminated: 'Ukončená',
-                              expired: 'Vypršelá',
-                            }[contract.status] || contract.status
-                          }}
-                        </span>
+                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex items-center gap-4 flex-1">
+                      <div
+                        class="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                      >
+                        <DocumentTextIcon class="size-5" />
                       </div>
-                      <div class="mt-1 text-xs text-slate-500">
-                        {{ contract.date_from || '—' }} &mdash;
-                        {{ contract.date_to || 'Doba neurčitá' }}
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-medium text-slate-900">{{ contract.title }}</span>
+                          <span
+                            class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                            :class="{
+                              'bg-emerald-100 text-emerald-700': contract.status === 'active',
+                              'bg-slate-100 text-slate-600': contract.status === 'draft',
+                              'bg-red-100 text-red-700': contract.status === 'terminated',
+                              'bg-amber-100 text-amber-700': contract.status === 'expired',
+                            }"
+                          >
+                            {{
+                              {
+                                draft: 'Koncept',
+                                active: 'Aktivní',
+                                terminated: 'Ukončená',
+                                expired: 'Vypršelá',
+                              }[contract.status] || contract.status
+                            }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                          {{ contract.date_from || '—' }} &mdash;
+                          {{ contract.date_to || 'Doba neurčitá' }}
+                        </p>
                       </div>
                     </NuxtLink>
                     <button
@@ -1036,35 +1061,40 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="'o-' + offer.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex-1">
-                      <div class="flex items-center gap-3">
-                        <span class="font-medium text-slate-900"
-                          >{{ offer.code }} — {{ offer.title }}</span
-                        >
-                        <span
-                          class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                          :class="{
-                            'bg-slate-100 text-slate-600': offer.status === 'draft',
-                            'bg-blue-100 text-blue-700': offer.status === 'sent',
-                            'bg-emerald-100 text-emerald-700': offer.status === 'accepted',
-                            'bg-red-100 text-red-700': offer.status === 'rejected',
-                            'bg-amber-100 text-amber-700': offer.status === 'expired',
-                          }"
-                        >
-                          {{
-                            {
-                              draft: 'Koncept',
-                              sent: 'Odeslaná',
-                              accepted: 'Přijatá',
-                              rejected: 'Zamítnutá',
-                              expired: 'Vypršelá',
-                            }[offer.status] || offer.status
-                          }}
-                        </span>
+                    <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex items-center gap-4 flex-1">
+                      <div
+                        class="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+                      >
+                        <DocumentIcon class="size-5" />
                       </div>
-                      <div class="mt-1 text-xs text-slate-500">
-                        Celkem s DPH: {{ offer.total_with_vat }} · Platnost do
-                        {{ offer.valid_to || '—' }}
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-medium text-slate-900">{{ offer.code }} — {{ offer.title }}</span>
+                          <span
+                            class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                            :class="{
+                              'bg-slate-100 text-slate-600': offer.status === 'draft',
+                              'bg-blue-100 text-blue-700': offer.status === 'sent',
+                              'bg-emerald-100 text-emerald-700': offer.status === 'accepted',
+                              'bg-red-100 text-red-700': offer.status === 'rejected',
+                              'bg-amber-100 text-amber-700': offer.status === 'expired',
+                            }"
+                          >
+                            {{
+                              {
+                                draft: 'Koncept',
+                                sent: 'Odeslaná',
+                                accepted: 'Přijatá',
+                                rejected: 'Zamítnutá',
+                                expired: 'Vypršelá',
+                              }[offer.status] || offer.status
+                            }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                          Celkem s DPH: {{ offer.total_with_vat }} · Platnost do
+                          {{ offer.valid_to || '—' }}
+                        </p>
                       </div>
                     </NuxtLink>
                     <button

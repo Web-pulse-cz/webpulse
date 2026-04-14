@@ -589,46 +589,53 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="contract.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex-1">
-                      <div class="flex items-center gap-3">
-                        <span class="font-medium text-slate-900">{{ contract.title }}</span>
-                        <span
-                          class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                          :class="{
-                            'bg-emerald-100 text-emerald-700': contract.status === 'active',
-                            'bg-slate-100 text-slate-600': contract.status === 'draft',
-                            'bg-red-100 text-red-700': contract.status === 'terminated',
-                            'bg-amber-100 text-amber-700': contract.status === 'expired',
-                          }"
-                        >
-                          {{
-                            {
-                              draft: 'Koncept',
-                              active: 'Aktivní',
-                              terminated: 'Ukončená',
-                              expired: 'Vypršelá',
-                            }[contract.status] || contract.status
-                          }}
-                        </span>
-                        <span
-                          class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-600"
-                        >
-                          {{
-                            {
-                              hpp: 'HPP',
-                              dpp: 'DPP',
-                              dpc: 'DPČ',
-                              osvc: 'OSVČ',
-                              internship: 'Stáž',
-                              nda: 'NDA',
-                              other: 'Jiný',
-                            }[contract.type] || contract.type
-                          }}
-                        </span>
+                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex items-center gap-4 flex-1">
+                      <div
+                        class="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                      >
+                        <DocumentTextIcon class="size-5" />
                       </div>
-                      <div class="mt-1 text-xs text-slate-500">
-                        {{ contract.date_from || '—' }} &mdash;
-                        {{ contract.date_to || 'Doba neurčitá' }}
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-medium text-slate-900">{{ contract.title }}</span>
+                          <span
+                            class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                            :class="{
+                              'bg-emerald-100 text-emerald-700': contract.status === 'active',
+                              'bg-slate-100 text-slate-600': contract.status === 'draft',
+                              'bg-red-100 text-red-700': contract.status === 'terminated',
+                              'bg-amber-100 text-amber-700': contract.status === 'expired',
+                            }"
+                          >
+                            {{
+                              {
+                                draft: 'Koncept',
+                                active: 'Aktivní',
+                                terminated: 'Ukončená',
+                                expired: 'Vypršelá',
+                              }[contract.status] || contract.status
+                            }}
+                          </span>
+                          <span
+                            class="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-600"
+                          >
+                            {{
+                              {
+                                hpp: 'HPP',
+                                dpp: 'DPP',
+                                dpc: 'DPČ',
+                                osvc: 'OSVČ',
+                                internship: 'Stáž',
+                                nda: 'NDA',
+                                other: 'Jiný',
+                              }[contract.type] || contract.type
+                            }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                          {{ contract.date_from || '—' }} &mdash;
+                          {{ contract.date_to || 'Doba neurčitá' }}
+                        </p>
                       </div>
                     </NuxtLink>
                     <button
