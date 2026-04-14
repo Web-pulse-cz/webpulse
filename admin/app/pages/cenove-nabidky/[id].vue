@@ -12,6 +12,7 @@ const taxRateStore = useTaxRateStore();
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -138,6 +139,7 @@ async function loadProjects() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
 
@@ -348,7 +350,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <!-- Info tab -->
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
@@ -369,6 +371,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   label="Název nabídky"
                   type="text"
                   name="title"
+                  rules="required"
                   class="col-span-full"
                 />
                 <BaseFormSelect

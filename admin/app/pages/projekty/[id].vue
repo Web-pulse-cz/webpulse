@@ -25,6 +25,7 @@ const taxRateStore = useTaxRateStore();
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -213,6 +214,7 @@ async function loadUsers() {
 // ─── Save Project ──────────────────────────────────────────
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
   const payload = { ...item.value, tags: item.value.tags?.map((t: any) => t.id || t) || [] };
@@ -544,7 +546,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <!-- ═══ Přehled ═══ -->
       <template v-if="tabs.find((t) => t.current && t.link === '#prehled')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">

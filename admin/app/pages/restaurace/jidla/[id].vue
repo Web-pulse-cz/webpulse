@@ -13,6 +13,7 @@ const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 const languageStore = useLanguageStore();
 const selectedLocale = ref('cs');
 
@@ -124,6 +125,7 @@ async function loadItem() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
   const payload = {
@@ -231,7 +233,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <!-- ═══ Tab: Základní údaje ═══ -->
       <template v-if="tabs.find((t) => t.current && t.link === '#info')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">

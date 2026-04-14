@@ -18,6 +18,7 @@ const countryStore = useCountryStore();
 const currencyStore = useCurrencyStore();
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -146,6 +147,7 @@ async function loadSites() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
   await client(
@@ -284,7 +286,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <!-- Osobní údaje -->
       <template v-if="tabs.find((t) => t.current && t.link === '#osobni')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">

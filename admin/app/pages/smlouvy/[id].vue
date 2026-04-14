@@ -6,6 +6,7 @@ import { DocumentTextIcon, UserIcon } from '@heroicons/vue/24/outline';
 const { $toast } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 const error = ref(false);
 const loading = ref(false);
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
@@ -142,6 +143,7 @@ async function loadProjects() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
   await client(
@@ -204,7 +206,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       @save="saveItem"
     />
     <LayoutTabs :tabs="tabs" class="sticky top-16 z-30" />
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 lg:col-span-9">
           <!-- Info tab -->

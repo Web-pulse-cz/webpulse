@@ -10,6 +10,7 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const languageStore = useLanguageStore();
 const selectedLocale = ref('cs');
@@ -74,6 +75,8 @@ async function loadItem() {
 }
 
 async function saveItem(redirect = true as boolean) {
+  if (!(await validateForm())) return;
+
   const client = useSanctumClient();
   loading.value = true;
 
@@ -193,7 +196,7 @@ const addGroup = () => {
       @save="saveItem"
     />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 space-y-6 lg:col-span-9">
           <LayoutContainer>
