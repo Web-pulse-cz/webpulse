@@ -340,6 +340,95 @@ useHead({
   title: pageTitle.value,
 });
 
+const moduleGroups = [
+  {
+    title: 'Obsah',
+    slugs: [
+      'posts',
+      'pages',
+      'novelties',
+      'services',
+      'events',
+      'reviews',
+      'logos',
+      'careers',
+      'quizzes',
+      'faqs',
+    ],
+  },
+  {
+    title: 'Restaurace',
+    slugs: [
+      'allergens',
+      'foodstuffs',
+      'meals',
+      'recipes',
+      'menus',
+      'restaurant_tables',
+      'reservations',
+    ],
+  },
+  {
+    title: 'Zákazníci',
+    slugs: ['customers', 'vouchers', 'newsletters', 'demands'],
+  },
+  {
+    title: 'Byznys a osobní růst',
+    slugs: [
+      'contacts',
+      'users_has_activities',
+      'message_blueprints',
+      'calendars',
+      'cashflows',
+      'leagues',
+    ],
+  },
+  {
+    title: 'Vedení firmy',
+    slugs: [
+      'clients',
+      'invoices',
+      'projects',
+      'price_offers',
+      'project_time_entries',
+      'project_tasks',
+      'task_boards',
+      'employees',
+      'shifts',
+      'employee_contracts',
+      'biographies',
+    ],
+  },
+  {
+    title: 'Nastavení a správa',
+    slugs: [
+      'users',
+      'sites',
+      'settings',
+      'changelogs',
+      'activities',
+      'emails',
+      'languages',
+      'countries',
+      'currencies',
+      'tax_rates',
+      'trackings',
+    ],
+  },
+];
+
+function toggleGroupModules(group: { slugs: string[] }) {
+  const allEnabled = group.slugs.every((s) => item.value.settings.enabled_modules.includes(s));
+  group.slugs.forEach((s) => {
+    const idx = item.value.settings.enabled_modules.indexOf(s);
+    if (allEnabled) {
+      if (idx !== -1) item.value.settings.enabled_modules.splice(idx, 1);
+    } else {
+      if (idx === -1) item.value.settings.enabled_modules.push(s);
+    }
+  });
+}
+
 function addRemoveEnabledModule(module: string) {
   if (item.value.settings.enabled_modules.includes(module)) {
     item.value.settings.enabled_modules.splice(
@@ -670,24 +759,54 @@ definePageMeta({
                 </div>
               </div>
 
-              <div class="rounded-2xl border border-slate-100 p-6">
-                <div class="mb-4 flex items-center gap-2 border-b border-slate-50 pb-2">
+              <div class="space-y-4">
+                <div class="flex items-center gap-2">
                   <SquaresPlusIcon class="size-4 text-slate-400" />
                   <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
                     >Aktivní moduly systému</span
                   >
                 </div>
-                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <BaseFormCheckbox
-                    v-for="(module, index) in settings.enabled_modules"
-                    :key="index"
-                    :value="item.settings.enabled_modules.includes(module)"
-                    :checked="item.settings.enabled_modules.includes(module)"
-                    :label="getSettingTitle(module)"
-                    :name="'enabled_modules' + module"
-                    class="flex-row-reverse justify-between rounded-lg bg-slate-50 p-2"
-                    @click="addRemoveEnabledModule(module)"
-                  />
+
+                <div
+                  v-for="group in moduleGroups"
+                  :key="group.title"
+                  class="overflow-hidden rounded-2xl ring-1 ring-slate-200"
+                >
+                  <div
+                    class="flex items-center justify-between bg-slate-50 px-4 py-2.5"
+                  >
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">{{
+                      group.title
+                    }}</span>
+                    <button
+                      type="button"
+                      class="text-[10px] font-bold uppercase tracking-widest transition"
+                      :class="
+                        group.slugs.every((s) => item.settings.enabled_modules.includes(s))
+                          ? 'text-indigo-600'
+                          : 'text-slate-400 hover:text-slate-600'
+                      "
+                      @click="toggleGroupModules(group)"
+                    >
+                      {{
+                        group.slugs.every((s) => item.settings.enabled_modules.includes(s))
+                          ? 'Odebrat vše'
+                          : 'Vybrat vše'
+                      }}
+                    </button>
+                  </div>
+                  <div class="grid grid-cols-1 gap-0 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0">
+                    <BaseFormCheckbox
+                      v-for="slug in group.slugs"
+                      :key="slug"
+                      :value="item.settings.enabled_modules.includes(slug)"
+                      :checked="item.settings.enabled_modules.includes(slug)"
+                      :label="getSettingTitle(slug)"
+                      :name="'enabled_modules_' + slug"
+                      class="flex-row-reverse justify-between border-b border-slate-50 px-4 py-2.5 sm:border-b-0 sm:odd:border-r sm:odd:border-slate-100"
+                      @click="addRemoveEnabledModule(slug)"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
