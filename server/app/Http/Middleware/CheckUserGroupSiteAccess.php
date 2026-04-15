@@ -23,6 +23,11 @@ class CheckUserGroupSiteAccess
             return $next($request);
         }
 
+        // Superadmin group (ID 1) has access to all sites
+        if ($user->userGroup->id === 1) {
+            return $next($request);
+        }
+
         $site = Site::query()->where('hash', $siteHash)->first();
 
         if (! $site) {
