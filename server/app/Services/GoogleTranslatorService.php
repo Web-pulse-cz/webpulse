@@ -15,7 +15,7 @@ class GoogleTranslatorService
 
     public function __construct()
     {
-        $this->apiKey = env('GOOGLE_TRANSLATE_API_KEY');
+        $this->apiKey = config('google.translate_api_key');
 
         // Inicializace Guzzle klienta s V2 endpointem
         $this->client = new Client([
