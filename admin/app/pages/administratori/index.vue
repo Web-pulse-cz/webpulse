@@ -19,6 +19,7 @@ const breadcrumbs = ref([
 ]);
 
 const searchString = ref(inject('searchString', ''));
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const tableQuery = ref({
   search: null as string | null,
   paginate: 12 as number,
@@ -39,6 +40,7 @@ async function loadItems() {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then((response) => {
@@ -67,6 +69,7 @@ async function deleteItem(id: number) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
     },
   })
     .then(() => {})
@@ -103,6 +106,7 @@ watch(searchString, () => {
   tableQuery.value.search = searchString.value;
   debouncedLoadItems();
 });
+watch(selectedSiteHash, () => loadItems());
 
 useHead({
   title: pageTitle.value,
