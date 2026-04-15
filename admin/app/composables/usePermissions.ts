@@ -12,6 +12,9 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
     const userGroup = getUserGroup();
     if (!userGroup) return false;
 
+    // Superadmin group (ID 1) has access to all sites
+    if (userGroup.id === 1) return true;
+
     if (userGroup.sites && userGroup.sites.length > 0 && selectedSiteHash.value) {
       return userGroup.sites.some((site: any) => site.hash === selectedSiteHash.value);
     }
