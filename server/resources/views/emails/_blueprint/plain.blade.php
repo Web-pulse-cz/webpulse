@@ -2,16 +2,12 @@
 
 Dobrý den,
 
-Na webu {{ env('CLIENT_URL') }} byla právě vytvořena nová poptávka pro službu {{ $inquiry->service_name }}.
+{!! $content ?? 'Toto je ukázková e-mailová šablona systému Web-pulse.' !!}
 
-Níže jsou detaily:
-
-Jméno a příjmení: {{ $inquiry->fullname }}
-E-mail: {{ $inquiry->email }}
-Telefon: {{ $inquiry->fullPhone }}
-Služba: {{ $inquiry->service_name }}
-Navrhovaná cena: {{ $inquiry->offered_price }}
-Jazyk: {{ app()->getLocale() }}
+Produkt          | Množství    | Cena
+-----------------+-------------+-----------
+Webdesign Basic  | 1           | 5 000 Kč
+Hosting Premium  | 12 měsíců   | 2 400 Kč
 
 ---
 © {{ date('Y') }} Web-pulse. Všechna práva vyhrazena.

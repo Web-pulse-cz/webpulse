@@ -1,166 +1,52 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $subject }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', Arial, sans-serif;
-            background-color: #f1f5f9;
-            color: #0f172a;
-        }
+@extends('emails._layout.html')
 
-        .container {
-            max-width: 768px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+@section('title', $subject)
+@section('subtitle', 'Pracovn&iacute; pozice: {{ $careerApplication->career->name }}')
 
-        .header {
-            padding: 20px 30px;
-            text-align: center;
-        }
+@section('body')
+    @if($type == 'client')
+        <p style="font-size: 15px; line-height: 1.7; color: #334155; margin: 0 0 16px; font-weight: 400;">
+            D&ecaron;kujeme v&aacute;m za pod&aacute;n&iacute; &zcaron;&aacute;dosti o pracovn&iacute; pozici
+            <strong style="color: #0f172a;">{{ $careerApplication->career->name }}</strong>.
+        </p>
+        <p style="font-size: 15px; line-height: 1.7; color: #334155; margin: 0; font-weight: 400;">
+            O jej&iacute;m pr&udblac;b&ecaron;hu v&aacute;s budeme informovat na t&eacute;to e-mailov&eacute; adrese.
+        </p>
+    @elseif($type == 'admin')
+        <p style="font-size: 15px; line-height: 1.7; color: #334155; margin: 0 0 16px; font-weight: 400;">
+            V syst&eacute;mu vznikla nov&aacute; &zcaron;&aacute;dost o pracovn&iacute; pozici
+            <strong style="color: #0f172a;">{{ $careerApplication->career->name }}</strong>.
+        </p>
 
-        .logo {
-            max-width: 140px;
-            height: auto;
-        }
-
-        .content {
-            padding: 30px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .content h1 {
-            font-size: 24px;
-            color: #06b6d4;
-            font-weight: 700;
-            margin-top: 0;
-        }
-
-        .content p {
-            font-weight: 500;
-            margin: 12px 0;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .table th, .table td {
-            border: 1px solid #e2e8f0;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .table th {
-            background-color: #f1f5f9;
-            font-weight: 600;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #06b6d4;
-            color: #ffffff !important;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-
-        .footer {
-            background-color: #f8fafc;
-            text-align: center;
-            padding: 15px 20px;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        @media screen and (max-width: 600px) {
-            .container {
-                max-width: 600px;
-            }
-
-            .content {
-                padding: 20px;
-                font-size: 14px;
-            }
-
-            .content h1 {
-                font-size: 20px;
-            }
-
-            .button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-<div style="padding: 30px;">
-    <div class="container">
-        <div class="header">
-            <img src="https://placehold.co/140x140?text=Webpulse" alt="Web-pulse Logo" class="logo">
+        <div style="margin: 24px 0; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; width: 40%; border-bottom: 1px solid #f1f5f9;">Jm&eacute;no</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $careerApplication->firstname }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">P&rcaron;&iacute;jmen&iacute;</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $careerApplication->lastname }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">E-mail</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $careerApplication->email }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">Telefon</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $careerApplication->phone }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">O&ccaron;ek&aacute;van&aacute; mzda</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $careerApplication->salary_expectation }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc;">Datum n&aacute;stupu</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155;">{{ $careerApplication->realAvailability }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="content">
-            <h1>{{ $subject }}</h1>
-            <p>Dobrý den,</p>
-            @if($type == 'client')
-                <p>Děkujeme vám za podání žádosti o pracovní pozici {{ $careerApplication->career->name }}.</p>
-                <p>O jejím průběhu vás budeme informovat na této e-mailové adrese.</p>
-            @elseif($type == 'admin')
-                <p>Dovolujeme si vás upozornit, že v systému vznikla nová žádost o pracovní
-                    pozici {{ $careerApplication->career->name }}.</p>
-                <p>Níže zasíláme její podrobnosti:</p>
-            @endif
-
-            @if($type == 'admin')
-                <!-- Tabulka -->
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td>Jméno:</td>
-                        <td>{{ $careerApplication->firstname }}</td>
-                    </tr>
-                    <tr>
-                        <td>Příjmení:</td>
-                        <td>{{ $careerApplication->lastname }}</td>
-                    </tr>
-                    <tr>
-                        <td>E-mail:</td>
-                        <td>{{ $careerApplication->email }}</td>
-                    </tr>
-                    <tr>
-                        <td>Telefon:</td>
-                        <td>{{ $careerApplication->phone }}</td>
-                    </tr>
-                    <tr>
-                        <td>Očekávaná mzda:</td>
-                        <td>{{ $careerApplication->salary_expectation }}</td>
-                    </tr>
-                    <tr>
-                        <td>Datum nástupu:</td>
-                        <td>{{ $careerApplication->realAvailability }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            @endif
-        </div>
-        <div class="footer">
-            &copy; {{ date('Y') }} Web-pulse. Všechna práva vyhrazena.
-        </div>
-    </div>
-</div>
-</body>
-</html>
+    @endif
+@endsection

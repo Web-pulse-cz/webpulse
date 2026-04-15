@@ -1,155 +1,60 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $subject }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', Arial, sans-serif;
-            background-color: #f1f5f9;
-            color: #0f172a;
-        }
-        .container {
-            max-width: 768px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            padding: 20px 30px;
-            text-align: center;
-        }
-        .logo {
-            max-width: 140px;
-            height: auto;
-        }
-        .content {
-            padding: 30px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        .content h1 {
-            font-size: 24px;
-            color: #06b6d4;
-            font-weight: 700;
-            margin-top: 0;
-        }
-        .content p {
-            font-weight: 500;
-            margin: 12px 0;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .table th, .table td {
-            border: 1px solid #e2e8f0;
-            padding: 10px;
-            text-align: left;
-        }
-        .table th {
-            background-color: #f1f5f9;
-            font-weight: 600;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #06b6d4;
-            color: #ffffff !important;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-        .footer {
-            background-color: #f8fafc;
-            text-align: center;
-            padding: 15px 20px;
-            font-size: 12px;
-            color: #64748b;
-        }
-        @media screen and (max-width: 600px) {
-            .container {
-                max-width: 600px;
-            }
-            .content {
-                padding: 20px;
-                font-size: 14px;
-            }
-            .content h1 {
-                font-size: 20px;
-            }
-            .button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-<div style="padding: 30px;">
-    <div class="container">
-        <div class="header">
-            <img src="https://placehold.co/140x140?text=Webpulse" alt="Web-pulse Logo" class="logo">
-        </div>
-        <div class="content">
-            <h1>{{ $subject }}</h1>
-            <p>Dobrý den,</p>
-            <p>Děkujeme za přihlášení na akci {{ $eventRegistration->event->name }}.</p>
-            <p>Níže zasíláme detaily.</p>
+@extends('emails._layout.html')
 
-            <!-- Tabulka -->
-            <table class="table">
-                <tbody>
-                <tr>
-                    <td>Název akce:</td>
-                    <td>{{ $eventRegistration->event->name }}</td>
-                </tr>
-                <tr>
-                    <td>Začátek akce :</td>
-                    <td>{{ \Illuminate\Support\Carbon::parse($eventRegistration->event->start_date)->format('d. m. Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>Konec akce :</td>
-                    <td>{{ \Illuminate\Support\Carbon::parse($eventRegistration->event->end_date)->format('d. m. Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>Místo konání:</td>
-                    <td>{{ $eventRegistration->event->place }}</td>
-                </tr>
-                <tr>
-                    <td>Příjmení:</td>
-                    <td>{{ $eventRegistration->lastname }}</td>
-                </tr>
-                <tr>
-                    <td>E-mail:</td>
-                    <td>{{ $eventRegistration->email }}</td>
-                </tr>
-                <tr>
-                    <td>Telefon:</td>
-                    <td>{{ $eventRegistration->phone }}</td>
-                </tr>
-                <tr>
-                    <td>Poznámka:</td>
-                    <td>{{ $eventRegistration->note }}</td>
-                </tr>
-                <tr>
-                    <td>Cena:</td>
-                    <td>{{ $eventRegistration->event->price }},- Kč</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="footer">
-            &copy; {{ date('Y') }} Web-pulse. Všechna práva vyhrazena.
-        </div>
+@section('title', $subject)
+@section('subtitle', '{{ $eventRegistration->event->name }}')
+
+@section('body')
+    <p style="font-size: 15px; line-height: 1.7; color: #334155; margin: 0 0 16px; font-weight: 400;">
+        D&ecaron;kujeme za p&rcaron;ihl&aacute;&scaron;en&iacute; na akci
+        <strong style="color: #0f172a;">{{ $eventRegistration->event->name }}</strong>.
+        N&iacute;&zcaron;e zas&iacute;l&aacute;me detaily.
+    </p>
+
+    {{-- Event info card --}}
+    <div style="margin: 24px 0; padding: 20px; background-color: #eef2ff; border-radius: 12px;">
+        <p style="font-size: 13px; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px;">Informace o akci</p>
+        <p style="font-size: 14px; color: #334155; margin: 0 0 6px;">
+            <strong>{{ $eventRegistration->event->name }}</strong>
+        </p>
+        <p style="font-size: 13px; color: #64748b; margin: 0 0 4px;">
+            {{ \Illuminate\Support\Carbon::parse($eventRegistration->event->start_date)->format('d. m. Y H:i') }}
+            &ndash;
+            {{ \Illuminate\Support\Carbon::parse($eventRegistration->event->end_date)->format('d. m. Y H:i') }}
+        </p>
+        @if($eventRegistration->event->place)
+            <p style="font-size: 13px; color: #64748b; margin: 0;">
+                {{ $eventRegistration->event->place }}
+            </p>
+        @endif
     </div>
-</div>
-</body>
-</html>
+
+    {{-- Attendee details --}}
+    <div style="margin: 24px 0; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tbody>
+            <tr>
+                <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; width: 40%; border-bottom: 1px solid #f1f5f9;">Jm&eacute;no</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $eventRegistration->firstname }} {{ $eventRegistration->lastname }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">E-mail</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $eventRegistration->email }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">Telefon</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $eventRegistration->phone }}</td>
+            </tr>
+            @if($eventRegistration->note)
+                <tr>
+                    <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #f1f5f9;">Pozn&aacute;mka</td>
+                    <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">{{ $eventRegistration->note }}</td>
+                </tr>
+            @endif
+            <tr>
+                <td style="padding: 12px 16px; font-size: 13px; font-weight: 600; color: #64748b; background-color: #f8fafc;">Cena</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #0f172a; font-weight: 700;">{{ $eventRegistration->event->price }},- K&ccaron;</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+@endsection
