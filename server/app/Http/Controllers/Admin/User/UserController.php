@@ -25,10 +25,13 @@ class UserController extends Controller
 
         if ($request->header('X-Site-Hash')) {
             $siteId = $this->handleSite($request->header('X-Site-Hash'));
-            $query->whereHas('userGroup', function ($q) use ($siteId) {
-                $q->whereHas('sites', function ($q2) use ($siteId) {
-                    $q2->where('siteables.site_id', $siteId);
-                });
+            $query->where(function ($q) use ($siteId) {
+                $q->where('user_group_id', 1)
+                    ->orWhereHas('userGroup', function ($q2) use ($siteId) {
+                        $q2->whereHas('sites', function ($q3) use ($siteId) {
+                            $q3->where('siteables.site_id', $siteId);
+                        });
+                    });
             });
         }
 
