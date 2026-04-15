@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\User\UserResource;
 use App\Models\User\User;
+use App\Traits\Siteable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -16,9 +17,20 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    use Siteable;
+
     public function index(Request $request): JsonResponse
     {
         $query = User::query();
+
+        if ($request->header('X-Site-Hash')) {
+            $siteId = $this->handleSite($request->header('X-Site-Hash'));
+            $query->whereHas('userGroup', function ($q) use ($siteId) {
+                $q->whereHas('sites', function ($q2) use ($siteId) {
+                    $q2->where('siteables.site_id', $siteId);
+                });
+            });
+        }
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
