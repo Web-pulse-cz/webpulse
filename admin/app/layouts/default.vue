@@ -1152,18 +1152,18 @@ onMounted(() => {
                 <MenuItems
                   class="absolute right-0 z-10 mt-3 w-60 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
                 >
-                  <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  <div
+                    class="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                  >
                     Vyberte stránku
                   </div>
-                  <MenuItem
-                    v-for="site in sitesForSelect"
-                    :key="site.value"
-                    v-slot="{ active }"
-                  >
+                  <MenuItem v-for="site in sitesForSelect" :key="site.value" v-slot="{ active }">
                     <button
                       :class="[
                         active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
-                        selectedSiteHash === site.value ? 'bg-indigo-50 text-indigo-600 font-semibold' : '',
+                        selectedSiteHash === site.value
+                          ? 'bg-indigo-50 font-semibold text-indigo-600'
+                          : '',
                         'group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
                       ]"
                       @click="selectedSiteHash = site.value"
@@ -1181,7 +1181,11 @@ onMounted(() => {
               </transition>
             </Menu>
 
-            <div v-if="sitesForSelect.length > 0" class="h-6 w-px bg-slate-200" aria-hidden="true" />
+            <div
+              v-if="sitesForSelect.length > 0"
+              class="h-6 w-px bg-slate-200"
+              aria-hidden="true"
+            />
 
             <Menu v-if="quickAccess && quickAccess.length" as="div" class="relative">
               <MenuButton

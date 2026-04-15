@@ -59,7 +59,7 @@ const props = defineProps({
       <span v-if="rules && rules.includes('required')" class="ml-1 text-red-500">*</span>
     </label>
 
-    <Field v-model="model" :rules="rules" :name="name" v-slot="{ field, errors }">
+    <Field v-slot="{ field, errors }" v-model="model" :rules="rules" :name="name">
       <input
         v-bind="{ ...$attrs, ...field }"
         :id="name"
