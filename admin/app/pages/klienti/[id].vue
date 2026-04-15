@@ -19,6 +19,7 @@ const countryStore = useCountryStore();
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -134,6 +135,7 @@ async function loadClientInvoices() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
 
@@ -281,7 +283,7 @@ definePageMeta({
 
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           <div class="col-span-1 space-y-8 lg:col-span-9">
@@ -578,7 +580,10 @@ definePageMeta({
                 :key="offer.id"
                 class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
               >
-                <NuxtLink :to="'/cenove-nabidky/' + offer.id" class="flex items-center gap-4 flex-1">
+                <NuxtLink
+                  :to="'/cenove-nabidky/' + offer.id"
+                  class="flex flex-1 items-center gap-4"
+                >
                   <div
                     class="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
                   >

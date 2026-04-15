@@ -45,7 +45,7 @@ trait HasFiles
         }
 
         $file = $request->file('file');
-        $model->attachUploadedFile($file, $directory . '/' . $model->id);
+        $model->attachUploadedFile($file, $directory.'/'.$model->id);
 
         if ($resourceClass) {
             return Response::json($resourceClass::make(

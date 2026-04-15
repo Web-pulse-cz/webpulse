@@ -7,6 +7,7 @@ const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 const loading = ref(false);
 
 const tabs = ref([
@@ -110,6 +111,7 @@ async function loadItem() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
   await client(
@@ -170,7 +172,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <!-- Info -->
       <template v-if="tabs.find((t) => t.current && t.link === '#info')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
@@ -312,13 +314,19 @@ definePageMeta({ middleware: 'sanctum:auth' });
               <div class="flex items-center gap-4">
                 <div
                   class="flex size-10 items-center justify-center rounded-lg"
-                  :class="res.is_registered_customer ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'"
+                  :class="
+                    res.is_registered_customer
+                      ? 'bg-indigo-50 text-indigo-600'
+                      : 'bg-slate-100 text-slate-500'
+                  "
                 >
                   <UserIcon class="size-5" />
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-slate-900">{{ res.guest_full_name }}</span>
+                    <span class="text-sm font-medium text-slate-900">{{
+                      res.guest_full_name
+                    }}</span>
                     <span
                       v-if="res.is_registered_customer"
                       class="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700"

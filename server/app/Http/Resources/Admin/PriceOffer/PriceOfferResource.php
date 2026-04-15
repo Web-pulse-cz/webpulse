@@ -33,7 +33,7 @@ class PriceOfferResource extends JsonResource
             'invoice_id' => $this->invoice_id,
             'items' => PriceOfferItemResource::collection($this->items),
             'files' => $this->files(),
-            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
+            'sites' => $this->whenLoaded('sites', fn () => $this->sites->pluck('id')),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

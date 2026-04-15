@@ -13,8 +13,8 @@ class ContractResource extends JsonResource
             'id' => $this->id,
             'employee_id' => $this->employee_id,
             'project_id' => $this->project_id,
-            'employee_name' => $this->whenLoaded('employee', fn() => $this->employee?->full_name),
-            'project_name' => $this->whenLoaded('project', fn() => $this->project?->name),
+            'employee_name' => $this->whenLoaded('employee', fn () => $this->employee?->full_name),
+            'project_name' => $this->whenLoaded('project', fn () => $this->project?->name),
             'title' => $this->title,
             'description' => $this->description,
             'type' => $this->type,
@@ -33,7 +33,7 @@ class ContractResource extends JsonResource
             'notice_period_days' => $this->notice_period_days,
             'note' => $this->note,
             'files' => $this->files(),
-            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
+            'sites' => $this->whenLoaded('sites', fn () => $this->sites->pluck('id')),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

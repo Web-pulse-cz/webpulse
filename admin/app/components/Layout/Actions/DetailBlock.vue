@@ -101,6 +101,15 @@ function updateItemImage(files) {
   image.value = files[0];
 }
 
+const hasMultipleSites = computed(() => user.value?.sites?.length > 1);
+
+// Pokud má uživatel jen jednu stránku, automaticky ji přiřadíme
+watchEffect(() => {
+  if (user.value?.sites?.length === 1 && !sites.value.includes(user.value.sites[0].id)) {
+    sites.value = [user.value.sites[0].id];
+  }
+});
+
 function addRemoveItemSite(siteId) {
   if (sites.value.includes(siteId)) {
     sites.value = sites.value.filter((site) => site !== siteId);
@@ -174,7 +183,7 @@ function addRemoveItemSite(siteId) {
       </div>
 
       <div
-        v-if="allowSites && user?.sites"
+        v-if="allowSites && hasMultipleSites"
         :class="[
           allowSites &&
           !allowIsActive &&

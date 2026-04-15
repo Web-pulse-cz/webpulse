@@ -24,7 +24,10 @@ class UserGroupController extends Controller
 
         if ($request->header('X-Site-Hash')) {
             $siteId = $this->handleSite($request->header('X-Site-Hash'));
-            $query->whereRelation('sites', 'site_id', $siteId);
+            $query->where(function ($q) use ($siteId) {
+                $q->where('id', 1)
+                    ->orWhereRelation('sites', 'site_id', $siteId);
+            });
         }
 
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {

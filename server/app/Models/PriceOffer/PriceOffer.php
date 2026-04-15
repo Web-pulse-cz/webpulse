@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PriceOffer extends Model
 {
-    use Siteable, Fileable;
+    use Fileable, Siteable;
 
     protected $table = 'price_offers';
 

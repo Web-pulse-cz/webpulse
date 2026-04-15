@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { defineRule } from 'vee-validate';
-import { defineModel, ref } from 'vue';
+import { ref } from 'vue';
 import {
   Listbox,
   ListboxLabel,
@@ -40,13 +39,6 @@ defineProps({
     default: false,
   },
 });
-defineRule('required', (value) => {
-  if (!value) {
-    return `Pole je povinné.`;
-  }
-  return true;
-});
-
 const options = ref([
   { name: 'Červená', value: 'red' },
   { name: 'Oranžová', value: 'orange' },

@@ -9,6 +9,7 @@ const user = useSanctumUser();
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -116,6 +117,7 @@ async function loadItem() {
 }
 
 async function saveItem(redirect = true as boolean) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
 
@@ -291,7 +293,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
 
     <LayoutTabs :tabs="tabs" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
         <div class="flex flex-col gap-8">
           <LayoutContainer>

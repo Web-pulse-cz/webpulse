@@ -37,7 +37,7 @@ class ClientResource extends JsonResource
             'bank_account_swift' => $this->bank_account_swift,
             'variable_symbol' => $this->variable_symbol,
             'note' => $this->note,
-            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
+            'sites' => $this->whenLoaded('sites', fn () => $this->sites->pluck('id')),
             'synced_at' => $this->synced_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

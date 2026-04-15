@@ -7,18 +7,21 @@ use App\Http\Resources\Admin\Invoice\InvoiceResource;
 use App\Http\Resources\Admin\Invoice\InvoiceSimpleResource;
 use App\Jobs\Fakturoid\SyncInvoiceToFakturoidJob;
 use App\Models\Invoice\Invoice;
+use App\Models\Site\Site;
 use App\Traits\HasFiles;
 use App\Traits\Siteable;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
-    use Siteable, HasFiles;
+    use HasFiles, Siteable;
 
     public function index(Request $request): JsonResponse
     {
@@ -153,15 +156,15 @@ class InvoiceController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
-            \Illuminate\Support\Facades\Log::error('Invoice save error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            Log::error('Invoice save error: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
-            return Response::json(['message' => 'Chyba při ukládání faktury: ' . $e->getMessage()], 500);
+            return Response::json(['message' => 'Chyba při ukládání faktury: '.$e->getMessage()], 500);
         }
 
         // Generate PDF: Fakturoid if available, otherwise local
         try {
             $siteId = $this->handleSite($request->header('X-Site-Hash'));
-            $site = \App\Models\Site\Site::find($siteId);
+            $site = Site::find($siteId);
 
             if ($site?->hasFakturoid()) {
                 SyncInvoiceToFakturoidJob::dispatch($invoice->id, $siteId);
@@ -209,17 +212,17 @@ class InvoiceController extends Controller
         return $this->handleDownloadFile(Invoice::class, $invoiceId, $fileId);
     }
 
-    protected function generateLocalPdf(Invoice $invoice, ?\App\Models\Site\Site $site): void
+    protected function generateLocalPdf(Invoice $invoice, ?Site $site): void
     {
         try {
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', [
+            $pdf = Pdf::loadView('pdf.invoice', [
                 'invoice' => $invoice,
                 'site' => $site,
             ]);
 
             $fileSlug = $invoice->number ? preg_replace('/[^a-zA-Z0-9\-]/', '-', $invoice->number) : $invoice->id;
-            $path = 'files/invoices/' . $fileSlug . '.pdf';
-            $name = 'faktura-' . ($invoice->number ?? $invoice->id) . '.pdf';
+            $path = 'files/invoices/'.$fileSlug.'.pdf';
+            $name = 'faktura-'.($invoice->number ?? $invoice->id).'.pdf';
 
             // Remove old PDF
             $existingFiles = $invoice->files();
@@ -231,7 +234,7 @@ class InvoiceController extends Controller
 
             $invoice->attachFileFromContent($pdf->output(), $path, $name, 'application/pdf');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Local PDF generation failed: ' . $e->getMessage());
+            Log::warning('Local PDF generation failed: '.$e->getMessage());
         }
     }
 }

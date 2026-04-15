@@ -1,139 +1,41 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $subject }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', Arial, sans-serif;
-            background-color: #f1f5f9;
-            color: #0f172a;
-        }
-        .container {
-            max-width: 768px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            padding: 20px 30px;
-            text-align: center;
-        }
-        .logo {
-            max-width: 140px;
-            height: auto;
-        }
-        .content {
-            padding: 30px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        .content h1 {
-            font-size: 24px;
-            color: #06b6d4;
-            font-weight: 700;
-            margin-top: 0;
-        }
-        .content p {
-            font-weight: 500;
-            margin: 12px 0;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .table th, .table td {
-            border: 1px solid #e2e8f0;
-            padding: 10px;
-            text-align: left;
-        }
-        .table th {
-            background-color: #f1f5f9;
-            font-weight: 600;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #06b6d4;
-            color: #ffffff !important;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-        .footer {
-            background-color: #f8fafc;
-            text-align: center;
-            padding: 15px 20px;
-            font-size: 12px;
-            color: #64748b;
-        }
-        @media screen and (max-width: 600px) {
-            .container {
-                max-width: 600px;
-            }
-            .content {
-                padding: 20px;
-                font-size: 14px;
-            }
-            .content h1 {
-                font-size: 20px;
-            }
-            .button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-<div style="padding: 30px;">
-    <div class="container">
-        <div class="header">
-            <img src="https://placehold.co/140x140?text=Webpulse" alt="Web-pulse Logo" class="logo">
-        </div>
-        <div class="content">
-            <h1>{{ $subject }}</h1>
-            <p>Dobrý den,</p>
-            <p>{!! $content ?? 'Toto je elegantní, profesionální a responzivní e-mailová šablona inspirovaná stylem Web-pulse. Moderní design a čistá typografie.' !!}</p>
+@extends('emails._layout.html')
 
-            <!-- Tabulka -->
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Produkt</th>
-                    <th>Množství</th>
-                    <th>Cena</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Webdesign Basic</td>
-                    <td>1</td>
-                    <td>5 000 Kč</td>
-                </tr>
-                <tr>
-                    <td>Hosting Premium</td>
-                    <td>12 měsíců</td>
-                    <td>2 400 Kč</td>
-                </tr>
-                </tbody>
-            </table>
+@section('title', $subject)
+@section('subtitle', 'Uk&aacute;zkov&aacute; &scaron;ablona')
 
-            <p style="margin-top: 20px;">
-                <a href="{{ $button_url ?? '#' }}" class="button">{{ $button_text ?? 'Klikněte zde' }}</a>
-            </p>
-        </div>
-        <div class="footer">
-            &copy; {{ date('Y') }} Web-pulse. Všechna práva vyhrazena.
-        </div>
+@section('body')
+    <p style="font-size: 15px; line-height: 1.7; color: #334155; margin: 0 0 16px; font-weight: 400;">
+        {!! $content ?? 'Toto je uk&aacute;zkov&aacute; e-mailov&aacute; &scaron;ablona syst&eacute;mu Web-pulse.' !!}
+    </p>
+
+    {{-- Table --}}
+    <div style="margin: 24px 0; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr>
+                <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">Produkt</th>
+                <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">Mno&zcaron;stv&iacute;</th>
+                <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">Cena</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">Webdesign Basic</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9;">1</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; font-weight: 600; border-bottom: 1px solid #f1f5f9;">5&nbsp;000 K&ccaron;</td>
+            </tr>
+            <tr>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155;">Hosting Premium</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155;">12 m&ecaron;s&iacute;c&udblac;</td>
+                <td style="padding: 12px 16px; font-size: 14px; color: #334155; font-weight: 600;">2&nbsp;400 K&ccaron;</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-</div>
-</body>
-</html>
+@endsection
+
+@section('action')
+    <a href="{{ $button_url ?? '#' }}" style="display: inline-block; padding: 14px 32px; background-color: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 12px; font-size: 14px; font-weight: 700; letter-spacing: 0.01em;">
+        {{ $button_text ?? 'Klikn&ecaron;te zde' }}
+    </a>
+@endsection

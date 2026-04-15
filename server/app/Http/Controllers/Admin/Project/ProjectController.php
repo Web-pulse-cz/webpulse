@@ -18,7 +18,7 @@ use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
-    use Siteable, HasFiles;
+    use HasFiles, Siteable;
 
     public function index(Request $request): JsonResponse
     {

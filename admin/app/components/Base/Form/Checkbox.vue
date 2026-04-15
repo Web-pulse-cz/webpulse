@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineRule } from 'vee-validate';
-
 const model = defineModel({
   type: String,
   required: false,
@@ -50,31 +48,6 @@ const props = defineProps({
     default: false,
   },
 });
-defineRule('min', (value, { min }) => {
-  if (value.length < min && props.type === 'text') {
-    return `Pole musí obsahovat alespoň ${min} znaků.`;
-  }
-  return true;
-});
-defineRule('max', (value, { max }) => {
-  if (value.length > max && props.type === 'text') {
-    return `Pole může obsahovat maximálně ${max} znaků.`;
-  }
-  return true;
-});
-defineRule('required', (value) => {
-  if (!value) {
-    return `Pole je povinné.`;
-  }
-  return true;
-});
-defineRule('email', (value) => {
-  if (!value.includes('@')) {
-    return `Pole musí být platný e-mail.`;
-  }
-  return true;
-});
-
 const badgeClass = computed(() => (color: string) => {
   if (color === 'red') {
     return 'inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-inset ring-red-600/20';

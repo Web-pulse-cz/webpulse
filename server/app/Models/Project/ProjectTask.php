@@ -2,6 +2,8 @@
 
 namespace App\Models\Project;
 
+use App\Models\Site\Site;
+use App\Models\Task\TaskBoard;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -93,12 +95,12 @@ class ProjectTask extends Model
 
     public function globalBoard()
     {
-        return $this->belongsTo(\App\Models\Task\TaskBoard::class, 'global_board_id', 'id');
+        return $this->belongsTo(TaskBoard::class, 'global_board_id', 'id');
     }
 
     public function site()
     {
-        return $this->belongsTo(\App\Models\Site\Site::class, 'site_id', 'id');
+        return $this->belongsTo(Site::class, 'site_id', 'id');
     }
 
     public function user()

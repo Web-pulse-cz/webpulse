@@ -21,6 +21,7 @@ const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -171,6 +172,8 @@ async function loadItem() {
 }
 
 async function saveItem(redirect = true as boolean) {
+  if (!(await validateForm())) return;
+
   const client = useSanctumClient();
   loading.value = true;
 
@@ -484,7 +487,7 @@ definePageMeta({
       @save="saveItem"
     />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
         <div class="space-y-8">
           <LayoutContainer>
@@ -772,9 +775,7 @@ definePageMeta({
                   :key="group.title"
                   class="overflow-hidden rounded-2xl ring-1 ring-slate-200"
                 >
-                  <div
-                    class="flex items-center justify-between bg-slate-50 px-4 py-2.5"
-                  >
+                  <div class="flex items-center justify-between bg-slate-50 px-4 py-2.5">
                     <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">{{
                       group.title
                     }}</span>
@@ -795,7 +796,9 @@ definePageMeta({
                       }}
                     </button>
                   </div>
-                  <div class="grid grid-cols-1 gap-0 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0">
+                  <div
+                    class="grid grid-cols-1 gap-0 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0"
+                  >
                     <BaseFormCheckbox
                       v-for="slug in group.slugs"
                       :key="slug"

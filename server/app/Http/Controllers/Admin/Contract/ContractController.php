@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Contract;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Contract\ContractResource;
 use App\Models\Contract\Contract;
+use App\Models\Site\Site;
 use App\Traits\HasFiles;
 use App\Traits\Siteable;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -12,12 +13,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ContractController extends Controller
 {
-    use Siteable, HasFiles;
+    use HasFiles, Siteable;
 
     public function index(Request $request): JsonResponse
     {
@@ -29,9 +32,9 @@ class ContractController extends Controller
         if ($request->filled('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                    ->orWhereHas('employee', fn($e) => $e->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%'))
-                    ->orWhereHas('project', fn($p) => $p->where('name', 'like', '%' . $search . '%'));
+                $q->where('title', 'like', '%'.$search.'%')
+                    ->orWhereHas('employee', fn ($e) => $e->where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%'))
+                    ->orWhereHas('project', fn ($p) => $p->where('name', 'like', '%'.$search.'%'));
             });
         }
 
@@ -76,7 +79,7 @@ class ContractController extends Controller
     {
         if ($id) {
             $contract = Contract::find($id);
-            if (!$contract) {
+            if (! $contract) {
                 App::abort(404);
             }
         } else {
@@ -106,14 +109,14 @@ class ContractController extends Controller
             // Handle file upload
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $contract->attachUploadedFile($file, 'files/contracts/' . $contract->id);
+                $contract->attachUploadedFile($file, 'files/contracts/'.$contract->id);
             }
 
             $sites = $request->get('sites', []);
             if (is_string($sites)) {
                 $sites = json_decode($sites, true) ?? [];
             }
-            if (!empty($sites)) {
+            if (! empty($sites)) {
                 $this->saveSites($contract, $sites);
             }
 
@@ -121,7 +124,7 @@ class ContractController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return Response::json(['message' => 'Chyba při ukládání smlouvy: ' . $e->getMessage()], 500);
+            return Response::json(['message' => 'Chyba při ukládání smlouvy: '.$e->getMessage()], 500);
         }
 
         // Generate PDF from content if contract has content
@@ -140,7 +143,7 @@ class ContractController extends Controller
             ->whereRelation('sites', 'site_id', $siteId)
             ->find($id);
 
-        if (!$contract) {
+        if (! $contract) {
             App::abort(404);
         }
 
@@ -150,7 +153,7 @@ class ContractController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $contract = Contract::find($id);
-        if (!$contract) {
+        if (! $contract) {
             App::abort(404);
         }
 
@@ -169,16 +172,16 @@ class ContractController extends Controller
     {
         try {
             $siteId = $contract->sites->first()?->id;
-            $site = $siteId ? \App\Models\Site\Site::find($siteId) : null;
+            $site = $siteId ? Site::find($siteId) : null;
 
             $pdf = Pdf::loadView('pdf.contract', [
                 'contract' => $contract,
                 'site' => $site,
             ]);
 
-            $fileSlug = \Illuminate\Support\Str::slug($contract->title) ?: $contract->id;
-            $path = 'files/contracts/' . $contract->id . '/' . $fileSlug . '.pdf';
-            $name = 'smlouva-' . $fileSlug . '.pdf';
+            $fileSlug = Str::slug($contract->title) ?: $contract->id;
+            $path = 'files/contracts/'.$contract->id.'/'.$fileSlug.'.pdf';
+            $name = 'smlouva-'.$fileSlug.'.pdf';
 
             // Remove old generated PDF
             $existingFiles = $contract->files();
@@ -190,7 +193,7 @@ class ContractController extends Controller
 
             $contract->attachFileFromContent($pdf->output(), $path, $name, 'application/pdf');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Contract PDF generation failed: ' . $e->getMessage());
+            Log::warning('Contract PDF generation failed: '.$e->getMessage());
         }
     }
 }

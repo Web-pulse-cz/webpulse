@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\PriceOffer\PriceOfferSimpleResource;
 use App\Jobs\Fakturoid\SyncInvoiceToFakturoidJob;
 use App\Models\Invoice\Invoice;
 use App\Models\PriceOffer\PriceOffer;
+use App\Models\Site\Site;
 use App\Traits\HasFiles;
 use App\Traits\Siteable;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -17,12 +18,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class PriceOfferController extends Controller
 {
-    use Siteable, HasFiles;
+    use HasFiles, Siteable;
 
     public function index(Request $request): JsonResponse
     {
@@ -151,7 +153,7 @@ class PriceOfferController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return Response::json(['message' => 'Chyba při ukládání cenové nabídky: ' . $e->getMessage()], 500);
+            return Response::json(['message' => 'Chyba při ukládání cenové nabídky: '.$e->getMessage()], 500);
         }
 
         // Generate PDF
@@ -306,7 +308,7 @@ class PriceOfferController extends Controller
     {
         try {
             $siteId = $offer->sites->first()?->id;
-            $site = $siteId ? \App\Models\Site\Site::find($siteId) : null;
+            $site = $siteId ? Site::find($siteId) : null;
 
             $pdf = Pdf::loadView('pdf.price-offer', [
                 'offer' => $offer,
@@ -314,8 +316,8 @@ class PriceOfferController extends Controller
             ]);
 
             $fileSlug = $offer->code ? preg_replace('/[^a-zA-Z0-9\-]/', '-', $offer->code) : $offer->id;
-            $path = 'files/price-offers/' . $fileSlug . '.pdf';
-            $name = 'cenova-nabidka-' . ($offer->code ?? $offer->id) . '.pdf';
+            $path = 'files/price-offers/'.$fileSlug.'.pdf';
+            $name = 'cenova-nabidka-'.($offer->code ?? $offer->id).'.pdf';
 
             // Remove old generated PDF
             $existingFiles = $offer->files();
@@ -327,7 +329,7 @@ class PriceOfferController extends Controller
 
             $offer->attachFileFromContent($pdf->output(), $path, $name, 'application/pdf');
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Price offer PDF generation failed: ' . $e->getMessage());
+            Log::warning('Price offer PDF generation failed: '.$e->getMessage());
         }
     }
 }
