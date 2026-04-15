@@ -39,6 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $laravelCommands = [
         // Přidán COMPOSER_HOME=/tmp
         'COMPOSER_HOME=/tmp composer install --no-interaction --no-ansi --prefer-dist --optimize-autoloader 2>&1',
+
+        // Oprava oprávnění – storage a bootstrap/cache musí být zapisovatelné webserverem
+        'chmod -R 777 ' . escapeshellarg($laravelPath . '/storage') . ' 2>&1',
+        'chmod -R 777 ' . escapeshellarg($laravelPath . '/bootstrap/cache') . ' 2>&1',
+
         'php artisan migrate --force 2>&1',
         'php artisan optimize:clear 2>&1',
         'php artisan config:cache 2>&1',
