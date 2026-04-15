@@ -27,6 +27,10 @@ class UserGroupController extends Controller
             $query->whereRelation('sites', 'site_id', $siteId);
         }
 
+        if ($siteId !== 1 && $request->user()->id !== 1) {
+            $query->where('id', '!=', 1);
+        }
+
         if ($request->has('search') && $request->get('search') != '' && $request->get('search') != null) {
             $searchString = $request->get('search');
             if (str_contains(':', $searchString)) {
