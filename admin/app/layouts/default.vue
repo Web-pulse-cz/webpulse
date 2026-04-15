@@ -718,6 +718,11 @@ const sitesForSelect = computed(() => {
   }));
 });
 
+const selectedSiteName = computed(() => {
+  const site = sitesForSelect.value.find((s: any) => s.value === selectedSiteHash.value);
+  return site?.name || 'Vyberte stránku';
+});
+
 watch(
   () => selectedSiteHash.value,
   (newValue) => {
@@ -825,13 +830,6 @@ onMounted(() => {
                       alt="Your Company"
                     />
                   </NuxtLink>
-                </div>
-                <div v-if="user?.sites?.length" class="mt-2">
-                  <BaseFormSelect
-                    v-model="selectedSiteHash"
-                    :options="sitesForSelect"
-                    theme="dark"
-                  />
                 </div>
                 <nav class="flex flex-1 flex-col">
                   <ul role="list" class="flex flex-1 flex-col gap-y-8">
@@ -980,11 +978,7 @@ onMounted(() => {
           </NuxtLink>
         </div>
 
-        <div v-if="user?.sites?.length" class="mt-2">
-          <BaseFormSelect v-model="selectedSiteHash" :options="sitesForSelect" theme="dark" />
-        </div>
-
-        <nav class="flex flex-1 flex-col">
+        <nav class="mt-2 flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-8">
             <li v-for="(group, index) in filteredNavigation" :key="index">
               <div class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500">
@@ -1129,6 +1123,70 @@ onMounted(() => {
           </div>
 
           <div class="flex items-center gap-x-4 lg:gap-x-6">
+            <Menu v-if="sitesForSelect.length > 0" as="div" class="relative">
+              <MenuButton
+                class="-m-1.5 flex items-center rounded-full p-1.5 transition-colors hover:bg-slate-100"
+              >
+                <span class="sr-only">Vybrat stránku</span>
+                <span class="flex items-center px-2">
+                  <GlobeAltIcon class="size-5 text-indigo-500" aria-hidden="true" />
+                  <span
+                    class="ml-2 hidden max-w-[160px] truncate text-sm font-semibold text-slate-700 lg:block"
+                    aria-hidden="true"
+                    >{{ selectedSiteName }}</span
+                  >
+                  <ChevronDownIcon
+                    class="ml-2 hidden size-4 text-slate-400 lg:block"
+                    aria-hidden="true"
+                  />
+                </span>
+              </MenuButton>
+              <transition
+                enter-active-class="transition ease-out duration-150"
+                enter-from-class="transform opacity-0 scale-95 translate-y-1"
+                enter-to-class="transform opacity-100 scale-100 translate-y-0"
+                leave-active-class="transition ease-in duration-100"
+                leave-from-class="transform opacity-100 scale-100 translate-y-0"
+                leave-to-class="transform opacity-0 scale-95 translate-y-1"
+              >
+                <MenuItems
+                  class="absolute right-0 z-10 mt-3 w-60 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
+                >
+                  <div
+                    class="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                  >
+                    Vyberte stránku
+                  </div>
+                  <MenuItem v-for="site in sitesForSelect" :key="site.value" v-slot="{ active }">
+                    <button
+                      :class="[
+                        active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
+                        selectedSiteHash === site.value
+                          ? 'bg-indigo-50 font-semibold text-indigo-600'
+                          : '',
+                        'group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                      ]"
+                      @click="selectedSiteHash = site.value"
+                    >
+                      <span
+                        :class="[
+                          selectedSiteHash === site.value ? 'bg-indigo-500' : 'bg-slate-300',
+                          'size-2 shrink-0 rounded-full',
+                        ]"
+                      />
+                      <span class="truncate">{{ site.name }}</span>
+                    </button>
+                  </MenuItem>
+                </MenuItems>
+              </transition>
+            </Menu>
+
+            <div
+              v-if="sitesForSelect.length > 0"
+              class="h-6 w-px bg-slate-200"
+              aria-hidden="true"
+            />
+
             <Menu v-if="quickAccess && quickAccess.length" as="div" class="relative">
               <MenuButton
                 class="-m-1.5 flex items-center rounded-full p-1.5 transition-colors hover:bg-slate-100"

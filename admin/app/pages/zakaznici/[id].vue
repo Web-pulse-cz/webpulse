@@ -212,7 +212,13 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   name="last_name"
                   rules="required"
                 />
-                <BaseFormInput v-model="item.email" label="E-mail" type="email" name="email" rules="required|email" />
+                <BaseFormInput
+                  v-model="item.email"
+                  label="E-mail"
+                  type="email"
+                  name="email"
+                  rules="required|email"
+                />
                 <div class="flex gap-3">
                   <BaseFormInput
                     v-model="item.phone_prefix"

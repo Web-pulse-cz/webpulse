@@ -68,9 +68,7 @@ async function handleSubmit() {
       >
         <LockClosedIcon class="size-8 text-white" />
       </div>
-      <h1 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
-        Obnovení hesla
-      </h1>
+      <h1 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Obnovení hesla</h1>
       <p class="mt-3 text-sm text-slate-500">Zadejte nové heslo pro svůj účet.</p>
     </div>
 
@@ -80,9 +78,7 @@ async function handleSubmit() {
     >
       <!-- Invalid link -->
       <div v-if="!isValidLink" class="py-4 text-center">
-        <div
-          class="mx-auto mb-5 flex size-16 items-center justify-center rounded-full bg-red-50"
-        >
+        <div class="mx-auto mb-5 flex size-16 items-center justify-center rounded-full bg-red-50">
           <ExclamationTriangleIcon class="size-8 text-red-600" />
         </div>
         <h2 class="text-lg font-bold text-slate-900">Neplatný odkaz</h2>
