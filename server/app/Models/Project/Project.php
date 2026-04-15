@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use Siteable, Fileable;
+    use Fileable, Siteable;
 
     protected $table = 'projects';
 

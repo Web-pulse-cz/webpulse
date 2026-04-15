@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -105,9 +106,9 @@ class SiteController extends Controller
             DB::commit();
         } catch (\Throwable|\Exception $e) {
             DB::rollBack();
-            \Illuminate\Support\Facades\Log::error('Site save error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            Log::error('Site save error: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
-            return Response::json(['message' => 'An error occurred while updating site: ' . $e->getMessage()], 500);
+            return Response::json(['message' => 'An error occurred while updating site: '.$e->getMessage()], 500);
         }
 
         return Response::json(SiteResource::make($site));

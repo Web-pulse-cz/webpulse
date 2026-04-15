@@ -26,13 +26,16 @@ class LoginController extends Controller
             return Response::json(['errors' => $validator->errors()], 422);
         }
 
-        if (! Auth::attempt($data)) {
+        $credentials = $request->only('email', 'password');
+
+        if (! Auth::attempt($credentials)) {
             return Response::json(['error' => 'Unauthorized'], 401);
         }
 
-        Auth::attempt($data);
         $user = Auth::user();
-        $token = $user->createToken('auth_token', ['*'], now()->addDays(3))->plainTextToken;
+        $remember = $request->boolean('remember', false);
+        $expiration = $remember ? now()->addYear() : now()->addDays(3);
+        $token = $user->createToken('auth_token', ['*'], $expiration)->plainTextToken;
 
         return Response::json(['token' => $token]);
     }

@@ -42,7 +42,7 @@ class InvoiceResource extends JsonResource
             'cancelled_on' => $this->cancelled_on?->format('Y-m-d'),
             'sent_on' => $this->sent_on?->format('Y-m-d'),
             'items' => InvoiceItemResource::collection($this->items),
-            'files' => $this->files()->map(fn($f) => [
+            'files' => $this->files()->map(fn ($f) => [
                 'id' => $f->id,
                 'name' => $f->name,
                 'original_name' => $f->original_name,
@@ -50,7 +50,7 @@ class InvoiceResource extends JsonResource
                 'size' => $f->size,
                 'created_at' => $f->created_at,
             ]),
-            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
+            'sites' => $this->whenLoaded('sites', fn () => $this->sites->pluck('id')),
             'synced_at' => $this->synced_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

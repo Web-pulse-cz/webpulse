@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contract extends Model
 {
-    use Siteable, Fileable;
+    use Fileable, Siteable;
 
     protected $table = 'employee_contracts';
 

@@ -681,8 +681,7 @@ const filteredNavigation = computed(() => {
   return navigation.value.filter((group: any) =>
     group.menu.some(
       (item: any) =>
-        !item.slug ||
-        (item.slug && moduleBelongsToSite(item.slug) && canView(item.slug)),
+        !item.slug || (item.slug && moduleBelongsToSite(item.slug) && canView(item.slug)),
     ),
   );
 });

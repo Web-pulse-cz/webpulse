@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class Page extends Model
 {
-    use Siteable, Fileable, Translatable;
+    use Fileable, Siteable, Translatable;
 
     protected $table = 'pages';
 

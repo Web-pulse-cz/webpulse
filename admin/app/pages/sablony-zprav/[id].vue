@@ -8,6 +8,7 @@ const { $toast } = useNuxtApp();
 
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -83,6 +84,7 @@ async function loadItem() {
 }
 
 async function saveItem(redirect = true as boolean) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
 
@@ -159,7 +161,7 @@ definePageMeta({
       @save="saveItem"
     />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <div class="grid grid-cols-1 gap-8">
         <LayoutContainer class="w-full">
           <div class="mb-8 flex items-center justify-between">

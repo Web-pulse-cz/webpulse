@@ -23,7 +23,7 @@ class EmployeeDivisionResource extends JsonResource
             'head_employee_name' => $this->headEmployee?->full_name,
             'position' => $this->position,
             'employees_count' => $this->whenCounted('employees'),
-            'sites' => $this->whenLoaded('sites', fn() => $this->sites->pluck('id')),
+            'sites' => $this->whenLoaded('sites', fn () => $this->sites->pluck('id')),
         ];
     }
 }

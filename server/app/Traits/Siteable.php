@@ -15,7 +15,7 @@ trait Siteable
     public function saveSites(Model $model, array $sites): void
     {
         // Filter out null/empty values
-        $sites = array_filter($sites, fn($s) => !empty($s));
+        $sites = array_filter($sites, fn ($s) => ! empty($s));
 
         DB::table('siteables')
             ->where('siteable_id', $model->id)

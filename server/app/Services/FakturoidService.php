@@ -132,7 +132,7 @@ class FakturoidService
 
         // Assign to current site if not already assigned
         $existingSiteIds = $client->sites()->pluck('sites.id')->toArray();
-        if (!in_array($this->site->id, $existingSiteIds)) {
+        if (! in_array($this->site->id, $existingSiteIds)) {
             DB::table('siteables')->insert([
                 'site_id' => $this->site->id,
                 'siteable_type' => get_class($client),
@@ -179,7 +179,7 @@ class FakturoidService
                 $existing = $this->client->getInvoicesProvider()->get($invoice->fakturoid_id);
                 $existingBody = $existing->getBody();
                 $destroyLines = [];
-                if (!empty($existingBody->lines)) {
+                if (! empty($existingBody->lines)) {
                     foreach ($existingBody->lines as $line) {
                         $destroyLines[] = ['id' => $line->id, '_destroy' => true];
                     }
@@ -295,7 +295,7 @@ class FakturoidService
 
         // Assign to current site
         $existingSiteIds = $invoice->sites()->pluck('sites.id')->toArray();
-        if (!in_array($this->site->id, $existingSiteIds)) {
+        if (! in_array($this->site->id, $existingSiteIds)) {
             DB::table('siteables')->insert([
                 'site_id' => $this->site->id,
                 'siteable_type' => get_class($invoice),
@@ -316,7 +316,7 @@ class FakturoidService
      */
     public function downloadInvoicePdf(Invoice $invoice): void
     {
-        if (!$invoice->fakturoid_id) {
+        if (! $invoice->fakturoid_id) {
             return;
         }
 
@@ -326,8 +326,8 @@ class FakturoidService
 
             if ($pdfContent) {
                 $fileSlug = $invoice->number ? preg_replace('/[^a-zA-Z0-9\-]/', '-', $invoice->number) : $invoice->id;
-                $path = 'files/invoices/' . $fileSlug . '.pdf';
-                $name = 'faktura-' . ($invoice->number ?? $invoice->id) . '.pdf';
+                $path = 'files/invoices/'.$fileSlug.'.pdf';
+                $name = 'faktura-'.($invoice->number ?? $invoice->id).'.pdf';
 
                 // Remove old PDF if exists
                 $existingFiles = $invoice->files();
@@ -340,7 +340,7 @@ class FakturoidService
                 $invoice->attachFileFromContent($pdfContent, $path, $name, 'application/pdf');
             }
         } catch (\Throwable $e) {
-            Log::warning('Fakturoid PDF download failed for invoice ' . $invoice->id . ': ' . $e->getMessage());
+            Log::warning('Fakturoid PDF download failed for invoice '.$invoice->id.': '.$e->getMessage());
         }
     }
 

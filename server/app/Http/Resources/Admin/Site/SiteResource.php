@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Admin\Site;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class SiteResource extends JsonResource
         $hasFakturoidSecret = false;
         try {
             $hasFakturoidSecret = ! empty($this->fakturoid_client_secret);
-        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+        } catch (DecryptException $e) {
             // Secret was encrypted with a different APP_KEY
         }
 

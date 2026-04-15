@@ -10,6 +10,7 @@ definePageMeta({ layout: 'login' });
 const form = ref({
   email: '' as string,
   password: '' as string,
+  remember: false as boolean,
 });
 
 const isSubmitting = ref(false);
@@ -85,6 +86,7 @@ async function handleSubmit() {
         <div class="flex items-center justify-between px-1">
           <label class="group flex cursor-pointer items-center">
             <input
+              v-model="form.remember"
               type="checkbox"
               class="size-4 rounded border-slate-300 text-indigo-600 transition-all focus:ring-indigo-500"
             />

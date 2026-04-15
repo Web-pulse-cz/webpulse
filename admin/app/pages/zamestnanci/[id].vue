@@ -18,6 +18,7 @@ const countryStore = useCountryStore();
 const currencyStore = useCurrencyStore();
 const route = useRoute();
 const router = useRouter();
+const { formRef, validateForm } = useFormValidation();
 
 const error = ref(false);
 const loading = ref(false);
@@ -146,6 +147,7 @@ async function loadSites() {
 }
 
 async function saveItem(redirect = true) {
+  if (!(await validateForm())) return;
   const client = useSanctumClient();
   loading.value = true;
   await client(
@@ -284,7 +286,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
 
-    <Form @submit="saveItem">
+    <Form ref="formRef" @submit="saveItem">
       <!-- Osobní údaje -->
       <template v-if="tabs.find((t) => t.current && t.link === '#osobni')">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
@@ -589,7 +591,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     :key="contract.id"
                     class="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <NuxtLink :to="'/smlouvy/' + contract.id" class="flex items-center gap-4 flex-1">
+                    <NuxtLink
+                      :to="'/smlouvy/' + contract.id"
+                      class="flex flex-1 items-center gap-4"
+                    >
                       <div
                         class="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
                       >
@@ -597,7 +602,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
                       </div>
                       <div>
                         <div class="flex items-center gap-2">
-                          <span class="text-sm font-medium text-slate-900">{{ contract.title }}</span>
+                          <span class="text-sm font-medium text-slate-900">{{
+                            contract.title
+                          }}</span>
                           <span
                             class="rounded-full px-2 py-0.5 text-[10px] font-bold"
                             :class="{

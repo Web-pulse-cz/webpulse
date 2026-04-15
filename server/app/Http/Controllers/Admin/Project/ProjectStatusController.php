@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,7 +67,7 @@ class ProjectStatusController extends Controller
         try {
             DB::beginTransaction();
             $status->fill($request->all());
-            if (!$status->color) {
+            if (! $status->color) {
                 $status->color = '#6366f1';
             }
             $status->save();
@@ -78,9 +79,9 @@ class ProjectStatusController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
-            \Illuminate\Support\Facades\Log::error('ProjectStatus save error: ' . $e->getMessage());
+            Log::error('ProjectStatus save error: '.$e->getMessage());
 
-            return Response::json(['message' => 'Chyba při ukládání statusu: ' . $e->getMessage()], 500);
+            return Response::json(['message' => 'Chyba při ukládání statusu: '.$e->getMessage()], 500);
         }
 
         return Response::json(ProjectStatusResource::make($status->fresh('sites')));
