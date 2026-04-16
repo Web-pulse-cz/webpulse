@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { FaqCategory } from '~/types/FaqCategory';
 
-const { t, locale } = useI18n();
 const localePath = useLocalePath();
 
 interface categoryProps {
@@ -19,7 +18,7 @@ const props = defineProps<categoryProps>();
         params: { id: props.category.id, slug: props.category.slug },
       })
     "
-    class="hover:shadow-redShadow flex aspect-square items-center justify-center rounded-lg p-2 shadow transition-all duration-1000 hover:bg-gray-50 hover:shadow-lg"
+    class="flex aspect-square items-center justify-center rounded-xl border border-slate-200 p-2 transition-all duration-300 hover:border-primary hover:bg-slate-50 hover:shadow-md"
   >
     <BasePropsHeading type="h5">
       {{ category.name }}

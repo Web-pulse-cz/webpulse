@@ -3,14 +3,8 @@ import { useI18n } from 'vue-i18n';
 import { useApi } from '~/../app/composables/useApi';
 import { useAsyncData } from '#app';
 
-const localePath = useLocalePath();
-const route = useRoute();
-const { t, locale } = useI18n();
+const { locale, t } = useI18n();
 const api = useApi();
-const tableQuery = ref({
-  paginate: 12 as number,
-  page: 1 as number,
-});
 
 const pageMeta = ref({
   title: t('blog.title'),
@@ -19,29 +13,27 @@ const pageMeta = ref({
   meta_description: t('blog.meta_description'),
 });
 
-const {
-  data: categoriesData,
-  status: categoriesStatus,
-  error: categoriesError,
-  pending: categoriesPending,
-} = useAsyncData('categories', () => api.blog.categories(locale.value));
+const { data: categoriesData } = useAsyncData('categories', () =>
+  api.blog.categories(locale.value),
+);
 
 const getPosts = () => {
   return api.blog.posts(
     tableQuery.value.page,
     tableQuery.value.paginate,
     locale.value,
-    route.params.id, // Add the category ID parameter
+    route.params.id,
   );
 };
 
-const {
-  data: postsData,
-  status: postsStatus,
-  error: postsError,
-  pending: postsPending,
-} = useAsyncData(
-  // Use a unique key that includes the category ID
+const route = useRoute();
+
+const tableQuery = ref({
+  paginate: 12 as number,
+  page: 1 as number,
+});
+
+const { data: postsData } = useAsyncData(
   () => `posts-${route.params.id}`,
   () =>
     api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id),
@@ -59,7 +51,7 @@ async function updatePage(paginate: number) {
 useHead({
   title: pageMeta.value.title,
   meta: [
-    { name: 'description', content: pageMeta.value.description },
+    { name: 'description', content: pageMeta.value.meta_description },
     { property: 'og:title', content: pageMeta.value.meta_title },
     { property: 'og:description', content: pageMeta.value.meta_description },
   ],
@@ -81,19 +73,13 @@ useHead({
       <div
         class="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center justify-center py-8 text-center md:py-12"
       >
-        <div
-          class="absolute inset-0 -z-10 scale-110 animate-pulse rounded-[30%_70%_70%_30%/30%_30%_70%_70%] bg-turquoise/20 md:scale-125"
-        ></div>
-
         <span
-          class="mb-6 inline-block rounded-full border-4 border-deep-blue bg-primary px-6 py-2 font-black uppercase tracking-[0.2em] text-white shadow-[4px_4px_0px_0px_rgba(26,83,92,1)]"
+          class="mb-6 inline-block rounded-full bg-primary/10 px-5 py-2 text-sm font-semibold uppercase tracking-widest text-primary"
         >
-          Naše Články
+          Blog
         </span>
 
-        <h1
-          class="mb-6 font-display text-6xl font-black italic leading-[0.9] text-deep-blue md:text-8xl"
-        >
+        <h1 class="mb-6 text-4xl font-bold leading-tight text-slate-900 md:text-5xl">
           {{ t('blog.title') }}
         </h1>
       </div>

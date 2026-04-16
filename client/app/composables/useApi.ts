@@ -10,8 +10,8 @@ import { useLoadingStore } from '~/../stores/loading';
 export function useApi() {
   const loading = useLoadingStore();
 
-  const wrapWithLoading = <T>(fn: (...args: any[]) => Promise<T>) => {
-    return async (...args: any[]): Promise<T> => {
+  const wrapWithLoading = <T>(fn: (...args: unknown[]) => Promise<T>) => {
+    return async (...args: unknown[]): Promise<T> => {
       try {
         loading.start();
         return await fn(...args);
@@ -24,8 +24,8 @@ export function useApi() {
     };
   };
 
-  const wrapSilent = <T>(fn: (...args: any[]) => Promise<T>) => {
-    return async (...args: any[]): Promise<T> => {
+  const wrapSilent = <T>(fn: (...args: unknown[]) => Promise<T>) => {
+    return async (...args: unknown[]): Promise<T> => {
       try {
         return await fn(...args);
       } catch (error) {

@@ -6,7 +6,6 @@ import { useAsyncData, useRoute, useRuntimeConfig, useHead } from '#app';
 
 const { t, locale } = useI18n();
 const route = useRoute();
-const localePath = useLocalePath();
 const api = useApi();
 
 const tableQuery = ref({
@@ -15,12 +14,7 @@ const tableQuery = ref({
 });
 
 // 1. STAŽENÍ DAT KATEGORIE S DYNAMICKÝM KLÍČEM A SLEDOVÁNÍM
-const {
-  data: categoryData,
-  status: categoryStatus,
-  error: categoryError,
-  pending: categoryPending,
-} = useAsyncData(
+const { data: categoryData } = useAsyncData(
   () => `category-${route.params.id}`,
   () =>
     api.blog
@@ -41,12 +35,7 @@ const {
 const getPosts = () =>
   api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id);
 
-const {
-  data: postsData,
-  status: postsStatus,
-  error: postsError,
-  pending: postsPending,
-} = useAsyncData(
+const { data: postsData } = useAsyncData(
   () => `categoriesPosts-${route.params.id}`,
   () =>
     api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id),

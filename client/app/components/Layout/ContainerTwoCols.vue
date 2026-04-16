@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
 const route = useRoute();
 
@@ -9,9 +9,9 @@ interface LayoutProps {
   path?: string;
 }
 
-const props = defineProps<LayoutProps>();
+defineProps<LayoutProps>();
 
-const isActive = (link: any) => {
+const isActive = (link: { id: number | string }) => {
   return String(route.params.id) === String(link.id);
 };
 </script>
@@ -27,10 +27,10 @@ const isActive = (link: any) => {
           v-for="(link, index) in links"
           :key="index"
           :to="localePath({ name: path, params: { id: link.id, slug: link.slug } })"
-          class="text-brand hover:text-brand block py-2 text-lg font-medium transition-all duration-300"
+          class="block py-2 text-lg font-medium transition-all duration-300"
           :class="{
-            'text-brand -ml-2 rounded-md px-2': isActive(link),
-            'text-textBlack hover:text-brand -ml-2 rounded-md px-2': !isActive(link),
+            '-ml-2 rounded-md px-2 text-primary': isActive(link),
+            '-ml-2 rounded-md px-2 text-slate-700 hover:text-primary': !isActive(link),
           }"
         >
           {{ link.name }}

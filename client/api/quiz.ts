@@ -1,7 +1,7 @@
 import type { Quiz } from '../types/Quiz';
 
 export function useQuizApi(
-  wrap: <T>(fn: (...args: any[]) => Promise<T>) => (...args: any[]) => Promise<T>,
+  wrap: <T>(fn: (...args: unknown[]) => Promise<T>) => (...args: unknown[]) => Promise<T>,
 ) {
   const client = useSanctumClient();
   const runtimeConfig = useRuntimeConfig();

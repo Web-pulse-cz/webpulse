@@ -10,10 +10,9 @@ const { t, locale } = useI18n();
 const route = useRoute();
 const api = useApi();
 
-// 1. DYNAMICKÝ KLÍČ A SLEDOVÁNÍ ZMĚN
+// 1. DYNAMICKY KLIC A SLEDOVANI ZMEN
 const {
   data: postData,
-  status: postStatus,
   error: postError,
   pending: postPending,
 } = useAsyncData(
@@ -33,7 +32,7 @@ const {
   },
 );
 
-// Opravená funkce (přidáno .value u postData)
+// Opravena funkce (pridano .value u postData)
 function canonicalUrl() {
   const appUrl = useRuntimeConfig().public.appUrl;
   let string = locale.value !== 'cs' ? `${appUrl}/${locale.value}` : appUrl;
@@ -45,14 +44,13 @@ function canonicalUrl() {
   return string;
 }
 
-// 2. REAKTIVNÍ METADATA PŘES COMPUTED
+// 2. REAKTIVNI METADATA PRES COMPUTED
 const pageMeta = computed(() => {
   const defaultTitle = t('blog.title');
   const defaultDesc = t('blog.meta_description');
 
   return {
     title: postData.value?.name ? `${postData.value.name} | ${defaultTitle}` : defaultTitle,
-    // U článku se často místo "description" používá "perex" nebo úvodní text. Pokud máš v API jiný název klíče, jen ho tu přepiš:
     description: postData.value?.perex || postData.value?.description || defaultDesc,
     meta_title: postData.value?.meta_title || postData.value?.name || defaultTitle,
     meta_description: postData.value?.meta_description || postData.value?.perex || defaultDesc,
@@ -61,7 +59,7 @@ const pageMeta = computed(() => {
   };
 });
 
-// 3. REAKTIVNÍ USEHEAD S FUNKCÍ
+// 3. REAKTIVNI USEHEAD S FUNKCI
 useHead(() => ({
   title: pageMeta.value.title,
   meta: [
@@ -72,29 +70,23 @@ useHead(() => ({
   link: [
     {
       rel: 'canonical',
-      href: canonicalUrl(), // Propojili jsme tu tvoji existující funkci
+      href: canonicalUrl(),
     },
   ],
 }));
 </script>
 
 <template>
-  <div class="min-h-screen bg-background-light">
+  <div class="min-h-screen bg-surface">
     <LayoutContainer
       v-if="!postPending && !postError && postData"
       class="relative mx-auto max-w-4xl px-6 py-16 lg:py-24"
     >
-      <div
-        class="absolute -right-10 -top-10 -z-10 hidden size-64 animate-pulse rounded-[30%_70%_70%_30%/30%_30%_70%_70%] bg-sunny/20 md:block"
-      ></div>
-
-      <article
-        class="relative overflow-hidden rounded-[3rem] border-4 border-deep-blue bg-white p-8 shadow-[12px_12px_0px_0px_rgba(26,83,92,1)] md:p-16"
-      >
+      <article class="relative overflow-hidden rounded-2xl bg-white p-8 shadow-sm md:p-16">
         <header class="mb-10">
           <div
             v-if="postData && postData.categories && postData.categories.length > 0"
-            class="mb-6 flex items-center gap-4"
+            class="mb-6 flex items-center gap-3"
           >
             <NuxtLink
               v-for="(category, index) in postData.categories"
@@ -105,51 +97,46 @@ useHead(() => ({
                   params: { id: category.id, slug: category.slug },
                 })
               "
-              class="inline-block rounded-full border-2 border-deep-blue bg-primary px-6 py-2 text-sm font-black uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_rgba(26,83,92,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+              class="inline-block rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
             >
               {{ category.name }}
             </NuxtLink>
           </div>
           <span
             v-else
-            class="mb-6 inline-block rounded-full border-2 border-deep-blue bg-primary px-6 py-2 text-sm font-black uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_rgba(26,83,92,1)]"
+            class="mb-6 inline-block rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-white"
           >
             Article
           </span>
 
-          <h1
-            class="mb-8 font-display text-5xl font-black leading-[1.1] text-deep-blue md:text-7xl"
-          >
+          <h1 class="mb-8 text-4xl font-bold leading-tight text-slate-900 md:text-5xl">
             {{ postData.name }}
           </h1>
 
-          <div class="flex items-center gap-4 border-t-2 border-dotted border-deep-blue/20 pt-6">
+          <div class="flex items-center gap-4 border-t border-slate-200 pt-6">
             <div
-              class="flex size-14 items-center justify-center rounded-[30%_70%_70%_30%/30%_30%_70%_70%] border-2 border-deep-blue bg-turquoise text-white shadow-sm"
+              class="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary"
             >
-              <span class="material-symbols-outlined text-2xl">edit_document</span>
+              <span class="material-symbols-outlined text-xl">edit_document</span>
             </div>
             <div class="flex flex-col">
-              <span class="mt-1 text-xs font-bold uppercase tracking-widest text-deep-blue/50">
+              <span class="mt-1 text-xs font-medium uppercase tracking-widest text-slate-500">
                 {{ dayjs(postData.createdAt).format('DD.MM.YYYY') }} • 5 min read
               </span>
             </div>
           </div>
         </header>
 
-        <div
-          v-if="postData.image"
-          class="group mb-12 overflow-hidden rounded-[2.5rem] border-4 border-deep-blue shadow-[8px_8px_0px_0px_rgba(26,83,92,1)]"
-        >
+        <div v-if="postData.image" class="group mb-12 overflow-hidden rounded-xl">
           <BaseImage
-              :src="`/content/images/post/large/${postData.image}`"
+            :src="`/content/images/post/large/${postData.image}`"
             :alt="postData.name"
             class="aspect-video w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>
 
         <div
-          class="article-content text-lg font-medium leading-relaxed text-deep-blue/80 md:text-xl"
+          class="article-content text-lg font-medium leading-relaxed text-slate-700 md:text-xl"
           v-html="postData.text"
         ></div>
       </article>
@@ -157,24 +144,19 @@ useHead(() => ({
 
     <div v-else-if="postPending" class="flex min-h-[50vh] items-center justify-center">
       <div
-        class="size-16 animate-spin rounded-full border-4 border-deep-blue border-t-primary"
+        class="size-16 animate-spin rounded-full border-4 border-primary/20 border-t-primary"
       ></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* Protože používáš v-html, Tailwind třídy se automaticky neaplikují na vložené tagy.
-  Pomocí selektoru :deep() nastavíme styly přímo pro HTML tagy uvnitř článku,
-  aby text odpovídal tvému specifickému designu.
-*/
-
 .article-content :deep(h2) {
-  @apply mb-6 mt-12 font-display text-4xl font-black italic leading-tight text-deep-blue;
+  @apply mb-6 mt-12 text-3xl font-bold leading-tight text-slate-900;
 }
 
 .article-content :deep(h3) {
-  @apply mb-4 mt-10 font-display text-3xl font-black text-deep-blue;
+  @apply mb-4 mt-10 text-2xl font-bold text-slate-900;
 }
 
 .article-content :deep(p) {
@@ -182,7 +164,7 @@ useHead(() => ({
 }
 
 .article-content :deep(a) {
-  @apply font-bold text-deep-blue underline decoration-primary decoration-4 underline-offset-4 transition-all hover:bg-primary hover:text-white;
+  @apply font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-4 transition-all hover:decoration-primary;
 }
 
 .article-content :deep(ul) {
@@ -194,14 +176,14 @@ useHead(() => ({
 }
 
 .article-content :deep(blockquote) {
-  @apply my-8 rounded-r-2xl border-l-8 border-turquoise bg-turquoise/10 p-6 font-display text-2xl italic text-deep-blue;
+  @apply my-8 rounded-r-xl border-l-4 border-primary bg-primary/5 p-6 text-xl italic text-slate-800;
 }
 
 .article-content :deep(img) {
-  @apply my-10 h-auto max-w-full rounded-3xl border-4 border-deep-blue shadow-[8px_8px_0px_0px_rgba(26,83,92,1)];
+  @apply my-10 h-auto max-w-full rounded-xl;
 }
 
 .article-content :deep(strong) {
-  @apply font-black text-deep-blue;
+  @apply font-bold text-slate-900;
 }
 </style>

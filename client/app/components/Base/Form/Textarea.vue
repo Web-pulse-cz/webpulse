@@ -87,7 +87,7 @@ const inputClass = computed(() => {
           :class="[inputClass, { 'bg-light': disabled }]"
         />
       </Field>
-      <p v-if="model" class="text-grayLight pt-1 text-end text-xs">
+      <p v-if="model" class="pt-1 text-end text-xs text-slate-400">
         {{ model.length }} / {{ max }}
       </p>
     </div>

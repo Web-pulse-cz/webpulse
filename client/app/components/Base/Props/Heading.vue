@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const colorClasses = {
-  black: 'text-textBlack',
-  brand: 'text-brand',
+  black: 'text-slate-900',
+  brand: 'text-primary',
   white: 'text-white',
 };
 
@@ -45,19 +45,19 @@ const baseClass = computed(() => {
   <h1 v-if="type === 'h1'" :class="baseClass">
     <slot />
   </h1>
-  <h2 v-if="type === 'h2'" :class="baseClass">
+  <h2 v-else-if="type === 'h2'" :class="baseClass">
     <slot />
   </h2>
-  <h3 v-if="type === 'h3'" :class="baseClass">
+  <h3 v-else-if="type === 'h3'" :class="baseClass">
     <slot />
   </h3>
-  <h4 v-if="type === 'h4'" :class="baseClass">
+  <h4 v-else-if="type === 'h4'" :class="baseClass">
     <slot />
   </h4>
-  <h5 v-if="type === 'h5'" :class="baseClass">
+  <h5 v-else-if="type === 'h5'" :class="baseClass">
     <slot />
   </h5>
-  <h6 v-if="type === 'h6'" :class="baseClass">
+  <h6 v-else :class="baseClass">
     <slot />
   </h6>
 </template>

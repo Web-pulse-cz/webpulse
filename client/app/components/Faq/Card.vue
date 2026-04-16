@@ -9,7 +9,7 @@ interface faqProps {
   }[];
 }
 
-const props = defineProps<faqProps>();
+defineProps<faqProps>();
 </script>
 
 <template>

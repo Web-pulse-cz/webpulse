@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/vue/24/outline';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { useApi } from '~/../app/composables/useApi';
-import { useAsyncData } from '#app';
 
 const { t, locale } = useI18n();
 const route = useRoute();
@@ -19,19 +15,11 @@ const pageMeta = ref({
   slug: route.params.slug,
 });
 
-const {
-  data: categoriesData,
-  status: categoriesStatus,
-  error: categoriesError,
-  pending: categoriesPending,
-} = useAsyncData(`faqCategories-${route.params.id}`, () => api.faq.categories(locale.value));
+const { data: categoriesData } = useAsyncData(`faqCategories-${route.params.id}`, () =>
+  api.faq.categories(locale.value),
+);
 
-const {
-  data: categoryData,
-  status: categoryStatus,
-  error: categoryError,
-  pending: categoryPending,
-} = useAsyncData(`faqCategory-${route.params.id}`, () =>
+const { data: categoryData } = useAsyncData(`faqCategory-${route.params.id}`, () =>
   api.faq.categoryDetail(route.params.id, locale.value).then((data) => {
     pageMeta.value.title = data.name;
     pageMeta.value.meta_title = data.meta_title || data.name;

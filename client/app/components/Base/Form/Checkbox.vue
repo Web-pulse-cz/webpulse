@@ -32,7 +32,7 @@ const props = defineProps({
   color: {
     type: String,
     required: false,
-    default: 'primaryCustom',
+    default: 'primary',
   },
   checked: {
     type: Boolean,
@@ -128,7 +128,7 @@ const badgeClass = computed(() => (color: string) => {
               type="checkbox"
               :checked="checked"
               :disabled="disabled"
-              class="border-grayLight checked:bg-dark indeterminate:bg-dark active:bg-dark bg-chppGray checked:border-chppGray indeterminate:border-chppGray focus:border-chppGray focus:bg-chppGray active:border-chppGray disabled:border-chppGray disabled:bg-chppGray disabled:checked:bg-chppGray col-start-1 row-start-1 appearance-none rounded border"
+              class="col-start-1 row-start-1 appearance-none rounded border border-slate-300 bg-white checked:border-primary checked:bg-primary indeterminate:border-primary indeterminate:bg-primary focus:border-primary focus:bg-white active:border-primary active:bg-primary disabled:border-slate-200 disabled:bg-slate-100 disabled:checked:bg-slate-400"
             />
             <svg
               class="pointer-events-none col-start-1 row-start-1 size-1.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
