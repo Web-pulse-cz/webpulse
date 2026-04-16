@@ -8,12 +8,16 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
     return (user.value as any).user_group ?? null;
   }
 
+  function isSuperAdmin(): boolean {
+    const userGroup = getUserGroup();
+    return userGroup?.id === 1;
+  }
+
   function groupBelongsToSite(): boolean {
+    if (isSuperAdmin()) return true;
+
     const userGroup = getUserGroup();
     if (!userGroup) return false;
-
-    // Superadmin group (ID 1) has access to all sites
-    if (userGroup.id === 1) return true;
 
     if (userGroup.sites && userGroup.sites.length > 0 && selectedSiteHash.value) {
       return userGroup.sites.some((site: any) => site.hash === selectedSiteHash.value);
@@ -24,6 +28,9 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
   }
 
   function moduleBelongsToSite(slug: string): boolean {
+    // Superadmin has access to all modules on all sites
+    if (isSuperAdmin()) return true;
+
     if (!user?.value?.sites?.length) return true;
 
     const currentSite = user.value.sites.find((site: any) => site.hash === selectedSiteHash.value);
@@ -41,6 +48,9 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
   }
 
   function canView(slug: string): boolean {
+    // Superadmin can view everything
+    if (isSuperAdmin()) return true;
+
     if (!groupBelongsToSite()) return false;
 
     const userGroup = getUserGroup();
@@ -52,6 +62,9 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
   }
 
   function canEdit(slug: string): boolean {
+    // Superadmin can edit everything
+    if (isSuperAdmin()) return true;
+
     if (!groupBelongsToSite()) return false;
 
     const userGroup = getUserGroup();
@@ -63,6 +76,9 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
   }
 
   function canDelete(slug: string): boolean {
+    // Superadmin can delete everything
+    if (isSuperAdmin()) return true;
+
     if (!groupBelongsToSite()) return false;
 
     const userGroup = getUserGroup();
