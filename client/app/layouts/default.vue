@@ -5,7 +5,7 @@ import { useSettingStore } from '~/../stores/settingStore';
 
 const settingStore = useSettingStore();
 
-const { t, locale } = useI18n({
+const { locale } = useI18n({
   useScope: 'global',
 });
 const loadingStore = useLoadingStore();
@@ -37,9 +37,11 @@ onMounted(() => {
     <!-- Globální loader -->
     <div
       v-if="loading"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm"
     >
-      <div class="h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent" />
+      <div
+        class="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"
+      />
     </div>
   </div>
 </template>

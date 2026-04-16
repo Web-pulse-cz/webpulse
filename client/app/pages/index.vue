@@ -35,13 +35,7 @@ const getPosts = () => {
 };
 
 // Z useAsyncData vytažena funkce 'refresh' pro manuální spuštění
-const {
-  data: postsData,
-  status: postsStatus,
-  error: postsError,
-  pending: postsPending,
-  refresh,
-} = useAsyncData('posts', () => getPosts(), {
+const { data: postsData, refresh } = useAsyncData('posts', () => getPosts(), {
   // Vyhledávání jsme z hlídání odstranili, budeme ho řídit manuálně
   watch: [locale, () => tableQuery.value.page, () => tableQuery.value.paginate],
 });

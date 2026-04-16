@@ -10,19 +10,9 @@ const pageMeta = ref({
 });
 
 const api = useApi();
-const {
-  data: reviewCategoriesData,
-  pending: reviewCategoriesPending,
-  error: reviewCategoriesError,
-  status: reviewCategoriesStatus,
-} = useAsyncData('reviewCategories', () => api.review.categories());
+useAsyncData('reviewCategories', () => api.review.categories());
 
-const {
-  data: reviewData,
-  pending: reviewPending,
-  error: reviewError,
-  status: reviewStatus,
-} = useAsyncData('reviewDetail', () =>
+const { data: reviewData } = useAsyncData('reviewDetail', () =>
   api.review
     .reviewDetail(route.params.id, locale.value)
     .then()
@@ -101,7 +91,7 @@ const randomReviews = computed(() => {
 <!-- TODO random reviews,they used to work, but now are not -->
 <template>
   <div>
-    <div class="bg-chppGray w-full rounded-br-[160px] md:rounded-br-[300px]">
+    <div class="w-full rounded-br-[160px] bg-surface md:rounded-br-[300px]">
       <LayoutContainer>
         <div
           class="relative grid h-full min-h-[512px] w-full grid-cols-1 items-center gap-6 py-6 md:grid-cols-2"

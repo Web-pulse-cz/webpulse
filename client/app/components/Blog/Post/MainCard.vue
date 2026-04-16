@@ -2,7 +2,6 @@
 import dayjs from 'dayjs';
 import type { Post } from '~/types/Post';
 
-const { t, locale } = useI18n();
 const localePath = useLocalePath();
 
 export interface BlogMainCardProps {
@@ -16,7 +15,7 @@ const formattedDate = computed(() => dayjs(props.post.created_at).format('DD. MM
 <template>
   <NuxtLink
     :to="localePath({ name: 'blog-id-slug', params: { id: post.id, slug: post.slug } })"
-    class="hover:shadow-redShadow group block overflow-hidden rounded-3xl bg-white shadow-xl transition-all duration-1000 hover:shadow-xl"
+    class="group block overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-500 hover:shadow-lg"
   >
     <div
       class="flex flex-col justify-end bg-cover bg-center"
@@ -40,12 +39,12 @@ const formattedDate = computed(() => dayjs(props.post.created_at).format('DD. MM
 
           <div
             v-if="post.categories && post.categories.length > 0"
-            class="inline-flex items-center justify-center gap-1 overflow-hidden rounded-full bg-indigo-50 px-2 py-1"
+            class="inline-flex items-center justify-center gap-1 overflow-hidden rounded-full bg-white/10 px-3 py-1.5 backdrop-blur-sm"
           >
             <div
               class="flex flex-wrap justify-start gap-2 text-center text-xs font-semibold leading-none"
             >
-              <span v-for="category in post.categories" :key="category.id" class="text-brand">
+              <span v-for="category in post.categories" :key="category.id" class="text-white">
                 {{ category.name }}
               </span>
             </div>

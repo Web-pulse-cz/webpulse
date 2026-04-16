@@ -18,7 +18,7 @@ defineProps({
           <BasePropsHeading type="h3" class="mt-6">
             {{ t('error.title') }}
           </BasePropsHeading>
-          <BaseButton variant="primary" size="xxl" @click="navigateTo('/')">{{
+          <BaseButton variant="primary" size="xl" @click="navigateTo('/')">{{
             t('layout.home')
           }}</BaseButton>
         </div>

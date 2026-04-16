@@ -135,7 +135,7 @@ definePageMeta({
             },
           })
         "
-        class="text-brand"
+        class="text-primary"
       >
         {{ review.name }}
       </NuxtLink>

@@ -1,22 +1,13 @@
 <script setup>
-import {
-  Dialog,
-  DialogTitle,
-  DialogDescription,
-  DialogPanel,
-  DialogOverlay,
-  TransitionRoot,
-  TransitionChild,
-} from '@headlessui/vue';
+import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue';
 import { Form } from 'vee-validate';
-import { ref } from 'vue';
 
 const { t, locale } = useI18n();
 const emit = defineEmits(['close']);
 const api = useApi();
 const toast = useToast();
 
-const props = defineProps({
+defineProps({
   open: {
     type: Boolean,
     required: true,
@@ -129,12 +120,12 @@ const onSubmit = async (values) => {
                   <p class="px-4 text-sm/6 text-primary">
                     {{ t('contactForm.submitForm') }}
                     <!-- TODO: Add link to privacy policy -->
-                    <NuxtLink to="#" class="text-brand">
+                    <NuxtLink to="#" class="font-semibold text-primary underline">
                       {{ t('contactForm.personalInformation') }}</NuxtLink
                     >
                   </p>
                   <div class="px-4 text-start">
-                    <BaseButton variant="primary" size="xxl">
+                    <BaseButton variant="primary" size="xl">
                       {{ t('contactForm.submit') }}
                     </BaseButton>
                   </div>

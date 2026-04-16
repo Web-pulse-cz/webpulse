@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ChevronRightIcon, HomeIcon } from '@heroicons/vue/24/outline';
 
+const localePath = useLocalePath();
+
 defineProps({
   links: {
     type: Array,
@@ -16,8 +18,8 @@ defineProps({
       <ol role="list" class="flex items-center space-x-2">
         <li>
           <NuxtLink
-            to="/client/public"
-            class="hover:text-brand flex items-center text-gray-600 transition-colors duration-1000"
+            :to="localePath('/')"
+            class="flex items-center text-gray-600 transition-colors duration-300 hover:text-primary"
           >
             <HomeIcon class="size-3 shrink-0 lg:mb-1 lg:size-4" aria-hidden="true" />
             <span class="sr-only">Home</span>
@@ -28,10 +30,10 @@ defineProps({
             <ChevronRightIcon class="size-3 shrink-0 text-gray-400 lg:size-4" aria-hidden="true" />
             <NuxtLink
               :to="link.link"
-              class="ml-2 rounded-full text-xs transition-colors duration-1000 lg:text-sm"
+              class="ml-2 rounded-full text-xs transition-colors duration-300 lg:text-sm"
               :class="
                 link.current
-                  ? 'text-brand bg-red-50 font-semibold'
+                  ? 'bg-primary/10 font-semibold text-primary'
                   : 'text-gray-600 hover:bg-gray-100'
               "
               :aria-current="link.current ? 'page' : undefined"
