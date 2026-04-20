@@ -211,27 +211,9 @@ definePageMeta({
                   rules="required"
                   placeholder="Zde napište text vaší šablony..."
                   :rows="12"
+                  :max="5000"
                   class="col-span-full border-none bg-white !shadow-none focus:ring-0"
                 />
-              </div>
-
-              <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
-                <span class="text-xs font-semibold text-slate-500">Dostupné tagy:</span>
-                <span
-                  class="rounded-md bg-white px-2 py-1 text-[10px] font-bold uppercase text-indigo-600 ring-1 ring-inset ring-indigo-200"
-                >
-                  {jmeno}
-                </span>
-                <span
-                  class="rounded-md bg-white px-2 py-1 text-[10px] font-bold uppercase text-indigo-600 ring-1 ring-inset ring-indigo-200"
-                >
-                  {datum}
-                </span>
-                <span
-                  class="rounded-md bg-white px-2 py-1 text-[10px] font-bold uppercase text-indigo-600 ring-1 ring-inset ring-indigo-200"
-                >
-                  {cas}
-                </span>
               </div>
             </div>
           </div>
