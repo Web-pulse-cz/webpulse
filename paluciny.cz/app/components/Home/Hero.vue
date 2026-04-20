@@ -4,18 +4,12 @@
   <section class="relative overflow-hidden bg-cream">
     <!-- Full-width photo area -->
     <div class="relative min-h-[50vh] md:min-h-[65vh] lg:min-h-[75vh]">
-      <!-- Background image placeholder -->
-      <div class="absolute inset-0 bg-forest/20">
-        <svg
-          class="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 text-forest/30"
-          viewBox="0 0 100 100"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M50 10L20 50H35L15 80H85L65 50H80L50 10Z" />
-          <rect x="45" y="80" width="10" height="15" />
-        </svg>
-      </div>
+      <!-- Background image -->
+      <img
+        src="/static/img/hero-nature.jpg"
+        alt="Les s prosvítajícím sluncem"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
 
       <!-- Gradient overlay -->
       <div class="absolute inset-0 bg-gradient-to-t from-earth/40 via-transparent to-transparent" />
