@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import { TrashIcon, PlusIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/vue/24/outline';
+import {
+  TrashIcon,
+  PlusIcon,
+  ChatBubbleBottomCenterTextIcon,
+  MegaphoneIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -44,6 +49,15 @@ const item = ref({
 function defaultValueForType(type: string) {
   if (type === 'popup') {
     return { title: '', content: '', buttonText: '', buttonLink: '' };
+  }
+  if (type === 'bar') {
+    return {
+      text: '',
+      buttonText: '',
+      buttonLink: '',
+      backgroundColor: '#1e293b',
+      textColor: '#ffffff',
+    };
   }
   return { groups: [] };
 }
@@ -228,7 +242,11 @@ const addGroup = () => {
                 <Cog6ToothIcon class="size-5" />
               </div>
               <LayoutTitle class="!mb-0">{{
-                item.type === 'popup' ? 'Konfigurace pop-upu' : 'Konfigurace menu'
+                item.type === 'popup'
+                  ? 'Konfigurace pop-upu'
+                  : item.type === 'bar'
+                    ? 'Konfigurace proužku'
+                    : 'Konfigurace menu'
               }}</LayoutTitle>
             </div>
 
@@ -242,6 +260,7 @@ const addGroup = () => {
                     { value: 'topMenu', name: 'Horní navigace (Header)' },
                     { value: 'bottomMenu', name: 'Spodní navigace (Footer)' },
                     { value: 'popup', name: 'Pop-up okno' },
+                    { value: 'bar', name: 'Oznamovací proužek' },
                   ]"
                   :disabled="route.params.id !== 'pridat'"
                 />
@@ -452,6 +471,99 @@ const addGroup = () => {
               </div>
             </div>
           </LayoutContainer>
+
+          <LayoutContainer v-if="item.type === 'bar'">
+            <div class="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <MegaphoneIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0"
+                >Obsah proužku ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+              >
+            </div>
+
+            <div v-if="item.translations[selectedLocale]?.value" class="space-y-6">
+              <div
+                class="rounded-2xl p-5 ring-1 ring-slate-200"
+                :style="{
+                  backgroundColor:
+                    item.translations[selectedLocale].value.backgroundColor || '#1e293b',
+                  color: item.translations[selectedLocale].value.textColor || '#ffffff',
+                }"
+              >
+                <p class="mb-2 text-[10px] font-black uppercase tracking-widest opacity-60">
+                  Náhled
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-4 text-sm font-medium">
+                  <span>{{
+                    item.translations[selectedLocale].value.text || 'Text proužku se zobrazí zde'
+                  }}</span>
+                  <a
+                    v-if="
+                      item.translations[selectedLocale].value.buttonText &&
+                      item.translations[selectedLocale].value.buttonLink
+                    "
+                    class="rounded-full bg-white/20 px-4 py-1 text-xs font-semibold ring-1 ring-white/30"
+                  >
+                    {{ item.translations[selectedLocale].value.buttonText }}
+                  </a>
+                </div>
+              </div>
+
+              <BaseFormInput
+                v-model="item.translations[selectedLocale].value.text"
+                label="Text proužku"
+                name="barText"
+                placeholder="Např. 2+1 zdarma na vybrané pobyty"
+                rules="required"
+              />
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <p class="mb-4 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Volitelné tlačítko (CTA)
+                </p>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.buttonText"
+                    label="Text tlačítka"
+                    name="barButtonText"
+                    placeholder="Např. Chci rezervovat"
+                  />
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.buttonLink"
+                    label="Odkaz tlačítka"
+                    name="barButtonLink"
+                    placeholder="/kontakt"
+                  />
+                </div>
+                <p class="mt-3 text-xs text-slate-400">
+                  Nechte obě pole prázdná, pokud tlačítko nechcete zobrazit.
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <p class="mb-4 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Barvy
+                </p>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.backgroundColor"
+                    label="Barva pozadí"
+                    name="barBackgroundColor"
+                    type="color"
+                  />
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.textColor"
+                    label="Barva textu"
+                    name="barTextColor"
+                    type="color"
+                  />
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
         </div>
 
         <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
@@ -464,7 +576,7 @@ const addGroup = () => {
           />
 
           <div
-            v-if="item.type !== 'popup'"
+            v-if="item.type === 'topMenu' || item.type === 'bottomMenu'"
             class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
           >
             <div class="mb-3 flex items-center gap-2">
@@ -479,7 +591,7 @@ const addGroup = () => {
           </div>
 
           <div
-            v-else
+            v-else-if="item.type === 'popup'"
             class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
           >
             <div class="mb-3 flex items-center gap-2">
@@ -489,6 +601,21 @@ const addGroup = () => {
             <p class="text-xs leading-relaxed opacity-90">
               Pop-up bude na webu zobrazen pouze pokud je nastavení aktivní. Pro nejlepší výsledky
               volte stručný nadpis a jasné CTA tlačítko.
+            </p>
+          </div>
+
+          <div
+            v-else-if="item.type === 'bar'"
+            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
+          >
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold">Tip pro proužek</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+              Proužek se zobrazí nad hlavičkou webu. Návštěvník ho může zavřít a pokud změníte
+              obsah, automaticky se mu znovu objeví. Ideální pro akce jako "2+1 zdarma" nebo sezónní
+              slevy.
             </p>
           </div>
         </aside>
