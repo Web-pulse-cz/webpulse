@@ -16,7 +16,7 @@ const mobileMenuOpen = ref(false);
 <template>
   <BaseModalContactForm :open="isOpen" @close="isOpen = false" />
   <header
-    class="fixed top-0 z-50 flex w-full items-center justify-between border-b border-cream-dark bg-cream/95 px-6 py-3 backdrop-blur-sm lg:px-20"
+    class="sticky top-0 z-50 flex w-full items-center justify-between border-b border-cream-dark bg-cream/95 px-6 py-3 backdrop-blur-sm lg:px-20"
   >
     <NuxtLink :to="locale !== 'cs' ? `/${locale}` : '/'" class="flex items-center gap-2.5">
       <div class="flex size-9 items-center justify-center rounded-full bg-forest shadow-sm">
@@ -67,41 +67,41 @@ const mobileMenuOpen = ref(false);
         <XMarkIcon v-else class="size-6" />
       </button>
     </div>
-  </header>
 
-  <!-- Mobile menu -->
-  <transition
-    enter-active-class="transition duration-200 ease-out"
-    enter-from-class="opacity-0 -translate-y-2"
-    enter-to-class="opacity-100 translate-y-0"
-    leave-active-class="transition duration-150 ease-in"
-    leave-from-class="opacity-100 translate-y-0"
-    leave-to-class="opacity-0 -translate-y-2"
-  >
-    <div
-      v-if="mobileMenuOpen"
-      class="fixed left-0 right-0 top-[57px] z-40 border-b border-cream-dark bg-cream px-6 py-4 shadow-lg md:hidden"
+    <!-- Mobile menu -->
+    <transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-2"
     >
       <div
-        v-if="
-          settingStore.topMenu &&
-          settingStore.topMenu['value'] &&
-          settingStore.topMenu['value']['groups']
-        "
-        class="flex flex-col gap-2"
+        v-if="mobileMenuOpen"
+        class="absolute left-0 right-0 top-full z-40 border-b border-cream-dark bg-cream px-6 py-4 shadow-lg md:hidden"
       >
-        <NuxtLink
-          v-for="(group, index) in settingStore.topMenu['value']['groups']"
-          :key="index"
-          :to="
-            localePath({ name: group.link !== '' && group.link !== null ? group.link : 'index' })
+        <div
+          v-if="
+            settingStore.topMenu &&
+            settingStore.topMenu['value'] &&
+            settingStore.topMenu['value']['groups']
           "
-          class="rounded-lg px-3 py-2 text-sm font-medium text-earth transition-colors hover:bg-cream-dark hover:text-forest"
-          @click="mobileMenuOpen = false"
+          class="flex flex-col gap-2"
         >
-          {{ group.name }}
-        </NuxtLink>
+          <NuxtLink
+            v-for="(group, index) in settingStore.topMenu['value']['groups']"
+            :key="index"
+            :to="
+              localePath({ name: group.link !== '' && group.link !== null ? group.link : 'index' })
+            "
+            class="rounded-lg px-3 py-2 text-sm font-medium text-earth transition-colors hover:bg-cream-dark hover:text-forest"
+            @click="mobileMenuOpen = false"
+          >
+            {{ group.name }}
+          </NuxtLink>
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </header>
 </template>
