@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import { TrashIcon, PlusIcon } from '@heroicons/vue/24/outline';
+import {
+  TrashIcon,
+  PlusIcon,
+  ChatBubbleBottomCenterTextIcon,
+  MegaphoneIcon,
+} from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -36,9 +41,26 @@ const breadcrumbs = ref([
 const item = ref({
   id: null as number | null,
   type: 'topMenu' as string,
+  active: true as boolean,
   translations: {} as object,
   sites: [] as number[],
 });
+
+function defaultValueForType(type: string) {
+  if (type === 'popup') {
+    return { title: '', content: '', buttonText: '', buttonLink: '' };
+  }
+  if (type === 'bar') {
+    return {
+      text: '',
+      buttonText: '',
+      buttonLink: '',
+      backgroundColor: '#1e293b',
+      textColor: '#ffffff',
+    };
+  }
+  return { groups: [] };
+}
 
 async function loadItem() {
   const client = useSanctumClient();
@@ -167,9 +189,22 @@ onMounted(() => {
       item.value.translations[lang.code] = {};
     }
     // finally, initialize the value for that language
-    item.value.translations[lang.code] = { value: { groups: [] } };
+    item.value.translations[lang.code] = { value: defaultValueForType(item.value.type) };
   });
 });
+
+watch(
+  () => item.value.type,
+  (newType) => {
+    if (route.params.id !== 'pridat') return;
+    languageStore.languages.forEach((lang) => {
+      if (!item.value.translations[lang.code]) {
+        item.value.translations[lang.code] = {};
+      }
+      item.value.translations[lang.code] = { value: defaultValueForType(newType) };
+    });
+  },
+);
 definePageMeta({
   middleware: 'sanctum:auth',
 });
@@ -206,23 +241,52 @@ const addGroup = () => {
               >
                 <Cog6ToothIcon class="size-5" />
               </div>
-              <LayoutTitle class="!mb-0">Konfigurace menu</LayoutTitle>
+              <LayoutTitle class="!mb-0">{{
+                item.type === 'popup'
+                  ? 'Konfigurace pop-upu'
+                  : item.type === 'bar'
+                    ? 'Konfigurace proužku'
+                    : 'Konfigurace menu'
+              }}</LayoutTitle>
             </div>
 
-            <div class="max-w-md">
-              <BaseFormSelect
-                v-model="item.type"
-                label="Umístění v šabloně"
-                name="type"
-                :options="[
-                  { value: 'topMenu', name: 'Horní navigace (Header)' },
-                  { value: 'bottomMenu', name: 'Spodní navigace (Footer)' },
-                ]"
-                :disabled="route.params.id !== 'pridat'"
-              />
-              <p class="mt-2 text-xs text-slate-400">
-                Typ menu definuje, kde se tyto odkazy na webu vykreslí.
-              </p>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <BaseFormSelect
+                  v-model="item.type"
+                  label="Umístění v šabloně"
+                  name="type"
+                  :options="[
+                    { value: 'topMenu', name: 'Horní navigace (Header)' },
+                    { value: 'bottomMenu', name: 'Spodní navigace (Footer)' },
+                    { value: 'popup', name: 'Pop-up okno' },
+                    { value: 'bar', name: 'Oznamovací proužek' },
+                  ]"
+                  :disabled="route.params.id !== 'pridat'"
+                />
+                <p class="mt-2 text-xs text-slate-400">
+                  Typ definuje, kde se obsah na webu vykreslí.
+                </p>
+              </div>
+
+              <div class="flex flex-col justify-between rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+                <label class="mb-2 block text-sm font-medium text-slate-700">Stav</label>
+                <div class="flex items-center justify-between gap-3">
+                  <BaseFormSwitch
+                    v-model:enabled="item.active"
+                    enabled-text="Aktivní"
+                    disabled-text="Neaktivní"
+                  />
+                  <span
+                    :class="[
+                      item.active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500',
+                      'rounded-full px-2.5 py-1 text-xs font-semibold',
+                    ]"
+                  >
+                    {{ item.active ? 'Zobrazeno na webu' : 'Skryto' }}
+                  </span>
+                </div>
+              </div>
             </div>
           </LayoutContainer>
 
@@ -352,6 +416,154 @@ const addGroup = () => {
               </BaseButton>
             </div>
           </LayoutContainer>
+
+          <LayoutContainer v-if="item.type === 'popup'">
+            <div class="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <ChatBubbleBottomCenterTextIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0"
+                >Obsah pop-upu ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+              >
+            </div>
+
+            <div
+              v-if="item.translations[selectedLocale]?.value"
+              class="space-y-6"
+            >
+              <BaseFormInput
+                v-model="item.translations[selectedLocale].value.title"
+                label="Nadpis"
+                name="popupTitle"
+                placeholder="Např. Získejte 10% slevu"
+                rules="required"
+              />
+
+              <BaseFormEditor
+                v-model="item.translations[selectedLocale].value.content"
+                label="Obsah"
+                name="popupContent"
+              />
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <p class="mb-4 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Volitelné tlačítko (CTA)
+                </p>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.buttonText"
+                    label="Text tlačítka"
+                    name="popupButtonText"
+                    placeholder="Např. Chci slevu"
+                  />
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.buttonLink"
+                    label="Odkaz tlačítka"
+                    name="popupButtonLink"
+                    placeholder="/kontakt"
+                  />
+                </div>
+                <p class="mt-3 text-xs text-slate-400">
+                  Nechte obě pole prázdná, pokud tlačítko nechcete zobrazit.
+                </p>
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer v-if="item.type === 'bar'">
+            <div class="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <MegaphoneIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0"
+                >Obsah proužku ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+              >
+            </div>
+
+            <div v-if="item.translations[selectedLocale]?.value" class="space-y-6">
+              <div
+                class="rounded-2xl p-5 ring-1 ring-slate-200"
+                :style="{
+                  backgroundColor:
+                    item.translations[selectedLocale].value.backgroundColor || '#1e293b',
+                  color: item.translations[selectedLocale].value.textColor || '#ffffff',
+                }"
+              >
+                <p class="mb-2 text-[10px] font-black uppercase tracking-widest opacity-60">
+                  Náhled
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-4 text-sm font-medium">
+                  <span>{{
+                    item.translations[selectedLocale].value.text || 'Text proužku se zobrazí zde'
+                  }}</span>
+                  <a
+                    v-if="
+                      item.translations[selectedLocale].value.buttonText &&
+                      item.translations[selectedLocale].value.buttonLink
+                    "
+                    class="rounded-full bg-white/20 px-4 py-1 text-xs font-semibold ring-1 ring-white/30"
+                  >
+                    {{ item.translations[selectedLocale].value.buttonText }}
+                  </a>
+                </div>
+              </div>
+
+              <BaseFormInput
+                v-model="item.translations[selectedLocale].value.text"
+                label="Text proužku"
+                name="barText"
+                placeholder="Např. 2+1 zdarma na vybrané pobyty"
+                rules="required"
+              />
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <p class="mb-4 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Volitelné tlačítko (CTA)
+                </p>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.buttonText"
+                    label="Text tlačítka"
+                    name="barButtonText"
+                    placeholder="Např. Chci rezervovat"
+                  />
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.buttonLink"
+                    label="Odkaz tlačítka"
+                    name="barButtonLink"
+                    placeholder="/kontakt"
+                  />
+                </div>
+                <p class="mt-3 text-xs text-slate-400">
+                  Nechte obě pole prázdná, pokud tlačítko nechcete zobrazit.
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <p class="mb-4 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Barvy
+                </p>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.backgroundColor"
+                    label="Barva pozadí"
+                    name="barBackgroundColor"
+                    type="color"
+                  />
+                  <BaseFormInput
+                    v-model="item.translations[selectedLocale].value.textColor"
+                    label="Barva textu"
+                    name="barTextColor"
+                    type="color"
+                  />
+                </div>
+              </div>
+            </div>
+          </LayoutContainer>
         </div>
 
         <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
@@ -363,7 +575,10 @@ const addGroup = () => {
             class="shadow-sm"
           />
 
-          <div class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
+          <div
+            v-if="item.type === 'topMenu' || item.type === 'bottomMenu'"
+            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
+          >
             <div class="mb-3 flex items-center gap-2">
               <LightBulbIcon class="size-5 text-indigo-200" />
               <h4 class="text-sm font-bold">Tip pro navigaci</h4>
@@ -372,6 +587,35 @@ const addGroup = () => {
               Pro lepší SEO doporučujeme v menu používat jasné názvy (např. "Ceník služeb" místo jen
               "Ceny"). U horního menu se snažte nepřekročit 5–7 hlavních skupin, aby zůstalo
               přehledné i na tabletech.
+            </p>
+          </div>
+
+          <div
+            v-else-if="item.type === 'popup'"
+            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
+          >
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold">Tip pro pop-up</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+              Pop-up bude na webu zobrazen pouze pokud je nastavení aktivní. Pro nejlepší výsledky
+              volte stručný nadpis a jasné CTA tlačítko.
+            </p>
+          </div>
+
+          <div
+            v-else-if="item.type === 'bar'"
+            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
+          >
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold">Tip pro proužek</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+              Proužek se zobrazí nad hlavičkou webu. Návštěvník ho může zavřít a pokud změníte
+              obsah, automaticky se mu znovu objeví. Ideální pro akce jako "2+1 zdarma" nebo sezónní
+              slevy.
             </p>
           </div>
         </aside>

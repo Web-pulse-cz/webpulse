@@ -17,6 +17,7 @@ class SettingResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
+            'active' => (bool) $this->active,
             'value' => json_decode(json_encode($this->value), false),
         ];
     }
