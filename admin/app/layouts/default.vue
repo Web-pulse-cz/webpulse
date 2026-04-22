@@ -723,6 +723,12 @@ const selectedSiteName = computed(() => {
   return site?.name || 'Vyberte stránku';
 });
 
+const selectedSiteUrl = computed(() => {
+  const site = user?.value?.sites?.find((s: any) => s.hash === selectedSiteHash.value);
+  if (!site?.url) return 'https://web-pulse.cz';
+  return `${site.is_secure ? 'https' : 'http'}://${site.url}`;
+});
+
 watch(
   () => selectedSiteHash.value,
   (newValue) => {
@@ -820,7 +826,7 @@ onMounted(() => {
               >
                 <div class="flex h-24 shrink-0 items-center justify-center border-b border-white/5">
                   <NuxtLink
-                    to="https://web-pulse.cz"
+                    :to="selectedSiteUrl"
                     target="_blank"
                     class="transition-transform hover:scale-105"
                   >
@@ -970,7 +976,7 @@ onMounted(() => {
       >
         <div class="flex h-24 shrink-0 items-center justify-center border-b border-white/5">
           <NuxtLink
-            to="https://web-pulse.cz"
+            :to="selectedSiteUrl"
             target="_blank"
             class="transition-transform hover:scale-105"
           >
