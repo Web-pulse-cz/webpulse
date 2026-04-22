@@ -17,6 +17,7 @@ class SettingResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
+            'active' => (bool) $this->active,
             'value' => $this->value,
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'sites' => $this->sites,

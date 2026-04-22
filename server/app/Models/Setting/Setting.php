@@ -15,6 +15,11 @@ class Setting extends Model
 
     protected $fillable = [
         'type',
+        'active',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
     ];
 
     protected $translatedAttributes = [
