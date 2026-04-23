@@ -7,6 +7,7 @@ import {
   CheckIcon,
   ArrowLeftStartOnRectangleIcon,
   FunnelIcon,
+  Cog6ToothIcon,
 } from '@heroicons/vue/24/outline';
 import { inject, ref } from 'vue';
 
@@ -70,6 +71,7 @@ const emit = defineEmits([
   'add-dialog',
   'filter-dialog',
   'open-cashflow-dialog',
+  'open-dashboard-settings',
 ]);
 const quickAccessItem = ref({
   id: null,
@@ -193,6 +195,16 @@ const emitUpdateFilters = () => {
               @click="emit('open-cashflow-dialog')"
             >
               <PlusIcon class="mr-2 size-4" />
+              {{ action.text }}
+            </BaseButton>
+
+            <BaseButton
+              v-if="action.type === 'dashboard-settings'"
+              variant="secondary"
+              size="lg"
+              @click="emit('open-dashboard-settings')"
+            >
+              <Cog6ToothIcon class="mr-2 size-4" />
               {{ action.text }}
             </BaseButton>
 

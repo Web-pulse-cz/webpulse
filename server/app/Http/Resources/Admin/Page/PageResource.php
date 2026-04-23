@@ -21,6 +21,8 @@ class PageResource extends JsonResource
             'translations' => array_column($this->translations->toArray(), null, 'locale'),
             'files' => $this->files(),
             'sites' => $this->sites,
+            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
         ];
     }
 }
