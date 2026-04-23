@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, inject, watch } from 'vue';
 
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
@@ -21,6 +21,8 @@ const error = ref(false);
 
 const breadcrumbs = ref([]);
 
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
+
 const widgetConfig = ref<WidgetConfig[]>(defaultConfig());
 const settingsDialogShow = ref(false);
 
@@ -41,6 +43,10 @@ const cashflowActionDialog = ref({
 });
 
 async function loadConfig() {
+	if (!selectedSiteHash.value) {
+		widgetConfig.value = defaultConfig();
+		return;
+	}
 	const client = useSanctumClient();
 	try {
 		const response: any = await client('/api/admin/dashboard/widget', {
@@ -48,6 +54,7 @@ async function loadConfig() {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
+				'X-Site-Hash': selectedSiteHash.value,
 			},
 		});
 		const saved = (response?.data ?? []) as WidgetConfig[];
@@ -66,6 +73,7 @@ async function saveConfig(newConfig: WidgetConfig[]) {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
+				'X-Site-Hash': selectedSiteHash.value,
 			},
 		});
 		const saved = (response?.data ?? []) as WidgetConfig[];
@@ -156,6 +164,7 @@ useHead({
 onMounted(() => {
 	loadConfig();
 });
+watch(selectedSiteHash, () => loadConfig());
 definePageMeta({
 	middleware: 'sanctum:auth',
 });
