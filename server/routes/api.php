@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Country\CountryController;
 use App\Http\Controllers\Admin\Currency\CurrencyController;
 use App\Http\Controllers\Admin\Customer\CustomerController;
 use App\Http\Controllers\Admin\Customer\CustomerGroupController;
+use App\Http\Controllers\Admin\Dashboard\DashboardWidgetController;
 use App\Http\Controllers\Admin\Demand\DemandController;
 use App\Http\Controllers\Admin\Email\EmailController;
 use App\Http\Controllers\Admin\Employee\EmployeeContractController;
@@ -741,8 +742,9 @@ Route::group([
         });
 
         // Dashboard and statistics routes
+        Route::get('dashboard/widget', [DashboardWidgetController::class, 'index']);
+        Route::post('dashboard/widget', [DashboardWidgetController::class, 'store']);
         Route::get('dashboard/contact', [BaseController::class, 'dashboardContact']);
-        Route::get('dashboard', [BaseController::class, 'dashboard']);
         Route::get('statistics', [BaseController::class, 'statistics']);
 
         // Contract routes

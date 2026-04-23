@@ -26,6 +26,8 @@ class PostResource extends JsonResource
             'categories' => $this->categories->pluck('id')->toArray(),
             'files' => $this->files(),
             'sites' => $this->sites,
+            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
         ];
     }
 }
