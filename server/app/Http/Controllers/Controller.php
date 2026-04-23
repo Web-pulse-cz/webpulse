@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity\Activity;
 use App\Models\Activity\UserActivity;
+use App\Models\Blog\Post;
 use App\Models\Cashflow\CashflowCategory;
 use App\Models\Contact\Contact;
 use App\Models\Contact\ContactPhase;
+use App\Models\Event\Event;
+use App\Models\Novelty\Novelty;
+use App\Models\Page\Page;
 use App\Models\Site\Site;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -45,6 +49,50 @@ class Controller extends BaseController
     }
 
     public function dashboard(Request $request): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $map = fn ($item) => [
+            'id' => $item->id,
+            'name' => $item->name,
+            'updated_at' => $item->updated_at,
+            'created_at' => $item->created_at,
+        ];
+
+        $postsQuery = Post::query()->whereRelation('sites', 'site_id', $siteId);
+        $noveltiesQuery = Novelty::query()->whereRelation('sites', 'site_id', $siteId);
+        $eventsQuery = Event::query()->whereRelation('sites', 'site_id', $siteId);
+        $pagesQuery = Page::query()->whereRelation('sites', 'site_id', $siteId);
+
+        return Response::json([
+            'posts' => [
+                'count' => (clone $postsQuery)->count(),
+                'data' => (clone $postsQuery)->orderBy('updated_at', 'desc')->limit(5)->get()->map($map),
+            ],
+            'novelties' => [
+                'count' => (clone $noveltiesQuery)->count(),
+                'data' => (clone $noveltiesQuery)->orderBy('updated_at', 'desc')->limit(5)->get()->map($map),
+            ],
+            'events' => [
+                'count' => (clone $eventsQuery)->count(),
+                'data' => (clone $eventsQuery)->orderBy('updated_at', 'desc')->limit(5)->get()->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                        'start_date' => $item->start_date,
+                        'updated_at' => $item->updated_at,
+                        'created_at' => $item->created_at,
+                    ];
+                }),
+            ],
+            'pages' => [
+                'count' => (clone $pagesQuery)->count(),
+                'data' => (clone $pagesQuery)->orderBy('updated_at', 'desc')->limit(5)->get()->map($map),
+            ],
+        ]);
+    }
+
+    public function dashboardContact(Request $request): JsonResponse
     {
         $lastAddedContacts = Contact::without(['phase', 'source', 'tasks'])
             ->orderBy('created_at', 'desc')

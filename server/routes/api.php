@@ -741,6 +741,7 @@ Route::group([
         });
 
         // Dashboard and statistics routes
+        Route::get('dashboard/contact', [BaseController::class, 'dashboardContact']);
         Route::get('dashboard', [BaseController::class, 'dashboard']);
         Route::get('statistics', [BaseController::class, 'statistics']);
 

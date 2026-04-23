@@ -392,6 +392,11 @@ const navigation = ref([
             link: '/kontakty/ukoly',
             current: false,
           },
+          {
+            name: 'Hovory a schůzky',
+            link: '/kontakty/hovory-schuzky',
+            current: false,
+          },
         ],
       },
       {
