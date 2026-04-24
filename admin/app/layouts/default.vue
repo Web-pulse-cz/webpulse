@@ -51,6 +51,12 @@ import {
   CodeBracketIcon,
   ExclamationTriangleIcon,
   ShoppingCartIcon,
+  HomeModernIcon,
+  KeyIcon,
+  SparklesIcon,
+  SunIcon,
+  Squares2X2Icon,
+  BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useActivityStore } from '~/../stores/activityStore';
@@ -311,6 +317,53 @@ const navigation = ref([
         icon: CalendarDaysIcon,
         current: false,
         slug: 'reservations',
+      },
+    ],
+  },
+  {
+    title: 'Ubytování',
+    menu: [
+      {
+        name: 'Apartmány',
+        link: '/ubytovani/apartmany',
+        icon: HomeModernIcon,
+        current: false,
+        slug: 'apartments',
+      },
+      {
+        name: 'Typy apartmánů',
+        link: '/ubytovani/typy-apartmanu',
+        icon: Squares2X2Icon,
+        current: false,
+        slug: 'apartment_types',
+      },
+      {
+        name: 'Budovy',
+        link: '/ubytovani/budovy',
+        icon: BuildingOffice2Icon,
+        current: false,
+        slug: 'buildings',
+      },
+      {
+        name: 'Vybavení',
+        link: '/ubytovani/vybaveni',
+        icon: SparklesIcon,
+        current: false,
+        slug: 'amenities',
+      },
+      {
+        name: 'Roční období',
+        link: '/ubytovani/rocni-obdobi',
+        icon: SunIcon,
+        current: false,
+        slug: 'seasons',
+      },
+      {
+        name: 'Rezervace',
+        link: '/ubytovani/rezervace',
+        icon: KeyIcon,
+        current: false,
+        slug: 'apartment_reservations',
       },
     ],
   },
