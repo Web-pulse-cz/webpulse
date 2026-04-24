@@ -2,10 +2,15 @@
 
 use App\Http\Controllers\Admin\Activity\ActivityController;
 use App\Http\Controllers\Admin\Activity\UserActivityController;
+use App\Http\Controllers\Admin\Amenity\AmenityController;
+use App\Http\Controllers\Admin\Apartment\ApartmentBlockController;
+use App\Http\Controllers\Admin\Apartment\ApartmentController;
+use App\Http\Controllers\Admin\Apartment\ApartmentTypeController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Biography\BiographyController;
+use App\Http\Controllers\Admin\Building\BuildingController;
 use App\Http\Controllers\Admin\Blog\PostCategoryController;
 use App\Http\Controllers\Admin\Blog\PostController;
 use App\Http\Controllers\Admin\Career\CareerApplicationController;
@@ -66,9 +71,11 @@ use App\Http\Controllers\Admin\Project\ProjectTaskController;
 use App\Http\Controllers\Admin\Project\ProjectTimeEntryController;
 use App\Http\Controllers\Admin\Project\TagController;
 use App\Http\Controllers\Admin\Quiz\QuizController;
+use App\Http\Controllers\Admin\Reservation\ReservationController as ApartmentReservationController;
 use App\Http\Controllers\Admin\Restaurant\ReservationController;
 use App\Http\Controllers\Admin\Restaurant\RestaurantTableController;
 use App\Http\Controllers\Admin\Review\ReviewController;
+use App\Http\Controllers\Admin\Season\SeasonController;
 use App\Http\Controllers\Admin\Service\ServiceController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Shift\ShiftController;
@@ -866,6 +873,70 @@ Route::group([
             Route::get('{id}', [EventController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [EventController::class, 'store']);
             Route::delete('{id}', [EventController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Accommodation routes
+        Route::group([
+            'prefix' => 'building',
+        ], function () {
+            Route::get('', [BuildingController::class, 'index']);
+            Route::get('{id}', [BuildingController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [BuildingController::class, 'store']);
+            Route::delete('{id}', [BuildingController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::group([
+            'prefix' => 'amenity',
+        ], function () {
+            Route::get('', [AmenityController::class, 'index']);
+            Route::get('{id}', [AmenityController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [AmenityController::class, 'store']);
+            Route::delete('{id}', [AmenityController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::group([
+            'prefix' => 'season',
+        ], function () {
+            Route::get('', [SeasonController::class, 'index']);
+            Route::get('{id}', [SeasonController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [SeasonController::class, 'store']);
+            Route::delete('{id}', [SeasonController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        Route::group([
+            'prefix' => 'apartment',
+        ], function () {
+            Route::group([
+                'prefix' => 'type',
+            ], function () {
+                Route::get('', [ApartmentTypeController::class, 'index']);
+                Route::get('{id}', [ApartmentTypeController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ApartmentTypeController::class, 'store']);
+                Route::delete('{id}', [ApartmentTypeController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::group([
+                'prefix' => 'block',
+            ], function () {
+                Route::get('', [ApartmentBlockController::class, 'index']);
+                Route::get('{id}', [ApartmentBlockController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ApartmentBlockController::class, 'store']);
+                Route::delete('{id}', [ApartmentBlockController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::group([
+                'prefix' => 'reservation',
+            ], function () {
+                Route::get('', [ApartmentReservationController::class, 'index']);
+                Route::get('{id}', [ApartmentReservationController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id?}', [ApartmentReservationController::class, 'store']);
+                Route::delete('{id}', [ApartmentReservationController::class, 'destroy'])->where('id', '[0-9]+');
+            });
+
+            Route::get('', [ApartmentController::class, 'index']);
+            Route::get('{id}', [ApartmentController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [ApartmentController::class, 'store']);
+            Route::delete('{id}', [ApartmentController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Career routes

@@ -28,9 +28,6 @@ export function usePermissions(siteHashOverride?: Ref<string>) {
   }
 
   function moduleBelongsToSite(slug: string): boolean {
-    // Superadmin has access to all modules on all sites
-    if (isSuperAdmin()) return true;
-
     if (!user?.value?.sites?.length) return true;
 
     const currentSite = user.value.sites.find((site: any) => site.hash === selectedSiteHash.value);

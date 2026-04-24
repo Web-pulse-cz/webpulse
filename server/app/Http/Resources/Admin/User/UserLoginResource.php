@@ -4,6 +4,7 @@ namespace App\Http\Resources\Admin\User;
 
 use App\Http\Resources\Admin\QickAccess\QuickAccessResource;
 use App\Http\Resources\Admin\Site\SiteResource;
+use App\Models\Site\Site;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,8 @@ class UserLoginResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $sites = $this->user_group_id === 1 ? Site::all() : $this->sites;
+
         return [
             'id' => $this->id,
             'avatar' => $this->avatar,
@@ -25,7 +28,7 @@ class UserLoginResource extends JsonResource
             'quick_access' => QuickAccessResource::collection($this->quickAccess),
             'user_group_id' => $this->user_group_id,
             'user_group' => UserGroupResource::make($this->userGroup),
-            'sites' => SiteResource::collection($this->sites),
+            'sites' => SiteResource::collection($sites),
         ];
     }
 }
