@@ -338,6 +338,18 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Stoly';
     case 'reservations':
       return 'Rezervace';
+    case 'apartments':
+      return 'Apartmány';
+    case 'apartment_types':
+      return 'Typy apartmánů';
+    case 'buildings':
+      return 'Budovy';
+    case 'amenities':
+      return 'Vybavení';
+    case 'seasons':
+      return 'Roční období';
+    case 'apartment_reservations':
+      return 'Rezervace ubytování';
     case 'project_time_entries':
       return 'Sledování času';
     default:
@@ -375,6 +387,17 @@ const moduleGroups = [
       'menus',
       'restaurant_tables',
       'reservations',
+    ],
+  },
+  {
+    title: 'Ubytování',
+    slugs: [
+      'apartments',
+      'apartment_types',
+      'buildings',
+      'amenities',
+      'seasons',
+      'apartment_reservations',
     ],
   },
   {
