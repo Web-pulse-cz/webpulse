@@ -278,7 +278,7 @@ definePageMeta({
     </div>
 
     <LayoutContainer class="!mt-4 overflow-hidden">
-      <div class="custom-scrollbar w-full overflow-x-auto">
+      <div class="custom-scrollbar w-full">
         <div class="min-w-[1000px] pb-4">
           <CashflowTable
             v-if="!loading && !error"

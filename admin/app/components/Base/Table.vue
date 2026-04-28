@@ -77,6 +77,11 @@ defineProps({
     required: false,
     default: '' as string,
   },
+  compact: {
+    type: Boolean,
+    required: false,
+    default: false as boolean,
+  },
 });
 
 function canEdit(slug: string) {
@@ -140,11 +145,11 @@ const emit = defineEmits([
 </script>
 
 <template>
-  <div class="w-full px-4 sm:px-0">
+  <div :class="compact ? 'w-full' : 'w-full px-4 sm:px-0'">
     <div class="flow-root">
-      <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+      <div :class="compact ? 'overflow-x-auto' : '-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8'">
+        <div :class="compact ? 'inline-block min-w-full align-middle' : 'inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'">
+          <div :class="compact ? 'overflow-hidden' : 'overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200'">
             <table class="min-w-full divide-y divide-slate-200">
               <thead class="bg-slate-50">
                 <tr>
@@ -289,6 +294,7 @@ const emit = defineEmits([
 
                   <td
                     class="relative w-[150px] whitespace-nowrap py-3.5 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                    @click.stop
                   >
                     <div class="flex items-center justify-end gap-x-3">
                       <template v-for="(action, index) in actions" :key="index">

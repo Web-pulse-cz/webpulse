@@ -1,23 +1,68 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, inject, watch, type Ref } from 'vue';
 
-const props = defineProps<{
-	widgetKey: string;
-	title: string;
-	icon: unknown;
-	endpoint: string;
-	link: string;
-	color: string;
-	emptyLabel?: string;
-}>();
+const props = withDefaults(
+	defineProps<{
+		widgetKey: string;
+		title: string;
+		icon: unknown;
+		endpoint: string;
+		link: string;
+		color: string;
+		emptyLabel?: string;
+		columns?: any[];
+		enums?: Record<string, Record<string | number, string>>;
+		actions?: any[];
+		dateField?: string;
+		permissionSlug?: string;
+		paginate?: boolean;
+		dataKey?: string;
+	}>(),
+	{
+		columns: () => [{ key: 'name', name: 'Název', type: 'text' }],
+		enums: () => ({}),
+		actions: () => [{ type: 'edit' }],
+		dateField: 'updated_at',
+		permissionSlug: '',
+		paginate: true,
+		dataKey: '',
+	},
+);
+
+const selectedSiteHash = inject<Ref<string>>('selectedSiteHash', ref(''));
 
 const total = ref(0);
-const items = ref<Array<{ id: number; name: string | null; updated_at: string }>>([]);
 const loading = ref(false);
+const error = ref(false);
+const items = ref<{
+	data: any[];
+	total: number;
+	currentPage: number;
+	perPage: number;
+	lastPage: number;
+}>({
+	data: [],
+	total: 0,
+	currentPage: 1,
+	perPage: 5,
+	lastPage: 1,
+});
+
+const orderBy = computed(() => props.dateField || 'updated_at');
+
+const tableActions = computed(() =>
+	props.actions.map((a) => ({ ...a, path: a.path ?? props.link })),
+);
 
 async function loadItems() {
+	if (!selectedSiteHash.value) return;
 	loading.value = true;
+	error.value = false;
 	const client = useSanctumClient();
+
+	const query: Record<string, any> = props.paginate
+		? { paginate: 5, page: 1, orderBy: orderBy.value, orderWay: 'desc' }
+		: {};
 
 	try {
 		const response: any = await client(props.endpoint, {
@@ -25,53 +70,58 @@ async function loadItems() {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
+				'X-Site-Hash': selectedSiteHash.value,
 			},
-			query: {
-				paginate: 5,
-				page: 1,
-				orderBy: 'updated_at',
-				orderWay: 'desc',
-			},
+			query,
 		});
-		total.value = response?.total ?? 0;
-		items.value = response?.data ?? [];
+
+		if (props.dataKey) {
+			const raw = response?.[props.dataKey];
+			const arr = Array.isArray(raw) ? raw : (raw?.data ?? []);
+			total.value = arr.length;
+			items.value = {
+				data: arr,
+				total: arr.length,
+				currentPage: 1,
+				perPage: arr.length,
+				lastPage: 1,
+			};
+		} else {
+			total.value = response?.total ?? 0;
+			items.value = {
+				data: response?.data ?? [],
+				total: response?.total ?? 0,
+				currentPage: response?.currentPage ?? 1,
+				perPage: response?.perPage ?? 5,
+				lastPage: response?.lastPage ?? 1,
+			};
+		}
 	} catch (_) {
+		error.value = true;
 		total.value = 0;
-		items.value = [];
+		items.value = { data: [], total: 0, currentPage: 1, perPage: 5, lastPage: 1 };
 	} finally {
 		loading.value = false;
 	}
 }
 
 onMounted(loadItems);
+watch(selectedSiteHash, () => loadItems());
 </script>
 
 <template>
 	<DashboardWidgetBaseCard :title="title" :icon="icon" :color="color" :count="total" :link="link">
-		<div v-if="loading" class="space-y-2">
-			<div
-				v-for="n in 3"
-				:key="n"
-				class="h-9 animate-pulse rounded-lg border border-slate-100 bg-slate-50"
-			/>
-		</div>
-		<div v-else-if="items.length" class="space-y-2">
-			<div
-				v-for="item in items"
-				:key="item.id"
-				class="flex items-center justify-between gap-3 rounded-lg border border-slate-100 px-3 py-2 text-sm text-slate-700 transition group-hover:border-slate-200"
-			>
-				<span class="truncate">{{ item.name || '— bez názvu —' }}</span>
-				<span class="shrink-0 text-[10px] uppercase tracking-widest text-slate-400">
-					{{ new Date(item.updated_at).toLocaleDateString('cs-CZ') }}
-				</span>
-			</div>
-		</div>
-		<div
-			v-else
-			class="rounded-lg border border-dashed border-slate-200 px-3 py-6 text-center text-xs text-slate-400"
-		>
-			{{ emptyLabel || 'Zatím žádné položky' }}
-		</div>
+		<BaseTable
+			compact
+			:items="items"
+			:columns="columns"
+			:enums="enums"
+			:actions="tableActions"
+			:loading="loading"
+			:error="error"
+			:singular="title"
+			:plural="title"
+			:slug="permissionSlug"
+		/>
 	</DashboardWidgetBaseCard>
 </template>
