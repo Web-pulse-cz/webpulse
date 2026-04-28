@@ -22,6 +22,8 @@ class NewsletterResource extends JsonResource
             'fullname' => $this->fullname,
             'addressing' => $this->addressing,
             'locale' => $this->locale,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

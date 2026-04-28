@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import {
 	Dialog,
 	DialogPanel,
@@ -11,6 +11,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import draggable from 'vuedraggable';
 
 import { availableWidgets, type WidgetConfig, type WidgetSize } from '~/components/Dashboard/widgets';
+import { usePermissions } from '~/composables/usePermissions';
 
 const show = defineModel('show', {
 	type: Boolean,
@@ -25,13 +26,28 @@ const emit = defineEmits<{
 	(e: 'save', payload: WidgetConfig[]): void;
 }>();
 
+const { canView, moduleBelongsToSite } = usePermissions();
+
+function widgetVisible(slug?: string): boolean {
+	if (!slug) return true;
+	return moduleBelongsToSite(slug) && canView(slug);
+}
+
+const visibleWidgets = computed(() =>
+	availableWidgets.filter((w) => widgetVisible(w.permissionSlug)),
+);
+
+const visibleKeys = computed(() => new Set(visibleWidgets.value.map((w) => w.key)));
+
 const localConfig = ref<WidgetConfig[]>([]);
 
 watch(
-	() => [show.value, props.config],
+	() => [show.value, props.config, visibleKeys.value],
 	() => {
 		if (show.value) {
-			localConfig.value = props.config.map((w) => ({ ...w }));
+			localConfig.value = props.config
+				.filter((w) => visibleKeys.value.has(w.widget_key))
+				.map((w) => ({ ...w }));
 		}
 	},
 	{ immediate: true },
@@ -49,12 +65,13 @@ function applyPositions() {
 
 function save() {
 	applyPositions();
-	emit('save', localConfig.value);
+	const hiddenConfigs = props.config.filter((w) => !visibleKeys.value.has(w.widget_key));
+	emit('save', [...localConfig.value, ...hiddenConfigs]);
 	show.value = false;
 }
 
 function resetDefaults() {
-	localConfig.value = availableWidgets
+	localConfig.value = visibleWidgets.value
 		.slice()
 		.sort((a, b) => a.defaultPosition - b.defaultPosition)
 		.map((w) => ({

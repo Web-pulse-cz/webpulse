@@ -9,6 +9,7 @@ import {
 	mergeConfig,
 	type WidgetConfig,
 } from '~/components/Dashboard/widgets';
+import { usePermissions } from '~/composables/usePermissions';
 
 const cashflowCategoryStore = useCashflowCategoryStore();
 const currencyStore = useCurrencyStore();
@@ -26,6 +27,13 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const widgetConfig = ref<WidgetConfig[]>(defaultConfig());
 const settingsDialogShow = ref(false);
 
+const { canView, moduleBelongsToSite } = usePermissions();
+
+function widgetVisible(slug?: string): boolean {
+	if (!slug) return true;
+	return moduleBelongsToSite(slug) && canView(slug);
+}
+
 const activeWidgets = computed(() =>
 	widgetConfig.value
 		.filter((w) => w.enabled)
@@ -33,7 +41,8 @@ const activeWidgets = computed(() =>
 			config: w,
 			definition: availableWidgets.find((d) => d.key === w.widget_key)!,
 		}))
-		.filter((w) => !!w.definition),
+		.filter((w) => !!w.definition)
+		.filter((w) => widgetVisible(w.definition.permissionSlug)),
 );
 
 const cashflowActionDialog = ref({
@@ -194,6 +203,7 @@ definePageMeta({
 					:widget-key="item.definition.key"
 					:title="item.definition.title"
 					:icon="item.definition.icon"
+					:permission-slug="item.definition.permissionSlug"
 					v-bind="item.definition.props || {}"
 				/>
 			</div>

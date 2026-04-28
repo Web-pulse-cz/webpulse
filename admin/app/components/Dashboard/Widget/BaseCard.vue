@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { colorClasses } from '~/components/Dashboard/widgets';
 
-defineProps<{
+const props = defineProps<{
 	title: string;
 	icon: unknown;
 	color: string;
 	count?: number;
 	link?: string;
 }>();
+
+function navigateToLink() {
+	if (props.link) navigateTo(props.link);
+}
 </script>
 
 <template>
-	<component
-		:is="link ? 'NuxtLink' : 'div'"
-		:to="link"
-		class="group block h-full rounded-2xl bg-white p-6 ring-1 ring-slate-100 transition"
-		:class="link ? 'hover:-translate-y-0.5 hover:ring-slate-200 hover:shadow-sm' : ''"
+	<div
+		class="group flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-slate-100 transition"
+		:class="link ? 'cursor-pointer hover:-translate-y-0.5 hover:ring-slate-200 hover:shadow-sm' : ''"
+		@click="navigateToLink"
 	>
 		<div class="mb-5 flex items-center justify-between">
 			<div class="flex items-center gap-3">
@@ -39,5 +42,5 @@ defineProps<{
 		</div>
 
 		<slot />
-	</component>
+	</div>
 </template>
