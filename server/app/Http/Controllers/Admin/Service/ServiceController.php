@@ -97,6 +97,7 @@ class ServiceController extends Controller
             }
 
             $service->save();
+            $service->saveImages($service, $request->get('image'));
             $service->saveSites($service, $request->get('sites', []));
 
             DB::commit();

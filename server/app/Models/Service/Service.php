@@ -4,6 +4,7 @@ namespace App\Models\Service;
 
 use App\Models\Currency\Currency;
 use App\Models\TaxRate\TaxRate;
+use App\Traits\Imagable;
 use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\App;
 
 class Service extends Model
 {
-    use Siteable, Translatable;
+    use Imagable, Siteable, Translatable;
 
     protected $table = 'services';
 
@@ -74,6 +75,16 @@ class Service extends Model
 
         // Jinak klasicky vrátí atribut
         return parent::getAttribute($key);
+    }
+
+    public function getMainImageAttribute()
+    {
+        return $this->getMainImage($this);
+    }
+
+    public function getImagesAttribute()
+    {
+        return $this->imagesAttribute($this);
     }
 
     public function sites()
