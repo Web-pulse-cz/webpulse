@@ -46,6 +46,8 @@ class EventResource extends JsonResource
             'registrations_count' => $this->registrations->count(),
             'registrations' => ['data' => EventRegistrationResource::collection($this->registrations)],
             'sites' => $this->sites,
+            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
         ];
     }
 }

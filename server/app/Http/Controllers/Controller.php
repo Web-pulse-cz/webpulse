@@ -44,7 +44,7 @@ class Controller extends BaseController
         return $site->id;
     }
 
-    public function dashboard(Request $request): JsonResponse
+    public function dashboardContact(Request $request): JsonResponse
     {
         $lastAddedContacts = Contact::without(['phase', 'source', 'tasks'])
             ->orderBy('created_at', 'desc')

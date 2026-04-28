@@ -120,7 +120,7 @@ const inputClass = computed(() => {
       aria-autocomplete="none"
       autocomplete="off"
       :autofocus="false"
-      :class="[inputClass, { 'bg-grayLight': disabled }]"
+      :class="[inputClass, { 'bg-slate-100': disabled }]"
     />
     <Field
       v-else-if="type === 'number'"
@@ -136,7 +136,7 @@ const inputClass = computed(() => {
       :min="min > 0 ? min : 0"
       :max="max > 0 ? max : 999999999"
       :autofocus="false"
-      :class="[inputClass, { 'bg-grayLight': disabled }]"
+      :class="[inputClass, { 'bg-slate-100': disabled }]"
     />
     <ErrorMessage :name="name" class="text-danger text-xs" />
   </div>

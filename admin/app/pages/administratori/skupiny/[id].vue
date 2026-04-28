@@ -75,6 +75,17 @@ const moduleGroups = ref([
     ],
   },
   {
+    title: 'Ubytování',
+    modules: [
+      { slug: 'apartments', name: 'Apartmány' },
+      { slug: 'apartment_types', name: 'Typy apartmánů' },
+      { slug: 'buildings', name: 'Budovy' },
+      { slug: 'amenities', name: 'Vybavení' },
+      { slug: 'seasons', name: 'Roční období' },
+      { slug: 'apartment_reservations', name: 'Rezervace ubytování' },
+    ],
+  },
+  {
     title: 'Zákazníci',
     modules: [
       { slug: 'customers', name: 'Zákazníci' },

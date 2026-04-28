@@ -30,5 +30,8 @@ export const useSettingStore = defineStore({
     bottomMenu() {
       return this.settings.find((setting) => setting.type === 'bottomMenu');
     },
+    bar() {
+      return this.settings.find((setting) => setting.type === 'bar');
+    },
   },
 });

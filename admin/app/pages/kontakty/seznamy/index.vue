@@ -144,7 +144,7 @@ definePageMeta({
         {
           key: 'contacts_count',
           name: 'Počet kontaktů',
-          type: 'text',
+          type: 'number',
           width: 80,
           hidden: true,
           sortable: false,

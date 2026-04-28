@@ -16,8 +16,9 @@ async function handleSubmit() {
   if (!email.value) return;
 
   isSubmitting.value = true;
+  const client = useSanctumClient();
   try {
-    await $fetch('/api/admin/auth/forgot-password', {
+    await client('/api/admin/auth/forgot-password', {
       method: 'POST',
       body: { email: email.value },
     });

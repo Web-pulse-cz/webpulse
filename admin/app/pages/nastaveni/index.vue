@@ -142,7 +142,12 @@ definePageMeta({
       :query="tableQuery"
       slug="settings"
       :enums="{
-        type: { topMenu: 'Horní menu', bottomMenu: 'Spodní menu' },
+        type: {
+          topMenu: 'Horní menu',
+          bottomMenu: 'Spodní menu',
+          popup: 'Pop-up okno',
+          bar: 'Oznamovací proužek',
+        },
       }"
       @delete-item="deleteItem"
       @update-sort="updateSort"

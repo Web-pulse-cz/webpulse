@@ -54,7 +54,7 @@ const badgeClass = computed(() => (color: string) => {
   } else if (color === 'stone') {
     return 'bg-stone-50 text-stone-800 ring-stone-600/20';
   } else {
-    return 'bg-brand/20 text-neutral-800 ring-brand/20';
+    return 'bg-primary/10 text-primary ring-primary/20';
   }
 });
 </script>

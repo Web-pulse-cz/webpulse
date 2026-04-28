@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const props = defineProps({
   page: {
     type: Number,
@@ -67,7 +67,7 @@ generatePages();
     </div>
     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
       <div>
-        <p class="text-grayLight text-sm">
+        <p class="text-sm text-slate-400">
           {{ t('pagination.shown') }}
           {{ ' ' }}
           <span class="font-medium">{{ (page - 1) * perPage + 1 }}</span>
@@ -104,8 +104,8 @@ generatePages();
             :key="key"
             :class="[
               generatedPage === page
-                ? 'bg-primaryCustom text-white'
-                : 'text-grayDark ring-1 ring-inset ring-gray-300',
+                ? 'bg-primary text-white'
+                : 'text-slate-700 ring-1 ring-inset ring-slate-300',
               'relative z-10 inline-flex cursor-pointer items-center px-4 py-2 text-sm font-semibold',
             ]"
             @click="

@@ -26,6 +26,8 @@ class DemandResource extends JsonResource
             'service_name' => $this->service ? $this->service->name : null,
             'offer_price' => $this->offer_price,
             'locale' => $this->locale,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

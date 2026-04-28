@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, inject, watch } from 'vue';
 
-import { CalendarDaysIcon, PhoneIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline';
 import { useCashflowCategoryStore } from '~/../stores/cashflowCategoryStore';
 import { useCurrencyStore } from '~/../stores/currencyStore';
+import {
+	availableWidgets,
+	defaultConfig,
+	mergeConfig,
+	type WidgetConfig,
+} from '~/components/Dashboard/widgets';
+import { usePermissions } from '~/composables/usePermissions';
 
 const cashflowCategoryStore = useCashflowCategoryStore();
 const currencyStore = useCurrencyStore();
@@ -16,289 +22,222 @@ const error = ref(false);
 
 const breadcrumbs = ref([]);
 
-const dashboard = ref([]);
-const changelog = ref([]);
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const cashflowActionDialog = ref({
-  show: false as boolean,
-  day: 0 as number,
-  categoryId: null as number | null,
-});
+const widgetConfig = ref<WidgetConfig[]>(defaultConfig());
+const settingsDialogShow = ref(false);
 
-async function loadDashboard() {
-  loading.value = true;
-  const client = useSanctumClient();
+const { canView, moduleBelongsToSite } = usePermissions();
 
-  await client<{ id: number }>('/api/admin/dashboard', {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      dashboard.value = response;
-    })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se načíst přehled. Zkuste to prosím později.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+function widgetVisible(slug?: string): boolean {
+	if (!slug) return true;
+	return moduleBelongsToSite(slug) && canView(slug);
 }
 
-async function loadChangelog() {
-  loading.value = true;
-  const client = useSanctumClient();
+const activeWidgets = computed(() =>
+	widgetConfig.value
+		.filter((w) => w.enabled)
+		.map((w) => ({
+			config: w,
+			definition: availableWidgets.find((d) => d.key === w.widget_key)!,
+		}))
+		.filter((w) => !!w.definition)
+		.filter((w) => widgetVisible(w.definition.permissionSlug)),
+);
 
-  await client<{ id: number }>('/api/admin/changelog', {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    query: {
-      orderBy: 'id',
-      orderWay: 'desc',
-    },
-  })
-    .then((response) => {
-      changelog.value = response;
-    })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se načíst changelog. Zkuste to prosím později.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+const cashflowActionDialog = ref({
+	show: false as boolean,
+	day: 0 as number,
+	categoryId: null as number | null,
+});
+
+async function loadConfig() {
+	if (!selectedSiteHash.value) {
+		widgetConfig.value = defaultConfig();
+		return;
+	}
+	const client = useSanctumClient();
+	try {
+		const response: any = await client('/api/admin/dashboard/widget', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				'X-Site-Hash': selectedSiteHash.value,
+			},
+		});
+		const saved = (response?.data ?? []) as WidgetConfig[];
+		widgetConfig.value = mergeConfig(saved);
+	} catch (_) {
+		widgetConfig.value = defaultConfig();
+	}
+}
+
+async function saveConfig(newConfig: WidgetConfig[]) {
+	const client = useSanctumClient();
+	try {
+		const response: any = await client('/api/admin/dashboard/widget', {
+			method: 'POST',
+			body: JSON.stringify({ widgets: newConfig }),
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				'X-Site-Hash': selectedSiteHash.value,
+			},
+		});
+		const saved = (response?.data ?? []) as WidgetConfig[];
+		widgetConfig.value = mergeConfig(saved);
+		$toast.show({
+			summary: 'Hotovo',
+			detail: 'Nastavení dashboardu bylo uloženo.',
+			severity: 'success',
+		});
+	} catch (_) {
+		$toast.show({
+			summary: 'Chyba',
+			detail: 'Nepodařilo se uložit nastavení dashboardu.',
+			severity: 'error',
+		});
+	}
 }
 
 function openCashflowDialog() {
-  cashflowActionDialog.value.show = true;
-  cashflowActionDialog.value.categoryId = 50;
-  cashflowActionDialog.value.day = new Date().getDate();
+	cashflowActionDialog.value.show = true;
+	cashflowActionDialog.value.categoryId = 50;
+	cashflowActionDialog.value.day = new Date().getDate();
 }
 
 async function saveDayRecords(data: {
-  categoryId: number | null;
-  currencyId: number;
-  day: number;
-  type: string;
-  dayRecords: Array<{ id: number | null; amount: number; description: string }>;
+	categoryId: number | null;
+	currencyId: number;
+	day: number;
+	type: string;
+	dayRecords: Array<{ id: number | null; amount: number; description: string }>;
 }) {
-  const client = useSanctumClient();
-  // loading.value = true;
-  error.value = false;
+	const client = useSanctumClient();
+	error.value = false;
 
-  const month = new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
+	const month = new Date().getMonth() + 1;
+	const year = new Date().getFullYear();
 
-  const formattedDate = new Date(Date.UTC(year, month - 1, data.day)).toISOString();
+	const formattedDate = new Date(Date.UTC(year, month - 1, data.day)).toISOString();
 
-  const categoryId = data.categoryId ? data.categoryId : null;
-  const currencyId = data.currencyId ? data.currencyId : null;
-  const type = data.type ? data.type : 'expense';
-  const records = data.dayRecords.map((record) => ({
-    id: record.id,
-    amount: record.amount,
-    description: record.description,
-  }));
+	const categoryId = data.categoryId ? data.categoryId : null;
+	const currencyId = data.currencyId ? data.currencyId : null;
+	const type = data.type ? data.type : 'expense';
+	const records = data.dayRecords.map((record) => ({
+		id: record.id,
+		amount: record.amount,
+		description: record.description,
+	}));
 
-  await client<{
-    id: number;
-  }>(categoryId ? '/api/admin/cashflow/' + categoryId : '/api/admin/cashflow', {
-    method: 'POST',
-    body: JSON.stringify({
-      categoryId,
-      currencyId,
-      formattedDate,
-      type,
-      records,
-    }),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(() => {
-      $toast.show({
-        summary: 'Hotovo',
-        detail: 'Záznamy byly úspěšně uložen.',
-        severity: 'success',
-      });
-    })
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail:
-          'Nepodařilo se uložit záznamy. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+	await client(categoryId ? '/api/admin/cashflow/' + categoryId : '/api/admin/cashflow', {
+		method: 'POST',
+		body: JSON.stringify({
+			categoryId,
+			currencyId,
+			formattedDate,
+			type,
+			records,
+		}),
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+	})
+		.then(() => {
+			$toast.show({
+				summary: 'Hotovo',
+				detail: 'Záznamy byly úspěšně uložen.',
+				severity: 'success',
+			});
+		})
+		.catch(() => {
+			error.value = true;
+			$toast.show({
+				summary: 'Chyba',
+				detail:
+					'Nepodařilo se uložit záznamy. Zkontrolujte, že máte vyplněna všechna pole správně a zkuste to znovu.',
+				severity: 'error',
+			});
+		})
+		.finally(() => {
+			loading.value = false;
+		});
 }
 
 useHead({
-  title: pageTitle.value,
+	title: pageTitle.value,
 });
 
 onMounted(() => {
-  loadDashboard();
-  loadChangelog();
+	loadConfig();
 });
+watch(selectedSiteHash, () => loadConfig());
 definePageMeta({
-  middleware: 'sanctum:auth',
+	middleware: 'sanctum:auth',
 });
 </script>
 
 <template>
-  <div class="space-y-6 pb-20">
-    <LayoutHeader
-      :title="pageTitle"
-      :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'add-cashflow', text: 'Zaznamenat výdaj' }]"
-      @open-cashflow-dialog="openCashflowDialog"
-    />
+	<div class="space-y-6 pb-20">
+		<LayoutHeader
+			:title="pageTitle"
+			:breadcrumbs="breadcrumbs"
+			:actions="[
+				{ type: 'dashboard-settings', text: 'Nastavit widgety' },
+				{ type: 'add-cashflow', text: 'Zaznamenat výdaj' },
+			]"
+			@open-cashflow-dialog="openCashflowDialog"
+			@open-dashboard-settings="settingsDialogShow = true"
+		/>
 
-    <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
-      <div class="col-span-1 space-y-8 lg:col-span-8">
-        <LayoutContainer>
-          <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
-            <div class="flex items-center gap-3">
-              <div
-                class="relative flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
-              >
-                <PhoneIcon class="size-5" />
-                <div
-                  class="absolute -right-1 -top-1 flex h-2.5 w-2.5 animate-pulse rounded-full bg-amber-400 ring-2 ring-white"
-                />
-              </div>
-              <LayoutTitle class="!mb-0">Dnes kontaktovat (Hovory)</LayoutTitle>
-            </div>
-            <div
-              class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400"
-            >
-              Celkem:
-              <span class="text-sm/none font-black text-indigo-600">{{
-                dashboard.contactsToCall?.length || 0
-              }}</span>
-            </div>
-          </div>
+		<div v-if="activeWidgets.length" class="grid grid-cols-1 items-start gap-6 sm:grid-cols-2">
+			<div
+				v-for="item in activeWidgets"
+				:key="item.config.widget_key"
+				:class="item.config.size === 'full' ? 'sm:col-span-2' : 'sm:col-span-1'"
+			>
+				<component
+					:is="item.definition.component"
+					:widget-key="item.definition.key"
+					:title="item.definition.title"
+					:icon="item.definition.icon"
+					:permission-slug="item.definition.permissionSlug"
+					v-bind="item.definition.props || {}"
+				/>
+			</div>
+		</div>
 
-          <BaseTable
-            :items="dashboard.contactsToCall"
-            :columns="[
-              { key: 'firstname', name: 'Jméno', type: 'text', sortable: false },
-              { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
-              { key: 'phone', name: 'Telefonní číslo', type: 'text', sortable: false },
-            ]"
-            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-            :loading="loading"
-            :error="error"
-            singular="Hovor na dnes"
-            plural="Hovory na dnes"
-          />
-        </LayoutContainer>
+		<div
+			v-else
+			class="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center"
+		>
+			<p class="text-sm text-slate-500">
+				Na dashboardu nejsou žádné widgety. Klikněte na
+				<button
+					class="font-semibold text-indigo-600 hover:underline"
+					@click="settingsDialogShow = true"
+				>
+					Nastavit widgety
+				</button>
+				a vyberte, co chcete zobrazit.
+			</p>
+		</div>
 
-        <LayoutContainer>
-          <div class="mb-8 flex items-center gap-3">
-            <div
-              class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
-            >
-              <CalendarDaysIcon class="size-5" />
-            </div>
-            <LayoutTitle class="!mb-0">Nadcházející schůzky</LayoutTitle>
-          </div>
+		<DashboardSettingsDialog
+			v-model:show="settingsDialogShow"
+			:config="widgetConfig"
+			@save="saveConfig"
+		/>
 
-          <BaseTable
-            :items="dashboard.comingEvents"
-            :columns="[
-              { key: 'firstname', name: 'Jméno klienta', type: 'text', sortable: false },
-              { key: 'lastname', name: 'Příjmení', type: 'text', sortable: false },
-              { key: 'next_meeting', name: 'Termín schůzky', type: 'datetime', sortable: false },
-            ]"
-            :actions="[{ type: 'edit', path: '/kontakty', hash: '#proces' }]"
-            :loading="loading"
-            :error="error"
-            singular="Naplánovaná schůzka"
-            plural="Naplánované schůzky"
-          />
-        </LayoutContainer>
-      </div>
-
-      <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-4">
-        <LayoutContainer class="!py-6">
-          <div class="mb-6 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <RocketLaunchIcon class="size-4 text-slate-400" />
-              <LayoutTitle class="!mb-0 text-xs uppercase tracking-widest text-slate-400"
-                >Changelog</LayoutTitle
-              >
-            </div>
-            <span
-              class="rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"
-            >
-              v1.0.6
-            </span>
-          </div>
-
-          <div
-            class="custom-scrollbar max-h-[calc(100vh-200px)] space-y-6 overflow-y-auto pb-2 pr-2"
-          >
-            <ChangelogCard
-              v-for="(changelogItem, index) in changelog"
-              :key="index"
-              :changelog="changelogItem"
-            />
-          </div>
-        </LayoutContainer>
-
-        <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100/50">
-          <p class="text-sm leading-relaxed text-indigo-800/80">
-            <strong>Tip:</strong> Zaznamenávejte schůzky a hovory ihned po jejich skončení. Udržíte
-            tak histori kontaktu v CRM aktuální a nezapomenete na důležité detaily.
-          </p>
-        </div>
-      </aside>
-    </div>
-
-    <CashflowDialogExtendedAction
-      v-model:show="cashflowActionDialog.show"
-      :categories="cashflowCategoryStore.categoriesOptions"
-      :currencies="currencyStore.currenciesOptions"
-      :day="cashflowActionDialog.day"
-      :type="cashflowActionDialog.type"
-      @save-day-records="saveDayRecords($event)"
-    />
-  </div>
+		<CashflowDialogExtendedAction
+			v-model:show="cashflowActionDialog.show"
+			:categories="cashflowCategoryStore.categoriesOptions"
+			:currencies="currencyStore.currenciesOptions"
+			:day="cashflowActionDialog.day"
+			:type="cashflowActionDialog.type"
+			@save-day-records="saveDayRecords($event)"
+		/>
+	</div>
 </template>
-
-<style scoped>
-/* Jemný scrollbar pro Changelog sloupec, aby nerušil design */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* slate-300 */
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; /* slate-400 */
-}
-</style>

@@ -1,12 +1,12 @@
 import type { Demand } from '../types/Demand';
 
 export function useGlobalApi(
-  wrap: <T>(fn: (...args: any[]) => Promise<T>) => (...args: any[]) => Promise<T>,
+  wrap: <T>(fn: (...args: unknown[]) => Promise<T>) => (...args: unknown[]) => Promise<T>,
 ) {
   const client = useSanctumClient();
   const runtimeConfig = useRuntimeConfig();
 
-  const newsletter = wrap(async (email: string, locale: string): Promise<{}> => {
+  const newsletter = wrap(async (email: string, locale: string): Promise<Record<string, never>> => {
     return await client(`/api/newsletter/${locale}`, {
       method: 'POST',
       headers: {

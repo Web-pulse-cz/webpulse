@@ -37,8 +37,9 @@ async function handleSubmit() {
   }
 
   isSubmitting.value = true;
+  const client = useSanctumClient();
   try {
-    await $fetch('/api/admin/auth/reset-password', {
+    await client('/api/admin/auth/reset-password', {
       method: 'POST',
       body: {
         token: token.value,

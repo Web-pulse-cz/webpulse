@@ -25,28 +25,13 @@ const pageMeta = ref({
   slug: route.params.slug,
 });
 
-const {
-  data: categoriesData,
-  status: categoriesStatus,
-  error: categoriesError,
-  pending: categoriesPending,
-} = useAsyncData('categories', () => api.blog.categories(locale.value));
+useAsyncData('categories', () => api.blog.categories(locale.value));
 
-const {
-  data: categoryData,
-  status: categoryStatus,
-  error: categoryError,
-  pending: categoryPending,
-} = useAsyncData('category', () => api.blog.categoryDetail(route.params.id, locale.value));
+useAsyncData('category', () => api.blog.categoryDetail(route.params.id, locale.value));
 
 const getPosts = () =>
   api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id);
-const {
-  data: postsData,
-  status: postsStatus,
-  error: postsError,
-  pending: postsPending,
-} = useAsyncData('categoriesPosts', () =>
+const { data: postsData } = useAsyncData('categoriesPosts', () =>
   api.blog.posts(tableQuery.value.page, tableQuery.value.paginate, locale.value, route.params.id),
 );
 
@@ -75,16 +60,6 @@ async function updatePage(page: number) {
 
   const reviews = getReviews();
   reviewsData.value = await reviews;
-}
-
-function canonicalUrl() {
-  const appUrl = useRuntimeConfig().public.appUrl;
-  let string = locale.value !== 'cs' ? `${appUrl}/${locale.value}` : appUrl;
-  string += `/review/${t('canonical.category')}`;
-  string += categoryData && categoryData.id ? `/${categoryData.id}` : `/${route.params.id}`;
-  string += categoryData && categoryData.slug ? `/${categoryData.slug}` : `/${route.params.slug}`;
-
-  return string;
 }
 
 watch(

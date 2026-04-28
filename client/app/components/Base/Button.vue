@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 
-const sizeClasses = ref({
-  sm: 'px-4 lg:px-8 py-3 text-xs shadow-sm rounded-full',
-  md: 'px-1.5 py-1.5 lg:px-2.5 py-1 lg:py-1.5 text-xs shadow-sm rounded-full',
-  lg: 'px-1.5 lg:px-3 py-1.5 lg:py-2 text-xs lg:text-sm shadow-sm rounded-full',
-  xl: 'px-2 lg:px-3.5 py-1.5 lg:py-2.5 text-xs lg:text-sm shadow-sm rounded-full',
-  xxl: 'px-6 lg:px-8 py-3 lg:py-4 text-xs lg:text-sm shadow-sm rounded-full',
-  long: 'px-5 lg:px-7 py-3 lg:py-4 text-xs lg:text-sm shadow-sm rounded-full',
-});
-const variantClasses = ref({
+const sizeClasses = {
+  sm: 'px-3 py-1.5 text-xs rounded-lg shadow-sm',
+  md: 'px-4 py-2 text-sm rounded-lg shadow-sm',
+  lg: 'px-5 py-2.5 text-sm rounded-lg shadow-sm',
+  xl: 'px-6 py-3 text-base rounded-lg shadow-sm',
+};
+const variantClasses = {
   primary:
-    'bg-primary hover:bg-secondary hover:text-brand text-beige border border-primary transition duration-300 ',
+    'bg-primary hover:bg-primary-dark text-white border border-primary transition duration-300',
   secondary:
-    'bg-white ring-1 ring-inset ring-grayLight hover:bg-gray-50 focus-visible:outline-grayLight text-grayDark',
-});
+    'bg-white ring-1 ring-inset ring-slate-300 hover:bg-slate-50 text-slate-700 transition duration-300',
+  outline:
+    'border border-primary text-primary hover:bg-primary hover:text-white transition duration-300',
+};
 const props = defineProps({
   variant: {
     type: String,
@@ -27,7 +27,7 @@ const props = defineProps({
 });
 
 const buttonClasses = computed(() => {
-  return `${sizeClasses.value[props.size] || ''} ${variantClasses.value[props.variant] || ''} font-medium`;
+  return `${sizeClasses[props.size] || sizeClasses.md} ${variantClasses[props.variant] || variantClasses.primary} font-medium`;
 });
 </script>
 

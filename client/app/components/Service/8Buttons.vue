@@ -18,7 +18,7 @@ const props = defineProps({
   <div class="grid grid-cols-2 gap-1">
     <NuxtLink v-for="i in 4" :key="'left-' + i" :to="props.links[i - 1]">
       <div class="flex flex-col gap-1">
-        <BaseButton variant="reverse" size="long">
+        <BaseButton variant="secondary" size="lg">
           {{ props.name[i - 1] }}
         </BaseButton>
       </div>
@@ -26,7 +26,7 @@ const props = defineProps({
 
     <NuxtLink v-for="i in 4" :key="'right-' + i" :to="props.links[i + 3]">
       <div class="flex flex-col gap-1">
-        <BaseButton variant="reverse" size="long">
+        <BaseButton variant="secondary" size="lg">
           {{ props.name[i + 3] }}
         </BaseButton>
       </div>

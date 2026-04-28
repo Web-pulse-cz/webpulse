@@ -51,6 +51,12 @@ import {
   CodeBracketIcon,
   ExclamationTriangleIcon,
   ShoppingCartIcon,
+  HomeModernIcon,
+  KeyIcon,
+  SparklesIcon,
+  SunIcon,
+  Squares2X2Icon,
+  BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useActivityStore } from '~/../stores/activityStore';
@@ -315,6 +321,53 @@ const navigation = ref([
     ],
   },
   {
+    title: 'Ubytování',
+    menu: [
+      {
+        name: 'Apartmány',
+        link: '/ubytovani/apartmany',
+        icon: HomeModernIcon,
+        current: false,
+        slug: 'apartments',
+      },
+      {
+        name: 'Typy apartmánů',
+        link: '/ubytovani/typy-apartmanu',
+        icon: Squares2X2Icon,
+        current: false,
+        slug: 'apartment_types',
+      },
+      {
+        name: 'Budovy',
+        link: '/ubytovani/budovy',
+        icon: BuildingOffice2Icon,
+        current: false,
+        slug: 'buildings',
+      },
+      {
+        name: 'Vybavení',
+        link: '/ubytovani/vybaveni',
+        icon: SparklesIcon,
+        current: false,
+        slug: 'amenities',
+      },
+      {
+        name: 'Roční období',
+        link: '/ubytovani/rocni-obdobi',
+        icon: SunIcon,
+        current: false,
+        slug: 'seasons',
+      },
+      {
+        name: 'Rezervace',
+        link: '/ubytovani/rezervace',
+        icon: KeyIcon,
+        current: false,
+        slug: 'apartment_reservations',
+      },
+    ],
+  },
+  {
     title: 'Zákazníci',
     menu: [
       {
@@ -390,6 +443,11 @@ const navigation = ref([
           {
             name: 'Úkoly',
             link: '/kontakty/ukoly',
+            current: false,
+          },
+          {
+            name: 'Hovory a schůzky',
+            link: '/kontakty/hovory-schuzky',
             current: false,
           },
         ],
@@ -723,6 +781,12 @@ const selectedSiteName = computed(() => {
   return site?.name || 'Vyberte stránku';
 });
 
+const selectedSiteUrl = computed(() => {
+  const site = user?.value?.sites?.find((s: any) => s.hash === selectedSiteHash.value);
+  if (!site?.url) return 'https://web-pulse.cz';
+  return `${site.is_secure ? 'https' : 'http'}://${site.url}`;
+});
+
 watch(
   () => selectedSiteHash.value,
   (newValue) => {
@@ -820,7 +884,7 @@ onMounted(() => {
               >
                 <div class="flex h-24 shrink-0 items-center justify-center border-b border-white/5">
                   <NuxtLink
-                    to="https://web-pulse.cz"
+                    :to="selectedSiteUrl"
                     target="_blank"
                     class="transition-transform hover:scale-105"
                   >
@@ -970,7 +1034,7 @@ onMounted(() => {
       >
         <div class="flex h-24 shrink-0 items-center justify-center border-b border-white/5">
           <NuxtLink
-            to="https://web-pulse.cz"
+            :to="selectedSiteUrl"
             target="_blank"
             class="transition-transform hover:scale-105"
           >
