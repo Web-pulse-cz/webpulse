@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Filemanager\Filemanager;
+use App\Models\Site\Site;
 use Illuminate\Http\File;
 use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\ImageInterface;
 
@@ -13,6 +14,12 @@ class FileManagerService
     private const IMAGES_BASE_PATH = 'images';
 
     private const FILES_BASE_PATH = 'files';
+
+    private const ALLOWED_POSITIONS = [
+        'top-left', 'top', 'top-right',
+        'left', 'center', 'right',
+        'bottom-left', 'bottom', 'bottom-right',
+    ];
 
     private ImageManager $imageManager;
 
@@ -23,40 +30,39 @@ class FileManagerService
 
     public function getImageFormats(string $type, ?string $format = null): array
     {
-        $config = config(sprintf('filemanager.images.%s', $type), []);
-        $formats = [];
+        $siteId = $this->resolveSiteIdFromRequest();
 
-        foreach ($config as $item) {
-            if ($format && $item['format'] === $format) {
-                return [
-                    'format' => $item['format'],
-                    'width' => $item['width'],
-                    'height' => $item['height'],
-                    'keepAspectRatio' => $item['keepAspectRatio'],
-                    'path' => storage_path('app/public/'.self::IMAGES_BASE_PATH.'/'.$type.'/'.$item['path']),
-                ];
-            }
-            $formats[] = [
-                'format' => $item['format'],
-                'width' => $item['width'],
-                'height' => $item['height'],
-                'keepAspectRatio' => $item['keepAspectRatio'],
-                'path' => storage_path('app/public/'.self::IMAGES_BASE_PATH.'/'.$type.'/'.$item['path']),
-            ];
+        $query = Filemanager::query()
+            ->where('entity_type', $type)
+            ->orderBy('position');
+
+        if ($siteId) {
+            $query->whereRelation('sites', 'sites.id', $siteId);
         }
 
-        return $formats;
+        if ($format) {
+            $row = $query->where('format', $format)->first();
+
+            return $row ? $this->serializeRow($row, $type) : [];
+        }
+
+        return $query->get()
+            ->map(fn ($row) => $this->serializeRow($row, $type))
+            ->toArray();
     }
 
     public function uploadImages(string $type, ?string $format = null, int $keepName = 0, array $files = [], ?string $url = null): array
     {
         $uploadedImages = [];
 
-        // Validate type
         $imageFormats = $this->getImageFormats($type, $format);
+        if ($format && ! empty($imageFormats) && isset($imageFormats['format'])) {
+            // Single-format response — wrap to a list to keep the loop uniform
+            $imageFormats = [$imageFormats];
+        }
+
         if (! empty($files)) {
             foreach ($files as $file) {
-                // Validate file
                 if (! $file->isValid()) {
                     throw new \Exception('Invalid file upload.');
                 }
@@ -69,11 +75,9 @@ class FileManagerService
                         if (! is_dir($configFormat['path'])) {
                             mkdir($configFormat['path'], 0755, true);
                         }
-
-                        // Copy the file (instead of move) into each directory
                         copy($file->getRealPath(), $configFormat['path'].'/'.$filename);
 
-                        continue; // Pokračuj na další formát
+                        continue;
                     }
 
                     try {
@@ -89,11 +93,9 @@ class FileManagerService
                     $imageData->save($configFormat['path'].'/'.$filename);
                 }
 
-                // Store the filename for the uploaded image
                 $uploadedImages[] = $filename;
             }
         } elseif ($url) {
-            // Handle URL upload
             $imageContents = file_get_contents($url);
             if ($imageContents === false) {
                 throw new \Exception('Failed to fetch image from URL.');
@@ -103,7 +105,6 @@ class FileManagerService
             file_put_contents($tempFilePath, $imageContents);
 
             $file = new File($tempFilePath);
-            $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
             $filename = $keepName ? basename(parse_url($url, PHP_URL_PATH)) : uniqid('', true).'.jpg';
 
             foreach ($imageFormats as $configFormat) {
@@ -120,14 +121,36 @@ class FileManagerService
                 $imageData->save($configFormat['path'].'/'.$filename);
             }
 
-            // Store the filename for the uploaded image
             $uploadedImages[] = $filename;
 
-            // Clean up temporary file
             unlink($tempFilePath);
         }
 
         return $uploadedImages;
+    }
+
+    private function serializeRow(Filemanager $row, string $type): array
+    {
+        return [
+            'format' => $row->format,
+            'width' => $row->width,
+            'height' => $row->height,
+            'mode' => $row->mode,
+            'crop_position' => $row->crop_position,
+            'path' => storage_path('app/public/'.self::IMAGES_BASE_PATH.'/'.$type.'/'.$row->path),
+        ];
+    }
+
+    private function resolveSiteIdFromRequest(): ?int
+    {
+        $hash = request()->header('X-Site-Hash');
+        if (! $hash) {
+            return null;
+        }
+
+        $site = Site::query()->where('hash', $hash)->first();
+
+        return $site?->id;
     }
 
     private function parseImage($file, array $format): ImageInterface
@@ -136,14 +159,19 @@ class FileManagerService
 
         $width = $format['width'] ?? null;
         $height = $format['height'] ?? null;
-        $keepAspectRatio = $format['keepAspectRatio'] ?? true;
+        $mode = $format['mode'] ?? 'cover';
+        $position = $format['crop_position'] ?? 'center';
+
+        if (! in_array($position, self::ALLOWED_POSITIONS, true)) {
+            $position = 'center';
+        }
 
         if ($width && $height) {
-            if ($keepAspectRatio) {
-                $image->pad($width, $height);
-            } else {
-                $image->resize($width, $height);
-            }
+            match ($mode) {
+                'contain' => $image->pad($width, $height),
+                'stretch' => $image->resize($width, $height),
+                default => $image->cover($width, $height, $position),
+            };
         }
 
         return $image;
