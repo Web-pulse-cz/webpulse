@@ -100,6 +100,7 @@ const settings = {
     'sites',
     'faqs',
     'changelogs',
+    'filemanagers',
   ],
   default_currency: 1,
   enabled_currencies: [1, 3],
@@ -350,6 +351,8 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Roční období';
     case 'apartment_reservations':
       return 'Rezervace ubytování';
+    case 'filemanagers':
+      return 'Filemanager';
     case 'project_time_entries':
       return 'Sledování času';
     default:
@@ -436,6 +439,7 @@ const moduleGroups = [
     slugs: [
       'users',
       'sites',
+      'filemanagers',
       'settings',
       'changelogs',
       'activities',

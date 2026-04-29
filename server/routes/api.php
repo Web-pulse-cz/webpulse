@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\Event\EventRegistrationController;
 use App\Http\Controllers\Admin\Fakturoid\FakturoidWebhookController;
 use App\Http\Controllers\Admin\Faq\FaqCategoryController;
 use App\Http\Controllers\Admin\Faq\FaqController;
+use App\Http\Controllers\Admin\Filemanager\FilemanagerController as AdminFilemanagerController;
 use App\Http\Controllers\Admin\Food\Allergen\AllergenController;
 use App\Http\Controllers\Admin\Food\Foodstuff\FoodstuffCategoryController;
 use App\Http\Controllers\Admin\Food\Foodstuff\FoodstuffController;
@@ -529,6 +530,16 @@ Route::group([
             Route::post('{id}/file', [PageController::class, 'uploadFile'])->where('id', '[0-9]+');
             Route::get('{pageId}/file/{fileId}', [PageController::class, 'downloadFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
             Route::delete('{pageId}/file/{fileId}', [PageController::class, 'deleteFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
+        });
+
+        // Filemanager routes
+        Route::group([
+            'prefix' => 'filemanager',
+        ], function () {
+            Route::get('', [AdminFilemanagerController::class, 'index']);
+            Route::get('{id}', [AdminFilemanagerController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [AdminFilemanagerController::class, 'store']);
+            Route::delete('{id}', [AdminFilemanagerController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Client routes
