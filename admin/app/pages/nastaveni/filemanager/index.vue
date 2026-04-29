@@ -59,11 +59,14 @@ async function loadItems() {
     },
   })
     .then((response) => {
-      const raw = response.data ?? response;
-      items.value = (raw ?? []).map((row: any) => ({
-        ...row,
-        dimensions: row.width && row.height ? `${row.width} × ${row.height}` : '—',
-      }));
+      if (response?.data && Array.isArray(response.data)) {
+        response.data = response.data.map((row: any) => ({
+          ...row,
+          dimensions: row.width && row.height ? `${row.width} × ${row.height}` : '—',
+        }));
+      }
+      items.value = response;
+      tableQuery.value.page = response?.currentPage ?? tableQuery.value.page;
     })
     .catch(() => {
       error.value = true;
