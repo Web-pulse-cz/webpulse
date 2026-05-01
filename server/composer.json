@@ -8,6 +8,7 @@
         "php": "^8.2",
         "astrotomic/laravel-translatable": "^11.16",
         "barryvdh/laravel-dompdf": "^3.1",
+        "dedoc/scramble": "^0.13.22",
         "fakturoid/fakturoid-php": "^2.1",
         "google/apiclient": "2.16.0",
         "guzzlehttp/guzzle": "^7.2",

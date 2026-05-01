@@ -23,11 +23,22 @@ class FileManagerService
 
     private const SVG_EXTENSIONS = ['svg', 'svgz'];
 
-    private ImageManager $imageManager;
+    private ?ImageManager $imageManager = null;
 
     public function __construct()
     {
-        $this->imageManager = new ImageManager(new Driver);
+        // Image manager (and its underlying Imagick driver) is created lazily
+        // to keep this service safely instantiable in environments without
+        // the Imagick PHP extension (e.g. CLI introspection, route:list).
+    }
+
+    private function imageManager(): ImageManager
+    {
+        if ($this->imageManager === null) {
+            $this->imageManager = new ImageManager(new Driver);
+        }
+
+        return $this->imageManager;
     }
 
     public function getImageFormats(string $type, ?string $format = null): array
@@ -170,7 +181,7 @@ class FileManagerService
 
     private function parseImage($file, array $format, string $extension): ImageInterface
     {
-        $image = $this->imageManager->read($file);
+        $image = $this->imageManager()->read($file);
 
         $width = $format['width'] ?? null;
         $height = $format['height'] ?? null;
