@@ -147,6 +147,8 @@ definePageMeta({
           bottomMenu: 'Spodní menu',
           popup: 'Pop-up okno',
           bar: 'Oznamovací proužek',
+          contacts: 'Kontakty',
+          openingHours: 'Otevírací doba',
         },
       }"
       @delete-item="deleteItem"

@@ -21,7 +21,7 @@ const props = defineProps({
 const emit = defineEmits(['update-files', 'remove-file']);
 const isUploadDialogVisible = ref(false);
 
-const imageFormatMessage = await useImageFormatMessage(
+const imageFormatMessage = useImageFormatMessage(
   props.fileType,
   props.multiple,
   props.type,

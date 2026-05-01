@@ -637,6 +637,13 @@ const navigation = ref([
         slug: 'sites',
       },
       {
+        name: 'Filemanager',
+        link: '/nastaveni/filemanager',
+        icon: PhotoIcon,
+        current: false,
+        slug: 'filemanagers',
+      },
+      {
         name: 'Nastavení',
         link: '/nastaveni',
         icon: CogIcon,
