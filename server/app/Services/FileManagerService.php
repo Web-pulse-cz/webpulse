@@ -21,11 +21,24 @@ class FileManagerService
         'bottom-left', 'bottom', 'bottom-right',
     ];
 
-    private ImageManager $imageManager;
+    private const SVG_EXTENSIONS = ['svg', 'svgz'];
+
+    private ?ImageManager $imageManager = null;
 
     public function __construct()
     {
-        $this->imageManager = new ImageManager(new Driver);
+        // Image manager (and its underlying Imagick driver) is created lazily
+        // to keep this service safely instantiable in environments without
+        // the Imagick PHP extension (e.g. CLI introspection, route:list).
+    }
+
+    private function imageManager(): ImageManager
+    {
+        if ($this->imageManager === null) {
+            $this->imageManager = new ImageManager(new Driver);
+        }
+
+        return $this->imageManager;
     }
 
     public function getImageFormats(string $type, ?string $format = null): array
@@ -69,28 +82,24 @@ class FileManagerService
 
                 $extension = strtolower($file->getClientOriginalExtension());
                 $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true).'.'.$extension;
+                $isSvg = in_array($extension, self::SVG_EXTENSIONS, true) || $file->getMimeType() === 'image/svg+xml';
 
                 foreach ($imageFormats as $configFormat) {
-                    if (in_array($extension, ['svg', 'svgz']) || $file->getMimeType() === 'image/svg+xml') {
-                        if (! is_dir($configFormat['path'])) {
-                            mkdir($configFormat['path'], 0755, true);
-                        }
+                    $this->ensureDirectoryExists($configFormat['path']);
+
+                    if ($isSvg) {
                         copy($file->getRealPath(), $configFormat['path'].'/'.$filename);
 
                         continue;
                     }
 
                     try {
-                        $imageData = $this->parseImage($file, $configFormat);
+                        $imageData = $this->parseImage($file, $configFormat, $extension);
                     } catch (\Exception $e) {
                         throw new \Exception('Error processing image: '.$e->getMessage());
                     }
 
-                    if (! is_dir($configFormat['path'])) {
-                        mkdir($configFormat['path'], 0755, true);
-                    }
-
-                    $imageData->save($configFormat['path'].'/'.$filename);
+                    $this->saveImage($imageData, $configFormat['path'].'/'.$filename, $extension);
                 }
 
                 $uploadedImages[] = $filename;
@@ -101,24 +110,34 @@ class FileManagerService
                 throw new \Exception('Failed to fetch image from URL.');
             }
 
-            $tempFilePath = tempnam(sys_get_temp_dir(), 'img_');
+            $urlExtension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
+            if (! $urlExtension) {
+                $urlExtension = 'jpg';
+            }
+
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'img_').'.'.$urlExtension;
             file_put_contents($tempFilePath, $imageContents);
 
             $file = new File($tempFilePath);
-            $filename = $keepName ? basename(parse_url($url, PHP_URL_PATH)) : uniqid('', true).'.jpg';
+            $filename = $keepName ? basename(parse_url($url, PHP_URL_PATH)) : uniqid('', true).'.'.$urlExtension;
+            $isSvg = in_array($urlExtension, self::SVG_EXTENSIONS, true);
 
             foreach ($imageFormats as $configFormat) {
+                $this->ensureDirectoryExists($configFormat['path']);
+
+                if ($isSvg) {
+                    copy($tempFilePath, $configFormat['path'].'/'.$filename);
+
+                    continue;
+                }
+
                 try {
-                    $imageData = $this->parseImage($file, $configFormat);
+                    $imageData = $this->parseImage($file, $configFormat, $urlExtension);
                 } catch (\Exception $e) {
                     throw new \Exception('Error processing image from URL: '.$e->getMessage());
                 }
 
-                if (! is_dir($configFormat['path'])) {
-                    mkdir($configFormat['path'], 0755, true);
-                }
-
-                $imageData->save($configFormat['path'].'/'.$filename);
+                $this->saveImage($imageData, $configFormat['path'].'/'.$filename, $urlExtension);
             }
 
             $uploadedImages[] = $filename;
@@ -127,6 +146,13 @@ class FileManagerService
         }
 
         return $uploadedImages;
+    }
+
+    private function ensureDirectoryExists(string $path): void
+    {
+        if (! is_dir($path)) {
+            mkdir($path, 0755, true);
+        }
     }
 
     private function serializeRow(Filemanager $row, string $type): array
@@ -153,9 +179,9 @@ class FileManagerService
         return $site?->id;
     }
 
-    private function parseImage($file, array $format): ImageInterface
+    private function parseImage($file, array $format, string $extension): ImageInterface
     {
-        $image = $this->imageManager->read($file);
+        $image = $this->imageManager()->read($file);
 
         $width = $format['width'] ?? null;
         $height = $format['height'] ?? null;
@@ -167,13 +193,30 @@ class FileManagerService
         }
 
         if ($width && $height) {
+            // PNG/WEBP/GIF support transparency — pad with transparent background
+            // so we never burn a white background into a transparent image.
+            $padBackground = $this->supportsTransparency($extension) ? 'transparent' : 'ffffff';
+
             match ($mode) {
-                'contain' => $image->pad($width, $height),
+                'contain' => $image->pad($width, $height, $padBackground, $position),
                 'stretch' => $image->resize($width, $height),
                 default => $image->cover($width, $height, $position),
             };
         }
 
         return $image;
+    }
+
+    private function saveImage(ImageInterface $image, string $path, string $extension): void
+    {
+        // Encode by the requested extension so the output format always matches
+        // the input (PNG stays PNG, JPG stays JPG, WEBP stays WEBP, …).
+        $encoded = $image->encodeByExtension($extension);
+        $encoded->save($path);
+    }
+
+    private function supportsTransparency(string $extension): bool
+    {
+        return in_array($extension, ['png', 'webp', 'gif', 'avif'], true);
     }
 }

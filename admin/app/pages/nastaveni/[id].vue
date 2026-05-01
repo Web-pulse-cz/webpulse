@@ -6,6 +6,11 @@ import {
   PlusIcon,
   ChatBubbleBottomCenterTextIcon,
   MegaphoneIcon,
+  BuildingOffice2Icon,
+  ClockIcon,
+  CalendarDaysIcon,
+  XMarkIcon,
+  GlobeAltIcon,
 } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
@@ -46,6 +51,33 @@ const item = ref({
   sites: [] as number[],
 });
 
+const SOCIAL_PLATFORMS = [
+  { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/...' },
+  { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/...' },
+  { key: 'linkedin', label: 'LinkedIn', placeholder: 'https://linkedin.com/company/...' },
+  { key: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@...' },
+  { key: 'twitter', label: 'X / Twitter', placeholder: 'https://x.com/...' },
+  { key: 'tiktok', label: 'TikTok', placeholder: 'https://tiktok.com/@...' },
+];
+
+const WEEK_DAYS = [
+  { key: 'monday', label: 'Pondělí', short: 'Po' },
+  { key: 'tuesday', label: 'Úterý', short: 'Út' },
+  { key: 'wednesday', label: 'Středa', short: 'St' },
+  { key: 'thursday', label: 'Čtvrtek', short: 'Čt' },
+  { key: 'friday', label: 'Pátek', short: 'Pá' },
+  { key: 'saturday', label: 'Sobota', short: 'So' },
+  { key: 'sunday', label: 'Neděle', short: 'Ne' },
+];
+
+function defaultDays() {
+  const days: Record<string, { closed: boolean; intervals: { from: string; to: string }[] }> = {};
+  WEEK_DAYS.forEach((d) => {
+    days[d.key] = { closed: false, intervals: [{ from: '', to: '' }] };
+  });
+  return days;
+}
+
 function defaultValueForType(type: string) {
   if (type === 'popup') {
     return { title: '', content: '', buttonText: '', buttonLink: '' };
@@ -57,6 +89,27 @@ function defaultValueForType(type: string) {
       buttonLink: '',
       backgroundColor: '#1e293b',
       textColor: '#ffffff',
+    };
+  }
+  if (type === 'contacts') {
+    return {
+      companyName: '',
+      ico: '',
+      dic: '',
+      phone: '',
+      email: '',
+      address: '',
+      mapEmbed: '',
+      socials: SOCIAL_PLATFORMS.reduce<Record<string, string>>((acc, p) => {
+        acc[p.key] = '';
+        return acc;
+      }, {}),
+    };
+  }
+  if (type === 'openingHours') {
+    return {
+      days: defaultDays(),
+      exceptions: [] as { date: string; closed: boolean; intervals: { from: string; to: string }[]; note: string }[],
     };
   }
   return { groups: [] };
@@ -209,11 +262,95 @@ definePageMeta({
   middleware: 'sanctum:auth',
 });
 
-const addGroup = () => {
-  if (!props.item.translations[props.selectedLocale].value) {
-    props.item.translations[props.selectedLocale].value = { groups: [] };
+function ensureOpeningHoursShape(value: any) {
+  if (!value.days) value.days = defaultDays();
+  WEEK_DAYS.forEach((d) => {
+    if (!value.days[d.key]) {
+      value.days[d.key] = { closed: false, intervals: [{ from: '', to: '' }] };
+    }
+    if (!Array.isArray(value.days[d.key].intervals)) {
+      value.days[d.key].intervals = [{ from: '', to: '' }];
+    }
+  });
+  if (!Array.isArray(value.exceptions)) value.exceptions = [];
+}
+
+function addInterval(dayKey: string) {
+  const value = item.value.translations[selectedLocale.value].value;
+  ensureOpeningHoursShape(value);
+  value.days[dayKey].intervals.push({ from: '', to: '' });
+}
+
+function removeInterval(dayKey: string, index: number) {
+  const value = item.value.translations[selectedLocale.value].value;
+  value.days[dayKey].intervals.splice(index, 1);
+  if (value.days[dayKey].intervals.length === 0) {
+    value.days[dayKey].intervals.push({ from: '', to: '' });
   }
-  props.item.translations[props.selectedLocale].value.groups.push({
+}
+
+function toggleDayClosed(dayKey: string) {
+  const value = item.value.translations[selectedLocale.value].value;
+  ensureOpeningHoursShape(value);
+  value.days[dayKey].closed = !value.days[dayKey].closed;
+  if (value.days[dayKey].closed) {
+    value.days[dayKey].intervals = [];
+  } else if (value.days[dayKey].intervals.length === 0) {
+    value.days[dayKey].intervals = [{ from: '', to: '' }];
+  }
+}
+
+function addException() {
+  const value = item.value.translations[selectedLocale.value].value;
+  ensureOpeningHoursShape(value);
+  value.exceptions.push({
+    date: '',
+    closed: true,
+    intervals: [],
+    note: '',
+  });
+}
+
+function removeException(index: number) {
+  const value = item.value.translations[selectedLocale.value].value;
+  value.exceptions.splice(index, 1);
+}
+
+function toggleExceptionClosed(index: number) {
+  const value = item.value.translations[selectedLocale.value].value;
+  const ex = value.exceptions[index];
+  ex.closed = !ex.closed;
+  if (ex.closed) {
+    ex.intervals = [];
+  } else if (!ex.intervals || ex.intervals.length === 0) {
+    ex.intervals = [{ from: '', to: '' }];
+  }
+}
+
+function addExceptionInterval(index: number) {
+  const value = item.value.translations[selectedLocale.value].value;
+  if (!Array.isArray(value.exceptions[index].intervals)) {
+    value.exceptions[index].intervals = [];
+  }
+  value.exceptions[index].intervals.push({ from: '', to: '' });
+}
+
+function removeExceptionInterval(exIndex: number, intIndex: number) {
+  const value = item.value.translations[selectedLocale.value].value;
+  value.exceptions[exIndex].intervals.splice(intIndex, 1);
+}
+
+const addGroup = () => {
+  if (!item.value.translations[selectedLocale.value]) {
+    item.value.translations[selectedLocale.value] = { value: { groups: [] } };
+  }
+  if (!item.value.translations[selectedLocale.value].value) {
+    item.value.translations[selectedLocale.value].value = { groups: [] };
+  }
+  if (!item.value.translations[selectedLocale.value].value.groups) {
+    item.value.translations[selectedLocale.value].value.groups = [];
+  }
+  item.value.translations[selectedLocale.value].value.groups.push({
     name: '',
     link: '',
     submenu: [],
@@ -246,7 +383,11 @@ const addGroup = () => {
                   ? 'Konfigurace pop-upu'
                   : item.type === 'bar'
                     ? 'Konfigurace proužku'
-                    : 'Konfigurace menu'
+                    : item.type === 'contacts'
+                      ? 'Konfigurace kontaktů'
+                      : item.type === 'openingHours'
+                        ? 'Konfigurace otevírací doby'
+                        : 'Konfigurace menu'
               }}</LayoutTitle>
             </div>
 
@@ -261,6 +402,8 @@ const addGroup = () => {
                     { value: 'bottomMenu', name: 'Spodní navigace (Footer)' },
                     { value: 'popup', name: 'Pop-up okno' },
                     { value: 'bar', name: 'Oznamovací proužek' },
+                    { value: 'contacts', name: 'Kontakty' },
+                    { value: 'openingHours', name: 'Otevírací doba' },
                   ]"
                   :disabled="route.params.id !== 'pridat'"
                 />
@@ -564,6 +707,323 @@ const addGroup = () => {
               </div>
             </div>
           </LayoutContainer>
+
+          <LayoutContainer v-if="item.type === 'contacts'">
+            <div class="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <BuildingOffice2Icon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0"
+                >Kontaktní údaje ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+              >
+            </div>
+
+            <div v-if="item.translations[selectedLocale]?.value" class="space-y-6">
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.companyName"
+                  label="Název firmy"
+                  name="contactsCompanyName"
+                  placeholder="Např. WebPulse s.r.o."
+                />
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.ico"
+                  label="IČO"
+                  name="contactsIco"
+                  placeholder="Např. 12345678"
+                />
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.dic"
+                  label="DIČ"
+                  name="contactsDic"
+                  placeholder="Např. CZ12345678"
+                />
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.phone"
+                  label="Telefon"
+                  name="contactsPhone"
+                  placeholder="Např. +420 123 456 789"
+                />
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.email"
+                  label="E-mail"
+                  name="contactsEmail"
+                  placeholder="info@example.com"
+                  rules="email"
+                />
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.address"
+                  label="Adresa"
+                  name="contactsAddress"
+                  placeholder="Ulice 123, 110 00 Praha"
+                />
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <p class="mb-3 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Mapa
+                </p>
+                <BaseFormInput
+                  v-model="item.translations[selectedLocale].value.mapEmbed"
+                  label="Embed kód mapy nebo URL"
+                  name="contactsMapEmbed"
+                  placeholder="<iframe src=&quot;https://www.google.com/maps/embed?...&quot;></iframe>"
+                />
+                <p class="mt-2 text-xs text-slate-400">
+                  Vložte iframe embed kód z Google Maps nebo URL mapy.
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+                <div class="mb-4 flex items-center gap-2">
+                  <GlobeAltIcon class="size-4 text-indigo-600" />
+                  <p class="text-xs font-black uppercase tracking-widest text-slate-400">
+                    Sociální sítě
+                  </p>
+                </div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <BaseFormInput
+                    v-for="platform in SOCIAL_PLATFORMS"
+                    :key="platform.key"
+                    v-model="item.translations[selectedLocale].value.socials[platform.key]"
+                    :label="platform.label"
+                    :name="'contactsSocial_' + platform.key"
+                    :placeholder="platform.placeholder"
+                  />
+                </div>
+                <p class="mt-3 text-xs text-slate-400">
+                  Nechte prázdná pole, pokud konkrétní síť na webu nechcete zobrazit.
+                </p>
+              </div>
+            </div>
+          </LayoutContainer>
+
+          <LayoutContainer v-if="item.type === 'openingHours'">
+            <div class="mb-8 flex items-center gap-3 border-b border-slate-100 pb-5">
+              <div
+                class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+              >
+                <ClockIcon class="size-5" />
+              </div>
+              <LayoutTitle class="!mb-0"
+                >Otevírací doba ({{ selectedLocale.toUpperCase() }})</LayoutTitle
+              >
+            </div>
+
+            <div
+              v-if="item.translations[selectedLocale]?.value?.days"
+              class="space-y-4"
+            >
+              <div
+                v-for="day in WEEK_DAYS"
+                :key="day.key"
+                class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200"
+              >
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <span
+                      class="flex size-9 items-center justify-center rounded-lg bg-white text-xs font-black uppercase tracking-wider text-slate-700 ring-1 ring-slate-200"
+                      >{{ day.short }}</span
+                    >
+                    <span class="text-sm font-semibold text-slate-700">{{ day.label }}</span>
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      :class="[
+                        'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
+                        item.translations[selectedLocale].value.days[day.key]?.closed
+                          ? 'bg-red-50 text-red-600 ring-1 ring-red-200'
+                          : 'bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-100',
+                      ]"
+                      @click="toggleDayClosed(day.key)"
+                    >
+                      {{
+                        item.translations[selectedLocale].value.days[day.key]?.closed
+                          ? 'Zavřeno'
+                          : 'Otevřeno'
+                      }}
+                    </button>
+                    <BaseButton
+                      v-if="!item.translations[selectedLocale].value.days[day.key]?.closed"
+                      type="button"
+                      variant="secondary"
+                      size="md"
+                      class="bg-white shadow-none ring-slate-200 hover:ring-indigo-500"
+                      title="Přidat interval"
+                      @click="addInterval(day.key)"
+                    >
+                      <PlusIcon class="size-4 text-indigo-600" />
+                    </BaseButton>
+                  </div>
+                </div>
+
+                <div
+                  v-if="!item.translations[selectedLocale].value.days[day.key]?.closed"
+                  class="mt-4 space-y-2"
+                >
+                  <div
+                    v-for="(interval, intIndex) in item.translations[selectedLocale].value.days[
+                      day.key
+                    ].intervals"
+                    :key="intIndex"
+                    class="flex items-center gap-2"
+                  >
+                    <BaseFormInput
+                      v-model="interval.from"
+                      label="Od"
+                      :name="'oh_' + day.key + '_from_' + intIndex"
+                      type="time"
+                      class="flex-1"
+                    />
+                    <span class="mt-6 text-slate-400">–</span>
+                    <BaseFormInput
+                      v-model="interval.to"
+                      label="Do"
+                      :name="'oh_' + day.key + '_to_' + intIndex"
+                      type="time"
+                      class="flex-1"
+                    />
+                    <button
+                      type="button"
+                      class="mt-6 flex size-9 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                      title="Odebrat interval"
+                      @click="removeInterval(day.key, intIndex)"
+                    >
+                      <XMarkIcon class="size-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-10 border-t border-slate-100 pt-6">
+              <div class="mb-5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+                  >
+                    <CalendarDaysIcon class="size-5" />
+                  </div>
+                  <LayoutTitle class="!mb-0">Výjimky a svátky</LayoutTitle>
+                </div>
+                <BaseButton type="button" variant="primary" size="md" @click="addException">
+                  <PlusIcon class="mr-2 size-4" />
+                  Přidat výjimku
+                </BaseButton>
+              </div>
+
+              <div
+                v-if="item.translations[selectedLocale]?.value?.exceptions?.length"
+                class="space-y-4"
+              >
+                <div
+                  v-for="(exception, exIndex) in item.translations[selectedLocale].value.exceptions"
+                  :key="exIndex"
+                  class="rounded-2xl bg-amber-50/40 p-5 ring-1 ring-amber-100"
+                >
+                  <div class="grid grid-cols-12 items-end gap-4">
+                    <BaseFormInput
+                      v-model="exception.date"
+                      label="Datum"
+                      :name="'exception_date_' + exIndex"
+                      type="date"
+                      class="col-span-12 md:col-span-3"
+                    />
+                    <BaseFormInput
+                      v-model="exception.note"
+                      label="Popis (volitelné)"
+                      :name="'exception_note_' + exIndex"
+                      placeholder="Např. Štědrý den"
+                      class="col-span-12 md:col-span-6"
+                    />
+                    <div class="col-span-12 flex items-center justify-end gap-2 md:col-span-3">
+                      <button
+                        type="button"
+                        :class="[
+                          'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
+                          exception.closed
+                            ? 'bg-red-50 text-red-600 ring-1 ring-red-200'
+                            : 'bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-100',
+                        ]"
+                        @click="toggleExceptionClosed(exIndex)"
+                      >
+                        {{ exception.closed ? 'Zavřeno' : 'Otevřeno' }}
+                      </button>
+                      <button
+                        type="button"
+                        class="flex size-9 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                        title="Smazat výjimku"
+                        @click="removeException(exIndex)"
+                      >
+                        <TrashIcon class="size-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div v-if="!exception.closed" class="mt-4 space-y-2">
+                    <div
+                      v-for="(interval, intIndex) in exception.intervals"
+                      :key="intIndex"
+                      class="flex items-center gap-2"
+                    >
+                      <BaseFormInput
+                        v-model="interval.from"
+                        label="Od"
+                        :name="'exception_' + exIndex + '_from_' + intIndex"
+                        type="time"
+                        class="flex-1"
+                      />
+                      <span class="mt-6 text-slate-400">–</span>
+                      <BaseFormInput
+                        v-model="interval.to"
+                        label="Do"
+                        :name="'exception_' + exIndex + '_to_' + intIndex"
+                        type="time"
+                        class="flex-1"
+                      />
+                      <button
+                        type="button"
+                        class="mt-6 flex size-9 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                        title="Odebrat interval"
+                        @click="removeExceptionInterval(exIndex, intIndex)"
+                      >
+                        <XMarkIcon class="size-4" />
+                      </button>
+                    </div>
+                    <BaseButton
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      class="bg-white shadow-none ring-slate-200 hover:ring-indigo-500"
+                      @click="addExceptionInterval(exIndex)"
+                    >
+                      <PlusIcon class="mr-1 size-3 text-indigo-600" />
+                      Přidat interval
+                    </BaseButton>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                v-else
+                class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-amber-200 py-10 text-center"
+              >
+                <div class="mb-3 rounded-full bg-amber-50 p-3">
+                  <CalendarDaysIcon class="size-6 text-amber-400" />
+                </div>
+                <p class="text-sm font-medium text-slate-500">
+                  Zatím nejsou nastavené žádné výjimky.
+                </p>
+                <p class="mt-1 text-xs text-slate-400">
+                  Přidejte svátky nebo dny, kdy se otevírací doba liší.
+                </p>
+              </div>
+            </div>
+          </LayoutContainer>
         </div>
 
         <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
@@ -616,6 +1076,36 @@ const addGroup = () => {
               Proužek se zobrazí nad hlavičkou webu. Návštěvník ho může zavřít a pokud změníte
               obsah, automaticky se mu znovu objeví. Ideální pro akce jako "2+1 zdarma" nebo sezónní
               slevy.
+            </p>
+          </div>
+
+          <div
+            v-else-if="item.type === 'contacts'"
+            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
+          >
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold">Tip pro kontakty</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+              Kontaktní údaje se používají v patičce, na kontaktní stránce i ve strukturovaných
+              datech pro vyhledávače. Doporučujeme vyplnit alespoň název firmy, telefon, e-mail
+              a adresu — pro lepší dohledatelnost na Googlu.
+            </p>
+          </div>
+
+          <div
+            v-else-if="item.type === 'openingHours'"
+            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
+          >
+            <div class="mb-3 flex items-center gap-2">
+              <LightBulbIcon class="size-5 text-indigo-200" />
+              <h4 class="text-sm font-bold">Tip pro otevírací dobu</h4>
+            </div>
+            <p class="text-xs leading-relaxed opacity-90">
+              Pro každý den můžete přidat více intervalů (např. polední pauza), nebo den označit
+              jako zavřený. Výjimky slouží pro jednorázové dny — typicky státní svátky, dovolenou
+              nebo sezónní úpravy.
             </p>
           </div>
         </aside>
