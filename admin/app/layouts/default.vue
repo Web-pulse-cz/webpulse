@@ -178,6 +178,13 @@ const navigation = ref([
         slug: 'logos',
       },
       {
+        name: 'Fotogalerie',
+        link: '/obsah/fotogalerie',
+        icon: Squares2X2Icon,
+        current: false,
+        slug: 'photo_galleries',
+      },
+      {
         name: 'Pracovní pozice',
         icon: AcademicCapIcon,
         current: false,

@@ -57,6 +57,7 @@ const moduleGroups = ref([
       { slug: 'events', name: 'Události' },
       { slug: 'reviews', name: 'Reference' },
       { slug: 'logos', name: 'Loga klientů' },
+      { slug: 'photo_galleries', name: 'Fotogalerie' },
       { slug: 'careers', name: 'Pracovní pozice' },
       { slug: 'quizzes', name: 'Kvízy' },
       { slug: 'faqs', name: 'FAQ' },

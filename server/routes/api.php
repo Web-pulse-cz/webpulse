@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\Message\MessageBlueprintController;
 use App\Http\Controllers\Admin\Newsletter\NewsletterController;
 use App\Http\Controllers\Admin\Novelty\NoveltyController;
 use App\Http\Controllers\Admin\Page\PageController;
+use App\Http\Controllers\Admin\PhotoGallery\PhotoGalleryController;
 use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Project\ProjectController;
 use App\Http\Controllers\Admin\Project\ProjectCostController;
@@ -530,6 +531,16 @@ Route::group([
             Route::post('{id}/file', [PageController::class, 'uploadFile'])->where('id', '[0-9]+');
             Route::get('{pageId}/file/{fileId}', [PageController::class, 'downloadFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
             Route::delete('{pageId}/file/{fileId}', [PageController::class, 'deleteFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
+        });
+
+        // Photo Gallery routes
+        Route::group([
+            'prefix' => 'photo-gallery',
+        ], function () {
+            Route::get('', [PhotoGalleryController::class, 'index']);
+            Route::get('{id}', [PhotoGalleryController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PhotoGalleryController::class, 'store']);
+            Route::delete('{id}', [PhotoGalleryController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Filemanager routes
