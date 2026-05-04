@@ -376,6 +376,7 @@ const moduleGroups = [
     slugs: [
       'posts',
       'pages',
+      'blocks',
       'novelties',
       'services',
       'events',
