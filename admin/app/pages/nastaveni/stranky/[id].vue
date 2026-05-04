@@ -60,6 +60,7 @@ const settings = {
     'apartment_reservations',
     'posts',
     'pages',
+    'blocks',
     'novelties',
     'services',
     'events',
@@ -248,6 +249,8 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Blogové članky';
     case 'pages':
       return 'Informační stránky';
+    case 'blocks':
+      return 'Bloky';
     case 'novelties':
       return 'Novinky';
     case 'services':

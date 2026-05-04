@@ -57,6 +57,7 @@ import {
   SunIcon,
   Squares2X2Icon,
   BuildingOffice2Icon,
+  RectangleStackIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useActivityStore } from '~/../stores/activityStore';
@@ -125,6 +126,13 @@ const navigation = ref([
         icon: DocumentIcon,
         current: false,
         slug: 'pages',
+      },
+      {
+        name: 'Bloky',
+        link: '/obsah/bloky',
+        icon: RectangleStackIcon,
+        current: false,
+        slug: 'blocks',
       },
       {
         name: 'Novinky',

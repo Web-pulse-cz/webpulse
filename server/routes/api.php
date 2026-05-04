@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Biography\BiographyController;
+use App\Http\Controllers\Admin\Block\BlockController;
 use App\Http\Controllers\Admin\Building\BuildingController;
 use App\Http\Controllers\Admin\Blog\PostCategoryController;
 use App\Http\Controllers\Admin\Blog\PostController;
@@ -92,6 +93,7 @@ use App\Http\Controllers\Admin\User\QuickAccessController;
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\User\UserGroupController;
 use App\Http\Controllers\Admin\Voucher\VoucherController;
+use App\Http\Controllers\Client\Block\BlockController as ClientBlockController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
 use App\Http\Controllers\Client\Blog\PostController as ClientPostController;
 use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
@@ -189,6 +191,13 @@ Route::group([
     'prefix' => 'page',
 ], function () {
     Route::get('{id}/{lang?}', [ClientPageController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'block',
+], function () {
+    Route::get('{blockableKey}/{blockableId}/{lang?}', [ClientBlockController::class, 'index'])
+        ->where('blockableId', '[0-9]+');
 });
 
 Route::group([
@@ -646,6 +655,18 @@ Route::group([
             Route::post('{id}/file', [PageController::class, 'uploadFile'])->where('id', '[0-9]+');
             Route::get('{pageId}/file/{fileId}', [PageController::class, 'downloadFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
             Route::delete('{pageId}/file/{fileId}', [PageController::class, 'deleteFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
+        });
+
+        // Block routes
+        Route::group([
+            'prefix' => 'block',
+        ], function () {
+            Route::get('schemas', [BlockController::class, 'schemas']);
+            Route::post('reorder', [BlockController::class, 'reorder']);
+            Route::get('', [BlockController::class, 'index']);
+            Route::get('{id}', [BlockController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [BlockController::class, 'store']);
+            Route::delete('{id}', [BlockController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Photo Gallery routes
