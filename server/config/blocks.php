@@ -9,17 +9,10 @@
  * Field types: text, textarea, richtext, image, link, boolean, number, select.
  * Mark `translatable: true` for fields stored in block_translations.data per locale.
  *
- * Allowed `blockable` types are listed below — admin restricts the parent picker
- * and the controller validates against this allowlist (no arbitrary class names).
+ * Bloky se přiřazují k webům přes standardní Siteable trait (morphToMany sites).
  */
 
 return [
-    'allowed_blockables' => [
-        'site' => \App\Models\Site\Site::class,
-        'page' => \App\Models\Page\Page::class,
-        'apartment' => \App\Models\Apartment\Apartment::class,
-    ],
-
     'types' => [
         'hero' => [
             'label' => 'Hero',

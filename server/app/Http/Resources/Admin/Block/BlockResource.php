@@ -9,17 +9,8 @@ class BlockResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $blockableTypes = array_flip(array_map(
-            fn ($cls) => $cls,
-            config('blocks.allowed_blockables', [])
-        ));
-
         return [
             'id' => $this->id,
-            'site_id' => $this->site_id,
-            'blockable_type' => $this->blockable_type,
-            'blockable_key' => $blockableTypes[$this->blockable_type] ?? null,
-            'blockable_id' => $this->blockable_id,
             'type' => $this->type,
             'data' => $this->data ?? [],
             'position' => $this->position,
@@ -32,6 +23,7 @@ class BlockResource extends JsonResource
                 null,
                 'locale'
             ),
+            'sites' => $this->sites,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ];

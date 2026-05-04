@@ -196,8 +196,7 @@ Route::group([
 Route::group([
     'prefix' => 'block',
 ], function () {
-    Route::get('{blockableKey}/{blockableId}/{lang?}', [ClientBlockController::class, 'index'])
-        ->where('blockableId', '[0-9]+');
+    Route::get('{lang?}', [ClientBlockController::class, 'index']);
 });
 
 Route::group([

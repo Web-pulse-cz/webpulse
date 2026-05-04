@@ -2,21 +2,17 @@
 
 namespace App\Models\Block;
 
-use App\Models\Site\Site;
+use App\Traits\Siteable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Block extends Model
 {
-    use Translatable;
+    use Siteable, Translatable;
 
     protected $table = 'blocks';
 
     protected $fillable = [
-        'site_id',
-        'blockable_type',
-        'blockable_id',
         'type',
         'data',
         'position',
@@ -35,13 +31,8 @@ class Block extends Model
 
     public $translationForeignKey = 'block_id';
 
-    public function blockable(): MorphTo
+    public function sites()
     {
-        return $this->morphTo();
-    }
-
-    public function site()
-    {
-        return $this->belongsTo(Site::class);
+        return $this->morphToMany('App\Models\Site\Site', 'siteable');
     }
 }
