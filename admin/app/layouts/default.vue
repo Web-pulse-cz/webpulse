@@ -57,6 +57,7 @@ import {
   SunIcon,
   Squares2X2Icon,
   BuildingOffice2Icon,
+  RectangleStackIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { useActivityStore } from '~/../stores/activityStore';
@@ -127,6 +128,13 @@ const navigation = ref([
         slug: 'pages',
       },
       {
+        name: 'Bloky',
+        link: '/obsah/bloky',
+        icon: RectangleStackIcon,
+        current: false,
+        slug: 'blocks',
+      },
+      {
         name: 'Novinky',
         link: '/obsah/novinky',
         icon: NewspaperIcon,
@@ -176,6 +184,13 @@ const navigation = ref([
         icon: PhotoIcon,
         current: false,
         slug: 'logos',
+      },
+      {
+        name: 'Fotogalerie',
+        link: '/obsah/fotogalerie',
+        icon: Squares2X2Icon,
+        current: false,
+        slug: 'photo_galleries',
       },
       {
         name: 'Pracovní pozice',

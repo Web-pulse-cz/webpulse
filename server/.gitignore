@@ -18,3 +18,4 @@ yarn-error.log
 /.idea
 /.vscode
 /api.json
+/postman_collection.json

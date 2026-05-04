@@ -52,11 +52,13 @@ const moduleGroups = ref([
     modules: [
       { slug: 'posts', name: 'Blogové články' },
       { slug: 'pages', name: 'Informační stránky' },
+      { slug: 'blocks', name: 'Bloky' },
       { slug: 'novelties', name: 'Novinky' },
       { slug: 'services', name: 'Služby' },
       { slug: 'events', name: 'Události' },
       { slug: 'reviews', name: 'Reference' },
       { slug: 'logos', name: 'Loga klientů' },
+      { slug: 'photo_galleries', name: 'Fotogalerie' },
       { slug: 'careers', name: 'Pracovní pozice' },
       { slug: 'quizzes', name: 'Kvízy' },
       { slug: 'faqs', name: 'FAQ' },

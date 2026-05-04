@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Biography\BiographyController;
+use App\Http\Controllers\Admin\Block\BlockController;
 use App\Http\Controllers\Admin\Building\BuildingController;
 use App\Http\Controllers\Admin\Blog\PostCategoryController;
 use App\Http\Controllers\Admin\Blog\PostController;
@@ -59,6 +60,7 @@ use App\Http\Controllers\Admin\Message\MessageBlueprintController;
 use App\Http\Controllers\Admin\Newsletter\NewsletterController;
 use App\Http\Controllers\Admin\Novelty\NoveltyController;
 use App\Http\Controllers\Admin\Page\PageController;
+use App\Http\Controllers\Admin\PhotoGallery\PhotoGalleryController;
 use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Project\ProjectController;
 use App\Http\Controllers\Admin\Project\ProjectCostController;
@@ -91,6 +93,7 @@ use App\Http\Controllers\Admin\User\QuickAccessController;
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\User\UserGroupController;
 use App\Http\Controllers\Admin\Voucher\VoucherController;
+use App\Http\Controllers\Client\Block\BlockController as ClientBlockController;
 use App\Http\Controllers\Client\Blog\PostCategoryController as ClientPostCategoryController;
 use App\Http\Controllers\Client\Blog\PostController as ClientPostController;
 use App\Http\Controllers\Client\Career\CareerApplicationController as ClientCareerApplicationController;
@@ -109,6 +112,20 @@ use App\Http\Controllers\Client\Quiz\QuizController as ClientQuizController;
 use App\Http\Controllers\Client\Review\ReviewController as ClientReviewController;
 use App\Http\Controllers\Client\Service\ServiceController as ClientServiceController;
 use App\Http\Controllers\Client\Setting\SettingController as ClientSettingController;
+use App\Http\Controllers\Client\Amenity\AmenityController as ClientAmenityController;
+use App\Http\Controllers\Client\Apartment\ApartmentController as ClientApartmentController;
+use App\Http\Controllers\Client\Apartment\ApartmentTypeController as ClientApartmentTypeController;
+use App\Http\Controllers\Client\Apartment\ReservationController as ClientApartmentReservationController;
+use App\Http\Controllers\Client\Building\BuildingController as ClientBuildingController;
+use App\Http\Controllers\Client\Food\Allergen\AllergenController as ClientAllergenController;
+use App\Http\Controllers\Client\Food\Foodstuff\FoodstuffController as ClientFoodstuffController;
+use App\Http\Controllers\Client\Food\Meal\MealController as ClientMealController;
+use App\Http\Controllers\Client\Food\Menu\MenuController as ClientMenuController;
+use App\Http\Controllers\Client\Food\Recipe\RecipeController as ClientRecipeController;
+use App\Http\Controllers\Client\PhotoGallery\PhotoGalleryController as ClientPhotoGalleryController;
+use App\Http\Controllers\Client\Restaurant\ReservationController as ClientRestaurantReservationController;
+use App\Http\Controllers\Client\Restaurant\RestaurantTableController as ClientRestaurantTableController;
+use App\Http\Controllers\Client\Season\SeasonController as ClientSeasonController;
 use App\Http\Controllers\Controller as BaseController;
 use App\Http\Controllers\FilemanagerController;
 use Illuminate\Support\Facades\Route;
@@ -174,6 +191,13 @@ Route::group([
     'prefix' => 'page',
 ], function () {
     Route::get('{id}/{lang?}', [ClientPageController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'block',
+], function () {
+    Route::get('{blockableKey}/{blockableId}/{lang?}', [ClientBlockController::class, 'index'])
+        ->where('blockableId', '[0-9]+');
 });
 
 Route::group([
@@ -253,6 +277,107 @@ Route::group([
     Route::get('{id}', [ClientQuizController::class, 'show'])->where('id', '[0-9]+');
     Route::post('{id}', [ClientQuizController::class, 'store'])->where('id', '[0-9]+');
     Route::get('filter', [ClientQuizController::class, 'filters']);
+});
+
+Route::group([
+    'prefix' => 'photo-gallery',
+], function () {
+    Route::get('{lang?}', [ClientPhotoGalleryController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientPhotoGalleryController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'apartment',
+], function () {
+    Route::group([
+        'prefix' => 'type',
+    ], function () {
+        Route::get('{lang?}', [ClientApartmentTypeController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientApartmentTypeController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'reservation',
+    ], function () {
+        Route::post('{lang?}', [ClientApartmentReservationController::class, 'store']);
+    });
+
+    Route::get('{lang?}', [ClientApartmentController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientApartmentController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'building',
+], function () {
+    Route::get('{lang?}', [ClientBuildingController::class, 'index']);
+    Route::get('{id}/{lang?}', [ClientBuildingController::class, 'show'])->where('id', '[0-9]+');
+});
+
+Route::group([
+    'prefix' => 'amenity',
+], function () {
+    Route::get('{lang?}', [ClientAmenityController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'season',
+], function () {
+    Route::get('{lang?}', [ClientSeasonController::class, 'index']);
+});
+
+Route::group([
+    'prefix' => 'food',
+], function () {
+    Route::group([
+        'prefix' => 'allergen',
+    ], function () {
+        Route::get('{lang?}', [ClientAllergenController::class, 'index']);
+    });
+
+    Route::group([
+        'prefix' => 'foodstuff',
+    ], function () {
+        Route::get('{lang?}', [ClientFoodstuffController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientFoodstuffController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'meal',
+    ], function () {
+        Route::get('{lang?}', [ClientMealController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientMealController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'recipe',
+    ], function () {
+        Route::get('{lang?}', [ClientRecipeController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientRecipeController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'menu',
+    ], function () {
+        Route::get('{lang?}', [ClientMenuController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientMenuController::class, 'show'])->where('id', '[0-9]+');
+    });
+});
+
+Route::group([
+    'prefix' => 'restaurant',
+], function () {
+    Route::group([
+        'prefix' => 'table',
+    ], function () {
+        Route::get('{lang?}', [ClientRestaurantTableController::class, 'index']);
+        Route::get('{id}/{lang?}', [ClientRestaurantTableController::class, 'show'])->where('id', '[0-9]+');
+    });
+
+    Route::group([
+        'prefix' => 'reservation',
+    ], function () {
+        Route::post('{lang?}', [ClientRestaurantReservationController::class, 'store']);
+    });
 });
 
 /**
@@ -530,6 +655,28 @@ Route::group([
             Route::post('{id}/file', [PageController::class, 'uploadFile'])->where('id', '[0-9]+');
             Route::get('{pageId}/file/{fileId}', [PageController::class, 'downloadFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
             Route::delete('{pageId}/file/{fileId}', [PageController::class, 'deleteFile'])->where(['pageId' => '[0-9]+', 'fileId' => '[0-9]+']);
+        });
+
+        // Block routes
+        Route::group([
+            'prefix' => 'block',
+        ], function () {
+            Route::get('schemas', [BlockController::class, 'schemas']);
+            Route::post('reorder', [BlockController::class, 'reorder']);
+            Route::get('', [BlockController::class, 'index']);
+            Route::get('{id}', [BlockController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [BlockController::class, 'store']);
+            Route::delete('{id}', [BlockController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Photo Gallery routes
+        Route::group([
+            'prefix' => 'photo-gallery',
+        ], function () {
+            Route::get('', [PhotoGalleryController::class, 'index']);
+            Route::get('{id}', [PhotoGalleryController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [PhotoGalleryController::class, 'store']);
+            Route::delete('{id}', [PhotoGalleryController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Filemanager routes

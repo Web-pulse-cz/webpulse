@@ -60,11 +60,13 @@ const settings = {
     'apartment_reservations',
     'posts',
     'pages',
+    'blocks',
     'novelties',
     'services',
     'events',
     'reviews',
     'logos',
+    'photo_galleries',
     'careers',
     'quizzes',
     'customers',
@@ -247,6 +249,8 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Blogové članky';
     case 'pages':
       return 'Informační stránky';
+    case 'blocks':
+      return 'Bloky';
     case 'novelties':
       return 'Novinky';
     case 'services':
@@ -257,6 +261,8 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Recenze';
     case 'logos':
       return 'Loga klientů';
+    case 'photo_galleries':
+      return 'Fotogalerie';
     case 'careers':
       return 'Pracovní pozice';
     case 'quizzes':
@@ -375,6 +381,7 @@ const moduleGroups = [
       'events',
       'reviews',
       'logos',
+      'photo_galleries',
       'careers',
       'quizzes',
       'faqs',
