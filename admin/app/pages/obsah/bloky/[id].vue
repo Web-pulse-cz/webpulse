@@ -30,39 +30,27 @@ const breadcrumbs = ref([
   },
 ]);
 
-const schemas = ref<{
-  types: Array<any>;
-  allowed_blockables: Array<{ key: string; class: string }>;
-}>({ types: [], allowed_blockables: [] });
-
-const item = ref({
-  id: null as number | null,
-  type: '' as string,
-  blockable_key: 'site' as string,
-  blockable_id: null as number | null,
-  position: 0 as number,
-  is_active: true as boolean,
-  data: {} as Record<string, any>,
-  translations: {} as Record<string, { data: Record<string, any> }>,
-});
+const schemas = ref<{ types: Array<any> }>({ types: [] });
 
 const currentSite = computed(() =>
   (user.value as any)?.sites?.find((s: any) => s.hash === selectedSiteHash.value),
 );
+
+const item = ref({
+  id: null as number | null,
+  type: '' as string,
+  position: 0 as number,
+  is_active: true as boolean,
+  data: {} as Record<string, any>,
+  translations: {} as Record<string, { data: Record<string, any> }>,
+  sites: [] as number[],
+});
 
 const currentTypeSchema = computed(() =>
   schemas.value.types.find((t: any) => t.key === item.value.type),
 );
 
 const sharedFields = computed(() => currentTypeSchema.value?.fields ?? []);
-
-const blockableOptions = computed(() =>
-  schemas.value.allowed_blockables.map((b) => ({
-    label: b.key,
-    name: b.key,
-    value: b.key,
-  })),
-);
 
 const typeOptions = computed(() =>
   schemas.value.types.map((t: any) => ({
@@ -101,12 +89,11 @@ async function loadItem() {
       item.value = {
         id: response.id,
         type: response.type,
-        blockable_key: response.blockable_key ?? 'site',
-        blockable_id: response.blockable_id,
         position: response.position ?? 0,
         is_active: !!response.is_active,
         data: response.data ?? {},
         translations: response.translations ?? {},
+        sites: (response.sites ?? []).map((s: any) => s.id),
       };
       breadcrumbs.value.pop();
       pageTitle.value = `${currentTypeSchema.value?.label ?? response.type} #${response.id}`;
@@ -134,8 +121,8 @@ async function loadItem() {
 async function saveItem(redirect = true as boolean) {
   if (!(await validateForm())) return;
 
-  if (!item.value.blockable_id && item.value.blockable_key === 'site' && currentSite.value?.id) {
-    item.value.blockable_id = currentSite.value.id;
+  if (item.value.sites.length === 0 && currentSite.value?.id) {
+    item.value.sites = [currentSite.value.id];
   }
 
   const client = useSanctumClient();
@@ -147,12 +134,11 @@ async function saveItem(redirect = true as boolean) {
       method: 'POST',
       body: JSON.stringify({
         type: item.value.type,
-        blockable_type: item.value.blockable_key,
-        blockable_id: item.value.blockable_id,
         position: item.value.position,
         is_active: item.value.is_active,
         data: item.value.data,
         translations: item.value.translations,
+        sites: item.value.sites,
       }),
       headers: {
         Accept: 'application/json',
@@ -198,29 +184,11 @@ function fillEmptyTranslations() {
   });
 }
 
-function ensureBlockableId() {
-  if (item.value.blockable_key === 'site' && currentSite.value?.id) {
-    item.value.blockable_id = currentSite.value.id;
-  }
-}
-
 watch(selectedSiteHash, () => {
   if (route.params.id !== 'pridat') {
     loadItem();
-  } else {
-    ensureBlockableId();
   }
 });
-
-watch(
-  () => item.value.blockable_key,
-  (newKey, oldKey) => {
-    if (newKey !== oldKey) {
-      item.value.blockable_id = null;
-      ensureBlockableId();
-    }
-  },
-);
 
 useHead({
   title: pageTitle.value,
@@ -231,8 +199,6 @@ onMounted(async () => {
   fillEmptyTranslations();
   if (route.params.id !== 'pridat') {
     await loadItem();
-  } else {
-    ensureBlockableId();
   }
 });
 
@@ -261,7 +227,7 @@ definePageMeta({
               >
                 <RectangleStackIcon class="size-5" />
               </div>
-              <LayoutTitle class="!mb-0">Typ a umístění</LayoutTitle>
+              <LayoutTitle class="!mb-0">Typ bloku</LayoutTitle>
             </div>
 
             <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
@@ -271,22 +237,6 @@ definePageMeta({
                 name="type"
                 :options="typeOptions"
                 :disabled="route.params.id !== 'pridat'"
-                rules="required"
-              />
-
-              <BaseFormSelect
-                v-model="item.blockable_key"
-                label="Typ rodiče"
-                name="blockable_key"
-                :options="blockableOptions"
-                rules="required"
-              />
-
-              <BaseFormInput
-                v-model="item.blockable_id"
-                label="ID rodiče"
-                name="blockable_id"
-                type="number"
                 rules="required"
               />
 
@@ -360,6 +310,7 @@ definePageMeta({
           <LayoutActionsDetailBlock
             v-model:selected-locale="selectedLocale"
             v-model:active="item.is_active"
+            v-model:sites="item.sites"
             :allow-image="false"
             :allow-is-active="true"
             :allow-translations="true"

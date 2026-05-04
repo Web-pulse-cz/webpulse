@@ -29,8 +29,8 @@ const tableQuery = ref({
   orderWay: 'asc' as string,
 });
 
-const items = ref<any[]>([]);
-const schemas = ref<any>({ types: [], allowed_blockables: [] });
+const items = ref<any>({});
+const schemas = ref<any>({ types: [] });
 
 async function loadSchemas() {
   const client = useSanctumClient();
@@ -56,16 +56,14 @@ async function loadItems() {
     },
   })
     .then((response: any) => {
-      const rows = Array.isArray(response) ? response : response.data;
-      items.value = rows.map((b: any) => ({
+      response.data = (response.data ?? []).map((b: any) => ({
         ...b,
         type_label:
           schemas.value.types.find((t: any) => t.key === b.type)?.label ?? b.type,
         title: pickFirstTranslationField(b, ['title', 'name']) || '—',
-        parent:
-          (b.blockable_key ?? b.blockable_type) + ' #' + b.blockable_id,
       }));
-      tableQuery.value.page = response.page ?? tableQuery.value.page;
+      items.value = response;
+      tableQuery.value.page = response.currentPage ?? tableQuery.value.page;
     })
     .catch(() => {
       error.value = true;
@@ -166,11 +164,10 @@ definePageMeta({
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-        { key: 'type_label', name: 'Typ', type: 'text', width: 120, hidden: false, sortable: false },
-        { key: 'title', name: 'Titulek', type: 'text', width: 200, hidden: false, sortable: false },
-        { key: 'parent', name: 'Rodič', type: 'text', width: 150, hidden: false, sortable: false },
-        { key: 'position', name: 'Pořadí', type: 'text', width: 80, hidden: false, sortable: true },
-        { key: 'is_active', name: 'Aktivní', type: 'status', width: 80, hidden: false, sortable: false },
+        { key: 'type_label', name: 'Typ', type: 'text', width: 160, hidden: false, sortable: false },
+        { key: 'title', name: 'Titulek', type: 'text', width: 280, hidden: false, sortable: false },
+        { key: 'position', name: 'Pořadí', type: 'text', width: 100, hidden: false, sortable: true },
+        { key: 'is_active', name: 'Aktivní', type: 'status', width: 100, hidden: false, sortable: false },
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"
