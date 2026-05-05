@@ -6,6 +6,7 @@ const props = defineProps<{
     label: string;
     translatable: boolean;
     rules?: string;
+    multiple?: boolean;
     options?: Array<{ value: string | number; label: string }>;
   }>;
   modelValue: Record<string, any>;
@@ -22,6 +23,15 @@ const emit = defineEmits<{
 function setField(name: string, value: any) {
   const next = { ...(props.modelValue || {}), [name]: value };
   emit('update:modelValue', next);
+}
+
+function normalizeUpload(result: unknown, multiple: boolean, current: unknown) {
+  const incoming = Array.isArray(result) ? (result as string[]).filter(Boolean) : result ? [result as string] : [];
+  if (!multiple) {
+    return incoming[0] ?? '';
+  }
+  const existing = Array.isArray(current) ? (current as string[]) : [];
+  return [...existing, ...incoming];
 }
 
 const visibleFields = computed(() =>
@@ -94,12 +104,14 @@ const fieldKey = (name: string) =>
       <BaseFormUploadImage
         v-else-if="field.type === 'image'"
         :key="fieldKey(field.name)"
-        :model-value="modelValue?.[field.name] ?? ''"
+        :model-value="modelValue?.[field.name] ?? (field.multiple ? [] : '')"
         :label="field.label"
         :format="imageFormat || 'large'"
         :type="imageType || 'block'"
+        :multiple="!!field.multiple"
         class="col-span-full"
-        @update:model-value="(v) => setField(field.name, v)"
+        @update-files="(result) => setField(field.name, normalizeUpload(result, !!field.multiple, modelValue?.[field.name]))"
+        @remove-file="(remaining) => setField(field.name, field.multiple ? remaining || [] : '')"
       />
 
       <BaseFormInput

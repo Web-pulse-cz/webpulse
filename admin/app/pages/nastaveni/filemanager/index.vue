@@ -46,11 +46,12 @@ const entityTypeOptions = [
   { value: 'apartment', label: 'Apartmány' },
   { value: 'apartment-type', label: 'Typy apartmánů' },
   { value: 'building', label: 'Budovy' },
-  { value: 'gallery', label: 'Fotogalerie' },
+  { value: 'gallery', label: 'Fotogalerie / Blok – Galerie' },
   { value: 'review', label: 'Reference' },
   { value: 'icon', label: 'Ikony' },
   { value: 'block', label: 'Bloky (obecné)' },
   { value: 'hero', label: 'Blok – Hero' },
+  { value: 'about', label: 'Blok – O nás' },
 ];
 
 async function loadItems() {
