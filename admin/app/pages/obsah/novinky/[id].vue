@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import { MagnifyingGlassIcon, NewspaperIcon, SparklesIcon } from '@heroicons/vue/24/outline';
+import { MagnifyingGlassIcon, NewspaperIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -308,19 +308,6 @@ definePageMeta({
             image-type="novelty"
             class="shadow-sm"
           />
-
-          <div
-            class="mt-6 rounded-3xl border border-dashed border-slate-300 bg-white/50 p-6 transition-colors hover:bg-white"
-          >
-            <div class="mb-3 flex items-center gap-2">
-              <SparklesIcon class="size-4 text-orange-500" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900">Nápověda</h4>
-            </div>
-            <p class="text-sm leading-relaxed text-slate-500">
-              U novinek s <strong>vysokou prioritou</strong> doporučujeme nahrát kvalitní náhledový
-              obrázek, který upoutá pozornost na úvodní straně.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

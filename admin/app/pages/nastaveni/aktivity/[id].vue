@@ -248,16 +248,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
-            <h4 class="text-[10px] font-black uppercase tracking-widest text-amber-900">
-              Nápověda
-            </h4>
-            <p class="mt-2 text-xs leading-relaxed text-amber-800/80">
-              Byznys aktivity se započítávají do statistik výnosů, zatímco osobní aktivity blokují
-              čas v kalendáři bez vlivu na tržby.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

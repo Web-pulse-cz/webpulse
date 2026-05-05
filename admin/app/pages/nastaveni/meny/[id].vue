@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { BanknotesIcon, CreditCardIcon, InformationCircleIcon } from '@heroicons/vue/24/outline';
+import { BanknotesIcon, CreditCardIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -356,21 +356,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-emerald-50 p-6 ring-1 ring-inset ring-emerald-100">
-            <div class="flex items-start gap-4">
-              <InformationCircleIcon class="mt-0.5 size-5 shrink-0 text-emerald-600" />
-              <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest text-emerald-900">
-                  Automatizace
-                </h4>
-                <p class="mt-2 text-sm leading-relaxed text-emerald-800/80">
-                  Pokud měnu deaktivujete, nebude ji možné vybrat v nastavení projektů ani při
-                  tvorbě nových faktur.
-                </p>
-              </div>
-            </div>
-          </div>
         </aside>
       </div>
     </Form>

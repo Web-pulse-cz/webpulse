@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { InformationCircleIcon, ReceiptPercentIcon } from '@heroicons/vue/24/outline';
+import { ReceiptPercentIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -149,9 +149,8 @@ definePageMeta({
     />
 
     <Form ref="formRef" @submit="saveItem">
-      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
-        <div class="col-span-1 space-y-8 lg:col-span-9">
-          <LayoutContainer>
+      <div class="space-y-8">
+        <LayoutContainer>
             <div class="mb-8 flex items-center gap-3">
               <div
                 class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
@@ -188,33 +187,7 @@ definePageMeta({
                 </div>
               </div>
             </div>
-          </LayoutContainer>
-        </div>
-
-        <aside class="col-span-1 space-y-6 lg:sticky lg:top-8 lg:col-span-3">
-          <div class="rounded-3xl bg-slate-900 p-6 text-white shadow-xl shadow-slate-200">
-            <div class="mb-4 flex items-center gap-2">
-              <InformationCircleIcon class="size-5 text-indigo-400" />
-              <h4 class="text-xs font-bold uppercase tracking-widest">Důležité</h4>
-            </div>
-            <p class="text-sm leading-relaxed opacity-80">
-              Sazby DPH jsou přímo napojeny na položky v <strong>Ceníku služeb</strong> a
-              <strong>Produktech</strong>.
-            </p>
-            <p class="mt-4 text-sm leading-relaxed opacity-80">
-              Změna výše sazby u již existujících dokladů neovlivní historická data, ale projeví se
-              u všech nově generovaných faktur.
-            </p>
-          </div>
-
-          <div class="rounded-3xl border border-dashed border-slate-300 p-6">
-            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500">Tip</h5>
-            <p class="mt-2 text-xs italic leading-relaxed text-slate-400">
-              Pro sazby, které jsou osvobozeny od daně, zadejte hodnotu 0 a název např.
-              "Osvobozeno".
-            </p>
-          </div>
-        </aside>
+        </LayoutContainer>
       </div>
     </Form>
   </div>

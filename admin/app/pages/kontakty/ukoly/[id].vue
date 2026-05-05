@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { ArrowPathIcon, CheckBadgeIcon, LightBulbIcon } from '@heroicons/vue/24/outline';
+import { ArrowPathIcon, CheckBadgeIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -242,19 +242,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-4 text-amber-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">
-                Automatizace
-              </h4>
-            </div>
-            <p class="text-sm leading-relaxed text-amber-800/80">
-              Správně nastavené úkoly pro každou fázi zajistí, že váš obchodní proces bude
-              konzistentní a na nikoho se nezapomene.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

@@ -2,13 +2,7 @@
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
 import Draggable from 'vuedraggable';
-import {
-  PhotoIcon,
-  GlobeAltIcon,
-  LightBulbIcon,
-  TrashIcon,
-  StarIcon,
-} from '@heroicons/vue/24/outline';
+import { PhotoIcon, GlobeAltIcon, TrashIcon, StarIcon } from '@heroicons/vue/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/vue/24/solid';
 import { useLanguageStore } from '~~/stores/languageStore';
 
@@ -412,19 +406,6 @@ definePageMeta({
             :allow-position="true"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-4 text-amber-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">
-                Tip pro galerii
-              </h4>
-            </div>
-            <p class="text-sm leading-relaxed text-amber-800/80">
-              Pro lepší dohledatelnost vyplňte <strong>SEO meta název a popis</strong>. První
-              fotografie se použije jako hlavní náhled galerie — pořadí lze upravit přetažením.
-            </p>
-          </div>
         </div>
       </div>
     </Form>

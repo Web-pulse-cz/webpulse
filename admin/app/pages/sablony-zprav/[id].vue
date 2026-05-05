@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { InformationCircleIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -218,24 +217,6 @@ definePageMeta({
             </div>
           </div>
         </LayoutContainer>
-
-        <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100 lg:p-8">
-          <div class="flex items-start gap-4">
-            <div
-              class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-indigo-600 shadow-sm"
-            >
-              <InformationCircleIcon class="size-6" />
-            </div>
-            <div>
-              <h4 class="text-sm font-bold text-indigo-900">Jak pracovat se šablonami?</h4>
-              <p class="mt-1 text-sm leading-relaxed text-indigo-700/80">
-                Šablony zpráv slouží k rychlému odesílání odpovědí klientům. Při psaní zprávy v
-                detailu kontaktu jednoduše vyberete tuto šablonu a systém automaticky vyplní text,
-                který jste si zde připravili.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </Form>
   </div>

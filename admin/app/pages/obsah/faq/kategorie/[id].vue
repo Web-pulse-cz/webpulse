@@ -290,16 +290,6 @@ definePageMeta({
             :allow-is-active="true"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
-              Struktura webu
-            </h4>
-            <p class="mt-2 text-sm leading-relaxed text-indigo-800/80">
-              Kategorie slouží k logickému seskupení dotazů. Správné pojmenování pomáhá uživatelům v
-              rychlejší navigaci v centru nápovědy.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>
