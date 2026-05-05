@@ -102,6 +102,20 @@ function removeFile(index: number) {
 }
 
 /**
+ * Dialog already mutated `files` via v-model, so we just need to keep the
+ * parent's modelValue in sync. Only fire when the user removed an
+ * already-uploaded item (file === null) — staged uploads aren't in modelValue
+ * yet, so removing them is a local-only concern.
+ */
+function onDialogRemove(payload: { index: number; removed?: { file: File | null }; remaining: { file: File | null; name: string }[] }) {
+  const wasUploaded = !!payload.removed && payload.removed.file === null;
+  if (!wasUploaded) return;
+
+  const remainingNames = payload.remaining.filter((f) => f.file === null).map((f) => f.name);
+  emit('remove-file', remainingNames);
+}
+
+/**
  * Nahrání souborů z inputu na server
  */
 async function uploadFiles() {
@@ -272,10 +286,10 @@ async function uploadFromRemoteUrl() {
       ]"
     >
       <div
-        v-if="files.length === 0"
+        v-if="multiple || files.length === 0"
         :class="[
           !multiple ? 'col-span-full py-12' : 'col-span-1 aspect-square',
-          'flex cursor-pointer flex-col items-center justify-center gap-y-3 rounded-xl bg-white shadow-sm transition-all hover:bg-indigo-50',
+          'order-last flex cursor-pointer flex-col items-center justify-center gap-y-3 rounded-xl border-2 border-dashed border-slate-200 bg-white/60 shadow-sm transition-all hover:border-indigo-300 hover:bg-indigo-50',
         ]"
         @click="isUploadDialogVisible = true"
       >
@@ -285,7 +299,7 @@ async function uploadFromRemoteUrl() {
           <PlusIcon class="h-5 w-5 md:h-6 md:w-6" />
         </div>
         <p class="px-2 text-center text-sm font-medium text-slate-600">
-          Nahrát {{ multiple ? 'obrázky' : 'obrázek' }}
+          {{ files.length === 0 ? `Nahrát ${multiple ? 'obrázky' : 'obrázek'}` : 'Přidat další' }}
         </p>
       </div>
 
@@ -354,6 +368,7 @@ async function uploadFromRemoteUrl() {
       @upload-remote-url="uploadFromRemoteUrl"
       @handle-file-change="handleFileChange"
       @upload-files="uploadFiles"
+      @remove-staged="onDialogRemove"
     />
   </div>
 </template>
