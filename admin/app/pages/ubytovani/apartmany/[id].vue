@@ -559,8 +559,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
             <BaseFormUploadImage
               v-model="item.image"
               :multiple="true"
-              format="apartment"
-              type="icon"
+              type="apartment"
+              format="large"
               label="Nahrát fotografie"
               @update-files="
                 (files: any) => {

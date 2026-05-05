@@ -49,6 +49,11 @@ const entityTypeOptions = [
   { value: 'apartment', name: 'Apartmány' },
   { value: 'apartment-type', name: 'Typy apartmánů' },
   { value: 'building', name: 'Budovy' },
+  { value: 'gallery', name: 'Fotogalerie' },
+  { value: 'review', name: 'Reference' },
+  { value: 'icon', name: 'Ikony' },
+  { value: 'block', name: 'Bloky (obecné)' },
+  { value: 'hero', name: 'Blok – Hero' },
 ];
 
 const modeOptions = [

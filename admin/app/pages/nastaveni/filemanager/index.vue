@@ -43,6 +43,14 @@ const entityTypeOptions = [
   { value: 'event', label: 'Události' },
   { value: 'career', label: 'Pracovní pozice' },
   { value: 'quiz', label: 'Kvízy' },
+  { value: 'apartment', label: 'Apartmány' },
+  { value: 'apartment-type', label: 'Typy apartmánů' },
+  { value: 'building', label: 'Budovy' },
+  { value: 'gallery', label: 'Fotogalerie' },
+  { value: 'review', label: 'Reference' },
+  { value: 'icon', label: 'Ikony' },
+  { value: 'block', label: 'Bloky (obecné)' },
+  { value: 'hero', label: 'Blok – Hero' },
 ];
 
 async function loadItems() {

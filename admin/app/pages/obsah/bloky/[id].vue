@@ -260,7 +260,12 @@ definePageMeta({
               </div>
             </div>
 
-            <BlockFieldRenderer v-model="item.data" :fields="sharedFields" :translatable="false" />
+            <BlockFieldRenderer
+              v-model="item.data"
+              :fields="sharedFields"
+              :translatable="false"
+              :image-type="item.type"
+            />
           </LayoutContainer>
 
           <LayoutContainer v-if="item.type && item.translations[selectedLocale]">
@@ -290,6 +295,7 @@ definePageMeta({
               :fields="sharedFields"
               :translatable="true"
               :selected-locale="selectedLocale"
+              :image-type="item.type"
             />
           </LayoutContainer>
         </div>
