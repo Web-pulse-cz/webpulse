@@ -22,11 +22,7 @@ const POSITION_LABEL: Record<string, string> = {
   'bottom-right': 'vpravo dole',
 };
 
-function buildMessage(
-  response: any,
-  fileType: string,
-  multiple: boolean,
-): string {
+function buildMessage(response: any, fileType: string, multiple: boolean): string {
   if (multiple) {
     return fileType === 'image'
       ? `Nahrávejte pouze soubory s příponou ${IMG_EXTS}. ${FILE_SIZE_MSG}.`
@@ -71,9 +67,7 @@ export default function (
           format,
           securityKey: 'your_security_key_here',
         },
-        headers: selectedSiteHash?.value
-          ? { 'X-Site-Hash': selectedSiteHash.value }
-          : {},
+        headers: selectedSiteHash?.value ? { 'X-Site-Hash': selectedSiteHash.value } : {},
       });
     } catch {
       response = null;

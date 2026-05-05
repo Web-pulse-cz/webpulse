@@ -151,42 +151,42 @@ definePageMeta({
     <Form ref="formRef" @submit="saveItem">
       <div class="space-y-8">
         <LayoutContainer>
-            <div class="mb-8 flex items-center gap-3">
-              <div
-                class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
-              >
-                <ReceiptPercentIcon class="size-5" />
-              </div>
-              <LayoutTitle class="!mb-0">Nastavení daňové sazby</LayoutTitle>
+          <div class="mb-8 flex items-center gap-3">
+            <div
+              class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+            >
+              <ReceiptPercentIcon class="size-5" />
             </div>
+            <LayoutTitle class="!mb-0">Nastavení daňové sazby</LayoutTitle>
+          </div>
 
-            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+            <BaseFormInput
+              v-model="item.name"
+              label="Název sazby"
+              type="text"
+              name="name"
+              rules="required|min:2"
+              placeholder="Např. Základní sazba DPH"
+            />
+
+            <div class="relative">
               <BaseFormInput
-                v-model="item.name"
-                label="Název sazby"
-                type="text"
-                name="name"
-                rules="required|min:2"
-                placeholder="Např. Základní sazba DPH"
+                v-model="item.rate"
+                label="Výše sazby (v %)"
+                type="number"
+                name="rate"
+                min="0"
+                rules="required"
+                placeholder="21"
               />
-
-              <div class="relative">
-                <BaseFormInput
-                  v-model="item.rate"
-                  label="Výše sazby (v %)"
-                  type="number"
-                  name="rate"
-                  min="0"
-                  rules="required"
-                  placeholder="21"
-                />
-                <div
-                  class="absolute bottom-3 right-4 flex h-6 items-center border-l border-slate-200 pl-3 text-slate-400"
-                >
-                  <span class="text-sm font-bold">%</span>
-                </div>
+              <div
+                class="absolute bottom-3 right-4 flex h-6 items-center border-l border-slate-200 pl-3 text-slate-400"
+              >
+                <span class="text-sm font-bold">%</span>
               </div>
             </div>
+          </div>
         </LayoutContainer>
       </div>
     </Form>

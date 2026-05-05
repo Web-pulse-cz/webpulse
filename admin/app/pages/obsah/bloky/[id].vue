@@ -240,18 +240,10 @@ definePageMeta({
                 rules="required"
               />
 
-              <BaseFormInput
-                v-model="item.position"
-                label="Pořadí"
-                name="position"
-                type="number"
-              />
+              <BaseFormInput v-model="item.position" label="Pořadí" name="position" type="number" />
             </div>
 
-            <p
-              v-if="currentTypeSchema?.description"
-              class="mt-4 text-xs italic text-slate-400"
-            >
+            <p v-if="currentTypeSchema?.description" class="mt-4 text-xs italic text-slate-400">
               {{ currentTypeSchema.description }}
             </p>
           </LayoutContainer>
@@ -268,11 +260,7 @@ definePageMeta({
               </div>
             </div>
 
-            <BlockFieldRenderer
-              v-model="item.data"
-              :fields="sharedFields"
-              :translatable="false"
-            />
+            <BlockFieldRenderer v-model="item.data" :fields="sharedFields" :translatable="false" />
           </LayoutContainer>
 
           <LayoutContainer v-if="item.type && item.translations[selectedLocale]">

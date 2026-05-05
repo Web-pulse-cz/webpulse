@@ -320,7 +320,13 @@ definePageMeta({
               </div>
               <span class="text-xs font-medium text-slate-400">
                 {{ item.images.length }}
-                {{ item.images.length === 1 ? 'fotografie' : item.images.length >= 2 && item.images.length <= 4 ? 'fotografie' : 'fotografií' }}
+                {{
+                  item.images.length === 1
+                    ? 'fotografie'
+                    : item.images.length >= 2 && item.images.length <= 4
+                      ? 'fotografie'
+                      : 'fotografií'
+                }}
               </span>
             </div>
 
@@ -342,7 +348,7 @@ definePageMeta({
                     <img
                       :src="`/content/images/gallery/full/${element}`"
                       :alt="`Fotografie ${index + 1}`"
-                      class="h-full w-full cursor-grab object-cover transition-transform duration-500 group-hover:scale-105 active:cursor-grabbing"
+                      class="h-full w-full cursor-grab object-cover transition-transform duration-500 active:cursor-grabbing group-hover:scale-105"
                     />
 
                     <div

@@ -148,8 +148,20 @@ const emit = defineEmits([
   <div :class="compact ? 'w-full' : 'w-full px-4 sm:px-0'">
     <div class="flow-root">
       <div :class="compact ? 'overflow-x-auto' : '-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8'">
-        <div :class="compact ? 'inline-block min-w-full align-middle' : 'inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'">
-          <div :class="compact ? 'overflow-hidden' : 'overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200'">
+        <div
+          :class="
+            compact
+              ? 'inline-block min-w-full align-middle'
+              : 'inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'
+          "
+        >
+          <div
+            :class="
+              compact
+                ? 'overflow-hidden'
+                : 'overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200'
+            "
+          >
             <table class="min-w-full divide-y divide-slate-200">
               <thead class="bg-slate-50">
                 <tr>
