@@ -58,8 +58,7 @@ async function loadItems() {
     .then((response: any) => {
       response.data = (response.data ?? []).map((b: any) => ({
         ...b,
-        type_label:
-          schemas.value.types.find((t: any) => t.key === b.type)?.label ?? b.type,
+        type_label: schemas.value.types.find((t: any) => t.key === b.type)?.label ?? b.type,
         title: pickFirstTranslationField(b, ['title', 'name']) || '—',
       }));
       items.value = response;
@@ -164,10 +163,31 @@ definePageMeta({
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-        { key: 'type_label', name: 'Typ', type: 'text', width: 160, hidden: false, sortable: false },
+        {
+          key: 'type_label',
+          name: 'Typ',
+          type: 'text',
+          width: 160,
+          hidden: false,
+          sortable: false,
+        },
         { key: 'title', name: 'Titulek', type: 'text', width: 280, hidden: false, sortable: false },
-        { key: 'position', name: 'Pořadí', type: 'text', width: 100, hidden: false, sortable: true },
-        { key: 'is_active', name: 'Aktivní', type: 'status', width: 100, hidden: false, sortable: false },
+        {
+          key: 'position',
+          name: 'Pořadí',
+          type: 'text',
+          width: 100,
+          hidden: false,
+          sortable: true,
+        },
+        {
+          key: 'is_active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 100,
+          hidden: false,
+          sortable: false,
+        },
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"

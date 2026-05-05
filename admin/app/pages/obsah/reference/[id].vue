@@ -327,16 +327,6 @@ definePageMeta({
             image-type="review"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
-              Sociální důkaz
-            </h4>
-            <p class="mt-2 text-sm leading-relaxed text-indigo-700/80">
-              Kvalitní recenze s fotkou zvyšuje konverzi až o 40 %. Nezapomeňte nahrát profilovou
-              fotku autora do sidebaru.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

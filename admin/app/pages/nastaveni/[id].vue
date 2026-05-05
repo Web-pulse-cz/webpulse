@@ -109,7 +109,12 @@ function defaultValueForType(type: string) {
   if (type === 'openingHours') {
     return {
       days: defaultDays(),
-      exceptions: [] as { date: string; closed: boolean; intervals: { from: string; to: string }[]; note: string }[],
+      exceptions: [] as {
+        date: string;
+        closed: boolean;
+        intervals: { from: string; to: string }[];
+        note: string;
+      }[],
     };
   }
   return { groups: [] };
@@ -412,7 +417,9 @@ const addGroup = () => {
                 </p>
               </div>
 
-              <div class="flex flex-col justify-between rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <div
+                class="flex flex-col justify-between rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"
+              >
                 <label class="mb-2 block text-sm font-medium text-slate-700">Stav</label>
                 <div class="flex items-center justify-between gap-3">
                   <BaseFormSwitch
@@ -422,7 +429,9 @@ const addGroup = () => {
                   />
                   <span
                     :class="[
-                      item.active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500',
+                      item.active
+                        ? 'bg-emerald-50 text-emerald-600'
+                        : 'bg-slate-100 text-slate-500',
                       'rounded-full px-2.5 py-1 text-xs font-semibold',
                     ]"
                   >
@@ -572,10 +581,7 @@ const addGroup = () => {
               >
             </div>
 
-            <div
-              v-if="item.translations[selectedLocale]?.value"
-              class="space-y-6"
-            >
+            <div v-if="item.translations[selectedLocale]?.value" class="space-y-6">
               <BaseFormInput
                 v-model="item.translations[selectedLocale].value.title"
                 label="Nadpis"
@@ -762,14 +768,12 @@ const addGroup = () => {
               </div>
 
               <div class="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
-                <p class="mb-3 text-xs font-black uppercase tracking-widest text-slate-400">
-                  Mapa
-                </p>
+                <p class="mb-3 text-xs font-black uppercase tracking-widest text-slate-400">Mapa</p>
                 <BaseFormInput
                   v-model="item.translations[selectedLocale].value.mapEmbed"
                   label="Embed kód mapy nebo URL"
                   name="contactsMapEmbed"
-                  placeholder="<iframe src=&quot;https://www.google.com/maps/embed?...&quot;></iframe>"
+                  placeholder='<iframe src="https://www.google.com/maps/embed?..."></iframe>'
                 />
                 <p class="mt-2 text-xs text-slate-400">
                   Vložte iframe embed kód z Google Maps nebo URL mapy.
@@ -812,10 +816,7 @@ const addGroup = () => {
               >
             </div>
 
-            <div
-              v-if="item.translations[selectedLocale]?.value?.days"
-              class="space-y-4"
-            >
+            <div v-if="item.translations[selectedLocale]?.value?.days" class="space-y-4">
               <div
                 v-for="day in WEEK_DAYS"
                 :key="day.key"
@@ -1034,80 +1035,6 @@ const addGroup = () => {
             :allow-image="false"
             class="shadow-sm"
           />
-
-          <div
-            v-if="item.type === 'topMenu' || item.type === 'bottomMenu'"
-            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
-          >
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-5 text-indigo-200" />
-              <h4 class="text-sm font-bold">Tip pro navigaci</h4>
-            </div>
-            <p class="text-xs leading-relaxed opacity-90">
-              Pro lepší SEO doporučujeme v menu používat jasné názvy (např. "Ceník služeb" místo jen
-              "Ceny"). U horního menu se snažte nepřekročit 5–7 hlavních skupin, aby zůstalo
-              přehledné i na tabletech.
-            </p>
-          </div>
-
-          <div
-            v-else-if="item.type === 'popup'"
-            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
-          >
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-5 text-indigo-200" />
-              <h4 class="text-sm font-bold">Tip pro pop-up</h4>
-            </div>
-            <p class="text-xs leading-relaxed opacity-90">
-              Pop-up bude na webu zobrazen pouze pokud je nastavení aktivní. Pro nejlepší výsledky
-              volte stručný nadpis a jasné CTA tlačítko.
-            </p>
-          </div>
-
-          <div
-            v-else-if="item.type === 'bar'"
-            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
-          >
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-5 text-indigo-200" />
-              <h4 class="text-sm font-bold">Tip pro proužek</h4>
-            </div>
-            <p class="text-xs leading-relaxed opacity-90">
-              Proužek se zobrazí nad hlavičkou webu. Návštěvník ho může zavřít a pokud změníte
-              obsah, automaticky se mu znovu objeví. Ideální pro akce jako "2+1 zdarma" nebo sezónní
-              slevy.
-            </p>
-          </div>
-
-          <div
-            v-else-if="item.type === 'contacts'"
-            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
-          >
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-5 text-indigo-200" />
-              <h4 class="text-sm font-bold">Tip pro kontakty</h4>
-            </div>
-            <p class="text-xs leading-relaxed opacity-90">
-              Kontaktní údaje se používají v patičce, na kontaktní stránce i ve strukturovaných
-              datech pro vyhledávače. Doporučujeme vyplnit alespoň název firmy, telefon, e-mail
-              a adresu — pro lepší dohledatelnost na Googlu.
-            </p>
-          </div>
-
-          <div
-            v-else-if="item.type === 'openingHours'"
-            class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200"
-          >
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-5 text-indigo-200" />
-              <h4 class="text-sm font-bold">Tip pro otevírací dobu</h4>
-            </div>
-            <p class="text-xs leading-relaxed opacity-90">
-              Pro každý den můžete přidat více intervalů (např. polední pauza), nebo den označit
-              jako zavřený. Výjimky slouží pro jednorázové dny — typicky státní svátky, dovolenou
-              nebo sezónní úpravy.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

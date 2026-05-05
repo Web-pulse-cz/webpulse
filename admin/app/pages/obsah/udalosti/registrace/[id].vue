@@ -353,14 +353,6 @@ definePageMeta({
               class="!bg-slate-50 focus:!bg-white"
             />
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
-            <h4 class="text-sm font-bold">Potřebujete fakturu?</h4>
-            <p class="mt-2 text-xs leading-relaxed opacity-80">
-              Pokud jsou vyplněny firemní údaje (IČO/DIČ), systém automaticky vygeneruje daňový
-              doklad po označení registrace jako uhrazené.
-            </p>
-          </div>
         </div>
       </div>
     </Form>

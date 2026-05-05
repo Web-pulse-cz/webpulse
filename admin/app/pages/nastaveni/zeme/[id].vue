@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { GlobeEuropeAfricaIcon, LightBulbIcon } from '@heroicons/vue/24/outline';
+import { GlobeEuropeAfricaIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -286,20 +286,6 @@ definePageMeta({
               </p>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-4 text-indigo-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
-                Standardizace
-              </h4>
-            </div>
-            <p class="text-sm leading-relaxed text-indigo-800/80">
-              Doporučujeme používat standardy <strong>ISO 3166-1 alpha-2</strong> (pro kódy) a
-              <strong>alpha-3</strong> (pro ISO kódy) pro maximální kompatibilitu s platebními
-              bránami.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

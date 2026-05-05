@@ -218,16 +218,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-            <h4 class="text-[10px] font-black uppercase tracking-widest text-indigo-900">
-              CRM Tip
-            </h4>
-            <p class="mt-2 text-xs leading-relaxed text-indigo-800/80">
-              Snažte se používat barvy, které intuitivně odpovídají stavu – např.
-              <strong>zelená</strong> pro úspěch, <strong>červená</strong> pro ztracený kontakt.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

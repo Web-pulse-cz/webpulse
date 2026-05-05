@@ -134,10 +134,25 @@ definePageMeta({
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
-        { key: 'image', name: 'Náhled', type: 'image', path: 'gallery/full', width: 100, hidden: false, sortable: false },
+        {
+          key: 'image',
+          name: 'Náhled',
+          type: 'image',
+          path: 'gallery/full',
+          width: 100,
+          hidden: false,
+          sortable: false,
+        },
         { key: 'name', name: 'Název', type: 'text', width: 200, hidden: false, sortable: false },
         { key: 'position', name: 'Pořadí', type: 'text', width: 80, hidden: true, sortable: true },
-        { key: 'active', name: 'Aktivní', type: 'status', width: 80, hidden: false, sortable: false },
+        {
+          key: 'active',
+          name: 'Aktivní',
+          type: 'status',
+          width: 80,
+          hidden: false,
+          sortable: false,
+        },
       ]"
       :actions="[{ type: 'edit' }, { type: 'delete' }]"
       :loading="loading"

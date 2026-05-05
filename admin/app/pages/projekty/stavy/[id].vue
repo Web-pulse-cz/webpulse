@@ -2,7 +2,7 @@
 import { ref, inject } from 'vue';
 
 import { Form } from 'vee-validate';
-import { QuestionMarkCircleIcon, SwatchIcon } from '@heroicons/vue/24/outline';
+import { SwatchIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
@@ -215,23 +215,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200 lg:p-8">
-            <div class="flex items-start gap-4">
-              <div
-                class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm"
-              >
-                <QuestionMarkCircleIcon class="size-6" />
-              </div>
-              <div>
-                <h4 class="text-sm font-bold text-slate-900">Proč zvolit barvu?</h4>
-                <p class="mt-1 text-sm leading-relaxed text-slate-600">
-                  Přiřazení barvy vám pomůže vizuálně seskupit související úkoly a poptávky. V
-                  přehledech tak na první pohled uvidíte, které aktivity patří k tomuto projektu.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">

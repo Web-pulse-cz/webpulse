@@ -96,8 +96,8 @@ const fieldKey = (name: string) =>
         :key="fieldKey(field.name)"
         :model-value="modelValue?.[field.name] ?? ''"
         :label="field.label"
-        :format="imageFormat || 'block'"
-        :type="imageType || 'content'"
+        :format="imageFormat || 'large'"
+        :type="imageType || 'block'"
         class="col-span-full"
         @update:model-value="(v) => setField(field.name, v)"
       />

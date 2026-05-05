@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import {
-  BanknotesIcon,
-  IdentificationIcon,
-  InformationCircleIcon,
-} from '@heroicons/vue/24/outline';
+import { BanknotesIcon, IdentificationIcon } from '@heroicons/vue/24/outline';
 import { useCurrencyStore } from '~/../stores/currencyStore';
 import { useTaxRateStore } from '~/../stores/taxRateStore';
 import { useLanguageStore } from '~~/stores/languageStore';
@@ -356,19 +352,6 @@ definePageMeta({
             image-type="service"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-emerald-50 p-6 ring-1 ring-inset ring-emerald-100">
-            <div class="mb-3 flex items-center gap-2">
-              <InformationCircleIcon class="size-4 text-emerald-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-emerald-900">
-                Dobrá rada
-              </h4>
-            </div>
-            <p class="text-sm leading-relaxed text-emerald-800/80">
-              Ujistěte se, že <strong>Perex</strong> je dostatečně úderný. Je to první věc, kterou
-              zákazník uvidí v ceníku nebo v náhledu služby.
-            </p>
-          </div>
         </div>
       </div>
     </Form>

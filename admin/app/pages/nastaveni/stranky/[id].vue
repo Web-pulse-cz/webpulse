@@ -4,7 +4,6 @@ import { Form } from 'vee-validate';
 import {
   AdjustmentsHorizontalIcon,
   BanknotesIcon,
-  ExclamationTriangleIcon,
   GlobeAltIcon,
   LanguageIcon,
   SquaresPlusIcon,
@@ -855,17 +854,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
-            <div class="flex items-start gap-4">
-              <ExclamationTriangleIcon class="size-6 shrink-0 text-amber-600" />
-              <p class="text-sm leading-relaxed text-amber-900">
-                <strong>Pozor:</strong> Deaktivace modulu, který se na webu aktivně používá, může
-                způsobit chyby v zobrazení frontendu. Před vypnutím se ujistěte, že modul není nikde
-                nasazen.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </Form>

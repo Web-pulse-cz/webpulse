@@ -295,16 +295,6 @@ definePageMeta({
             :allow-image="false"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl border border-dashed border-slate-300 p-6">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">
-              Tip pro editora
-            </h4>
-            <p class="mt-2 text-sm leading-relaxed text-slate-500">
-              Nezapomeňte vyplnit <strong>Meta název</strong>. Pokud zůstane prázdný, systém
-              automaticky použije název kategorie, což nemusí být ideální pro vyhledávače.
-            </p>
-          </div>
         </div>
       </div>
     </Form>

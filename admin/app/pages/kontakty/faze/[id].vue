@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { MagnifyingGlassIcon, PresentationChartLineIcon } from '@heroicons/vue/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -246,17 +246,6 @@ definePageMeta({
             :allow-translations="false"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
-            <div class="mb-3 flex items-center gap-2">
-              <PresentationChartLineIcon class="size-5 text-indigo-200" />
-              <h4 class="text-sm font-bold">Marketingový ROI</h4>
-            </div>
-            <p class="text-xs leading-relaxed opacity-80">
-              Správné nastavení zdrojů vám umožní přesně měřit, kolik vás stojí získání jednoho
-              zákazníka (CAC). Barvy doporučujeme sladit se schématem vašich reklamních kampaní.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

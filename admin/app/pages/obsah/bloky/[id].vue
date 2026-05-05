@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, computed } from 'vue';
 import { Form } from 'vee-validate';
-import { RectangleStackIcon, GlobeAltIcon, LightBulbIcon } from '@heroicons/vue/24/outline';
+import { RectangleStackIcon, GlobeAltIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -240,18 +240,10 @@ definePageMeta({
                 rules="required"
               />
 
-              <BaseFormInput
-                v-model="item.position"
-                label="Pořadí"
-                name="position"
-                type="number"
-              />
+              <BaseFormInput v-model="item.position" label="Pořadí" name="position" type="number" />
             </div>
 
-            <p
-              v-if="currentTypeSchema?.description"
-              class="mt-4 text-xs italic text-slate-400"
-            >
+            <p v-if="currentTypeSchema?.description" class="mt-4 text-xs italic text-slate-400">
               {{ currentTypeSchema.description }}
             </p>
           </LayoutContainer>
@@ -272,6 +264,7 @@ definePageMeta({
               v-model="item.data"
               :fields="sharedFields"
               :translatable="false"
+              :image-type="item.type"
             />
           </LayoutContainer>
 
@@ -302,6 +295,7 @@ definePageMeta({
               :fields="sharedFields"
               :translatable="true"
               :selected-locale="selectedLocale"
+              :image-type="item.type"
             />
           </LayoutContainer>
         </div>
@@ -316,17 +310,6 @@ definePageMeta({
             :allow-translations="true"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-4 text-amber-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">Tip</h4>
-            </div>
-            <p class="text-sm leading-relaxed text-amber-800/80">
-              Sdílená pole platí napříč jazyky, překládatelná se ukládají per jazyková verze.
-              Pořadí ovlivní, v jakém pořadí frontend bloky vykreslí.
-            </p>
-          </div>
         </div>
       </div>
     </Form>

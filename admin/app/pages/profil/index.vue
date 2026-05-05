@@ -373,14 +373,6 @@ definePageMeta({
             </div>
           </div>
         </LayoutContainer>
-
-        <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-          <h4 class="text-sm font-bold text-indigo-900">Potřebujete pomoc?</h4>
-          <p class="mt-2 text-xs leading-relaxed text-indigo-700/80">
-            Pokud nemůžete změnit svůj e-mail nebo skupinu, kontaktujte prosím technickou podporu
-            Barbershop Adminu.
-          </p>
-        </div>
       </aside>
     </div>
   </div>

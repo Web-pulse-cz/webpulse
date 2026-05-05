@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import { BuildingOfficeIcon, PhotoIcon, SparklesIcon } from '@heroicons/vue/24/outline';
+import { BuildingOfficeIcon, PhotoIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -282,17 +282,6 @@ definePageMeta({
             :allow-image="false"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-slate-900 p-6 text-white shadow-xl shadow-slate-200">
-            <div class="mb-3 flex items-center gap-2">
-              <SparklesIcon class="size-4 text-amber-400" />
-              <h4 class="text-xs font-bold uppercase tracking-widest">Tip pro zobrazení</h4>
-            </div>
-            <p class="text-sm leading-relaxed opacity-80">
-              Loga se na webu obvykle zobrazují v řadě (carousel). Pokud má logo příliš bílého
-              místa, ořízněte jej pro lepší zarovnání s ostatními.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

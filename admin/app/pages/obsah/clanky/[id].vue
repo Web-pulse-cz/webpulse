@@ -459,16 +459,6 @@ definePageMeta({
               :allow-sites="false"
               class="shadow-sm"
             />
-
-            <div class="mt-6 rounded-3xl bg-amber-50 p-6 ring-1 ring-inset ring-amber-100">
-              <h4 class="text-xs font-bold uppercase tracking-widest text-amber-900">
-                Publikační tip
-              </h4>
-              <p class="mt-2 text-sm leading-relaxed text-amber-800/80">
-                Perex by měl být krátký a úderný. Zobrazuje se v náhledech na hlavní stránce a ve
-                výpisu blogu.
-              </p>
-            </div>
           </div>
         </div>
       </template>

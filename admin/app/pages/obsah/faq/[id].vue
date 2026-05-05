@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { Form } from 'vee-validate';
-import { LightBulbIcon, QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
 
 const { $toast } = useNuxtApp();
@@ -325,19 +325,6 @@ definePageMeta({
             :allow-is-active="true"
             class="shadow-sm"
           />
-
-          <div class="mt-6 rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-            <div class="mb-3 flex items-center gap-2">
-              <LightBulbIcon class="size-4 text-indigo-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
-                Dobrá praxe
-              </h4>
-            </div>
-            <p class="text-sm leading-relaxed text-indigo-800/80">
-              Stručné a jasné otázky pomáhají zákazníkům rychleji najít to, co hledají. Odpověď se
-              snažte formátovat pomocí odrážek pro lepší čitelnost.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

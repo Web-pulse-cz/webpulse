@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { GlobeAltIcon, LanguageIcon } from '@heroicons/vue/24/outline';
+import { LanguageIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -271,19 +271,6 @@ definePageMeta({
               </div>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-indigo-50 p-6 ring-1 ring-inset ring-indigo-100">
-            <div class="mb-3 flex items-center gap-2">
-              <GlobeAltIcon class="size-4 text-indigo-600" />
-              <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-900">
-                Standardizace
-              </h4>
-            </div>
-            <p class="text-sm leading-relaxed text-indigo-800/80">
-              Pro maximální kompatibilitu s vyhledávači používejte standardy
-              <strong>ISO 639-1</strong>.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>

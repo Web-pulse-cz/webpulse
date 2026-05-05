@@ -385,14 +385,6 @@ definePageMeta({
               </p>
             </div>
           </LayoutContainer>
-
-          <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-xl shadow-indigo-200">
-            <h4 class="text-sm font-bold">Auditní stopa</h4>
-            <p class="mt-2 text-xs leading-relaxed opacity-80">
-              Všechny změny provedené tímto uživatelem jsou logovány. Ujistěte se, že každý člen
-              týmu má svůj vlastní unikátní účet.
-            </p>
-          </div>
         </aside>
       </div>
     </Form>
