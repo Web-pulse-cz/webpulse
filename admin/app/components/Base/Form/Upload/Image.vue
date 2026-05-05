@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, type PropType } from 'vue';
 import Draggable from 'vuedraggable';
 import { TrashIcon, PlusIcon, ArrowPathIcon } from '@heroicons/vue/24/outline';
 import useImageFormatMessage from '~/composables/useImageFormatMessage';
@@ -14,7 +14,11 @@ const props = defineProps({
   format: { type: String, default: 'service', required: true },
   type: { type: String, default: 'icon', required: false },
   multiple: { type: Boolean, default: false },
-  modelValue: { type: String, default: '', required: false },
+  modelValue: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: '',
+    required: false,
+  },
   allowRemoteUrl: { type: Boolean, default: false, required: false },
 });
 
@@ -34,17 +38,19 @@ const files = ref<{ file: File | null; name: string; preview?: string }[]>([]);
 watch(
   () => props.modelValue,
   () => {
-    if (!props.modelValue) {
+    const value = props.modelValue;
+    const names = Array.isArray(value) ? value.filter(Boolean) : value ? [value] : [];
+
+    if (!names.length) {
       files.value = [];
       return;
     }
-    files.value = [
-      {
-        file: null,
-        name: props.modelValue,
-        preview: `/content/images/${props.type}/${props.format}/${props.modelValue}`,
-      },
-    ];
+
+    files.value = names.map((name) => ({
+      file: null,
+      name,
+      preview: `/content/images/${props.type}/${props.format}/${name}`,
+    }));
   },
   { immediate: true },
 );
@@ -89,7 +95,10 @@ function handleFileChange(event: Event) {
 
 function removeFile(index: number) {
   files.value.splice(index, 1);
-  emit('remove-file');
+  emit(
+    'remove-file',
+    files.value.map((f) => f.name),
+  );
 }
 
 /**

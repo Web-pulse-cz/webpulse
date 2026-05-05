@@ -46,5 +46,50 @@ return [
                 ],
             ],
         ],
+        'about' => [
+            'label' => 'O nás',
+            'description' => 'Sekce s nadpisem, popisem a obrázkem.',
+            'fields' => [
+                'image' => [
+                    'type' => 'image',
+                    'label' => 'Obrázek',
+                    'translatable' => false,
+                ],
+                'title' => [
+                    'type' => 'text',
+                    'label' => 'Nadpis',
+                    'translatable' => true,
+                    'rules' => 'required|max:200',
+                ],
+                'text' => [
+                    'type' => 'richtext',
+                    'label' => 'Text',
+                    'translatable' => true,
+                ],
+            ],
+        ],
+        'gallery' => [
+            'label' => 'Galerie',
+            'description' => 'Galerie fotografií s nadpisem a popisem.',
+            'fields' => [
+                'images' => [
+                    'type' => 'image',
+                    'label' => 'Fotografie',
+                    'multiple' => true,
+                    'translatable' => false,
+                ],
+                'title' => [
+                    'type' => 'text',
+                    'label' => 'Nadpis',
+                    'translatable' => true,
+                    'rules' => 'max:200',
+                ],
+                'description' => [
+                    'type' => 'textarea',
+                    'label' => 'Popis',
+                    'translatable' => true,
+                ],
+            ],
+        ],
     ],
 ];
