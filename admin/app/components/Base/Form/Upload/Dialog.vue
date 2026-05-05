@@ -2,7 +2,7 @@
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { Form } from 'vee-validate';
 import Draggable from 'vuedraggable';
-import { XMarkIcon } from '@heroicons/vue/24/outline';
+import { TrashIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const show = defineModel('show', {
   type: Boolean,
@@ -52,7 +52,22 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change', 'upload-files']);
+const emit = defineEmits([
+  'save-item',
+  'upload-remote-url',
+  'handle-file-change',
+  'upload-files',
+  'remove-staged',
+]);
+
+function removeStaged(index: number) {
+  const list = files.value ?? [];
+  const removed = list[index];
+  const next = [...list];
+  next.splice(index, 1);
+  files.value = next;
+  emit('remove-staged', { index, removed, remaining: next });
+}
 </script>
 
 <template>
@@ -139,19 +154,21 @@ const emit = defineEmits(['save-item', 'upload-remote-url', 'handle-file-change'
                               style="display: contents"
                               class="cursor-grab active:cursor-grabbing"
                             >
-                              <template #item="{ element }">
+                              <template #item="{ element, index }">
                                 <div
                                   :class="[
                                     multiple ? 'col-span-1' : 'col-span-full mx-auto max-w-sm',
                                     'group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md',
                                   ]"
                                 >
-                                  <UTooltip
-                                    text="Odstranit soubor"
-                                    placement="top"
-                                    class="absolute right-2 top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100"
+                                  <button
+                                    type="button"
+                                    title="Odstranit soubor"
+                                    class="absolute right-2 top-2 z-10 flex size-7 items-center justify-center rounded-full bg-red-500 text-white shadow-sm ring-1 ring-red-600 opacity-100 transition-opacity hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100"
+                                    @click="removeStaged(index)"
                                   >
-                                  </UTooltip>
+                                    <TrashIcon class="size-3.5" />
+                                  </button>
 
                                   <div class="aspect-square w-full">
                                     <img

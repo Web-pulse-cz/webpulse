@@ -35,12 +35,21 @@ class FilemanagerController extends Controller
         $validator = Validator::make($request->all(), [
             'type' => 'required|string', // e.g., 'product', 'blog', etc.
             'format' => 'nullable|string', // e.g., 'thumbnail', 'full', etc.
-            /*'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:4096',*/
+            'images' => 'nullable|array|max:30',
+            'images.*' => 'file|mimes:jpeg,png,jpg,gif,svg,webp,avif|max:8192',
+            'url' => 'nullable|string|max:2048',
         ]);
 
         if ($validator->fails()) {
             return Response::json(['errors' => $validator->errors()], 422);
+        }
+
+        // One of files or url must be provided — otherwise we'd return an
+        // empty array and confuse the caller into thinking nothing failed.
+        if (empty($request->file('images')) && ! $request->filled('url')) {
+            return Response::json([
+                'errors' => ['images' => ['Žádný soubor ani URL nebyly poskytnuty.']],
+            ], 422);
         }
 
         try {

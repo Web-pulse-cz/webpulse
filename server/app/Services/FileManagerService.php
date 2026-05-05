@@ -74,12 +74,27 @@ class FileManagerService
             $imageFormats = [$imageFormats];
         }
 
-        if (! empty($files)) {
-            foreach ($files as $file) {
-                if (! $file->isValid()) {
-                    throw new \Exception('Invalid file upload.');
-                }
+        // Bail out before touching the disk if there's nothing configured for
+        // this entity_type — otherwise we'd silently return filenames that point
+        // to files that were never actually written.
+        if (empty($imageFormats)) {
+            throw new \Exception(
+                $format
+                    ? "Pro typ '{$type}' / formát '{$format}' není nastavený žádný preset. Vytvořte ho v Nastavení → Filemanager."
+                    : "Pro typ '{$type}' není nastavený žádný formát. Vytvořte preset v Nastavení → Filemanager."
+            );
+        }
 
+        if (! empty($files)) {
+            // Validate everything up front so a mid-batch failure doesn't leave
+            // orphan files on disk for whatever was processed before the error.
+            foreach ($files as $i => $file) {
+                if (! $file->isValid()) {
+                    throw new \Exception("Soubor #".($i + 1)." je neplatný (".$file->getErrorMessage().").");
+                }
+            }
+
+            foreach ($files as $file) {
                 $extension = strtolower($file->getClientOriginalExtension());
                 $filename = $keepName ? $file->getClientOriginalName() : uniqid('', true).'.'.$extension;
                 $isSvg = in_array($extension, self::SVG_EXTENSIONS, true) || $file->getMimeType() === 'image/svg+xml';
