@@ -15,6 +15,8 @@ class Site extends Model
         'hash',
         'is_secure',
         'is_active',
+        'contact_email',
+        'contact_phone',
         'settings',
         'user_id',
         'fakturoid_client_id',
