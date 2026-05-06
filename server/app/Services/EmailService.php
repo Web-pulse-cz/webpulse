@@ -27,7 +27,7 @@ class EmailService
         try {
             $email = new Email;
             $email->fill([
-                'from' => env('MAIL_FROM_ADDRESS'), // TODO: přidat z envu
+                'from' => config('mail.from.address'),
                 'to' => $to,
                 'subject' => $subject,
                 'cc' => $cc ?? [],
