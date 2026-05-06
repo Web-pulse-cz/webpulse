@@ -215,7 +215,7 @@ onMounted(async () => {
     <div
       v-if="slug"
       ref="preferencesRef"
-      class="relative mb-2 flex items-center justify-end"
+      class="relative mb-2 mt-2 flex items-center justify-end"
     >
       <button
         type="button"
