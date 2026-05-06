@@ -212,6 +212,88 @@ onMounted(async () => {
 
 <template>
   <div :class="compact ? 'w-full' : 'w-full px-4 sm:px-0'">
+    <div
+      v-if="slug"
+      ref="preferencesRef"
+      class="relative mb-2 flex items-center justify-end"
+    >
+      <button
+        type="button"
+        class="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-medium text-slate-500 shadow-sm ring-1 ring-slate-200 transition-colors hover:bg-slate-50 hover:text-slate-700"
+        title="Nastavení tabulky"
+        @click="showPreferences = !showPreferences"
+      >
+        <Cog6ToothIcon class="size-4" />
+        <span>Sloupce a stránkování</span>
+      </button>
+
+      <div
+        v-if="showPreferences"
+        class="absolute right-0 top-full z-30 mt-2 w-72 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-200"
+      >
+        <div class="mb-3 flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+            Viditelné sloupce
+          </span>
+          <button
+            type="button"
+            class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 transition-colors hover:text-indigo-600"
+            title="Resetovat na výchozí"
+            @click="resetPreferences"
+          >
+            <ArrowPathIcon class="size-3" />
+            Reset
+          </button>
+        </div>
+
+        <ul class="mb-4 max-h-64 space-y-1 overflow-y-auto pr-1">
+          <li
+            v-for="column in (columns as any[])"
+            :key="column.key"
+            class="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50"
+          >
+            <label
+              :for="`pref-col-${column.key}`"
+              class="flex flex-1 cursor-pointer items-center gap-2 text-sm text-slate-700"
+              :class="FORCED_COLUMN_KEYS.has(column.key) ? 'cursor-not-allowed text-slate-400' : ''"
+            >
+              <input
+                :id="`pref-col-${column.key}`"
+                type="checkbox"
+                :checked="isColumnChecked(column.key)"
+                :disabled="FORCED_COLUMN_KEYS.has(column.key)"
+                class="size-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+                @change="toggleColumn(column.key)"
+              />
+              <span>{{ column.name }}</span>
+            </label>
+          </li>
+        </ul>
+
+        <div>
+          <span class="mb-2 block text-[11px] font-bold uppercase tracking-widest text-slate-500">
+            Záznamů na stránku
+          </span>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              v-for="size in PER_PAGE_OPTIONS"
+              :key="size"
+              type="button"
+              class="rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors"
+              :class="
+                preferences.perPage.value === size
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              "
+              @click="selectPerPage(size)"
+            >
+              {{ size }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="flow-root">
       <div :class="compact ? 'overflow-x-auto' : '-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8'">
         <div
@@ -228,88 +310,6 @@ onMounted(async () => {
                 : 'overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200'
             "
           >
-            <div
-              v-if="slug"
-              ref="preferencesRef"
-              class="relative flex items-center justify-end border-b border-slate-100 bg-white px-4 py-2"
-            >
-              <button
-                type="button"
-                class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
-                title="Nastavení tabulky"
-                @click="showPreferences = !showPreferences"
-              >
-                <Cog6ToothIcon class="size-4" />
-                <span>Sloupce a paginace</span>
-              </button>
-
-              <div
-                v-if="showPreferences"
-                class="absolute right-2 top-full z-30 mt-2 w-72 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-200"
-              >
-                <div class="mb-3 flex items-center justify-between">
-                  <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">
-                    Viditelné sloupce
-                  </span>
-                  <button
-                    type="button"
-                    class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 transition-colors hover:text-indigo-600"
-                    title="Resetovat na výchozí"
-                    @click="resetPreferences"
-                  >
-                    <ArrowPathIcon class="size-3" />
-                    Reset
-                  </button>
-                </div>
-
-                <ul class="mb-4 max-h-64 space-y-1 overflow-y-auto pr-1">
-                  <li
-                    v-for="column in (columns as any[])"
-                    :key="column.key"
-                    class="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50"
-                  >
-                    <label
-                      :for="`pref-col-${column.key}`"
-                      class="flex flex-1 cursor-pointer items-center gap-2 text-sm text-slate-700"
-                      :class="FORCED_COLUMN_KEYS.has(column.key) ? 'cursor-not-allowed text-slate-400' : ''"
-                    >
-                      <input
-                        :id="`pref-col-${column.key}`"
-                        type="checkbox"
-                        :checked="isColumnChecked(column.key)"
-                        :disabled="FORCED_COLUMN_KEYS.has(column.key)"
-                        class="size-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
-                        @change="toggleColumn(column.key)"
-                      />
-                      <span>{{ column.name }}</span>
-                    </label>
-                  </li>
-                </ul>
-
-                <div>
-                  <span class="mb-2 block text-[11px] font-bold uppercase tracking-widest text-slate-500">
-                    Záznamů na stránku
-                  </span>
-                  <div class="flex flex-wrap gap-1.5">
-                    <button
-                      v-for="size in PER_PAGE_OPTIONS"
-                      :key="size"
-                      type="button"
-                      class="rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors"
-                      :class="
-                        preferences.perPage.value === size
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      "
-                      @click="selectPerPage(size)"
-                    >
-                      {{ size }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <table class="min-w-full divide-y divide-slate-200">
               <thead class="bg-slate-50">
                 <tr>
