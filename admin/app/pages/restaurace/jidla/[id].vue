@@ -5,6 +5,7 @@ import {
   DocumentIcon,
   ExclamationTriangleIcon,
   FolderIcon,
+  GlobeAltIcon,
   NewspaperIcon,
 } from '@heroicons/vue/24/outline';
 import { useLanguageStore } from '~~/stores/languageStore';
@@ -259,6 +260,15 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   class="col-span-full"
                 />
                 <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.slug !== undefined"
+                  :key="`slug-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].slug"
+                  label="Slug (URL)"
+                  type="text"
+                  name="slug"
+                  class="col-span-full"
+                />
+                <BaseFormInput
                   v-model="item.price"
                   label="Cena (Kč)"
                   type="number"
@@ -272,6 +282,79 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   name="weight"
                   placeholder="Např. 200g"
                 />
+              </div>
+            </LayoutContainer>
+
+            <!-- Popis a SEO -->
+            <LayoutContainer>
+              <div class="mb-6 flex items-center justify-between border-b border-slate-100 pb-5">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                  >
+                    <DocumentIcon class="size-5" />
+                  </div>
+                  <LayoutTitle class="!mb-0">Popis a SEO</LayoutTitle>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                    >Jazyk:</span
+                  >
+                  <span
+                    class="rounded-md bg-slate-900 px-2 py-1 text-xs font-bold uppercase tracking-tight text-white"
+                  >
+                    {{ selectedLocale }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-2">
+                <BaseFormInput
+                  v-if="item.translations?.[selectedLocale]?.meta_title !== undefined"
+                  :key="`meta_title-${selectedLocale}`"
+                  v-model="item.translations[selectedLocale].meta_title"
+                  label="Meta název"
+                  type="text"
+                  name="meta_title"
+                  class="col-span-full lg:col-span-1"
+                />
+
+                <div
+                  class="col-span-full rounded-2xl bg-slate-50 p-6 ring-1 ring-inset ring-slate-200/60"
+                >
+                  <div class="mb-4 flex items-center gap-2">
+                    <GlobeAltIcon class="size-4 text-slate-400" />
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-500"
+                      >SEO Optimalizace</span
+                    >
+                  </div>
+                  <BaseFormTextarea
+                    v-if="item.translations?.[selectedLocale]?.meta_description !== undefined"
+                    :key="`meta_description-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].meta_description"
+                    label="Meta popisek"
+                    name="meta_description"
+                    rows="2"
+                    class="bg-white"
+                  />
+                </div>
+
+                <div class="col-span-full space-y-10 pt-4">
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]?.perex !== undefined"
+                    :key="`perex-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].perex"
+                    label="Perex"
+                    name="perex"
+                  />
+                  <BaseFormEditor
+                    v-if="item.translations?.[selectedLocale]?.text !== undefined"
+                    :key="`text-${selectedLocale}`"
+                    v-model="item.translations[selectedLocale].text"
+                    label="Popis"
+                    name="text"
+                  />
+                </div>
               </div>
             </LayoutContainer>
 

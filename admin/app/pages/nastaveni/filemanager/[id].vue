@@ -4,7 +4,6 @@ import { Form } from 'vee-validate';
 import { PhotoIcon, ArrowsPointingOutIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
-const user = useSanctumUser();
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const { formRef, validateForm } = useFormValidation();
@@ -74,23 +73,6 @@ const cropPositionOptions = [
   { value: 'bottom', name: 'Dole' },
   { value: 'bottom-right', name: 'Vpravo dole' },
 ];
-
-const allSites = ref<{ id: number; name: string; hash: string }[]>([]);
-
-async function loadSites() {
-  const client = useSanctumClient();
-  await client('/api/admin/site', {
-    method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  })
-    .then((response: any) => {
-      const data = Array.isArray(response) ? response : response.data || [];
-      allSites.value = data.map((s: any) => ({ id: s.id, name: s.name, hash: s.hash }));
-    })
-    .catch(() => {
-      $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se načíst weby.', severity: 'error' });
-    });
-}
 
 async function loadItem() {
   const client = useSanctumClient();
@@ -162,7 +144,6 @@ async function saveItem(redirect = true as boolean) {
 useHead({ title: pageTitle.value });
 
 onMounted(async () => {
-  await loadSites();
   if (!isNew.value) await loadItem();
 });
 
@@ -263,32 +244,13 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </div>
 
         <aside class="col-span-1 lg:sticky lg:top-8 lg:col-span-3">
-          <LayoutContainer>
-            <LayoutTitle class="!mb-4 text-base">Přiřazení k webům</LayoutTitle>
-            <div v-if="allSites.length === 0" class="text-sm italic text-slate-400">
-              Žádné weby k dispozici.
-            </div>
-            <div v-else class="space-y-2">
-              <label
-                v-for="site in allSites"
-                :key="site.id"
-                class="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-slate-50"
-              >
-                <input
-                  type="checkbox"
-                  :value="site.id"
-                  :checked="item.sites.includes(site.id)"
-                  class="size-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                  @change="
-                    item.sites.includes(site.id)
-                      ? (item.sites = item.sites.filter((id: number) => id !== site.id))
-                      : item.sites.push(site.id)
-                  "
-                />
-                <span class="text-sm font-medium text-slate-700">{{ site.name }}</span>
-              </label>
-            </div>
-          </LayoutContainer>
+          <LayoutActionsDetailBlock
+            v-model:sites="item.sites"
+            :allow-translations="false"
+            :allow-image="false"
+            :allow-is-active="false"
+            class="shadow-sm"
+          />
         </aside>
       </div>
     </Form>

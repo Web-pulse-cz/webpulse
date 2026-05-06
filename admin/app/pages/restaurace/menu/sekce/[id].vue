@@ -106,7 +106,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </LayoutContainer>
         </div>
         <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">
-          <LayoutActionsDetailBlock v-model:sites="item.sites" />
+          <LayoutActionsDetailBlock v-model:sites="item.sites" image-type="icon" />
         </div>
       </div>
     </Form>

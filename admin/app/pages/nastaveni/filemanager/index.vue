@@ -166,16 +166,6 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat formát' }]"
       slug="filemanagers"
     />
-
-    <div class="mb-4 max-w-xs">
-      <BaseFormSelect
-        v-model="tableQuery.entity_type"
-        :options="entityTypeOptions"
-        label="Filtr podle typu"
-        name="entity_type_filter"
-      />
-    </div>
-
     <BaseTable
       :items="items"
       :columns="[
