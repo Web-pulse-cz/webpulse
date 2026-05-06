@@ -19,11 +19,17 @@ trait Imagable
             ->delete();
 
         if ($images && is_array($images)) {
+            $position = 0;
             foreach ($images as $image) {
-                $this->insertImage($model, $image);
+                $filename = is_string($image) ? trim($image) : (is_array($image) ? ($image['filename'] ?? '') : '');
+                if ($filename === '') {
+                    continue;
+                }
+                $this->insertImage($model, $filename, $position);
+                $position++;
             }
-        } elseif ($images && $images != '' && $images != null) {
-            $this->insertImage($model, $images);
+        } elseif ($images && is_string($images) && trim($images) !== '') {
+            $this->insertImage($model, trim($images), 0);
         }
     }
 
@@ -73,6 +79,8 @@ trait Imagable
         return DB::table('images')
             ->where('imagable_id', $model->id)
             ->where('imagable_type', get_class($model))
+            ->orderBy('position')
+            ->orderBy('id')
             ->get();
     }
 }

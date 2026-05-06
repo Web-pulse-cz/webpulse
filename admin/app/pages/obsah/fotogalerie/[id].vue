@@ -75,8 +75,15 @@ async function loadItem() {
   })
     .then((response) => {
       item.value = response;
-      item.value.sites = response.sites.map((site) => site.id);
-      item.value.images = response.images || [];
+      item.value.sites = (response.sites ?? []).map((site: any) =>
+        typeof site === 'object' ? site.id : site,
+      );
+      const incomingImages = Array.isArray(response.images) ? response.images : [];
+      item.value.images = incomingImages
+        .map((img: any) =>
+          typeof img === 'string' ? img : img?.filename || img?.name || null,
+        )
+        .filter(Boolean);
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;
       breadcrumbs.value.push({
