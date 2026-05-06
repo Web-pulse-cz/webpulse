@@ -90,6 +90,7 @@ use App\Http\Controllers\Admin\TaxRate\TaxRateController;
 use App\Http\Controllers\Admin\TimeEntry\TimeEntryController;
 use App\Http\Controllers\Admin\User\ProfileController;
 use App\Http\Controllers\Admin\User\QuickAccessController;
+use App\Http\Controllers\Admin\User\TablePreferenceController;
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\User\UserGroupController;
 use App\Http\Controllers\Admin\Voucher\VoucherController;
@@ -413,6 +414,15 @@ Route::group([
             Route::get('{id}', [QuickAccessController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [QuickAccessController::class, 'store']);
             Route::delete('{id}', [QuickAccessController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Per-user table preferences (visible columns + per-page)
+        Route::group([
+            'prefix' => 'table-preferences',
+        ], function () {
+            Route::get('', [TablePreferenceController::class, 'show']);
+            Route::post('', [TablePreferenceController::class, 'store']);
+            Route::delete('', [TablePreferenceController::class, 'destroy']);
         });
 
         // Profile routes

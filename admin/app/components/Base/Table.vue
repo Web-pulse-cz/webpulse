@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { computed, inject, onMounted, ref, watch } from 'vue';
 
 import {
   BoltIcon,
@@ -9,12 +9,15 @@ import {
   CheckIcon,
   XMarkIcon,
   ArrowDownTrayIcon,
+  Cog6ToothIcon,
+  ArrowPathIcon,
 } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, ChevronUpIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { useFormat } from '~/composables/useFormat';
+import { useTablePreferences } from '~/composables/useTablePreferences';
 
 const { $toast } = useNuxtApp();
-const { formatNumber, formatDate, formatDateTime, formatSeconds } = useFormat();
+const { formatNumber, formatCurrency, formatDate, formatDateTime, formatSeconds } = useFormat();
 
 const user = useSanctumUser();
 const permissions = usePermissions();
@@ -23,10 +26,12 @@ const route = useRoute();
 const router = useRouter();
 const showDeleteDialog = ref(false);
 const deleteDialogItem = ref(null);
+const showPreferences = ref(false);
+const preferencesRef = ref<HTMLElement | null>(null);
 
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-defineProps({
+const props = defineProps({
   items: {
     type: Object,
     required: true,
@@ -138,10 +143,71 @@ const emit = defineEmits([
   'delete-item',
   'update-sort',
   'update-page',
+  'update-per-page',
   'open-dialog',
   'download',
   'replicate',
 ]);
+
+const PER_PAGE_OPTIONS = [10, 25, 50, 100, 250];
+const FORCED_COLUMN_KEYS = new Set(['id']);
+
+const preferences = useTablePreferences(props.slug, { defaultPerPage: 25 });
+
+const visibleColumns = computed(() => {
+  return (props.columns as any[]).filter((column) => {
+    if (FORCED_COLUMN_KEYS.has(column.key)) return true;
+    return preferences.isColumnVisible(column.key);
+  });
+});
+
+function toggleColumn(key: string): void {
+  if (FORCED_COLUMN_KEYS.has(key)) return;
+  const allKeys = (props.columns as any[]).map((c) => c.key);
+  const current = preferences.visibleColumns.value ?? allKeys;
+  const next = current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
+  preferences.setVisibleColumns(next);
+}
+
+function selectPerPage(value: number): void {
+  if (preferences.perPage.value === value) return;
+  preferences.setPerPage(value);
+  emit('update-per-page', value);
+}
+
+async function resetPreferences(): Promise<void> {
+  await preferences.reset();
+  emit('update-per-page', preferences.perPage.value);
+}
+
+function isColumnChecked(key: string): boolean {
+  if (FORCED_COLUMN_KEYS.has(key)) return true;
+  if (!preferences.visibleColumns.value) return true;
+  return preferences.visibleColumns.value.includes(key);
+}
+
+function handleClickOutside(event: MouseEvent): void {
+  if (!preferencesRef.value) return;
+  if (!preferencesRef.value.contains(event.target as Node)) {
+    showPreferences.value = false;
+  }
+}
+
+watch(showPreferences, (open) => {
+  if (open) {
+    document.addEventListener('mousedown', handleClickOutside);
+  } else {
+    document.removeEventListener('mousedown', handleClickOutside);
+  }
+});
+
+onMounted(async () => {
+  if (!props.slug) return;
+  await preferences.load();
+  if (preferences.perPage.value !== 25) {
+    emit('update-per-page', preferences.perPage.value);
+  }
+});
 </script>
 
 <template>
@@ -162,11 +228,93 @@ const emit = defineEmits([
                 : 'overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200'
             "
           >
+            <div
+              v-if="slug"
+              ref="preferencesRef"
+              class="relative flex items-center justify-end border-b border-slate-100 bg-white px-4 py-2"
+            >
+              <button
+                type="button"
+                class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                title="Nastavení tabulky"
+                @click="showPreferences = !showPreferences"
+              >
+                <Cog6ToothIcon class="size-4" />
+                <span>Sloupce a paginace</span>
+              </button>
+
+              <div
+                v-if="showPreferences"
+                class="absolute right-2 top-full z-30 mt-2 w-72 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-200"
+              >
+                <div class="mb-3 flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                    Viditelné sloupce
+                  </span>
+                  <button
+                    type="button"
+                    class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 transition-colors hover:text-indigo-600"
+                    title="Resetovat na výchozí"
+                    @click="resetPreferences"
+                  >
+                    <ArrowPathIcon class="size-3" />
+                    Reset
+                  </button>
+                </div>
+
+                <ul class="mb-4 max-h-64 space-y-1 overflow-y-auto pr-1">
+                  <li
+                    v-for="column in (columns as any[])"
+                    :key="column.key"
+                    class="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50"
+                  >
+                    <label
+                      :for="`pref-col-${column.key}`"
+                      class="flex flex-1 cursor-pointer items-center gap-2 text-sm text-slate-700"
+                      :class="FORCED_COLUMN_KEYS.has(column.key) ? 'cursor-not-allowed text-slate-400' : ''"
+                    >
+                      <input
+                        :id="`pref-col-${column.key}`"
+                        type="checkbox"
+                        :checked="isColumnChecked(column.key)"
+                        :disabled="FORCED_COLUMN_KEYS.has(column.key)"
+                        class="size-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+                        @change="toggleColumn(column.key)"
+                      />
+                      <span>{{ column.name }}</span>
+                    </label>
+                  </li>
+                </ul>
+
+                <div>
+                  <span class="mb-2 block text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                    Záznamů na stránku
+                  </span>
+                  <div class="flex flex-wrap gap-1.5">
+                    <button
+                      v-for="size in PER_PAGE_OPTIONS"
+                      :key="size"
+                      type="button"
+                      class="rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors"
+                      :class="
+                        preferences.perPage.value === size
+                          ? 'bg-indigo-600 text-white shadow-sm'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      "
+                      @click="selectPerPage(size)"
+                    >
+                      {{ size }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <table class="min-w-full divide-y divide-slate-200">
               <thead class="bg-slate-50">
                 <tr>
                   <th
-                    v-for="(column, key) in columns"
+                    v-for="(column, key) in visibleColumns"
                     :key="key"
                     scope="col"
                     :class="[
@@ -212,7 +360,7 @@ const emit = defineEmits([
                   class="transition-colors hover:bg-slate-50/50"
                 >
                   <td
-                    v-for="(column, index) in columns"
+                    v-for="(column, index) in visibleColumns"
                     :key="index"
                     :class="[
                       column.hidden ? 'hidden md:table-cell' : '',
@@ -224,10 +372,13 @@ const emit = defineEmits([
                       {{ printText(item, column) }}
                     </span>
                     <span v-else-if="column.type === 'number'" class="tabular-nums text-slate-900">
-                      {{ formatNumber(printText(item, column), column.decimals ?? 2) }}
+                      {{ formatNumber(printText(item, column), column.decimals ?? 0) }}
+                    </span>
+                    <span v-else-if="column.type === 'currency'" class="tabular-nums text-slate-900">
+                      {{ formatCurrency(printText(item, column), column.currency ?? 'Kč', column.decimals ?? 2) }}
                     </span>
                     <span v-else-if="column.type === 'percent'" class="tabular-nums">
-                      {{ formatNumber(item[column.key], 0) }} %
+                      {{ formatNumber(item[column.key], column.decimals ?? 0) }} %
                     </span>
                     <PropsBadge
                       v-else-if="column.type === 'badge'"
@@ -394,7 +545,7 @@ const emit = defineEmits([
 
                 <tr v-else-if="!loading && error">
                   <td
-                    :colspan="columns.length + 1"
+                    :colspan="visibleColumns.length + 1"
                     class="whitespace-nowrap py-12 text-center text-sm text-slate-500"
                   >
                     {{ `${plural} se nepodařilo načíst.` }}
@@ -402,7 +553,7 @@ const emit = defineEmits([
                 </tr>
                 <tr v-else-if="!loading && !error && items.data && items.data.length === 0">
                   <td
-                    :colspan="columns.length + 1"
+                    :colspan="visibleColumns.length + 1"
                     class="whitespace-nowrap py-12 text-center text-sm text-slate-500"
                   >
                     {{ `Zatím nemáte žádné ${plural.toLowerCase()}.` }}
@@ -410,7 +561,7 @@ const emit = defineEmits([
                 </tr>
                 <tr v-else-if="loading">
                   <td
-                    :colspan="columns.length + 1"
+                    :colspan="visibleColumns.length + 1"
                     class="whitespace-nowrap py-12 text-center text-sm text-slate-500"
                   >
                     <div class="flex items-center justify-center gap-x-2">
