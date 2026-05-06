@@ -29,6 +29,8 @@ class SiteResource extends JsonResource
             'hash' => $this->hash,
             'is_secure' => $this->is_secure,
             'is_active' => $this->is_active,
+            'contact_email' => $this->contact_email,
+            'contact_phone' => $this->contact_phone,
             'settings' => $this->settings,
             'fakturoid_client_id' => $this->fakturoid_client_id,
             'fakturoid_client_secret' => $hasFakturoidSecret ? '••••••••' : null,

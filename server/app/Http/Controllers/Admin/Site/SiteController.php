@@ -69,6 +69,8 @@ class SiteController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'url' => 'required|string',
+            'contact_email' => 'nullable|email|max:255',
+            'contact_phone' => 'nullable|string|max:32',
         ]);
 
         if ($validator->fails()) {
