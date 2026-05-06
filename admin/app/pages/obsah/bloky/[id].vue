@@ -52,6 +52,31 @@ const currentTypeSchema = computed(() =>
 
 const sharedFields = computed(() => currentTypeSchema.value?.fields ?? []);
 
+function toFilename(value: unknown): string {
+  if (typeof value === 'string') return value.trim();
+  if (value && typeof value === 'object') {
+    const obj = value as Record<string, unknown>;
+    if (typeof obj.filename === 'string') return obj.filename.trim();
+    if (typeof obj.name === 'string') return obj.name.trim();
+  }
+  return '';
+}
+
+function sanitizeImageFields(data: Record<string, any>, fields: any[]): Record<string, any> {
+  const sanitized = { ...data };
+  for (const field of fields) {
+    if (field.type !== 'image') continue;
+    const raw = sanitized[field.name];
+    if (field.multiple) {
+      const arr = Array.isArray(raw) ? raw : raw ? [raw] : [];
+      sanitized[field.name] = arr.map(toFilename).filter(Boolean);
+    } else {
+      sanitized[field.name] = toFilename(raw);
+    }
+  }
+  return sanitized;
+}
+
 const typeOptions = computed(() =>
   schemas.value.types.map((t: any) => ({
     label: t.label,
@@ -86,14 +111,27 @@ async function loadItem() {
     },
   })
     .then((response: any) => {
+      const responseFields =
+        schemas.value.types.find((t: any) => t.key === response.type)?.fields ?? [];
+      const sharedFieldDefs = responseFields.filter((f: any) => !f.translatable);
+      const translatableFieldDefs = responseFields.filter((f: any) => f.translatable);
+
+      const sanitizedTranslations: Record<string, { data: Record<string, any> }> = {};
+      for (const [locale, value] of Object.entries(response.translations ?? {})) {
+        const tData = (value as any)?.data ?? {};
+        sanitizedTranslations[locale] = {
+          data: sanitizeImageFields(tData, translatableFieldDefs),
+        };
+      }
+
       item.value = {
         id: response.id,
         type: response.type,
         position: response.position ?? 0,
         is_active: !!response.is_active,
-        data: response.data ?? {},
-        translations: response.translations ?? {},
-        sites: (response.sites ?? []).map((s: any) => s.id),
+        data: sanitizeImageFields(response.data ?? {}, sharedFieldDefs),
+        translations: sanitizedTranslations,
+        sites: (response.sites ?? []).map((s: any) => (typeof s === 'object' ? s.id : s)),
       };
       breadcrumbs.value.pop();
       pageTitle.value = `${currentTypeSchema.value?.label ?? response.type} #${response.id}`;
@@ -125,6 +163,17 @@ async function saveItem(redirect = true as boolean) {
     item.value.sites = [currentSite.value.id];
   }
 
+  const sharedFieldDefs = sharedFields.value.filter((f: any) => !f.translatable);
+  const translatableFieldDefs = sharedFields.value.filter((f: any) => f.translatable);
+
+  const cleanData = sanitizeImageFields(item.value.data ?? {}, sharedFieldDefs);
+  const cleanTranslations: Record<string, { data: Record<string, any> }> = {};
+  for (const [locale, value] of Object.entries(item.value.translations ?? {})) {
+    cleanTranslations[locale] = {
+      data: sanitizeImageFields((value as any)?.data ?? {}, translatableFieldDefs),
+    };
+  }
+
   const client = useSanctumClient();
   loading.value = true;
 
@@ -136,8 +185,8 @@ async function saveItem(redirect = true as boolean) {
         type: item.value.type,
         position: item.value.position,
         is_active: item.value.is_active,
-        data: item.value.data,
-        translations: item.value.translations,
+        data: cleanData,
+        translations: cleanTranslations,
         sites: item.value.sites,
       }),
       headers: {

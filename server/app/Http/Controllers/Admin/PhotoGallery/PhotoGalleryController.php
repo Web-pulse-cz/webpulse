@@ -94,7 +94,16 @@ class PhotoGalleryController extends Controller
             }
 
             $gallery->save();
-            $gallery->saveImages($gallery, $request->get('images', []));
+
+            $images = $request->input('images', []);
+            if (! is_array($images)) {
+                $images = [];
+            }
+            $gallery->saveImages($gallery, array_values(array_filter(array_map(
+                fn ($i) => is_string($i) ? trim($i) : (is_array($i) && isset($i['filename']) ? trim((string) $i['filename']) : ''),
+                $images,
+            ))));
+
             $gallery->saveSites($gallery, $request->get('sites', []));
 
             DB::commit();

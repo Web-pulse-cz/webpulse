@@ -25,12 +25,26 @@ function setField(name: string, value: any) {
   emit('update:modelValue', next);
 }
 
-function normalizeUpload(result: unknown, multiple: boolean, current: unknown) {
-  const incoming = Array.isArray(result) ? (result as string[]).filter(Boolean) : result ? [result as string] : [];
-  if (!multiple) {
-    return incoming[0] ?? '';
+function toFilename(value: unknown): string {
+  if (typeof value === 'string') return value.trim();
+  if (value && typeof value === 'object') {
+    const obj = value as Record<string, unknown>;
+    if (typeof obj.filename === 'string') return obj.filename.trim();
+    if (typeof obj.name === 'string') return obj.name.trim();
   }
-  const existing = Array.isArray(current) ? (current as string[]) : [];
+  return '';
+}
+
+function normalizeUpload(result: unknown, multiple: boolean, current: unknown) {
+  const incomingRaw = Array.isArray(result) ? result : result ? [result] : [];
+  const incoming = incomingRaw.map(toFilename).filter(Boolean);
+
+  if (!multiple) {
+    return incoming[0] ?? toFilename(current);
+  }
+
+  const existingRaw = Array.isArray(current) ? current : [];
+  const existing = existingRaw.map(toFilename).filter(Boolean);
   return [...existing, ...incoming];
 }
 
