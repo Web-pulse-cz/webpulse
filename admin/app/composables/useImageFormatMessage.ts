@@ -23,18 +23,12 @@ const POSITION_LABEL: Record<string, string> = {
 };
 
 function buildMessage(response: any, fileType: string, multiple: boolean): string {
-  if (multiple) {
-    return fileType === 'image'
-      ? `Nahrávejte pouze soubory s příponou ${IMG_EXTS}. ${FILE_SIZE_MSG}.`
-      : `Nahrávejte pouze soubory se příponou ${DOC_EXTS} ${FILE_SIZE_MSG}.`;
-  }
-
   if (fileType !== 'image') {
     return `Nahrávejte pouze soubory se příponou ${DOC_EXTS} ${FILE_SIZE_MSG}.`;
   }
 
   if (!response || !response.width || !response.height) {
-    return `Pro tento typ není pro vybraný web nastavený žádný rozměr. Nastav ho v Nastavení → Filemanager. ${FILE_SIZE_MSG}.`;
+    return '';
   }
 
   let extra = '';
@@ -44,7 +38,11 @@ function buildMessage(response: any, fileType: string, multiple: boolean): strin
     extra = ` Mód: ${MODE_LABEL[response.mode]}.`;
   }
 
-  return `Pro ideální výsledek nahrávejte obrázek v rozměru ${response.width}x${response.height}px ${FILE_SIZE_MSG}.${extra}`;
+  const intro = multiple
+    ? `Nahrávejte pouze obrázky (${IMG_EXTS}) v rozměru ${response.width}x${response.height}px`
+    : `Pro ideální výsledek nahrávejte obrázek v rozměru ${response.width}x${response.height}px`;
+
+  return `${intro} ${FILE_SIZE_MSG}.${extra}`;
 }
 
 export default function (
