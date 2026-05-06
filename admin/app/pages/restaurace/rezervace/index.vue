@@ -109,6 +109,11 @@ function updatePage(page: number) {
   tableQuery.value.page = page;
   loadItems();
 }
+function updatePerPage(perPage: number) {
+  tableQuery.value.paginate = perPage;
+  tableQuery.value.page = 1;
+  loadItems();
+}
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
@@ -213,6 +218,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       @delete-item="deleteItem"
       @update-sort="updateSort"
       @update-page="updatePage"
+      @update-per-page="updatePerPage"
     />
   </div>
 </template>
