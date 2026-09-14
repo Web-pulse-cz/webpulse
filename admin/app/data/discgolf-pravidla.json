@@ -1,0 +1,2532 @@
+{
+ "docTitle": "OFICIÁLNÍ PRAVIDLA DISCGOLFU (PDGA)",
+ "docMeta": [
+  "Revize k 1. lednu 2026",
+  "Přeloženo z anglického originálu: https://www.pdga.com/book/export/html/8371",
+  "(Poznámka: jedná se o překlad sekcí 800–813 a Příloh A–G, tj. samotných herních pravidel.",
+  "Soutěžní manuál (Competition Manual) a sekce Otázky a odpovědi jsou na zdrojové stránce",
+  "mimořádně rozsáhlé a nebylo možné je stáhnout v tomto kroku celé - v případě zájmu je",
+  "možné je doplnit samostatně.)"
+ ],
+ "sections": [
+  {
+   "id": "800",
+   "title": "POPIS HRY",
+   "blocks": [
+    {
+     "type": "paragraph",
+     "text": "Cílem discgolfu je dokončit hřiště (kurz) na co nejméně hodů diskem. Kurz se obvykle skládá z devíti nebo osmnácti \"jamek\" (holes), z nichž každá je samostatnou hodnotící jednotkou."
+    },
+    {
+     "type": "paragraph",
+     "text": "Hra na každé jamce začíná na odpališti (tee) a končí u cíle (target). Poté, co hráč hodí z odpaliště, se každý další hod provádí z místa, kde se zastavil předchozí hod. Po dokončení jamky hráč pokračuje na odpaliště další jamky, dokud nejsou odehrány všechny jamky."
+    },
+    {
+     "type": "paragraph",
+     "text": "Discgolfová hřiště jsou obvykle vedena v zalesněných oblastech s rozmanitým terénem, který vytváří přirozené překážky pro let disku. Hráč nesmí kurz nijak upravovat tak, aby snížil obtížnost jamky. Hráči musí hrát kurz tak, jak ho nacházejí, a hrát disk tam, kde leží, pokud tato pravidla nestanoví jinak."
+    }
+   ]
+  },
+  {
+   "id": "801",
+   "title": "UPLATŇOVÁNÍ PRAVIDEL",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "801.01",
+     "title": "Spravedlnost (Fairness)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Tato pravidla byla navržena tak, aby podporovala férovou hru pro všechny hráče discgolfu. Při jejich používání by měl hráč uplatnit pravidlo, které nejpřesněji odpovídá dané situaci.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Pokud sporný bod není pravidly pokryt, rozhodnutí se učiní v souladu se spravedlností. Logické rozšíření nejbližšího existujícího pravidla nebo principů obsažených v těchto pravidlech často poskytne vodítko pro určení spravedlivého řešení.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "801.02",
+     "title": "Vymáhání pravidel (Enforcement)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Ředitel turnaje\" (Tournament Director, TD) je osoba odpovědná za turnaj nebo akci. Vedoucí ligy je pro účely ligy považován za ředitele turnaje. Ředitel turnaje je hlavním turnajovým funkcionářem (Tournament Official) akce. Rozhodnutí učiněná ředitelem turnaje jsou konečná. Nesprávná rozhodnutí ředitele turnaje zůstávají v platnosti, pokud je sám ředitel turnaje neopraví.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "\"Turnajový funkcionář\" neboli \"rozhodčí\" (Official) je osoba pověřená ředitelem turnaje k posuzování správné aplikace pravidel v průběhu hry. Rozhodnutí rozhodčího nemusí být potvrzeno, aby bylo vymahatelné, a má přednost před jakýmkoli rozhodnutím skupiny. Rozhodčí, který sám hraje, nesmí působit jako rozhodčí pro hráče ve své vlastní divizi.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "\"Turnajový pozorovatel\" (Tournament Spotter) je osoba pověřená ředitelem turnaje ke konkrétnímu účelu sledování letu disku, aniž by byla oprávněna jednat jako turnajový funkcionář.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Hráči jsou přiřazeni k společné hře jamek ve \"skupině\" (group) za účelem ověřování skóre a zajištění hry v souladu s pravidly.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Od hráčů se očekává, že nahlásí porušení pravidel, jakmile k němu zjevně dojde. Nahlášení musí být učiněno neprodleně, aby bylo vymahatelné (s výjimkou špatně odehraných jamek - misplay).",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Kterýkoli hráč ve skupině může nahlásit nebo potvrdit porušení pravidel u kteréhokoli hráče skupiny tím, že o tom informuje všechny hráče skupiny.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "\"Varování\" (warning) je první upozornění, které hráč obdrží za porušení určitých pravidel. Další porušení téhož pravidla již vedou k trestným hodům.",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Nahlášení porušení pravidel, které vede k varování, nemusí být potvrzeno, aby bylo vymahatelné.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Varování se nepřenášejí z jednoho kola do druhého ani do play-off.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "8.",
+       "text": "\"Trestný hod\" (penalty throw) je hod přičtený ke skóre hráče za porušení pravidla nebo za přemístění lehu (lie) podle pravidla.",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Nahlášení porušení pravidel jiným hráčem, které vede k jednomu nebo více trestným hodům, je vymahatelné pouze tehdy, pokud je potvrzeno jiným hráčem skupiny nebo rozhodčím.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Nahlášení porušení pravidel hráčem na sebe samého nemusí být potvrzeno, aby bylo vymahatelné, ledaže by proti němu vznesl námitku jiný hráč skupiny nebo rozhodčí.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "9.",
+       "text": "Diskvalifikovaní hráči nesmí dále v akci soutěžit a ztrácejí právo na výhru jakékoli finanční nebo věcné ceny. Diskvalifikovat hráče může pouze ředitel turnaje (nebo turnajový funkcionář k tomu ředitelem turnaje výslovně zmocněný).",
+       "children": []
+      },
+      {
+       "marker": "10.",
+       "text": "Hod nebo jednání, které podléhá trestu podle více než jednoho pravidla, se posuzuje podle pravidla, které vede k nejvyššímu počtu trestných hodů; případně, jsou-li tresty stejné, podle pravidla, které bylo porušeno jako první.",
+       "children": []
+      },
+      {
+       "marker": "11.",
+       "text": "Je-li let, poloha nebo stav disku sporný, rozhoduje o tom skupina.",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Prvního hlasování se musí zúčastnit všichni hráči kromě toho, kdo hodil. Rozhodnutím skupiny je varianta s nejvíce hlasy.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Hráč, který hodil, může stručně vyjádřit svůj názor, ale nesmí se skupinou hádat ani ji lobovat pro určitý výsledek. Hráč, který se hádá nebo lobuje pro výsledek, se dopustil porušení slušného chování (viz 812, Slušné chování).",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Pokud po prvním hlasování dojde k nerozhodnému výsledku, musí hráč, který hodil, hlasovat, aby remízu rozhodl.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Hráči se mohou zdržet hlasování skupiny pouze tehdy, pokud nebyli fyzicky přítomni. Jinak je zdržení se hlasování porušením slušného chování (viz 812, Slušné chování).",
+         "children": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "801.03",
+     "title": "Odvolání (Appeals)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč se může odvolat proti varováním, trestům nebo rozhodnutím skupiny k rozhodčímu, nebo proti rozhodnutí rozhodčího k řediteli turnaje, tím, že jasně a neprodleně sdělí toto přání skupině. Je-li rozhodčí snadno dostupný, může skupina počkat stranou a nechat ostatní skupiny hrát dál, zatímco se odvolání projednává.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Není-li rozhodčí pro projednání odvolání snadno dostupný, může hráč, který hodil, odehrát sadu provizorních hodů (viz 809.02) a odvolat se proti rozhodnutí k rozhodčímu později, jakmile to bude možné. Pokud jsou lehy stejné, žádná další sada hodů se nehraje.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Je-li rozhodnutí zvráceno, může rozhodčí upravit skóre hráče tak, aby odpovídalo správnému výkladu pravidel. Alternativně může rozhodčí nechat hráče odehrát znovu jednu nebo více jamek. Rozhodnutí ředitele turnaje jsou konečná. Nesprávná rozhodnutí ředitele turnaje zůstávají v platnosti, pokud je sám ředitel turnaje neopraví.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Pokud skupina po příchodu k hozenému disku zjistí, že rozhodnutí turnajového pozorovatele bylo nesprávné, pokračuje hráč ve hře z lehu podle rozhodnutí skupiny. Sled hodů založený na nesprávném signálu pozorovatele se ignoruje. Hráč se může proti rozhodnutí skupiny odvolat a pokračovat v původním sledu hodů formou provizorního sledu hodů.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "802",
+   "title": "HÁZENÍ",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "802.01",
+     "title": "Hod (Throw)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Hod\" je vypuštění a uvolnění disku za účelem změny jeho polohy.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Každý hod, který je proveden jako soutěžní pokus o změnu lehu, se počítá, ledaže je podle pravidel zrušen (disregarded).",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "U hodu, který je zrušen, se ruší i veškeré trestné hody s ním spojené. Tresty spojené s provedením hodu jsou: mimo hřiště (OB), hazard, minutá povinná branka (mandatory), disk nad dva metry, postoj (stance), značení (marking), neoprávněná úleva (improper relief) a ztracený disk.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "802.02",
+     "title": "Pořadí hráčů (Order of Play)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Pořadí hodů na odpališti první jamky je dáno pořadím, v jakém jsou hráči uvedeni na scorecard(ech).",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Pořadí hodů na všech dalších odpalištích se určuje podle skóre na předchozí jamce, tak že hráč s nejnižším skóre hází první atd. Remízy pořadí hodů nemění.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Poté, co všichni hráči mají leh jiný než odpaliště, je na řadě hráč, jehož leh je od cíle nejdále (\"away player\"). Mají-li dva nebo více hráčů leh ve stejné vzdálenosti od cíle, určuje pořadí hry pořadí, v jakém byly tyto lehy vytvořeny.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Pokud hráč provádí další hod ze stejného lehu, nebo opakovaný hod (re-throw), zůstává na řadě tento hráč. \"Opakovaný hod\" je dodatečný hod ze stejného lehu, který se hraje místo původního hodu.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Pro plynulost hry smí hráč, který není na řadě, hodit, pokud s tím souhlasí hráč, který je na řadě, nebo pokud jeho hod neovlivní hráče, který je na řadě.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Házení mimo pořadí je porušením slušného chování.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "Během turnajové hry nesmí žádná skupina předehrát skupinu před sebou, pokud to nenařídí rozhodčí, nebo pokud skupina před ní stojí stranou v souladu s pravidly.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "802.03",
+     "title": "Nadměrné zdržování (Excessive Time)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráči musí zajistit plynulé tempo hry a nesmí házet s nadměrným zdržováním.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráč se nadměrně zdržel, pokud nehodil ve lhůtě, která mu je podle tohoto pravidla přidělena.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráčům je přidělen čas k hodu takto:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Při hodu z odpaliště (802.04), z dropzóny (802.05.C), nebo do 20 metrů od cíle má hráč na hod 30 sekund.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Při hodu z jakéhokoli jiného lehu má hráč na hod 45 sekund.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "4.",
+       "text": "Přidělený čas začíná běžet poté, co:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Předchozí hráč hodil; a",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Hráč je na řadě; a",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Hráč určil polohu svého lehu; a",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Hráč zaujal svůj leh (addressed); a",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Hrací oblast zůstává volná.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "5.",
+       "text": "Hráč zaujal svůj leh v okamžiku, kdy začne provádět jakoukoli činnost naznačující, že se připravuje k hodu. Mezi tyto činnosti patří mimo jiné:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Značení lehu mini značkou;",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Umístění opěrného bodu na leh;",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Provádění přípravné rutiny před hodem;",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Použití dálkoměru;",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Kontrola větru;",
+         "children": []
+        },
+        {
+         "marker": "f.",
+         "text": "Odstraňování náhodných překážek (casual obstacles);",
+         "children": []
+        },
+        {
+         "marker": "g.",
+         "text": "Testování terénu a stability.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "6.",
+       "text": "Pokud hrací oblast přestane být volná, hráči nesmí házet. Přidělený čas hráče se resetuje, jakmile je hrací oblast opět volná.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "Hráč, který se zbytečně zdržuje cestou ke svému lehu, nebo je u lehu přítomen, ale odmítá jej zaujmout, se nadměrně zdržuje.",
+       "children": []
+      },
+      {
+       "marker": "8.",
+       "text": "Hráč může požádat skupinu o dodatečný čas na dojití na toaletu. Nevrátí-li se v přiměřené době, je pro danou jamku považován za nepřítomného a obdrží skóre par plus čtyři na této jamce.",
+       "children": []
+      },
+      {
+       "marker": "9.",
+       "text": "Hráč, který se nadměrně zdržuje, obdrží za první porušení varování. Hráč, který se nadměrně zdržuje poté, co za to již v daném kole obdržel varování, dostává jeden trestný hod. Viz 811.F.5 pro případ hráče, který je nepřítomen, když je na něj řada.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "802.04",
+     "title": "Odhoz z odpaliště (Teeing Off)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hra na každé jamce začíná hodem hráče z odpaliště dané jamky. \"Odpaliště\" (teeing area, tee) je oblast vymezená okraji odpalovací plochy (tee pad), je-li k dispozici. Jinak je to oblast sahající tři metry kolmo za vyznačenou odpalovací čáru (tee line). \"Odpalovací čára\" je čára v přední části odpaliště, nebo čára mezi vnějšími okraji dvou odpalovacích značek.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Při uvolnění disku musí mít hráč alespoň jeden opěrný bod uvnitř odpaliště a všechny opěrné body musí být uvnitř odpaliště. \"Opěrný bod\" je jakákoli část těla hráče, která je v okamžiku uvolnění disku v kontaktu s hrací plochou nebo jiným předmětem poskytujícím oporu. Hráč smí mít opěrný bod mimo odpaliště před nebo po, avšak nikoli v okamžiku uvolnění disku.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč, který poruší 802.04.B, se dopustil porušení postoje (stance violation) a obdrží jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "802.05",
+     "title": "Leh (Lie)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Leh\" je místo na hrací ploše, na kterém hráč zaujme postoj, aby hodil. \"Hrací plocha\" je plocha, obecně terén, která je schopna hráče unést a ze které lze rozumně zaujmout postoj. Hrací plocha může existovat nad nebo pod jinou hrací plochou. Není-li jasné, zda je daná plocha hrací plochou, rozhoduje o tom rozhodčí.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Lehem pro první hod na jamce je odpaliště.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Dropzóna je leh. \"Dropzóna\" je oblast na kurzu, určená ředitelem turnaje, ze které se hod provádí za určitých podmínek. Dropzóna může být vyznačena a hraná stejným způsobem jako odpaliště, nebo stejným způsobem jako vyznačený leh. Odpaliště lze použít jako dropzónu.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Ve všech ostatních případech je leh obdélník o rozměrech 20 cm na šířku a 30 cm na hloubku, vystředěný na herní linii za zadní hranou značkovacího disku. \"Značkovací disk\" neboli \"značka\" (marker disc, marker) je disk používaný ke značení lehu podle pravidla 802.06.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "\"Herní linie\" (line of play) je pomyslná čára na hrací ploše, vedoucí od středu cíle přes střed značkovacího disku a dále za něj. Pokud tato hrací plocha končí, herní linie pokračuje na nejbližší hrací ploše, která tuto linii sleduje. Je-li lehem odpaliště, používá se místo značkovacího disku k určení herní linie bod na odpališti nejbližší cíli.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "802.06",
+     "title": "Značení lehu (Marking the Lie)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Leh je vyznačen polohou hozeného disku na hrací ploše v hranicích hřiště.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Alternativně může hráč vyznačit leh umístěním mini značky na hrací plochu tak, aby se dotýkala přední části hozeného disku na herní linii. \"Mini značka\" je malý disk, který se nepoužívá při hře a splňuje Technické normy PDGA pro mini značky.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Není-li hozený disk na hrací ploše v hranicích hřiště, nebo má-li být leh podle pravidla přemístěn, hráč vyznačí leh umístěním mini značky v souladu s příslušným pravidlem.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Házení z lehu vyznačeného jiným způsobem, než je popsáno výše, je porušením značení. Za první porušení značení obdrží hráč varování. Za každé další porušení jakéhokoli pravidla o značení v průběhu kola obdrží hráč jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "802.07",
+     "title": "Postoj (Stance)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Je-li leh vyznačen značkovacím diskem, musí mít hráč v okamžiku uvolnění disku:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Alespoň jeden opěrný bod v kontaktu s lehem; a",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Žádný opěrný bod blíže k cíli než zadní hrana značkovacího disku; a",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Všechny opěrné body v hranicích hřiště (in-bounds).",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "2.",
+       "text": "Dropzóna se hraje buď jako odpaliště (viz 802.04.B), nebo jako vyznačený leh (viz 802.07.A).",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč, který poruší 802.07.A nebo 802.07.B, se dopustil porušení postoje a obdrží jeden trestný hod.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "803",
+   "title": "PŘEKÁŽKY A ÚLEVA",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "803.01",
+     "title": "Přemísťování překážek (Moving Obstacles)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč musí zvolit postoj, který způsobí co nejmenší pohyb jakékoli překážky, jež je trvalou nebo nedílnou součástí kurzu. Jakmile hráč zaujal postoj, nesmí překážku přemístit, aby si uvolnil místo pro házecí pohyb. Je dovoleno, aby házecí pohyb hráče způsobil neúmyslný pohyb překážky.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráč nesmí přemísťovat žádnou překážku na kurzu, s výjimkou:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Hráč smí přemístit náhodné překážky (casual obstacles), které se nacházejí na hrací ploše dále od cíle než přední hrana lehu. \"Náhodná překážka\" je:",
+         "children": [
+          {
+           "marker": "i.",
+           "text": "Předmět nebo shluk volného odpadu (jako malé kameny, malé nepřipojené větve, šišky, listí nebo větvičky), který hráč dokáže sám snadno a rychle přemístit; nebo jiné předměty určené ředitelem turnaje; a",
+           "children": []
+          },
+          {
+           "marker": "ii.",
+           "text": "Předmět, který nebyl záměrně umístěn jako součást kurzu nebo akce; a",
+           "children": []
+          },
+          {
+           "marker": "iii.",
+           "text": "Předmět, který není zapuštěn v hrací ploše.",
+           "children": []
+          }
+         ]
+        },
+        {
+         "marker": "b.",
+         "text": "Hráč smí požádat jiné osoby, aby se samy přemístily nebo přemístily své věci.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Hráč smí uvést vybavení kurzu do řádného provozního stavu, včetně odstranění překážek.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Hráč smí z kurzu odstranit odpadky.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč, který přemístí jakoukoli překážku na kurzu jinak, než je výše povoleno, obdrží jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "803.02",
+     "title": "Úleva od překážek (Relief from Obstacles)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč může získat úlevu od následujících překážek: škodlivý hmyz nebo zvířata, nebo jakýkoli předmět určený ředitelem turnaje. K získání úlevy smí hráč vyznačit nový leh na herní linii, dále od cíle, v nejbližším bodě, který úlevu poskytuje (pokud ředitel turnaje neoznámil větší úlevu).",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Brání-li překážka hráči fyzicky v zaujetí legálního postoje za značkovacím diskem, nebo ve vyznačení lehu pro hozený disk, který je nad nebo pod hrací plochou, smí hráč vyznačit nový leh na herní linii přímo za touto překážkou.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč, který si vezme úlevu jinak, než je pravidly povoleno, se dopustil špatně odehrané jamky (misplay) za hru z nesprávného lehu (viz 811.F.1).",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Žádný trestný hod se nepřičítá, pokud se čerpá volitelná úleva po trestu za disk mimo hřiště nebo nad dva metry.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "803.03",
+     "title": "Volitelná úleva na herní linii (Optional Line of Play Relief)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč se může kdykoli rozhodnout čerpat volitelnou úlevu tím, že tento úmysl oznámí skupině. Leh pak lze přemístit vyznačením nového lehu, který je dále od cíle a leží na herní linii. Ke skóre hráče se přičítá jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "803.04",
+     "title": "Poškozování kurzu (Damaging the Course)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč, který úmyslně poškodí jakoukoli část kurzu, obdrží dva trestné hody. Hráč může být rovněž z turnaje diskvalifikován v souladu se sekcí 3.03 Soutěžního manuálu.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "804",
+   "title": "REGULOVANÉ TRASY",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "804.01",
+     "title": "Povinné branky/trasy (Mandatory Routes)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Povinná trasa\" (mandatory) omezuje dráhu, kterou disk může urazit při hraní jamky.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Omezená rovina je svislá rovina vyznačená jedním nebo více předměty či jinými značkami, které vymezují okraje prostoru.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Pokud část hozeného disku zjevně vstoupí do omezené roviny, obdrží hráč jeden trestný hod. Lehem pro další hod je dropzóna určená pro tuto povinnou trasu. Není-li dropzóna určena, je lehem pro další hod předchozí leh.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Je-li hozený disk uvolněn na opačné straně omezené roviny, než je zadní hrana značkovacího disku, hráč minul povinnou trasu. Další leh a trest jsou stejné jako v 804.01.C.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "805",
+   "title": "REGULOVANÉ POLOHY",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "805.01",
+     "title": "Určení polohy (Establishing a Position)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hozený disk určuje \"polohu\" (position) v místě, kde se poprvé zastaví.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hozený disk je považován za zastavený, jakmile se poprvé přestane pohybovat. Disk ve vodě nebo v listí je považován za zastavený, pokud se pohybuje jen v důsledku pohybu vody, listí nebo větru.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Zastaví-li se disk nad hrací plochou, jeho polohou je bod na hrací ploše přímo pod diskem. Není-li pod diskem žádná hrací plocha, je jeho polohou bod na hrací ploše přímo nad diskem.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Rozpadne-li se hozený disk na kusy, jeho polohou je poloha největšího kusu.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "805.02",
+     "title": "Disk nad dva metry (Disc Above Two Meters)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Pravidlo dvou metrů\" se týká pravidel obsažených v 805.02. Není v platnosti, pokud jej ředitel turnaje nevyhlásí za platné. Ředitel turnaje může vyhlásit platnost pravidla dvou metrů pro celý kurz, pro jednotlivé jamky a/nebo pro jednotlivé předměty.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Je-li pravidlo dvou metrů v platnosti a disk se zastaví alespoň dva metry nad hrací plochou v hranicích hřiště (měřeno od nejnižšího bodu disku k hrací ploše přímo pod ním), obdrží hráč jeden trestný hod. Poloha disku je na hrací ploše přímo pod diskem. Po určení tohoto lehu smí hráč následně vyznačit nový leh, který je dále od cíle a leží na herní linii, bez dalšího trestu.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Disk podepřený cílem hrané jamky pravidlu dvou metrů nepodléhá.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Pokud hráč disk přemístí dříve, než bylo rozhodnutí učiněno, je disk považován za zastavený nad dvěma metry.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "805.03",
+     "title": "Ztracený disk (Lost Disc)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Disk je prohlášen za ztracený, pokud jej hráč nedokáže nalézt do tří minut po příchodu do oblasti, kde se předpokládá, že se nachází. Kterýkoli hráč skupiny nebo rozhodčí může zahájit měření těchto tří minut a musí o zahájení měření informovat skupinu.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Všichni hráči skupiny musí pomáhat při hledání disku. Nedodržení této povinnosti je porušením slušného chování.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Jakmile je disk prohlášen za ztracený, jeho status se nemění, ani pokud je následně nalezen. Hráč smí nalezený disk dále používat.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Hráč, jehož disk byl prohlášen za ztracený, obdrží jeden trestný hod. Další hod se provádí z předchozího lehu. Byla-li pro ztracené disky na dané jamce určena dropzóna, smí hráč hodit z dropzóny místo z předchozího lehu.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Zjistí-li se před ukončením turnaje, že disk hráče, který byl prohlášen za ztracený, byl odstraněn nebo odnesen ještě před prohlášením za ztracený, odečtou se hráči za tuto jamku dva hody ze skóre.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Byla-li pro ztracené disky poskytnuta dropzóna, může ředitel turnaje povolit hráčům přejít přímo do dropzóny za cenu dvou trestných hodů.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "Sekce 805.03 se nepoužije, je-li disk považován za disk mimo hřiště.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "806",
+   "title": "REGULOVANÉ OBLASTI",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "806.01",
+     "title": "Puttovací oblast (Putting Area)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Jakýkoli hod provedený do 10 metrů od cíle, měřeno od přední hrany lehu k patě cíle, je \"putt\".",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Po uvolnění puttu musí hráč prokázat plnou kontrolu rovnováhy za značkovacím diskem, než začne postupovat směrem k cíli. Hráč, který tak neučiní, se dopustil porušení postoje a obdrží jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "806.02",
+     "title": "Mimo hřiště (Out-of-Bounds, OB)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Oblast mimo hřiště\" (OB) je oblast určená ředitelem turnaje, ze které nelze hrát disk a ve které nelze zaujmout postoj. Hranice OB je součástí OB oblasti. Jakákoli oblast kurzu, která není OB, je \"v hranicích hřiště\" (in-bounds).",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Disk je mimo hřiště, pokud je jeho poloha zjevně a zcela obklopena oblastí mimo hřiště.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Existují-li přesvědčivé důkazy, že se disk zastavil v oblasti mimo hřiště, je disk považován za disk mimo hřiště a není nutné jej nalézt.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Hráč, jehož disk je mimo hřiště, obdrží jeden trestný hod. Další hod smí hráč provést z:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Předchozího lehu; nebo",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Lehu vyznačeného značkovacím diskem umístěným na hrací ploše až jeden metr od bodu, kde byl disk naposledy v hranicích hřiště. Po určení tohoto lehu smí hráč následně vyznačit nový leh, který je dále od cíle a leží na herní linii, bez dalšího trestu. Výše uvedené možnosti pro oblast mimo hřiště smí ředitel turnaje omezit pouze s předchozím souhlasem ředitele podpory akcí PDGA (PDGA Director of Event Support). Bez ohledu na to, zda byl takový souhlas udělen, musí hráči během turnajové hry i tak dodržovat pravidla kurzu vyhlášená ředitelem turnaje. Podle uvážení ředitele turnaje smí hráč dále zvolit provedení dalšího hodu z:",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Vyznačené dropzóny; nebo",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Lehu vyznačeného značkovacím diskem umístěným na hrací ploše až jeden metr od bodu na hranici mimo hřiště nejbližšího poloze disku.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "5.",
+       "text": "Je-li poloha hozeného disku v hranicích hřiště a do jednoho metru od hranice mimo hřiště, lze leh přemístit na nový leh v libovolném bodě na jednometrové čáře, která vede kolmo z tohoto bodu hranice mimo hřiště a prochází hozeným diskem. Alternativně, je-li hozený disk do jednoho metru od rohu, lze leh přemístit na jednometrové čáře, která vede z tohoto rohu skrz hozený disk.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Hranice mimo hřiště vytváří svislou rovinu. Při vyznačování do jednoho metru od hranice mimo hřiště lze jednometrovou úlevu čerpat z libovolného bodu nahoře či dole na této svislé rovině.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "Byla-li pro oblast mimo hřiště poskytnuta dropzóna, může ředitel turnaje povolit hráčům přejít přímo do dropzóny za cenu dvou trestných hodů.",
+       "children": []
+      },
+      {
+       "marker": "8.",
+       "text": "Ředitel turnaje může pro konkrétní oblasti mimo hřiště na jamce vyhlásit úlevu větší než jeden metr.",
+       "children": []
+      },
+      {
+       "marker": "9.",
+       "text": "Přemístí-li hráč disk dříve, než bylo rozhodnuto o jeho stavu mimo hřiště, je disk považován za disk mimo hřiště.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "806.03",
+     "title": "Neutrální oblast (Casual Area)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Neutrální oblast\" (casual area) je oblast určená ředitelem turnaje, která umožňuje volitelné přemístění bez trestu. Hráč se může rozhodnout čerpat úlevu, je-li jeho leh v této oblasti.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Ve výchozím nastavení je jakákoli vodní plocha, která je v hranicích hřiště a nebyla ředitelem turnaje výslovně prohlášena za hratelnou, neutrální oblastí.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč smí bez trestu čerpat úlevu z neutrální oblasti tak, že podél herní linie vyznačí nový leh, který je dále od cíle a ne dále, než je nejbližší leh, u kterého jsou značkovací disk i leh mimo neutrální oblast.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Ředitel turnaje smí pro neutrální oblast vyhlásit dodatečnou nebo alternativní úlevu.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Hráč, který si vezme úlevu jinak, než je pravidly povoleno, se dopustil misplay za hru z nesprávného lehu (viz 811.F.1).",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "806.04",
+     "title": "Povinná úlevová oblast (Required Relief Area)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Povinná úlevová oblast\" je oblast určená ředitelem turnaje, ze které nelze hrát disk.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Povinná úlevová oblast se posuzuje a hraje jako oblast mimo hřiště (viz 806.02), s následujícími výjimkami:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Hráč neobdrží trestný hod popsaný v 806.02.D.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Protože hráč neobdrží trestný hod, nemůže čerpat volitelnou úlevu na herní linii bez trestu popsanou v 806.02.D.2.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Hráč nesmí hrát z předchozího lehu popsaného v 806.02.D.1. I nadále však může svůj hod zrušit (abandon) s trestem podle 809.01.",
+         "children": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "806.05",
+     "title": "Hazard"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Hazard\" je oblast určená ředitelem turnaje, za kterou se ukládá trestný hod.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Čára vymezující okraje hazardu je součástí hazardu. Sdílí-li čáru oblast mimo hřiště a hazard, je tato čára považována za součást oblasti mimo hřiště.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Disk je v hazardu, pokud je jeho poloha zjevně a zcela obklopena hazardem nebo kombinací hazardu a oblasti mimo hřiště.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Hráč, jehož disk je v hazardu, obdrží jeden trestný hod. Hazard nemá žádný vliv na určení polohy lehu.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Přemístí-li hráč disk dříve, než bylo rozhodnuto, zda je v hazardu, je disk považován za disk v hazardu.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "807",
+   "title": "DOKONČENÍ JAMKY",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Cíl\" (target) je zařízení, jehož účelem je jednoznačně určit dokončení jamky. \"Košový cíl\" (basket target) je navržen tak, aby zachytával disky, a obvykle se skládá z misky, řetězů a nosníku řetězů upevněného na tyči. \"Objektový cíl\" (object target) má obecně vyznačenou cílovou plochu.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "K dokončení jamky s košovým cílem musí hráč disk uvolnit a disk se musí zastavit podepřen miskou nebo řetězy pod nosníkem řetězů.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "K dokončení jamky s objektovým cílem musí hráč disk uvolnit a disk musí zasáhnout vyznačenou cílovou plochu předmětu.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "808",
+   "title": "SKÓROVÁNÍ",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Každý hráč si musí vést vlastní scorecard, na kterém po každé jamce zaznamenává skóre pro celou skupinu. Hráč musí na požádání ukázat svůj scorecard rozhodčímu nebo ostatním hráčům své skupiny. Hráč, který odmítne vést skóre, bude diskvalifikován.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráči mohou vedení skóre delegovat pouze na svého určeného caddieho.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Po dokončení každé jamky zaznamená každý hráč skóre všech hráčů skupiny způsobem, který je pro každého hráče skupiny srozumitelný. Případná varování nebo trestné hody se zaznamenávají spolu se skóre za jamku.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Skóre hráče na jamce je celkový počet hodů včetně trestných hodů. Celkové skóre za kolo je součet skóre za všechny jamky plus případné další trestné hody. Použití čehokoli jiného než čísla jako skóre (včetně chybějícího skóre) podléhá trestu podle 808.G.2.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Je-li o hlášeném skóre hráče spor, skupina jamku znovu projedná a pokusí se dojít ke správnému skóre. Nedokáže-li skupina dosáhnout shody na skóre hráče, vyhledá co nejdříve pomoc rozhodčího. Souhlasí-li všichni hráči skupiny, že skóre je nesprávné, může být opraveno před odevzdáním scorecardu.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Všichni hráči jsou odpovědní za srovnání a odevzdání svého vyhotovení scorecardu do 30 minut od okamžiku, kdy jejich skupina dokončí kolo. Hráč, který svůj scorecard neodevzdá včas, obdrží dva trestné hody.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "Po odevzdání scorecardu je zapsané celkové skóre konečné, s výjimkou následujících okolností:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Trestné hody smí ředitel turnaje přidat nebo odebrat až do okamžiku, kdy ředitel turnaje prohlásí turnaj za ukončený, nebo než jsou rozdány všechny ceny.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Odevzdá-li hráč scorecard, na kterém je jeho celkové skóre nebo skóre za jednotlivé jamky nesprávné, nesprávně zapsané nebo chybějící, přičtou se ke správnému celkovému skóre dva trestné hody. Tyto trestné hody se nepřičítají, pokud bylo skóre upraveno kvůli jiným porušením zjištěným poté, co hráč odevzdal jinak správný scorecard.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Hráč není trestán, pokud jiný člen jeho skupiny odevzdá nesprávný scorecard.",
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "809",
+   "title": "DALŠÍ TYPY HODŮ",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "809.01",
+     "title": "Zrušený hod (Abandoned Throw)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč se může rozhodnout zrušit svůj poslední hod tím, že tento úmysl oznámí skupině. Zrušený hod a jeden trestný hod se počítají do skóre hráče a hráč hraje z lehu, ze kterého byl zrušený hod proveden. Trestné hody způsobené zrušeným hodem se ignorují.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Byla-li pro zrušené hody na dané jamce určena dropzóna, smí hráč hodit z dropzóny místo z předchozího lehu.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "809.02",
+     "title": "Provizorní hod (Provisional Throw)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Provizorní hody\" jsou alternativní sled hodů začínající z jiného lehu. Do konečného skóre za jamku se počítá pouze jeden ze dvou sledů hodů.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráči používají sled provizorních hodů na jamce, dokud není jamka dokončena nebo dokud rozhodnutí neurčí, který sled hodů se má použít.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Provizorní hody lze provádět pouze za následujících okolností:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Když je nejasné, nebo je spor o to, jak správně postupovat podle pravidel; nebo",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Když hráč, který hodil, hodlá podat odvolání proti rozhodnutí; nebo",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Když platí následující:",
+         "children": [
+          {
+           "marker": "i.",
+           "text": "Stav disku není znám; a",
+           "children": []
+          },
+          {
+           "marker": "ii.",
+           "text": "Disk může být ztracen, mimo hřiště, nebo v povinné úlevové oblasti; a",
+           "children": []
+          },
+          {
+           "marker": "iii.",
+           "text": "Provizorní hod zabrání zpětnému vracení se.",
+           "children": []
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "marker": "4.",
+       "text": "Provizorní hody nejsou k dispozici v následujících situacích, i když jsou jinak splněny podmínky v 809.02.C:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Když disk případně minul povinnou trasu (viz 804.01);",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Když hráč zvažuje zrušení hodu (viz 809.01);",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Když jde pouze o to, zda se uplatní trestný hod (viz Odvolání, 801.03).",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "5.",
+       "text": "Aby hráč zahájil provizorní sled, musí učinit všechny tři následující věci způsobem srozumitelným pro všechny členy skupiny:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Prohlásit, že zahajuje provizorní sled; a",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Vysvětlit, proč provizorní sled zahajuje; a",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Vysvětlit, který sled hodů se použije pro který výsledek.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "6.",
+       "text": "Provizorní hody, které nesplňují požadavky uvedené v 809.02, jsou tréninkovými hody (viz 809.03).",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "809.03",
+     "title": "Tréninkový hod (Practice Throw)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "\"Tréninkový hod\" je jakýkoli hod, který není proveden jako soutěžní pokus o změnu lehu, s výjimkou hodu provedeného za účelem odložení nepoužívaného disku nebo vrácení disku hráči, který urazí méně než pět metrů ve vzduchu. Upuštění disku (drop) není tréninkovým hodem.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráč obdrží za tréninkový hod jeden trestný hod; samotný hod se ignoruje a nepočítá se.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "810",
+   "title": "ZASAHOVÁNÍ (INTERFERENCE)",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Pokud se hozený disk poté, co se zastavil na hrací ploše v hranicích hřiště, přemístil, vrátí se na místo, kde se poprvé zastavil, jak se dohodne skupina. Hozený disk, který se zastavil jinde, není třeba vracet a jeho poloha se určuje podle toho, kde se poprvé zastavil, jak se dohodne skupina.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Přemístěný značkovací disk se vrací na své původní místo, jak se dohodne skupina.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hozený disk, který zasáhne osobu nebo zvíře, se hraje tam, kde se poprvé zastaví.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Je porušením pravidel, pokud hráč nebo jeho vybavení zasahuje do dráhy jeho vlastního hozeného disku. Hod a jeden trestný hod se počítají do skóre hráče; hráč pokračuje ve hře z předchozího lehu. Jakékoli další trestné hody způsobené tímto hodem se ignorují. Je-li do hodu zasaženo na žádost hráče, který hodil, považuje se to za totéž jako zasahování hráče do vlastního hodu.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Hozenému disku, jehož dráha byla úmyslně změněna někým jiným než hráčem, který hodil, se přiřadí poloha v místě kontaktu, jak se dohodne skupina. Hráč, který hodil, si může zvolit, zda bude hrát z výsledného lehu, nebo hod bez trestu zruší, přičemž v takovém případě se původní hod nezapočítává do skóre hráče.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Hráč, který úmyslně zasahuje do disku jiného hráče některým z následujících způsobů, obdrží dva trestné hody:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Změnou dráhy hozeného disku (jinak než za účelem zabránění zranění); nebo",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Přemístěním nebo zakrytím hozeného disku nebo značkovacího disku (jinak než v rámci identifikace, vyzvednutí, značení, nebo jak je dovoleno v 810.H).",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "7.",
+       "text": "Hráči nesmí stát ani nechávat své vybavení tam, kde by mohlo dojít k zasažení disku ve hře. Hráč může požadovat, aby se ostatní hráči nebo jejich vybavení přemístili, pokud by mohli hodu bránit. Odmítnutí tak učinit je porušením slušného chování.",
+       "children": []
+      },
+      {
+       "marker": "8.",
+       "text": "Disk ve hře hozený jiným hráčem, který se zastaví na nebo za lehem, lze přemístit. Poté, co hráč hodí, se disk druhého hráče vrátí na místo, kde se zastavil, jak se dohodne skupina.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "811",
+   "title": "ŠPATNĚ ODEHRANÁ JAMKA (MISPLAY)",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Je odpovědností hráče hrát kurz správně. Před zahájením hry se od hráčů očekává účast na \"poradě hráčů\" (players' meeting), aby se seznámili s případnými zvláštními podmínkami kurzu, včetně dodatečných jamek, alternativních odpališť, alternativního umístění jamek, oblastí mimo hřiště, povinných tras a dropzón.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "K \"misplay\" došlo, pokud hráč buď nedokončil každou jamku kurzu správně a ve správném pořadí, nebo hrál z nesprávného lehu při jakémkoli hodu.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Je-li misplay zjištěn po odevzdání scorecardu, obdrží hráč trestné hody odpovídající danému misplay.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Misplay není porušením postoje ani tréninkovým hodem.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Hráč, který úmyslně špatně hraje kurz, aby získal soutěžní výhodu, může být diskvalifikován v souladu se sekcí 3.03 Soutěžního manuálu. To zahrnuje mimo jiné jakékoli úmyslné misplay uvedené v 811.F.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Typy misplay:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Nesprávný leh. Hráč hrál z lehu, který není správným lehem. Hráč například:",
+         "children": [
+          {
+           "marker": "i.",
+           "text": "Odhodil z odpaliště, které není správným odpalištěm pro danou jamku; nebo",
+           "children": []
+          },
+          {
+           "marker": "ii.",
+           "text": "Hodil z jiného lehu, než jaký byl určen hozeným diskem; nebo",
+           "children": []
+          },
+          {
+           "marker": "iii.",
+           "text": "Hrál disk mimo hřiště, jako by byl v hranicích hřiště; nebo",
+           "children": []
+          },
+          {
+           "marker": "iv.",
+           "text": "Hodil z lehu určeného předchozím hodem, který minul povinnou trasu; nebo",
+           "children": []
+          },
+          {
+           "marker": "v.",
+           "text": "Hrál disk v povinné úlevové oblasti, jako by v ní nebyl. Nebyl-li po chybně odehraném hodu proveden žádný další hod, tento hod se ignoruje. Hráč hraje ze správného lehu a obdrží za misplay jeden trestný hod. Byl-li po chybně odehraném hodu proveden dodatečný hod, hráč pokračuje ve hře ze svého aktuálního lehu a obdrží za misplay dva trestné hody. Případné trestné hody vztahující se k použitým hodům se ukládají navíc k trestům za misplay.",
+           "children": []
+          }
+         ]
+        },
+        {
+         "marker": "b.",
+         "text": "Nedokončení jamky. Hráč dokončil kolo nebo hodil na jamce, aniž by dokončil předchozí jamku. Skóre za chybně odehranou jamku je počet provedených hodů plus jeden hod za dokončení jamky plus dva trestné hody za misplay. Úmyslné nedokončení jamky představuje odstoupení ze soutěže.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Nesekvenční hra. Hráč dokončil hru na jamce ve špatném pořadí. Hráč pokračuje ve hře kurzu ve správném pořadí. Bez ohledu na počet jamek odehraných ve špatném pořadí během kola se k celkovému skóre hráče za misplay přičítají celkem dva trestné hody. Skóre za jakoukoli dokončenou jamku zůstává v platnosti.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Nepřítomnost. Není-li hráč přítomen na začátku kola ve své přiřazené skupině, je považován za nepřítomného a jamku nehraje. Hráč je rovněž považován za nepřítomného, pokud neodehrál předchozí jamku a není přítomen, když je jeho skupina připravena zahájit jamku. Nepřítomný hráč obdrží skóre par plus čtyři na každé neodehrané jamce. \"Par\" určuje ředitel turnaje.",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Chybějící hráč. Byl-li hráč přítomen se skupinou a nyní chybí, když je na něj řada, dostane 30 sekund na to, aby se ke skupině znovu připojil. Zůstane-li chybět i po uplynutí této doby, je pro danou jamku považován za nepřítomného a obdrží skóre par plus čtyři na dané jamce. Výjimku z tohoto pravidla viz 802.03.H.",
+         "children": []
+        },
+        {
+         "marker": "f.",
+         "text": "Vynechaná jamka. Kolo bylo dokončeno a hráč zanedbal odehrání jedné nebo více jamek. Hráč obdrží skóre par plus čtyři na každé neodehrané jamce. Úmyslné neodehrání jamky představuje odstoupení ze soutěže.",
+         "children": []
+        },
+        {
+         "marker": "g.",
+         "text": "Nesprávná jamka. Hráč dokončil jamku, která není součástí kurzu pro dané kolo, místo jamky, jež součástí kurzu je. Ke skóre hráče za tuto jamku se přičítají dva trestné hody.",
+         "children": []
+        },
+        {
+         "marker": "h.",
+         "text": "Nadbytečná jamka. Hráč dokončil jamku, která není součástí kurzu pro dané kolo. K celkovému skóre hráče se přičítají dva trestné hody. Hody provedené na nadbytečné jamce se nepočítají.",
+         "children": []
+        },
+        {
+         "marker": "i.",
+         "text": "Špatná výchozí skupina. Hráč zahájil hru v jiné skupině, než ke které byl přiřazen. Hráč musí najít svou přiřazenou skupinu, aby mohl zahájit hru. Jakékoli hody provedené hráčem ve špatné skupině se ignorují. Hráč podléhá trestům za nepřítomnost ve své přiřazené skupině.",
+         "children": []
+        },
+        {
+         "marker": "j.",
+         "text": "Špatná výchozí jamka. Skupina zahájila hru na jamce, ke které nebyla přiřazena. Provede-li kterýkoli hráč skupiny na dané jamce více než jeden hod, celá skupina jamku chybně odehrála. Skupina jamku dokončí a každý hráč přičte ke svému skóre na jamce dva trestné hody. V opačném případě obdrží hráči, kteří provedli pouze jeden hod, každý jeden trestný hod a chybně odehraný hod se ignoruje. Skupina poté přejde na správnou jamku, aby zahájila své kolo.",
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "812",
+   "title": "SLUŠNÉ CHOVÁNÍ (COURTESY)",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč nesmí:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Házet, pokud by hod mohl někoho zranit nebo rozptýlit jiného hráče; nebo",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Házet mimo pořadí bez souhlasu nebo pokud by to ovlivnilo jiného hráče; nebo",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Provádět rušivé nebo nesportovní jednání, jako například:",
+         "children": [
+          {
+           "marker": "i.",
+           "text": "Křičet (kromě varování osoby ohrožené zásahem diskem),",
+           "children": []
+          },
+          {
+           "marker": "ii.",
+           "text": "Nadávat,",
+           "children": []
+          },
+          {
+           "marker": "iii.",
+           "text": "Bít, kopat nebo házet parkovým, kurzovým nebo hráčským vybavením,",
+           "children": []
+          },
+          {
+           "marker": "iv.",
+           "text": "Pohybovat se nebo mluvit, zatímco jiný hráč hází,",
+           "children": []
+          },
+          {
+           "marker": "v.",
+           "text": "Postupovat před hráče, který je na řadě (away player); nebo",
+           "children": []
+          }
+         ]
+        },
+        {
+         "marker": "d.",
+         "text": "Nechávat vybavení tam, kde by mohlo rozptylovat ostatní hráče nebo zasahovat do hozeného disku; nebo",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Odhazovat odpadky, včetně cigaretových nedopalků; nebo",
+         "children": []
+        },
+        {
+         "marker": "f.",
+         "text": "Dovolit, aby jeho kouř rušil ostatní hráče.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "2.",
+       "text": "Hráč musí:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Provádět úkony očekávané pravidly, včetně:",
+         "children": [
+          {
+           "marker": "i.",
+           "text": "Pomoci při hledání ztraceného disku; a",
+           "children": []
+          },
+          {
+           "marker": "ii.",
+           "text": "Přemístění vybavení na požádání; a",
+           "children": []
+          },
+          {
+           "marker": "iii.",
+           "text": "Řádného vedení skóre.",
+           "children": []
+          }
+         ]
+        },
+        {
+         "marker": "b.",
+         "text": "Sledovat ostatní členy skupiny při hodu, aby zajistil dodržování pravidel a pomohl s hledáním disků.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "3.",
+       "text": "Za první porušení kteréhokoli pravidla slušného chování obdrží hráč varování. Za každé další porušení jakéhokoli pravidla slušného chování týmž hráčem ve stejném kole se ukládá jeden trestný hod. Porušení slušného chování může nahlásit nebo potvrdit kterýkoli dotčený hráč nebo rozhodčí. Opakovaná porušení slušného chování mohou vést k diskvalifikaci ze strany ředitele turnaje.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "813",
+   "title": "VYBAVENÍ",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "813.01",
+     "title": "Nelegální disk"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Disky používané ve hře musí být schváleny PDGA a splňovat všechny podmínky uvedené v Technických normách PDGA. Seznam schválených disků viz https://pdga.com/technical-standards/equipment-certification/discs",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Povolené úpravy disku po jeho výrobě jsou omezeny na:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Opotřebení vzniklé používáním při hře;",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Mírné broušení k odstranění opotřebení nebo drobných výrobních nedokonalostí;",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Značení barvivem nebo permanentním fixem;",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Aplikaci grafiky pomocí horkého ražení, tisku barvivem nebo barvivem, které odpovídá schváleným specifikacím daného modelu disku;",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Odstranění grafiky způsobem, který odpovídá schváleným specifikacím daného modelu disku.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "3.",
+       "text": "Jiné úpravy disku po výrobě činí disk nelegálním, mimo jiné včetně:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Úprav disku, které mění jeho původní letové vlastnosti;",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Nadměrného broušení disku;",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Přidání materiálu znatelné tloušťky, jako je barva;",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Úmyslného deformování disku tak, že již nemá kruhový, talířovitý tvar.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "4.",
+       "text": "Je-li ředitelem turnaje vyhlášena noční nebo sněhová hra, smí hráči přidat materiál nebo zařízení usnadňující nalezení disku.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Disk, který je prasklý nebo má díru, je nelegální.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Disk, jehož legalitu zpochybní jiný hráč nebo rozhodčí, je nelegální, pokud jej následně neschválí ředitel turnaje.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "Hráč, který během hry hodí nelegální disk, obdrží dva trestné hody. Hráč, který opakovaně hází nelegálním diskem, může být diskvalifikován v souladu se sekcí 3.03 Soutěžního manuálu PDGA.",
+       "children": []
+      },
+      {
+       "marker": "8.",
+       "text": "Všechny disky používané při hře, kromě mini značek, musí být identifikovatelně označeny. Hráč obdrží za první hod neoznačeným diskem varování. Za každý další hod neoznačeným diskem obdrží hráč jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "813.02",
+     "title": "Nelegální zařízení"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč nesmí používat žádné zařízení, které přímo napomáhá provedení hodu.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Umístění předmětu jako směrové pomůcky není povoleno.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Zařízení snižující nebo omezující odření kůže (jako rukavice, páska, obvazy nebo gáza), prostředky aplikované na kůži pro zlepšení úchopu (jako mastek, křída, prach nebo hlína) a zdravotnické pomůcky (jako ortézy kolena či kotníku) jsou povoleny.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Předmět, jako je ručník nebo podložka, lze umístit pod opěrný bod, pokud jeho tloušťka po stlačení nepřesahuje jeden centimetr.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Zařízení, jehož legalitu zpochybní jiný hráč nebo rozhodčí, je nelegální, pokud je následně neschválí ředitel turnaje.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "Hráč obdrží dva trestné hody, je-li kdykoli během kola přistižen při používání nelegálního zařízení. Hráč, který opakovaně používá nelegální zařízení, může být diskvalifikován v souladu se sekcí 3.03 Soutěžního manuálu PDGA.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "A",
+   "title": "HRA NA JAMKY (MATCH PLAY)",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "A.01",
+     "title": "Obecně"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Ve \"hře na jamky\" (match play) soutěží dvojice hráčů proti sobě ve snaze vyhrát co nejvíce jamek během kola. Hráč, který vyhraje více jamek, vyhrává zápas.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Používají se Oficiální pravidla discgolfu (která popisují \"hru na rány\", medal play), s výjimkou případů, kdy je nahrazují tato pravidla.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Dvojice soupeřů hraje ve skupině alespoň s jednou další dvojicí, nebo s rozhodčím.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "A.02",
+     "title": "Pořadí hráčů"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Pořadí odhozu pro dvojice soupeřů ve stejné skupině se řídí pořadím na scorecardu.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "V rámci každé dvojice soupeřů hází na první jamce první hráč uvedený na scorecardu. Na všech dalších jamkách hází první hráč, který vyhrál předchozí jamku. Remízy nemění pořadí hodů.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "A.03",
+     "title": "Tresty"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Tresty a varování udělené mezi jamkami se vztahují na následující jamku.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "A.04",
+     "title": "Skórování"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Skóre ve hře na jamky se zaznamenává podle toho, kdo vyhrál více jamek v daném okamžiku. Zápas začíná nerozhodně, tzv. \"all square\". Jak zápas postupuje, hráč, který vyhrál více jamek, \"vede\" (up) o tento počet jamek; jeho soupeř \"prohrává\" (down) o stejný počet.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráč vyhrává jamku tím, že ji dokončí na méně hodů než soupeř. Hráč, který jamku vyhrál, obdrží skóre 1. Druhý hráč neobdrží žádné skóre, což lze označit pomlčkou. Dokončí-li oba hráči jamku na stejný počet hodů, je jamka \"vyrovnaná\" (halved) a žádný z hráčů neobdrží skóre.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč se může zeptat svého soupeře, kolik hodů již na dané jamce provedl. Hráč, který tento počet nepravdivě uvede, prohrává jamku.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Když už hráč nemůže jamku vyhrát ani vyrovnat, je jamka dokončena a hra na této jamce musí ustat.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Jakékoli hody po dokončení jamky jsou tréninkovými hody. Trest za tréninkový hod se přičítá ke skóre hráče na následující jamce.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "A.05",
+     "title": "Vzdání se (Conceding)"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Hráč se může kdykoli před koncem zápasu vzdát celého zápasu. Soupeř pak zápas vyhrává.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Hráč se může vzdát jamky kdykoli, dokud oba hráči jamku nedokončí. Soupeř pak jamku vyhrává.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Hráč může svému soupeři odpustit další hod. Tento hod se pak považuje za hod, kterým byla jamka dokončena.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Dvojice hráčů se může dohodnout na vyrovnání hrané jamky.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Vzdání se nelze odmítnout ani vzít zpět.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "A.06",
+     "title": "Vítězství v zápase"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Vede-li hráč o více jamek, než kolik jamek zbývá odehrát, vyhrál zápas.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Je-li dvojice hráčů na konci kola nerozhodně (all square), zápas je remízový. O tom, zda a jak se remízy rozhodují, rozhoduje ředitel turnaje.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "title": "HRA DVOJIC (DOUBLES PLAY)",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "B.01",
+     "title": "Obecně"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Tým dvojice se skládá ze dvou hráčů. Jsou možné i alternativní formáty s odlišným počtem hráčů v týmu, které lze z těchto pravidel odvodit.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Používají se Oficiální pravidla discgolfu, s výjimkou případů, kdy je nahrazují tato pravidla.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Pro účely týmového skórování se v sekci 808 (Skórování) slovo \"tým\" nahrazuje slovem \"hráč\".",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "B.02",
+     "title": "Pořadí hráčů"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Pořadí hodů na první jamce je dáno pořadím, v jakém jsou týmy uvedeny na scorecard(ech). Pořadí hodů na všech dalších odpalištích se určuje podle skóre na předchozí jamce, tak že tým s nejnižším skóre hází první atd. Remízy pořadí hodů nemění.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Poté, co všechny týmy mají leh jiný než odpaliště, je na řadě tým, jehož leh je od cíle nejdále.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Členové týmu, kteří hází ze stejného lehu, mohou házet v libovolném pořadí.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "B.03",
+     "title": "Tresty"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Tresty způsobené hodem se vztahují pouze na toho člena týmu, který hod provedl. Všechna ostatní varování a tresty se udělují týmu jako celku a započítávají se týmu bez ohledu na formát.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Jakýkoli hod, který nemůže žádným způsobem zlepšit skóre týmu, je \"nadbytečný hod\" (extra throw). Tým, jehož člen provedl nadbytečný hod, obdrží za první porušení varování a za každé další porušení kterýmkoli členem týmu jeden trestný hod.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "B.04",
+     "title": "Leh"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Ve formátech, kde oba členové týmu házejí ze stejného lehu, obdrží člen týmu, který hází z jiného lehu, než jaký hrál první házející člen týmu, jeden trestný hod za misplay.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Leh, který hrají oba členové týmu, musí být vyznačen stejným značkovacím diskem. Nedodržení tohoto pravidla je porušením značení.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Je-li leh hraný oběma členy týmu z jakéhokoli důvodu přemístěn, musí oba členové hrát z přemístěného lehu.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "B.05",
+     "title": "Formáty"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Nejlepší hod (Best Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Oba členové týmu hází z odpaliště. Tým poté zvolí, ze které ze dvou pozic bude hrát další hod. Oba členové týmu hází z výsledného lehu a tým znovu zvolí, ze které z obou pozic bude hrát, a tak dále.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Tým dokončí jamku, jakmile ji dokončí kterýkoli člen týmu.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Skóre týmu na jamce je počet hodů z odehraných lehů plus případné trestné hody.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Zvedne-li tým hozený disk dříve, než byl leh zvolen nebo vyznačen značkovacím diskem, nesmí si tento hod vybrat. Zvedne-li tým oba hozené disky, aniž by byl leh vyznačen, vrátí se druhý zvednutý disk na své původní místo, jak se dohodne skupina, a tým musí hrát z výsledného lehu.",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Je-li jeden člen týmu nepřítomen, opozdí se nebo přestane hrát, smí hrát druhý člen týmu, ale žádné hody se za chybějícího člena neprovádějí. Opozdilý člen týmu se smí připojit ke hře pouze mezi jamkami.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "2.",
+       "text": "Upravený nejlepší hod (Modified Best Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Upravený nejlepší hod je stejný jako Nejlepší hod s tou výjimkou, že ředitel turnaje smí stanovit limit, kdy tým smí použít odhoz jednotlivého člena z odpaliště. Tým obdrží dva trestné hody pokaždé, když je tento limit překročen.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "3.",
+       "text": "Nejhorší hod (Worst Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Oba členové týmu hází z odpaliště. Soupeři týmu poté zvolí, ze které ze dvou pozic bude tým hrát, s cílem maximalizovat skóre týmu na jamce. Oba členové týmu hází z výsledného lehu a soupeři znovu zvolí, ze které z výsledných pozic bude tým hrát, a tak dále.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Tým dokončí jamku, jakmile ji všichni členové týmu dokončí ze stejného lehu.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Skóre týmu na jamce je počet hodů z odehraných lehů plus případné trestné hody.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Zvedne-li nebo vyznačí-li tým hozený disk dříve, než soupeři zvolili leh, vrátí se disk na své původní místo, jak se dohodne skupina. Soupeři poté zvolí mezi výsledným lehem přemístěného disku, lehem druhého disku a předchozím lehem jako lehem přemístěného disku.",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Zvolí-li soupeři zjevně výhodný leh, mohou být ředitelem turnaje diskvalifikováni.",
+         "children": []
+        },
+        {
+         "marker": "f.",
+         "text": "Je-li člen týmu nepřítomen, opozdí se nebo odstoupí, tým odstupuje. Je-li člen týmu diskvalifikován, je diskvalifikován celý tým.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "4.",
+       "text": "Tvrdý hod (Tough Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Tvrdý hod je stejný jako Nejhorší hod s tou výjimkou, že tým dokončí jamku, jakmile ji dokončí kterýkoli člen týmu.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "5.",
+       "text": "Střídavý hod (Alternate Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Tým zvolí, který člen provede první hod na první jamce. Poté se střídají: každý člen týmu hází z lehu vzniklého hodem předchozího člena, dokud jamku nedokončí.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Tým dokončí jamku, jakmile ji dokončí kterýkoli člen týmu.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Skóre týmu na jamce je počet hodů daného týmu plus případné trestné hody.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Hod nesprávného člena týmu je misplay a ukládá se za něj jeden trestný hod. Hod se ignoruje a hází správný člen týmu. Byl-li po hodu nesprávného člena proveden dodatečný hod, obdrží tým dva trestné hody a hra pokračuje.",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Jakýkoli opakovaný hod ze stejného lehu provádí stejný hráč.",
+         "children": []
+        },
+        {
+         "marker": "f.",
+         "text": "Tým obdrží skóre par plus čtyři na jakékoli jamce zmeškané opozdilým nebo nepřítomným členem týmu. Odstoupí-li kterýkoli člen týmu, tým odstupuje. Je-li člen týmu diskvalifikován, je diskvalifikován celý tým.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "6.",
+       "text": "Upravený střídavý hod (Modified Alternate Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Upravený střídavý hod je stejný jako Střídavý hod s tou výjimkou, že ředitel turnaje smí určit, který člen týmu provede první hod na každé jamce.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "7.",
+       "text": "Nejlepší skóre (Best Score)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Každý člen týmu hraje jamku jako individuální hráč.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Tým dokončí jamku, jakmile ji člen týmu dokončí s nejnižším možným skóre pro tým.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Skóre týmu na jamce je nejnižší skóre na jamce dosažené kterýmkoli členem týmu, včetně případných trestných hodů tohoto hráče, plus případné týmové trestné hody.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "8.",
+       "text": "Nejlepší skóre - střídavý hod (Best Score Alternate Throw)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Každý člen týmu hází z odpaliště, čímž se zahajují dva sledy Střídavého hodu.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Tým dokončí jamku, jakmile kterýkoli sled Střídavého hodu dokončí jamku s nejnižším možným skóre pro tým.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Skóre týmu na jamce je nižší z obou skóre pro dané dva sledy Střídavého hodu, včetně případných trestných hodů z tohoto sledu, plus případné týmové trestné hody.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "9.",
+       "text": "Součtové skóre (Aggregate Score)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Každý člen týmu hraje jamku jako individuální hráč.",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Skóre týmu na jamce je součet skóre všech členů týmu na jamce včetně případných individuálních nebo týmových trestných hodů.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Odstoupí-li kterýkoli člen týmu, tým odstupuje. Je-li člen týmu diskvalifikován, je diskvalifikován celý tým.",
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C",
+   "title": "ZDROJE",
+   "blocks": [
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "-",
+       "text": "Oficiální pravidla discgolfu: https://www.pdga.com/rules/official-rules-disc-golf",
+       "children": []
+      },
+      {
+       "marker": "-",
+       "text": "Otázky a odpovědi k pravidlům: https://pdga.com/rules/official-rules-disc-golf/questions-and-answers",
+       "children": []
+      },
+      {
+       "marker": "-",
+       "text": "Soutěžní manuál: https://www.pdga.com/rules/competition-manual-disc-golf-events",
+       "children": []
+      },
+      {
+       "marker": "-",
+       "text": "Adresář hřišť: https://www.pdga.com/course-directory",
+       "children": []
+      },
+      {
+       "marker": "-",
+       "text": "Technické normy: https://www.pdga.com/technical-standards",
+       "children": []
+      },
+      {
+       "marker": "-",
+       "text": "Informace a zdroje pro ředitele turnajů: https://www.pdga.com/tdinfo/resources",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "D",
+   "title": "PŘEVODY JEDNOTEK",
+   "blocks": [
+    {
+     "type": "table",
+     "rows": [
+      [
+       "Metrický systém",
+       "Anglický systém"
+      ],
+      [
+       "10 metrů",
+       "32 stop 10 palců"
+      ],
+      [
+       "3 metry",
+       "9 stop 10 palců"
+      ],
+      [
+       "2 metry",
+       "6 stop 6 palců"
+      ],
+      [
+       "1 metr",
+       "3 stopy 3 palce"
+      ],
+      [
+       "30 centimetrů",
+       "1 stopa"
+      ],
+      [
+       "20 centimetrů",
+       "8 palců"
+      ],
+      [
+       "1 centimetr",
+       "1/2 palce"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "F",
+   "title": "ADAPTIVNÍ PRAVIDLA DISCGOLFU",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "F.01",
+     "title": "Obecně"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "PDGA je odhodlána poskytovat otevřené a inkluzivní prostředí pro všechny hráče bez ohledu na zdravotní postižení. Za tímto účelem jsou ředitelé turnajů oprávněni pořádat akce sankcionované PDGA určené pro adaptivní discgolf nebo s prvky adaptivního discgolfu, jak je definováno v této Příloze F. Nic v této Příloze F nemá nahrazovat ani jinak měnit zásadu PDGA týkající se přiměřené úpravy pro výjimku z pravidel, předpisů a postupů PDGA (Reasonable Modification for Exemption from PDGA Rules, Regulations, and Procedures) u úprav zde výslovně neupravených. Dále nic v této Příloze F nezakládá, ani nemá být vykládáno jako zakládající, jakékoli právo nebo nárok hráče na akci sankcionované PDGA účastnit se prvku adaptivního discgolfu nebo využívat tato pravidla; o tom vždy podle vlastního uvážení rozhoduje ředitel turnaje. Kromě výslovně stanoveného v této Příloze F nic v ní nezakládá další práva hráčů ani povinnosti PDGA nebo ředitelů turnajů nad rámec toho, co vyžaduje příslušné právo dané jurisdikce.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Nabízí-li akce prvek pro adaptivní discgolf nebo je pro něj zcela určena, platí následující rozšíření Oficiálních pravidel discgolfu a Soutěžního manuálu PDGA pro discgolfové akce. \"Adaptivní discgolf\" znamená verzi discgolfu určenou pro účastníky používající pohonné mobilní zařízení. \"Pohonné mobilní zařízení\" je invalidní vozík nebo jiné vozidlo poháněné sebou samým nebo motorem. Mobilní pomůcky, které napomáhají chůzi, ale nejsou poháněny hráčem nebo motorem, jako hůl nebo berle, nejsou pohonnými mobilními zařízeními.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Používá-li akce tato rozšíření, musí být ředitel turnaje ve všech materiálech před registrací jasný ohledně použitelnosti této Přílohy na danou akci.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Tato Příloha musí platit buď pro konkrétní divize, nebo pro celou akci. Akce používající tuto Přílohu jsou označeny \"X\" podle Standardů PDGA Tour a získávají nebo jsou vyloučeny z hodnocení stejným způsobem jako akce stejného typu (např. jednotlivci, týmová hra nebo hra na jamky, akce omezené na klub PDGA nebo národnost, charitativní akce), které používají standardní Oficiální pravidla discgolfu a Soutěžní manuál pro discgolfové akce.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "F.02",
+     "title": "Divize a způsobilost"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Za účelem podpory rovnocenné soutěže musí akce, které používají tato rozšíření a zároveň divizní systém klasifikující sportovce podle postižení, přiřadit každou takovou klasifikaci nebo její podskupinu ke konkrétní divizi PDGA nebo dvojici divizí PDGA (např. daná paralympijská sportovní třída nebo skupina tříd může být přiřazena k MA2 a FA2, zatímco jiná může být přiřazena k FA1 a MA1).",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "U akcí používajících tato rozšíření má způsobilost pro divizi na základě klasifikace podle postižení dle F.02.A přednost před nezpůsobilostí pro danou divizi na základě reitingu.",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "F.03",
+     "title": "Rozšíření pravidel"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "802.04 Odhoz z odpaliště. Používá-li hráč adaptivního discgolfu pohonné mobilní zařízení, jsou kola nebo jiné součásti tohoto zařízení, které spočívají na zemi a poskytují oporu, stejně jako prostor mezi koly, považovány za opěrné body pro účely tohoto i každého dalšího příslušného pravidla v Oficiálních pravidlech discgolfu.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "802.05 Leh. Používají-li hráči adaptivního discgolfu pohonné mobilní zařízení, bude leh hluboký dva metry namísto 30 cm.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "803.02 Úleva od překážek. Podmínky jako hluboké bahno, neschůdný terén nebo strmé svahy, které brání hráči adaptivního discgolfu používajícímu pohonné mobilní zařízení zaujmout legální postoj za značkovacím diskem, jsou překážkami popsanými v 803.02.B.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "806.02 Mimo hřiště. Hráči adaptivního discgolfu používající pohonné mobilní zařízení získávají úlevu stejným způsobem, jak je popsáno v této sekci, avšak tito hráči mohou předpokládat, že jim ředitel turnaje povolil čerpat úlevu až do tří metrů.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "807 Dokončení jamky. Podle uvážení ředitele turnaje může být na hrací plochu umístěn a vystředěn na patu cíle obruč o průměru nejvýše jeden metr. Obruč musí být upevněna k zemi, aby se nemohla hýbat. Podle uvážení ředitele turnaje mají hráči adaptivního discgolfu používající pohonné mobilní zařízení ve stanovených divizích jamku rovněž dokončenu, pokud se jejich disk zastaví zcela uvnitř obruče nebo se jí dotýká, aniž by jakákoli jeho část přesahovala mimo obruč.",
+       "children": []
+      },
+      {
+       "marker": "6.",
+       "text": "813.02 Nelegální zařízení. Hráči adaptivního discgolfu se zrakovým postižením mohou používat pípátka nebo jiná zvuková zařízení na discích a cílech jako směrovou pomůcku a pro snazší nalezení disku, stejně jako by ředitel turnaje vyhlásil noční nebo sněhovou hru.",
+       "children": []
+      },
+      {
+       "marker": "7.",
+       "text": "3.05 Vozíky, caddies a skupiny. Hráči adaptivního discgolfu používající pohonné mobilní zařízení neporušují zákazy v 3.05.F používáním tohoto pohonného mobilního zařízení.",
+       "children": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "G",
+   "title": "TÝMOVÁ HRA",
+   "blocks": [
+    {
+     "type": "subheading",
+     "number": "G.01",
+     "title": "Obecně"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "V týmové hře soutěží tým hráčů společně proti jiným týmům.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Nejběžnější velikost týmu jsou čtyři hráči, ale týmy mohou mít dva nebo více hráčů v závislosti na formátu a pravidlech dané akce.",
+       "children": []
+      },
+      {
+       "marker": "3.",
+       "text": "Používají se Oficiální pravidla discgolfu, s výjimkou případů, kdy je nahrazují tato pravidla.",
+       "children": []
+      },
+      {
+       "marker": "4.",
+       "text": "Platí pravidla hry dvojic (viz Příloha B), s výjimkou případů, kdy je nahrazují tato pravidla.",
+       "children": []
+      },
+      {
+       "marker": "5.",
+       "text": "Akce s týmovou hrou sankcionované PDGA jsou označeny \"X\" jako alternativní soutěžní formát (viz 5.10.A.1).",
+       "children": []
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "G.02",
+     "title": "Zásady pro divize"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Týmová hra používá divize PDGA (viz tabulka Divizí, reitingů a bodových faktorů) pro tým jako celek.",
+       "children": []
+      },
+      {
+       "marker": "2.",
+       "text": "Ředitelé turnajů mohou týmům uložit požadavky na způsobilost, které přesahují kritéria způsobilosti pro divizi týmu, a to následujícími způsoby:",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Požadavkem na jednoho nebo více hráčů způsobilých pro divize podle pohlaví (např. musíte mít alespoň dva hráče způsobilé hrát v FA1).",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Požadavkem na jednoho nebo více hráčů způsobilých pro určité věkové divize (např. musíte mít alespoň jednoho hráče ve věku 40+ a alespoň jednoho ve věku 50+).",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Požadavkem na jednoho nebo více hráčů s danou klasifikací členství (např. musíte mít alespoň jednoho hráče amatérské třídy).",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Požadavkem na hráče z určitých reitingových pásem (např. musíte mít alespoň jednoho hráče s reitingem nižším než 900).",
+         "children": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "subheading",
+     "number": "G.03",
+     "title": "Formáty"
+    },
+    {
+     "type": "list",
+     "items": [
+      {
+       "marker": "1.",
+       "text": "Týmoví jednotlivci (Team Singles)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Všichni členové týmu hrají podle pravidel hry na rány (viz A.01.B).",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Má-li tým méně hráčů, než je standardní velikost týmu pro danou akci, chybějící hráči obdrží nejhorší individuální skóre kteréhokoli hráče ve stejné divizi plus 2 hody. Například tříčlenný tým soutěží v akci, kde je velikost týmu čtyři hráči. Hráč A dosáhne skóre 43, B skóre 45 a C skóre 50. Nejhorší skóre kteréhokoli hráče v divizi je 57, takže čtvrté skóre pro tým je 57+2=59.",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Ředitel turnaje může celkové skóre za kolo buď sečíst, nebo zprůměrovat (metodou zaokrouhlení poloviny nahoru).",
+         "children": [
+          {
+           "marker": "i.",
+           "text": "Příklad 1: Hráč A dosáhne 43, B 45, C 50 a D 54. Akce používá metodu sčítání, takže skóre týmu je 192.",
+           "children": []
+          },
+          {
+           "marker": "ii.",
+           "text": "Příklad 2: Hráč A dosáhne 45, B 46, C 50 a D 54. Průměr je 48,75. Při zaokrouhlení poloviny nahoru je skóre týmu 49.",
+           "children": []
+          },
+          {
+           "marker": "iii.",
+           "text": "Příklad 3: Hráč A dosáhne 44, B 45, C 50 a D 54. Průměr je 48,25. Při zaokrouhlení poloviny nahoru je skóre týmu 48.",
+           "children": []
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "marker": "2.",
+       "text": "Týmové dvojice (Team Doubles)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Každý tým se rozdělí do dvou stejně velkých skupin. Týmy s lichým počtem hráčů nebudou mít dokonale stejné skupiny (např. pětičlenný tým bude mít jednu skupinu o třech a jednu o dvou hráčích).",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Každá skupina hraje Nejlepší hod (viz B.05.A).",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Má-li tým tři hráče, rozdělí se na skupinu dvou a jednotlivého hráče. Je-li na řadě jednotlivý hráč, hází pouze jednou, jako by hrál jednotlivce.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "Je-li velikost týmu na dané akci čtyři nebo více, ale tým má pouze dva hráče, hrají tito dva hráči Nejlepší hod společně. Chybějící skupina obdrží nejhorší skóre dvojice kteréhokoli týmu ve stejné divizi plus 2 hody. Například dvoučlenný tým soutěží v akci, kde je velikost týmu čtyři hráči. Dosáhnou skóre 39. Nejhorší skóre kterékoli skupiny v divizi je 57, takže druhé skóre pro tým je 57+2=59.",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Ředitel turnaje může celkové skóre za kolo buď sečíst, nebo zprůměrovat (metodou zaokrouhlení poloviny nahoru). Příklady metod viz G.03.A.3.",
+         "children": []
+        }
+       ]
+      },
+      {
+       "marker": "3.",
+       "text": "Střídavé týmové dvojice (Alternate Team Doubles)",
+       "children": [
+        {
+         "marker": "a.",
+         "text": "Střídavé týmové dvojice jsou kombinací Nejlepšího hodu (viz B.05.A) a Upraveného střídavého hodu (viz B.05.F).",
+         "children": []
+        },
+        {
+         "marker": "b.",
+         "text": "Každý tým se rozdělí do dvou stejně velkých skupin. Týmy s lichým počtem hráčů nebudou mít dokonale stejné skupiny (např. pětičlenný tým bude mít jednu skupinu o třech a jednu o dvou hráčích).",
+         "children": []
+        },
+        {
+         "marker": "c.",
+         "text": "Každá skupina jedná jako jednotlivý hráč podle pravidel Upraveného střídavého hodu, což znamená, že se obě skupiny na dané jamce střídají v házení a ředitel turnaje smí určit, který člen týmu provede první hod na každé jamce.",
+         "children": []
+        },
+        {
+         "marker": "d.",
+         "text": "V rámci každé skupiny platí pravidla Nejlepšího hodu. Například se čtyřčlenný tým rozdělí na dvě skupiny: hráči A a B a hráči C a D. Hráči A a B odehrají odpaliště na jamce 1 hrou Nejlepšího hodu, jako by byli dvojicí. Hráči C a D zvolí nejlepší leh z hodů A a B a hrají Nejlepší hod z tohoto zvoleného lehu. Toto pokračuje, dokud kterýkoli hráč týmu jamku nedokončí.",
+         "children": []
+        },
+        {
+         "marker": "e.",
+         "text": "Má-li tým tři hráče, rozdělí se na skupinu dvou a jednotlivého hráče. Je-li na řadě jednotlivý hráč, hází pouze jednou, jako by hrál jednotlivce.",
+         "children": []
+        },
+        {
+         "marker": "f.",
+         "text": "Má-li tým dva hráče, hrají Upravený střídavý hod pro dvojice (viz B.05.F).",
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "closingNote": "Poznámka k terminologii: Discgolf v ČR zatím nemá zcela jednotně ustálenou českou terminologii pro všechny anglické pojmy (lie, mandatory, casual area apod.). U klíčových pojmů byl proto v závorce nebo v textu zachován anglický originál, aby byla zajištěna jednoznačná shoda s oficiálním zněním pravidel PDGA a nedošlo k jejich nesprávné aplikaci v praxi."
+}

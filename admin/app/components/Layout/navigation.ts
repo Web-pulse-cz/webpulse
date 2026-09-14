@@ -45,6 +45,7 @@ import {
   MapIcon,
   ChartBarIcon,
   UserGroupIcon,
+  ScaleIcon,
 } from '@heroicons/vue/24/outline';
 
 export interface MenuSubItem {
@@ -457,6 +458,14 @@ export const menuSections: MenuSectionDef[] = [
         name: 'Statistiky hřišť',
         link: '/discgolf/statistiky-hriste',
         icon: MapIcon,
+        current: false,
+        slug: 'games',
+      },
+      {
+        key: 'discgolf_pravidla',
+        name: 'Pravidla',
+        link: '/discgolf/pravidla',
+        icon: ScaleIcon,
         current: false,
         slug: 'games',
       },

@@ -70,5 +70,8 @@
   },
   "engines": {
     "node": ">=22.10.0"
+  },
+  "overrides": {
+    "@xmldom/xmldom": "^0.9.8"
   }
 }
