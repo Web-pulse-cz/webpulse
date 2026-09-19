@@ -19,6 +19,7 @@ class GameResource extends JsonResource
             'layout_name' => $this->layout_name,
             'played_at' => $this->played_at,
             'status' => $this->status,
+            'count_to_cup' => $this->count_to_cup,
             'note' => $this->note,
             'par' => $this->par,
             'holes_count' => $this->holes_count,

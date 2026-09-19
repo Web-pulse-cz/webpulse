@@ -18,6 +18,7 @@ class Game extends Model
         'custom_layout_name',
         'played_at',
         'status',
+        'count_to_cup',
         'note',
         'par',
         'holes_count',
@@ -26,6 +27,7 @@ class Game extends Model
 
     protected $casts = [
         'played_at' => 'datetime',
+        'count_to_cup' => 'boolean',
         'par' => 'integer',
         'holes_count' => 'integer',
     ];

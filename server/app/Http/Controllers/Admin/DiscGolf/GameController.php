@@ -72,6 +72,22 @@ class GameController extends Controller
         return Response::json(GameResource::make($item));
     }
 
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $item = Game::find($id);
+        if (! $item) {
+            App::abort(404);
+        }
+
+        if ($request->has('count_to_cup')) {
+            $item->count_to_cup = $request->boolean('count_to_cup');
+        }
+
+        $item->save();
+
+        return Response::json(GameResource::make($item));
+    }
+
     public function destroy(int $id): JsonResponse
     {
         $item = Game::find($id);
@@ -95,6 +111,7 @@ class GameController extends Controller
             ->with(['course', 'layout', 'players.player'])
             ->whereRelation('sites', 'site_id', $siteId)
             ->where('status', 'completed')
+            ->where('count_to_cup', true)
             ->orderBy('played_at', 'desc')
             ->get();
 

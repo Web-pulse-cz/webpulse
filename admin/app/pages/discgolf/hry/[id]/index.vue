@@ -35,6 +35,34 @@ function relativeClass(relative: number | null): string {
   return 'text-slate-600';
 }
 
+async function updateCountToCup() {
+  const client = useSanctumClient();
+
+  await client('/api/admin/discgolf/game/' + route.params.id, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+    body: { count_to_cup: game.value.count_to_cup },
+  })
+    .then(() => {
+      $toast.show({
+        summary: 'Uloženo',
+        detail: 'Nastavení bylo uloženo.',
+        severity: 'success',
+      });
+    })
+    .catch(() => {
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se uložit nastavení.',
+        severity: 'error',
+      });
+    });
+}
+
 async function loadItem() {
   const client = useSanctumClient();
   loading.value = true;
@@ -127,6 +155,20 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <span class="font-semibold">({{ relativeLabel(game.winner.relative_to_par) }})</span>
         </div>
         <p v-if="game.note" class="mt-4 text-sm text-slate-500">{{ game.note }}</p>
+      </LayoutContainer>
+
+      <LayoutContainer>
+        <div
+          class="flex items-center justify-between rounded-2xl bg-slate-50 px-5 py-4 ring-1 ring-slate-200"
+        >
+          <div>
+            <div class="font-semibold text-slate-800">Počítat do poháru</div>
+            <div class="text-xs text-slate-500">
+              Pokud je zapnuto, hra se zobrazí v tabulce Záznamy.
+            </div>
+          </div>
+          <BaseFormSwitch v-model:enabled="game.count_to_cup" @update:enabled="updateCountToCup" />
+        </div>
       </LayoutContainer>
 
       <LayoutContainer>

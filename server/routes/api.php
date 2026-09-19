@@ -1219,6 +1219,7 @@ Route::group([
                 Route::post('{id}/complete', [GameFlowController::class, 'complete'])->where('id', '[0-9]+');
                 Route::get('', [GameController::class, 'index']);
                 Route::get('{id}', [GameController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id}', [GameController::class, 'update'])->where('id', '[0-9]+');
                 Route::delete('{id}', [GameController::class, 'destroy'])->where('id', '[0-9]+');
             });
         });
