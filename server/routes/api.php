@@ -1212,6 +1212,7 @@ Route::group([
                 'prefix' => 'game',
             ], function () {
                 Route::get('matrix', [GameController::class, 'matrix']);
+                Route::get('cup', [GameController::class, 'cup']);
                 Route::post('create', [GameFlowController::class, 'create']);
                 Route::post('{id}/players', [GameFlowController::class, 'players'])->where('id', '[0-9]+');
                 Route::post('{id}/start', [GameFlowController::class, 'start'])->where('id', '[0-9]+');

@@ -149,4 +149,57 @@ class GameController extends Controller
 
         return Response::json(['data' => $rows]);
     }
+
+    /**
+     * Gellerův pohár standings: per player, sum of relative-to-par (net score − par)
+     * across all games flagged count_to_cup — lower total is better.
+     */
+    public function cup(Request $request): JsonResponse
+    {
+        $siteId = $this->handleSite($request->header('X-Site-Hash'));
+
+        $games = Game::query()
+            ->with('players.player')
+            ->whereRelation('sites', 'site_id', $siteId)
+            ->where('status', 'completed')
+            ->where('count_to_cup', true)
+            ->get();
+
+        $standings = [];
+
+        foreach ($games as $game) {
+            foreach ($game->players as $gamePlayer) {
+                if (! $gamePlayer->player || ! $gamePlayer->player->include_in_stats) {
+                    continue;
+                }
+
+                $playerId = $gamePlayer->player_id;
+
+                if (! isset($standings[$playerId])) {
+                    $standings[$playerId] = [
+                        'player_id' => $playerId,
+                        'player_name' => $gamePlayer->player->name,
+                        'games_played' => 0,
+                        'total_relative_to_par' => 0,
+                    ];
+                }
+
+                $standings[$playerId]['games_played']++;
+                $standings[$playerId]['total_relative_to_par'] += $gamePlayer->relative_to_par ?? 0;
+            }
+        }
+
+        $rows = collect($standings)
+            ->map(function ($row) {
+                $row['average_relative_to_par'] = $row['games_played'] > 0
+                    ? round($row['total_relative_to_par'] / $row['games_played'], 2)
+                    : null;
+
+                return $row;
+            })
+            ->sortBy('total_relative_to_par')
+            ->values();
+
+        return Response::json(['data' => $rows]);
+    }
 }

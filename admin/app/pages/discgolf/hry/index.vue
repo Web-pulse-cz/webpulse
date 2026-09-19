@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import _ from 'lodash';
-import { PlusIcon, ListBulletIcon, TableCellsIcon } from '@heroicons/vue/24/outline';
+import { PlusIcon, ListBulletIcon, TableCellsIcon, TrophyIcon } from '@heroicons/vue/24/outline';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
@@ -15,11 +15,16 @@ const matrixError = ref(false);
 const matrixRows = ref<any[]>([]);
 const matrixLoaded = ref(false);
 
+const cupLoading = ref(false);
+const cupError = ref(false);
+const cupRows = ref<any[]>([]);
+const cupLoaded = ref(false);
+
 const breadcrumbs = ref([{ name: pageTitle.value, link: '/discgolf/hry', current: true }]);
 const searchString = ref(inject('searchString', ''));
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const activeTab = ref<'games' | 'matrix'>('games');
+const activeTab = ref<'games' | 'matrix' | 'cup'>('games');
 
 const tableQuery = ref({
   search: null as string | null,
@@ -112,9 +117,40 @@ async function deleteItem(id: number) {
     });
 }
 
-function switchTab(tab: 'games' | 'matrix') {
+async function loadCup() {
+  cupLoading.value = true;
+  cupError.value = false;
+  const client = useSanctumClient();
+
+  await client('/api/admin/discgolf/game/cup', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then((response: any) => {
+      cupRows.value = response.data || [];
+      cupLoaded.value = true;
+    })
+    .catch(() => {
+      cupError.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst pořadí poháru.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      cupLoading.value = false;
+    });
+}
+
+function switchTab(tab: 'games' | 'matrix' | 'cup') {
   activeTab.value = tab;
   if (tab === 'matrix' && !matrixLoaded.value) loadMatrix();
+  if (tab === 'cup' && !cupLoaded.value) loadCup();
 }
 
 function updateSort(column: string) {
@@ -144,7 +180,9 @@ watch(searchString, () => {
 watch(selectedSiteHash, () => {
   loadItems();
   matrixLoaded.value = false;
+  cupLoaded.value = false;
   if (activeTab.value === 'matrix') loadMatrix();
+  if (activeTab.value === 'cup') loadCup();
 });
 
 useHead({ title: pageTitle.value });
@@ -183,6 +221,19 @@ definePageMeta({ middleware: 'sanctum:auth' });
         >
           <TableCellsIcon class="size-4" />
           Záznamy
+        </button>
+        <button
+          type="button"
+          class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors"
+          :class="
+            activeTab === 'cup'
+              ? 'bg-indigo-600 text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+          "
+          @click="switchTab('cup')"
+        >
+          <TrophyIcon class="size-4" />
+          Gellerův pohár
         </button>
       </div>
 
@@ -278,6 +329,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
     <div v-show="activeTab === 'matrix'">
       <DiscGolfGamesMatrix :rows="matrixRows" :loading="matrixLoading" :error="matrixError" />
+    </div>
+
+    <div v-show="activeTab === 'cup'">
+      <DiscGolfCupStandings :rows="cupRows" :loading="cupLoading" :error="cupError" />
     </div>
   </div>
 </template>
