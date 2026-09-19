@@ -312,6 +312,14 @@ definePageMeta({ middleware: 'sanctum:auth' });
             hidden: false,
             sortable: false,
           },
+          {
+            key: 'count_to_cup',
+            name: 'Do poháru',
+            type: 'status',
+            width: 100,
+            hidden: false,
+            sortable: false,
+          },
         ]"
         :actions="[{ type: 'edit', path: '/discgolf/hry' }, { type: 'delete' }]"
         :loading="loading"
