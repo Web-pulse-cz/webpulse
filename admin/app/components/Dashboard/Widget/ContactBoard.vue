@@ -81,7 +81,13 @@ onMounted(loadSections);
 </script>
 
 <template>
-  <DashboardWidgetBaseCard :title="title" :icon="icon" :color="color" :count="totalCards" :link="link">
+  <DashboardWidgetBaseCard
+    :title="title"
+    :icon="icon"
+    :color="color"
+    :count="totalCards"
+    :link="link"
+  >
     <div v-if="loading" class="py-10 text-center text-sm text-slate-400">Načítání...</div>
     <div v-else-if="!sections.length" class="py-10 text-center text-sm text-slate-400">
       Zatím nejsou vytvořené žádné sekce.
@@ -95,10 +101,15 @@ onMounted(loadSections);
       >
         <div class="mb-2 flex items-center justify-between gap-2 px-0.5">
           <div class="flex min-w-0 items-center gap-1.5">
-            <span class="size-2 shrink-0 rounded-full" :class="sectionColorClass(section.color, 'dot')" />
+            <span
+              class="size-2 shrink-0 rounded-full"
+              :class="sectionColorClass(section.color, 'dot')"
+            />
             <span class="truncate text-xs font-bold text-slate-700">{{ section.name }}</span>
           </div>
-          <span class="shrink-0 text-[10px] font-bold text-slate-400">{{ section.cards?.length || 0 }}</span>
+          <span class="shrink-0 text-[10px] font-bold text-slate-400">{{
+            section.cards?.length || 0
+          }}</span>
         </div>
 
         <div class="space-y-1.5">

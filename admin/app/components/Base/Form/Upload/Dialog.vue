@@ -164,7 +164,7 @@ function removeStaged(index: number) {
                                   <button
                                     type="button"
                                     title="Odstranit soubor"
-                                    class="absolute right-2 top-2 z-10 flex size-7 items-center justify-center rounded-full bg-red-500 text-white shadow-sm ring-1 ring-red-600 opacity-100 transition-opacity hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100"
+                                    class="absolute right-2 top-2 z-10 flex size-7 items-center justify-center rounded-full bg-red-500 text-white opacity-100 shadow-sm ring-1 ring-red-600 transition-opacity hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100"
                                     @click="removeStaged(index)"
                                   >
                                     <TrashIcon class="size-3.5" />

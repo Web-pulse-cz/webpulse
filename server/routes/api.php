@@ -42,6 +42,8 @@ use App\Http\Controllers\Admin\DiscGolf\GameController;
 use App\Http\Controllers\Admin\DiscGolf\GameFlowController;
 use App\Http\Controllers\Admin\DiscGolf\PlayerController;
 use App\Http\Controllers\Admin\DiscGolf\StatsController;
+use App\Http\Controllers\Admin\League\LeagueBoardController;
+use App\Http\Controllers\Admin\League\LeagueController;
 use App\Http\Controllers\Admin\Email\EmailController;
 use App\Http\Controllers\Admin\Employee\EmployeeContractController;
 use App\Http\Controllers\Admin\Employee\EmployeeController;
@@ -1175,6 +1177,25 @@ Route::group([
             Route::get('{id}', [ApartmentController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [ApartmentController::class, 'store']);
             Route::delete('{id}', [ApartmentController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // League routes
+        Route::group([
+            'prefix' => 'league',
+        ], function () {
+            Route::group([
+                'prefix' => 'board',
+            ], function () {
+                Route::get('', [LeagueBoardController::class, 'overview']);
+                Route::get('{id}', [LeagueBoardController::class, 'show'])->where('id', '[0-9]+');
+                Route::post('{id}/record', [LeagueBoardController::class, 'record'])->where('id', '[0-9]+');
+            });
+
+            Route::post('reorder', [LeagueController::class, 'reorder']);
+            Route::get('', [LeagueController::class, 'index']);
+            Route::get('{id}', [LeagueController::class, 'show'])->where('id', '[0-9]+');
+            Route::post('{id?}', [LeagueController::class, 'store']);
+            Route::delete('{id}', [LeagueController::class, 'destroy'])->where('id', '[0-9]+');
         });
 
         // Disc golf routes

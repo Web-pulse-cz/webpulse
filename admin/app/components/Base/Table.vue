@@ -212,11 +212,7 @@ onMounted(async () => {
 
 <template>
   <div :class="compact ? 'w-full' : 'w-full px-4 sm:px-0'">
-    <div
-      v-if="slug"
-      ref="preferencesRef"
-      class="relative mt-2 flex items-center justify-end"
-    >
+    <div v-if="slug" ref="preferencesRef" class="relative mt-2 flex items-center justify-end">
       <button
         type="button"
         class="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-medium text-slate-500 shadow-sm ring-1 ring-slate-200 transition-colors hover:bg-slate-50 hover:text-slate-700"
@@ -248,7 +244,7 @@ onMounted(async () => {
 
         <ul class="mb-4 max-h-64 space-y-1 overflow-y-auto pr-1">
           <li
-            v-for="column in (columns as any[])"
+            v-for="column in columns as any[]"
             :key="column.key"
             class="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50"
           >
@@ -374,8 +370,17 @@ onMounted(async () => {
                     <span v-else-if="column.type === 'number'" class="tabular-nums text-slate-900">
                       {{ formatNumber(printText(item, column), column.decimals ?? 0) }}
                     </span>
-                    <span v-else-if="column.type === 'currency'" class="tabular-nums text-slate-900">
-                      {{ formatCurrency(printText(item, column), column.currency ?? 'Kč', column.decimals ?? 2) }}
+                    <span
+                      v-else-if="column.type === 'currency'"
+                      class="tabular-nums text-slate-900"
+                    >
+                      {{
+                        formatCurrency(
+                          printText(item, column),
+                          column.currency ?? 'Kč',
+                          column.decimals ?? 2,
+                        )
+                      }}
                     </span>
                     <span v-else-if="column.type === 'percent'" class="tabular-nums">
                       {{ formatNumber(item[column.key], column.decimals ?? 0) }} %

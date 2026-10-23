@@ -88,7 +88,10 @@ const placeIcon: Record<number, string> = {
             :class="placeBg[index + 1] || ''"
             class="hover:brightness-95"
           >
-            <td class="px-4 py-3 font-bold tabular-nums" :class="placeIcon[index + 1] || 'text-slate-400'">
+            <td
+              class="px-4 py-3 font-bold tabular-nums"
+              :class="placeIcon[index + 1] || 'text-slate-400'"
+            >
               {{ index + 1 }}
             </td>
             <td class="px-4 py-3 font-medium text-slate-900">{{ row.player_name }}</td>

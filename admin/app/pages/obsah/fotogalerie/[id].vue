@@ -80,9 +80,7 @@ async function loadItem() {
       );
       const incomingImages = Array.isArray(response.images) ? response.images : [];
       item.value.images = incomingImages
-        .map((img: any) =>
-          typeof img === 'string' ? img : img?.filename || img?.name || null,
-        )
+        .map((img: any) => (typeof img === 'string' ? img : img?.filename || img?.name || null))
         .filter(Boolean);
       breadcrumbs.value.pop();
       pageTitle.value = item.value.name;

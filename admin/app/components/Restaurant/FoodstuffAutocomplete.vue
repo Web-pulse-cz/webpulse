@@ -97,10 +97,7 @@ function onSelect(foodstuff: Foodstuff | null) {
           static
           class="absolute z-50 mt-2 max-h-72 w-full overflow-auto rounded-2xl bg-white p-1.5 text-sm shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
         >
-          <div
-            v-if="loading"
-            class="px-4 py-3 text-center text-sm font-medium text-slate-400"
-          >
+          <div v-if="loading" class="px-4 py-3 text-center text-sm font-medium text-slate-400">
             Vyhledávám…
           </div>
           <div

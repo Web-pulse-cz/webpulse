@@ -199,26 +199,26 @@ definePageMeta({
               <LayoutTitle class="!mb-0">Definice nového seznamu</LayoutTitle>
             </div>
 
-            <div class="w-full grid grid-cols-6 gap-6">
+            <div class="grid w-full grid-cols-6 gap-6">
               <div class="col-span-4">
-              <BaseFormInput
-                v-model="item.name"
-                label="Název seznamu"
-                type="text"
-                name="name"
-                rules="required|min:3"
-                placeholder="Např. VIP klienti 2026"
-                class="w-full"
-              />
-              <p class="mt-2 text-sm italic text-slate-400">
-                Název by měl být stručný a výstižný pro snadnou orientaci v CRM.
-              </p>
+                <BaseFormInput
+                  v-model="item.name"
+                  label="Název seznamu"
+                  type="text"
+                  name="name"
+                  rules="required|min:3"
+                  placeholder="Např. VIP klienti 2026"
+                  class="w-full"
+                />
+                <p class="mt-2 text-sm italic text-slate-400">
+                  Název by měl být stručný a výstižný pro snadnou orientaci v CRM.
+                </p>
               </div>
               <BaseFormColorPicker
-                  v-model="item.color"
-                  label="Barva štítku"
-                  name="color"
-                  class="w-full col-span-2"
+                v-model="item.color"
+                label="Barva štítku"
+                name="color"
+                class="col-span-2 w-full"
               />
             </div>
           </LayoutContainer>

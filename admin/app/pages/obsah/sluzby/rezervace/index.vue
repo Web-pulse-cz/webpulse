@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue';
-import { definePageMeta } from '#imports';
 import {
   PhoneIcon,
   EnvelopeIcon,
@@ -11,6 +10,7 @@ import {
   ClockIcon,
   PlusIcon,
 } from '@heroicons/vue/24/outline';
+import { definePageMeta } from '#imports';
 import { getCzechHolidays } from '~/composables/useCzechHolidays';
 
 const { $toast } = useNuxtApp();
@@ -490,7 +490,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 'bg-white': day.inMonth && day.dateStr !== todayStr && !holidayName(day.dateStr),
                 'bg-slate-50/50': !day.inMonth,
                 'bg-indigo-50/60': day.dateStr === todayStr,
-                'bg-rose-50/70': day.inMonth && day.dateStr !== todayStr && holidayName(day.dateStr),
+                'bg-rose-50/70':
+                  day.inMonth && day.dateStr !== todayStr && holidayName(day.dateStr),
                 'ring-2 ring-inset ring-indigo-500': day.dateStr === selectedDate,
               }"
               :title="holidayName(day.dateStr)"
@@ -508,7 +509,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 </span>
                 <span v-else>{{ day.date.getDate() }}</span>
               </div>
-              <div v-if="holidayName(day.dateStr)" class="truncate text-center text-[9px] font-medium text-rose-500">
+              <div
+                v-if="holidayName(day.dateStr)"
+                class="truncate text-center text-[9px] font-medium text-rose-500"
+              >
                 {{ holidayName(day.dateStr) }}
               </div>
               <div v-if="bookingCounts[day.dateStr]" class="mt-1 flex justify-center">
@@ -527,7 +531,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
       <div class="space-y-4">
         <LayoutContainer class="!py-4">
           <div class="flex items-center justify-between gap-2">
-            <h2 class="text-lg font-bold text-slate-900">Rezervace — {{ selectedDateFormatted }}</h2>
+            <h2 class="text-lg font-bold text-slate-900">
+              Rezervace — {{ selectedDateFormatted }}
+            </h2>
             <button
               type="button"
               class="flex shrink-0 items-center gap-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
@@ -608,7 +614,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
                   </a>
                 </div>
 
-                <div v-if="booking.note" class="mt-2 flex items-start gap-1.5 text-sm text-slate-500">
+                <div
+                  v-if="booking.note"
+                  class="mt-2 flex items-start gap-1.5 text-sm text-slate-500"
+                >
                   <ChatBubbleLeftIcon class="mt-0.5 size-4 shrink-0" />
                   <span>{{ booking.note }}</span>
                 </div>

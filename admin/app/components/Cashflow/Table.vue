@@ -469,7 +469,9 @@ function formatAmount(amount: number) {
                   </td>
                   <td
                     class="whitespace-nowrap px-3 py-3 text-center text-xs font-bold"
-                    :class="monthlyBalance() >= 0 ? 'bg-green-100 text-success' : 'bg-red-100 text-danger'"
+                    :class="
+                      monthlyBalance() >= 0 ? 'bg-green-100 text-success' : 'bg-red-100 text-danger'
+                    "
                   >
                     {{ formatAmount(monthlyBalance()) }} Kč
                   </td>

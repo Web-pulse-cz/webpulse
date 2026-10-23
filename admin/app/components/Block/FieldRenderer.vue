@@ -124,7 +124,13 @@ const fieldKey = (name: string) =>
         :type="imageType || 'block'"
         :multiple="!!field.multiple"
         class="col-span-full"
-        @update-files="(result) => setField(field.name, normalizeUpload(result, !!field.multiple, modelValue?.[field.name]))"
+        @update-files="
+          (result) =>
+            setField(
+              field.name,
+              normalizeUpload(result, !!field.multiple, modelValue?.[field.name]),
+            )
+        "
         @remove-file="(remaining) => setField(field.name, field.multiple ? remaining || [] : '')"
       />
 

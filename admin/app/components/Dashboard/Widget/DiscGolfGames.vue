@@ -169,13 +169,7 @@ watch(selectedSiteHash, () => loadRows());
 </script>
 
 <template>
-  <DashboardWidgetBaseCard
-    :title="title"
-    :icon="icon"
-    :color="color"
-    :count="total"
-    :link="link"
-  >
+  <DashboardWidgetBaseCard :title="title" :icon="icon" :color="color" :count="total" :link="link">
     <div class="-mx-2 overflow-x-auto" @click.stop>
       <table class="min-w-full border-separate border-spacing-0 text-sm">
         <thead>
@@ -288,9 +282,7 @@ watch(selectedSiteHash, () => loadRows());
                 >
                   {{ playerCell(row, player.player_id).net_score
                   }}<span class="ml-1 text-[10px] font-semibold"
-                    >({{
-                      relativeLabel(playerCell(row, player.player_id).relative_to_par)
-                    }})</span
+                    >({{ relativeLabel(playerCell(row, player.player_id).relative_to_par) }})</span
                   >
                 </td>
                 <td

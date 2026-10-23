@@ -123,9 +123,9 @@ function step(delta: number) {
         </button>
       </div>
       <span
-          v-if="holeRelative !== null"
-          class="w-10 text-center text-xs font-bold tabular-nums"
-          :class="relativeColor(holeRelative)"
+        v-if="holeRelative !== null"
+        class="w-10 text-center text-xs font-bold tabular-nums"
+        :class="relativeColor(holeRelative)"
       >
         {{ formatRelative(holeRelative) }}
       </span>

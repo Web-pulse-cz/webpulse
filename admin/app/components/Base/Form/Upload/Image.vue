@@ -107,7 +107,11 @@ function removeFile(index: number) {
  * already-uploaded item (file === null) — staged uploads aren't in modelValue
  * yet, so removing them is a local-only concern.
  */
-function onDialogRemove(payload: { index: number; removed?: { file: File | null }; remaining: { file: File | null; name: string }[] }) {
+function onDialogRemove(payload: {
+  index: number;
+  removed?: { file: File | null };
+  remaining: { file: File | null; name: string }[];
+}) {
   const wasUploaded = !!payload.removed && payload.removed.file === null;
   if (!wasUploaded) return;
 

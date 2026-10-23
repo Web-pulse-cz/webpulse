@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, inject, onMounted, watch } from 'vue';
-import {
-  CalculatorIcon,
-  TrashIcon,
-  StarIcon,
-  FireIcon,
-} from '@heroicons/vue/24/outline';
+import { CalculatorIcon, TrashIcon, StarIcon, FireIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 const route = useRoute();
@@ -122,14 +117,17 @@ async function loadMeasurement() {
   const client = useSanctumClient();
 
   try {
-    const measurement: any = await client('/api/admin/food/calorie-measurement/' + route.params.id, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Site-Hash': selectedSiteHash.value,
+    const measurement: any = await client(
+      '/api/admin/food/calorie-measurement/' + route.params.id,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-Site-Hash': selectedSiteHash.value,
+        },
       },
-    });
+    );
 
     // Fetch current foodstuffs to recompute macros live.
     const foods: any = await client('/api/admin/food/foodstuff', {
@@ -185,7 +183,11 @@ async function save() {
     return;
   }
   if (!rows.value.length) {
-    $toast.show({ summary: 'Prázdné měření', detail: 'Přidejte alespoň jednu potravinu.', severity: 'warn' });
+    $toast.show({
+      summary: 'Prázdné měření',
+      detail: 'Přidejte alespoň jednu potravinu.',
+      severity: 'warn',
+    });
     return;
   }
 
@@ -220,7 +222,11 @@ async function save() {
       },
     );
 
-    $toast.show({ summary: 'Uloženo', detail: 'Měření bylo uloženo do oblíbených.', severity: 'success' });
+    $toast.show({
+      summary: 'Uloženo',
+      detail: 'Měření bylo uloženo do oblíbených.',
+      severity: 'success',
+    });
 
     if (isNew.value && response?.id) {
       router.replace('/restaurace/kalkulacka/' + response.id);
@@ -248,7 +254,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <LayoutContainer>
       <!-- Search -->
       <div class="mb-6 flex items-center gap-3 border-b border-slate-100 pb-5">
-        <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+        <div
+          class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"
+        >
           <CalculatorIcon class="size-5" />
         </div>
         <div>
@@ -329,7 +337,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
           <tfoot v-if="rows.length" class="border-t-2 border-slate-200 bg-slate-50">
             <tr class="font-bold text-slate-900">
               <td class="px-4 py-3">
-                <span class="text-[11px] uppercase tracking-wide text-slate-500">Celkem (1 porce)</span>
+                <span class="text-[11px] uppercase tracking-wide text-slate-500"
+                  >Celkem (1 porce)</span
+                >
               </td>
               <td class="px-4 py-3"></td>
               <td class="px-4 py-3 text-center tabular-nums">{{ fmt(totals.calories, 0) }}</td>
@@ -365,19 +375,27 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </div>
           <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm">
             <div>
-              <span class="font-extrabold tabular-nums text-slate-900">{{ fmt(grandTotals.calories, 0) }}</span>
+              <span class="font-extrabold tabular-nums text-slate-900">{{
+                fmt(grandTotals.calories, 0)
+              }}</span>
               <span class="text-xs text-slate-500"> kcal</span>
             </div>
             <div>
-              <span class="font-bold tabular-nums text-slate-800">{{ fmt(grandTotals.carbohydrates) }} g</span>
+              <span class="font-bold tabular-nums text-slate-800"
+                >{{ fmt(grandTotals.carbohydrates) }} g</span
+              >
               <span class="text-xs text-slate-500"> sach.</span>
             </div>
             <div>
-              <span class="font-bold tabular-nums text-slate-800">{{ fmt(grandTotals.proteins) }} g</span>
+              <span class="font-bold tabular-nums text-slate-800"
+                >{{ fmt(grandTotals.proteins) }} g</span
+              >
               <span class="text-xs text-slate-500"> bílk.</span>
             </div>
             <div>
-              <span class="font-bold tabular-nums text-slate-800">{{ fmt(grandTotals.fats) }} g</span>
+              <span class="font-bold tabular-nums text-slate-800"
+                >{{ fmt(grandTotals.fats) }} g</span
+              >
               <span class="text-xs text-slate-500"> tuky</span>
             </div>
           </div>

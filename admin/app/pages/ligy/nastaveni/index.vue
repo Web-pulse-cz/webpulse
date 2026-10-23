@@ -1,0 +1,187 @@
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+import _ from 'lodash';
+import { definePageMeta } from '#imports';
+
+const { $toast } = useNuxtApp();
+const pageTitle = ref('Nastavení lig');
+
+const loading = ref(false);
+const error = ref(false);
+
+const breadcrumbs = ref([{ name: pageTitle.value, link: '/ligy/nastaveni', current: true }]);
+const searchString = ref(inject('searchString', ''));
+const selectedSiteHash = ref(inject('selectedSiteHash', ''));
+
+const tableQuery = ref({
+  search: null as string | null,
+  paginate: 25 as number,
+  page: 1 as number,
+  orderBy: 'position' as string,
+  orderWay: 'asc' as string,
+});
+
+const items = ref([]);
+
+async function loadItems() {
+  loading.value = true;
+  const client = useSanctumClient();
+
+  await client('/api/admin/league', {
+    method: 'GET',
+    query: tableQuery.value,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .then((response) => {
+      items.value = response;
+      tableQuery.value.page = response.page;
+    })
+    .catch(() => {
+      error.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst ligy.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
+
+async function deleteItem(id: number) {
+  loading.value = true;
+  const client = useSanctumClient();
+  await client('/api/admin/league/' + id, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-Site-Hash': selectedSiteHash.value,
+    },
+  })
+    .catch(() => {
+      error.value = true;
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat ligu.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+      loadItems();
+    });
+}
+
+function updateSort(column: string) {
+  if (tableQuery.value.orderBy === column) {
+    tableQuery.value.orderWay = tableQuery.value.orderWay === 'asc' ? 'desc' : 'asc';
+  } else {
+    tableQuery.value.orderBy = column;
+    tableQuery.value.orderWay = 'asc';
+  }
+  loadItems();
+}
+function updatePage(page: number) {
+  tableQuery.value.page = page;
+  loadItems();
+}
+function updatePerPage(perPage: number) {
+  tableQuery.value.paginate = perPage;
+  tableQuery.value.page = 1;
+  loadItems();
+}
+
+const debouncedLoadItems = _.debounce(loadItems, 400);
+watch(searchString, () => {
+  tableQuery.value.search = searchString.value;
+  debouncedLoadItems();
+});
+watch(selectedSiteHash, () => loadItems());
+
+useHead({ title: pageTitle.value });
+onMounted(() => loadItems());
+definePageMeta({ middleware: 'sanctum:auth' });
+</script>
+
+<template>
+  <div>
+    <LayoutHeader
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="[{ type: 'add', text: 'Přidat ligu' }]"
+      slug="leagues"
+    />
+    <BaseTable
+      :items="items"
+      :columns="[
+        { key: 'id', name: 'ID', type: 'text', width: 80, hidden: true, sortable: true },
+        { key: 'name', name: 'Název', type: 'text', width: 240, hidden: false, sortable: true },
+        {
+          key: 'scoring_type',
+          name: 'Bodování',
+          type: 'mapped',
+          width: 120,
+          hidden: false,
+          sortable: true,
+          map: {
+            points: { label: 'Body', class: 'bg-indigo-100 text-indigo-700' },
+            minutes: { label: 'Minuty', class: 'bg-amber-100 text-amber-700' },
+          },
+        },
+        {
+          key: 'visibility',
+          name: 'Viditelnost',
+          type: 'mapped',
+          width: 140,
+          hidden: false,
+          sortable: true,
+          map: {
+            public: { label: 'Pro všechny', class: 'bg-emerald-100 text-emerald-700' },
+            invite: { label: 'Na pozvání', class: 'bg-slate-100 text-slate-600' },
+          },
+        },
+        {
+          key: 'activities_count',
+          name: 'Aktivit',
+          type: 'number',
+          width: 100,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'members_count',
+          name: 'Pozvaných',
+          type: 'number',
+          width: 100,
+          hidden: false,
+          sortable: false,
+        },
+        {
+          key: 'position',
+          name: 'Pořadí',
+          type: 'number',
+          width: 80,
+          hidden: true,
+          sortable: true,
+        },
+      ]"
+      :actions="[{ type: 'edit' }, { type: 'delete' }]"
+      :loading="loading"
+      :error="error"
+      singular="Liga"
+      plural="Ligy"
+      :query="tableQuery"
+      slug="leagues"
+      @delete-item="deleteItem"
+      @update-sort="updateSort"
+      @update-page="updatePage"
+      @update-per-page="updatePerPage"
+    />
+  </div>
+</template>

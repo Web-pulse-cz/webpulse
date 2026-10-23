@@ -785,25 +785,25 @@ definePageMeta({
                     name="next_contact"
                   />
                   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <BaseFormInput
-                    v-model="item.formatted_last_contacted_at"
-                    type="datetime-local"
-                    label="Naposledy kontaktováno"
-                    name="last_contacted_at"
-                    class="col-span-full"
-                  />
-                  <BaseButton
-                    type="button"
-                    class="col-span-full"
-                    @click="
-                      setLastContactedAt(
-                        new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                          .toISOString()
-                          .slice(0, 16),
-                      )
-                    "
-                    >Teď</BaseButton
-                  >
+                    <BaseFormInput
+                      v-model="item.formatted_last_contacted_at"
+                      type="datetime-local"
+                      label="Naposledy kontaktováno"
+                      name="last_contacted_at"
+                      class="col-span-full"
+                    />
+                    <BaseButton
+                      type="button"
+                      class="col-span-full"
+                      @click="
+                        setLastContactedAt(
+                          new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                            .toISOString()
+                            .slice(0, 16),
+                        )
+                      "
+                      >Teď</BaseButton
+                    >
                   </div>
                 </div>
               </div>

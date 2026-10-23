@@ -138,7 +138,12 @@ const selectedContact = computed(() => {
                   'relative cursor-pointer select-none rounded-xl py-2.5 pl-4 pr-4 italic transition-colors duration-150',
                 ]"
               >
-                <span :class="[selected ? 'font-bold text-indigo-700' : 'font-medium', 'block truncate']">
+                <span
+                  :class="[
+                    selected ? 'font-bold text-indigo-700' : 'font-medium',
+                    'block truncate',
+                  ]"
+                >
                   Bez kontaktu
                 </span>
               </li>

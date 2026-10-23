@@ -385,7 +385,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
               size="md"
               :disabled="activeHoleIndex === holes.length - 1"
               @click="goHole(activeHoleIndex + 1)"
-            ><ChevronRightIcon class="ml-1 size-4" />
+              ><ChevronRightIcon class="ml-1 size-4" />
             </BaseButton>
           </div>
         </LayoutContainer>

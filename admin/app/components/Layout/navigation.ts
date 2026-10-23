@@ -603,10 +603,21 @@ export const menuSections: MenuSectionDef[] = [
       {
         key: 'business_ligy',
         name: 'Ligy',
-        link: '/demo',
         icon: TrophyIcon,
         current: false,
         slug: 'leagues',
+        submenu: [
+          {
+            name: 'Přehled lig',
+            link: '/ligy',
+            current: false,
+          },
+          {
+            name: 'Nastavení',
+            link: '/ligy/nastaveni',
+            current: false,
+          },
+        ],
       },
     ],
   },
