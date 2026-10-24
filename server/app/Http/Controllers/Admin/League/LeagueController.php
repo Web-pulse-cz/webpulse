@@ -94,9 +94,11 @@ class LeagueController extends Controller
             'sections.*.activities' => 'nullable|array',
             'activities' => 'nullable|array',
             'sections.*.activities.*.name' => 'required|string|max:255',
+            'sections.*.activities.*.description' => 'nullable|string|max:1000',
             'sections.*.activities.*.value' => 'required|integer|min:0',
             'sections.*.activities.*.max_per_day' => 'nullable|integer|min:1',
             'activities.*.name' => 'required|string|max:255',
+            'activities.*.description' => 'nullable|string|max:1000',
             'activities.*.value' => 'required|integer|min:0',
             'activities.*.max_per_day' => 'nullable|integer|min:1',
         ]);
@@ -216,6 +218,7 @@ class LeagueController extends Controller
 
         $activity->league_section_id = $sectionId;
         $activity->name = $data['name'];
+        $activity->description = filled($data['description'] ?? null) ? $data['description'] : null;
         $activity->value = (int) ($data['value'] ?? 0);
         $activity->max_per_day = isset($data['max_per_day']) && $data['max_per_day'] !== '' ? (int) $data['max_per_day'] : null;
         $activity->counts_to_league = (bool) ($data['counts_to_league'] ?? true);

@@ -13,6 +13,7 @@ class LeagueActivityResource extends JsonResource
             'id' => $this->id,
             'league_section_id' => $this->league_section_id,
             'name' => $this->name,
+            'description' => $this->description,
             'value' => (int) $this->value,
             'max_per_day' => $this->max_per_day,
             'counts_to_league' => (bool) $this->counts_to_league,

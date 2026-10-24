@@ -158,7 +158,6 @@ definePageMeta({ middleware: 'sanctum:auth' });
         <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
           {{ league.visibility === 'invite' ? 'Na pozvání' : 'Pro všechny' }}
         </span>
-        <span v-if="league.description" class="text-slate-500">{{ league.description }}</span>
         <NuxtLink
           v-if="canEdit('leagues')"
           :to="`/ligy/nastaveni/${league.id}`"
@@ -168,6 +167,20 @@ definePageMeta({ middleware: 'sanctum:auth' });
           Nastavení ligy
         </NuxtLink>
       </div>
+
+      <LayoutContainer v-if="league.description">
+        <details class="group">
+          <summary
+            class="cursor-pointer select-none text-sm font-semibold text-slate-800 hover:text-indigo-600"
+          >
+            Popis a pravidla ligy
+          </summary>
+          <div
+            class="league-rules mt-4 text-sm text-slate-600"
+            v-html="league.description"
+          />
+        </details>
+      </LayoutContainer>
 
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 space-y-6 lg:col-span-7 xl:col-span-8">
@@ -265,3 +278,42 @@ definePageMeta({ middleware: 'sanctum:auth' });
     </template>
   </div>
 </template>
+
+<style scoped>
+.league-rules :deep(h1),
+.league-rules :deep(h2),
+.league-rules :deep(h3) {
+  margin: 1rem 0 0.5rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+.league-rules :deep(h1) {
+  font-size: 1.25rem;
+}
+.league-rules :deep(h2) {
+  font-size: 1.125rem;
+}
+.league-rules :deep(p) {
+  margin-bottom: 0.5rem;
+}
+.league-rules :deep(ul),
+.league-rules :deep(ol) {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+.league-rules :deep(ul) {
+  list-style: disc;
+}
+.league-rules :deep(ol) {
+  list-style: decimal;
+}
+.league-rules :deep(a) {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+.league-rules :deep(blockquote) {
+  border-left: 3px solid #e2e8f0;
+  padding-left: 0.75rem;
+  color: #64748b;
+}
+</style>

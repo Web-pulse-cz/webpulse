@@ -36,6 +36,7 @@ function addActivity(list: LeagueActivityForm[]) {
     _key: newKey(),
     id: null,
     name: '',
+    description: '',
     value: props.scoringType === 'minutes' ? 60 : 1,
     max_per_day: 1,
     counts_to_league: true,

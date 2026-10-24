@@ -12,6 +12,7 @@ class LeagueActivity extends Model
         'league_id',
         'league_section_id',
         'name',
+        'description',
         'value',
         'max_per_day',
         'counts_to_league',

@@ -32,6 +32,9 @@ const canIncrease = computed(
   >
     <div class="min-w-0">
       <div class="truncate text-sm font-semibold text-slate-800">{{ activity.name }}</div>
+      <div v-if="activity.description" class="line-clamp-2 text-xs text-slate-500">
+        {{ activity.description }}
+      </div>
       <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
         <span class="tabular-nums">{{ formatScore(activity.value, scoringType) }}</span>
         <span v-if="!isSingle" class="text-slate-400">

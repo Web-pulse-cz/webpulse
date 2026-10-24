@@ -54,6 +54,7 @@ function toActivityForm(a: any): LeagueActivityForm {
     _key: `a-${a.id}`,
     id: a.id,
     name: a.name,
+    description: a.description || '',
     value: a.value,
     max_per_day: a.max_per_day,
     counts_to_league: a.counts_to_league,
@@ -65,6 +66,7 @@ function toPayloadActivity(a: LeagueActivityForm) {
   return {
     id: a.id,
     name: a.name,
+    description: a.description?.trim() || null,
     value: Number(a.value) || 0,
     max_per_day: a.max_per_day,
     counts_to_league: a.counts_to_league,
@@ -241,7 +243,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
               <LayoutTitle class="!mb-0">Základní údaje</LayoutTitle>
             </div>
 
-            <div class="grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
               <div class="md:col-span-2">
                 <BaseFormInput
                   v-model="item.name"
@@ -266,12 +268,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 rules="required"
                 :options="visibilityOptions"
               />
-              <div class="md:col-span-2">
-                <BaseFormTextarea
+              <div class="md:col-span-full">
+                <BaseFormEditor
+                  :key="`description-${item.id}`"
                   v-model="item.description"
-                  label="Popis"
+                  label="Popis / pravidla"
                   name="description"
-                  rows="3"
                 />
               </div>
             </div>

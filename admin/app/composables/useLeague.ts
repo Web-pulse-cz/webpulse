@@ -2,6 +2,7 @@ export interface LeagueActivityForm {
   _key: string;
   id?: number | null;
   name: string;
+  description: string;
   value: number;
   max_per_day: number | null;
   counts_to_league: boolean;

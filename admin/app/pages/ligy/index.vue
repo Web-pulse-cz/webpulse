@@ -12,6 +12,14 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const { canEdit } = usePermissions();
 
 const loading = ref(false);
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 const leagues = ref<any[]>([]);
 
 async function loadLeagues() {
@@ -49,7 +57,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6 pb-24">
     <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="leagues" />
 
     <div v-if="loading && !leagues.length" class="py-12 text-center text-sm text-slate-500">
@@ -101,7 +109,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </div>
 
         <p v-if="league.description" class="mb-4 line-clamp-2 text-sm text-slate-600">
-          {{ league.description }}
+          {{ stripHtml(league.description) }}
         </p>
 
         <div class="mt-auto grid grid-cols-2 gap-3 border-t border-slate-100 pt-4 text-sm">
