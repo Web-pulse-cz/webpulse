@@ -112,7 +112,7 @@ watch(selectedSiteHash, () => loadLeagues());
           </div>
         </div>
 
-        <ol v-if="league.top?.some((r) => r.total > 0)" class="space-y-1">
+        <ol v-if="league.top?.some((r) => r.total !== 0)" class="space-y-1">
           <li v-for="row in league.top" :key="row.user_id" class="flex items-center gap-2 text-xs">
             <span
               class="flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"

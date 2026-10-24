@@ -20,6 +20,18 @@ const emit = defineEmits<{ change: [count: number] }>();
 const { formatScore } = useLeague();
 
 const isSingle = computed(() => props.activity.max_per_day === 1);
+
+const valueLabel = computed(() => {
+  const value = Number(props.activity.value) || 0;
+  return (value > 0 ? '+' : '') + formatScore(value, props.scoringType);
+});
+
+const valueClass = computed(() => {
+  if (!props.activity.counts_to_league) return 'bg-slate-100 text-slate-400 ring-slate-200';
+  if (props.activity.value < 0) return 'bg-red-50 text-red-700 ring-red-200';
+  return 'bg-indigo-50 text-indigo-700 ring-indigo-200';
+});
+
 const canIncrease = computed(
   () => props.activity.max_per_day === null || props.count < props.activity.max_per_day,
 );
@@ -31,14 +43,24 @@ const canIncrease = computed(
     :class="count > 0 ? 'bg-emerald-50 ring-emerald-200' : 'bg-white ring-slate-200'"
   >
     <div class="min-w-0">
-      <div class="truncate text-sm font-semibold text-slate-800">{{ activity.name }}</div>
+      <div class="flex items-center gap-2">
+        <span class="truncate text-sm font-semibold text-slate-800">{{ activity.name }}</span>
+        <span
+          class="shrink-0 rounded-md px-1.5 py-0.5 text-xs font-bold tabular-nums ring-1 ring-inset"
+          :class="valueClass"
+        >
+          {{ valueLabel }}
+        </span>
+      </div>
       <div v-if="activity.description" class="line-clamp-2 text-xs text-slate-500">
         {{ activity.description }}
       </div>
-      <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-        <span class="tabular-nums">{{ formatScore(activity.value, scoringType) }}</span>
+      <div
+        v-if="!isSingle || !activity.counts_to_league"
+        class="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500"
+      >
         <span v-if="!isSingle" class="text-slate-400">
-          · {{ activity.max_per_day ? `max ${activity.max_per_day}× denně` : 'vícekrát denně' }}
+          {{ activity.max_per_day ? `max ${activity.max_per_day}× denně` : 'vícekrát denně' }}
         </span>
         <span
           v-if="!activity.counts_to_league"

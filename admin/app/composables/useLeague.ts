@@ -45,14 +45,15 @@ export function useLeague() {
     const num = Number(value) || 0;
     if (type !== 'minutes') return `${num.toLocaleString('cs-CZ')} b.`;
 
-    const totalSeconds = Math.round(num);
+    const sign = num < 0 ? '-' : '';
+    const totalSeconds = Math.abs(Math.round(num));
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    if (hours > 0) return `${hours} h ${String(minutes).padStart(2, '0')} min`;
-    if (seconds > 0) return `${minutes}:${String(seconds).padStart(2, '0')} min`;
-    return `${minutes} min`;
+    if (hours > 0) return `${sign}${hours} h ${String(minutes).padStart(2, '0')} min`;
+    if (seconds > 0) return `${sign}${minutes}:${String(seconds).padStart(2, '0')} min`;
+    return `${sign}${minutes} min`;
   }
 
   function dayLabel(date: string): {

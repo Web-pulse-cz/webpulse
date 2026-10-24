@@ -95,11 +95,11 @@ class LeagueController extends Controller
             'activities' => 'nullable|array',
             'sections.*.activities.*.name' => 'required|string|max:255',
             'sections.*.activities.*.description' => 'nullable|string|max:1000',
-            'sections.*.activities.*.value' => 'required|integer|min:0',
+            'sections.*.activities.*.value' => 'required|integer',
             'sections.*.activities.*.max_per_day' => 'nullable|integer|min:1',
             'activities.*.name' => 'required|string|max:255',
             'activities.*.description' => 'nullable|string|max:1000',
-            'activities.*.value' => 'required|integer|min:0',
+            'activities.*.value' => 'required|integer',
             'activities.*.max_per_day' => 'nullable|integer|min:1',
         ]);
 

@@ -217,8 +217,8 @@ class LeagueBoardController extends Controller
             ->groupBy('e.user_id')
             ->select([
                 'e.user_id',
-                DB::raw('SUM(CASE WHEN a.counts_to_league = 1 THEN e.count * a.value ELSE 0 END) as total'),
-                DB::raw("SUM(CASE WHEN a.counts_to_league = 1 AND e.date >= '{$weekFrom}' THEN e.count * a.value ELSE 0 END) as week_total"),
+                DB::raw('SUM(CASE WHEN a.counts_to_league = 1 THEN CAST(e.count AS SIGNED) * a.value ELSE 0 END) as total'),
+                DB::raw("SUM(CASE WHEN a.counts_to_league = 1 AND e.date >= '{$weekFrom}' THEN CAST(e.count AS SIGNED) * a.value ELSE 0 END) as week_total"),
                 DB::raw('SUM(e.count) as records'),
                 DB::raw('COUNT(DISTINCT e.date) as active_days'),
             ])

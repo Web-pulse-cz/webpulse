@@ -48,6 +48,28 @@ function countFor(activityId: number): number {
   return selectedDay.value?.entries?.[activityId] ?? 0;
 }
 
+// Rotating accent per section so neighbouring sections are easy to tell apart
+const sectionAccents = [
+  'bg-indigo-600',
+  'bg-amber-500',
+  'bg-sky-600',
+  'bg-rose-600',
+  'bg-teal-600',
+  'bg-violet-600',
+];
+
+/** Done activities and day subtotal of a section for the selected day. */
+function groupStats(group: { activities: any[] }) {
+  let done = 0;
+  let total = 0;
+  for (const activity of group.activities) {
+    const count = countFor(activity.id);
+    if (count > 0) done++;
+    if (activity.counts_to_league) total += activity.value * count;
+  }
+  return { done, total };
+}
+
 function applyBoard(response: any) {
   league.value = response.league;
   days.value = response.days;
@@ -175,10 +197,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
           >
             Popis a pravidla ligy
           </summary>
-          <div
-            class="league-rules mt-4 text-sm text-slate-600"
-            v-html="league.description"
-          />
+          <div class="league-rules mt-4 text-sm text-slate-600" v-html="league.description" />
         </details>
       </LayoutContainer>
 
@@ -208,29 +227,58 @@ definePageMeta({ middleware: 'sanctum:auth' });
               Liga zatím nemá žádné aktivity.
             </div>
 
-            <div v-for="group in groups" :key="group.key" class="mb-6 last:mb-0">
-              <h3
-                v-if="group.name"
-                class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500"
+            <div class="space-y-4">
+              <section
+                v-for="(group, index) in groups"
+                :key="group.key"
+                :class="
+                  group.name ? 'overflow-hidden rounded-xl bg-slate-50 ring-1 ring-slate-200' : ''
+                "
               >
-                {{ group.name }}
-              </h3>
-              <div class="grid grid-cols-1 gap-2 xl:grid-cols-2">
-                <LeagueActivityTile
-                  v-for="activity in group.activities"
-                  :key="activity.id"
-                  :activity="activity"
-                  :count="countFor(activity.id)"
-                  :scoring-type="league.scoring_type"
-                  :disabled="saving"
-                  @change="(count) => record(activity.id, count)"
-                />
-              </div>
+                <header
+                  v-if="group.name"
+                  class="flex items-center justify-between gap-3 px-4 py-3 text-white"
+                  :class="sectionAccents[index % sectionAccents.length]"
+                >
+                  <h3 class="truncate text-base font-bold">{{ group.name }}</h3>
+                  <div
+                    class="flex shrink-0 items-center gap-1.5 text-xs font-semibold tabular-nums"
+                  >
+                    <span
+                      class="rounded-full bg-white/20 px-2 py-0.5"
+                      title="Zaznamenáno / aktivit"
+                    >
+                      {{ groupStats(group).done }}/{{ group.activities.length }}
+                    </span>
+                    <span
+                      v-if="groupStats(group).total !== 0"
+                      class="rounded-full bg-white px-2 py-0.5"
+                      :class="groupStats(group).total > 0 ? 'text-emerald-700' : 'text-red-700'"
+                    >
+                      {{ groupStats(group).total > 0 ? '+' : ''
+                      }}{{ formatScore(groupStats(group).total, league.scoring_type) }}
+                    </span>
+                  </div>
+                </header>
+                <div class="grid grid-cols-1 gap-2 xl:grid-cols-2" :class="{ 'p-3': group.name }">
+                  <LeagueActivityTile
+                    v-for="activity in group.activities"
+                    :key="activity.id"
+                    :activity="activity"
+                    :count="countFor(activity.id)"
+                    :scoring-type="league.scoring_type"
+                    :disabled="saving"
+                    @change="(count) => record(activity.id, count)"
+                  />
+                </div>
+              </section>
             </div>
           </LayoutContainer>
         </div>
 
-        <aside class="col-span-1 space-y-6 lg:col-span-5 xl:col-span-4">
+        <aside
+          class="col-span-1 space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:-m-1 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:p-1 xl:col-span-4"
+        >
           <LayoutContainer>
             <div class="mb-5 flex items-center gap-3">
               <div

@@ -65,7 +65,7 @@ const inputClass =
                   = {{ formatScore(activity.value, 'minutes') }}
                 </template>
               </label>
-              <input v-model.number="activity.value" type="number" min="0" :class="inputClass" />
+              <input v-model.number="activity.value" type="number" :class="inputClass" />
             </div>
 
             <div class="w-[calc(50%-0.375rem)] md:w-32">
