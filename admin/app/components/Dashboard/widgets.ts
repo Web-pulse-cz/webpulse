@@ -19,6 +19,7 @@ import DashboardWidgetContentList from './Widget/ContentList.vue';
 import DashboardWidgetChangelog from './Widget/Changelog.vue';
 import DashboardWidgetDiscGolfGames from './Widget/DiscGolfGames.vue';
 import DashboardWidgetContactBoard from './Widget/ContactBoard.vue';
+import DashboardWidgetLeagues from './Widget/Leagues.vue';
 
 export type WidgetSize = 'half' | 'full';
 
@@ -392,6 +393,21 @@ export const availableWidgets: WidgetDefinition[] = [
     permissionSlug: 'contacts',
     defaultPosition: 15,
     defaultSize: 'full',
+    defaultEnabled: true,
+  },
+  {
+    key: 'leagues',
+    title: 'Ligy',
+    icon: TrophyIcon,
+    component: markRaw(DashboardWidgetLeagues),
+    props: {
+      endpoint: '/api/admin/league/board',
+      link: '/ligy',
+      color: 'amber',
+    },
+    permissionSlug: 'leagues',
+    defaultPosition: 16,
+    defaultSize: 'half',
     defaultEnabled: true,
   },
   {

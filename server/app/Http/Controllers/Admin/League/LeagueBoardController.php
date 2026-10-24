@@ -50,6 +50,7 @@ class LeagueBoardController extends Controller
                 'activities_count' => $league->activities_count,
                 'participants_count' => count($leaderboard),
                 'leader' => $leaderboard[0] ?? null,
+                'top' => array_slice($leaderboard, 0, 3),
                 'my_total' => $me['total'] ?? 0,
                 'my_rank' => $me['rank'] ?? null,
             ];
