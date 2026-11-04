@@ -46,6 +46,7 @@ import {
   ChartBarIcon,
   UserGroupIcon,
   ScaleIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/vue/24/outline';
 
 export interface MenuSubItem {
@@ -537,11 +538,6 @@ export const menuSections: MenuSectionDef[] = [
             current: false,
           },
           {
-            name: 'Nástěnka',
-            link: '/kontakty/nastenka',
-            current: false,
-          },
-          {
             name: 'Seznamy kontaktů',
             link: '/kontakty/seznamy',
             current: false,
@@ -567,6 +563,14 @@ export const menuSections: MenuSectionDef[] = [
             current: false,
           },
         ],
+      },
+      {
+        key: 'contact_board',
+        name: 'Nástěnka',
+        link: '/nastenka',
+        icon: ClipboardDocumentListIcon,
+        current: false,
+        slug: 'contact_board_sections',
       },
       {
         key: 'aktivita',

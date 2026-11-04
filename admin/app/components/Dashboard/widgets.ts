@@ -382,15 +382,15 @@ export const availableWidgets: WidgetDefinition[] = [
   },
   {
     key: 'contact_board_cards',
-    title: 'Nástěnka kontaktů',
+    title: 'Nástěnka',
     icon: ClipboardDocumentListIcon,
     component: markRaw(DashboardWidgetContactBoard),
     props: {
       endpoint: '/api/admin/contact/board/section',
-      link: '/kontakty/nastenka',
+      link: '/nastenka',
       color: 'violet',
     },
-    permissionSlug: 'contacts',
+    permissionSlug: 'contact_board_sections',
     defaultPosition: 15,
     defaultSize: 'full',
     defaultEnabled: true,

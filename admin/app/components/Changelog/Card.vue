@@ -8,79 +8,70 @@ const props = defineProps({
   },
 });
 
-// Sladěno s naším novým design systémem (amber místo yellow, emerald místo green)
-const priorityColorClass = computed(() => {
+const priorityConfig = computed(() => {
   switch (props.changelog.priority) {
     case 'high':
-      return 'bg-red-500';
+      return { dot: 'bg-rose-500', text: 'Vysoká priorita' };
     case 'medium':
-      return 'bg-amber-400';
+      return { dot: 'bg-amber-400', text: 'Normální priorita' };
     case 'low':
-      return 'bg-emerald-500';
+      return { dot: 'bg-emerald-500', text: 'Nízká priorita' };
     default:
-      return 'bg-slate-300';
+      return { dot: 'bg-slate-300', text: '' };
   }
 });
 
-// Sladěno s naším novým design systémem (indigo místo blue, slate místo gray)
-const badgeConfig = computed(() => {
+const typeConfig = computed(() => {
   switch (props.changelog.type) {
     case 'feature':
-      return { color: 'indigo', text: 'Nová funkce' };
+      return { classes: 'bg-indigo-50 text-indigo-600', text: 'Nová funkce' };
     case 'bugfix':
-      return { color: 'red', text: 'Oprava chyby' };
+      return { classes: 'bg-rose-50 text-rose-600', text: 'Oprava chyby' };
     case 'design':
-      return { color: 'emerald', text: 'Design' };
+      return { classes: 'bg-emerald-50 text-emerald-600', text: 'Design' };
     default:
-      return { color: 'slate', text: 'Ostatní' };
+      return { classes: 'bg-slate-100 text-slate-600', text: 'Ostatní' };
   }
 });
 </script>
 
 <template>
   <div
-    class="group relative overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/40"
+    class="rounded-xl p-3 ring-1 ring-slate-200 transition hover:shadow-md hover:ring-indigo-300"
   >
-    <div
-      :class="[
-        'absolute inset-y-0 left-0 w-1.5 transition-colors duration-300',
-        priorityColorClass,
-      ]"
-    />
-
-    <div class="p-6">
-      <div class="grid grid-cols-12 items-start gap-4">
-        <div
-          class="col-span-12 flex shrink-0 items-center gap-2.5 lg:col-span-full lg:mb-1 xl:col-span-4 xl:mb-0 xl:flex-row xl:justify-start"
-        >
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2">
           <span
-            class="inline-flex items-center rounded-lg bg-slate-900 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white ring-1 ring-inset ring-slate-900"
-          >
-            v{{ changelog.version }}
-          </span>
-          <PropsBadge :color="badgeConfig.color" class="text-[10px] uppercase">
-            {{ badgeConfig.text }}
-          </PropsBadge>
+            class="size-2 shrink-0 rounded-full"
+            :class="priorityConfig.dot"
+            :title="priorityConfig.text"
+          />
+          <div class="truncate text-sm font-semibold text-slate-900">{{ changelog.title }}</div>
         </div>
-
-        <div class="col-span-12 xl:col-span-8">
-          <h3
-            class="text-lg font-bold tracking-tight text-slate-900 transition-colors group-hover:text-indigo-600"
-          >
-            {{ changelog.title }}
-          </h3>
-          <p v-if="changelog.subtitle" class="mt-1 text-sm font-medium text-slate-500">
-            {{ changelog.subtitle }}
-          </p>
-
-          <div v-if="changelog.description" class="mt-5 space-y-3 border-t border-slate-100 pt-5">
-            <div
-              class="prose prose-sm prose-slate prose-headings:text-slate-900 prose-a:font-medium prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:text-indigo-500 hover:prose-a:underline max-w-none text-slate-600"
-              v-html="changelog.description"
-            ></div>
-          </div>
+        <div v-if="changelog.subtitle" class="mt-0.5 text-[11px] text-slate-500">
+          {{ changelog.subtitle }}
         </div>
       </div>
+      <div class="flex shrink-0 items-center gap-1.5">
+        <span
+          class="rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+          :class="typeConfig.classes"
+        >
+          {{ typeConfig.text }}
+        </span>
+        <span
+          class="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-slate-600"
+        >
+          v{{ changelog.version }}
+        </span>
+      </div>
     </div>
+
+    <div
+      v-if="changelog.description"
+      class="prose prose-sm prose-slate prose-p:my-1 prose-a:font-medium prose-a:text-indigo-600 prose-ul:my-1 prose-li:my-0 mt-2 max-w-none border-t border-slate-100 pt-2 text-xs text-slate-600"
+      v-html="changelog.description"
+    />
   </div>
 </template>

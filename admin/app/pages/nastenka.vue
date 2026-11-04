@@ -15,10 +15,7 @@ const { $toast } = useNuxtApp();
 const { canEdit, canDelete } = usePermissions();
 
 const pageTitle = ref('Nástěnka');
-const breadcrumbs = ref([
-  { name: 'Kontakty', link: '/kontakty', current: false },
-  { name: pageTitle.value, link: '/kontakty/nastenka', current: true },
-]);
+const breadcrumbs = ref([{ name: pageTitle.value, link: '/nastenka', current: true }]);
 
 const loading = ref(false);
 const sections = ref([] as any[]);
@@ -299,9 +296,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
 <template>
   <div class="space-y-6 pb-20">
-    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="contacts" />
+    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="contact_board_sections" />
 
-    <div v-if="canEdit('contacts')" class="flex justify-end">
+    <div v-if="canEdit('contact_board_sections')" class="flex justify-end">
       <button
         type="button"
         class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
@@ -345,7 +342,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 {{ section.cards?.length || 0 }}
               </span>
             </div>
-            <div v-if="canEdit('contacts')" class="flex shrink-0 items-center gap-1">
+            <div v-if="canEdit('contact_board_sections')" class="flex shrink-0 items-center gap-1">
               <button
                 type="button"
                 class="rounded-lg p-1 text-slate-400 transition hover:bg-white hover:text-slate-700"
@@ -354,7 +351,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 <PencilSquareIcon class="size-4" />
               </button>
               <button
-                v-if="canDelete('contacts')"
+                v-if="canDelete('contact_board_sections')"
                 type="button"
                 class="rounded-lg p-1 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                 @click="confirmDeleteSection(section)"
@@ -395,7 +392,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
           </draggable>
 
           <button
-            v-if="canEdit('contacts')"
+            v-if="canEdit('contact_board_sections')"
             type="button"
             class="mt-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-slate-200 py-2 text-xs font-medium text-slate-400 transition hover:border-indigo-300 hover:bg-white hover:text-indigo-600"
             @click="openNewCard(section)"
@@ -603,7 +600,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
             <div class="flex items-center justify-between border-t border-slate-200 px-6 py-4">
               <button
-                v-if="selectedCard.id && canDelete('contacts')"
+                v-if="selectedCard.id && canDelete('contact_board_sections')"
                 type="button"
                 class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-200"
                 @click="deleteCard"

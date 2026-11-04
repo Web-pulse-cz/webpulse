@@ -102,6 +102,7 @@ const moduleGroups = ref([
     title: 'Byznys a osobní růst',
     modules: [
       { slug: 'contacts', name: 'Kontakty' },
+      { slug: 'contact_board_sections', name: 'Nástěnka' },
       { slug: 'users_has_activities', name: 'Aktivita' },
       { slug: 'message_blueprints', name: 'Šablony zpráv' },
       { slug: 'calendars', name: 'Kalendář' },

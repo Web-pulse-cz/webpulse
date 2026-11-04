@@ -72,6 +72,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/style.css'],
 
   routeRules: {
+    '/kontakty/nastenka': { redirect: '/nastenka' },
     '/api/**': {
       proxy: `${process.env.API_URL ?? 'https://api.web-pulse.cz/'}/api/**`,
     },

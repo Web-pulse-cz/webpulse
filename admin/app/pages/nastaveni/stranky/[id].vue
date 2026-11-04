@@ -79,6 +79,7 @@ const settings = {
     'newsletters',
     'demands',
     'contacts',
+    'contact_board_sections',
     'users_has_activities',
     'message_blueprints',
     'calendars',
@@ -308,6 +309,8 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Poptávky';
     case 'contacts':
       return 'Kontakty';
+    case 'contact_board_sections':
+      return 'Nástěnka';
     case 'users_has_activities':
       return 'Aktivita';
     case 'message_blueprints':
@@ -462,6 +465,7 @@ const moduleGroups = [
     title: 'Byznys a osobní růst',
     slugs: [
       'contacts',
+      'contact_board_sections',
       'users_has_activities',
       'message_blueprints',
       'calendars',
