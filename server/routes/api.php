@@ -42,8 +42,6 @@ use App\Http\Controllers\Admin\DiscGolf\GameController;
 use App\Http\Controllers\Admin\DiscGolf\GameFlowController;
 use App\Http\Controllers\Admin\DiscGolf\PlayerController;
 use App\Http\Controllers\Admin\DiscGolf\StatsController;
-use App\Http\Controllers\Admin\League\LeagueBoardController;
-use App\Http\Controllers\Admin\League\LeagueController;
 use App\Http\Controllers\Admin\Email\EmailController;
 use App\Http\Controllers\Admin\Employee\EmployeeContractController;
 use App\Http\Controllers\Admin\Employee\EmployeeController;
@@ -67,11 +65,16 @@ use App\Http\Controllers\Admin\Food\Recipe\RecipeCategoryController;
 use App\Http\Controllers\Admin\Food\Recipe\RecipeController;
 use App\Http\Controllers\Admin\Invoice\InvoiceController;
 use App\Http\Controllers\Admin\Language\LanguageController;
+use App\Http\Controllers\Admin\League\LeagueBoardController;
+use App\Http\Controllers\Admin\League\LeagueController;
 use App\Http\Controllers\Admin\Logo\LogoController;
 use App\Http\Controllers\Admin\Message\MessageBlueprintController;
 use App\Http\Controllers\Admin\Newsletter\NewsletterController;
 use App\Http\Controllers\Admin\Novelty\NoveltyController;
 use App\Http\Controllers\Admin\Page\PageController;
+use App\Http\Controllers\Admin\PersonalGrowth\AudioController;
+use App\Http\Controllers\Admin\PersonalGrowth\BookController;
+use App\Http\Controllers\Admin\PersonalGrowth\SeminarController;
 use App\Http\Controllers\Admin\PhotoGallery\PhotoGalleryController;
 use App\Http\Controllers\Admin\PriceOffer\PriceOfferController;
 use App\Http\Controllers\Admin\Project\ProjectController;
@@ -1196,6 +1199,26 @@ Route::group([
             Route::get('{id}', [LeagueController::class, 'show'])->where('id', '[0-9]+');
             Route::post('{id?}', [LeagueController::class, 'store']);
             Route::delete('{id}', [LeagueController::class, 'destroy'])->where('id', '[0-9]+');
+        });
+
+        // Personal growth routes (Osobní růst — per-user)
+        Route::group([
+            'prefix' => 'personal-growth',
+        ], function () {
+            foreach ([
+                'book' => BookController::class,
+                'audio' => AudioController::class,
+                'seminar' => SeminarController::class,
+            ] as $prefix => $controller) {
+                Route::group([
+                    'prefix' => $prefix,
+                ], function () use ($controller) {
+                    Route::get('', [$controller, 'index']);
+                    Route::get('{id}', [$controller, 'show'])->where('id', '[0-9]+');
+                    Route::post('{id?}', [$controller, 'store']);
+                    Route::delete('{id}', [$controller, 'destroy'])->where('id', '[0-9]+');
+                });
+            }
         });
 
         // Disc golf routes

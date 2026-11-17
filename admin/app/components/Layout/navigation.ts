@@ -47,12 +47,15 @@ import {
   UserGroupIcon,
   ScaleIcon,
   ClipboardDocumentListIcon,
+  BookOpenIcon,
 } from '@heroicons/vue/24/outline';
 
 export interface MenuSubItem {
   name: string;
   link: string;
   current: boolean;
+  // Vlastní slug podpoložky (permissions + modul). Bez něj podpoložka dědí slug rodiče.
+  slug?: string;
 }
 
 export interface MenuLinkItem {
@@ -620,6 +623,32 @@ export const menuSections: MenuSectionDef[] = [
             name: 'Nastavení',
             link: '/ligy/nastaveni',
             current: false,
+          },
+        ],
+      },
+      {
+        key: 'osobni_rust',
+        name: 'Osobní růst',
+        icon: BookOpenIcon,
+        current: false,
+        submenu: [
+          {
+            name: 'Knihy',
+            link: '/osobni-rust/knihy',
+            current: false,
+            slug: 'books',
+          },
+          {
+            name: 'Audia',
+            link: '/osobni-rust/audia',
+            current: false,
+            slug: 'audios',
+          },
+          {
+            name: 'Semináře',
+            link: '/osobni-rust/seminare',
+            current: false,
+            slug: 'seminars',
           },
         ],
       },

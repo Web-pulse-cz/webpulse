@@ -127,10 +127,18 @@ function isMenuItemVisible(item: any): boolean {
   return !item.slug || (moduleBelongsToSite(item.slug) && canView(item.slug));
 }
 
+// Podpoložky s vlastním slugem filtrujeme zvlášť; rodič bez viditelných podpoložek zmizí.
+function filterMenuItem(item: any): any | null {
+  if (!isMenuItemVisible(item)) return null;
+  if (!item.submenu?.some((sub: any) => sub.slug)) return item;
+  const submenu = item.submenu.filter((sub: any) => isMenuItemVisible(sub));
+  return submenu.length ? { ...item, submenu } : null;
+}
+
 // Sections containing only items the user may see (permissions, site modules, onlyUserId).
 const visibleNavigation = computed(() =>
   navigation.value
-    .map((group) => ({ ...group, menu: group.menu.filter(isMenuItemVisible) }))
+    .map((group) => ({ ...group, menu: group.menu.map(filterMenuItem).filter(Boolean) }))
     .filter((group) => group.menu.length > 0),
 );
 

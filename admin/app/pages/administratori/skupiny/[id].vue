@@ -108,6 +108,9 @@ const moduleGroups = ref([
       { slug: 'calendars', name: 'Kalendář' },
       { slug: 'cashflows', name: 'Cashflow' },
       { slug: 'leagues', name: 'Ligy' },
+      { slug: 'books', name: 'Knihy' },
+      { slug: 'audios', name: 'Audia' },
+      { slug: 'seminars', name: 'Semináře' },
     ],
   },
   {

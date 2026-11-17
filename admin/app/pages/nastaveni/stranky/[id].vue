@@ -85,6 +85,9 @@ const settings = {
     'calendars',
     'cashflows',
     'leagues',
+    'books',
+    'audios',
+    'seminars',
     'clients',
     'biographies',
     'projects',
@@ -325,6 +328,12 @@ const getSettingTitle = computed(() => (key: string) => {
       return 'Cashflow';
     case 'leagues':
       return 'Ligy';
+    case 'books':
+      return 'Knihy';
+    case 'audios':
+      return 'Audia';
+    case 'seminars':
+      return 'Semináře';
     case 'clients':
       return 'Klienti';
     case 'customers':
@@ -475,6 +484,9 @@ const moduleGroups = [
       'calendars',
       'cashflows',
       'leagues',
+      'books',
+      'audios',
+      'seminars',
     ],
   },
   {

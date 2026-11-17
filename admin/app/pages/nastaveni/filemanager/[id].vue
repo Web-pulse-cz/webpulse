@@ -56,6 +56,7 @@ const entityTypeOptions = [
   { value: 'block', name: 'Bloky (obecné)' },
   { value: 'hero', name: 'Blok – Hero' },
   { value: 'about', name: 'Blok – O nás' },
+  { value: 'book', name: 'Knihy (osobní růst)' },
 ];
 
 const modeOptions = [
