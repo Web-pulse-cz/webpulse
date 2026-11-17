@@ -8,6 +8,7 @@ import {
   PlusIcon,
   TrashIcon,
   ArrowPathIcon,
+  ClockIcon,
 } from '@heroicons/vue/24/outline';
 import { definePageMeta } from '#imports';
 
@@ -18,6 +19,8 @@ interface Book {
   keywords: string[];
   is_read: boolean;
   image: string | null;
+  tasks_total: number;
+  tasks_done: number;
 }
 
 interface Paginated<T> {
@@ -333,23 +336,51 @@ definePageMeta({
               </button>
             </div>
 
-            <div class="mt-auto flex justify-end gap-1 pt-3">
-              <NuxtLink
-                :to="`/osobni-rust/knihy/${book.id}`"
-                class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-                :aria-label="`Detail knihy ${book.name}`"
+            <div class="mt-auto flex items-center justify-between gap-2 pt-3">
+              <div
+                v-if="book.tasks_total"
+                class="flex items-center gap-1.5 text-xs font-medium"
+                :aria-label="`Úkoly: ${book.tasks_done} splněno, ${book.tasks_total - book.tasks_done} nesplněno`"
               >
-                <MagnifyingGlassIcon class="size-5" />
-              </NuxtLink>
-              <button
-                v-if="canDelete('books')"
-                type="button"
-                class="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600"
-                :aria-label="`Smazat knihu ${book.name}`"
-                @click="askDelete(book)"
-              >
-                <TrashIcon class="size-5" />
-              </button>
+                <span
+                  class="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-0.5 text-emerald-700 ring-1 ring-inset ring-emerald-200"
+                  title="Splněné úkoly"
+                >
+                  <CheckCircleIcon class="size-3.5" />
+                  {{ book.tasks_done }}
+                </span>
+                <span
+                  class="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 ring-1 ring-inset"
+                  :class="
+                    book.tasks_total - book.tasks_done
+                      ? 'bg-amber-50 text-amber-700 ring-amber-200'
+                      : 'bg-slate-50 text-slate-400 ring-slate-200'
+                  "
+                  title="Nesplněné úkoly"
+                >
+                  <ClockIcon class="size-3.5" />
+                  {{ book.tasks_total - book.tasks_done }}
+                </span>
+              </div>
+              <span v-else class="text-xs text-slate-400">Bez úkolů</span>
+              <div class="flex gap-1">
+                <NuxtLink
+                  :to="`/osobni-rust/knihy/${book.id}`"
+                  class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                  :aria-label="`Detail knihy ${book.name}`"
+                >
+                  <MagnifyingGlassIcon class="size-5" />
+                </NuxtLink>
+                <button
+                  v-if="canDelete('books')"
+                  type="button"
+                  class="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600"
+                  :aria-label="`Smazat knihu ${book.name}`"
+                  @click="askDelete(book)"
+                >
+                  <TrashIcon class="size-5" />
+                </button>
+              </div>
             </div>
           </div>
         </li>
