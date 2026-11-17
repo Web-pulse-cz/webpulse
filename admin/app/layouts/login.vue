@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F8FAFC]">
+  <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
     <div class="pointer-events-none absolute inset-0 z-0 opacity-40">
       <svg
         class="absolute left-full -translate-x-1/2 -translate-y-1/4 transform"
@@ -20,12 +20,7 @@
     <main class="relative z-10 w-full">
       <slot />
     </main>
+
+    <UiToastContainer />
   </div>
 </template>
-
-<style scoped>
-/* Globální reset pro login layout */
-:deep(body) {
-  @apply bg-[#F8FAFC];
-}
-</style>

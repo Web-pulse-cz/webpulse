@@ -80,12 +80,12 @@ watchEffect(() => {
     });
   } else {
     tabs.value[0].current = true;
-    router.push(route.path + '#kontakty');
+    router.replace(route.path + '#kontakty');
   }
 });
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {

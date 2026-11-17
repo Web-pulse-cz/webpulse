@@ -98,10 +98,7 @@ const priorityColors: Record<string, string> = {
       </div>
 
       <div class="mt-3 pl-[4rem]">
-        <NuxtLink
-          to="/nastenka"
-          class="text-xs font-semibold text-violet-600 hover:underline"
-        >
+        <NuxtLink to="/nastenka" class="text-xs font-semibold text-violet-600 hover:underline">
           Otevřít v nástěnce →
         </NuxtLink>
       </div>

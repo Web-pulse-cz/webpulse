@@ -9,11 +9,6 @@ const props = defineProps({
   },
 });
 
-function getMax() {
-  const max = Math.max(...props.items.business.series[0].data);
-  return Math.ceil(max / 10) * 10 + 2;
-}
-
 function formatAmount(amount: number) {
   return (amount ?? 0).toLocaleString('cs-CZ');
 }

@@ -11,6 +11,8 @@ const sources = ref([]);
 const phases = ref([]);
 
 const loading = ref(false);
+const lookupsLoading = ref(false);
+const quickSaving = ref(false);
 const error = ref(false);
 
 const breadcrumbs = ref([
@@ -22,14 +24,17 @@ const breadcrumbs = ref([
 ]);
 
 const searchString = ref(inject('searchString', ''));
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12 as number,
-  page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'desc' as string,
-  filters: {} as Record<string, number[]>,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25 as number,
+    page: 1 as number,
+    orderBy: 'id' as string,
+    orderWay: 'desc' as string,
+    filters: {} as Record<string, number[]>,
+  },
+  { searchString },
+);
 
 const showQuickEditDialog = ref(false);
 const quickEditDialogItem = ref(null);
@@ -37,6 +42,7 @@ const quickEditDialogItem = ref(null);
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
 
@@ -69,7 +75,7 @@ async function loadItems() {
 
 async function loadPhases() {
   const client = useSanctumClient();
-  loading.value = true;
+  lookupsLoading.value = true;
 
   await client<{ id: number }>('/api/admin/contact/phase', {
     method: 'GET',
@@ -82,7 +88,6 @@ async function loadPhases() {
       phases.value = response;
     })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst fáze. Zkuste to prosím později.',
@@ -90,13 +95,13 @@ async function loadPhases() {
       });
     })
     .finally(() => {
-      loading.value = false;
+      lookupsLoading.value = false;
     });
 }
 
 async function loadSources() {
   const client = useSanctumClient();
-  loading.value = true;
+  lookupsLoading.value = true;
 
   await client<{ id: number }>('/api/admin/contact/source', {
     method: 'GET',
@@ -109,7 +114,6 @@ async function loadSources() {
       sources.value = response;
     })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se načíst zdroje. Zkuste to prosím později.',
@@ -117,7 +121,7 @@ async function loadSources() {
       });
     })
     .finally(() => {
-      loading.value = false;
+      lookupsLoading.value = false;
     });
 }
 
@@ -132,9 +136,10 @@ async function deleteItem(id: number) {
       'Content-Type': 'application/json',
     },
   })
-    .then(() => {})
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku kontaktu.',
@@ -149,7 +154,7 @@ async function deleteItem(id: number) {
 
 async function saveItem(item) {
   const client = useSanctumClient();
-  loading.value = true;
+  quickSaving.value = true;
 
   await client<{ id: number }>('/api/admin/contact/' + item.id, {
     method: 'POST',
@@ -165,9 +170,10 @@ async function saveItem(item) {
         detail: 'Kontakt byl úspěšně uložen.',
         severity: 'success',
       });
+      showQuickEditDialog.value = false;
+      loadItems();
     })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail:
@@ -176,9 +182,7 @@ async function saveItem(item) {
       });
     })
     .finally(() => {
-      loading.value = false;
-      showQuickEditDialog.value = false;
-      loadItems();
+      quickSaving.value = false;
     });
 }
 
@@ -206,27 +210,76 @@ function updatePerPage(perPage: number) {
   loadItems();
 }
 
-function updateFilters() {
+function updateFilters(query: Record<string, any>) {
+  tableQuery.value.filters = query.filters ?? {};
+  tableQuery.value.page = 1;
+  loadItems();
+}
+
+const isFiltered = computed(
+  () =>
+    !!tableQuery.value.search ||
+    Object.values(tableQuery.value.filters ?? {}).some((value) =>
+      Array.isArray(value) ? value.length > 0 : !!value,
+    ),
+);
+
+function clearFilters() {
+  tableQuery.value.filters = {};
+  tableQuery.value.search = null;
+  tableQuery.value.page = 1;
+  searchString.value = '';
+  loadItems();
+}
+
+async function bulkDeleteItems(ids: number[]) {
+  const client = useSanctumClient();
+  loading.value = true;
+
+  const results = await Promise.allSettled(
+    ids.map((id) =>
+      client('/api/admin/contact/' + id, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }),
+    ),
+  );
+
+  const failed = results.filter((result) => result.status === 'rejected').length;
+  const deleted = results.length - failed;
+  if (deleted) {
+    $toast.show({ summary: 'Smazáno', detail: `Smazáno položek: ${deleted}`, severity: 'success' });
+  }
+  if (failed) {
+    $toast.show({
+      summary: 'Chyba',
+      detail: `Nepodařilo se smazat ${failed} z ${results.length} položek.`,
+      severity: 'error',
+    });
+  }
+
+  loading.value = false;
   loadItems();
 }
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
-  // Load filters from session storage
-  if (sessionStorage.getItem('filtersQuery')) {
-    console.log('sessionStorage.getItem("filtersQuery")', sessionStorage.getItem('filtersQuery'));
-    tableQuery.value = JSON.parse(sessionStorage.getItem('filtersQuery'));
-  }
-  searchString.value = '';
+  // Filtry/stránkování se obnovují z URL (useListQuery); zbytkové hledání z jiné stránky vynulovat
+  if (!tableQuery.value.search) searchString.value = '';
   loadItems();
   loadPhases();
   loadSources();
@@ -251,6 +304,8 @@ definePageMeta({
       @update-filters="updateFilters"
     />
     <BaseTable
+      add-link="/kontakty/pridat"
+      add-label="Přidat kontakt"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
@@ -298,7 +353,12 @@ definePageMeta({
       plural="Kontakty"
       :query="tableQuery"
       slug="contacts"
+      selectable
+      :filtered="isFiltered"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="clearFilters"
+      @bulk-delete="bulkDeleteItems"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

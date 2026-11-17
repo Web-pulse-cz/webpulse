@@ -323,7 +323,7 @@ watch(
 );
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {

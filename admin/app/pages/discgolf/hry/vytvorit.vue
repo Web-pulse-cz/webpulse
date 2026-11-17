@@ -340,7 +340,9 @@ async function completeRetro() {
 const inputClass =
   'block w-full rounded-xl border-0 px-4 py-2.5 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500';
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadCourses();
   loadPlayers();

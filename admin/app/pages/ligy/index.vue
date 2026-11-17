@@ -51,7 +51,9 @@ async function loadLeagues() {
 
 watch(selectedSiteHash, () => loadLeagues());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => loadLeagues());
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>

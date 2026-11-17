@@ -156,7 +156,7 @@ async function loadRows() {
       },
     });
     rows.value = response?.data ?? [];
-  } catch (_) {
+  } catch {
     error.value = true;
     rows.value = [];
   } finally {
@@ -241,74 +241,73 @@ watch(selectedSiteHash, () => loadRows());
         </thead>
 
         <tbody class="divide-y divide-slate-100">
-          <tr
-            v-for="row in rows"
-            v-if="!loading && !error && rows.length"
-            :key="row.id"
-            class="transition-colors hover:bg-slate-50/50"
-          >
-            <td
-              class="sticky left-0 z-10 whitespace-nowrap bg-white px-3 py-2.5 font-medium tabular-nums text-slate-900"
-            >
-              {{ formatDate(row.played_at) }}
-            </td>
-            <td class="whitespace-nowrap px-3 py-2.5 text-slate-700">{{ row.course_name }}</td>
-            <td class="whitespace-nowrap px-3 py-2.5 text-slate-500">{{ row.layout_name }}</td>
-            <td class="whitespace-nowrap px-3 py-2.5 text-center tabular-nums text-slate-700">
-              {{ row.par }}
-            </td>
-            <td class="whitespace-nowrap px-3 py-2.5">
-              <span
-                v-if="row.winner"
-                class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"
+          <template v-if="!loading && !error && rows.length">
+            <tr v-for="row in rows" :key="row.id" class="transition-colors hover:bg-slate-50/50">
+              <td
+                class="sticky left-0 z-10 whitespace-nowrap bg-white px-3 py-2.5 font-medium tabular-nums text-slate-900"
               >
-                <TrophyIcon class="size-3.5" />
-                {{ row.winner.player_name }}
-              </span>
-              <span v-else class="text-slate-300">-</span>
-            </td>
-            <td class="max-w-[180px] truncate px-3 py-2.5 text-xs text-slate-400">
-              {{ row.note || '-' }}
-            </td>
+                {{ formatDate(row.played_at) }}
+              </td>
+              <td class="whitespace-nowrap px-3 py-2.5 text-slate-700">{{ row.course_name }}</td>
+              <td class="whitespace-nowrap px-3 py-2.5 text-slate-500">{{ row.layout_name }}</td>
+              <td class="whitespace-nowrap px-3 py-2.5 text-center tabular-nums text-slate-700">
+                {{ row.par }}
+              </td>
+              <td class="whitespace-nowrap px-3 py-2.5">
+                <span
+                  v-if="row.winner"
+                  class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"
+                >
+                  <TrophyIcon class="size-3.5" />
+                  {{ row.winner.player_name }}
+                </span>
+                <span v-else class="text-slate-300">-</span>
+              </td>
+              <td class="max-w-[180px] truncate px-3 py-2.5 text-xs text-slate-400">
+                {{ row.note || '-' }}
+              </td>
 
-            <template v-for="player in players" :key="`cell-${row.id}-${player.player_id}`">
-              <template v-if="playerCell(row, player.player_id).present">
-                <td
-                  class="whitespace-nowrap border-l border-slate-100 px-2.5 py-2.5 text-center font-bold tabular-nums"
-                  :class="[
-                    relativeClass(playerCell(row, player.player_id).relative_to_par),
-                    placeBgClass(row.id, player.player_id),
-                  ]"
-                >
-                  {{ playerCell(row, player.player_id).net_score
-                  }}<span class="ml-1 text-[10px] font-semibold"
-                    >({{ relativeLabel(playerCell(row, player.player_id).relative_to_par) }})</span
+              <template v-for="player in players" :key="`cell-${row.id}-${player.player_id}`">
+                <template v-if="playerCell(row, player.player_id).present">
+                  <td
+                    class="whitespace-nowrap border-l border-slate-100 px-2.5 py-2.5 text-center font-bold tabular-nums"
+                    :class="[
+                      relativeClass(playerCell(row, player.player_id).relative_to_par),
+                      placeBgClass(row.id, player.player_id),
+                    ]"
                   >
-                </td>
-                <td
-                  class="whitespace-nowrap px-2.5 py-2.5 text-center tabular-nums text-slate-500"
-                  :class="placeBgClass(row.id, player.player_id)"
-                >
-                  {{ playerCell(row, player.player_id).handicap ?? '-' }}
-                </td>
-                <td
-                  class="whitespace-nowrap px-2.5 py-2.5 text-center tabular-nums text-slate-700"
-                  :class="placeBgClass(row.id, player.player_id)"
-                >
-                  {{ playerCell(row, player.player_id).total_throws ?? '-' }}
-                </td>
+                    {{ playerCell(row, player.player_id).net_score
+                    }}<span class="ml-1 text-[10px] font-semibold"
+                      >({{
+                        relativeLabel(playerCell(row, player.player_id).relative_to_par)
+                      }})</span
+                    >
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-2.5 py-2.5 text-center tabular-nums text-slate-500"
+                    :class="placeBgClass(row.id, player.player_id)"
+                  >
+                    {{ playerCell(row, player.player_id).handicap ?? '-' }}
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-2.5 py-2.5 text-center tabular-nums text-slate-700"
+                    :class="placeBgClass(row.id, player.player_id)"
+                  >
+                    {{ playerCell(row, player.player_id).total_throws ?? '-' }}
+                  </td>
+                </template>
+                <template v-else>
+                  <td
+                    class="border-l border-slate-100 bg-slate-50/40 px-2.5 py-2.5 text-center text-slate-300"
+                  >
+                    –
+                  </td>
+                  <td class="bg-slate-50/40 px-2.5 py-2.5 text-center text-slate-300">–</td>
+                  <td class="bg-slate-50/40 px-2.5 py-2.5 text-center text-slate-300">–</td>
+                </template>
               </template>
-              <template v-else>
-                <td
-                  class="border-l border-slate-100 bg-slate-50/40 px-2.5 py-2.5 text-center text-slate-300"
-                >
-                  –
-                </td>
-                <td class="bg-slate-50/40 px-2.5 py-2.5 text-center text-slate-300">–</td>
-                <td class="bg-slate-50/40 px-2.5 py-2.5 text-center text-slate-300">–</td>
-              </template>
-            </template>
-          </tr>
+            </tr>
+          </template>
 
           <tr v-else-if="!loading && error">
             <td

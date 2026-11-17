@@ -52,6 +52,8 @@ const item = ref({
   layouts: [] as Layout[],
 });
 
+const { markClean } = useDirtyGuard(item);
+
 function newHole(number: number): Hole {
   return { id: null, number, par: 3, meters: null };
 }
@@ -150,6 +152,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -171,6 +174,7 @@ async function saveItem(redirect = true as boolean) {
     },
   )
     .then((response: any) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail: isNew.value ? 'Hřiště bylo vytvořeno.' : 'Hřiště bylo upraveno.',
@@ -193,7 +197,9 @@ async function saveItem(redirect = true as boolean) {
     });
 }
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 watch(selectedSiteHash, () => {
   if (!isNew.value) loadItem();
 });
@@ -204,6 +210,7 @@ onMounted(() => {
   } else {
     item.value.layouts = [newLayout()];
   }
+  if (isNew.value) markClean();
 });
 
 definePageMeta({ middleware: 'sanctum:auth' });
@@ -214,12 +221,25 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       slug="courses"
+      :saving="loading"
       @save="saveItem"
     />
-
-    <Form ref="formRef" @submit="saveItem">
+    <div
+      v-if="loading && !item.id && !isNew"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 space-y-8 lg:col-span-9">
           <LayoutContainer>

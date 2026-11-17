@@ -6,7 +6,7 @@ const show = defineModel('show', {
   type: Boolean,
   default: false,
 });
-const props = defineProps({
+defineProps({
   day: {
     type: Number,
     required: false,
@@ -22,19 +22,15 @@ const props = defineProps({
     required: false,
     default: () => [],
   },
-  dayRecords: {
-    type: Array,
-    required: false,
-    default: [
-      {
-        id: null as number | null,
-        amount: 0,
-        description: '',
-      },
-    ],
-  },
 });
 
+const dayRecords = ref<any[]>([
+  {
+    id: null as number | null,
+    amount: 0,
+    description: '',
+  },
+]);
 const categoryId = ref(1);
 const currencyId = ref(1);
 const type = ref('expense');

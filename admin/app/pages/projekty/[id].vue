@@ -82,6 +82,8 @@ const item = ref({
   sites: [] as number[],
 });
 
+const { markClean } = useDirtyGuard(item);
+
 const boards = ref([]);
 const expandedBoards = ref<Record<number, boolean>>({});
 const showDrawer = ref(false);
@@ -119,6 +121,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -214,7 +217,7 @@ async function loadUsers() {
 // ─── Save Project ──────────────────────────────────────────
 
 async function saveItem(redirect = true) {
-  if (!(await validateForm())) return;
+  if (!(await validateForm(tabs))) return;
   const client = useSanctumClient();
   loading.value = true;
   const payload = { ...item.value, tags: item.value.tags?.map((t: any) => t.id || t) || [] };
@@ -231,6 +234,7 @@ async function saveItem(redirect = true) {
     },
   )
     .then((r) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail: route.params.id === 'pridat' ? 'Projekt vytvořen.' : 'Projekt upraven.',
@@ -500,7 +504,7 @@ async function downloadProjectFile(type: 'contract' | 'price-offer', entity: any
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-  } catch (e) {
+  } catch {
     $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
   }
 }
@@ -513,12 +517,14 @@ watchEffect(() => {
     });
   else {
     tabs.value[0].current = true;
-    router.push(route.path + '#prehled');
+    router.replace(route.path + '#prehled');
   }
 });
 watch(selectedSiteHash, () => loadItem());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadStatuses();
   loadTags();
@@ -530,6 +536,7 @@ onMounted(() => {
     loadProjectContracts();
     loadProjectPriceOffers();
   }
+  if (route.params.id === 'pridat') markClean();
 });
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
@@ -539,16 +546,29 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       :modify-bottom="false"
       slug="projects"
+      :saving="loading"
       @save="saveItem"
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
-
-    <Form ref="formRef" @submit="saveItem">
+    <div
+      v-if="loading && !item.id && route.params.id !== 'pridat'"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
       <!-- ═══ Přehled ═══ -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#prehled')">
+      <div v-show="tabs.find((t) => t.current && t.link === '#prehled')" data-tab-panel="#prehled">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           <div class="col-span-1 space-y-8 lg:col-span-9">
             <LayoutContainer>
@@ -742,10 +762,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
             />
           </div>
         </div>
-      </template>
+      </div>
 
       <!-- ═══ Úkoly ═══ -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#ukoly')">
+      <div v-show="tabs.find((t) => t.current && t.link === '#ukoly')" data-tab-panel="#ukoly">
         <div class="space-y-6">
           <!-- New task form -->
           <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
@@ -888,10 +908,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </div>
           </div>
         </div>
-      </template>
+      </div>
 
       <!-- ═══ Náklady ═══ -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#naklady')">
+      <div v-show="tabs.find((t) => t.current && t.link === '#naklady')" data-tab-panel="#naklady">
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
             <div class="flex size-8 items-center justify-center rounded-lg bg-red-50 text-red-600">
@@ -976,7 +996,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
             </div>
           </div>
         </LayoutContainer>
-      </template>
+      </div>
 
       <!-- Soubory tab -->
       <template v-if="tabs.find((t) => t.current && t.link === '#soubory')">

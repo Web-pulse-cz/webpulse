@@ -60,6 +60,8 @@ const item = ref({
   template: 'default' as const,
 });
 
+const { markClean } = useDirtyGuard(item);
+
 async function loadItem() {
   const client = useSanctumClient();
   loading.value = true;
@@ -113,11 +115,12 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
 async function saveItem(redirect = true as boolean) {
-  if (!(await validateForm())) return;
+  if (!(await validateForm(tabs))) return;
   const client = useSanctumClient();
   loading.value = true;
 
@@ -157,6 +160,7 @@ async function saveItem(redirect = true as boolean) {
     },
   )
     .then((response) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail:
@@ -188,13 +192,14 @@ async function saveItem(redirect = true as boolean) {
 }
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
   if (route.params.id !== 'pridat') {
     loadItem();
   }
+  if (route.params.id === 'pridat') markClean();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -203,12 +208,6 @@ definePageMeta({
 function takeEmailFromProfile() {
   if (user.value && user.value.email) {
     item.value.email = user.value.email;
-  }
-}
-
-function takePhonePrefixFromProfile() {
-  if (user.value && user.value.phone_prefix) {
-    item.value.phone_prefix = user.value.phone_prefix;
   }
 }
 
@@ -226,7 +225,7 @@ watchEffect(() => {
     });
   } else {
     tabs.value[0].current = true;
-    router.push(route.path + '#info');
+    router.replace(route.path + '#info');
   }
 });
 
@@ -285,16 +284,29 @@ function removeSkill(groupIndex: number, skillIndex: number) {
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       :modify-bottom="false"
       slug="biographies"
+      :saving="loading"
       @save="saveItem"
     />
 
     <LayoutTabs :tabs="tabs" />
-
-    <Form ref="formRef" @submit="saveItem">
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
+    <div
+      v-if="loading && !item.id && route.params.id !== 'pridat'"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
+      <div v-show="tabs.find((tab) => tab.current && tab.link === '#info')" data-tab-panel="#info">
         <div class="flex flex-col gap-8">
           <LayoutContainer>
             <LayoutTitle>Základní informace</LayoutTitle>
@@ -501,9 +513,12 @@ function removeSkill(groupIndex: number, skillIndex: number) {
             </div>
           </LayoutContainer>
         </div>
-      </template>
+      </div>
 
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#pracovni-zkusenosti')">
+      <div
+        v-show="tabs.find((tab) => tab.current && tab.link === '#pracovni-zkusenosti')"
+        data-tab-panel="#pracovni-zkusenosti"
+      >
         <LayoutContainer>
           <div class="mb-8 flex items-center justify-between">
             <LayoutTitle class="!mb-0">Pracovní zkušenosti</LayoutTitle>
@@ -603,9 +618,12 @@ function removeSkill(groupIndex: number, skillIndex: number) {
             </div>
           </div>
         </LayoutContainer>
-      </template>
+      </div>
 
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#vzdelani')">
+      <div
+        v-show="tabs.find((tab) => tab.current && tab.link === '#vzdelani')"
+        data-tab-panel="#vzdelani"
+      >
         <LayoutContainer>
           <div class="mb-8 flex items-center justify-between">
             <LayoutTitle class="!mb-0">Dosažené vzdělání</LayoutTitle>
@@ -666,7 +684,7 @@ function removeSkill(groupIndex: number, skillIndex: number) {
             </div>
           </div>
         </LayoutContainer>
-      </template>
+      </div>
 
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#nahled')">
         <LayoutContainer class="overflow-hidden bg-slate-800 p-0 ring-slate-800">

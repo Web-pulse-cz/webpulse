@@ -7,12 +7,12 @@ const props = defineProps({
   categories: {
     type: Array,
     required: false,
-    default: [],
+    default: () => [],
   },
   income: {
     type: Array,
     required: false,
-    default: [],
+    default: () => [],
   },
   year: {
     type: Number,
@@ -28,7 +28,7 @@ const props = defineProps({
 
 const cashflowActionDialog = ref({
   show: false as boolean,
-  dayRecords: [] as [],
+  dayRecords: [] as any[],
   day: 0 as number,
   type: 'expense' as string,
   categoryId: null as number | null,
@@ -184,7 +184,7 @@ function updateCashflow(type: string, categoryId: number | null, day: number) {
   cashflowActionDialog.value.show = true;
 }
 
-function updateCashflowIncome(day: number, categoryId: number | null = null) {
+function updateCashflowIncome(day: number) {
   cashflowActionDialog.value.day = day;
   cashflowActionDialog.value.categoryId = null;
 
@@ -357,8 +357,8 @@ function formatAmount(amount: number) {
                   </td>
 
                   <td
-                    v-for="(category, index) in categories"
-                    :key="index"
+                    v-for="(category, catIndex) in categories"
+                    :key="catIndex"
                     class="cursor-pointer whitespace-nowrap px-3 py-2.5 text-right text-xs font-medium text-slate-700 transition-colors hover:bg-indigo-50"
                     @click="updateCashflow('expense', category.id, day)"
                     @mouseover="markRowColumn"
@@ -489,6 +489,7 @@ function formatAmount(amount: number) {
       :day-records="cashflowActionDialog.dayRecords"
       :type="cashflowActionDialog.type"
       :category="cashflowActionDialog.category ? cashflowActionDialog.category : 'Příjem'"
+      @add-day-record="cashflowActionDialog.dayRecords.push($event)"
       @save-day-records="
         emit(
           'save-day-records',

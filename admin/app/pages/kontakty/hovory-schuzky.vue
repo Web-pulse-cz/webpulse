@@ -52,7 +52,7 @@ async function loadDashboard() {
 }
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {

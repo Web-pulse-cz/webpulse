@@ -109,7 +109,9 @@ function onRuleTextClick(event: MouseEvent) {
   if (id) openSectionAndScroll(id);
 }
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
 
@@ -188,8 +190,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 {{ section.id }}
               </span>
               <span
+                v-safe-html="highlightText(section.title, search)"
                 class="text-sm font-bold text-slate-900"
-                v-html="highlightText(section.title, search)"
               />
             </span>
             <ChevronDownIcon
@@ -232,8 +234,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 {{ section.id }}
               </span>
               <span
+                v-safe-html="highlightText(section.title, search)"
                 class="text-sm font-bold text-slate-900"
-                v-html="highlightText(section.title, search)"
               />
             </span>
             <ChevronDownIcon

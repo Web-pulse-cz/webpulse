@@ -24,17 +24,21 @@ const breadcrumbs = ref([
 
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const searchString = ref(inject('searchString', ''));
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12 as number,
-  page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'desc' as string,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25 as number,
+    page: 1 as number,
+    orderBy: 'id' as string,
+    orderWay: 'desc' as string,
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
 
@@ -76,9 +80,10 @@ async function deleteItem(id: number) {
       'X-Site-Hash': selectedSiteHash.value,
     },
   })
-    .then(() => {})
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku administrátorské skupinu.',
@@ -112,12 +117,14 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 watch(selectedSiteHash, () => loadItems());
@@ -139,6 +146,8 @@ definePageMeta({
       :actions="[{ type: 'add', text: 'Přidat administrátorskou skupinu' }]"
     />
     <BaseTable
+      add-link="/administratori/skupiny/pridat"
+      add-label="Přidat administrátorskou skupinu"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
@@ -159,7 +168,10 @@ definePageMeta({
       plural="Uživatelské skupiny"
       :query="tableQuery"
       slug="users"
+      :filtered="!!tableQuery.search"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

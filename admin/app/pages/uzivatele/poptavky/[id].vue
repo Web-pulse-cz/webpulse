@@ -87,7 +87,7 @@ watch(selectedSiteHash, () => {
 });
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {

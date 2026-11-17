@@ -12,17 +12,21 @@ const breadcrumbs = ref([{ name: pageTitle.value, link: '/zakaznici', current: t
 
 const searchString = ref(inject('searchString', ''));
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12,
-  page: 1,
-  orderBy: 'last_name',
-  orderWay: 'asc',
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25,
+    page: 1,
+    orderBy: 'last_name',
+    orderWay: 'asc',
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
   await client('/api/admin/customer', {
@@ -56,9 +60,20 @@ async function deleteItem(id: number) {
   await client('/api/admin/customer/' + id, {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).finally(() => {
-    loadItems();
-  });
+  })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
+    .catch(() => {
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat položku.',
+        severity: 'error',
+      });
+    })
+    .finally(() => {
+      loadItems();
+    });
 }
 
 function updateSort(column: string) {
@@ -82,12 +97,16 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 watch(selectedSiteHash, () => loadItems());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadItems();
 });
@@ -103,6 +122,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
       slug="customers"
     />
     <BaseTable
+      add-link="/zakaznici/pridat"
+      add-label="Přidat zákazníka"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
@@ -168,7 +189,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
       plural="Zákazníci"
       :query="tableQuery"
       slug="customers"
+      :filtered="!!tableQuery.search"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

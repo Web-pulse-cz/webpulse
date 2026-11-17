@@ -1,28 +1,24 @@
 <script setup lang="ts">
-import { ref, provide, computed, watch, watchEffect, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, provide, computed, watch, watchEffect, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute } from 'vue-router';
 import {
   Dialog,
   DialogPanel,
   Menu,
   MenuButton,
   MenuItem,
-  MenuItems,
   TransitionChild,
   TransitionRoot,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
 } from '@headlessui/vue';
 import {
   Bars3Icon,
   XMarkIcon,
   ArrowTopRightOnSquareIcon,
-  ChevronRightIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
+  GlobeAltIcon,
 } from '@heroicons/vue/24/outline';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
+import { ChevronDownIcon, MagnifyingGlassIcon, StarIcon } from '@heroicons/vue/24/solid';
 import { menuSections } from '~/components/Layout/navigation';
 import { applyMenuOrder, useMenuOrder } from '~/composables/useMenuOrder';
 import { useActivityStore } from '~/../stores/activityStore';
@@ -40,7 +36,6 @@ const taxRateStore = useTaxRateStore();
 const cashflowCategoryStore = useCashflowCategoryStore();
 
 const route = useRoute();
-const router = useRouter();
 const user = useSanctumUser();
 const { logout, refreshIdentity } = useSanctumAuth();
 const sidebarOpen = ref(false);
@@ -60,6 +55,17 @@ function toggleSidebarCollapsed() {
 
 const searchString = ref('');
 provide('searchString', searchString);
+
+// Header search filters the current list page only — reset it when leaving the page.
+watch(
+  () => route.path,
+  () => {
+    searchString.value = '';
+  },
+);
+
+const commandPaletteOpen = ref(false);
+const isMac = ref(false);
 
 const selectedSiteHash = ref(
   import.meta.client ? localStorage.getItem('selectedSiteHash') || '' : '',
@@ -121,21 +127,42 @@ function isMenuItemVisible(item: any): boolean {
   return !item.slug || (moduleBelongsToSite(item.slug) && canView(item.slug));
 }
 
-const filteredNavigation = computed(() => {
-  return navigation.value.filter((group: any) => group.menu.some(isMenuItemVisible));
-});
+// Sections containing only items the user may see (permissions, site modules, onlyUserId).
+const visibleNavigation = computed(() =>
+  navigation.value
+    .map((group) => ({ ...group, menu: group.menu.filter(isMenuItemVisible) }))
+    .filter((group) => group.menu.length > 0),
+);
 
-function canViewBySlug(slug: string): boolean {
-  return canView(slug);
+async function handleLogout() {
+  try {
+    await logout();
+  } catch {
+    // Token už API neuznává – identita je stejně pryč, jen přesměrujeme.
+  }
+  await navigateTo('/login');
 }
 
-function canViewBySite(slug: string): boolean {
-  return moduleBelongsToSite(slug);
-}
+// Periodické ověření identity. Dřív se volalo refreshIdentity() bez await a hned
+// se kontroloval user – když byl user zrovna null (např. po 401 z jiného requestu),
+// zavolal se logout(), který vyhodil "User is not authenticated" (token se nesmazal),
+// a router.push('/login'). Rozběhnutý refreshIdentity pak usera vrátil zpět →
+// uživatel stál na /login jako přihlášený a login() padal na "already authenticated".
+// Interval se navíc nikdy nečistil, takže běžel dál i na login stránce.
+let identityTimer: ReturnType<typeof setInterval> | undefined;
 
-function handleLogout() {
-  logout();
-  router.push('/login');
+async function checkIdentity() {
+  try {
+    await refreshIdentity();
+  } catch (error) {
+    const status = (error as { response?: { status?: number } })?.response?.status;
+    // Odhlásit jen při skutečně neplatném tokenu; síťové chyby / 5xx session nechají být.
+    if (status === 401 || status === 419) {
+      if (identityTimer) clearInterval(identityTimer);
+      user.value = null;
+      await navigateTo('/login');
+    }
+  }
 }
 
 function getQuickAccess() {
@@ -148,9 +175,15 @@ watchEffect(() => {
   getQuickAccess();
 });
 
-const sitesForSelect = computed(() => {
+interface SiteOption {
+  label: string;
+  name: string;
+  value: string;
+}
+
+const sitesForSelect = computed<SiteOption[]>(() => {
   if (!user?.value?.sites) return [];
-  return user.value.sites.map((site: any) => ({
+  return user.value.sites.map((site: { name: string; hash: string }) => ({
     label: site.name,
     name: site.name,
     value: site.hash,
@@ -158,9 +191,25 @@ const sitesForSelect = computed(() => {
 });
 
 const selectedSiteName = computed(() => {
-  const site = sitesForSelect.value.find((s: any) => s.value === selectedSiteHash.value);
+  const site = sitesForSelect.value.find((s) => s.value === selectedSiteHash.value);
   return site?.name || 'Vyberte stránku';
 });
+
+const selectedSiteInitials = computed(() => {
+  const site = sitesForSelect.value.find((s) => s.value === selectedSiteHash.value);
+  if (!site?.name) return '?';
+  const words = String(site.name)
+    .replace(/^https?:\/\//, '')
+    .split(/[\s.\-_]+/)
+    .filter(Boolean);
+  const [first = '?', second] = words;
+  const initials = second ? `${first.charAt(0)}${second.charAt(0)}` : first.slice(0, 2);
+  return initials.toUpperCase();
+});
+
+function selectSite(hash: string) {
+  selectedSiteHash.value = hash;
+}
 
 const selectedSiteUrl = computed(() => {
   const site = user?.value?.sites?.find((s: any) => s.hash === selectedSiteHash.value);
@@ -175,7 +224,7 @@ watch(
     if (import.meta.client && newValue) {
       localStorage.setItem('selectedSiteHash', newValue);
     }
-    refreshIdentity();
+    checkIdentity();
   },
 );
 
@@ -194,7 +243,8 @@ watch(
 );
 
 onMounted(() => {
-  refreshIdentity();
+  isMac.value = /Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent);
+  checkIdentity();
   getQuickAccess();
 
   activityStore.fetchActivities();
@@ -204,18 +254,16 @@ onMounted(() => {
   taxRateStore.fetchTaxRates();
   cashflowCategoryStore.fetchCategories();
 
-  setInterval(() => {
-    refreshIdentity();
-    if (!user?.value) {
-      logout();
-      router.push('/login');
-    }
-  }, 60000);
+  identityTimer = setInterval(checkIdentity, 60000);
+});
+
+onBeforeUnmount(() => {
+  if (identityTimer) clearInterval(identityTimer);
 });
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 font-sans">
+  <div class="min-h-screen bg-background font-sans">
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
         <TransitionChild
@@ -271,128 +319,15 @@ onMounted(() => {
                     target="_blank"
                     class="transition-transform hover:scale-105"
                   >
-                    <img
-                      class="h-16 w-auto"
-                      src="/static/img/logo-gray-300.png"
-                      alt="Your Company"
-                    />
+                    <img class="h-16 w-auto" src="/static/img/logo-gray-300.png" alt="Web Pulse" />
+                    <span class="sr-only">(otevře se v novém okně)</span>
                   </NuxtLink>
                 </div>
-                <nav class="flex flex-1 flex-col">
-                  <ul role="list" class="flex flex-1 flex-col gap-y-8">
-                    <li v-for="(group, index) in filteredNavigation" :key="index">
-                      <div
-                        class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500"
-                      >
-                        {{ group.title }}
-                      </div>
-                      <ul role="list" class="-mx-2 space-y-1.5">
-                        <li v-for="(item, key) in group.menu" :key="key">
-                          <NuxtLink
-                            v-if="isMenuItemVisible(item) && !item.submenu"
-                            :to="item.link"
-                            :class="[
-                              item.current
-                                ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
-                                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
-                              'group flex gap-x-3 rounded-xl p-2.5 text-sm font-medium transition-all duration-200',
-                            ]"
-                            @click="sidebarOpen = false"
-                          >
-                            <component
-                              :is="item.icon"
-                              :class="[
-                                item.current
-                                  ? 'text-white'
-                                  : 'text-zinc-500 group-hover:text-zinc-300',
-                                'size-5 shrink-0 transition-colors',
-                              ]"
-                              aria-hidden="true"
-                            />
-                            <span class="truncate">{{ item.name }}</span>
-                          </NuxtLink>
-
-                          <Disclosure
-                            v-else-if="isMenuItemVisible(item)"
-                            v-slot="{ open }"
-                            as="div"
-                            class="w-full"
-                          >
-                            <DisclosureButton
-                              :class="[
-                                item.current
-                                  ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
-                                  : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
-                                'group flex w-full items-center justify-between gap-x-3 rounded-xl p-2.5 text-sm font-medium transition-all duration-200',
-                              ]"
-                            >
-                              <div class="flex items-center gap-x-3">
-                                <component
-                                  :is="item.icon"
-                                  :class="[
-                                    item.current
-                                      ? 'text-white'
-                                      : 'text-zinc-500 group-hover:text-zinc-300',
-                                    'size-5 shrink-0 transition-colors',
-                                  ]"
-                                  aria-hidden="true"
-                                />
-                                {{ item.name }}
-                              </div>
-                              <ChevronRightIcon
-                                :class="[
-                                  open
-                                    ? 'rotate-90 text-white'
-                                    : 'text-zinc-500 group-hover:text-zinc-300',
-                                  'size-4 shrink-0 transition-transform duration-200',
-                                ]"
-                                aria-hidden="true"
-                              />
-                            </DisclosureButton>
-                            <Transition
-                              enter-active-class="transition duration-200 ease-out"
-                              enter-from-class="transform scale-95 opacity-0"
-                              enter-to-class="transform scale-100 opacity-100"
-                              leave-active-class="transition duration-75 ease-out"
-                              leave-from-class="transform scale-100 opacity-100"
-                              leave-to-class="transform scale-95 opacity-0"
-                            >
-                              <DisclosurePanel as="ul" class="mt-1 px-2">
-                                <li
-                                  v-for="subItem in item.submenu"
-                                  :key="subItem.name"
-                                  class="mt-1"
-                                >
-                                  <DisclosureButton as="div" class="w-full">
-                                    <NuxtLink
-                                      v-if="subItem.link"
-                                      :to="subItem.link"
-                                      :class="[
-                                        subItem.current
-                                          ? 'bg-zinc-800/80 text-white'
-                                          : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
-                                        'group flex w-full cursor-pointer items-center gap-x-3 rounded-lg p-2 pl-10 text-sm font-medium transition-all duration-200',
-                                      ]"
-                                      @click="sidebarOpen = false"
-                                    >
-                                      <div
-                                        :class="[
-                                          subItem.current ? 'bg-indigo-500' : 'bg-zinc-700',
-                                          'h-1.5 w-1.5 rounded-full',
-                                        ]"
-                                      ></div>
-                                      {{ subItem.name }}
-                                    </NuxtLink>
-                                  </DisclosureButton>
-                                </li>
-                              </DisclosurePanel>
-                            </Transition>
-                          </Disclosure>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </nav>
+                <LayoutSidebarNav
+                  :sections="visibleNavigation"
+                  id-prefix="sidebar-mobile"
+                  @navigate="sidebarOpen = false"
+                />
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -407,8 +342,13 @@ onMounted(() => {
       @mouseleave="sidebarHovered = false"
     >
       <div
-        class="flex grow flex-col gap-y-6 overflow-y-auto bg-zinc-950 pb-6 shadow-2xl ring-1 ring-white/5"
-        :class="isSidebarExpanded ? 'px-6' : 'px-3'"
+        class="flex grow flex-col gap-y-6 overflow-y-auto bg-zinc-950 pb-6 ring-1 ring-white/5 transition-shadow duration-200"
+        :class="[
+          isSidebarExpanded ? 'px-6' : 'px-3',
+          sidebarCollapsed && sidebarHovered
+            ? 'shadow-[8px_0_48px_-4px_rgba(0,0,0,0.55)]'
+            : 'shadow-2xl',
+        ]"
       >
         <div
           class="relative flex h-32 shrink-0 items-center justify-center border-b border-white/5"
@@ -422,149 +362,43 @@ onMounted(() => {
               v-if="isSidebarExpanded"
               class="h-16 w-auto"
               src="/static/img/logo-gray-300.png"
-              alt="Your Company"
+              alt="Web Pulse"
             />
-            <img
-              v-else
-              class="size-10"
-              src="/static/img/icon/logo-gray-300.png"
-              alt="Your Company"
-            />
+            <img v-else class="size-10" src="/static/img/icon/logo-gray-300.png" alt="Web Pulse" />
+            <span class="sr-only">(otevře se v novém okně)</span>
           </NuxtLink>
         </div>
 
-        <nav class="mt-2 flex flex-1 flex-col">
-          <ul role="list" class="flex flex-1 flex-col gap-y-8">
-            <li v-for="(group, index) in filteredNavigation" :key="index">
-              <div
-                v-if="isSidebarExpanded"
-                class="mb-3 text-[11px] font-bold uppercase tracking-widest text-zinc-500"
-              >
-                {{ group.title }}
-              </div>
-              <div v-else class="mb-3 flex justify-center">
-                <span class="h-px w-6 bg-white/10" />
-              </div>
-              <ul role="list" class="-mx-2 space-y-1.5">
-                <li v-for="(item, key) in group.menu" :key="key">
-                  <NuxtLink
-                    v-if="isMenuItemVisible(item) && !item.submenu"
-                    :to="item.link"
-                    :title="isSidebarExpanded ? undefined : item.name"
-                    :class="[
-                      item.current
-                        ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
-                        : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
-                      isSidebarExpanded ? 'gap-x-3 p-2.5' : 'justify-center p-2.5',
-                      'group flex items-center rounded-xl text-sm font-medium transition-all duration-200',
-                    ]"
-                  >
-                    <component
-                      :is="item.icon"
-                      :class="[
-                        item.current ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300',
-                        'size-5 shrink-0 transition-colors',
-                      ]"
-                      aria-hidden="true"
-                    />
-                    <span v-if="isSidebarExpanded" class="truncate">{{ item.name }}</span>
-                  </NuxtLink>
-
-                  <Disclosure
-                    v-else-if="isMenuItemVisible(item)"
-                    v-slot="{ open }"
-                    as="div"
-                    class="w-full"
-                  >
-                    <DisclosureButton
-                      :title="isSidebarExpanded ? undefined : item.name"
-                      :class="[
-                        item.current
-                          ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-white/10'
-                          : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
-                        isSidebarExpanded
-                          ? 'justify-between gap-x-3 p-2.5'
-                          : 'justify-center p-2.5',
-                        'group flex w-full items-center rounded-xl text-sm font-medium transition-all duration-200',
-                      ]"
-                    >
-                      <div class="flex items-center gap-x-3">
-                        <component
-                          :is="item.icon"
-                          :class="[
-                            item.current ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300',
-                            'size-5 shrink-0 transition-colors',
-                          ]"
-                          aria-hidden="true"
-                        />
-                        <span v-if="isSidebarExpanded">{{ item.name }}</span>
-                      </div>
-                      <ChevronRightIcon
-                        v-if="isSidebarExpanded"
-                        :class="[
-                          open ? 'rotate-90 text-white' : 'text-zinc-500 group-hover:text-zinc-300',
-                          'size-4 shrink-0 transition-transform duration-200',
-                        ]"
-                        aria-hidden="true"
-                      />
-                    </DisclosureButton>
-                    <Transition
-                      enter-active-class="transition duration-200 ease-out"
-                      enter-from-class="transform scale-95 opacity-0"
-                      enter-to-class="transform scale-100 opacity-100"
-                      leave-active-class="transition duration-75 ease-out"
-                      leave-from-class="transform scale-100 opacity-100"
-                      leave-to-class="transform scale-95 opacity-0"
-                    >
-                      <DisclosurePanel v-if="isSidebarExpanded" as="ul" class="mt-1 px-2">
-                        <li v-for="subItem in item.submenu" :key="subItem.name" class="mt-1">
-                          <NuxtLink
-                            v-if="subItem.link"
-                            :to="subItem.link"
-                            :class="[
-                              subItem.current
-                                ? 'bg-zinc-800/80 text-white'
-                                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white',
-                              'group flex w-full items-center gap-x-3 rounded-lg p-2 pl-10 text-sm font-medium transition-all duration-200',
-                            ]"
-                          >
-                            <div
-                              :class="[
-                                subItem.current ? 'bg-indigo-500' : 'bg-zinc-700',
-                                'h-1.5 w-1.5 rounded-full',
-                              ]"
-                            ></div>
-                            {{ subItem.name }}
-                          </NuxtLink>
-                        </li>
-                      </DisclosurePanel>
-                    </Transition>
-                  </Disclosure>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
+        <LayoutSidebarNav
+          class="mt-2"
+          :sections="visibleNavigation"
+          :collapsed="!isSidebarExpanded"
+          id-prefix="sidebar-desktop"
+        />
 
         <div class="shrink-0 border-t border-white/5 pt-3">
           <button
             type="button"
-            class="group flex w-full items-center rounded-xl p-2.5 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-zinc-800/50 hover:text-white"
+            class="group flex w-full items-center rounded-xl p-2.5 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-zinc-800/50 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
             :class="isSidebarExpanded ? 'justify-start gap-x-3' : 'justify-center'"
             :title="sidebarCollapsed ? 'Rozbalit menu' : 'Sbalit menu'"
+            :aria-pressed="sidebarCollapsed"
             @click="toggleSidebarCollapsed"
           >
             <ChevronDoubleRightIcon
               v-if="sidebarCollapsed"
               class="size-5 shrink-0 text-zinc-500 transition-colors group-hover:text-zinc-300"
+              aria-hidden="true"
             />
             <ChevronDoubleLeftIcon
               v-else
               class="size-5 shrink-0 text-zinc-500 transition-colors group-hover:text-zinc-300"
+              aria-hidden="true"
             />
             <span v-if="isSidebarExpanded">{{
               sidebarCollapsed ? 'Rozbalit menu' : 'Sbalit menu'
             }}</span>
+            <span v-else class="sr-only">Rozbalit menu</span>
           </button>
         </div>
       </div>
@@ -589,9 +423,9 @@ onMounted(() => {
         <div class="h-6 w-px bg-slate-200 lg:hidden" aria-hidden="true" />
 
         <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-          <div class="relative flex flex-1 items-center">
+          <div class="relative flex flex-1 items-center gap-x-3">
             <div class="relative w-full max-w-md">
-              <label for="search-field" class="sr-only">Hledat</label>
+              <label for="search-field" class="sr-only">Hledat v seznamu</label>
               <MagnifyingGlassIcon
                 class="pointer-events-none absolute inset-y-0 left-3 h-full w-4 text-slate-400"
                 aria-hidden="true"
@@ -599,13 +433,26 @@ onMounted(() => {
               <input
                 id="search-field"
                 v-model="searchString"
-                class="block w-full rounded-full border-0 bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 shadow-inner transition-all placeholder:text-slate-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Hledat cokoliv..."
+                class="block w-full rounded-full border-0 bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 shadow-inner transition-all placeholder:text-slate-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Hledat v seznamu…"
                 type="search"
                 name="search"
                 autocomplete="off"
               />
             </div>
+
+            <button
+              type="button"
+              class="hidden shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium text-slate-500 ring-1 ring-slate-200 transition-colors hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 md:flex"
+              :aria-keyshortcuts="isMac ? 'Meta+K' : 'Control+K'"
+              @click="commandPaletteOpen = true"
+            >
+              <span>Přejít na…</span>
+              <kbd
+                class="rounded-md bg-slate-100 px-1.5 py-0.5 font-sans text-xs font-semibold text-slate-600 ring-1 ring-slate-200"
+                >{{ isMac ? '⌘' : 'Ctrl' }} K</kbd
+              >
+            </button>
           </div>
 
           <div class="flex items-center gap-x-4 lg:gap-x-6">
@@ -613,12 +460,18 @@ onMounted(() => {
               <MenuButton
                 class="-m-1.5 flex items-center rounded-full p-1.5 transition-colors hover:bg-slate-100"
               >
-                <span class="sr-only">Vybrat stránku</span>
+                <span class="sr-only">Vybrat stránku, aktuálně: </span>
                 <span class="flex items-center px-2">
-                  <GlobeAltIcon class="size-5 text-indigo-500" aria-hidden="true" />
+                  <GlobeAltIcon class="size-5 text-primary-500" aria-hidden="true" />
+                  <span
+                    class="ml-1.5 flex h-6 min-w-6 items-center justify-center rounded-md bg-primary-50 px-1 text-xs font-bold text-primary-700 ring-1 ring-primary-100 lg:hidden"
+                    :title="selectedSiteName"
+                    aria-hidden="true"
+                    >{{ selectedSiteInitials }}</span
+                  >
+                  <span class="sr-only lg:hidden">{{ selectedSiteName }}</span>
                   <span
                     class="ml-2 hidden max-w-[160px] truncate text-sm font-semibold text-slate-700 lg:block"
-                    aria-hidden="true"
                     >{{ selectedSiteName }}</span
                   >
                   <ChevronDownIcon
@@ -627,44 +480,31 @@ onMounted(() => {
                   />
                 </span>
               </MenuButton>
-              <transition
-                enter-active-class="transition ease-out duration-150"
-                enter-from-class="transform opacity-0 scale-95 translate-y-1"
-                enter-to-class="transform opacity-100 scale-100 translate-y-0"
-                leave-active-class="transition ease-in duration-100"
-                leave-from-class="transform opacity-100 scale-100 translate-y-0"
-                leave-to-class="transform opacity-0 scale-95 translate-y-1"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 mt-3 w-60 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
-                >
-                  <div
-                    class="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              <LayoutDropdownPanel width="w-60">
+                <div class="label-caps px-3 py-2 text-slate-400">Vyberte stránku</div>
+                <MenuItem v-for="site in sitesForSelect" :key="site.value" v-slot="{ active }">
+                  <button
+                    :class="[
+                      active ? 'bg-slate-50 text-primary-600' : 'text-slate-700',
+                      selectedSiteHash === site.value
+                        ? 'bg-primary-50 font-semibold text-primary-600'
+                        : '',
+                      'group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                    ]"
+                    :aria-current="selectedSiteHash === site.value ? 'true' : undefined"
+                    @click="selectSite(site.value)"
                   >
-                    Vyberte stránku
-                  </div>
-                  <MenuItem v-for="site in sitesForSelect" :key="site.value" v-slot="{ active }">
-                    <button
+                    <span
                       :class="[
-                        active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
-                        selectedSiteHash === site.value
-                          ? 'bg-indigo-50 font-semibold text-indigo-600'
-                          : '',
-                        'group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                        selectedSiteHash === site.value ? 'bg-primary-500' : 'bg-slate-300',
+                        'size-2 shrink-0 rounded-full',
                       ]"
-                      @click="selectedSiteHash = site.value"
-                    >
-                      <span
-                        :class="[
-                          selectedSiteHash === site.value ? 'bg-indigo-500' : 'bg-slate-300',
-                          'size-2 shrink-0 rounded-full',
-                        ]"
-                      />
-                      <span class="truncate">{{ site.name }}</span>
-                    </button>
-                  </MenuItem>
-                </MenuItems>
-              </transition>
+                      aria-hidden="true"
+                    />
+                    <span class="truncate">{{ site.name }}</span>
+                  </button>
+                </MenuItem>
+              </LayoutDropdownPanel>
             </Menu>
 
             <div
@@ -694,36 +534,27 @@ onMounted(() => {
                   />
                 </span>
               </MenuButton>
-              <transition
-                enter-active-class="transition ease-out duration-150"
-                enter-from-class="transform opacity-0 scale-95 translate-y-1"
-                enter-to-class="transform opacity-100 scale-100 translate-y-0"
-                leave-active-class="transition ease-in duration-100"
-                leave-from-class="transform opacity-100 scale-100 translate-y-0"
-                leave-to-class="transform opacity-0 scale-95 translate-y-1"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 mt-3 w-56 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
-                >
-                  <MenuItem v-for="item in quickAccess" :key="item.name" v-slot="{ active }">
-                    <NuxtLink
-                      :to="item.link"
-                      :target="item.target"
-                      :class="[
-                        active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
-                        'group flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-medium transition-colors',
-                      ]"
-                    >
-                      <span>{{ item.name }}</span>
+              <LayoutDropdownPanel width="w-56">
+                <MenuItem v-for="item in quickAccess" :key="item.name" v-slot="{ active }">
+                  <NuxtLink
+                    :to="item.link"
+                    :target="item.target"
+                    :class="[
+                      active ? 'bg-slate-50 text-primary-600' : 'text-slate-700',
+                      'group flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                    ]"
+                  >
+                    <span>{{ item.name }}</span>
+                    <template v-if="item.target === '_blank'">
                       <ArrowTopRightOnSquareIcon
-                        v-if="item.target === '_blank'"
                         class="ml-4 size-4 text-amber-500"
                         aria-hidden="true"
                       />
-                    </NuxtLink>
-                  </MenuItem>
-                </MenuItems>
-              </transition>
+                      <span class="sr-only">(otevře se v novém okně)</span>
+                    </template>
+                  </NuxtLink>
+                </MenuItem>
+              </LayoutDropdownPanel>
             </Menu>
 
             <div class="h-6 w-px bg-slate-200" aria-hidden="true" />
@@ -735,7 +566,7 @@ onMounted(() => {
                 <span class="sr-only">Otevřít uživatelské menu</span>
                 <span class="hidden px-2 lg:flex lg:items-center">
                   <div
-                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-full border border-indigo-200 bg-indigo-100 text-xs font-bold text-indigo-600"
+                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-full border border-primary-200 bg-primary-100 text-xs font-bold text-primary-600"
                   >
                     {{ user?.firstname?.charAt(0) }}{{ user?.lastname?.charAt(0) }}
                   </div>
@@ -745,46 +576,35 @@ onMounted(() => {
                   <ChevronDownIcon class="ml-2 size-4 text-slate-400" aria-hidden="true" />
                 </span>
                 <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full border border-indigo-200 bg-indigo-100 text-xs font-bold text-indigo-600 lg:hidden"
+                  class="flex h-8 w-8 items-center justify-center rounded-full border border-primary-200 bg-primary-100 text-xs font-bold text-primary-600 lg:hidden"
                 >
                   {{ user?.firstname?.charAt(0) || 'U' }}
                 </div>
               </MenuButton>
-              <transition
-                enter-active-class="transition ease-out duration-150"
-                enter-from-class="transform opacity-0 scale-95 translate-y-1"
-                enter-to-class="transform opacity-100 scale-100 translate-y-0"
-                leave-active-class="transition ease-in duration-100"
-                leave-from-class="transform opacity-100 scale-100 translate-y-0"
-                leave-to-class="transform opacity-0 scale-95 translate-y-1"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 mt-3 w-48 origin-top-right rounded-2xl bg-white p-1.5 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 focus:outline-none"
-                >
-                  <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                    <NuxtLink
-                      v-if="item.link != null"
-                      :to="item.link"
-                      :class="[
-                        active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
-                        'block rounded-xl px-3 py-2 text-sm font-medium transition-colors',
-                      ]"
-                    >
-                      {{ item.name }}
-                    </NuxtLink>
-                    <button
-                      v-else
-                      :class="[
-                        active ? 'bg-red-50 text-red-600' : 'text-slate-700',
-                        'block w-full rounded-xl px-3 py-2 text-left text-sm font-medium transition-colors',
-                      ]"
-                      @click="handleLogout"
-                    >
-                      {{ item.name }}
-                    </button>
-                  </MenuItem>
-                </MenuItems>
-              </transition>
+              <LayoutDropdownPanel width="w-48">
+                <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                  <NuxtLink
+                    v-if="item.link != null"
+                    :to="item.link"
+                    :class="[
+                      active ? 'bg-slate-50 text-primary-600' : 'text-slate-700',
+                      'block rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                    ]"
+                  >
+                    {{ item.name }}
+                  </NuxtLink>
+                  <button
+                    v-else
+                    :class="[
+                      active ? 'bg-red-50 text-red-600' : 'text-slate-700',
+                      'block w-full rounded-xl px-3 py-2 text-left text-sm font-medium transition-colors',
+                    ]"
+                    @click="handleLogout"
+                  >
+                    {{ item.name }}
+                  </button>
+                </MenuItem>
+              </LayoutDropdownPanel>
             </Menu>
           </div>
         </div>
@@ -792,10 +612,20 @@ onMounted(() => {
 
       <main class="flex-1 py-8">
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
-          <UiToastContainer />
           <slot />
         </div>
       </main>
     </div>
+
+    <LayoutCommandPalette
+      v-model:open="commandPaletteOpen"
+      :sections="visibleNavigation"
+      :quick-access="quickAccess"
+      :sites="sitesForSelect"
+      :selected-site-hash="selectedSiteHash"
+      @select-site="selectSite"
+    />
+
+    <UiToastContainer />
   </div>
 </template>

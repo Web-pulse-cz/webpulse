@@ -12,17 +12,21 @@ const breadcrumbs = ref([{ name: pageTitle.value, link: '/zamestnanci', current:
 
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const searchString = ref(inject('searchString', ''));
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12,
-  page: 1,
-  orderBy: 'last_name',
-  orderWay: 'asc',
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25,
+    page: 1,
+    orderBy: 'last_name',
+    orderWay: 'asc',
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
   await client('/api/admin/employee', {
@@ -61,6 +65,7 @@ async function deleteItem(id: number) {
       'X-Site-Hash': selectedSiteHash.value,
     },
   }).then(() => {
+    $toast.show({ summary: 'Smazáno', severity: 'success' });
     loadItems();
   });
 }
@@ -86,11 +91,15 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 watch(selectedSiteHash, () => loadItems());
 
 onMounted(() => {
@@ -108,6 +117,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
       slug="employees"
     />
     <BaseTable
+      add-link="/zamestnanci/pridat"
+      add-label="Přidat zaměstnance"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
@@ -159,7 +170,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
       plural="Zaměstnanci"
       :query="tableQuery"
       slug="employees"
+      :filtered="!!tableQuery.search"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

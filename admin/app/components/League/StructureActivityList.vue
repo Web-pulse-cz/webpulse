@@ -3,7 +3,7 @@ import draggable from 'vuedraggable';
 import { Bars3Icon, TrashIcon } from '@heroicons/vue/24/outline';
 import type { LeagueActivityForm, LeagueSectionForm } from '~/composables/useLeague';
 
-const props = defineProps<{
+defineProps<{
   list: LeagueActivityForm[];
   sectionKey: string | null;
   sections: LeagueSectionForm[];
@@ -14,13 +14,14 @@ const emit = defineEmits<{
   remove: [item: LeagueActivityForm];
   move: [item: LeagueActivityForm, sectionKey: string];
   'set-max': [item: LeagueActivityForm, value: string];
+  reorder: [value: LeagueActivityForm[]];
 }>();
 
 const { scoringLabel, valueUnit, formatScore } = useLeague();
 
-// Mutating the passed array in place keeps the parent's model in sync and limits drag to this list
+// The parent replaces the list contents in place, which limits drag to this list
 function onReorder(value: LeagueActivityForm[]) {
-  props.list.splice(0, props.list.length, ...value);
+  emit('reorder', value);
 }
 
 const inputClass =

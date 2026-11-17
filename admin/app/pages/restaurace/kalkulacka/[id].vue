@@ -157,7 +157,7 @@ async function loadMeasurement() {
 
     pageTitle.value = name.value || 'Kalorická kalkulačka';
     breadcrumbs.value[1].name = pageTitle.value;
-  } catch (_) {
+  } catch {
     $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se načíst měření.', severity: 'error' });
     router.push('/restaurace/kalkulacka');
   } finally {
@@ -231,7 +231,7 @@ async function save() {
     if (isNew.value && response?.id) {
       router.replace('/restaurace/kalkulacka/' + response.id);
     }
-  } catch (_) {
+  } catch {
     $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se uložit měření.', severity: 'error' });
   } finally {
     saving.value = false;
@@ -242,7 +242,9 @@ watch(selectedSiteHash, () => {
   if (!isNew.value) loadMeasurement();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => loadMeasurement());
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>

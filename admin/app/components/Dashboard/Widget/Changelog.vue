@@ -27,7 +27,7 @@ async function loadChangelog() {
       },
     });
     changelog.value = Array.isArray(response) ? response : (response?.data ?? []);
-  } catch (_) {
+  } catch {
     changelog.value = [];
   } finally {
     loading.value = false;

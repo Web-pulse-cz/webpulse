@@ -222,7 +222,9 @@ watch(selectedSiteHash, () => {
   loadTemplates();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadShifts();
   loadEmployees();

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 import { Form } from 'vee-validate';
-import { ListBulletIcon, SwatchIcon, UserGroupIcon } from '@heroicons/vue/24/outline';
+import { ListBulletIcon, UserGroupIcon } from '@heroicons/vue/24/outline';
 
 const { $toast } = useNuxtApp();
 
@@ -43,6 +43,8 @@ const item = ref({
   color: 'red' as string,
 });
 
+const { markClean } = useDirtyGuard(item);
+
 async function loadItem() {
   const client = useSanctumClient();
   loading.value = true;
@@ -78,6 +80,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -104,6 +107,7 @@ async function saveItem(redirect = true as boolean) {
     },
   )
     .then((response) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail:
@@ -121,7 +125,6 @@ async function saveItem(redirect = true as boolean) {
       }
     })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail:
@@ -162,7 +165,7 @@ async function loadContacts() {
 }
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
@@ -170,6 +173,7 @@ onMounted(() => {
     loadItem();
     loadContacts();
   }
+  if (route.params.id === 'pridat') markClean();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -181,12 +185,13 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="route.params.id === 'pridat' ? [{ type: 'save' }, { type: 'save-and-stay' }] : []"
+      :actions="route.params.id === 'pridat' ? [{ type: 'save' }, { type: 'save-and-leave' }] : []"
       slug="contacts"
+      :saving="loading"
       @save="saveItem"
     />
 
-    <Form v-if="route.params.id === 'pridat'" ref="formRef" @submit="saveItem">
+    <Form v-if="route.params.id === 'pridat'" ref="formRef" @submit="() => saveItem(false)">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 lg:col-span-9">
           <LayoutContainer>

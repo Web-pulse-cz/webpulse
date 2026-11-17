@@ -49,6 +49,8 @@ const item = ref({
   sites: [] as number[],
 });
 
+const { markClean } = useDirtyGuard(item);
+
 const typeOptions = ref([
   { value: 'hpp', name: 'HPP' },
   { value: 'dpp', name: 'DPP' },
@@ -99,6 +101,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -143,7 +146,7 @@ async function loadProjects() {
 }
 
 async function saveItem(redirect = true) {
-  if (!(await validateForm())) return;
+  if (!(await validateForm(tabs))) return;
   const client = useSanctumClient();
   loading.value = true;
   await client(
@@ -159,6 +162,7 @@ async function saveItem(redirect = true) {
     },
   )
     .then((r) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail: route.params.id === 'pridat' ? 'Smlouva vytvořena.' : 'Smlouva upravena.',
@@ -187,11 +191,14 @@ watchEffect(() => {
   }
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadEmployees();
   loadProjects();
   if (route.params.id !== 'pridat') loadItem();
+  if (route.params.id === 'pridat') markClean();
 });
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
@@ -201,16 +208,33 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       slug="employee_contracts"
+      :saving="loading"
       @save="saveItem"
     />
     <LayoutTabs :tabs="tabs" class="sticky top-16 z-30" />
-    <Form ref="formRef" @submit="saveItem">
+    <div
+      v-if="loading && !item.id && route.params.id !== 'pridat'"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 lg:col-span-9">
           <!-- Info tab -->
-          <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
+          <div
+            v-show="tabs.find((tab) => tab.current && tab.link === '#info')"
+            data-tab-panel="#info"
+          >
             <div class="space-y-8">
               <LayoutContainer>
                 <div class="mb-6 flex items-center gap-3">
@@ -351,10 +375,13 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 <BaseFormTextarea v-model="item.note" label="Poznámka" name="note" rows="3" />
               </LayoutContainer>
             </div>
-          </template>
+          </div>
 
           <!-- Content tab (WYSIWYG) -->
-          <template v-if="tabs.find((tab) => tab.current && tab.link === '#obsah')">
+          <div
+            v-show="tabs.find((tab) => tab.current && tab.link === '#obsah')"
+            data-tab-panel="#obsah"
+          >
             <LayoutContainer>
               <div class="mb-6 flex items-center gap-3">
                 <div
@@ -369,7 +396,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
               </p>
               <BaseFormEditor v-model="item.content" label="Text smlouvy" />
             </LayoutContainer>
-          </template>
+          </div>
         </div>
 
         <div class="col-span-1 lg:sticky lg:top-24 lg:col-span-3">

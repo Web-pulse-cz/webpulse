@@ -432,7 +432,9 @@ watch(selectedSiteHash, () => {
   loadDayBookings();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadServices();
   loadMonthBookings();

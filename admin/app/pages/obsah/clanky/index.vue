@@ -21,17 +21,21 @@ const breadcrumbs = ref([
 const searchString = ref(inject('searchString', ''));
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12 as number,
-  page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'desc' as string,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25 as number,
+    page: 1 as number,
+    orderBy: 'id' as string,
+    orderWay: 'desc' as string,
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
 
@@ -72,8 +76,10 @@ async function deleteItem(id: number) {
       'Content-Type': 'application/json',
     },
   })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat položku článku.',
@@ -84,6 +90,39 @@ async function deleteItem(id: number) {
       loading.value = false;
       loadItems();
     });
+}
+
+async function bulkDeleteItems(ids: number[]) {
+  const client = useSanctumClient();
+  loading.value = true;
+
+  const results = await Promise.allSettled(
+    ids.map((id) =>
+      client('/api/admin/post/' + id, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }),
+    ),
+  );
+
+  const failed = results.filter((result) => result.status === 'rejected').length;
+  const deleted = results.length - failed;
+  if (deleted) {
+    $toast.show({ summary: 'Smazáno', detail: `Smazáno položek: ${deleted}`, severity: 'success' });
+  }
+  if (failed) {
+    $toast.show({
+      summary: 'Chyba',
+      detail: `Nepodařilo se smazat ${failed} z ${results.length} položek.`,
+      severity: 'error',
+    });
+  }
+
+  loading.value = false;
+  loadItems();
 }
 
 function updateSort(column: string) {
@@ -107,14 +146,16 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 
 watch(selectedSiteHash, () => loadItems());
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
@@ -134,6 +175,8 @@ definePageMeta({
       slug="posts"
     />
     <BaseTable
+      add-link="/obsah/clanky/pridat"
+      add-label="Přidat článek"
       :items="items"
       :columns="[
         {
@@ -199,7 +242,12 @@ definePageMeta({
       plural="Články"
       :query="tableQuery"
       slug="posts"
+      :filtered="!!tableQuery.search"
+      selectable
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
+      @bulk-delete="bulkDeleteItems"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

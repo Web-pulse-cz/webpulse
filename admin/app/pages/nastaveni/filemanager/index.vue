@@ -21,40 +21,22 @@ const breadcrumbs = ref([
 const searchString = ref(inject('searchString', ''));
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 25 as number,
-  page: 1 as number,
-  orderBy: 'id' as string,
-  orderWay: 'asc' as string,
-  entity_type: '' as string,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25 as number,
+    page: 1 as number,
+    orderBy: 'id' as string,
+    orderWay: 'asc' as string,
+    entity_type: '' as string,
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
-const entityTypeOptions = [
-  { value: '', label: 'Všechny typy' },
-  { value: 'service', label: 'Služby' },
-  { value: 'user', label: 'Uživatelé' },
-  { value: 'novelty', label: 'Novinky' },
-  { value: 'post', label: 'Blog' },
-  { value: 'post_category', label: 'Kategorie blogu' },
-  { value: 'logo', label: 'Loga' },
-  { value: 'event', label: 'Události' },
-  { value: 'career', label: 'Pracovní pozice' },
-  { value: 'quiz', label: 'Kvízy' },
-  { value: 'apartment', label: 'Apartmány' },
-  { value: 'apartment-type', label: 'Typy apartmánů' },
-  { value: 'building', label: 'Budovy' },
-  { value: 'gallery', label: 'Fotogalerie / Blok – Galerie' },
-  { value: 'review', label: 'Reference' },
-  { value: 'icon', label: 'Ikony' },
-  { value: 'block', label: 'Bloky (obecné)' },
-  { value: 'hero', label: 'Blok – Hero' },
-  { value: 'about', label: 'Blok – O nás' },
-];
-
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
 
@@ -101,8 +83,10 @@ async function deleteItem(id: number) {
       'Content-Type': 'application/json',
     },
   })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat záznam filemanageru.',
@@ -136,7 +120,9 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 
@@ -147,7 +133,7 @@ watch(
 );
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
@@ -167,6 +153,8 @@ definePageMeta({
       slug="filemanagers"
     />
     <BaseTable
+      add-link="/nastaveni/filemanager/pridat"
+      add-label="Přidat formát"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
@@ -234,7 +222,10 @@ definePageMeta({
       plural="Formáty"
       :query="tableQuery"
       slug="filemanagers"
+      :filtered="!!tableQuery.search"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

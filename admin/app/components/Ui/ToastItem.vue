@@ -8,16 +8,23 @@ const { remove, pause, resume, colorClasses } = useToast();
 
 const cls = computed(() => colorClasses(props.toast.severity));
 
+// error/warning interrupt (assertive), success/info/neutral are polite status messages
+const ariaRole = computed(() =>
+  props.toast.severity === 'error' || props.toast.severity === 'warning' ? 'alert' : 'status',
+);
+
+// Local countdown so the toast prop is never mutated
+const remaining = ref(props.toast.remaining);
+
 const progress = computed(() => {
   const total = props.toast.duration;
-  const remaining = props.toast.remaining;
-  return Math.max(0, Math.min(100, 100 - (remaining / total) * 100));
+  return Math.max(0, Math.min(100, 100 - (remaining.value / total) * 100));
 });
 
 let raf: number | null = null;
 function tick() {
   if (!props.toast._paused && props.toast._endAt) {
-    props.toast.remaining = Math.max(0, props.toast._endAt - Date.now());
+    remaining.value = Math.max(0, props.toast._endAt - Date.now());
   }
   raf = requestAnimationFrame(tick);
 }
@@ -41,7 +48,7 @@ function onMouseLeave() {
   <div
     class="pointer-events-auto relative w-full max-w-sm overflow-hidden rounded-2xl shadow-2xl shadow-slate-200/60 ring-1 transition-all duration-300 sm:w-96"
     :class="[cls.base, cls.ring]"
-    role="alert"
+    :role="ariaRole"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
   >
@@ -62,12 +69,12 @@ function onMouseLeave() {
 
         <button
           type="button"
-          class="shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/10 focus:outline-none"
+          class="shrink-0 rounded-lg p-1.5 transition-colors hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
           :class="cls.text"
           aria-label="Zavřít"
           @click="remove(toast.id)"
         >
-          <svg class="size-4" viewBox="0 0 20 20" fill="currentColor">
+          <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path
               d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
             />
@@ -76,9 +83,13 @@ function onMouseLeave() {
       </div>
     </div>
 
-    <div class="absolute bottom-0 left-0 h-1 w-full bg-black/10">
+    <div
+      class="absolute bottom-0 left-0 h-1 w-full bg-black/10"
+      :class="cls.text"
+      aria-hidden="true"
+    >
       <div
-        class="h-full bg-white/40 transition-all duration-100 ease-linear"
+        class="h-full bg-current opacity-40 transition-all duration-100 ease-linear"
         :style="{ width: progress + '%' }"
       ></div>
     </div>

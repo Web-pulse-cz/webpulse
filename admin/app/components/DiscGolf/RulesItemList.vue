@@ -36,7 +36,7 @@ defineProps({
         {{ item.marker }}
       </span>
       <div class="min-w-0 flex-1 text-slate-700">
-        <span v-html="renderRuleText(item.text, search)" />
+        <span v-safe-html="renderRuleText(item.text, search)" />
         <RulesItemList
           v-if="item.children && item.children.length"
           :items="item.children"

@@ -2,17 +2,13 @@
 import { ref, inject, computed } from 'vue';
 import {
   PlusIcon,
-  FunnelIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   TrashIcon,
   XMarkIcon,
   ChatBubbleLeftIcon,
   ClockIcon,
-  UserIcon,
-  FolderIcon,
   CheckCircleIcon,
-  PencilSquareIcon,
   PlayIcon,
   StopIcon,
 } from '@heroicons/vue/24/outline';
@@ -330,7 +326,9 @@ watch(selectedSiteHash, () => {
   loadProjects();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadBoards();
   loadProjects();

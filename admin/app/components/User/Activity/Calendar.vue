@@ -8,7 +8,6 @@ import {
   PhoneIcon,
   LifebuoyIcon,
 } from '@heroicons/vue/24/outline';
-import { Switch } from '@headlessui/vue';
 import DumbbellIcon from '~/../public/static/img/icon/dumbbell.svg';
 import SmileFullIcon from '~/../public/static/img/icon/smile-full.svg';
 import SmileAudioIcon from '~/../public/static/img/icon/smile-audio.svg';
@@ -23,7 +22,7 @@ const props = defineProps({
   activities: {
     type: Array,
     required: true,
-    default: [],
+    default: () => [],
   },
 });
 
@@ -43,7 +42,6 @@ const startOfMonth = computed(() => {
   return day - 1; // Adjust to make Monday the first day of the week
 });
 
-const isSmile = ref('empty');
 function checkSmile(day: Date) {
   const activityIds = [];
   const formattedDay = day.getDate().toString().padStart(2, '0');
@@ -342,10 +340,6 @@ const activityNameById = computed(() => {
             />
             <SmileAudioIcon
               v-else-if="checkSmile(day) === 'audio'"
-              class="col-span-1 size-5 fill-success lg:size-8"
-            />
-            <SmileBookIcon
-              v-else-if="checkSmile(day) === 'book'"
               class="col-span-1 size-5 fill-success lg:size-8"
             />
             <SmileDreamIcon

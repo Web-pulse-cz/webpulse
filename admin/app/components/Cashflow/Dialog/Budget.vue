@@ -14,7 +14,7 @@ const id = defineModel('id', {
   type: Number,
   default: 0,
 });
-const props = defineProps({
+defineProps({
   month: {
     type: Number,
     required: true,

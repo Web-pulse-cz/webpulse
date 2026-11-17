@@ -3,7 +3,7 @@ const model = defineModel({
   type: String,
   required: false,
 });
-const props = defineProps({
+defineProps({
   rules: {
     type: String,
     required: false,
@@ -112,10 +112,10 @@ const badgeClass = computed(() => (colorProp: string) => {
             <input
               :id="name"
               v-model="model"
-              :aria-describedby="name"
               :name="name"
               type="checkbox"
               :checked="checked"
+              :disabled="disabled"
               class="col-start-1 row-start-1 size-5 cursor-pointer appearance-none rounded-md border-2 border-slate-300 bg-white transition-all duration-200 ease-in-out checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-50 disabled:checked:bg-slate-200"
             />
             <svg

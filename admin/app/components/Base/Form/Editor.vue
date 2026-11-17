@@ -83,7 +83,7 @@ const toolbarOptions = [
     >
       <ClientOnly>
         <QuillEditor
-          v-model:content="props.modelValue"
+          :content="props.modelValue"
           content-type="html"
           class="my-quill-editor"
           placeholder="Sem napište text..."

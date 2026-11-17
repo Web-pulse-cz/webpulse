@@ -133,9 +133,28 @@ const otherSections = computed(() =>
     .map((s) => ({ value: s.id, name: s.name })),
 );
 
+// Potvrzení mazání (prázdná sekce / karta) přes BaseDialogDelete
+const deleteDialog = ref({
+  show: false,
+  kind: 'section' as 'section' | 'card',
+  item: { id: null as number | null, name: '' },
+});
+
+function onConfirmDelete(id: number | null) {
+  if (!id) return;
+  const kind = deleteDialog.value.kind;
+  deleteDialog.value.show = false;
+  if (kind === 'card') deleteCard();
+  else deleteSectionNow(id);
+}
+
 function confirmDeleteSection(section: any) {
   if ((section.cards?.length || 0) === 0) {
-    deleteSectionNow(section.id);
+    deleteDialog.value = {
+      show: true,
+      kind: 'section',
+      item: { id: section.id, name: section.name },
+    };
     return;
   }
   sectionToDelete.value = section;
@@ -151,6 +170,7 @@ async function deleteSectionNow(id: number, moveTo: number | null = null) {
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   })
     .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
       showReassignDialog.value = false;
       loadSections();
     })
@@ -244,6 +264,15 @@ async function saveCard() {
     });
 }
 
+function confirmDeleteCard() {
+  if (!selectedCard.value?.id) return;
+  deleteDialog.value = {
+    show: true,
+    kind: 'card',
+    item: { id: selectedCard.value.id, name: selectedCard.value.title },
+  };
+}
+
 async function deleteCard() {
   if (!selectedCard.value?.id) return;
   const client = useSanctumClient();
@@ -252,6 +281,7 @@ async function deleteCard() {
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   })
     .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
       showCardDrawer.value = false;
       loadSections();
     })
@@ -287,7 +317,9 @@ function formatDate(value: string | null) {
   return new Date(value).toLocaleDateString('cs-CZ');
 }
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadSections();
 });
@@ -296,17 +328,16 @@ definePageMeta({ middleware: 'sanctum:auth' });
 
 <template>
   <div class="space-y-6 pb-20">
-    <LayoutHeader :title="pageTitle" :breadcrumbs="breadcrumbs" slug="contact_board_sections" />
-
-    <div v-if="canEdit('contact_board_sections')" class="flex justify-end">
-      <button
-        type="button"
-        class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
-        @click="openNewSection"
-      >
-        <PlusIcon class="size-4" /> Přidat sekci
-      </button>
-    </div>
+    <!-- 'add-category' = obecná přidávací akce bez kontroly modulu webu (nástěnka je per-user, ne Siteable) -->
+    <LayoutHeader
+      :title="pageTitle"
+      :breadcrumbs="breadcrumbs"
+      :actions="
+        canEdit('contact_board_sections') ? [{ type: 'add-category', text: 'Přidat sekci' }] : []
+      "
+      slug="contact_board_sections"
+      @add-category="openNewSection"
+    />
 
     <div v-if="!loading && !sections.length" class="py-16 text-center text-sm text-slate-400">
       Vytvořte první sekci nástěnky.
@@ -603,7 +634,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
                 v-if="selectedCard.id && canDelete('contact_board_sections')"
                 type="button"
                 class="rounded-lg bg-red-100 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-200"
-                @click="deleteCard"
+                @click="confirmDeleteCard"
               >
                 <TrashIcon class="mr-1 inline size-4" /> Smazat
               </button>
@@ -620,5 +651,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </div>
       </Transition>
     </Teleport>
+
+    <BaseDialogDelete
+      v-model:show="deleteDialog.show"
+      v-model:item="deleteDialog.item"
+      :title="deleteDialog.kind === 'card' ? 'Smazat kartu' : 'Smazat sekci'"
+      @delete-item="onConfirmDelete"
+    />
   </div>
 </template>

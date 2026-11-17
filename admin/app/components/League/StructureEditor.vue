@@ -118,6 +118,7 @@ function setMaxPerDay(item: LeagueActivityForm, value: string) {
             @remove="(item) => removeActivity(section.activities, item)"
             @move="(item, key) => moveActivity(section.activities, item, key)"
             @set-max="setMaxPerDay"
+            @reorder="(value) => section.activities.splice(0, section.activities.length, ...value)"
           />
 
           <button
@@ -143,6 +144,7 @@ function setMaxPerDay(item: LeagueActivityForm, value: string) {
         @remove="(item) => removeActivity(activities, item)"
         @move="(item, key) => moveActivity(activities, item, key)"
         @set-max="setMaxPerDay"
+        @reorder="(value) => activities.splice(0, activities.length, ...value)"
       />
 
       <button

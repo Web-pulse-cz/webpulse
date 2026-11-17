@@ -12,17 +12,21 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 const breadcrumbs = ref([{ name: pageTitle.value, link: '/smlouvy', current: true }]);
 
 const searchString = ref(inject('searchString', ''));
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12,
-  page: 1,
-  orderBy: 'created_at',
-  orderWay: 'desc',
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25,
+    page: 1,
+    orderBy: 'created_at',
+    orderWay: 'desc',
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
   await client('/api/admin/contract', {
@@ -81,7 +85,7 @@ async function downloadContract(id: number) {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-  } catch (e) {
+  } catch {
     $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout smlouvu.', severity: 'error' });
   }
 }
@@ -93,6 +97,7 @@ async function deleteItem(id: number) {
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   })
     .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
       loadItems();
     })
     .catch(() => {
@@ -121,12 +126,16 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 watch(selectedSiteHash, () => loadItems());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadItems();
 });
@@ -142,6 +151,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
       slug="employee_contracts"
     />
     <BaseTable
+      add-link="/smlouvy/pridat"
+      add-label="Přidat smlouvu"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
@@ -211,8 +222,11 @@ definePageMeta({ middleware: 'sanctum:auth' });
       plural="Smlouvy"
       :query="tableQuery"
       slug="employee_contracts"
+      :filtered="!!tableQuery.search"
       @download="downloadContract($event)"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

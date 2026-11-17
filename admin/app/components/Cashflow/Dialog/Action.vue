@@ -6,7 +6,7 @@ const show = defineModel('show', {
   type: Boolean,
   default: false,
 });
-const props = defineProps({
+defineProps({
   day: {
     type: Number,
     required: true,
@@ -25,7 +25,7 @@ const props = defineProps({
   dayRecords: {
     type: Array,
     required: true,
-    default: [
+    default: () => [
       {
         id: null as number | null,
         amount: 0,
@@ -34,10 +34,10 @@ const props = defineProps({
     ],
   },
 });
-const emit = defineEmits(['save-day-records']);
+const emit = defineEmits(['save-day-records', 'add-day-record']);
 
 function addDayRecord() {
-  props.dayRecords.push({
+  emit('add-day-record', {
     id: null,
     amount: 0,
     is_repeated: false,

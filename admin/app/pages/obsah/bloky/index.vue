@@ -21,13 +21,16 @@ const breadcrumbs = ref([
 const searchString = ref(inject('searchString', ''));
 const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 20 as number,
-  page: 1 as number,
-  orderBy: 'position' as string,
-  orderWay: 'asc' as string,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 20 as number,
+    page: 1 as number,
+    orderBy: 'position' as string,
+    orderWay: 'asc' as string,
+  },
+  { searchString },
+);
 
 const items = ref<any>({});
 const schemas = ref<any>({ types: [] });
@@ -43,6 +46,7 @@ async function loadSchemas() {
 }
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
 
@@ -100,8 +104,10 @@ async function deleteItem(id: number) {
       'X-Site-Hash': selectedSiteHash.value,
     },
   })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat blok.',
@@ -136,14 +142,16 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 
 watch(selectedSiteHash, () => loadItems());
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(async () => {
@@ -165,6 +173,8 @@ definePageMeta({
       slug="blocks"
     />
     <BaseTable
+      add-link="/obsah/bloky/pridat"
+      add-label="Přidat blok"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 80, hidden: false, sortable: true },
@@ -201,7 +211,10 @@ definePageMeta({
       plural="Bloky"
       :query="tableQuery"
       slug="blocks"
+      :filtered="!!tableQuery.search"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

@@ -70,8 +70,8 @@ const typeConfig = computed(() => {
 
     <div
       v-if="changelog.description"
+      v-safe-html="changelog.description"
       class="prose prose-sm prose-slate prose-p:my-1 prose-a:font-medium prose-a:text-indigo-600 prose-ul:my-1 prose-li:my-0 mt-2 max-w-none border-t border-slate-100 pt-2 text-xs text-slate-600"
-      v-html="changelog.description"
     />
   </div>
 </template>

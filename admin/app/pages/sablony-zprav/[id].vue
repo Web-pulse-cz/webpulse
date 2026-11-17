@@ -43,6 +43,8 @@ const item = ref({
   type: '' as string,
 });
 
+const { markClean } = useDirtyGuard(item);
+
 async function loadItem() {
   const client = useSanctumClient();
   loading.value = true;
@@ -79,6 +81,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -106,6 +109,7 @@ async function saveItem(redirect = true as boolean) {
     },
   )
     .then((response) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail:
@@ -137,13 +141,14 @@ async function saveItem(redirect = true as boolean) {
 }
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
   if (route.params.id !== 'pridat') {
     loadItem();
   }
+  if (route.params.id === 'pridat') markClean();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -155,12 +160,25 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       slug="message_blueprints"
+      :saving="loading"
       @save="saveItem"
     />
-
-    <Form ref="formRef" @submit="saveItem">
+    <div
+      v-if="loading && !item.id && route.params.id !== 'pridat'"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
       <div class="grid grid-cols-1 gap-8">
         <LayoutContainer class="w-full">
           <div class="mb-8 flex items-center justify-between">

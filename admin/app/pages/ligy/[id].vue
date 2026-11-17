@@ -197,7 +197,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
           >
             Popis a pravidla ligy
           </summary>
-          <div class="league-rules mt-4 text-sm text-slate-600" v-html="league.description" />
+          <div v-safe-html="league.description" class="league-rules mt-4 text-sm text-slate-600" />
         </details>
       </LayoutContainer>
 

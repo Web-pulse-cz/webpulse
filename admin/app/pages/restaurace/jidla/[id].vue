@@ -46,6 +46,8 @@ const item = ref({
   sites: [] as number[],
 });
 
+const { markClean } = useDirtyGuard(item);
+
 const allAllergens = ref([]);
 const allCategories = ref([]);
 const allRecipes = ref([]);
@@ -122,11 +124,12 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
 async function saveItem(redirect = true) {
-  if (!(await validateForm())) return;
+  if (!(await validateForm(tabs))) return;
   const client = useSanctumClient();
   loading.value = true;
   const payload = {
@@ -145,6 +148,7 @@ async function saveItem(redirect = true) {
     },
   )
     .then((r) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail: route.params.id === 'pridat' ? 'Jídlo vytvořeno.' : 'Jídlo upraveno.',
@@ -204,7 +208,7 @@ watchEffect(() => {
     });
   else {
     tabs.value[0].current = true;
-    router.push(route.path + '#info');
+    router.replace(route.path + '#info');
   }
 });
 
@@ -212,13 +216,16 @@ watch(selectedSiteHash, () => {
   loadItem();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadAllergens();
   loadCategories();
   loadRecipes();
   if (route.params.id !== 'pridat') loadItem();
   fillEmptyTranslations();
+  if (route.params.id === 'pridat') markClean();
 });
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
@@ -228,15 +235,28 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       slug="meals"
+      :saving="loading"
       @save="saveItem"
     />
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
-
-    <Form ref="formRef" @submit="saveItem">
+    <div
+      v-if="loading && !item.id && route.params.id !== 'pridat'"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
       <!-- ═══ Tab: Základní údaje ═══ -->
-      <template v-if="tabs.find((t) => t.current && t.link === '#info')">
+      <div v-show="tabs.find((t) => t.current && t.link === '#info')" data-tab-panel="#info">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           <div class="col-span-1 space-y-8 lg:col-span-9">
             <LayoutContainer>
@@ -504,7 +524,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
             />
           </aside>
         </div>
-      </template>
+      </div>
 
       <!-- ═══ Tab: Recept ═══ -->
       <template v-if="tabs.find((t) => t.current && t.link === '#recept')">
@@ -515,7 +535,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
             class="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
             @click="
               tabs.forEach((t) => (t.current = t.link === '#info'));
-              router.push(route.path + '#info');
+              router.replace(route.path + '#info');
             "
           >
             Přiřadit recept
@@ -603,13 +623,13 @@ definePageMeta({ middleware: 'sanctum:auth' });
             <LayoutTitle>Postup přípravy</LayoutTitle>
             <div
               v-if="item.recipe.perex"
+              v-safe-html="item.recipe.perex"
               class="mb-4 text-sm text-slate-600"
-              v-html="item.recipe.perex"
             ></div>
             <div
               v-if="item.recipe.text"
+              v-safe-html="item.recipe.text"
               class="prose prose-sm max-w-none text-slate-700"
-              v-html="item.recipe.text"
             ></div>
           </LayoutContainer>
         </div>

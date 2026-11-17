@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { StarIcon } from '@heroicons/vue/24/solid';
 
 const rating = defineModel('rating', {
@@ -7,7 +6,7 @@ const rating = defineModel('rating', {
   default: 1,
 });
 
-const props = defineProps({
+defineProps({
   maxStars: {
     type: Number,
     default: 5,

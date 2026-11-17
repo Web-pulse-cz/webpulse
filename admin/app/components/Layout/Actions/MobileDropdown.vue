@@ -2,9 +2,6 @@
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline';
 
-const permissions = usePermissions();
-
-const route = useRoute();
 const router = useRouter();
 
 defineProps({
@@ -20,9 +17,6 @@ defineProps({
   },
 });
 
-function canEdit(slug: string) {
-  return permissions.canEdit(slug);
-}
 const emit = defineEmits(['save', 'add-dialog', 'filter-dialog']);
 </script>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'; // Přidáme computed pro reaktivitu na props
+import { computed } from 'vue'; // Přidáme computed pro reaktivitu na props
 import type { ApexOptions } from 'apexcharts';
 
 const props = defineProps({

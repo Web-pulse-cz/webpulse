@@ -5,7 +5,7 @@ const model = defineModel({
   type: String,
   required: true,
 });
-const props = defineProps({
+defineProps({
   rules: {
     type: String,
     required: false,

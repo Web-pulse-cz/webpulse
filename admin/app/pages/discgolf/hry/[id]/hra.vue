@@ -247,7 +247,9 @@ function fmtRel(r: number) {
   return r > 0 ? `+${r}` : `${r}`;
 }
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 watch(selectedSiteHash, () => loadGame());
 onMounted(() => loadGame());
 definePageMeta({ middleware: 'sanctum:auth' });

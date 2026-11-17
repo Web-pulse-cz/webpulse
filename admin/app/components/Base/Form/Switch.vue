@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Switch } from '@headlessui/vue';
+import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 
 const enabled = defineModel('enabled', {
   type: Boolean,
@@ -22,31 +22,40 @@ defineProps({
     required: false,
     default: 'md',
   },
+  // Přístupný název přepínače (aria-label); bez něj se použijí texty enabledText/disabledText
+  label: {
+    type: String,
+    required: false,
+    default: '',
+  },
 });
 </script>
 
 <template>
-  <div
+  <SwitchGroup
+    as="div"
     class="flex w-full items-center justify-between text-sm font-medium sm:w-auto sm:justify-start"
   >
-    <span
+    <SwitchLabel
       v-if="disabledText"
+      :passive="!!label"
       :class="[
         enabled ? 'text-slate-400' : 'text-slate-900',
-        'cursor-default select-none transition-colors duration-200',
+        'cursor-pointer select-none transition-colors duration-200',
       ]"
     >
       {{ disabledText }}
-    </span>
+    </SwitchLabel>
 
     <Switch
       v-model="enabled"
+      :aria-label="label || undefined"
       :class="[
         enabled ? 'bg-indigo-600' : 'bg-slate-200',
         size === 'sm' ? 'h-6 w-11' : 'h-7 w-16',
         { 'ml-3': disabledText, 'mr-3': enabledText },
       ]"
-      class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      class="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
     >
       <span
         aria-hidden="true"
@@ -58,14 +67,15 @@ defineProps({
       />
     </Switch>
 
-    <span
+    <SwitchLabel
       v-if="enabledText"
+      :passive="!!label"
       :class="[
         enabled ? 'text-slate-900' : 'text-slate-400',
-        'cursor-default select-none transition-colors duration-200',
+        'cursor-pointer select-none transition-colors duration-200',
       ]"
     >
       {{ enabledText }}
-    </span>
-  </div>
+    </SwitchLabel>
+  </SwitchGroup>
 </template>

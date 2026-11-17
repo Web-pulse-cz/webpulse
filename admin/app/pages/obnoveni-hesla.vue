@@ -13,7 +13,6 @@ definePageMeta({ layout: 'login' });
 
 const { $toast } = useNuxtApp();
 const route = useRoute();
-const router = useRouter();
 
 const token = ref((route.query.token as string) || '');
 const email = ref((route.query.email as string) || '');
@@ -49,7 +48,7 @@ async function handleSubmit() {
       },
     });
     resetSuccess.value = true;
-  } catch (error) {
+  } catch {
     $toast.show({
       summary: 'Chyba',
       detail: 'Nepodařilo se obnovit heslo. Odkaz mohl vypršet nebo je neplatný.',

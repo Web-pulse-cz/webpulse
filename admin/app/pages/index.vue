@@ -69,8 +69,13 @@ async function loadConfig() {
     });
     const saved = (response?.data ?? []) as WidgetConfig[];
     widgetConfig.value = mergeConfig(saved);
-  } catch (_) {
+  } catch {
     widgetConfig.value = defaultConfig();
+    $toast.show({
+      summary: 'Chyba',
+      detail: 'Nepodařilo se načíst nastavení dashboardu, zobrazuje se výchozí rozložení.',
+      severity: 'error',
+    });
   }
 }
 
@@ -93,7 +98,7 @@ async function saveConfig(newConfig: WidgetConfig[]) {
       detail: 'Nastavení dashboardu bylo uloženo.',
       severity: 'success',
     });
-  } catch (_) {
+  } catch {
     $toast.show({
       summary: 'Chyba',
       detail: 'Nepodařilo se uložit nastavení dashboardu.',
@@ -176,7 +181,7 @@ async function saveDayRecords(data: {
 }
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {

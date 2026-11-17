@@ -68,6 +68,8 @@ const item = ref({
   translateAutomatically: false as boolean,
 });
 
+const { markClean } = useDirtyGuard(item);
+
 const translatableAttributes = ref([
   { field: 'name', label: 'Název' },
   { field: 'slug', label: 'URL slug' },
@@ -164,6 +166,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -269,7 +272,10 @@ async function deleteBlock(id: number) {
 }
 
 async function saveItem(redirect = true as boolean) {
-  if (!(await validateForm())) return;
+  if (!(await validateForm())) {
+    if (activeTab.value !== '#info') switchTab('#info');
+    return;
+  }
   const client = useSanctumClient();
   loading.value = true;
 
@@ -279,6 +285,7 @@ async function saveItem(redirect = true as boolean) {
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   })
     .then((response: any) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail: isNew.value ? 'Apartmán byl vytvořen.' : 'Apartmán byl upraven.',
@@ -347,7 +354,9 @@ function switchReservationSubTab(key: 'upcoming' | 'current' | 'past') {
   loadReservations();
 }
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 watch(selectedSiteHash, () => {
   loadLookups().then(() => {
     if (!isNew.value) loadItem();
@@ -367,6 +376,7 @@ onMounted(async () => {
     if (activeTab.value === '#blokace') loadBlocks();
   }
   fillEmptyTranslations();
+  if (isNew.value) markClean();
 });
 
 definePageMeta({ middleware: 'sanctum:auth' });
@@ -377,8 +387,9 @@ definePageMeta({ middleware: 'sanctum:auth' });
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       slug="apartments"
+      :saving="loading"
       @save="saveItem"
     />
 
@@ -399,7 +410,25 @@ definePageMeta({ middleware: 'sanctum:auth' });
       </button>
     </div>
 
-    <Form v-show="activeTab === '#info' || isNew" ref="formRef" @submit="saveItem">
+    <div
+      v-if="loading && !item.id && !isNew"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form
+      v-else
+      v-show="activeTab === '#info' || isNew"
+      ref="formRef"
+      @submit="() => saveItem(false)"
+    >
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div class="col-span-1 space-y-8 lg:col-span-9">
           <LayoutContainer>

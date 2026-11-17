@@ -11,7 +11,7 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const breadcrumbs = ref([{ name: pageTitle.value, link: '/nastaveni/rezervace', current: true }]);
 
-const tableQuery = ref({
+const tableQuery = useListQuery({
   search: null as string | null,
   paginate: 25,
   page: 1,
@@ -20,6 +20,7 @@ const tableQuery = ref({
 });
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
   await client('/api/admin/service-booking-setting', {
@@ -79,7 +80,9 @@ function updatePerPage(perPage: number) {
 
 watch(selectedSiteHash, () => loadItems());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadItems();
 });
@@ -142,6 +145,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       :query="tableQuery"
       slug="service_booking_settings"
       @update-sort="updateSort"
+      @retry="loadItems"
       @update-page="updatePage"
       @update-per-page="updatePerPage"
     />

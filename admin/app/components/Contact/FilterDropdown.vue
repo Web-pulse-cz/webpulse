@@ -31,36 +31,38 @@ const props = defineProps({
   filtersQuery: {
     type: Object,
     required: false,
-    default: {} as {},
+    default: () => ({}) as Record<string, any>,
   },
 });
 
 const emit = defineEmits(['update-filters']);
 
 function addRemoveToFiltersQuery(slug: string, value: number) {
-  if (!props.filtersQuery.filters) {
-    props.filtersQuery.filters = {};
+  const next: Record<string, any> = JSON.parse(JSON.stringify(props.filtersQuery ?? {}));
+
+  if (!next.filters) {
+    next.filters = {};
   }
 
-  if (!props.filtersQuery.filters[slug]) {
-    props.filtersQuery.filters[slug] = [];
+  if (!next.filters[slug]) {
+    next.filters[slug] = [];
   }
 
-  const index = props.filtersQuery.filters[slug].indexOf(value);
+  const index = next.filters[slug].indexOf(value);
   if (index > -1) {
-    props.filtersQuery.filters[slug].splice(index, 1);
+    next.filters[slug].splice(index, 1);
   } else {
-    props.filtersQuery.filters[slug].push(value);
+    next.filters[slug].push(value);
   }
 
-  if (props.filtersQuery.filters[slug].length === 0) {
-    delete props.filtersQuery.filters[slug];
+  if (next.filters[slug].length === 0) {
+    next.filters = Object.fromEntries(Object.entries(next.filters).filter(([key]) => key !== slug));
   }
 
   // Save to session storage
-  sessionStorage.setItem('filtersQuery', JSON.stringify(props.filtersQuery));
+  sessionStorage.setItem('filtersQuery', JSON.stringify(next));
 
-  emit('update-filters', props.filtersQuery);
+  emit('update-filters', next);
 }
 </script>
 

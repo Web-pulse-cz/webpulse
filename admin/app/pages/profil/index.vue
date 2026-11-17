@@ -40,7 +40,7 @@ watchEffect(() => {
     });
   else {
     tabs.value[0].current = true;
-    router.push(route.path + '#osobni');
+    router.replace(route.path + '#osobni');
   }
 });
 
@@ -56,6 +56,8 @@ const item = ref({
   city: '' as string,
   zip: '' as string,
 });
+
+const { markClean } = useDirtyGuard(item);
 
 const passwords = ref({
   current_password: '' as string,
@@ -98,6 +100,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -126,6 +129,7 @@ async function saveItem() {
   })
     .then((response) => {
       item.value = response;
+      markClean();
     })
     .then(() => {
       $toast.show({
@@ -239,6 +243,7 @@ definePageMeta({
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
       :actions="[{ type: 'save' }]"
+      :saving="loading"
       @save="saveItem"
     />
 
@@ -248,7 +253,7 @@ definePageMeta({
       <div class="col-span-1 space-y-8 lg:col-span-9">
         <template v-if="tabs.find((t) => t.current && t.link === '#osobni')">
           <LayoutContainer>
-            <Form @submit="saveItem">
+            <Form @submit="() => saveItem()">
               <div class="mb-8 flex items-center gap-3">
                 <div
                   class="flex size-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"

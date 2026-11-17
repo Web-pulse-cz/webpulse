@@ -2,59 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html {
-    background: #f1f5f9;
-    min-height: 100dvh;
+/*
+ * Design tokens — RGB channels consumed by tailwind.config.js (rgb(var(--x) / <alpha-value>)).
+ * primary = Tailwind indigo, neutrals = Tailwind slate.
+ */
+@layer base {
+  :root {
+    --color-primary-50: 238 242 255;
+    --color-primary-100: 224 231 255;
+    --color-primary-200: 199 210 254;
+    --color-primary-300: 165 180 252;
+    --color-primary-400: 129 140 248;
+    --color-primary-500: 99 102 241;
+    --color-primary-600: 79 70 229;
+    --color-primary-700: 67 56 202;
+    --color-primary-800: 55 48 163;
+    --color-primary-900: 49 46 129;
+    --color-primary-950: 30 27 75;
+
+    --color-background: 248 250 252; /* slate-50 */
+    --color-foreground: 15 23 42; /* slate-900 */
+    --color-surface: 255 255 255; /* white */
+    --color-surface-subtle: 241 245 249; /* slate-100 */
+    --color-surface-inverted: 15 23 42; /* slate-900 */
+    --color-muted: 241 245 249; /* slate-100 */
+    --color-muted-foreground: 100 116 139; /* slate-500 */
+    --color-border: 226 232 240; /* slate-200 */
+  }
+
+  body,
+  html {
+    @apply min-h-dvh bg-background;
+  }
+}
+
+@layer components {
+  .label-caps {
+    @apply text-[11px] font-semibold uppercase tracking-wider;
+  }
 }
 
 pre {
-    background: #0f172a;
-    padding: 16px;
-    color: #cbd5e1;
-    border-radius: 4px;
-    font-size: 12px;
-    line-height: 18px;
+  @apply bg-surface-inverted;
+  padding: 16px;
+  color: #cbd5e1;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 @media print {
-    .no-print {
-        display: none;
-    }
+  .no-print {
+    display: none;
+  }
 }
 
 .apexcharts-datalabel {
-    fill: #111827;
-    font-weight: 100;
+  fill: #111827;
+  font-weight: 100;
 }
 
 .apexcharts-tooltip {
-    background: #f3f3f3;
-    color: #111827;
+  background: #f3f3f3;
+  color: #111827;
 }
 
 .ql-container {
-    height: auto !important;
-    min-height: 200px !important;
-    border: 1px solid #ccc;
+  @apply border border-border;
+  height: auto !important;
+  min-height: 200px !important;
 }
 
 .ql-editor {
-    min-height: 150px;
-    font-family: inherit;
-    font-size: 1rem;
-    color: #000;
+  @apply text-foreground;
+  min-height: 150px;
+  font-family: inherit;
+  font-size: 1rem;
 }
 
-.vpv-sidebar-wrapper, .vp-items-center, .vpv-toolbar-start, .vpv-toolbar-end, .vpv-body>div:last-child {
-    display: none !important;
+.vpv-sidebar-wrapper,
+.vp-items-center,
+.vpv-toolbar-start,
+.vpv-toolbar-end,
+.vpv-body > div:last-child {
+  display: none !important;
 }
 
 .custom-list-style ul {
-    list-style: disc !important;
-    margin-left: 36px;
+  list-style: disc !important;
+  margin-left: 36px;
 }
 
 .custom-list-style ol {
-    list-style: disc !important;
-    margin-left: 36px;
+  list-style: disc !important;
+  margin-left: 36px;
 }

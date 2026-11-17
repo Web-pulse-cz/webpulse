@@ -20,18 +20,22 @@ const tabs = [
   { key: 'past', label: 'Minulé a zrušené' },
 ];
 
-const tableQuery = ref({
-  search: null as string | null,
-  tab: 'upcoming' as string,
-  paginate: 20 as number,
-  page: 1 as number,
-  orderBy: 'start_date' as string,
-  orderWay: 'desc' as string,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    tab: 'upcoming' as string,
+    paginate: 20 as number,
+    page: 1 as number,
+    orderBy: 'start_date' as string,
+    orderWay: 'desc' as string,
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   tableQuery.value.tab = activeTab.value;
   const client = useSanctumClient();
@@ -69,8 +73,10 @@ async function deleteItem(id: number) {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat rezervaci.',
@@ -110,12 +116,16 @@ function switchTab(key: 'upcoming' | 'current' | 'past') {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 watch(selectedSiteHash, () => loadItems());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => loadItems());
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
@@ -147,6 +157,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
     </div>
 
     <BaseTable
+      add-link="/ubytovani/rezervace/pridat"
+      add-label="Přidat rezervaci"
       :items="items"
       :columns="[
         { key: 'code', name: 'Kód', type: 'text', width: 80, hidden: false, sortable: false },
@@ -193,7 +205,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
       plural="Rezervace"
       :query="tableQuery"
       slug="apartment_reservations"
+      :filtered="!!tableQuery.search"
       @delete-item="deleteItem"
+      @retry="loadItems"
+      @clear-filters="searchString = ''"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

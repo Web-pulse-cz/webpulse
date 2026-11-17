@@ -80,7 +80,7 @@ async function downloadFile(file: any) {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-  } catch (e) {
+  } catch {
     $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
   }
 }

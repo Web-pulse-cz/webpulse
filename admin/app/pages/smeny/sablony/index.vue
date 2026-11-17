@@ -14,15 +14,16 @@ const breadcrumbs = ref([
   { name: pageTitle.value, link: '/smeny/sablony', current: true },
 ]);
 
-const tableQuery = ref({
+const tableQuery = useListQuery({
   search: null as string | null,
-  paginate: 12,
+  paginate: 25,
   page: 1,
   orderBy: 'name',
   orderWay: 'asc',
 });
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
   await client('/api/admin/shift/template', {
@@ -57,6 +58,7 @@ async function deleteItem(id: number) {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   }).then(() => {
+    $toast.show({ summary: 'Smazáno', severity: 'success' });
     loadItems();
   });
 }
@@ -82,7 +84,9 @@ function updatePerPage(perPage: number) {
 
 watch(selectedSiteHash, () => loadItems());
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadItems();
 });
@@ -98,6 +102,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
       slug="shifts"
     />
     <BaseTable
+      add-link="/smeny/sablony/pridat"
+      add-label="Přidat šablonu"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: false },
@@ -121,6 +127,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       :query="tableQuery"
       slug="shifts"
       @delete-item="deleteItem"
+      @retry="loadItems"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

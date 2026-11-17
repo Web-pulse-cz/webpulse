@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
-import { PlusIcon, TrashIcon, CheckCircleIcon, SwatchIcon } from '@heroicons/vue/24/outline';
+import { PlusIcon, TrashIcon, CheckCircleIcon } from '@heroicons/vue/24/outline';
 import { definePageMeta } from '#imports';
 
 const { $toast } = useNuxtApp();
@@ -103,7 +103,9 @@ async function deleteBoard(id: number) {
 }
 
 watch(selectedSiteHash, () => loadBoards());
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadBoards();
 });

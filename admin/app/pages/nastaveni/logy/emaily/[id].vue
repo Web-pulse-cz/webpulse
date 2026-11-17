@@ -109,12 +109,12 @@ watchEffect(() => {
     });
   } else {
     tabs.value[0].current = true;
-    router.push(route.path + '#info');
+    router.replace(route.path + '#info');
   }
 });
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
@@ -193,7 +193,7 @@ definePageMeta({
 
             <div class="flex min-h-[600px] justify-center bg-slate-50 p-4 md:p-8">
               <div class="w-full max-w-3xl rounded-sm bg-white p-2 shadow-2xl ring-1 ring-black/5">
-                <div class="prose prose-sm max-w-none" v-html="item.html" />
+                <div v-safe-html="item.html" class="prose prose-sm max-w-none" />
               </div>
             </div>
           </LayoutContainer>

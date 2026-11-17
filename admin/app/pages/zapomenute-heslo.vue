@@ -23,7 +23,7 @@ async function handleSubmit() {
       body: { email: email.value },
     });
     emailSent.value = true;
-  } catch (error) {
+  } catch {
     $toast.show({
       summary: 'Chyba',
       detail: 'Nepodařilo se odeslat odkaz pro obnovení hesla. Zkontrolujte zadaný e-mail.',

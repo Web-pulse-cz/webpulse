@@ -40,11 +40,11 @@ defineProps({
         class="flex items-baseline gap-2 pt-1 text-sm font-extrabold text-slate-900"
       >
         <span class="text-emerald-600">{{ block.number }}</span>
-        <span v-html="highlightText(block.title || '', search)" />
+        <span v-safe-html="highlightText(block.title || '', search)" />
       </h4>
 
       <p v-else-if="block.type === 'paragraph'" class="text-sm leading-relaxed text-slate-700">
-        <span v-html="renderRuleText(block.text || '', search)" />
+        <span v-safe-html="renderRuleText(block.text || '', search)" />
       </p>
 
       <RulesItemList

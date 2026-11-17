@@ -98,7 +98,7 @@ async function loadItems() {
         lastPage: response?.lastPage ?? 1,
       };
     }
-  } catch (_) {
+  } catch {
     error.value = true;
     total.value = 0;
     items.value = { data: [], total: 0, currentPage: 1, perPage: 5, lastPage: 1 };

@@ -23,8 +23,9 @@ const posClass = computed(() => {
     class="pointer-events-none fixed z-[9999] flex flex-col gap-3"
     :class="posClass"
     role="region"
+    aria-label="Oznámení"
     aria-live="polite"
-    aria-atomic="true"
+    aria-atomic="false"
   >
     <TransitionGroup name="toast" tag="div" class="flex flex-col gap-3">
       <UiToastItem v-for="t in items" :key="t.id" :toast="t" />

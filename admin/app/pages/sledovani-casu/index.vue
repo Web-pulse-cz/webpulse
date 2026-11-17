@@ -285,14 +285,37 @@ function restartEntry(entry: any) {
   startTimer();
 }
 
-async function deleteEntry(id: number) {
+const deleteDialog = ref({
+  show: false,
+  item: { id: null as number | null, name: '' },
+});
+
+function confirmDeleteEntry(entry: any) {
+  deleteDialog.value = {
+    show: true,
+    item: { id: entry.id, name: entry.description || 'Záznam času' },
+  };
+}
+
+async function deleteEntry(id: number | null) {
+  if (!id) return;
+  deleteDialog.value.show = false;
   const client = useSanctumClient();
   await client('/api/admin/time-entry/' + id, {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  }).then(() => {
-    loadEntries();
-  });
+  })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+      loadEntries();
+    })
+    .catch(() => {
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se smazat záznam času.',
+        severity: 'error',
+      });
+    });
 }
 
 // ─── Export ────────────────────────────────────────────────
@@ -337,7 +360,7 @@ watchEffect(() => {
     });
   else {
     tabs.value[0].current = true;
-    router.push(route.path + '#prehled');
+    router.replace(route.path + '#prehled');
   }
 });
 
@@ -350,7 +373,9 @@ onBeforeUnmount(() => {
   clearInterval(timerInterval.value);
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadEntries();
   loadProjects();
@@ -489,7 +514,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
                     type="button"
                     class="rounded-lg p-1.5 text-slate-300 transition hover:bg-red-50 hover:text-red-500"
                     title="Smazat"
-                    @click="deleteEntry(group.entries[0].id)"
+                    @click="confirmDeleteEntry(group.entries[0])"
                   >
                     <TrashIcon class="size-4" />
                   </button>
@@ -656,5 +681,12 @@ definePageMeta({ middleware: 'sanctum:auth' });
         </button>
       </div>
     </template>
+
+    <BaseDialogDelete
+      v-model:show="deleteDialog.show"
+      v-model:item="deleteDialog.item"
+      title="Smazat záznam času"
+      @delete-item="deleteEntry"
+    />
   </div>
 </template>

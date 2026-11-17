@@ -15,16 +15,20 @@ const breadcrumbs = ref([
 ]);
 
 const searchString = ref(inject('searchString', ''));
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 12,
-  page: 1,
-  orderBy: 'position',
-  orderWay: 'asc',
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25,
+    page: 1,
+    orderBy: 'position',
+    orderWay: 'asc',
+  },
+  { searchString },
+);
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
   await client('/api/admin/employee/division', {
@@ -56,6 +60,7 @@ async function deleteItem(id: number) {
       'X-Site-Hash': selectedSiteHash.value,
     },
   }).then(() => {
+    $toast.show({ summary: 'Smazáno', severity: 'success' });
     loadItems();
   });
 }
@@ -80,7 +85,9 @@ function updatePerPage(perPage: number) {
 }
 
 watch(selectedSiteHash, () => loadItems());
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => {
   loadItems();
 });
@@ -96,6 +103,8 @@ definePageMeta({ middleware: 'sanctum:auth' });
       slug="employees"
     />
     <BaseTable
+      add-link="/zamestnanci/divize/pridat"
+      add-label="Přidat divizi"
       :items="items"
       :columns="[
         { key: 'id', name: 'ID', type: 'text', width: 60, hidden: false, sortable: true },
@@ -128,6 +137,7 @@ definePageMeta({ middleware: 'sanctum:auth' });
       :query="tableQuery"
       slug="employees"
       @delete-item="deleteItem"
+      @retry="loadItems"
       @update-sort="updateSort"
       @update-page="updatePage"
       @update-per-page="updatePerPage"

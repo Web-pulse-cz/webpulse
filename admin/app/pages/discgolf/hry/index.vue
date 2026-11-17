@@ -26,17 +26,21 @@ const selectedSiteHash = ref(inject('selectedSiteHash', ''));
 
 const activeTab = ref<'games' | 'matrix' | 'cup'>('games');
 
-const tableQuery = ref({
-  search: null as string | null,
-  paginate: 25 as number,
-  page: 1 as number,
-  orderBy: 'played_at' as string,
-  orderWay: 'desc' as string,
-});
+const tableQuery = useListQuery(
+  {
+    search: null as string | null,
+    paginate: 25 as number,
+    page: 1 as number,
+    orderBy: 'played_at' as string,
+    orderWay: 'desc' as string,
+  },
+  { searchString },
+);
 
 const items = ref([]);
 
 async function loadItems() {
+  error.value = false;
   loading.value = true;
   const client = useSanctumClient();
 
@@ -103,8 +107,10 @@ async function deleteItem(id: number) {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
   })
+    .then(() => {
+      $toast.show({ summary: 'Smazáno', severity: 'success' });
+    })
     .catch(() => {
-      error.value = true;
       $toast.show({
         summary: 'Chyba',
         detail: 'Nepodařilo se smazat hru.',
@@ -174,7 +180,9 @@ function updatePerPage(perPage: number) {
 
 const debouncedLoadItems = _.debounce(loadItems, 400);
 watch(searchString, () => {
+  if ((tableQuery.value.search ?? '') === (searchString.value ?? '')) return;
   tableQuery.value.search = searchString.value;
+  tableQuery.value.page = 1;
   debouncedLoadItems();
 });
 watch(selectedSiteHash, () => {
@@ -185,7 +193,9 @@ watch(selectedSiteHash, () => {
   if (activeTab.value === 'cup') loadCup();
 });
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 onMounted(() => loadItems());
 definePageMeta({ middleware: 'sanctum:auth' });
 </script>
@@ -328,7 +338,10 @@ definePageMeta({ middleware: 'sanctum:auth' });
         plural="Hry"
         :query="tableQuery"
         slug="games"
+        :filtered="!!tableQuery.search"
         @delete-item="deleteItem"
+        @retry="loadItems"
+        @clear-filters="searchString = ''"
         @update-sort="updateSort"
         @update-page="updatePage"
         @update-per-page="updatePerPage"

@@ -29,6 +29,7 @@ const quickEditDialogItem = ref(null);
 const items = ref([]);
 
 async function loadItems(month: number, year: number) {
+  error.value = false;
   currentMonth.value = month;
   currentYear.value = year;
 
@@ -57,32 +58,6 @@ async function loadItems(month: number, year: number) {
     })
     .finally(() => {
       loading.value = false;
-    });
-}
-
-async function deleteItem(id: number) {
-  loading.value = true;
-  const client = useSanctumClient();
-
-  await client<{ id: number }>('/api/admin/user/activity/' + id, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(() => {})
-    .catch(() => {
-      error.value = true;
-      $toast.show({
-        summary: 'Chyba',
-        detail: 'Nepodařilo se smazat aktivitu.',
-        severity: 'error',
-      });
-    })
-    .finally(() => {
-      loading.value = false;
-      loadItems(currentMonth.value, currentYear.value);
     });
 }
 
@@ -152,7 +127,7 @@ function showUpdateEditDialog(item) {
 }
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onBeforeMount(() => {

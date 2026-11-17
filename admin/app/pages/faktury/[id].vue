@@ -75,6 +75,8 @@ const item = ref({
   sites: [] as number[],
 });
 
+const { markClean } = useDirtyGuard(item);
+
 async function loadItem() {
   const client = useSanctumClient();
   loading.value = true;
@@ -109,6 +111,7 @@ async function loadItem() {
     })
     .finally(() => {
       loading.value = false;
+      markClean();
     });
 }
 
@@ -147,7 +150,7 @@ async function loadProjects() {
 }
 
 async function saveItem(redirect = true) {
-  if (!(await validateForm())) return;
+  if (!(await validateForm(tabs))) return;
   const client = useSanctumClient();
   loading.value = true;
 
@@ -164,6 +167,7 @@ async function saveItem(redirect = true) {
     },
   )
     .then((response) => {
+      markClean();
       $toast.show({
         summary: 'Hotovo',
         detail:
@@ -240,14 +244,14 @@ watchEffect(() => {
     });
   } else {
     tabs.value[0].current = true;
-    router.push(route.path + '#info');
+    router.replace(route.path + '#info');
   }
 });
 
 watch(selectedSiteHash, () => loadItem());
 
 useHead({
-  title: pageTitle.value,
+  title: pageTitle,
 });
 
 onMounted(() => {
@@ -256,6 +260,7 @@ onMounted(() => {
   if (route.params.id !== 'pridat') {
     loadItem();
   }
+  if (route.params.id === 'pridat') markClean();
 });
 async function downloadFile(fileId: number) {
   const client = useSanctumClient();
@@ -275,7 +280,7 @@ async function downloadFile(fileId: number) {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-  } catch (e) {
+  } catch {
     $toast.show({ summary: 'Chyba', detail: 'Nepodařilo se stáhnout soubor.', severity: 'error' });
   }
 }
@@ -290,16 +295,29 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="[{ type: 'save' }, { type: 'save-and-stay' }]"
+      :actions="[{ type: 'save' }, { type: 'save-and-leave' }]"
       :modify-bottom="false"
       slug="invoices"
+      :saving="loading"
       @save="saveItem"
     />
 
     <LayoutTabs :tabs="tabs" class="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md" />
-
-    <Form ref="formRef" @submit="saveItem">
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#info')">
+    <div
+      v-if="loading && !item.id && route.params.id !== 'pridat'"
+      class="grid animate-pulse grid-cols-1 gap-8 lg:grid-cols-12"
+      aria-busy="true"
+    >
+      <div class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-9">
+        <div class="h-5 w-1/3 rounded bg-slate-200"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-10 rounded bg-slate-100"></div>
+        <div class="h-24 rounded bg-slate-100"></div>
+      </div>
+      <div class="h-64 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-3"></div>
+    </div>
+    <Form v-else ref="formRef" @submit="() => saveItem(false)">
+      <div v-show="tabs.find((tab) => tab.current && tab.link === '#info')" data-tab-panel="#info">
         <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
           <div class="col-span-1 space-y-8 lg:col-span-9">
             <LayoutContainer>
@@ -415,9 +433,12 @@ definePageMeta({
             />
           </div>
         </div>
-      </template>
+      </div>
 
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#polozky')">
+      <div
+        v-show="tabs.find((tab) => tab.current && tab.link === '#polozky')"
+        data-tab-panel="#polozky"
+      >
         <LayoutContainer>
           <div class="mb-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -496,9 +517,12 @@ definePageMeta({
             </div>
           </div>
         </LayoutContainer>
-      </template>
+      </div>
 
-      <template v-if="tabs.find((tab) => tab.current && tab.link === '#platba')">
+      <div
+        v-show="tabs.find((tab) => tab.current && tab.link === '#platba')"
+        data-tab-panel="#platba"
+      >
         <LayoutContainer>
           <div class="mb-6 flex items-center gap-3">
             <div
@@ -530,7 +554,7 @@ definePageMeta({
             <BaseFormInput v-model="item.swift_bic" label="SWIFT/BIC" name="swift_bic" />
           </div>
         </LayoutContainer>
-      </template>
+      </div>
 
       <template v-if="tabs.find((tab) => tab.current && tab.link === '#soubory')">
         <LayoutContainer>

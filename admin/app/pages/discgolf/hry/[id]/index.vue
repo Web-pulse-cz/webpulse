@@ -104,7 +104,9 @@ async function loadItem() {
     });
 }
 
-useHead({ title: pageTitle.value });
+useHead({
+  title: pageTitle,
+});
 watch(selectedSiteHash, () => loadItem());
 onMounted(() => loadItem());
 definePageMeta({ middleware: 'sanctum:auth' });

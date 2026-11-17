@@ -52,7 +52,7 @@ async function loadItems() {
       },
     });
     results.value = Array.isArray(response) ? response : (response?.data ?? []);
-  } catch (_) {
+  } catch {
     results.value = [];
   } finally {
     loading.value = false;

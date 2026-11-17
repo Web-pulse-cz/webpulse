@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Form } from 'vee-validate';
-import { ShieldCheckIcon, ArrowRightIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
+import { ShieldCheckIcon, ArrowRightIcon } from '@heroicons/vue/24/outline';
 
 // Meta data stránky
 useHead({ title: 'Přihlášení do systému | Core Admin' });
-definePageMeta({ layout: 'login' });
+// sanctum:guest – už přihlášeného uživatele pošle rovnou na dashboard
+definePageMeta({ layout: 'login', middleware: 'sanctum:guest' });
 
 const form = ref({
   email: '' as string,
@@ -49,7 +50,7 @@ async function handleSubmit() {
       severity: 'success',
       group: 'bc',
     });
-  } catch (error) {
+  } catch {
     $toast.show({
       summary: 'Chyba',
       detail: 'Neplatné přihlašovací údaje. Zkuste to prosím znovu.',

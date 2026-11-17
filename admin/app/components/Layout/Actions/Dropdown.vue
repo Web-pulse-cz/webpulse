@@ -16,11 +16,12 @@ defineProps({
     <Menu as="div" class="relative inline-block text-left">
       <div>
         <MenuButton
-          class="inline-flex rounded-md bg-white px-3.5 py-2.5 text-sm text-grayDark shadow-sm ring-1 ring-inset ring-grayLight hover:bg-gray-50 focus-visible:outline-grayLight"
+          class="inline-flex items-center rounded-xl bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          aria-label="Odkazy"
         >
           <span class="hidden lg:block">Odkazy</span>
           <ChevronDownIcon
-            class="h-5 w-5 text-primaryCustom hover:text-primaryLight lg:-mr-1 lg:ml-2"
+            class="size-5 text-indigo-600 hover:text-indigo-500 lg:-mr-1 lg:ml-2"
             aria-hidden="true"
           />
         </MenuButton>
@@ -35,15 +36,15 @@ defineProps({
         leave-to-class="transform scale-95 opacity-0"
       >
         <MenuItems
-          class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+          class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-slate-100 rounded-2xl bg-white p-1.5 shadow-lg ring-1 ring-slate-200 focus:outline-none"
         >
-          <div class="px-1 py-1">
+          <div class="space-y-1">
             <MenuItem v-for="(link, key) in links" :key="key" v-slot="{ active }">
               <NuxtLink
                 :to="{ name: link.to }"
                 :class="[
-                  active ? 'bg-gray-100 text-grayDark' : 'text-grayDark',
-                  'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                  active ? 'bg-slate-50 text-indigo-600' : 'text-slate-700',
+                  'group flex w-full items-center rounded-xl px-3 py-2 text-sm font-medium transition-colors',
                 ]"
               >
                 {{ link.name }}
