@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
-import { UserPlusIcon } from '@heroicons/vue/24/outline';
+import { UserMinusIcon, UserPlusIcon } from '@heroicons/vue/24/outline';
 import _ from 'lodash';
 
 type TriState = boolean | null;
@@ -22,9 +22,16 @@ const props = defineProps({
     type: [Number, String],
     required: true,
   },
+  // 'add' = přidat kontakty mimo seznam, 'remove' = odebrat kontakty ze seznamu
+  mode: {
+    type: String as () => 'add' | 'remove',
+    default: 'add',
+  },
 });
 
-const emit = defineEmits(['added']);
+const isRemove = computed(() => props.mode === 'remove');
+
+const emit = defineEmits(['done']);
 
 const { $toast } = useNuxtApp();
 
@@ -94,14 +101,19 @@ async function loadLookups() {
 
 async function request(dryRun: boolean) {
   const client = useSanctumClient();
-  return client<{ count: number }>('/api/admin/contact/list/' + props.listId + '/add-contacts', {
-    method: 'POST',
-    body: JSON.stringify({ ...filters.value, dry_run: dryRun }),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+  return client<{ count: number }>(
+    '/api/admin/contact/list/' +
+      props.listId +
+      (isRemove.value ? '/remove-contacts' : '/add-contacts'),
+    {
+      method: 'POST',
+      body: JSON.stringify({ ...filters.value, dry_run: dryRun }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  });
+  );
 }
 
 async function loadCount() {
@@ -135,16 +147,22 @@ async function save() {
     $toast.show({
       summary: 'Hotovo',
       detail: response.count
-        ? `Do seznamu bylo přidáno kontaktů: ${response.count}.`
-        : 'Žádný nový kontakt neodpovídá filtrům.',
+        ? isRemove.value
+          ? `Ze seznamu bylo odebráno kontaktů: ${response.count}.`
+          : `Do seznamu bylo přidáno kontaktů: ${response.count}.`
+        : isRemove.value
+          ? 'Žádný kontakt v seznamu neodpovídá filtrům.'
+          : 'Žádný nový kontakt neodpovídá filtrům.',
       severity: response.count ? 'success' : 'info',
     });
     show.value = false;
-    emit('added', response.count);
+    emit('done', response.count);
   } catch {
     $toast.show({
       summary: 'Chyba',
-      detail: 'Nepodařilo se přidat kontakty do seznamu. Zkuste to prosím znovu.',
+      detail: isRemove.value
+        ? 'Nepodařilo se odebrat kontakty ze seznamu. Zkuste to prosím znovu.'
+        : 'Nepodařilo se přidat kontakty do seznamu. Zkuste to prosím znovu.',
       severity: 'error',
     });
   } finally {
@@ -192,17 +210,22 @@ const segmentClass = (active: boolean) =>
               <form @submit.prevent="save">
                 <div class="mb-6 flex items-center gap-3">
                   <div
-                    class="flex size-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"
+                    class="flex size-10 items-center justify-center rounded-xl"
+                    :class="isRemove ? 'bg-red-50 text-red-600' : 'bg-indigo-50 text-indigo-600'"
                   >
-                    <UserPlusIcon class="size-6" />
+                    <UserMinusIcon v-if="isRemove" class="size-6" />
+                    <UserPlusIcon v-else class="size-6" />
                   </div>
                   <div>
                     <DialogTitle as="h3" class="text-xl font-bold tracking-tight text-slate-900">
-                      Přidat kontakty
+                      {{ isRemove ? 'Odebrat kontakty' : 'Přidat kontakty' }}
                     </DialogTitle>
                     <p class="text-sm text-slate-500">
-                      Přidají se všechny vaše kontakty odpovídající filtrům, které v seznamu ještě
-                      nejsou.
+                      {{
+                        isRemove
+                          ? 'Ze seznamu se odeberou všechny kontakty odpovídající filtrům. Samotné kontakty zůstanou zachovány.'
+                          : 'Přidají se všechny vaše kontakty odpovídající filtrům, které v seznamu ještě nejsou.'
+                      }}
                     </p>
                   </div>
                 </div>
@@ -313,20 +336,25 @@ const segmentClass = (active: boolean) =>
                   <p class="text-sm text-slate-500">
                     Odpovídá:
                     <span v-if="countLoading" class="text-slate-400">počítám…</span>
-                    <span v-else class="font-bold text-indigo-600">{{ matchCount ?? '–' }}</span>
-                    nových kontaktů
+                    <span
+                      v-else
+                      class="font-bold"
+                      :class="isRemove ? 'text-red-600' : 'text-indigo-600'"
+                      >{{ matchCount ?? '–' }}</span
+                    >
+                    {{ isRemove ? 'kontaktů v seznamu' : 'nových kontaktů' }}
                   </p>
                   <div class="flex gap-3">
                     <BaseButton variant="secondary" type="button" @click="show = false">
                       Zrušit
                     </BaseButton>
                     <BaseButton
-                      variant="primary"
+                      :variant="isRemove ? 'danger' : 'primary'"
                       type="submit"
                       :loading="saving"
                       :disabled="matchCount === 0"
                     >
-                      Uložit
+                      {{ isRemove ? 'Odebrat ze seznamu' : 'Uložit' }}
                     </BaseButton>
                   </div>
                 </div>

@@ -14,7 +14,12 @@ const error = ref(false);
 const loading = ref(false);
 
 const contacts = ref([] as Array<any>);
-const showAddContactsDialog = ref(false);
+const bulkDialog = ref({ show: false, mode: 'add' as 'add' | 'remove' });
+
+function openBulkDialog(mode: 'add' | 'remove') {
+  bulkDialog.value.mode = mode;
+  bulkDialog.value.show = true;
+}
 
 const pageTitle = ref(
   route.params.id === 'pridat' ? 'Nový seznam kontaktů' : 'Detail seznamu kontaktů',
@@ -189,12 +194,16 @@ definePageMeta({
       :actions="
         route.params.id === 'pridat'
           ? [{ type: 'save' }, { type: 'save-and-leave' }]
-          : [{ type: 'add-dialog', text: 'Přidat kontakty' }]
+          : [
+              { type: 'remove-dialog', text: 'Odebrat kontakty' },
+              { type: 'add-dialog', text: 'Přidat kontakty' },
+            ]
       "
       slug="contacts"
       :saving="loading"
       @save="saveItem"
-      @add-dialog="showAddContactsDialog = true"
+      @add-dialog="openBulkDialog('add')"
+      @remove-dialog="openBulkDialog('remove')"
     />
 
     <Form v-if="route.params.id === 'pridat'" ref="formRef" @submit="() => saveItem(false)">
@@ -288,11 +297,12 @@ definePageMeta({
       />
     </LayoutContainer>
 
-    <ContactListAddContactsDialog
+    <ContactListBulkContactsDialog
       v-if="route.params.id !== 'pridat'"
-      v-model:show="showAddContactsDialog"
+      v-model:show="bulkDialog.show"
+      :mode="bulkDialog.mode"
       :list-id="String(route.params.id)"
-      @added="loadContacts"
+      @done="loadContacts"
     />
   </div>
 </template>

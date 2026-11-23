@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Contact\ContactListResource;
 use App\Models\Contact\Contact;
 use App\Models\Contact\ContactList;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -101,6 +102,20 @@ class ContactListController extends Controller
      */
     public function addContacts(Request $request, int $id): JsonResponse
     {
+        return $this->bulkUpdateContacts($request, $id, 'add');
+    }
+
+    /**
+     * Hromadně odebere ze seznamu kontakty odpovídající filtrům.
+     * S `dry_run` pouze vrátí počet, který by se odebral.
+     */
+    public function removeContacts(Request $request, int $id): JsonResponse
+    {
+        return $this->bulkUpdateContacts($request, $id, 'remove');
+    }
+
+    private function bulkUpdateContacts(Request $request, int $id, string $mode): JsonResponse
+    {
         $contactList = ContactList::query()
             ->where('user_id', $request->user()->id)
             ->find($id);
@@ -126,12 +141,39 @@ class ContactListController extends Controller
             return Response::json(['errors' => $validator->errors()], 422);
         }
 
-        $query = Contact::query()
-            ->where('user_id', $request->user()->id)
-            ->whereDoesntHave('lists', function ($q) use ($contactList) {
-                $q->where('contact_lists.id', $contactList->id);
-            });
+        $query = Contact::query()->where('user_id', $request->user()->id);
 
+        // Přidávají se jen kontakty mimo seznam, odebírají jen ty v seznamu
+        $inList = function ($q) use ($contactList) {
+            $q->where('contact_lists.id', $contactList->id);
+        };
+        if ($mode === 'add') {
+            $query->whereDoesntHave('lists', $inList);
+        } else {
+            $query->whereHas('lists', $inList);
+        }
+
+        $this->applyContactFilters($query, $request);
+
+        if ($request->boolean('dry_run')) {
+            return Response::json(['count' => $query->count()]);
+        }
+
+        $contactIds = $query->pluck('id');
+
+        if ($contactIds->isNotEmpty()) {
+            if ($mode === 'add') {
+                $contactList->contacts()->attach($contactIds->all());
+            } else {
+                $contactList->contacts()->detach($contactIds->all());
+            }
+        }
+
+        return Response::json(['count' => $contactIds->count()]);
+    }
+
+    private function applyContactFilters(Builder $query, Request $request): void
+    {
         // Ano/ne filtry na vyplněnost pole (null = nezáleží)
         foreach (['phone', 'email', 'goal', 'occupation'] as $field) {
             $value = $request->input($field);
@@ -167,18 +209,6 @@ class ContactListController extends Controller
                 $q->whereNull('last_contacted_at')->orWhere('last_contacted_at', '<', $threshold);
             });
         }
-
-        if ($request->boolean('dry_run')) {
-            return Response::json(['count' => $query->count()]);
-        }
-
-        $contactIds = $query->pluck('id');
-
-        if ($contactIds->isNotEmpty()) {
-            $contactList->contacts()->attach($contactIds->all());
-        }
-
-        return Response::json(['count' => $contactIds->count()]);
     }
 
     /**

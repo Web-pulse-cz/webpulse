@@ -533,6 +533,7 @@ Route::group([
                 Route::get('', [ContactListController::class, 'index']);
                 Route::get('{id}', [ContactListController::class, 'show'])->where('id', '[0-9]+');
                 Route::post('{id}/add-contacts', [ContactListController::class, 'addContacts'])->where('id', '[0-9]+');
+                Route::post('{id}/remove-contacts', [ContactListController::class, 'removeContacts'])->where('id', '[0-9]+');
                 Route::post('{id?}', [ContactListController::class, 'store']);
                 Route::delete('{id}', [ContactListController::class, 'destroy'])->where('id', '[0-9]+');
             });
