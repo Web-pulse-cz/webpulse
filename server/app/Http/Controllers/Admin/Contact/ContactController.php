@@ -58,6 +58,13 @@ class ContactController extends Controller
                         case 'contact':
                             $query->where('contact_id', $rawFilter);
                             break;
+                        case 'list':
+                            if (! empty($rawFilter)) {
+                                $query->whereHas('lists', function ($q) use ($rawFilter) {
+                                    $q->whereIn('contact_lists.id', (array) $rawFilter);
+                                });
+                            }
+                            break;
                     }
                 }
             }
@@ -127,7 +134,8 @@ class ContactController extends Controller
             DB::beginTransaction();
             $oldContact = null;
             if ($id) {
-                $oldContact = $contact;
+                // Kopie stavu před úpravou (včetně načtené fáze) pro porovnání v ContactUpdated listeneru
+                $oldContact = clone $contact;
             }
 
             $contact->fill($request->all());
@@ -159,7 +167,24 @@ class ContactController extends Controller
             if ($request->has('contact_id')) {
                 $contact->contact_id = $request->contact_id ?? null;
             }
+            $previousLastContactedAt = $id ? $contact->getOriginal('last_contacted_at') : null;
+
             $contact->save();
+
+            if ($previousLastContactedAt && (! $contact->last_contacted_at || ! $contact->last_contacted_at->equalTo($previousLastContactedAt))) {
+                $history = new ContactHistory;
+                $history->fill([
+                    'name' => 'Poslední kontakt nebo pokus o kontakt',
+                    'description' => Carbon::parse($previousLastContactedAt)->format('Y-m-d H:i:s'),
+                    'origin' => 'system',
+                    'type' => 'last_contact',
+                ]);
+                $history->contact()->associate($contact);
+                $history->save();
+            }
+
+            // Načtené relace mohou po fill() odpovídat původním ID – obnovit
+            $contact->load(['phase', 'source']);
 
             if ($id) {
                 ContactUpdatedEvent::dispatch($oldContact, $contact);

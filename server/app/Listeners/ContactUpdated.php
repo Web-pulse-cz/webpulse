@@ -24,11 +24,12 @@ class ContactUpdated
             $history->save();
         }
 
-        if ($oldContact->contact_phase_id !== $newContact->contact_phase_id) {
+        // Volné porovnání – ID z requestu může přijít jako string
+        if ($oldContact->contact_phase_id != $newContact->contact_phase_id) {
             $history = new ContactHistory;
             $history->fill([
                 'name' => 'Fáze kontaktu změněna',
-                'description' => 'Fáze kontaktu byla změněna z '.$oldContact->phase?->name.' na '.$newContact->phase->name,
+                'description' => 'Fáze kontaktu byla změněna z '.($oldContact->phase?->name ?? '(žádná)').' na '.($newContact->phase?->name ?? '(žádná)'),
                 'origin' => 'system',
                 'type' => 'call',
             ]);

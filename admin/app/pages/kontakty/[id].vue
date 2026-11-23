@@ -46,11 +46,20 @@ const showCreateBoardCardDialog = ref(false);
 type TimelineEntryData = { id: number; created_at?: string | null } & Record<string, unknown>;
 
 const timelineItems = computed(() => {
-  const historyEntries = ((item.value.history || []) as TimelineEntryData[]).map((entry) => ({
-    kind: 'history' as const,
-    date: entry.created_at,
-    data: entry,
-  }));
+  const historyEntries = ((item.value.history || []) as TimelineEntryData[]).map((entry) =>
+    entry.type === 'last_contact'
+      ? {
+          // Řadí se podle data samotného kontaktu, ne podle data vytvoření záznamu
+          kind: 'last_contact' as const,
+          date: String(entry.description ?? '').replace(' ', 'T'),
+          data: entry,
+        }
+      : {
+          kind: 'history' as const,
+          date: entry.created_at,
+          data: entry,
+        },
+  );
   const boardCardEntries = ((item.value.board_cards || []) as TimelineEntryData[]).map((entry) => ({
     kind: 'board_card' as const,
     date: entry.created_at,
@@ -922,6 +931,10 @@ definePageMeta({
                   :history="entry.data"
                   @edit-history="editHistoryItem(entry.data)"
                   @delete-item="deleteHistoryItem(entry.data)"
+                />
+                <ContactHistoryLastContactRow
+                  v-else-if="entry.kind === 'last_contact'"
+                  :history="entry.data"
                 />
                 <ContactBoardCardHistoryItem v-else :card="entry.data" />
               </template>

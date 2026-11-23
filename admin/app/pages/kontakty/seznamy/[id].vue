@@ -14,6 +14,7 @@ const error = ref(false);
 const loading = ref(false);
 
 const contacts = ref([] as Array<any>);
+const showAddContactsDialog = ref(false);
 
 const pageTitle = ref(
   route.params.id === 'pridat' ? 'Nový seznam kontaktů' : 'Detail seznamu kontaktů',
@@ -185,10 +186,15 @@ definePageMeta({
     <LayoutHeader
       :title="pageTitle"
       :breadcrumbs="breadcrumbs"
-      :actions="route.params.id === 'pridat' ? [{ type: 'save' }, { type: 'save-and-leave' }] : []"
+      :actions="
+        route.params.id === 'pridat'
+          ? [{ type: 'save' }, { type: 'save-and-leave' }]
+          : [{ type: 'add-dialog', text: 'Přidat kontakty' }]
+      "
       slug="contacts"
       :saving="loading"
       @save="saveItem"
+      @add-dialog="showAddContactsDialog = true"
     />
 
     <Form v-if="route.params.id === 'pridat'" ref="formRef" @submit="() => saveItem(false)">
@@ -281,5 +287,12 @@ definePageMeta({
         class="pb-4"
       />
     </LayoutContainer>
+
+    <ContactListAddContactsDialog
+      v-if="route.params.id !== 'pridat'"
+      v-model:show="showAddContactsDialog"
+      :list-id="String(route.params.id)"
+      @added="loadContacts"
+    />
   </div>
 </template>

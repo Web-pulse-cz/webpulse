@@ -9,6 +9,7 @@ const pageTitle = ref('Kontakty');
 
 const sources = ref([]);
 const phases = ref([]);
+const lists = ref([]);
 
 const loading = ref(false);
 const lookupsLoading = ref(false);
@@ -122,6 +123,28 @@ async function loadSources() {
     })
     .finally(() => {
       lookupsLoading.value = false;
+    });
+}
+
+async function loadLists() {
+  const client = useSanctumClient();
+
+  await client<{ id: number }>('/api/admin/contact/list', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      lists.value = response;
+    })
+    .catch(() => {
+      $toast.show({
+        summary: 'Chyba',
+        detail: 'Nepodařilo se načíst seznamy. Zkuste to prosím později.',
+        severity: 'error',
+      });
     });
 }
 
@@ -283,6 +306,7 @@ onMounted(() => {
   loadItems();
   loadPhases();
   loadSources();
+  loadLists();
 });
 definePageMeta({
   middleware: 'sanctum:auth',
@@ -298,6 +322,7 @@ definePageMeta({
       :filters="[
         { title: 'Podle fáze', data: phases, multiple: true, type: 'badge', slug: 'phase' },
         { title: 'Podle zdroje', data: sources, multiple: true, type: 'badge', slug: 'source' },
+        { title: 'Podle seznamu', data: lists, multiple: true, type: 'badge', slug: 'list' },
       ]"
       :filters-query="tableQuery"
       slug="contacts"
